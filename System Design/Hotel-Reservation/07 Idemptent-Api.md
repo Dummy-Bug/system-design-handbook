@@ -5,6 +5,7 @@ An idempotent API guarantees:
 It does NOT mean the response payload is always identical at every step. It means side effects happen once. 
 
 [[Idempotency.pdf]]
+
 ## Idempotency Table
 
 `idempotency ----------- key (PK) request_hash response_payload status   -- IN_PROGRESS, COMPLETED created_at expires_at`
