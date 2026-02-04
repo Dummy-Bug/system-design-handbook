@@ -29,27 +29,6 @@ Unicode solved this by:
 
 ---
 
-## Unicode Uses Code Points
-
-Unicode identifies characters using **code points**.
-
-A code point is:
-
-> A unique number assigned to a character.
-
-Examples:
-
-| Character | Code Point |
------------|------------
-A          | U+0041
-₹          | U+20B9
-你         | U+4F60
-😂          | U+1F602
-
-These values are global and platform-independent.
-
----
-
 ## Unicode Is Language-Agnostic
 
 Unicode does not care about:
