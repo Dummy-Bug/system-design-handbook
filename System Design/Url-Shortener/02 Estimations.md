@@ -4,7 +4,7 @@
  
 1. User should be able to come up on the platform, give an original URL and get a shortened version of it.
 2. Whenever anyone opens the short url , they should be redirected to the original URL.
-3. User an give a custom short string , and if that short string is not already used , we can allocate that to the URL.*(This is an additional feature)*
+3. User can give a custom short string , and if that short string is not already used , we can allocate that to the URL.*(This is an additional feature)*
 
 ---
 
