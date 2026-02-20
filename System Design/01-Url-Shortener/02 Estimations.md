@@ -27,7 +27,7 @@
 	**Schema**
 	*(Pk , Original Url , shortUrl)*
 	1. PK - BigInt -> 8Bytes
-	2. Original Url - assume average length to be 25 chars -> 25 Byte
+	2. Original Url - assume average length to be 25(200-300 chars nowdays) chars -> 25 Byte
 	3. Short Url -> assume average length to be 7 chars -> 7 Byte
 	so total 8+25+7 => 40Bytes
 	

@@ -1,26 +1,19 @@
-[[05 Distributed Ids.pdf]] #snowflakeId  
+[[05 Distributed Ids.pdf]] #snowflakeId 
 
 Snowflake IDs were created to fix the **practical problems of UUIDs** while keeping their **global uniqueness**.
 
 UUIDs are:
 
 - Globally unique ✅
-    
 - Decentralized ✅
-    
 - But **long**, **random**, and **bad for indexing**
-    
 
 Snowflake IDs optimize for:
 
 - Distributed systems
-    
 - High write throughput
-    
 - Time ordering
-    
 - Shorter, URL-friendly identifiers
-    
 
 ---
 
@@ -43,15 +36,10 @@ Total = **63 bits** (1 bit unused for sign)
 ### 1. Timestamp (41 bits)
 
 - Milliseconds since a custom epoch
-    
 - Allows:
-    
     - Natural ordering by creation time
-        
     - Efficient range queries
-        
     - Easy pagination
-        
 
 41 bits ≈ **69 years** of timestamps
 
@@ -60,27 +48,20 @@ Total = **63 bits** (1 bit unused for sign)
 ### 2. Machine / Worker ID (10 bits)
 
 - Identifies the node generating the ID
-    
 - 10 bits = **1024 nodes**
-    
 
 This avoids collisions across:
 
 - Machines
-    
 - Pods
-    
 - Data centers
-    
 
 ---
 
 ### 3. Sequence number (12 bits)
 
 - Counter per millisecond per node
-    
 - 12 bits = **4096 IDs per ms per node**
-    
 
 This supports **very high write throughput**.
 
@@ -102,10 +83,8 @@ timestamp | machine | sequence
 
 Important point:
 
-- This is still **just a number**
-    
+- This is still **just a number** 
 - But it encodes **time + origin + order**
-    
 
 ---
 
@@ -116,16 +95,12 @@ Important point:
 Snowflake IDs are:
 
 - Monotonically increasing
-    
 - Naturally sorted by creation time
-    
 
 This fixes:
 
 - Random index inserts (UUID problem)
-    
 - Inefficient pagination
-    
 
 ---
 
@@ -134,11 +109,8 @@ This fixes:
 Because IDs increase over time:
 
 - Inserts are mostly append-only
-    
 - B-tree indexes stay compact
-    
 - Much better write performance
-    
 
 This matters at scale.
 
@@ -147,25 +119,18 @@ This matters at scale.
 ### 3. Shorter than UUIDs
 
 - Snowflake ID: **64 bits**
-    
 - UUID: **128 bits**
-    
 
 When Base62-encoded:
 
 - Snowflake → ~11 characters
-    
 - UUID → ~22 characters
-    
 
 Much better for:
 
 - Short URLs
-    
 - Copy/paste
-    
 - UX
-    
 
 ---
 
@@ -316,7 +281,5 @@ Use Snowflake-style IDs.
 ## Final mental model
 
 - **UUID** → correctness first, simplicity first
-    
 - **Snowflake** → scale, performance, observability
-    
 Snowflake IDs are what you use **after** you outgrow UUIDs.

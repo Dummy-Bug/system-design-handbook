@@ -108,18 +108,13 @@ This is critical for public-facing systems.
 UUIDs are:
 
 - Not tied to database type
-    
 - Not tied to sharding strategy
-    
 
 You can:
 
 - Reshard
-    
 - Migrate databases
-    
 - Change storage engines
-    
 
 Without breaking URLs.
 
@@ -142,16 +137,12 @@ Raw form:
 Even Base62-encoded, they are still:
 
 - Longer than Snowflake IDs
-    
 - Longer than sequential Base62 IDs
-    
+
 
 This hurts:
-
 - URL aesthetics
-    
 - Copy-paste usability
-    
 
 ---
 
@@ -162,11 +153,8 @@ UUIDs are **random** (especially v4).
 Implications:
 
 - Inserts hit random index pages
-    
 - B-tree fragmentation
-    
 - Slower writes at scale
-    
 
 This becomes noticeable at high QPS.
 
@@ -179,11 +167,8 @@ UUIDs do not encode time (unless using newer versions).
 You cannot:
 
 - Sort by creation time
-    
 - Infer age from the ID
-    
 - Use ID ordering for pagination efficiently
-    
 
 All of this requires extra columns.
 
@@ -194,11 +179,8 @@ All of this requires extra columns.
 From a UUID alone, you **cannot infer**:
 
 - When it was created
-    
 - Which node generated it
-    
 - Which region it came from
-    
 
 For distributed debugging, this is a limitation.
 
@@ -209,18 +191,12 @@ For distributed debugging, this is a limitation.
 UUIDs solve the **correctness problem**:
 
 - No collisions
-    
 - No shard conflicts
-    
 - No data leakage
-    
 
 But they introduce **operational drawbacks**:
 
 - Long URLs
-    
 - Index inefficiency
-    
 - Poor traceability
-    
 - No time ordering

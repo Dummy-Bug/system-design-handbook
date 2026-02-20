@@ -98,18 +98,13 @@ This is worse than using a BIGINT.
 Hashing:
 
 - Binds identity to the original URL
-    
-- Prevents multiple short URLs for the same target
-    
+- **Prevents multiple short URLs for the same target**
 
 You lose the ability to:
 
 - Create multiple campaigns for the same URL
-    
 - Track per-user or per-tenant links
-    
 - Set different expirations
-    
 
 ---
 
@@ -118,10 +113,7 @@ You lose the ability to:
 If you ever:
 
 - Change hash algorithm
-    
 - Change truncation length
-    
 - Add salting
-    
 
 You break existing URLs or need complex versioning.
