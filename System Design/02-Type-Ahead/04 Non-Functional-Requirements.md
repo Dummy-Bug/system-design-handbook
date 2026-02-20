@@ -101,9 +101,7 @@ Worst case:
 - Suggestions slightly misordered.
 - Trending query appears minutes late.
 
-Impact:
-
-Low.
+Impact:Low
 
 ---
 
@@ -115,6 +113,4 @@ Worst case:
 - Typing feels broken.
 - Product feels slow.
 
-Impact:
-
-High.
+Impact:High

@@ -241,7 +241,7 @@ Controlled load.
 
 If you update Redis on every search:
 
-- You will hit throughput ceiling.
+- We will hit throughput ceiling.
 - Costs explode.
 - Latency spikes.
 - Cluster thrashes.
@@ -252,9 +252,9 @@ Approximation is mandatory at this scale.
 
 ## Final Mental Model
 
-Redis is not your source of truth.
+Redis is not our source of truth.
 
-Redis is your:
+Redis is our:
 
 > High-speed approximate ranking cache.
 

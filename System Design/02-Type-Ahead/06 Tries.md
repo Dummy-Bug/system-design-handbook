@@ -310,7 +310,7 @@ Each query updates ~10 prefixes.
 	
 	Prefixes:
 	
-	`p pa par pari paris paris  paris t ...`
+	`p pa par pari paris paris t ...`
 
 Total prefix updates:
 `1B × 10 = 10B prefix updates/day` 
