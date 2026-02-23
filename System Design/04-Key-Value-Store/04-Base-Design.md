@@ -26,4 +26,10 @@ Client → Gateway → LB → App Server Replica 1
 now this Load balancer would receive the key and assuming this load balancer have some kind of hashing logic with which it will redirect our data to multiple app server.so whatever cluster has the data would send it back to client.
 
 
+### Problems
 
+* At some point of time we want to make our key value store durable as well.what if complete cluster goes down? we are anyway not ensuring the consistency so we can decide to not even ensure eventuall consistency as well.so we have decided to not provide consistency at all. so if cluser 2 goes down then client's data can't be Read at all.
+
+* what if interviewer says that no we should atleast have to have eventual consistency.so we have to maintain some kind of persistence at each app server level say we chose **Write Ahead Logs** WAL. It's an append only file.so whenever we get a new key-val pair we append it to the file and we can write this asynchronously.so we are not wasting anytime while Writing.So if 2nd cluster goes down then we can use WAL file and re-distribute the data of 2nd cluster to 1st and 3rd cluster.but issue is 1st and 3rd clusters are already working at peak load now adding more data will overwhelm the whole system and whole system would go down due to cascading failure.
+
+so we need to devise better Load Balancing strategies.that's where **Consistent Hashing** comes into the picture as it solves the problem of Data Redistribution.
