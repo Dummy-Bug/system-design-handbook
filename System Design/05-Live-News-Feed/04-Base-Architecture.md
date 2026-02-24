@@ -93,5 +93,3 @@ relation_towards : 321
 label : following
 ```
 
-
-
