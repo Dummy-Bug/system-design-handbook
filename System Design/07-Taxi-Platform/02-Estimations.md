@@ -30,3 +30,5 @@ so we kinda require 2GB data per day so full year we require ~1TB of storage.
 
 
 
+
+
