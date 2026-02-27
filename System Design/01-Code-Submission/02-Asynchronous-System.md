@@ -1,4 +1,3 @@
-
 ```Http
 
 [Web Client] --->[Load Balancer] ---> [App Server] ---> [DB]
@@ -105,9 +104,9 @@ In our case at most one is good enough for us.
 
 so as of now the flow is App server would receive the submission request then it will save the entry inside the DB and wait for acknowledgment and then add the submission payload inside the Queue and then return the response to user that submission has been recorded and will be notified to you once it's evaluated .
 
-but what if instead of waiting for the acknowledgement App Server add the payload inside Queue parallel to making entry inside the DB. If we do this then when control reaches the Evaluator machine and it starts to read the data then inside those machines first system have to interact with the DB to check if the entry is present inside the DB or not. 
-* but if not added for any failure or anything but it was recorded inside the Queue then at that point of time we create the entry inside the DB(but for this we have to handle other cases as well because of the DB was down then App Server would have send back the response to user that not able to record your submission and all). 
-* Other scenario is if entry is not present we do not evaluate it and we requeue it back like we add it again inside the Queue from Evaluator machine for a retry. and even after multiple retrues if the entry is still not there inside the DB then we can just discard the submission.
+What if instead of waiting for the acknowledgement App Server add the payload inside Queue parallel to making entry inside the DB. If we do this then when control reaches the Evaluator machine and it starts to read the data then inside those evaluator machines first system have to interact with the DB to check if the entry is present inside the DB or not. 
+* If entry was not added inside the submission DB because of any failure or anything but it was recorded inside the Queue then at that point of time we create the entry inside the DB(but for this we have to handle other cases as well because of the DB was down then App Server would have send back the response to user that not able to record your submission and all) from the evaluator machine. 
+* Other scenario is if entry is not present inside Submission DB and entry is present inside the Submission Queue and one of the Evaluator Machoine have picked it up for evaluation then after checking the entry inside the DB we won't find it then we do not evaluate it and we requeue it back like we add it again inside the Submission Queue from Evaluator machine for a retry. and even after multiple retrues if the entry is still not there inside the DB then we can just discard the submission.
 
 ![[01_Async_System.png]]
 
