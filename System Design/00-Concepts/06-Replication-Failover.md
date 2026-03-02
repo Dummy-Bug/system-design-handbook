@@ -1,4 +1,3 @@
-
 > **Replication** is the process of maintaining multiple synchronized copies of data across different nodes in a distributed system.
 
 It ensures that data exists in more than one place to prevent data loss.
@@ -154,3 +153,5 @@ Failover:
 > Replication maintains multiple copies of data for durability, while failover is the mechanism that promotes a backup and redirects traffic when a primary component fails.
 
 ---
+
+TODO:- Synchronous vs Asynchronous Replication
