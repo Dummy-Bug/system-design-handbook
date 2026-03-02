@@ -39,7 +39,7 @@ both are good in this usecase.
 
 Benefit of websockets is it's duplex communication.but there's a limit to number of websockets connection that we can have while such is not the case with SSE.
 
-so to manager our Websocktes we can introduce one more service named Socket Manager Service .  
+so to manager our Websocktes we can introduce one more service named Socket Manager Service . 
 * So this service will have always a socket connection prepared with client and it will be separatley horinzontally scaled if more connections are required.so by this way number of sockets connections needed will not impact the amount of scale Submission Service needs.
 
 * Assume we have 1M clients and then we will have 1M socket connections running acrosss 5 different machines.so now how will we identify that submission with id 71 was made by which user ? so how do we know among those 1M requests which one of ther users we have to send the data to.
