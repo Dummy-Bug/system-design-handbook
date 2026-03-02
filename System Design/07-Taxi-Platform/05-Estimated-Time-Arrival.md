@@ -20,7 +20,7 @@ now assume there's a junction between A and B named J
          .
          .
          .
-A..... J .....B 
+A..... J .....B                        
          .
          .
          .
