@@ -300,40 +300,6 @@ most of the systems are not yet technically ready to handle the Leap Second so t
 
 * Let's say we have two servers s1 and s2 , now if s2 tries to measure the time using it's own physical clock then there's a chance that clock error would be introduced somtime along the line.So time in s1 and s2 would be different and if times in two server insances is different then this can introduce some severe issues. assuming we have two clients c1 and c2 and c1 request something from s1 and c2 from s2 so according to the correct clock at t=0 c1 did some action and at t=1 c2 did some action.it means according to the correct clock c1 initiated the action first and c2 initiated the action later.also assume the fact that network delay to reach the requests to the servers is same.so now assume s1 is already time drifter by 2second and assume s2 does not have time drift as of now.so now c1's request's timestamp would be more than the timestamp of c2's request's timestamp because of the clock drift time delay.
 
-## How to Solve Clock Drift ?
-
-Instead of using our own clocks everytime what if we use more accurate clock and somehow calculate the time using that.So we should keep resync our clock with more accurate clocks every now and then.
-
-## Network Time Protocol
-
-Network Time Protocol (NTP) is designed as a layered system to deliver highly accurate time to end users without exposing critical infrastructure directly to the internet.
-
-At the top of the hierarchy are [**Stratum 0 devices**](https://www.geeksforgeeks.org/computer-networks/network-time-protocol-ntp/). These are ultra-precise time sources such as atomic clocks and GPS receivers. They maintain extremely accurate time but are not connected to the public network.
-
-These Stratum 0 devices feed time into [**Stratum 1 servers**](https://www.9tut.com/network-time-protocol-ntp-tutorial). Stratum 1 servers are directly connected to the high-precision hardware and act as the first level of network-accessible time sources. They are still tightly controlled and not widely exposed to general public traffic.
-
-Below them are **Stratum 2 servers**. These servers synchronize their time from one or more Stratum 1 servers and are typically the ones exposed to broader networks, including the public internet. Most client systems—such as laptops, servers, and mobile devices—retrieve time from these Stratum 2 servers.
-
-Large operating system vendors like Apple and Microsoft maintain their own distributed NTP infrastructure. This hierarchical design ensures:
-
-- **Accuracy**: Time originates from highly precise sources.
-- **Scalability**: Load is distributed across multiple layers of servers.
-- **Security and reliability**: Critical timekeeping devices are isolated from direct internet access.
-
-In short, NTP works by propagating accurate time from highly trusted, isolated sources down through multiple layers until it reaches end-user devices in a scalable and secure way.
-
-
-say at t=1 our machine initiate a request to the NTP server and at t=2 server receives the request. at t=3 it sent back the response and at t=4 machines received the response.
-
-![[Excalidraw/Drawing 2026-03-18 19.44.41.excalidraw]]
-so we have network delays as well as some computation delays so by the time the actual time contained inside the response we have already spent some more time , so at t=4 we did not get the actual real time immediatley might be slightly older time a few miliseconds etc.
-
-t1 -> Client sends -> 10:20:00(client thinks it's 10:20)
-t2 -> Server receives -> server's actual time 10:10 + 2second travel(10:10:02)
-
-
-
-
 
 
 
