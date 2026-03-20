@@ -62,3 +62,34 @@ so client's machines is 10 minutes behind the server's time.
 > If theta >= 1000s -> situation of Panic , manual intevention is required on how to change the clock etc because time difference is too high.
 
 theta is nothing but time or clock difference or clock drift.
+
+
+**How frequently should we poll the NTP servers?**
+
+Mac does it dynamically from every 64 seconds to stabilize the clock like when we boot up or connect to the network called the initial stage to every 15 to 20 minutes in steady stage. if power saver is on frequency can be slowed so every OS has it's own set of rules and all.
+
+
+In java code we can see the following pattern 
+
+1. System.currentTimeMills() <--- start
+	...
+	...
+	...
+	...
+2. System.currentTimeMills() <--- end
+
+which is used to calculate the time taken by the piece of code inside these two statements.The issue that can be arised in this is that System.currentTimeMills() is tied to the system clock so it would be impacted by the clock drift and hence by the clock reset or adjustments.So if at any point of the time between 1st and 10th statement NTP sync occurs then this system's clock can jump backward and foreward and provide us the error based timestamp.Hence it is not the most accurate metric of calculating the time difference between two code pointers.
+
+System.nanoTime() -> It returns the nano seconds relative to some arbitrary fixed point . it will fix some point say when machine's JVM was booted it will record that t=0 and then it will give us the time with respect to that.so it is not dependent on the system's time.so using this method we always get the monotonically increasing time.
+
+- `currentTimeMillis()` → What time is it?
+    
+- `nanoTime()` → How much time has passed?
+
+**NTP is updating system time does it also impact Epoch time ?**
+
+Yes , Imagine we do not have NTP servers and all and we use physical clock to calculate time and we have machine that we started at 1st Jan 1970 00:00:00 after 30 years there would be lot of clock drift that would happen so number of milliseconds elapsed from 1st Jan 1970 will never be accurate.so even epoch timestamp can also sometimes not monotonically increasing.
+
+
+
+
