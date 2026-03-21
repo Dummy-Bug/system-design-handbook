@@ -25,13 +25,14 @@ Conflict free Replicated Data Types are the data structures or data types which 
 **How CRDT avoids conflicts ?**
 
 Say we want to implement counter with CRDT then we have option of 
-- G-Counter(Grow only counter):-  Let's say we want to store count in different-different nodes then every node is going to have ID and they are going to track their own increments in map or dictionary and later we perform merge operation and then all the nodes would come in sync.INSERT THE G-COUNTER Sequence diagram here
-- PN-Counter :- This can be incremented as well as decremented.When synchronized the value converges towards the sum of all increments minus sum of all the decrements. INSERT THE PN-COUNTER Sequence diagram here
+- G-Counter(Grow only counter):-  Let's say we want to store count in different-different nodes then every node is going to have ID and they are going to track their own increments in map or dictionary and later we perform merge operation and then all the nodes would come in sync.![[06-Grow-Counter.jpeg]]
+- PN-Counter :- This can be incremented as well as decremented.When synchronized the value converges towards the sum of all increments minus sum of all the decrements.![[07-PN-Counter.jpeg]]
 
 Now we can use PN-Counter concept in our problem as well.
 let's C receives two requests instead of just one so when merge is gonna happen each of the master will have {a:1,b:1,c:2} after sync is complete.
+![[08-PN-Counter-Application.jpeg]]
 
-* Or-Sets :- If one region ADD an element and other REMOVE it simultaneously,the ADD takes precedence.We tag every ADD operation to the unique ID or Tag, like element with an ID considered as Active or Present in the cart.Now if User A tries to remove an item say apple then it will start scanning all the ids of apple and move it to something called tombstone(kinda used for soft delete that tells that the given key was deleted at given Timestamp) INSERT OR-SET diagram here
+* Or-Sets :- If one region ADD an element and other REMOVE it simultaneously,the ADD takes precedence.We tag every ADD operation to the unique ID or Tag, like element with an ID considered as Active or Present in the cart.Now if User A tries to remove an item say apple then it will start scanning all the ids of apple and move it to something called tombstone(kinda used for soft delete that tells that the given key was deleted at given Timestamp)![[09-Or-Set-Counter.jpeg]]
 
 
 [Check Redis Doc for CRDTs](https://redis.io/blog/diving-into-crdts/)
