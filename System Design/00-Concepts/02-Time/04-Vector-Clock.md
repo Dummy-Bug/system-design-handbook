@@ -100,15 +100,6 @@ Now let's consider the following shopping application, you and your friend share
 
 Conflict would be detected as both of them are trying to make changes at the same time because they are not aware about the current cart situation . like when Headphone were added Ipad was not aware that Headphones were already added inside the cart and when Ipad added kindle then laptop was not made aware that Kindle has been added.now it's upto server how to resolve this conflict we can either reject one of the request or add both the products just like we have done here.so when the laptop refreshes it sees both the items.So using Vector Clocks we are able to detect Conflicts.
 
-What shold be done when Write Conflict coming up ?
+What should be done when Write Conflict coming up ?
 
---- 
 
-## Write Conflicts
-
-Let's say two users are trying to book the same seat.
-**Solutions**
-* Do not process the request concurrently , let's say we have put messaging queue or streming system such that whenever someone tries to book a seat we process those requests one by one.
-* We can use Locks etc 
-
-In these above solution we never reach at the stage of write conflicts.Let's say in the first place we are not able to stop the write conflict from happening.Let's say we are using a Leaderless Database.and we have say two nodes n1 and n2. Let's say we are storing follower and following mapping and we are using Redis for this. Now for a particular user say influencer get lot of follow requests and unfollow requests.The more number followers a user has the more inconsistency in the number of followers we can see.like someone might have 2.1M followers and next day she might have 2.05M followers and on next day she might have 2.15M followers.Like their follower count keeps on fluctuating at very high note.
