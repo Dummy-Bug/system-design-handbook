@@ -45,3 +45,6 @@ Now assume there was one more node DB-4 which missed all of this action because 
 
 
 It might have happened that when DB-1's write of X=100 got rejected , DB-1 may receive another write request and this time chose value N = 102 and due to this DB-2's value won't get commit and then DB-2 get's the new request and so on which can leads to never ending cycle kinda thing so in order to avoid it we have **Randomized Backoff** which states that a failed node cannot retry before a certain amount of timeout.
+
+
+
