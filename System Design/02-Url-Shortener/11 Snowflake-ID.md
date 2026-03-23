@@ -1,6 +1,6 @@
 [[05 Distributed Ids.pdf]] #snowflakeId 
 
-Snowflake IDs were created to fix the **practical problems of UUIDs** while keeping their **global uniqueness**.
+Snowflake IDs were created to fix the **practical problems of UUID** while keeping their **global uniqueness**.
 
 UUIDs are:
 
@@ -139,11 +139,8 @@ Much better for:
 From a Snowflake ID, you can infer:
 
 - Approximate creation time
-    
 - Which node generated it
-    
 - Ordering relative to other events
-    
 
 This is **huge** for debugging distributed systems.
 
@@ -154,15 +151,10 @@ This is **huge** for debugging distributed systems.
 ### Flow
 
 1. Client calls `POST /shortUrl`
-    
 2. Application generates Snowflake ID
-    
 3. ID stored as primary key
-    
 4. ID Base62-encoded
-    
 5. Encoded value becomes shortCode
-    
 
 ```
 Snowflake ID (64-bit)
@@ -200,11 +192,8 @@ Short, sortable, unique.
 You must manage:
 
 - Worker IDs
-    
 - Clock synchronization
-    
 - Deployment coordination
-    
 
 UUIDs don’t need this.
 
@@ -215,9 +204,7 @@ UUIDs don’t need this.
 If system clocks move backward:
 
 - ID collisions can happen
-    
 - Systems must guard against this
-    
 
 Production systems add safeguards, but complexity exists.
 
@@ -228,7 +215,6 @@ Production systems add safeguards, but complexity exists.
 Snowflake IDs expose:
 
 - Approximate creation timestamp
-    
 
 This is usually acceptable, but not always.
 
@@ -253,26 +239,17 @@ This is usually acceptable, but not always.
 Use Snowflake when:
 
 - You expect high scale
-    
 - You shard databases
-    
 - You care about write performance
-    
 - You want sortable, compact IDs
-    
 - You need better observability
-    
 
 This is why:
 
 - Twitter
-    
 - Discord
-    
 - Instagram
-    
 - Many large systems
-    
 
 Use Snowflake-style IDs.
 

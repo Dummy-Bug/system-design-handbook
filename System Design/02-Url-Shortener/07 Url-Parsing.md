@@ -27,9 +27,7 @@ So:
 means:
 
 - Segment 1: `a+b`
-    
 - Segment 2: `c`
-    
 
 NOT a single identifier.
 
@@ -60,11 +58,8 @@ Not:
 So:
 
 - Router fails
-    
 - Or matches the wrong endpoint
-    
 - Or requires complex wildcard routing
-    
 
 That’s what **“breaks clean path segments”** means.
 
@@ -77,9 +72,7 @@ That’s what **“breaks clean path segments”** means.
 In URLs:
 
 - In query strings, `+` often means **space**
-    
 - Some frameworks auto-decode it
-    
 
 Example:
 
@@ -92,18 +85,13 @@ May get decoded as:
 Depending on:
 
 - Framework
-    
 - Middleware
-    
 - Reverse proxy
-    
 
 This causes:
 
 - Inconsistent behavior
-    
 - Hard-to-debug bugs
-    
 
 ---
 
@@ -128,15 +116,10 @@ Now it works.
 But now you’ve created **new problems**:
 
 - URLs are ugly
-    
 - Users copy/paste encoded strings
-    
 - QR codes become longer
-    
 - Verbal sharing becomes impossible
-    
 - You must encode/decode everywhere correctly
-    
 
 You’ve defeated the entire point of a **short URL**.
 
@@ -151,11 +134,8 @@ URL shorteners rely on:
 That only works if `{shortCode}`:
 
 - Is URL-safe
-    
 - Does not include `/`
-    
 - Does not require encoding
-    
 
 That’s why production systems **never use raw Base64 in paths**.
 
@@ -164,11 +144,8 @@ That’s why production systems **never use raw Base64 in paths**.
 URLs were designed to be:
 
 - ASCII
-    
 - Structured
-    
 - Safe to transmit over networks
-    
 
 But **not every character is allowed everywhere** in a URL.
 
@@ -214,9 +191,7 @@ Encoded:
 Because:
 
 - Space ASCII = 32
-    
 - 32 in hex = `20`
-    
 
 ---
 
@@ -233,9 +208,7 @@ Encoded:
 Because:
 
 - `/` ASCII = 47
-    
 - 47 in hex = `2F`
-    
 
 ---
 
@@ -286,11 +259,7 @@ Look at this:
 Problems:
 
 - Longer
-    
 - Ugly
-    
 - Non-human
-    
 - Error-prone
-    
 - Completely defeats “short URL”

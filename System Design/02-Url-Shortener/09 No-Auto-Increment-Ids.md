@@ -8,9 +8,7 @@
 This works **only** as long as:
 
 - Single database
-    
 - Single ID sequence
-    
 
 ---
 
@@ -27,13 +25,9 @@ Now encode IDs using Base62:
 ### Result
 
 - Same `shortCode`
-    
 - Different `originalUrl`
-    
 - **Hard collision**
-    
 - System becomes incorrect by design
-    
 
 This is not a bug. This is a **fundamental limitation** of auto-increment IDs in distributed systems.
 
@@ -48,12 +42,8 @@ You might think:
 Problems:
 
 - You’ve reinvented a distributed ID generator
-    
 - URL format is now coupled to sharding topology
-    
 - Re-sharding breaks URLs
-    
 - Migration becomes painful
-    
 
 This is why serious systems **stop using DB auto-increment as identity**.

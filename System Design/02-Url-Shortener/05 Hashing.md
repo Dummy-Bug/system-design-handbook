@@ -19,12 +19,9 @@ Instead of generating and storing a separate `shortCode`, we can **derive the sh
 Example hashes:
 
 - SHA-256
-    
     `https://example.com → e3b0c44298fc1c149afbf4c8996fb924...`
-    
 
 3. Take a subset of the hash (for brevity), e.g. first 7–8 characters:
-    
 
 `e3b0c44`
 
@@ -40,13 +37,9 @@ No separate shortCode generation logic; the short URL is **deterministic**.
 ## Why this looks attractive
 
 - No auto-increment IDs exposed
-    
 - No random generator needed
-    
 - Same URL always produces the same short URL
-    
 - Simple mental model
-    
 
 ---
 
@@ -63,25 +56,19 @@ Example:
 This causes:
 
 - One short URL pointing to two different destinations
-    
 - Data corruption or forced overwrites
-    
 
 Avoiding collisions means:
 
 - Longer hash → ugly URLs
-    
 - Collision checks → complexity returns
-    
 
 ---
 
 ## 2. Length vs usability trade-off
 
 - Short hash → collisions
-    
 - Long hash → defeats “short” in short URL
-    
 
 Example:
 
@@ -111,7 +98,6 @@ You lose the ability to:
 ## 4. Hard to rotate or change behavior
 
 If you ever:
-
 - Change hash algorithm
 - Change truncation length
 - Add salting

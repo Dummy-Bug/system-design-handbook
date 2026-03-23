@@ -7,13 +7,9 @@ UUID = **Universally Unique Identifier**
 - Designed to be unique across:
     
     - Machines
-        
     - Processes
-        
     - Time
-        
     - Datacenters
-        
 
 Example (UUID v4):
 
@@ -36,11 +32,8 @@ Each service instance generates UUIDs independently.
 There is **no shared counter**, hence:
 
 - No overlap
-    
 - No coordination
-    
 - No collision risk (practically zero)
-    
 
 ---
 
@@ -49,15 +42,10 @@ There is **no shared counter**, hence:
 ### Flow
 
 1. Client calls `POST /shortUrl`
-    
 2. Application generates a UUID
-    
 3. UUID is stored as primary key
-    
 4. UUID is encoded (Base62 / Base64URL)
-    
 5. Encoded value becomes the shortCode
-    
 
 `UUID (128-bit)    ↓ Base62 encode    ↓ shortCode`
 
@@ -80,11 +68,8 @@ There is **no shared counter**, hence:
 ### 1. No collisions across shards
 
 - Safe for horizontal scaling
-    
 - Safe for multi-region writes
-    
 - No central ID generator
-    
 
 ---
 
@@ -93,11 +78,8 @@ There is **no shared counter**, hence:
 Unlike auto-increment IDs, UUIDs do **not** reveal:
 
 - Total number of URLs
-    
 - Creation order
-    
 - Growth rate
-    
 
 This is critical for public-facing systems.
 
