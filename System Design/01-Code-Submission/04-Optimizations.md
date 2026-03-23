@@ -17,12 +17,11 @@ so synchronous flow was slow but parallel flow has it's own set of issues.
 
 * Other solution could be Evaluator Service is consuming the data from the Submission Queue anyway how about a new service X such that it's responsibility is to consume data from the Submission Queue but instead of evaluation this service's job is only to create an entry inside the DB.In this case Submission Service would directly make the entry inside the Submission Queue that too only once.
 	**Problems**
-	* Most of the Queuing servers are not going to allow multiple consumers. and the reason being most of the Queue servers like AWS s3 remove the payload once it is consumed.We can have separate Queues one for evaluator service and other for new service X but by doing so now Submission Service have to make two submissions which was the problem that we were trying to solve in first place because entry inside one of the Queues failed and inside another succeeded.
+	* Most of the Queuing servers are not going to allow multiple consumers. and the reason being most of the Queue servers like AWS SQS remove the payload once it is consumed.We can have separate Queues one for evaluator service and other for new service X but by doing so now Submission Service have to make two submissions which was the problem that we were trying to solve in first place because entry inside one of the Queues failed and inside another succeeded.
 
 so we kinda need a mechanism such that Submission Service should add the entry once and other services should be able to consume it more than once.that's where the concept of **Message Streams** comes into play.It is same as message queues with one big difference as Message Streams allows multiple consumers to read the same payload. So Message Streams promise **Atleast One Entry**.few popular examples of such Streams are **Apache Kafka** and **AWS Kinesis**.
 
-
-Now Submission Service will create an entry inside the Kafka instead of Message Queues and Evaluator Service and new service both are consumer of Message Stream and Submission Service no longer have to wait for the DB entry to get created Hence it can immediatley return the response to web-client. Remember we are adamant on making entry inside DB because user may want to view his older submissions and all. Hence we need durability.
+Now Submission Service will create an entry inside the Message Stream instead of Message Queues . Evaluator Service and new service both are consumer of Message Stream and Submission Service no longer have to wait for the DB entry to get created Hence it can immediatley return the response to web-client. Remember we are adamant on making entry inside DB because user may want to view his older submissions and all. Hence we need durability.
 
 
 

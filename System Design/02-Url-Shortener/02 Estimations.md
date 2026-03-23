@@ -7,6 +7,12 @@
 3. User can give a custom short string , and if that short string is not already used , we can allocate that to the URL.*(This is an additional feature)*
 
 ---
+## Non-Functional Requirements
+
+1. High availability for redirects → **99.9% uptime**
+2. Low latency redirects → **< 100ms p99**
+
+---
 
 ### Assumptions and Calculations
 
@@ -27,45 +33,74 @@
 	**Schema**
 	*(Pk , Original Url , shortUrl)*
 	1. PK - BigInt -> 8Bytes
-	2. Original Url - assume average length to be 25(200-300 chars nowdays) chars -> 25 Byte
-	3. Short Url -> assume average length to be 7 chars -> 7 Byte
-	so total 8+25+7 => 40Bytes
+	2. Original Url - assume average length to be 25(200-300 chars nowdays so 200Bytes) chars -> 200 Byte
+	3. Short Url -> assume average length to be 12 chars -> 12 Byte
+	so total 8+200+12 ~ 250Bytes including metadata
 	
-	- so for 5 years we need a storage of 2.5B* 40Byte -> 100B* Byte => 100GB
-	- for next 20 years - 100GB * 4 -> 400GB
+- for 5 years: 500M * 250Bytes = 125GB 
+- for 20 years: 125GB * 4 = 500GB
 
 ---
 
-### Non Functional Requirements
-
-1. 500M urls per year
-2. 10 Write Queries Per Second average -> 5x -> 50 qps
-3. for read queries peak load can be 100x(peak write QPS) -> 5000 qps
-4. Availability -> 99.9% for redirects
-
 ---
+## System Capacity
+
+1. 500M URLs/year
+2. ~10 QPS average writes → 5x peak → **50 QPS peak writes**
+3. Read:Write ratio = 100:1 (URL shorteners are extremely read-heavy; a single viral link can get millions of hits) → ~1000 QPS average reads → 5x peak → **5000 QPS peak reads**
+4. Storage: 125 GB (5 years), 500 GB (20 years)
 
 ### Why Cache Is Mandatory (Not Optional)
 
 Key observation:
 
 - Writes: **~50 QPS**
-    
-- Reads: **~5000 QPS**
-    
+- Reads: **~5000 QPS** 
 - Read/Write ratio = **100:1**
-    
 
 Hitting MySQL for every redirect:
 
 - Increases latency
-    
 - Burns DB connections
-    
 - Breaks 99.9% SLA under spikes
-    
 
 ➡️ **Redirects must be served from cache**
+
+
+
+## How to calculate Read factor
+
+---
+
+**Way 1: Bottom-up from user behavior (preferred)**
+
+Think about what actually happens with a short URL:
+
+- Someone creates 1 short URL → then **shares it** on WhatsApp, Twitter, email, etc.
+- That 1 URL gets clicked by maybe **50–200 different people**
+- So for every 1 write, you get ~100 reads
+
+That's your 100:1 ratio — it comes directly from the nature of the product, not a magic number.
+
+---
+
+**Way 2: Top-down from MAU**
+
+You already have:
+
+- 1M MAU, 50% are **creators** → 500K creators
+- The other 50% are **pure consumers** (they only click links, never create)
+- Plus creators themselves also click other links
+
+So your **reader pool is much larger than your writer pool** — easily 100x.
+
+---
+
+**How to say it in an interview**
+
+> _"URL shorteners are inherently read-heavy. A single URL gets created once but can be clicked by hundreds of people — think a viral WhatsApp forward or a tweet. I'll conservatively assume 100 reads per write, giving a 100:1 ratio. That means ~1000 QPS average reads and ~5000 QPS at peak."_
+
+That one sentence of justification is all the interviewer needs. The exact number (100x vs 80x vs 150x) doesn't matter — **the reasoning does.**
 
 
 
