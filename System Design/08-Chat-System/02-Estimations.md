@@ -131,18 +131,6 @@ B types "hello back" → sent over B's WS connection → server → pushed over 
 
 ---
 
-**Summary table for this exact scenario:**
-
-||A sends "hey"|B receives instantly?|B sends "hello back"|A receives instantly?|Connections per user|
-|---|---|---|---|---|---|
-|Short Polling|✅|❌ up to 3s delay|✅|❌ up to 3s delay|1 but reopens every 3s|
-|Long Polling|✅|✅|✅|✅|1 but reopens every message|
-|SSE|✅ extra HTTP|✅|✅ extra HTTP|✅|2 (SSE + HTTP)|
-|WebSocket|✅|✅|✅|✅|1 persistent|
-
-**Conclusion:** WebSockets is the only viable option.
-
-> WebSockets give us a persistent bidirectional connection. One connection per user handles both sending and receiving, with minimal overhead compared to repeated HTTP connections.
 
 
 
