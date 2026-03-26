@@ -9,7 +9,16 @@
 ## Estimation
 
  - The system should be able to cater 50M auctions concurrently.
- - For every auction we might get 100-200 bids.
+ - one auction runs for 10 days 
+ - Every auction has 200 bids.
+ - so total bids in 1 year = 365 * 1B ~ 400B bids in and in 10 years 4000B bids.
+
+
+```
+so total bids for 10 days-> 50M * 200 -> 10B bids -> 10 * 10^9
+so total bids per day -> 10^9
+so total bids per seconds -> 10^9/10^5 -> 10kbids/sec - QPS
+```
 
 ## Non Functional 
 
