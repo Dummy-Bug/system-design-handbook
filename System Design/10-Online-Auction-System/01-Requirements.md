@@ -4,6 +4,7 @@
 - People should be able to view the auctions:see the metadata about the auction,and current highest bid.
 - People should be able to bid a price for the item.
 - People can participate simultaneously in different auctions.
+- Auction can end with a given end time or 24 hours after no interaction.
 
 ## Estimation
 
