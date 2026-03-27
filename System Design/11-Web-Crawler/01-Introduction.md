@@ -229,3 +229,81 @@ Result appears in milliseconds ✓
 
 The key insight is — **by the time you search, all the hard work is already done**. Google is just doing a very fast lookup on a pre-built index, not browsing the internet in real time.
 
+Crawler (Googlebot)
+├── Fetcher   → makes the HTTP request, gets the HTML
+├── Parser    → reads that HTML, pulls out links
+└── Scheduler → adds new links to the queue
+
+Googlebot visits leetcode.com
+    ↓
+[internally] fetches the HTML
+    ↓
+[internally] parses it to find links
+    ↓
+adds those links to its own queue
+    ↓
+picks next link from queue, repeats
+
+
+
+`robots.txt` is a file that every website can put on their server that tells crawlers what they are and aren't allowed to crawl.
+
+---
+
+## Where it lives
+
+Always at the root of the domain. For LeetCode it would be:
+
+```
+https://leetcode.com/robots.txt
+```
+
+Go ahead and open that in your browser right now — every major website has one.
+
+---
+
+## What it looks like
+
+```
+User-agent: *
+Disallow: /private/
+Disallow: /user-settings/
+Allow: /problems/
+Crawl-delay: 10
+```
+
+**User-agent** — which crawler this rule applies to. `*` means all crawlers. You could also write `Googlebot` to target Google specifically.
+
+**Disallow** — don't crawl these paths.
+
+**Allow** — do crawl these paths.
+
+**Crawl-delay** — wait 10 seconds between requests. Don't hammer our server.
+
+---
+
+## Why websites need this
+
+LeetCode doesn't want Google crawling:
+
+- `/user-settings/` — private user data
+- `/api/internal/` — internal API endpoints
+- `/admin/` — admin panels
+
+They only want Google indexing the actual problem pages so those show up in search results.
+
+---
+
+## Why crawlers respect it
+
+Two reasons:
+
+**Ethical** — you're a guest on someone else's server. Ignoring robots.txt and hammering their server with requests is basically a DDoS attack.
+
+**Legal** — in some countries ignoring robots.txt can have legal consequences.
+
+---
+
+## The one thing to remember
+
+robots.txt is just a **gentleman's agreement**. There's no technical enforcement. A malicious scraper can completely ignore it. But any legitimate crawler — Googlebot, Bingbot — always respects it.
