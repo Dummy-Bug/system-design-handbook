@@ -27,23 +27,42 @@ Assuming every page is around -> 1MB per site -> 10^6 Bytes per page
 
 10^10 pages -> 10^10 * 10^6
 -> 10^16 -> 10PB of data
+
+For future proofing we might have to store 5x of data so 50PB of data.
+
+We have to crawl 10k pages per second
+1Page -> 1MB of data 
+so 10^6Bytes * 10^4 -> 10^10 -> 10GB of data per second we are downloading 
+1Byte -> 8 Giga bits
+**10GB -> 80Giga bits
+
+hence to download 10GB of data per second we need 80Gbps of bandwidth
+
+The bandwidth given by normal machines is around 1Gbps , so we might have to be aware that how powerful machines we have so that we can know how many machines we gonna need for achieing 10GB download per second .
+
+High-end machines like EC2 instances can support up to 200Gbps of network bandwidth, however in practice we should not assume full utilization. Accounting for overhead from other processes, OS networking stack, and shared infrastructure, a realistic usable bandwidth is around 25% — so effectively ~50Gbps per machine.
+
+Since we need 80Gbps total, theoretically 2 such machines suffice for bandwidth alone. However in practice we would provision more to account for peak load , fault tolerance and headroom
 ```
+
 
 ## Final estimations
 
 ```
-Total pages      = 10B (10^10)
-Throughput       = ~10,000 pages/second
-Page size        = ~1MB (upper bound)
-Storage          = ~10PB
-Data ingestion   = 10,000 * 1MB = ~10GB/second
+Total pages        = 10B
+Throughput         = ~10,000 pages/second
+Page size          = ~1MB
+Storage            = ~10PB
+Data ingestion     = ~10GB/second
+Network bandwidth  = ~80 Giga bits per second
+Machines needed    = ~10 minimum (bandwidth alone)
 ```
 
 ## Non Functional
 
 1. **Fault tolerant** — if a crawler worker crashes, no URLs should be lost or skipped
 2. **Horizontally scalable** — should handle crawling 10B pages within 10 days.
-3. **Scalable storage** — capable of storing ~5PB of raw HTML
+3. **Scalable storage** — capable of storing ~50PB of raw HTML
 4. **Polite** — respect per domain rate limits, avoid overwhelming any single server
 
 
