@@ -1,7 +1,7 @@
 ## Functional 
 
 1. Upload files to the platform
-2.  Download files from the platform
+2. Download files from the platform
 3. Sync files on cloud across devices
 4. Any file type
 5. How internal blob storage is working (Out of scope)
