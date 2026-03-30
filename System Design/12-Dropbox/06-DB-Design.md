@@ -8,3 +8,16 @@
 
 
 ## Versoning in chunks metadata
+
+- Instead of storing one list of chunks , we can store multiple lists of chunks where each list will denote version , and the set of chunks will be the file hashes for that version.S3 supports chunk version etc etc
+- A lot of chunjs might be common across versions so the S3 link will be same also.
+
+## What DB to chose from DB
+
+- Now we know that system might lead to race conditions where two clients are trying to change chunk of same file.
+- We might need some locking mechanism in this case and keeping a single leader replication will make it easy to apply ACID here.so again using RDBMS like MySql should work for us.If race conditions are not in place then a document store like MongoDB is also good.
+- For a better throuput we can partition the DB based on fileId as it is the primary key in identifying the file.
+
+**What if we use multi leader replication ?**
+- In multi leader replication it can happen that multiple clients do a write of metadata to different leader for the same file , which will lead to conflict.
+- In that case we might need to do a manual conflict resolution by the user,which will be complex for users.
