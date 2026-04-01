@@ -1,363 +1,59 @@
-Assume this state at time **t0**:
+## What Is a Race Condition?
 
-- `total_rooms = 100`
-- `total_reserved_rooms = 99`
-
-Two users check availability at the same time.
-
-Both see **1 room available**.  
-Both send a booking request.
-
-Because the database isolation level is **not SERIALIZABLE**, both transactions read the same snapshot and both proceed.
-
-Final result:
-
-- `total_reserved_rooms = 101`
-- Same room effectively booked twice.
-
-This is called **race condition** or **lost update problem**.
-
-Root cause:
-
-- Read and write operations were not properly synchronized.
-- Database allowed concurrent writes without conflict detection.
+A race condition happens when two operations read the same data at the same time, both think they can proceed, and both write — corrupting the final state.
 
 ---
 
-# Solution Approaches
+## The Hotel Booking Scenario
 
-There are two industry-standard strategies:
+At time `t0`, one Deluxe King room is left:
 
-1. Pessimistic Locking
-2. Optimistic Locking
-
-They solve the same problem differently.
-
----
-
-## 1) Pessimistic Locking
-
-### Idea
-
-Assume conflicts WILL happen.  
-So block others early.
-
-When a user selects a room:
-
-- System immediately locks that row or seat record.
-    
-- Other users cannot read or modify it until the lock is released.
-    
-
-### Example
-
-BookMyShow seat selection:
-
-- You click seat A1.
-- Seat becomes temporarily unavailable for others.
-- You have a time window to complete payment.
-
-Technically implemented using:
-
-```sql
-SELECT * FROM rooms 
-WHERE id = 10 
-FOR UPDATE;
-```
-
-This places a **row-level exclusive lock**.
-
----
-
-### Advantages
-
-- Guarantees consistency.
-    
-- No double booking possible.
-    
-- Simple mental model.
-    
-
----
-
-### Problems
-
-#### 1. Lock holding waste
-
-User may:
-
-- Abandon payment
-    
-- Close browser
-    
-- Lose network
-    
-
-Result:
-
-- Resource stays locked.
-    
-- Other users are blocked.
-    
-
-Needs timeout logic to clean up stale locks.
-
----
-
-#### 2. Deadlocks
-
-Example:
-
-- Transaction A locks Room 1 then tries Room 2
-    
-- Transaction B locks Room 2 then tries Room 1
-    
-
-Both wait forever.
-
-Database must detect and kill one transaction.
-
----
-
-#### 3. Scalability bottleneck
-
-High traffic systems suffer because:
-
-- Threads wait on locks.
-    
-- Throughput drops.
-    
-- Latency increases.
-    
-
-Not suitable for:
-
-- Flash sales
-    
-- Ticket booking peaks
-    
-- High concurrency workloads
-    
-
----
-
-## 2) Optimistic Locking
-
-### Idea
-
-Assume conflicts are RARE.  
-Do not lock upfront.
-
-Let everyone try.
-
-At commit time:
-
-- Detect conflict.
-    
-- Allow only one transaction to succeed.
-    
-- Reject others.
-    
-
-No blocking.
-
----
-
-### Flow
-
-1. Multiple users read the same data.
-    
-2. All attempt update.
-    
-3. Database checks if data changed meanwhile.
-    
-4. If changed → reject update.
-    
-
-Only one wins.
-
-Others retry or show error.
-
----
-
-### Why This Works Better at Scale
-
-- No long locks.
-    
-- No waiting.
-    
-- Better throughput.
-    
-- Works well when conflicts are infrequent.
-    
-
-Used by:
-
-- High-scale APIs
-    
-- Distributed systems
-    
-- Microservices
-    
-
----
-
-# How Optimistic Locking Is Implemented
-
-Two common techniques:
-
----
-
-## Method 1: Timestamp Based
-
-Each row has:
-
-```
-last_updated_at
-```
-
-### Flow
-
-1. Client reads row with timestamp `T1`
-    
-2. Client sends update with condition:
-    
-
-```sql
-UPDATE rooms
-SET reserved = true
-WHERE id = 10 
-AND last_updated_at = T1;
-```
-
-If another update happened:
-
-- Timestamp changed
-    
-- Query affects 0 rows
-    
-- Update fails
-    
-
----
-
-## Method 2: Version Number (Most Common)
-
-Preferred method.
-
-Add column:
-
-```
-version INT
-```
-
-Initial value:
-
-```
-version = 1
-```
-
----
-
-### Step-by-step Example
-
-Initial state:
-
-```
-room_id = 10
-reserved = false
-version = 5
-```
-
-Two users read this.
-
----
-
-### User A Update
-
-```sql
-UPDATE rooms
-SET reserved = true,
-    version = version + 1
-WHERE id = 10
-AND version = 5;
-```
-
-Success.
-
-Row becomes:
-
-```
-reserved = true
-version = 6
-```
-
----
-
-### User B Update
-
-Runs same query:
-
-```sql
-WHERE version = 5
-```
-
-But current version is now 6.
-
-Result:
-
-- 0 rows affected
-    
-- Update fails
-    
-- System returns "Booking failed. Try again."
-    
-
----
-
-### Important Property
-
-Database enforces atomicity.
-
-No race possible.
-
-No explicit lock.
-
----
-
-# Comparison Summary
-
-|Feature|Pessimistic|Optimistic|
+| room_type_id | date | available_count |
 |---|---|---|
-|Lock upfront|Yes|No|
-|Blocking|Yes|No|
-|Deadlock risk|Yes|No|
-|Throughput|Lower|Higher|
-|Failure handling|Rare|Common and expected|
-|Best for|High conflict systems|High scale systems|
+| RT007 | 2026-02-12 | **1** |
+
+Alice and Bob both search, both see "1 room left", and both click Reserve at the same moment.
 
 ---
 
-# Real World Usage
+## What Goes Wrong Without Protection
 
-### Use Pessimistic Locking When
+```mermaid
+sequenceDiagram
+    participant Alice
+    participant Bob
+    participant DB
 
-- Inventory is extremely small
-    
-- Conflicts are guaranteed
-    
-- Example: Bank balance transfer
-    
+    Alice->>DB: SELECT available_count WHERE room_type_id='RT007'
+    Bob->>DB: SELECT available_count WHERE room_type_id='RT007'
+    DB-->>Alice: available_count = 1
+    DB-->>Bob: available_count = 1
+    Note over Alice,Bob: Both see 1 room — both think they can book
+
+    Alice->>DB: UPDATE SET available_count = available_count - 1
+    Bob->>DB: UPDATE SET available_count = available_count - 1
+
+    Note over DB: available_count = -1 ❌
+    Note over DB: Both get confirmed bookings\nfor the same room
+```
+
+The read and the write are two separate steps. Between Alice's read and her write, Bob also reads the same value. Neither knows about the other.
+
+This is the **lost update problem** — Bob's update overwrites Alice's without knowing it happened.
 
 ---
 
-### Use Optimistic Locking When
+## The Two Solutions
 
-- Large inventory
-    
-- High concurrency
-    
-- Read heavy systems
-    
-- Example: Ticket booking, ecommerce carts
-    
+There are two industry-standard approaches to fix this. They solve the same problem with opposite philosophies:
+
+| Approach | Philosophy | File |
+|---|---|---|
+| **Pessimistic Locking** | Assume conflicts WILL happen — block others early | [[09 Pessimistic-Locking]] |
+| **Optimistic Locking** | Assume conflicts are RARE — let everyone try, detect conflict at commit time | [[10 Optimistic-Locking]] |
+
+> [!note] Which does our hotel system use?
+> We use **optimistic locking**.
+> Hotel booking has ~30 QPS spread across 1,100,000 rooms. The chance of two users booking the exact same room type at the same hotel on the same dates simultaneously is very low — conflicts are rare, not guaranteed.
+> Pessimistic locking would be correct for BookMyShow (thousands of users racing for the same seat in a 2-minute window) but is overkill here.
+> See [[10 Optimistic-Locking]] for the full implementation.

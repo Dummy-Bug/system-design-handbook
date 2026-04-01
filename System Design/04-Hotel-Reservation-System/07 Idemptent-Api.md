@@ -1,274 +1,154 @@
-An idempotent API guarantees:
+# Idempotent API — Implementation
 
-> Multiple identical requests result in **one logical operation** and **one final state**, without creating duplicates.
-
-It does NOT mean the response payload is always identical at every step. It means side effects happen once. 
-
-[[Idempotency.pdf]]
-
-## Idempotency Table
-
-`idempotency ----------- key (PK) request_hash response_payload status   -- IN_PROGRESS, COMPLETED created_at expires_at`
-
-Purpose:
-
-- Deduplicate Reserve API calls
-    
-- Handle retries and refreshes
-    
+> The problem this solves and why it exists is covered in [[06 Concurrency-Problems]].
+> This file covers only **how** idempotency is implemented server-side.
 
 ---
 
-## Reservation Table
+## What Idempotency Means
 
-`reservation ----------- id (PK) user_id hotel_id room_type_id start_date end_date status price_snapshot created_at expires_at`
-
-Purpose:
-
-- Track booking lifecycle
-    
-- Drive UI workflow
-    
-- Enforce state machine
-    
+> Multiple identical requests produce **one logical operation** and **one final state** — no duplicates, no double charges.
 
 ---
 
-# STEP 1 — User Clicks "Reserve"
+## The Idempotency Table
 
-Browser:
-`bookingKey = UUID() sessionStorage["booking_key"] = bookingKey`
-Request:
-`POST /reservations Headers: Idempotency-Key: bookingKey`
+A dedicated table stores every processed request by its key.
 
----
+```sql
+CREATE TABLE idempotency (
+    key              VARCHAR(100)    PRIMARY KEY,   -- UUID sent by client
+    status           VARCHAR(20)     NOT NULL,      -- IN_PROGRESS, COMPLETED
+    response_payload TEXT,                          -- cached response to replay
+    created_at       TIMESTAMP       DEFAULT NOW(),
+    expires_at       TIMESTAMP                      -- keys expire after 24 hours
+);
+```
 
-# STEP 2 — Reservation Service Receives Request
+**Sample data:**
 
-### 2.1 Check Idempotency Table
-
-SQL:
-
-`SELECT response_payload, status FROM idempotency WHERE key = :bookingKey;`
-
----
-
-### Case A — Already Exists (Retry / Refresh)
-
-If found:
-
-Return:
-
-`response_payload`
-
-STOP.
-
-No DB mutation.
+| key | status | response_payload | expires_at |
+|---|---|---|---|
+| 7f3k92md-a12b... | COMPLETED | `{"reservationToken":"tok_abc"}` | 2026-02-02 15:00:00 |
+| 9g4m03ne-b23c... | IN_PROGRESS | null | 2026-02-01 16:00:00 |
 
 ---
 
-### Case B — New Request
+## How the Client Generates the Key
 
-Insert placeholder row:
+When the user lands on the checkout page, the browser generates a UUID and stores it in `sessionStorage`:
 
-`INSERT INTO idempotency (key, status, created_at, expires_at) VALUES (:bookingKey, 'IN_PROGRESS', now(), now() + interval '24 hours');`
+```javascript
+const idempotencyKey = crypto.randomUUID();
+sessionStorage.setItem('booking_key', idempotencyKey);
+```
 
----
-
-# STEP 3 — Create Reservation Draft
-
-Insert reservation:
-
-`INSERT INTO reservation (id, user_id, hotel_id, room_type_id, start_date, end_date, status, created_at, expires_at) VALUES ('R001', :userId, :hotelId, :roomTypeId, :startDate, :endDate, 'STARTED', now(), now() + interval '15 minutes');`
-
-Important:
-
-- This is NOT confirmed booking.
-    
-- Inventory not yet locked permanently.
-    
-- Expiry protects abandoned carts.
-    
+Every retry of the same booking attempt reuses the same key from `sessionStorage`.
+A fresh booking (new session) generates a new UUID.
 
 ---
 
-# STEP 4 — Store Idempotency Result
+## Server-Side Flow
 
-Update idempotency row:
-
-`UPDATE idempotency SET status = 'COMPLETED',     response_payload = '{ "reservation_id": "R001" }' WHERE key = :bookingKey;`
-
----
-
-# STEP 5 — Return Reservation Page
-
-Response:
-
-`reservation_id = R001`
-
-Browser renders review page.
+```mermaid
+flowchart TD
+    A[Request arrives Idempotency-Key: abc123] --> B{Check idempotency table for key abc123}
+    B -- Found + COMPLETED --> C[Return cached response_payload no processing]
+    B -- Found + IN_PROGRESS --> D[Return 409 request still processing]
+    B -- Not found --> E[INSERT key with status = IN_PROGRESS]
+    E --> F[Process the request create PENDING reservation]
+    F --> G[UPDATE key status = COMPLETED store response_payload]
+    G --> H[Return response to client]
+```
 
 ---
 
-# STEP 6 — Page Refresh Happens
+## Step-by-Step
 
-Browser reuses:
+### Step 1 — Request arrives
 
-`sessionStorage["booking_key"]`
-
-Sends same request again.
-
-Backend:
-
-Runs:
-
-`SELECT response_payload FROM idempotency WHERE key = :bookingKey;`
-
-Returns:
-
-`R001`
-
-No new reservation row created.
+```http
+POST /api/v1/reservations/initiate
+Idempotency-Key: 7f3k92md-a12b-4c9d-b831-9f2e1d3a8c74
+```
 
 ---
 
-# STEP 7 — User Clicks "Next Final Details"
+### Step 2 — Check if key already exists
 
-Request:
+```sql
+SELECT status, response_payload
+FROM idempotency
+WHERE key = '7f3k92md-a12b-4c9d-b831-9f2e1d3a8c74';
+```
 
-`POST /reservations/R001/confirm-details`
+**Case A — Key found, status = COMPLETED (retry/refresh)**
 
----
+Return the cached `response_payload` immediately. No reservation created. No inventory touched.
 
-## Backend Logic
+```json
+{ "reservationToken": "tok_abc123xyz", "status": "PENDING" }
+```
 
-Fetch state:
+**Case B — Key found, status = IN_PROGRESS (concurrent duplicate)**
 
-`SELECT status FROM reservation WHERE id = 'R001';`
+The first request is still being processed. Return `409` — tell the client to wait and retry shortly.
 
----
+**Case C — Key not found (genuine new request)**
 
-### If status = STARTED
-
-Update:
-
-`UPDATE reservation SET status = 'DETAILS_CONFIRMED' WHERE id = 'R001';`
-
----
-
-### If status already progressed
-
-Return current UI state.
-
-No duplicate effect.
+Continue to Step 3.
 
 ---
 
-# STEP 8 — User Clicks "Complete Booking"
+### Step 3 — Insert placeholder row
 
-Request:
+Before doing any work, mark this key as in-progress. This prevents a second concurrent request with the same key from also proceeding.
 
-`POST /reservations/R001/complete Headers: Payment-Idempotency-Key: pay-uuid`
-
----
-
-# STEP 9 — Final Booking Transaction
-
-Single DB transaction.
+```sql
+INSERT INTO idempotency (key, status, expires_at)
+VALUES ('7f3k92md-a12b-4c9d-b831-9f2e1d3a8c74', 'IN_PROGRESS', NOW() + INTERVAL '24 hours');
+```
 
 ---
 
-### 9.1 Lock Inventory Rows
+### Step 4 — Process the request
 
-`SELECT booked_rooms, total_rooms, overbooking_limit FROM room_type_inventory WHERE hotel_id = :hotelId AND room_type_id = :roomTypeId AND date BETWEEN :start AND :end FOR UPDATE;`
-
----
-
-### 9.2 Validate Availability
-
-Application logic:
-
-`available = total + overbooking - booked`
-
-If any day sold out:
-
-ROLLBACK.
+Create the PENDING reservation and deduct inventory as normal. See [[04b Initiate-Reservation]] for the full transaction.
 
 ---
 
-### 9.3 Increment Inventory
+### Step 5 — Store the result
 
-`UPDATE room_type_inventory SET booked_rooms = booked_rooms + 1 WHERE hotel_id = :hotelId AND room_type_id = :roomTypeId AND date BETWEEN :start AND :end;`
+Once the reservation is created, update the idempotency row with the response:
 
----
-
-### 9.4 Update Reservation Status
-
-`UPDATE reservation SET status = 'CONFIRMED' WHERE id = 'R001';`
-
----
-
-### 9.5 Commit Transaction
-
-Booking is now final.
+```sql
+UPDATE idempotency
+SET status           = 'COMPLETED',
+    response_payload = '{"reservationToken":"tok_abc123xyz","status":"PENDING"}'
+WHERE key = '7f3k92md-a12b-4c9d-b831-9f2e1d3a8c74';
+```
 
 ---
 
-# STEP 10 — Duplicate "Complete Booking" Click Happens
+### Step 6 — Return response
 
-Backend checks:
-
-`SELECT status FROM reservation WHERE id = 'R001';`
-
-Finds:
-
-`CONFIRMED`
-
-Returns success response.
-
-No inventory update.  
-No payment retry.  
-No duplicate row.
+Return the response to the client. If the same request arrives again, Step 2 will find the COMPLETED row and replay this exact response — nothing else runs.
 
 ---
 
-# What This Guarantees
+## What Each Scenario Returns
+
+| Scenario | What happens | Response |
+|---|---|---|
+| First click | Key not found → process → store | Fresh response |
+| Double click (race) | Key found, IN_PROGRESS | 409 — retry shortly |
+| Retry after network drop | Key found, COMPLETED | Cached response replayed |
+| Page refresh | Key found in sessionStorage, COMPLETED | Cached response replayed |
+| New booking session | New UUID generated | Fresh request, processed normally |
 
 ---
 
-## Duplicate Reserve Click
-
-Blocked by:
-
-- Idempotency table
-    
-
----
-
-## Page Refresh
-
-Handled by:
-
-- sessionStorage reuse
-    
-- Idempotency replay
-    
-
----
-
-## Double Complete Booking Click
-
-Blocked by:
-
-- Reservation state machine
-    
-- Payment idempotency
-    
-
----
-
-## Overselling
-
-Blocked by:
-
-- Inventory row locking
+> [!note] Why do idempotency keys expire after 24 hours?
+> Old keys are useless after the booking window has passed.
+> Keeping them forever would grow the table indefinitely.
+> 24 hours gives enough window for any realistic retry scenario.

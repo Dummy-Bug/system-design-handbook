@@ -1,32 +1,86 @@
 See also: [[13-HTTP-Methods]] for HTTP method definitions
 
-## The User Journey (Booking.com flow)
+---
 
-Before writing APIs, always map the user's journey. Every API should serve a step in this flow:
+## The Booking.com Flow
 
 ```mermaid
-flowchart LR
-    A[Search hotels by city + dates] --> B[View hotel details]
-    B --> C[Check available room types]
-    C --> D[Book a room type]
-    D --> E[View / Cancel\booking]
+flowchart TD
+    A[Homepage\nFeatured Hotels] --> B[Click a Hotel]
+    B --> C[Hotel Detail Page\nRoom types + availability]
+    C --> D[Click Reserve]
+    D -->|POST /reservations/initiate\nRoom held — PENDING| E[Page 1: Personal Details\nName · Phone · Email]
+    E -->|Click Proceed| F[Page 2: Card Details\nCard → Stripe → paymentToken]
+    F -->|Click Next| G[Page 3: OTP\nBank sends OTP — 3DS verification]
+    G -->|Verify OTP\nPOST /reservations/confirm| H[Confirmation Screen\nRES900123 — CONFIRMED]
 ```
 
 > [!note] Why room TYPE and not a specific room?
 > On Booking.com you pick **"Deluxe King — $180/night"**, not **"Room 423"**.
-> The hotel has 50 Deluxe King rooms. Any one of them can fulfil your booking.
+> The hotel has 50 Deluxe King rooms — any one of them can fulfil your booking.
 > The hotel assigns you a specific physical room only at check-in.
 >
-> This matters for availability — we track inventory per room type ("50 Deluxe Kings left"),
+> This matters for availability — we track inventory per room type ("8 Deluxe Kings left"),
 > not per individual room. Booking against a type is simpler and scales better.
 
 ---
 
-## 1. Search & Browse APIs
+## 1. Homepage APIs
+
+### Featured Hotels
+
+User lands on Booking.com. Show a curated list of featured hotels and deals.
+
+```http
+GET /api/v1/hotels/featured
+```
+
+**Response `200 OK`**
+```json
+{
+  "hotels": [
+    {
+      "hotelId": "H1001",
+      "name": "Marriott Times Square",
+      "city": "New York",
+      "rating": 4.5,
+      "startingFromPrice": 180,
+      "thumbnailUrl": "https://..."
+    }
+  ]
+}
+```
+
+---
+
+### Destination Autocomplete
+
+As the user types in the search box, suggestions appear in a dropdown.
+
+```http
+GET /api/v1/destinations/autocomplete?q=New+Yor
+```
+
+**Response `200 OK`**
+```json
+{
+  "suggestions": [
+    { "label": "New York, United States", "destId": "DEST_NYC", "type": "city" },
+    { "label": "New York JFK Airport",    "destId": "DEST_JFK", "type": "airport" }
+  ]
+}
+```
+
+> [!tip] This endpoint is called on every keystroke — it must be extremely fast.
+> It is served from cache (Redis), not a live database query.
+
+---
+
+## 2. Search & Browse APIs
 
 ### Search Hotels
 
-The first thing a user does on Booking.com — enter a city and dates.
+User fills in city, dates, guests and hits Search.
 
 ```http
 GET /api/v1/hotels?city=New+York&checkIn=2026-02-10&checkOut=2026-02-13&guests=2&page=1&limit=20
@@ -38,6 +92,10 @@ GET /api/v1/hotels?city=New+York&checkIn=2026-02-10&checkOut=2026-02-13&guests=2
 | `checkIn` | Yes | Check-in date (YYYY-MM-DD) |
 | `checkOut` | Yes | Check-out date (YYYY-MM-DD) |
 | `guests` | Yes | Number of guests |
+| `minPrice` | No | Filter by minimum price per night |
+| `maxPrice` | No | Filter by maximum price per night |
+| `minRating` | No | Filter by minimum review score (e.g. 8.0) |
+| `freeCancel` | No | `true` to show only free cancellation hotels |
 | `page` | No | Page number (default: 1) |
 | `limit` | No | Results per page (default: 20, max: 50) |
 
@@ -52,15 +110,11 @@ GET /api/v1/hotels?city=New+York&checkIn=2026-02-10&checkOut=2026-02-13&guests=2
       "name": "Marriott Times Square",
       "city": "New York",
       "rating": 4.5,
+      "reviewCount": 2841,
+      "distanceFromCenter": "0.3 km",
       "startingFromPrice": 180,
-      "thumbnailUrl": "https://..."
-    },
-    {
-      "hotelId": "H1002",
-      "name": "Hilton Midtown",
-      "city": "New York",
-      "rating": 4.2,
-      "startingFromPrice": 150,
+      "freeCancel": true,
+      "urgencySignal": "Only 2 rooms left!",
       "thumbnailUrl": "https://..."
     }
   ]
@@ -68,28 +122,18 @@ GET /api/v1/hotels?city=New+York&checkIn=2026-02-10&checkOut=2026-02-13&guests=2
 ```
 
 > [!tip] Why is this response lightweight?
-> The search result shows only what you need to pick a hotel — name, rating, price preview.
-> Full details (amenities, room list, policies) are fetched separately when the user clicks in.
-> Sending everything upfront would be slow and wasteful.
+> The card shows only what you need to compare hotels — name, rating, price, distance.
+> Full details (amenities, room list, policies, reviews) are fetched separately when the user clicks in.
 
->[!Note] What is a thumbnail.
->A thumbnail is a small, low-resolution preview image of something.On Booking.com, when you search for hotels and see the list of results — each hotel card shows a small photo of the hotel on the left side. That small photo is the thumbnail.                                                            
-> It is not the full high-quality image. It is a compressed, small version specifically sized for the listing card — loads fast, takes very little data.When you actually click into the hotel page, you see the full-size photos.
+> [!note] What is `thumbnailUrl`?
+> A small, compressed preview image of the hotel — shown on the card in the search results list.
+> The client uses this URL to separately fetch and render the image. The image itself is never inside the JSON — that would make every response enormous.
 
-> [!Flow] Flow
-> The API returns the thumbnailUrl as a string in the JSON response. The client (browser or mobile app) then uses that URL to separately fetch and display the image.So the flow is:                                                               
-  Client calls GET /hotels?city=New York...                     
-              ↓      
-  Server returns JSON with thumbnailUrl     
-  "https://images.booking.com/hotels/H1001/thumb.jpg"       
-              ↓                                                     
-  Client uses that URL to fetch and render the image on the hotel card The image itself is never inside the JSON — that would be massive. The JSON just carries the address of where the image lives, and the client goes and gets it separately.
-  
 ---
 
 ### Get Hotel Details
 
-User clicks on a hotel to see full information.
+User clicks a hotel card — they see the full hotel page.
 
 ```http
 GET /api/v1/hotels/{hotelId}
@@ -103,10 +147,12 @@ GET /api/v1/hotels/{hotelId}
   "city": "New York",
   "address": "1535 Broadway, Manhattan, NY",
   "rating": 4.5,
+  "reviewCount": 2841,
   "amenities": ["wifi", "pool", "gym", "spa"],
   "checkInTime": "15:00",
   "checkOutTime": "11:00",
-  "cancellationPolicy": "Free cancellation up to 24 hours before check-in"
+  "cancellationPolicy": "Free cancellation up to 24 hours before check-in",
+  "photoUrls": ["https://...", "https://..."]
 }
 ```
 
@@ -114,7 +160,7 @@ GET /api/v1/hotels/{hotelId}
 
 ### Check Room Availability
 
-User is on the hotel page — they want to see which room types are available for their dates.
+On the same hotel page, the room table shows which room types are available for the selected dates.
 
 ```http
 GET /api/v1/hotels/{hotelId}/rooms/availability?checkIn=2026-02-10&checkOut=2026-02-13&guests=2
@@ -135,7 +181,9 @@ GET /api/v1/hotels/{hotelId}/rooms/availability?checkIn=2026-02-10&checkOut=2026
       "totalPrice": 540,
       "capacity": 2,
       "amenities": ["king bed", "city view", "bathtub"],
-      "remainingRooms": 8
+      "freeCancel": true,
+      "remainingRooms": 2,
+      "urgencySignal": "Only 2 left!"
     },
     {
       "roomTypeId": "RT008",
@@ -144,39 +192,46 @@ GET /api/v1/hotels/{hotelId}/rooms/availability?checkIn=2026-02-10&checkOut=2026
       "totalPrice": 1050,
       "capacity": 4,
       "amenities": ["living room", "jacuzzi", "butler service"],
-      "remainingRooms": 2
+      "freeCancel": false,
+      "remainingRooms": 5,
+      "urgencySignal": null
     }
   ]
 }
 ```
 
 > [!note] `remainingRooms` is approximate
-> This number can go stale within seconds — multiple users are viewing the same page.It is shown as a nudge ("Only 2 left!"), not a guarantee.The guarantee comes only when a booking is actually confirmed.
+> This number can go stale within seconds — many users may be viewing the same room simultaneously.
+> It is shown as a nudge ("Only 2 left!") to create urgency, not as a hard guarantee.
+> The guarantee only comes once a booking is confirmed.
 
 ---
 
-## 2. Reservation APIs
+## 3. Reservation APIs
 
-### Create Reservation
+The reservation stays `PENDING` across 3 pages. Only **one API call at the start** (initiate) and **one at the very end** (confirm after OTP).
 
-User selects a room type and confirms payment.
-
-```http
-POST /api/v1/reservations
+```mermaid
+flowchart TD
+    A[Click Reserve] -->|POST initiate| B[PENDING + reservationToken]
+    B --> C[Page 1: Personal Details\nno API call]
+    C --> D[Page 2: Card Details\nStripe returns paymentToken]
+    D --> E[Page 3: OTP\nBank verifies via 3DS]
+    E -->|POST confirm| F[CONFIRMED]
+    B -->|15 min expires| G[EXPIRED — room released]
 ```
 
-**Headers**
+---
+
+### Step 1 — Initiate Reservation (Click Reserve)
+
+User clicks "Reserve" on a room type. The system immediately holds the room and creates a `PENDING` reservation with a 15-minute countdown.
+
 ```http
+POST /api/v1/reservations/initiate
 Authorization: Bearer <user_token>
 Idempotency-Key: 7f3k92md-a12b-4c9d-b831-9f2e1d3a8c74
 ```
-
-> [!important] What is the Idempotency Key and why does it exist?
-> Imagine this: the user clicks "Confirm Booking", the request reaches our server, the booking is created and the card is charged — but then the network drops before the response reaches the user's phone.
->
-> The user sees an error screen. They click "Confirm" again. Without an idempotency key, we would charge their card a second time and create a duplicate booking.
->
-> With an idempotency key, the client sends the **same unique key** on retry. The server recognises it has already processed this exact request and returns the original response — no second charge, no duplicate booking.
 
 **Request Body**
 ```json
@@ -185,24 +240,39 @@ Idempotency-Key: 7f3k92md-a12b-4c9d-b831-9f2e1d3a8c74
   "roomTypeId": "RT007",
   "checkIn": "2026-02-10",
   "checkOut": "2026-02-13",
-  "guests": 2
+  "guests": 2,
+  "guestDetails": {
+    "firstName": "John",
+    "lastName": "Smith",
+    "email": "john@example.com",
+    "phone": "+1-555-0123",
+    "country": "US",
+    "specialRequests": "High floor, quiet room preferred"
+  }
 }
 ```
 
 **Response `201 Created`**
 ```json
 {
-  "reservationId": "RES900123",
-  "hotelId": "H1001",
-  "hotelName": "Marriott Times Square",
-  "roomType": "Deluxe King",
-  "checkIn": "2026-02-10",
-  "checkOut": "2026-02-13",
-  "nights": 3,
-  "totalPrice": 540,
-  "status": "CONFIRMED"
+  "reservationToken": "tok_7f3k92md_abc123xyz",
+  "status": "PENDING",
+  "expiresAt": "2026-02-01T15:30:00Z",
+  "summary": {
+    "hotelName": "Marriott Times Square",
+    "roomType": "Deluxe King",
+    "checkIn": "2026-02-10",
+    "checkOut": "2026-02-13",
+    "nights": 3,
+    "totalPrice": 540
+  }
 }
 ```
+
+> [!important] Why return a `reservationToken` instead of a `reservationId`?
+> The reservation is not confirmed yet — it is a temporary hold.
+> The `reservationToken` is a short-lived token (expires in 15 minutes) that proves you currently hold this room.
+> It is passed to the confirm step along with the payment. Only then does a permanent `reservationId` get created.
 
 **Error — Room no longer available `409 Conflict`**
 ```json
@@ -213,12 +283,81 @@ Idempotency-Key: 7f3k92md-a12b-4c9d-b831-9f2e1d3a8c74
 ```
 
 > [!note] Why 409 and not 400?
-> `400 Bad Request` means the client sent invalid data (e.g. missing field, wrong date format).
-> `409 Conflict` means the request was valid but it conflicts with the current state of the system — in this case, the room just got booked by someone else.These are different problems and should be communicated differently.
+> `400 Bad Request` = the client sent invalid data (wrong date format, missing field).
+> `409 Conflict` = the request was valid but conflicts with the current state of the system — someone else just grabbed the last room.
 
 ---
 
-### Get Reservation
+### Step 2 — Confirm Reservation (After OTP Verified)
+
+Here is what happens across pages 2 and 3 before this API is called:
+
+**Page 2 — Card Details:**
+User enters card details. The browser sends the card directly to Stripe (never to our server). Stripe returns a one-time `paymentToken`.
+
+**Page 3 — OTP:**
+The bank sends an OTP to the user's phone. This is called **3D Secure (3DS)** — a fraud prevention step mandated by the bank. The user enters the OTP, the bank verifies it, and only then does our `confirm` call fire.
+
+> [!important] Why does card data go to Stripe and not our server?
+> Handling raw card numbers requires extremely strict security certification called **PCI DSS compliance** — expensive and complex to maintain.
+> Instead, the browser sends the card directly to Stripe, which returns a safe one-time `paymentToken`.
+> Our server uses that token to charge the card — without ever seeing the card number itself.
+
+> [!note] What is 3DS / OTP?
+> 3D Secure is a bank-level fraud check. When you enter your card, your bank sends an OTP to your registered phone number to confirm it is really you making the payment.
+> This happens between the user and their bank — our server just waits.
+> The `POST /reservations/confirm` only fires after the OTP is successfully verified.
+
+```http
+POST /api/v1/reservations/confirm
+Authorization: Bearer <user_token>
+Idempotency-Key: 9g4m03ne-b23c-5d0e-c942-0g3f2e4b9d85
+```
+
+**Request Body**
+```json
+{
+  "reservationToken": "tok_7f3k92md_abc123xyz",
+  "paymentToken": "pay_tok_stripe_4xYz9mKp"
+}
+```
+
+**Response `200 OK`**
+```json
+{
+  "reservationId": "RES900123",
+  "confirmationNumber": "4521 887 609",
+  "status": "CONFIRMED",
+  "hotelName": "Marriott Times Square",
+  "roomType": "Deluxe King",
+  "checkIn": "2026-02-10",
+  "checkOut": "2026-02-13",
+  "totalPrice": 540,
+  "cancellationDeadline": "2026-02-09T23:59:00Z"
+}
+```
+
+**Error — Hold expired `409 Conflict`**
+```json
+{
+  "error": "RESERVATION_EXPIRED",
+  "message": "Your room hold expired. Please start the booking again."
+}
+```
+
+**Error — Payment failed `402 Payment Required`**
+```json
+{
+  "error": "PAYMENT_FAILED",
+  "message": "Your card was declined. Please try a different payment method."
+}
+```
+
+---
+
+### Get Reservation (Confirmation Screen)
+
+After confirmation, the confirmation screen fetches the booking details to display to the user.
 
 ```http
 GET /api/v1/reservations/{reservationId}
@@ -229,13 +368,17 @@ Authorization: Bearer <user_token>
 ```json
 {
   "reservationId": "RES900123",
-  "hotelId": "H1001",
+  "confirmationNumber": "4521 887 609",
+  "status": "CONFIRMED",
   "hotelName": "Marriott Times Square",
+  "hotelAddress": "1535 Broadway, Manhattan, NY",
+  "hotelPhone": "+1-212-555-0100",
   "roomType": "Deluxe King",
   "checkIn": "2026-02-10",
   "checkOut": "2026-02-13",
+  "nights": 3,
   "totalPrice": 540,
-  "status": "CONFIRMED"
+  "cancellationDeadline": "2026-02-09T23:59:00Z"
 }
 ```
 
@@ -250,7 +393,7 @@ Authorization: Bearer <user_token>
 
 > [!note] No `userId` in the query param
 > The user's identity comes from the `Authorization` token, not a query param.
-> Putting `userId` in the URL would allow any user to view another user's bookings just by changing the ID — a security hole.
+> Putting `userId` in the URL would let any user see another user's bookings by changing the ID — a security hole.
 
 **Response `200 OK`**
 ```json
@@ -281,7 +424,7 @@ Authorization: Bearer <user_token>
 ### Cancel Reservation
 
 ```http
-PATCH /api/v1/reservations/{reservationId}/cancel
+POST /api/v1/reservations/{reservationId}/cancel
 Authorization: Bearer <user_token>
 ```
 
@@ -295,17 +438,17 @@ Authorization: Bearer <user_token>
 }
 ```
 
-> [!important] Why `PATCH /cancel` and not `DELETE`?
+> [!important] Why `POST /cancel` and not `DELETE`?
 > `DELETE` means remove the record from the system entirely.
-> Cancelling a booking is a **state change** — `CONFIRMED → CANCELLED`.
-> The record must stay in the database for refund processing, audit trails, and the user's booking history.
-> We are not deleting anything — we are updating the status.
+> Cancellation is a **state change** — `CONFIRMED → CANCELLED`.
+> The record must stay in the database for refund processing, audit history, and the user's booking history.
+> We are not deleting anything — we are triggering a cancellation action.
 
 ---
 
-## 3. Admin APIs
+## 4. Admin APIs
 
-Admin endpoints are under a separate `/admin/` path — not a different version number. This makes it easy to apply different auth middleware to everything under `/admin/` in one place.
+Admin endpoints live under `/admin/` — not a different version number. This lets you apply stricter auth middleware to everything under `/admin/` in one place.
 
 ### Create Hotel
 
@@ -340,11 +483,9 @@ PATCH /api/v1/admin/hotels/{hotelId}
 Authorization: Bearer <admin_token>
 ```
 
-**Request Body** *(only send the fields you want to change)*
+**Request Body** *(only send fields you want to change)*
 ```json
-{
-  "amenities": ["wifi", "spa", "gym"]
-}
+{ "amenities": ["wifi", "spa", "gym"] }
 ```
 
 **Response `200 OK`**
@@ -393,7 +534,7 @@ Authorization: Bearer <admin_token>
 
 ---
 
-### Update Room Type Pricing
+### Update Room Type
 
 ```http
 PATCH /api/v1/admin/hotels/{hotelId}/room-types/{roomTypeId}
@@ -409,72 +550,3 @@ Authorization: Bearer <admin_token>
 ```json
 { "roomTypeId": "RT009", "status": "UPDATED" }
 ```
-
-
-  ---                                                                                  
-
-  POST — create something new
-
-  POST /hotels    
-
-  { "name": "Marriott Downtown", "city": "San Francisco" }                             
-
-  Server creates a brand new hotel and assigns it an ID. Every time you call this, a   
-
-  new hotel gets created. The ID does not exist yet — the server generates it.
-
-  ---             
-
-  PUT — replace an existing thing completely
-
-  
-
-  PUT /hotels/H1001
-
-  { "name": "Marriott Downtown", "city": "San Francisco", "rating": 4.5, "amenities":  
-
-  ["wifi"] }
-
-  You are saying "take hotel H1001 and make it exactly this". The server overwrites the
-
-   entire object with what you sent. You must send every field.
-
-  ---             
-
-  PATCH — update specific fields of an existing thing
-
-  
-
-  PATCH /hotels/H1001
-
-  { "rating": 4.8 }
-
-  You are saying "only change the rating, leave everything else alone". The server     
-
-  touches only what you sent.                                                          
-
-  ---             
-
-  The key difference in one line:
-
-  ┌────────┬─────────────────────────┬──────────────────────────┐
-
-  │ Method │         Action          │   ID known beforehand?   │                      
-
-  ├────────┼─────────────────────────┼──────────────────────────┤
-
-  │ POST   │ Create new              │ No — server generates it │                      
-
-  ├────────┼─────────────────────────┼──────────────────────────┤
-
-  │ PUT    │ Replace entire existing │ Yes                      │                      
-
-  ├────────┼─────────────────────────┼──────────────────────────┤
-
-  │ PATCH  │ Update part of existing │ Yes                      │                      
-
-  └────────┴─────────────────────────┴──────────────────────────┘
-
-  
-
-  ---

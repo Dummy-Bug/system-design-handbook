@@ -1,113 +1,82 @@
-# Scenario 1
-
-## Same User Clicks Book Multiple Times
-
-### Problem (What Actually Happens)
-
-- Double-clicks.
-- Mobile retry on network drop.
-- Browser auto-resubmits on refresh.
-- Payment gateway timeout causes user to retry.
-- Load balancer retries POST.
-
-Result:
-- Duplicate reservations.
-- Double charge.
-- Inventory corruption.
-
-# Solution 1: Client-Side Click Prevention
-
-### What We Do
-
-When the user clicks **Reserve / Book**:
-
-- Disable the button immediately.
-- Show loading spinner.
-- Block further clicks.
-- Prevent form resubmission.
-- Optionally debounce click events.
-
-### Example Behavior
-
-- Button becomes greyed out.
-- Text changes to “Processing…”.
-- Additional clicks are ignored until response arrives.
-
-### Why This Is Added
-
-- Prevents accidental double clicks.
-- Reduces duplicate requests from impatient users.
-- Improves perceived responsiveness.
-- Lowers unnecessary backend traffic.
-
-This is standard UX hygiene.
+# Concurrency Problem — Same User, Multiple Requests
 
 ---
 
-# Why This Solution Is Not Reliable
+## What Causes This?
 
-Client-side protection is **not security** and **not concurrency control**.
+```mermaid
+flowchart TD
+    A[User clicks Reserve] --> B[Network is slow\nspinner keeps spinning]
+    B --> C[User panics and clicks again]
+    C --> D[Two requests hit the server simultaneously]
+```
 
----
-
-## 1. JavaScript Can Be Bypassed
-
-User can:
-
-- Disable JavaScript.
-- Manually send HTTP requests using Postman or curl.
-- Trigger requests from browser console.
-- Replay the same request payload.
-
-Result:
-
-Backend still receives multiple booking requests.
+This also happens when:
+- Mobile app auto-retries on a dropped connection
+- Browser asks "Resend form data?" on page refresh
+- User opens two tabs and books in both
 
 ---
 
-## 2. Network Retries Ignore UI State
+## What Goes Wrong Without Protection?
 
-Even if UI is disabled:
+```mermaid
+sequenceDiagram
+    participant User
+    participant Server
+    participant DB
 
-- Browser may retry POST on timeout.
-- Mobile apps retry automatically.
-- Load balancer retries upstream calls.
+    User->>Server: POST /reservations/initiate (click 1)
+    User->>Server: POST /reservations/initiate (click 2)
+    Server->>DB: INSERT reservation RES001 — PENDING
+    Server->>DB: INSERT reservation RES002 — PENDING
+    Server-->>User: ✅ reservationToken A
+    Server-->>User: ✅ reservationToken B
+    Note over DB: Two holds created\nInventory deducted twice ❌
+```
 
-UI state does not control network behavior.
-
----
-
-## 3. Page Refresh Resubmits Forms
-
-User presses:
-
-`Ctrl + R`
-
-Browser asks:
-
-“Resend form data?”
-
-If user accepts:
-
-Same booking request is sent again.
+User ends up with two PENDING reservations and gets charged twice if both reach the confirm step.
 
 ---
 
-## 4. Multi-Tab Problem
+## Solution Layer 1 — Disable the Button (Client Side)
 
-User opens two tabs:
-- Clicks Book in both.
-- UI prevention works per tab only.
-- Backend still receives duplicates.
+When the user clicks Reserve:
+- Disable the button immediately
+- Show a loading spinner
+- Block all further clicks until the response arrives
+
+```
+[  Reserve  ]  →  [  Processing...  ]  (greyed out, unclickable)
+```
+
+> [!important] This is not enough on its own
+> The button is JavaScript — it can be bypassed.
+> A user can open Postman, disable JS, or simply open two browser tabs.
+> Client-side prevention improves UX but **never trust it for correctness**.
 
 ---
 
-# Conclusion
+## Solution Layer 2 — Idempotency Key (Server Side)
 
-Client-side disabling:
+The client generates a unique key per booking attempt and sends it in the request header:
 
-- Reduces accidental duplicates.
-- Improves UX.
-- Does NOT guarantee correctness.
-- Does NOT prevent double booking.
-- Must NEVER be the only protection.
+```http
+POST /api/v1/reservations/initiate
+Idempotency-Key: 7f3k92md-a12b-4c9d-b831-9f2e1d3a8c74
+```
+
+The server uses this key to detect duplicate requests and return the same response without processing the request again — no second reservation, no second charge.
+
+> For the full server-side implementation of how this works, see [[07 Idemptent-Api]]
+
+---
+
+## Two Layers Together
+
+| Layer | Where | What it stops |
+|---|---|---|
+| Disable button | Client | Accidental double clicks from impatient users |
+| Idempotency key | Server | Duplicate requests from retries, refreshes, multi-tab |
+
+Client-side stops accidents. Server-side guarantees correctness.
