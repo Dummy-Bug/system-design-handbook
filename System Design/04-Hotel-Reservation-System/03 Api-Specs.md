@@ -36,7 +36,6 @@ Body:
 {
   "name": "Marriott Downtown",
   "city": "San Francisco",
-  "rating": 4.3,
   "amenities": [
     "wifi",
     "spa"
