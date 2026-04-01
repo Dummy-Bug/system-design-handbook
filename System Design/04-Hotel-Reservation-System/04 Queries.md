@@ -7,33 +7,26 @@ Before choosing a database, we identify dominant query patterns.
 1. **Hotel Detail Queries**
     
     - Fetch hotel metadata
-        
     - Amenities
-        
     - Location info
-        
+    
 2. **Room Availability Queries**
     
     - List room types per hotel
-        
     - Filter by capacity and price
-        
     - Date-range availability
-        
+      
 3. **Reservation Creation**
     
     - Atomic booking operation
-        
     - Inventory update
-        
     - Payment linkage
-        
+    
 4. **Reservation History**
     
     - User booking history
-        
     - Hotel booking dashboard
-        
+
 
 These queries involve **strong relationships** and **multi-table joins**.
 
@@ -57,18 +50,13 @@ Search and availability:
 Booking:
 
 - Low QPS
-    
 - High correctness requirement
-    
 
 Relational DB handles this pattern efficiently with:
 
 - Indexes
-    
 - Query optimizer
-    
 - Transaction isolation
-    
 
 ---
 
