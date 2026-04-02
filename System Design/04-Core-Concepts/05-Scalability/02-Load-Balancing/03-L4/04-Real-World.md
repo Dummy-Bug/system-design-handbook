@@ -55,16 +55,19 @@ Cloudflare handles over **1 trillion DNS queries per day**. They use L4 load bal
 
 ---
 
-### Netflix — Internal Microservice Traffic
+### Twitch — Live Stream Ingestion
 
-Netflix has hundreds of microservices calling each other internally. The Recommendation Service calling User Profile Service, Streaming Service calling Metadata Service — millions of internal calls per second.
+When a streamer goes live on Twitch, their broadcasting software (OBS, Streamlabs) pushes a live video feed to Twitch's servers using **RTMP (Real-Time Messaging Protocol)** on TCP port **1935**.
 
-For internal traffic, Netflix uses **Envoy** (which can operate at L4) for raw throughput. When Service A calls Service B internally:
-- It knows exactly which service it's calling — no URL-based routing needed
-- It just needs fast forwarding
-- L4 handles this at wire speed with microsecond latency
+RTMP is not HTTP — it's a binary protocol designed specifically for low-latency video streaming. Twitch has thousands of ingest servers distributed globally to receive these streams.
 
-Using L7 for every internal call would add HTTP parsing overhead across millions of requests per second — completely unnecessary.
+```
+OBS on streamer's PC → RTMP TCP port 1935 → L4 LB → Ingest Server pool
+```
+
+- **Why L4:** RTMP is not HTTP. L7 load balancers don't understand RTMP — they'd try to parse it as HTTP and fail. L4 doesn't care what the protocol is, it just sees TCP on port 1935 and forwards it.
+- **Why not L7:** There's no URL path to route on. All streams come in on port 1935 and go to the same pool of ingest servers. No content-based routing needed.
+- **Scale:** Millions of concurrent live streams, each a continuous TCP connection pushing video data.
 
 ---
 
@@ -94,45 +97,15 @@ L4 cannot tell them apart. It has no choice but to route them all to the same po
 
 ---
 
-## How L4 and L7 Work Together in Production
-
-Large systems don't choose one or the other — they use both at different layers:
-
-```mermaid
-flowchart TD
-    Users["Users / Game Clients / Mobile Apps"]
-
-    Users -->|"HTTPS port 443\n(browsers, API calls)"| L7["L7 Load Balancer\nAWS ALB / NGINX\nReads URL, routes to right service"]
-    Users -->|"UDP port 7777\n(Valorant gameplay)"| L4ext["L4 Load Balancer\nAWS NLB\nForwards UDP to game servers"]
-
-    L7 -->|"/recommendations"| RecSvc["Recommendation\nService Servers"]
-    L7 -->|"/checkout"| PaySvc["Payment\nService Servers"]
-    L7 -->|"/user/profile"| UserSvc["User\nService Servers"]
-
-    L4ext --> GameSvc["Game\nServer Pool"]
-
-    RecSvc -->|"Internal calls\nTCP custom ports"| L4int["L4 Load Balancer\nInternal Service Mesh\nRaw TCP forwarding"]
-    PaySvc --> L4int
-    UserSvc --> L4int
-
-    L4int --> DB["Database\nRead Replicas\n(PgBouncer pools)"]
-```
-
-- **L7 at the edge** — user-facing HTTPS traffic, URL-based routing to the right microservice, SSL termination
-- **L4 for UDP** — game traffic, DNS, anything non-HTTP
-- **L4 internally** — service-to-service at wire speed, database connection pooling
-
----
-
 ## When to Use L4
 
 | Situation | Why L4 |
 |---|---|
-| Non-HTTP protocols (UDP games, DNS, SMTP) | L4 is protocol-agnostic |
-| Database connection pooling (PgBouncer) | DBs speak their own protocol |
-| Internal service-to-service at scale | No content routing needed, just speed |
-| Ultra-low latency requirements (trading) | No parsing overhead, microsecond forwarding |
-| Single service behind the load balancer | No need for content-based routing |
+| UDP protocols — games (Valorant), DNS (Cloudflare) | L4 is protocol-agnostic, L7 only understands HTTP |
+| Database connection pooling (PgBouncer, MySQL Router) | DBs speak their own binary wire protocol |
+| Live stream ingestion (Twitch RTMP port 1935) | RTMP is not HTTP, L7 can't parse it |
+| Ultra-low latency requirements (Goldman, trading) | No parsing overhead, microsecond forwarding |
+| Email servers (SMTP port 25, IMAP port 143) | Email protocols are not HTTP |
 
 > [!warning] Do not use L4 when you need to route HTTP traffic to multiple services
 > All HTTP looks the same to L4 on port 443. You cannot split `/checkout` from `/recommendations`. Use L7 for that.

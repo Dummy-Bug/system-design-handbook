@@ -11,6 +11,6 @@
 | File | Topic |
 |---|---|
 | 01-Scalability.md | What scalability is, vertical vs horizontal, the three bottlenecks |
-| 02-Load-Balancing/ | How traffic is distributed across servers — algorithms, Layer 4 vs 7 |
-| 03-Auto-Scaling.md | Reactive vs predictive scaling, how it ties into load balancing |
+| 02-Load-Balancing/ | How traffic is distributed across servers — algorithms, L4, L7, API Gateway |
+| 03-Auto-Scaling/ | Feedback loop, reactive vs predictive, connection draining, cold start |
 | 04-Interview-Cheatsheet.md | How to answer the "now scale it 10x" question |

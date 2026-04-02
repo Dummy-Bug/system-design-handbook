@@ -56,42 +56,36 @@ Client receives response from LB's IP — never saw Server B
 
 ---
 
-## TCP Full Walkthrough — Valorant Login
+## TCP Full Walkthrough — PgBouncer (PostgreSQL Connection Pooling)
 
-Login uses HTTPS (TCP) — correctness matters, can't lose the authentication token.
+PostgreSQL speaks its own binary wire protocol over TCP — not HTTP. An app server connecting to PostgreSQL through PgBouncer is a perfect L4 TCP example — one service, custom protocol, port 5432.
 
 ```mermaid
 sequenceDiagram
-    participant Client as Valorant Client (192.168.1.50)
-    participant LB as L4 Load Balancer (10.0.0.1)
-    participant ServerB as Auth Server B (10.0.0.5)
+    participant App as App Server (192.168.1.50)
+    participant PB as PgBouncer L4 LB (10.0.0.1:5432)
+    participant DB as Postgres B (10.0.0.5:5432)
 
-    Client->>LB: TCP SYN (dst: 10.0.0.1:443)
-    Note over LB: Port 443 → Auth server pool<br/>Round Robin → picks Server B<br/>Rewrites dst: 10.0.0.5<br/>Records: 192.168.1.50:54321 → 10.0.0.5
-    LB->>ServerB: TCP SYN (dst: 10.0.0.5:443)
-    ServerB->>LB: TCP SYN-ACK
-    Note over LB: Rewrites src: 10.0.0.5 → 10.0.0.1
-    LB->>Client: TCP SYN-ACK (src: 10.0.0.1)
-    Note over Client: TCP handshake complete ✓
-    Client->>LB: POST /login {username, password}
-    Note over LB: Looks up connection table<br/>192.168.1.50:54321 → Server B<br/>Forwards to 10.0.0.5
-    LB->>ServerB: POST /login {username, password}
-    ServerB->>LB: 200 OK {auth_token}
-    Note over LB: Rewrites src to 10.0.0.1
-    LB->>Client: 200 OK {auth_token}
-    Note over Client: Logged in. Never knew Server B existed.
+    App->>PB: TCP SYN (dst: 10.0.0.1:5432)
+    Note over PB: Port 5432 → PostgreSQL pool<br/>Least Connections → picks DB B<br/>Rewrites dst: 10.0.0.5<br/>Records: 192.168.1.50:54321 → 10.0.0.5
+    PB->>DB: TCP SYN (dst: 10.0.0.5:5432)
+    DB->>PB: TCP SYN-ACK
+    Note over PB: Rewrites src: 10.0.0.5 → 10.0.0.1
+    PB->>App: TCP SYN-ACK (src: 10.0.0.1)
+    Note over App: TCP handshake complete ✓
+    App->>PB: PostgreSQL wire protocol — SELECT * FROM users WHERE id=7
+    Note over PB: Looks up connection table<br/>192.168.1.50:54321 → DB B<br/>Forwards to 10.0.0.5
+    PB->>DB: PostgreSQL wire protocol — SELECT * FROM users WHERE id=7
+    DB->>PB: Result rows (binary PostgreSQL format)
+    Note over PB: Rewrites src to 10.0.0.1
+    PB->>App: Result rows
+    Note over App: Got query results. Never knew DB B existed.
 ```
 
-The connection table is what makes this work:
+> [!warning] Why not use L4 for HTTPS (port 443) routing to multiple services?
+> If Valorant had `/login`, `/store`, `/skins`, `/matchhistory` all arriving on port 443, L4 cannot tell them apart — they all look identical. It would blindly send all of them to the same server pool, which may be completely wrong for most requests. That's exactly L7's job — read the URL and route to the right service.
 
-```
-Connection Table:
-192.168.1.50:54321  →  Server B (10.0.0.5)
-192.168.1.51:61234  →  Server A (10.0.0.3)
-192.168.1.52:49812  →  Server C (10.0.0.7)
-```
-
-Every packet that arrives gets looked up and forwarded to the right server for the duration of that TCP connection.
+> [!info] How the connection table tracks every packet across the connection's lifetime — see `05-Layer4-Connection-Tables.md`
 
 ---
 
@@ -125,7 +119,7 @@ No handshake. No acknowledgment. No guarantee. If the packet is lost — it's go
 | Handshake | Yes — 3 steps before any data | No |
 | Delivery guarantee | Yes — resends lost packets | No |
 | Speed | Slower | Much faster |
-| Use when | Correctness matters (login, purchases) | Speed matters, loss is ok (positions, game state) |
+| Use when | Correctness matters (DB queries, file transfers) | Speed matters, loss is ok (positions, game state) |
 
 ---
 
@@ -141,7 +135,7 @@ sequenceDiagram
 
     Note over Client: Player moved. Pack position into 14 bytes.
     Client->>LB: UDP packet (dst: 10.0.0.1:7777, data: playerID=7 x=44 y=01 z=89)
-    Note over LB: Port 7777 → Game server pool<br/>Least Connections → picks Server B<br/>NAT: rewrites dst to 10.0.0.5<br/>No connection table — UDP is stateless
+    Note over LB: Port 7777 → Game server pool<br/>IP Hash → always picks same server per player<br/>NAT: rewrites dst to 10.0.0.5<br/>UDP session table tracks this mapping
     LB->>ServerB: UDP packet (dst: 10.0.0.5:7777, data: playerID=7 x=44 y=01 z=89)
     Note over ServerB: Updates game state for player 7
     ServerB->>LB: UDP packet (updated world state)
@@ -187,5 +181,4 @@ Content-Length: 28
 
 ~300 bytes with headers vs 14 bytes binary. 20x smaller. No TCP handshake. 128 times per second across 10 players — the difference is enormous.
 
-> [!info] UDP has no connection table
-> TCP needs a connection table because the LB must map ongoing connections to the right server. UDP has no connections — each packet is independent. The LB uses IP hashing (source IP → same server) to ensure all UDP packets from the same player go to the same game server.
+> [!info] How UDP session tables differ from TCP connection tables — and when UDP needs one at all — see `05-Layer4-Connection-Tables.md`

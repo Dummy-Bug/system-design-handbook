@@ -88,7 +88,7 @@ When you install Valorant, port 7777 comes with it. Riot's servers listen on 777
 
 ### Source Port — the return address
 
-The source port is randomly assigned by your OS for each new connection — just so the server knows where to send the response back.
+**The source port is randomly assigned by your OS for each new connection** — just so the server knows where to send the response back.
 
 ```
 Valorant client sends packet:
