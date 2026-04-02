@@ -19,26 +19,39 @@
 ### 2.3 Availability
 - Availability = uptime / (uptime + downtime), causes of unavailability
 - SPOF, redundancy, automatic failover
+- N+1 redundancy — always have one more than you need
 - Active-Active vs Active-Passive — stateless vs stateful components
 - Nines of availability — 99% to 99.999% in real downtime numbers
 - Series vs parallel availability calculations
 - 📁 Notes: `04-Core-Concepts/03-Availability/`
 
-### 2.4 Reliability & Redundancy
-- Reliability vs Availability — uptime vs correctness, different problems
-- N+1 redundancy pattern
+### 2.4 Reliability
+- Reliability vs Availability — uptime vs correctness, different problems, different solutions
 - MTBF and MTTR — how often things break vs how fast you recover
 - RTO and RPO — maximum acceptable downtime vs maximum acceptable data loss
-- 📁 Notes: `04-Core-Concepts/04-Reliability-Redundancy/`
+- 📁 Notes: `04-Core-Concepts/04-Reliability/`
 
-### 2.5 Scalability
+### 2.5 Fault Tolerance
+- Failure modes — crash, slow response, wrong answer
+- Graceful degradation — return partial results rather than total failure
+- Redundancy — the primary tool for fault tolerance
+- Failover — detecting failure and switching to backup
+- Bulkhead pattern — isolate failures so one component doesn't cascade
+
+### 2.6 Durability
+- Data survives crashes, power loss, disk failure
+- Write-Ahead Log (WAL) — log the operation before applying it
+- Replication as durability — copies on multiple nodes/racks/regions
+- Backup strategies — full, incremental, differential
+
+### 2.7 Scalability
 - Vertical scaling (scale up) — bigger machine, has a ceiling
 - Horizontal scaling (scale out) — more machines, near-infinite
 - Stateless vs stateful services — stateless is easy to scale horizontally
 - Auto-scaling — reactive (CPU/memory metric) vs predictive (schedule)
 - Database as the most common bottleneck — scale app tier first, then DB
 
-### 2.6 Concurrency & Locking
+### 2.8 Concurrency & Locking
 - Race conditions — two operations interfere, wrong result
 - Optimistic locking — read, compute, write only if nothing changed (CAS)
 - Pessimistic locking — lock the row before reading, others wait
@@ -54,7 +67,7 @@
   - ZooKeeper-based lock — ephemeral nodes
   - When you need distributed locking vs DB-level locking
 
-### 2.7 Transaction Isolation Levels
+### 2.9 Transaction Isolation Levels
 - Dirty read, non-repeatable read, phantom read, lost update — what each means
 - READ COMMITTED — no dirty reads, PostgreSQL default
 - REPEATABLE READ — no dirty or non-repeatable reads, MySQL default
@@ -62,7 +75,7 @@
 - Snapshot isolation — what most modern databases actually use
 - Choosing the right level — hotel reservation needs higher isolation than a view counter
 
-### 2.8 Consistency Models
+### 2.10 Consistency Models
 - Strong consistency — every read sees the latest write
 - Eventual consistency — replicas converge over time
 - Read-your-writes — you always see your own writes
@@ -70,32 +83,18 @@
 - Linearizability — real-time ordering guarantee
 - When each model fits — chat (causal), shopping cart (eventual), bank transfer (strong)
 
-### 2.9 CAP Theorem
+### 2.11 CAP Theorem
 - Consistency, Availability, Partition Tolerance — can only guarantee 2 during a partition
 - Partitions are not optional — they will happen in any distributed system
 - CP systems — ZooKeeper, HBase, etcd — stop serving rather than give stale data
 - AP systems — Cassandra, DynamoDB — serve potentially stale data over going down
 - How to apply in interviews — "this system needs AP because availability > consistency"
 
-### 2.10 PACELC Theorem
+### 2.12 PACELC Theorem
 - CAP only describes partition time — PACELC also covers normal operation
 - Even without partitions: Latency vs Consistency tradeoff exists
 - DynamoDB — optimizes for latency (EL), Spanner — optimizes for consistency (EC)
 - Use this when an interviewer pushes on your latency vs consistency choice
-
-### 2.11 Fault Tolerance
-- Failure modes — crash, slow response, wrong answer
-- Graceful degradation — return partial results rather than total failure
-- Redundancy — the primary tool for fault tolerance
-- Failover — detecting failure and switching to backup
-- Bulkhead pattern — isolate failures so one component doesn't cascade
-
-### 2.12 Durability
-- Data survives crashes, power loss, disk failure
-- Write-Ahead Log (WAL) — log the operation before applying it
-- Replication as durability — copies on multiple nodes/racks/regions
-- Backup strategies — full, incremental, differential
-- RTO and RPO — design decisions flow from these numbers
 
 ### 2.13 Non-Functional Requirements (NFRs)
 - How to identify NFRs from the problem statement in an interview

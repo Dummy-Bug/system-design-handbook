@@ -12,10 +12,10 @@
 
 These are independent. You can have any combination:
 
-| | Available | Not Available |
-|---|---|---|
-| **Reliable** | System is up, responses are correct ✅ | System is down, but when it was up it was correct |
-| **Not Reliable** | System is up, responses are wrong ❌ | System is down and was returning wrong data anyway |
+|                  | Available                             | Not Available                                      |
+| ---------------- | ------------------------------------- | -------------------------------------------------- |
+| **Reliable**     | System is up, responses are correct ✅ | System is down, but when it was up it was correct  |
+| **Not Reliable** | System is up, responses are wrong ❌   | System is down and was returning wrong data anyway |
 
 The dangerous quadrant is **available but not reliable** — users are reaching the system, getting responses, and trusting those responses. But the responses are wrong.
 
