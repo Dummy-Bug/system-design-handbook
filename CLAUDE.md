@@ -4,6 +4,74 @@ This file gives Claude Code an immediate, complete orientation to this repositor
 
 ---
 
+## Active Learning Session — Read This First
+
+### Who the user is
+Complete beginner in System Design targeting **Google L4 / SDE-2 strong hire** in the design round. No prior system design knowledge assumed — explain everything from scratch.
+
+### Goal
+Work through the syllabus at `System Design/01-Syllabus/` topic by topic, building permanent study notes along the way.
+
+### How each session works — follow this exactly
+1. **Study mode first** — user says a topic name or "go". Explain that topic from scratch, beginner-friendly, with real-world analogies and examples. No jargon without explanation.
+2. **Notes mode second** — once the user confirms they understood ("got it", "makes sense", "next"), write the notes as a proper `.md` file into the correct folder under `System Design/04-Core-Concepts/` (or whichever phase folder is active).
+3. **Never skip ahead** — do not move to the next topic until the user confirms the current one is understood.
+4. **Never write notes before the user has confirmed understanding** — explain first, write after.
+
+### Note file format (use this every time)
+```markdown
+# Topic Name
+
+## What it is
+One plain-English sentence. No jargon.
+
+## Why it matters in system design
+2-3 bullets — what breaks if you ignore this, what interviews ask about it.
+
+## How it works
+The actual explanation with examples.
+
+## The numbers / rules to memorize
+Concrete values, formulas, or decision rules (if applicable).
+
+## Interview application
+How to use this concept when answering a design question. What to say out loud.
+
+## Common mistakes
+What beginners get wrong.
+```
+
+### Current active phase
+**Phase 3 — Core System Design Concepts**
+Syllabus file: `System Design/01-Syllabus/03-Core-Concepts.md`
+Notes folder: `System Design/04-Core-Concepts/`
+
+### Topic order within Phase 3
+Work through in this order — tick off as completed:
+- [ ] 3.1 Performance Metrics → `01-Performance-Metrics/`
+- [ ] 3.2 SLA / SLO / SLI → `02-SLA-SLO-SLI/`
+- [ ] 3.3 Availability → `03-Availability/`
+- [ ] 3.4 Reliability & Redundancy → `04-Reliability-Redundancy/`
+- [ ] 3.5 Scalability → `05-Scalability/`
+- [ ] 3.6 Concurrency & Locking → `06-Concurrency-Locking/`
+- [ ] 3.7 Transaction Isolation Levels → `07-Transaction-Isolation/`
+- [ ] 3.8 Consistency Models → `08-Consistency-Models/`
+- [ ] 3.9 CAP Theorem → `09-CAP-Theorem/`
+- [ ] 3.10 PACELC Theorem → `10-PACELC/`
+- [ ] 3.11 Fault Tolerance → `11-Fault-Tolerance/`
+- [ ] 3.12 Durability → `12-Durability/`
+- [ ] 3.13 NFRs → `13-NFRs/`
+- [ ] 3.14 State Machines → `14-State-Machines/`
+
+### How to start a session
+User will say something like "let's continue" or "next topic" or a topic name.
+- If continuing: check which topics above are not yet completed (no note file exists in their folder), pick up from the first incomplete one, and say "Continuing from [topic name] — ready?"
+- If starting fresh on a topic: jump straight into the explanation.
+
+---
+
+---
+
 ## What This Repo Is
 
 A personal backend engineering knowledge base / study wiki built in Obsidian-compatible Markdown. It covers topics from fundamentals through advanced system design and is structured as a progressive learning curriculum aimed at interview prep and practical architecture work.
