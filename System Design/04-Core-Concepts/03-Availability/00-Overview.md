@@ -12,7 +12,8 @@
 |---|---|
 | 01-Availability.md | What availability is, formula, causes of unavailability |
 | 02-SPOF.md | Single points of failure, redundancy, automatic failover |
-| 03-Availability-Patterns.md | Active-Active vs Active-Passive, stateless vs stateful |
-| 04-Nines-of-Availability.md | 99% to 99.999% in real downtime numbers |
-| 05-Series-vs-Parallel.md | How combining components affects overall availability |
-| 06-Interview-Cheatsheet.md | How to use availability in a design interview |
+| 03-N+1-Redundancy.md | How much redundancy is enough — the N+1 formula |
+| 04-Availability-Patterns.md | Active-Active vs Active-Passive, stateless vs stateful |
+| 05-Nines-of-Availability.md | 99% to 99.999% in real downtime numbers |
+| 06-Series-vs-Parallel.md | How combining components affects overall availability |
+| 07-Interview-Cheatsheet.md | How to use availability in a design interview |
