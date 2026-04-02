@@ -21,12 +21,12 @@ It doesn't matter how many other tables are being served. Latency is only about 
 
 A request doesn't teleport. Time is spent at every step:
 
-| Step | What's happening |
-|---|---|
-| **Network** | Data physically travelling over wires between client and server |
-| **Queuing** | Your request sitting in a waiting line before a thread picks it up |
-| **Compute** | The server doing actual work — business logic, calculations |
-| **I/O** | Reading from a database or disk |
+| Step | What's happening | How slow? |
+|---|---|---|
+| **Network** | Data physically travelling over wires between client and server | 0.5ms same datacenter, 150ms US→Europe |
+| **Queuing** | Your request sitting in a waiting line before a thread picks it up | Depends on traffic |
+| **Compute** | The server doing actual work — business logic, calculations | Usually fast, microseconds |
+| **I/O** | Reading from a database or disk | 150µs SSD, 10ms HDD — the killer |
 
 > [!warning] I/O is almost always the dominant cost
 > This is the one that surprises beginners. The server doing calculations is fast. Waiting for data from disk is what kills latency.
@@ -46,19 +46,20 @@ Your server has two places it can get data from:
 
 That round trip is slow. And the reason databases live on disk — not RAM — is that **disk survives a server restart**. RAM gets wiped the moment the power goes off. You can't store your users' data there permanently.
 
-> [!info] The numbers that make this real
-> | Where data lives | Time to access |
-> |---|---|
-> | RAM | ~100 nanoseconds |
-> | SSD (disk) | ~150 microseconds |
-> | HDD (spinning disk) | ~10 milliseconds |
-> | Network call (same datacenter) | ~0.5 milliseconds |
-> | Network call (US → Europe) | ~150 milliseconds |
+> [!danger] The numbers every engineer must memorize
+> | Where data lives | Time to access | Comparison to RAM |
+> |---|---|---|
+> | **RAM** | ~100 nanoseconds | baseline |
+> | **SSD (disk)** | ~150 microseconds | 1,500x slower |
+> | **HDD (spinning disk)** | ~10 milliseconds | 100,000x slower |
+> | **Network (same datacenter)** | ~0.5 milliseconds | 5,000x slower |
+> | **Network (US → Europe)** | ~150 milliseconds | 1,500,000x slower |
 >
-> SSD is **1,500x slower** than RAM.
-> HDD is **100,000x slower** than RAM.
+> These numbers are not trivia. They are the reason every architecture decision exists.
+> - SSD is 1,500x slower than RAM → **this is why caching exists**
+> - Cross-region network is 1.5M x slower than RAM → **this is why CDNs exist**
 
-This single fact explains why caching exists — you're just copying frequently needed data from slow disk into fast RAM so the next request doesn't have to wait.
+This single table explains more about system design than almost anything else. Every time someone proposes a solution, trace it back to one of these numbers.
 
 ---
 
