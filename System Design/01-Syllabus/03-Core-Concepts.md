@@ -4,33 +4,32 @@
 > An interviewer will ask "why did you choose X" — this phase gives you the answers.
 
 ### 2.1 Performance Metrics
-- Latency — definition, sources (compute, network, I/O, queuing delay)
-- Throughput — requests/sec, bits/sec
-- Latency vs throughput tradeoff — optimizing one can hurt the other
-- Percentiles — P50, P95, P99, P999 — why P99 matters more than average
-- Why averages lie — one slow request hides behind a good average
-- Bandwidth vs latency — different bottlenecks, different solutions
+- Latency, Throughput, Bandwidth — three different bottlenecks, three different solutions
+- Percentiles (P50/P95/P99/P999) — why averages lie and which percentile to target per system type
+- Latency vs Throughput tradeoff — optimizing one can hurt the other
+- Interview checklist — assess all three metrics, attach percentile targets before designing
+- 📁 Notes: `04-Core-Concepts/01-Performance-Metrics/`
 
-### 2.2 SLA / SLO / SLI
-- SLI — what you measure (error rate, latency, availability)
-- SLO — your internal target (99.9% of requests < 200ms)
-- SLA — contractual commitment with penalties
-- Error budget — how much failure is left before you violate your SLO
-- Why this matters in design — drives how much redundancy you need
+### 2.2 Service Levels (SLI / SLO / SLA / Error Budget)
+- SLI — what you measure, SLO — internal target, SLA — external contract with penalties
+- Error Budget — how much failure is allowed, drives deployment velocity decisions
+- SLOs always stricter than SLAs — the gap is the safety buffer
+- 📁 Notes: `04-Core-Concepts/02-Service-Levels/`
 
 ### 2.3 Availability
-- Nines of availability — 99%, 99.9%, 99.99%, 99.999% — downtime per year
-- Calculating availability of components in series — weakest link multiplies down
-- Calculating availability of components in parallel — redundancy improves it
-- Availability vs reliability — a system can be available but give wrong answers
-- How to design for high availability — redundancy, failover, no SPOF
+- Availability = uptime / (uptime + downtime), causes of unavailability
+- SPOF, redundancy, automatic failover
+- Active-Active vs Active-Passive — stateless vs stateful components
+- Nines of availability — 99% to 99.999% in real downtime numbers
+- Series vs parallel availability calculations
+- 📁 Notes: `04-Core-Concepts/03-Availability/`
 
 ### 2.4 Reliability & Redundancy
-- Redundancy patterns — active-active, active-passive, N+1
-- MTTR (Mean Time to Repair) — how fast you recover affects availability
-- MTBF (Mean Time Between Failures) — how often components break
-- RTO (Recovery Time Objective) — max acceptable downtime
-- RPO (Recovery Point Objective) — max acceptable data loss
+- Reliability vs Availability — uptime vs correctness, different problems
+- N+1 redundancy pattern
+- MTBF and MTTR — how often things break vs how fast you recover
+- RTO and RPO — maximum acceptable downtime vs maximum acceptable data loss
+- 📁 Notes: `04-Core-Concepts/04-Reliability-Redundancy/`
 
 ### 2.5 Scalability
 - Vertical scaling (scale up) — bigger machine, has a ceiling

@@ -1,56 +1,20 @@
-# Performance Metrics
+# Performance Metrics — Overview
 
-> [!question] Before you design anything — how do you know if your system is working **well**?
-> You measure it. Performance Metrics are the measurements that answer that question.
+> Every architecture decision is a response to one of these metrics being bad. Know them before designing anything.
 
----
-
-## The Doctor Analogy
-
-When a doctor checks your health, they don't just say *"you look fine"*. They measure:
-- Blood pressure
-- Heart rate
-- Temperature
-
-Each number tells them something **specific**. A high temperature means infection. Low blood pressure means something else entirely. They can't treat you without knowing which number is off.
-
-Your system works the same way. When something is wrong, you need to know **which metric is failing** before you can fix it.
+> [!abstract] Before you can design a system, you need a vocabulary for what "good" looks like. This folder builds that vocabulary — latency, throughput, bandwidth, and percentiles are the four measurements that appear in every design discussion. Without them you can't define requirements, justify decisions, or identify bottlenecks.
 
 ---
 
-## The Core Vitals of a System
+## Files in this folder
 
-| Metric | The question it answers | File |
-|---|---|---|
-| **Latency** | How long does one request take? | 01-Latency.md |
-| **Throughput** | How many requests can we handle per second? | 02-Throughput.md |
-| **Bandwidth** | How much data flows per second? | 04-Bandwidth.md |
-| **Percentiles** | Are we fast for all users or just on average? | 06-Percentiles.md |
-
----
-
-## How these connect
-
-- **Latency** tells you how fast one request moves
-- **Throughput** tells you how many requests move simultaneously — directly shaped by latency and threads
-- **Bandwidth** tells you how much data those requests carry — a different bottleneck entirely
-- **Percentiles** make all three measurable and honest — without them, every claim about latency or throughput is just a vibe
-
-> [!tip] The mindset shift
-> Every architecture decision you make — adding a cache, sharding a database, using a queue, deploying a CDN — is a direct response to **one of these metrics being bad**.
->
-> Before you propose any solution in an interview, ask yourself: *which metric am I fixing right now?*
-
----
-
-## Why this matters in interviews
-
-Interviewers will ask you to define requirements. Vague answers fail. Specific metric-based answers pass.
-
-❌ *"The system should be fast"*
-✅ *"P99 latency should be under 100ms"*
-
-❌ *"It should handle a lot of traffic"*
-✅ *"We need to support 50,000 requests per second at peak"*
-
-Read the files in order. Each builds on the previous one. The last file — `07-Interview-Cheatsheet.md` — is where it all comes together.
+| File | Topic |
+|---|---|
+| 01-Introduction.md | What performance metrics are and why they matter |
+| 02-Latency.md | Round trip time, sources of delay, RAM vs disk numbers |
+| 03-Throughput.md | RPS/QPS, threads, what happens under load |
+| 04-Latency-vs-Throughput.md | Why optimizing one can hurt the other |
+| 05-Bandwidth.md | Data flow per second, the speed of light misconception |
+| 06-Bandwidth-vs-Latency-vs-Throughput.md | Three different bottlenecks, three different solutions |
+| 07-Percentiles.md | P50/P95/P99/P999, why averages lie |
+| 08-Interview-Cheatsheet.md | How to apply all of this in a design interview |
