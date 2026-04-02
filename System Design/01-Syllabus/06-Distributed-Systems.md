@@ -1,4 +1,4 @@
-## Phase 5 — Distributed Systems
+## Phase 6 — Distributed Systems
 
 > HLD relevance: Key-Value Store, Distributed DB, Chat, Dropbox, Collaborative Editing,
 > Stock Broker, Hotel Reservation — all require deep distributed systems knowledge.
@@ -69,8 +69,7 @@
   - Use in: chat message ordering, distributed logs
 - Vector Clocks — one counter per node, detects concurrent writes
   - Use in: Dynamo-style systems to detect conflicts
-- Google TrueTime — GPS + atomic clocks, bounded uncertainty [earliest, latest]
-  - Spanner uses this for global consistency without locks
+- Google TrueTime — GPS + atomic clocks give a bounded time uncertainty window; Spanner uses this for global external consistency. Know it exists; don't study the internals for SDE-2.
 
 ### 5.9 Consensus Algorithms
 - What consensus means — all non-faulty nodes agree on the same value
@@ -79,27 +78,39 @@
   - Log replication — leader sends AppendEntries, majority must ack before commit
   - Safety — at most one leader per term, committed entries never lost
   - Used in: etcd (Kubernetes), CockroachDB, Kafka KRaft
-- Paxos (understand conceptually)
-  - Proposer, Acceptor, Learner roles
-  - Two phases: prepare + accept
-  - Notoriously hard to implement correctly
+- Paxos — the original consensus algorithm; harder to implement correctly than Raft. Proposer, Acceptor, Learner roles, two phases (prepare + accept). Know it exists and why Raft replaced it in practice. Don't study it deeply for SDE-2.
 - When consensus appears in case studies — distributed key-value store, distributed DB
 
 ### 5.10 CRDTs (Conflict-free Replicated Data Types)
 - Merge concurrent writes without coordination, always converges
-- G-Counter — grow-only counter, per-node count, merge = max per node
-- PN-Counter — positive + negative counters, supports decrement
-- G-Set — add only, merge = union
-- OR-Set — add and remove, tracks causality to resolve concurrent add/remove
-- LWW-Register — last write wins per key
+- G-Counter — grow-only counter, per-node count, merge = max per node (know this one well; it explains the core idea)
+- The key property: any two replicas that have seen the same set of operations will have the same state, regardless of the order operations were applied
 - Directly applies to: Google Docs (collaborative editing), shopping cart, distributed counters
+
+#### OT (Operational Transformation) vs CRDT — Know the Difference
+> Google Docs interviewers will ask this directly
+
+- **Operational Transformation (OT)**
+  - When two users concurrently edit the same document, each operation (insert/delete at position X) must be transformed relative to what the other user did before it can be applied
+  - Requires a **central server to serialize operations** — the server receives all concurrent ops and determines the canonical order; clients apply the server-ordered ops
+  - Example: User A inserts "X" at position 5; simultaneously User B deletes character at position 3. The server transforms A's insert to position 4 (accounting for B's delete) before sending to B's client.
+  - Used in: Google Docs (historically), Etherpad
+  - Tradeoff: simpler to reason about for text, but requires the server to be the arbiter — no true peer-to-peer editing; offline editing is hard
+
+- **CRDT approach for text (RGA — Replicated Growable Array)**
+  - Each character is given a globally unique ID (timestamp + node ID); insertions and deletions reference these IDs, not positions
+  - Because IDs are stable (position shifts don't affect them), two replicas can merge without coordination — no server arbitration needed
+  - Clients can edit offline and merge when reconnected — the merge is always conflict-free
+  - Used in: Figma (multiplayer), Notion, newer collaborative editors
+  - Tradeoff: more complex implementation, metadata overhead per character
+
+- **Which to say in an interview** — "I'd use a CRDT-based approach because it supports offline editing and peer-to-peer sync without a serialization bottleneck. OT is simpler conceptually but requires the server to serialize all operations, which creates a single point of ordering."
 
 ### 5.11 Failure Detection
 - Heartbeats — periodic ping, simple but chatty at scale
 - Gossip protocol — nodes randomly share state, failure info propagates like an epidemic
   - Used in: Cassandra, DynamoDB — scalable, no single coordinator
-- Phi Accrual Failure Detector — continuous suspicion score instead of binary up/down
-  - Cassandra uses this — adapts to network conditions
+- Phi Accrual Failure Detector — Cassandra uses a probabilistic suspicion score (instead of binary up/down) that adapts to network jitter. Know it exists; one line in an interview is enough.
 
 ### 5.12 Merkle Trees
 - Hash tree — each node = hash of its children

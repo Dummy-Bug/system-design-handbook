@@ -5,7 +5,7 @@
 **API Gateway** Intermediate layer between the user and backend services . So it act as the encapsulator that encapsulate all the backend services and provides the one front.Responsible for Rate limiting , Authentications and to redirect the traffic to appropriate service etc etc
 
 
-![[System Design/06-Live-News-Feed/Images/01-Base-Architecture.png]]
+![[System Design/Case-Studies/06-Live-News-Feed/Images/01-Base-Architecture.png]]
 
 
 **News Feed Generation** Whatever relevant posts from Followers or Friends of the User should be shown to the user , get all it's metadata all of it's references and store it inside in-memory.

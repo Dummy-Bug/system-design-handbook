@@ -1,4 +1,4 @@
-## Phase 2 — Core System Design Concepts
+## Phase 3 — Core System Design Concepts
 
 > HLD relevance: These are the words and mental models you use to justify every design decision.
 > An interviewer will ask "why did you choose X" — this phase gives you the answers.
@@ -108,3 +108,20 @@
   - Durability → replication factor 3+, WAL, cross-region backup
   - Security → auth, encryption in transit and at rest
 - Conflicting NFRs — availability vs consistency, cost vs latency — state the tradeoff explicitly
+
+### 2.14 State Machines
+> Appears in 7+ case studies: Auction, Taxi, Task Queue, Hotel, Order, Payment, Chat
+
+- What a state machine is — a finite set of states, transitions triggered by events, and rules about which transitions are valid
+- Why it matters in system design — it forces you to enumerate every possible state an entity can be in and prevents illegal transitions at the DB level
+- How to model in a database — a `status` column (enum or varchar), enforced valid transitions in application logic or DB constraint
+- State machine examples across case studies
+  - Auction: `OPEN → ENDING_SOON → CLOSED → SETTLED`
+  - Taxi ride: `REQUESTED → DRIVER_MATCHED → IN_PROGRESS → COMPLETED | CANCELLED`
+  - Task: `PENDING → IN_PROGRESS → SUCCESS | FAILED | RETRYING`
+  - Hotel reservation: `HOLD → CONFIRMED → CANCELLED | EXPIRED`
+  - Payment: `INITIATED → PROCESSING → COMPLETED | FAILED | REFUNDED`
+- Invalid transition guard — never allow jumping from CANCELLED directly to COMPLETED; check current state before applying transition
+- Timeout-driven transitions — a HOLD reservation automatically moves to EXPIRED after 10 minutes if not confirmed (handled by a scheduled job or TTL-based event)
+- Persisting state transitions — append an event row per transition (audit trail) vs overwrite a status column (simpler but no history)
+- When the interviewer asks "walk me through the states" — draw states as circles, transitions as arrows, label the trigger event on each arrow

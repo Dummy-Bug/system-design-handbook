@@ -55,6 +55,25 @@ When an interviewer asks "how would you monitor this system?" — use these.
 - Simple implementation — Redis key per flag, app checks on each request
 - Mention in: any system where you want to reduce deployment risk
 
+### Reconciliation
+> Comes up in Payment System, Banking Ledger, Ad Click Aggregation
+
+- **What it is** — a periodic batch job that compares your internal records against an external source of truth to find and fix discrepancies
+- **Why it's needed** — even with idempotency keys and exactly-once guarantees, distributed systems have edge cases: network timeouts after charge but before ack, clock skew causing duplicate event IDs, bugs in event deduplication logic. Reconciliation is the safety net.
+- **Payment reconciliation example**
+  - Every night, fetch all transactions recorded in your ledger for the day
+  - Fetch the same day's transactions from the payment gateway (Stripe, Adyen) via their settlement report API
+  - Compare the two lists: any transaction in your DB but not in the gateway report = failed charge you marked as successful → trigger reversal or manual review; any in gateway but not in your DB = missed event → insert and trigger fulfillment
+- **Ad click reconciliation example**
+  - Streaming aggregation (Count-Min Sketch) gives approximate counts in real time
+  - Nightly batch job reprocesses the raw click log from Kafka/S3 for exact counts
+  - Billing uses the batch-accurate numbers; real-time is for dashboards only
+- **How to mention in an interview** — "I'd add a nightly reconciliation job that compares our internal ledger against the payment gateway's settlement file to catch any discrepancies from network failures or deduplication bugs. This is a standard safety net in any financial system."
+- **Key design choices**
+  - Run reconciliation on a read replica or offline copy — never on the primary DB under load
+  - Idempotent reconciliation job — safe to re-run if it crashes halfway
+  - Alert on reconciliation failures immediately — a discrepancy that isn't caught within 24 hours becomes much harder to reverse
+
 ### Graceful Degradation Examples
 Know one example per major case study type:
 - Chat — if message store is down, accept messages to queue, deliver when recovered

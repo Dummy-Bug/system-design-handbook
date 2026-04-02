@@ -1,4 +1,4 @@
-## Phase 8 — Back of Envelope Estimation
+## Phase 2 — Back of Envelope Estimation
 
 > HLD relevance: Every Google interview starts with estimation.
 > It drives your architecture — do you need sharding? caching? CDN?

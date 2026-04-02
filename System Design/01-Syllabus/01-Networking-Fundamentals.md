@@ -74,7 +74,27 @@
 - CDN as DDoS shield
 - Where CDN fits in architecture — YouTube, Dropbox, news feed, streaming
 
-### 1.11 API Design
+### 1.11 Email Protocols (SMTP / IMAP / POP3)
+> Directly applies to: Gmail case study
+
+- **SMTP (Simple Mail Transfer Protocol)** — the protocol used to *send and relay* email between servers
+  - Port 587 (submission from client to mail server), Port 25 (server-to-server relay)
+  - Flow: your mail client → your mail server (SMTP submission) → recipient's mail server (SMTP relay) → recipient's inbox
+  - SMTP is push-only — it delivers email to the destination server but does not let clients fetch mail
+- **IMAP (Internet Message Access Protocol)** — the protocol used by mail clients to *read* email from the server
+  - Email stays on the server; client syncs a local view. Multiple devices can all see the same inbox.
+  - Supports folders, flags (read/unread/starred), server-side search
+  - This is what Gmail, Outlook, and Apple Mail use when you add an account
+- **POP3 (Post Office Protocol 3)** — older protocol that *downloads* email to the client and deletes it from the server
+  - No sync across devices — once downloaded on your laptop, it's gone from the server
+  - Still used in some legacy systems; don't design with it
+- **What this means for Gmail's architecture**
+  - Inbound email arrives via SMTP → parsed and stored in Gmail's internal storage
+  - Client apps access mail via IMAP (or Gmail's proprietary API which abstracts IMAP)
+  - Outbound email submitted by client via SMTP submission → Gmail's outbound relay
+- **MX records (Mail Exchanger)** — DNS record type that says "email for this domain goes to this mail server." When you send to user@company.com, your mail server looks up the MX record for company.com to find the destination SMTP server.
+
+### 1.12 API Design
 - REST — stateless, resource-based, uniform interface
 - RESTful best practices
   - Resource naming (nouns not verbs)

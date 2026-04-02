@@ -1,4 +1,4 @@
-## Phase 4 — Caching
+## Phase 5 — Caching
 
 > HLD relevance: Caching is mentioned in almost every case study.
 > Type-ahead, news feed, chat, URL shortener, leaderboard — all rely on it.

@@ -1,4 +1,4 @@
-## Phase 6 — Messaging & Event-Driven Systems
+## Phase 7 — Messaging & Event-Driven Systems
 
 > HLD relevance: Notification system, ad click aggregation, news feed, web crawler,
 > chat, stock broker, job scheduler — all use async messaging.
@@ -18,6 +18,14 @@
 - Message ordering — FIFO per queue, per-partition in Kafka
 - Delay queues — deliver message after N seconds (retry scheduling, reminders)
 - Priority queues — higher priority messages processed first
+- Visibility timeout (message lease)
+  - When a worker picks up a message, the message becomes invisible to all other workers for a configurable window (e.g. 30 seconds)
+  - If the worker successfully processes and acks the message, it is deleted from the queue
+  - If the worker crashes or takes too long, the visibility timeout expires and the message reappears — another worker picks it up
+  - This is the core mechanism that prevents duplicate execution in task queues (SQS, RabbitMQ, Celery)
+  - The timeout must be set longer than the expected task execution time — if your task takes 45 seconds, set visibility timeout to 90 seconds
+  - Workers can extend the visibility timeout mid-task if they need more time (heartbeat extension)
+  - Directly applies to: Distributed Task Queue, Job Scheduling Platform case studies
 
 ### 6.3 Delivery Guarantees
 - At-most-once — ack before processing, can lose on crash

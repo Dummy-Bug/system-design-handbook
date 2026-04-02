@@ -1,4 +1,4 @@
-## Phase 7 — Infrastructure & Reliability Patterns
+## Phase 8 — Infrastructure & Reliability Patterns
 
 > HLD relevance: These patterns appear in the deep-dive sections of every case study.
 > Rate limiter is its own case study. Geo-spatial for Uber. ID generation for URL shortener.
@@ -150,4 +150,34 @@
   - Deduplication — hash each chunk, skip upload if chunk already exists (Dropbox)
 - Content-addressable storage — SHA256 of content = storage key, automatic dedup
 - Compression — compress before storing (gzip text, H.265 video) — significant cost reduction
+- **Delta sync** — on file change, only upload the chunks that changed, not the whole file
+  - Client computes SHA256 of each chunk of the new version; compares against stored chunk hashes
+  - Only chunks whose hash differs are uploaded — a 1-byte change in a 1 GB file uploads only 4–8 MB (one chunk), not 1 GB
+  - Server receives the new chunk list and assembles the new file version from existing + new chunks
+  - This is the main Dropbox deep-dive question — understand the full client → server flow
+  - Client sync architecture: local file watcher (inotify on Linux, FSEvents on Mac) detects change → diff chunk hashes → upload delta → update metadata DB with new chunk list
+  - Conflict resolution: two clients edit the same file offline → server gets two different chunk lists → create a conflict copy (Dropbox approach) or apply CRDT merge (Google Docs approach)
 - Directly applies to: Dropbox, Google Drive, YouTube, Gmail case studies
+
+### 7.10 Adaptive Bitrate Streaming (HLS / DASH)
+> Directly applies to: YouTube, Netflix, any video streaming case study
+
+- **Problem** — users have different and changing network speeds; serving a fixed-quality video causes buffering on slow connections or wastes bandwidth on fast ones
+- **HLS (HTTP Live Streaming)** — Apple's standard, widely supported
+  - Video is pre-transcoded into multiple quality tiers: 360p, 480p, 720p, 1080p, 4K
+  - Each tier is split into small segments, typically 2–10 seconds each (`.ts` files or `.m4s` in fMP4)
+  - A **manifest file** (`.m3u8`) lists all available tiers and segment URLs — the client fetches this first
+  - The player starts downloading segments; if download speed is fast, it upgrades to a higher tier; if slow, it drops down
+  - Segments are served from CDN edge nodes — no origin server hit for playback
+- **DASH (Dynamic Adaptive Streaming over HTTP)** — MPEG standard, used by YouTube
+  - Same concept as HLS; uses `.mpd` manifest instead of `.m3u8`
+  - Codec-agnostic (supports H.264, H.265, AV1)
+- **How it fits in the architecture**
+  1. Video uploaded → stored as raw blob in S3
+  2. Transcoding workers (triggered via Kafka) encode raw video into multiple resolutions + formats
+  3. Transcoded segments stored in S3 under structured paths by resolution
+  4. Manifest file generated and stored in S3 / served via CDN
+  5. Client player fetches manifest → selects tier → downloads segments via CDN
+- **Buffer management** — player maintains a playback buffer of ~30 seconds; switches quality to keep buffer full
+- **Key deep-dive question**: "What happens when a user pauses and resumes?" — segments already fetched stay in buffer; player re-fetches manifest to get fresh segment URLs if CDN URLs expire
+- Tradeoff: HLS/DASH segments are stored for every resolution — 5 resolutions × 3 formats = 15x raw video storage cost

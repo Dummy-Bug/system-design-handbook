@@ -1,4 +1,4 @@
-## Phase 3 — Storage & Databases
+## Phase 4 — Storage & Databases
 
 > HLD relevance: Every case study has a data storage layer.
 > This phase teaches you how to pick the right DB and design its schema, replication, and sharding.
@@ -7,6 +7,7 @@
 - Structured vs unstructured vs semi-structured data
 - Schema-on-write vs schema-on-read
 - Storage engines — how databases store data on disk (row-oriented vs column-oriented)
+- **Currency must never be stored as float or double** — binary floating point cannot represent 0.1 exactly; `0.1 + 0.2 = 0.30000000000000004` in IEEE 754. Always store money as integers (cents: $9.99 → 999) or use a Decimal/Numeric type. See `Fundamentals/Binary Number Rounding.md` for the full explanation. Applies to: Payment System, Banking Ledger, Auction, Stock Broker case studies.
 
 ### 3.2 ACID Properties
 - Atomicity — all or nothing
