@@ -136,36 +136,43 @@
 - AP systems — Cassandra, DynamoDB — serve potentially stale data over going down
 - How to apply in interviews — "this system needs AP because availability > consistency"
 
-### 2.13 PACELC Theorem
+### 2.13 PACELC Theorem ✅
 - CAP only describes partition time — PACELC also covers normal operation
 - Even without partitions: Latency vs Consistency tradeoff exists
-- DynamoDB — optimizes for latency (EL), Spanner — optimizes for consistency (EC)
+- The if-else: IF partition THEN A vs C, ELSE L vs C
+- Four labels: PA/EL (Cassandra, DynamoDB), PC/EC (Zookeeper, Spanner), PA/EC (MongoDB), PC/EL (invalid)
+- PA/EC is valid — consistent normally, available during failure (pilot analogy: strict until emergency)
+- PC/EL is contradictory — paying the unavailability cost of PC but accepting stale data anyway makes no sense
+- DynamoDB / Cassandra → PA/EL — availability and speed always
+- Zookeeper / Spanner → PC/EC — correctness always, coordination data cannot be stale
+- MongoDB → PA/EC — general purpose, tunable, jack of all trades
 - Use this when an interviewer pushes on your latency vs consistency choice
+- 📁 Notes: `04-Core-Concepts/13-PACELC/`
 
-### 2.14 Non-Functional Requirements (NFRs)
-- How to identify NFRs from the problem statement in an interview
-- NFR → Design Decision mapping
-  - High availability → redundancy, multi-AZ, active-active
-  - Low latency → caching, CDN, read replicas, async processing
-  - High throughput → horizontal scaling, partitioning, batching
-  - Strong consistency → single-leader writes, quorum
-  - Durability → replication factor 3+, WAL, cross-region backup
-  - Security → auth, encryption in transit and at rest
-- Conflicting NFRs — availability vs consistency, cost vs latency — state the tradeoff explicitly
-
-### 2.15 State Machines
+### 2.14 State Machines ✅
 > Appears in 7+ case studies: Auction, Taxi, Task Queue, Hotel, Order, Payment, Chat
 
-- What a state machine is — a finite set of states, transitions triggered by events, and rules about which transitions are valid
-- Why it matters in system design — it forces you to enumerate every possible state an entity can be in and prevents illegal transitions at the DB level
-- How to model in a database — a `status` column (enum or varchar), enforced valid transitions in application logic or DB constraint
-- State machine examples across case studies
-  - Auction: `OPEN → ENDING_SOON → CLOSED → SETTLED`
-  - Taxi ride: `REQUESTED → DRIVER_MATCHED → IN_PROGRESS → COMPLETED | CANCELLED`
-  - Task: `PENDING → IN_PROGRESS → SUCCESS | FAILED | RETRYING`
-  - Hotel reservation: `HOLD → CONFIRMED → CANCELLED | EXPIRED`
-  - Payment: `INITIATED → PROCESSING → COMPLETED | FAILED | REFUNDED`
-- Invalid transition guard — never allow jumping from CANCELLED directly to COMPLETED; check current state before applying transition
-- Timeout-driven transitions — a HOLD reservation automatically moves to EXPIRED after 10 minutes if not confirmed (handled by a scheduled job or TTL-based event)
-- Persisting state transitions — append an event row per transition (audit trail) vs overwrite a status column (simpler but no history)
-- When the interviewer asks "walk me through the states" — draw states as circles, transitions as arrows, label the trigger event on each arrow
+- Finite states, events trigger transitions, WHERE guard enforces validity (0 rows = illegal)
+- State IS the version number — optimistic locking built in, concurrency solved for free
+- Timeout transitions — background job (default), lazy expiry breaks queries by status
+- Persist both — status column (fast reads) + events table (audit trail), written in one transaction
+- 📁 Notes: `04-Core-Concepts/15-State-Machines/`
+
+### 2.15 Security
+- Authentication vs Authorization — who are you (JWT) vs what can you do (RBAC)
+- Encryption in transit vs at rest — TLS/HTTPS in flight, AES-256 on disk
+- Rate limiting — prevent abuse and brute force at the API gateway
+- Input validation — SQL injection, XSS, validate at system boundaries only
+- What to say in interviews — mention all four, don't deep dive unless asked
+- 📁 Notes: `04-Core-Concepts/14-Security/`
+
+### 2.16 Non-Functional Requirements (NFRs) ✅
+- NFR → Design Decision → Trade-off — the three-step move for every interview answer
+- Availability → redundancy, multi-AZ, failover, no SPOF
+- Consistency → quorum, sync replication, CP database
+- Latency → cache, CDN, read replicas, async — costs eventual consistency
+- Throughput → horizontal scale, sharding, queues, batching — costs cross-shard complexity
+- Durability → WAL, replication factor 3+, cross-region backup — costs write latency
+- Security → auth, encryption in transit + at rest, rate limiting
+- Conflicting NFRs — name it, pick a winner, state what you give up
+- 📁 Notes: `04-Core-Concepts/16-NFRs/`

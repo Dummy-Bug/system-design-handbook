@@ -19,27 +19,41 @@ Work through the syllabus at `System Design/01-Syllabus/` topic by topic, buildi
 4. **Never write notes before the user has confirmed understanding** — explain first, write after.
 
 ### Note file format (use this every time)
-```markdown
-# Topic Name
 
-## What it is
-One plain-English sentence. No jargon.
+Notes are split across **multiple files per topic** (not one big file). Typical structure:
 
-## Why it matters in system design
-2-3 bullets — what breaks if you ignore this, what interviews ask about it.
-
-## How it works
-The actual explanation with examples.
-
-## The numbers / rules to memorize
-Concrete values, formulas, or decision rules (if applicable).
-
-## Interview application
-How to use this concept when answering a design question. What to say out loud.
-
-## Common mistakes
-What beginners get wrong.
 ```
+00-Overview.md          ← summary + key callouts
+01-<Main-Concept>.md    ← deep-dive explanation
+02-<Sub-Topic>.md       ← follow-on detail (e.g. when to use, trade-offs)
+03-Interview-Cheatsheet.md ← quick-reference for revision
+```
+
+Each file uses this style:
+
+- **Obsidian callout blocks** for definitions and warnings:
+  ```
+  > [!info] Plain-English definition here
+  > [!important] Critical nuance to remember
+  > [!tip] Interview-specific advice
+  > [!danger] Common trap / myth
+  ```
+
+- **Code blocks for visual diagrams and flows** (not actual code):
+  ```
+  Write → Node A → replicates → Node B
+  Read  → Node B → stale data returned
+  ```
+
+- **Horizontal rules** (`---`) between major sections
+
+- **Concrete real-world examples inline** (e.g. Amazon cart, Instagram, Google Spanner, WhatsApp)
+
+- **"What it guarantees / What it doesn't guarantee"** pattern for each concept
+
+- **Spectrum / comparison diagrams** where a concept exists on a scale
+
+- No rigid section headings required — structure each file around how the concept naturally explains itself
 
 ### Current active phase
 **Phase 3 — Core System Design Concepts**
@@ -48,20 +62,22 @@ Notes folder: `System Design/04-Core-Concepts/`
 
 ### Topic order within Phase 3
 Work through in this order — tick off as completed:
-- [ ] 3.1 Performance Metrics → `01-Performance-Metrics/`
-- [ ] 3.2 SLA / SLO / SLI → `02-SLA-SLO-SLI/`
-- [ ] 3.3 Availability → `03-Availability/`
-- [ ] 3.4 Reliability & Redundancy → `04-Reliability-Redundancy/`
-- [ ] 3.5 Scalability → `05-Scalability/`
-- [ ] 3.6 Concurrency & Locking → `06-Concurrency-Locking/`
-- [ ] 3.7 Transaction Isolation Levels → `07-Transaction-Isolation/`
-- [ ] 3.8 Consistency Models → `08-Consistency-Models/`
-- [ ] 3.9 CAP Theorem → `09-CAP-Theorem/`
-- [ ] 3.10 PACELC Theorem → `10-PACELC/`
-- [ ] 3.11 Fault Tolerance → `11-Fault-Tolerance/`
-- [ ] 3.12 Durability → `12-Durability/`
-- [ ] 3.13 NFRs → `13-NFRs/`
-- [ ] 3.14 State Machines → `14-State-Machines/`
+- [x] 3.1 Performance Metrics → `01-Performance-Metrics/`
+- [x] 3.2 SLA / SLO / SLI → `02-Service-Levels/`
+- [x] 3.3 Availability → `03-Availability/`
+- [x] 3.4 Reliability & Redundancy → `04-Reliability/`
+- [x] 3.5 Scalability → `05-Scalability/`
+- [x] 3.6 Fault Tolerance → `06-Fault-Tolerance/`
+- [x] 3.7 Durability → `07-Durability/`
+- [x] 3.8 Concurrency & Locking → `08-Concurrency-Locking/`
+- [x] 3.9 Transaction Isolation Levels → `09-Transaction-Isolation/`
+- [x] 3.10 Consistency Models → `10-Consistency-Models/`
+- [x] 3.11 Network Partitions → `11-Network-Partitions/`
+- [x] 3.12 CAP Theorem → `12-CAP-Theorem/`
+- [x] 3.13 PACELC Theorem → `13-PACELC/`
+- [x] 3.14 State Machines → `15-State-Machines/`
+- [ ] 3.15 Security → `14-Security/`
+- [x] 3.16 NFRs → `16-NFRs/`
 
 ### How to start a session
 User will say something like "let's continue" or "next topic" or a topic name.
