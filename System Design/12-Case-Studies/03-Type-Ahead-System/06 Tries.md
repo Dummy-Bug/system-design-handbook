@@ -1,323 +1,253 @@
+## What Is a Trie?
 
-## Starting Point: Why Trie Looks Attractive
+A ==Trie== (pronounced "try") is a tree where **each node is one character**. You spell out a word by following a path from root to leaf.
 
-Trie gives:
+```mermaid
+graph TD
+    root --> p
+    p --> pa[a]
+    p --> pi[i]
+    pa --> par[r]
+    par --> pari[i]
+    par --> park[k ✅]
+    pari --> paris[s ✅]
+    paris --> parist[t]
+    parist --> party[y ✅]
+    pi --> piz[z]
+    piz --> pizz[z]
+    pizz --> pizza[a ✅]
+```
 
-- Fast prefix lookup.
-- O(length of prefix) traversal.
-- Natural fit for autocomplete.
-
-So the naive instinct is:
-
-> “Let’s put all queries into a Trie.”
-
-Correct direction. Wrong execution.
-
----
-
-## Problem 1 — We Don’t Want All Results
-
-Autocomplete does NOT need:
-
-- Every matching word.
-    
-
-It needs:
-
-> Only **Top K results by frequency**.
-
-So basic Trie output is already misaligned with product requirement.
+> [!example] Prefix lookup in action
+> To find all words starting with `"par"`:
+> traverse `p → a → r` then collect **everything** in the subtree below that node.
+>
+> **Time complexity:** `O(length of prefix)` to reach the node — independent of how many total words are stored.
 
 ---
 
-## Problem 2 — Storing Trie in Database
+## Why a Trie Looks Perfect for Autocomplete
 
-Trie is:
+```
+User types "par"
+  → traverse p → a → r          (3 steps, always)
+  → collect subtree
+  → return suggestions
+```
 
-- Pointer heavy.
-- Graph-like.
-- Memory optimized.
+- Reaches the right node in `O(prefix length)` — fast regardless of dataset size
+- Structure naturally mirrors how typing works character by character
+- Adding new words doesn't slow down existing lookups
 
-Traditional databases:
-
-- Are row-oriented.
-- Not pointer optimized.
-- Terrible for tree traversal.
-
-Result:
-
-You cannot practically persist Trie structure in MySQL or DynamoDB and query it efficiently.
-
-So:
-
-> Trie must live in memory.
+So the instinct is: ==*"put all queries in a Trie"*== — correct direction, but the naive execution has three serious problems.
 
 ---
 
-## Problem 3 — Sharding a Trie Is Hard
+## Problem 1 — We Don't Want All Results
 
-If traffic grows:
+> [!bug] Trie returns everything. We need only top 10.
 
-- You will shard your system.
+A Trie under prefix `"p"` contains **millions** of words. Autocomplete needs only the **top 10 by popularity**.
 
-But how do you shard a Trie?
+```
+Prefix "p" matches:
+  paris, pizza, python, php, paris travel, paris weather ...
+  + millions more
 
-Options:
+We need only:
+  1. paris     (searched 50M times)  ← show
+  2. pizza     (searched 40M times)  ← show
+  3. python    (searched 30M times)  ← show
+  ...
+  ❌ parenchyma (searched 200 times)  ← don't show
+```
 
-- Split by first letter.
-- Split by prefix ranges.
-
-Problems:
-
-- Hot prefixes concentrate load.
-- Uneven distribution.
-- Complex routing logic.
-
-This becomes operationally painful.
-
----
-
-## Conclusion So Far
-
-We decide:
-
-### Decision 1
-
-> Use an **in-memory data structure**.
-
-Not DB-backed.
+A basic Trie gives you everything. You need a ranked subset. These are different problems.
 
 ---
 
-## Next Naive Approach
+## Problem 2 — Tries Can't Live in a Database
 
-Store Trie in memory.
+Tries are pointer-heavy tree structures. Every node points to its children.
 
-For each terminal node:
+| Storage | Reality |
+|---|---|
+| **MySQL / Postgres** | Row-oriented — tree traversal needs recursive CTEs, catastrophically slow |
+| **DynamoDB / Cassandra** | Key-value / wide-column — no concept of pointer traversal |
+| **RAM** | ✅ Pointers = memory addresses — traversal is nanoseconds |
 
-- Store frequency count.
-
-On request:
-
-1. Traverse prefix.
-2. DFS subtree.
-3. Collect all words.
-4. Sort by frequency.
-5. Return top K.
+> [!warning] A Trie must live in memory
+> You cannot query a Trie efficiently from any disk-based database. In-memory is the only option.
 
 ---
 
-## Why This Is Terrible
+## Problem 3 — Sharding a Trie Is Painful
 
-Step 2 and 3 are expensive.
+At 1M QPS and 30GB of data, one machine isn't enough. But splitting a Trie across machines is awkward:
 
-For hot prefixes:
+| Strategy | Problem |
+|---|---|
+| Split by first letter (a–m / n–z) | `"p"` and `"s"` handle most English traffic → extreme hotspot on one machine |
+| Split by prefix ranges | Complex routing logic, hard to rebalance when traffic shifts |
+| Full replication | Works but 30GB × N replicas gets expensive fast |
 
-`"p"`
-
-Subtree size = millions.
-
-DFS cost:
-
-- O(number of words under prefix).
-- Repeated on every request.
-
-At 1M QPS this collapses instantly.
-
-This is the main performance killer.
+> [!danger] No clean sharding strategy exists for a Trie
+> This is the operational nightmare that makes Tries painful at Google scale.
 
 ---
 
-## Optimization Insight
+## The Naive In-Memory Approach — And Why It Collapses
 
-Observation:
+Put the Trie in RAM. Store frequency at each leaf. On every request:
 
-For a given prefix:
+```
+1. Traverse to prefix node     O(prefix length)
+2. DFS entire subtree          O(subtree size)  ← 💀 the killer
+3. Collect all matching words
+4. Sort by frequency
+5. Return top 10
+```
 
-> Top K suggestions do not change on every request.
+> [!danger] For the prefix `"p"` at 1M QPS
+> ```
+> Subtree size = millions of words
+> DFS cost     = O(millions) per request
+> At 1M QPS   → millions × millions ops/sec → instant collapse ❌
+> ```
 
-They change only when:
-
-- New searches arrive.
-- Popularity updates.
-
-So computing top K on every read is wasteful.
-
----
-
-## Correct Optimization
-
-### Store Top K Results At Each Prefix Node
-
-Instead of:
-
-- Computing dynamically with DFS.
-
-We:
-
-> Precompute and cache Top K at every prefix node.
-
-So Trie node becomes:
-
-`Node {   children   topKResults }`
-
-Now request flow:
-
-1. Traverse prefix.
-2. Return stored topK.
-3. Done.
-
-Time complexity:
-
-`O(prefix length)`
-
-No DFS. No sorting. Constant response time.
-
-This is the key breakthrough.
+Steps 2–4 happen on ==every single request==, even though the top 10 for `"par"` barely changes from one second to the next.
 
 ---
 
-## How Do We Update Top K?
+## The Key Insight — Precompute Top K at Every Node
 
-When a new search query comes:
+> [!success] The breakthrough
+> **Top 10 suggestions for a prefix don't change on every request.**
+> They only change when new searches come in and popularity shifts.
+> So why recompute them on every read?
 
-Example:
+**Fix: store the top K results directly at each prefix node.**
 
-`"paris city cost of living"`
+```mermaid
+flowchart LR
+    subgraph BEFORE["❌ Before — Naive"]
+        A["Node 'par'\n(children only)"] -- "every read" --> B["DFS subtree\nSort by freq\nReturn top 10"]
+    end
 
-Steps:
+    subgraph AFTER["✅ After — Optimised"]
+        C["Node 'par'\n(children + topK list)"] -- "every read" --> D["Return stored topK\nDone."]
+    end
+```
 
-1. Increment global count for this query.
-2. Walk through prefixes:
+New request flow:
+```
+1. Traverse to prefix node    O(prefix length)
+2. Return stored topK list    O(1)
+✅ Done.
+```
 
-`p pa par pari paris ...`
-
-3. At each prefix node:
-    - Update Top K heap or sorted set.
-    - Adjust ranking if needed.
-
-This is incremental propagation.
-
-Yes, it is extra write cost.
-
-But writes are much lower than reads.
-
----
-
-## Storage Tradeoff
-
-We are duplicating data:
-
-Same query appears in:
-
-- Many prefix nodes.
-
-Cost:
-
-- Higher memory usage.
-
-Benefit:
-
-- Massive read performance gain.
-
-This is a classic **space-for-time tradeoff**.
-
-For typeahead, it is worth it.
+Response time = ==`O(prefix length)`== — nothing extra. No DFS. No sorting.
 
 ---
 
-## Important Observation
+## The Trade-off: Space for Time
 
-You actually do NOT need a traditional Trie.
+Storing top K at every node means the same query appears in multiple nodes:
 
-You can represent the same idea using:
+```
+"paris" stored in top K of:
+  node "p"     → ["paris", "pizza", ...]
+  node "pa"    → ["paris", "party", ...]
+  node "par"   → ["paris", "park",  ...]
+  node "pari"  → ["paris", ...]
+  node "paris" → ["paris weather", ...]
+```
+
+> [!info] Is this worth it?
+> "paris" gets stored 5 times — but we calculated total storage at ~30GB, which fits in RAM.
+> The read performance gain (no DFS at 1M QPS) is absolutely worth the extra memory.
+> This is a classic ==space-time trade-off== — buy speed with memory.
 
 ---
 
-## Two HashMaps Approach
+## How Top K Gets Updated When New Searches Come In
+
+When a user submits `"paris city cost of living"`:
+
+```mermaid
+flowchart LR
+    Submit["User submits\n'paris city cost of living'"] 
+    --> Counter["1. Increment global\nfrequency counter"]
+    --> Walk["2. Walk every prefix:\np → pa → par → pari → paris\n→ paris  → paris c → ..."]
+    --> Update["3. At each node — update topK\nif new count pushes into top 10"]
+```
+
+This is called ==incremental propagation== — the update ripples from the full query up to all its prefixes.
+
+### Write Cost Per Submission
+
+```
+1 query submission   → updates ~10 prefix nodes
+1B searches/day      × 10 updates = 10B prefix writes/day
+
+10,000,000,000 ÷ 86,400 = ~115,000 ≈ 100,000 write QPS
+```
+
+> [!warning] 100k write QPS is the bottleneck
+> If every search submission directly updates the in-memory Trie, it becomes a write hotspot at this scale.
+> The fix — covered in [[07 Redis]] — is **not** to write directly on every submission. Instead: batch updates, write periodically. The Trie becomes an eventually-consistent read cache.
+
+---
+
+## The Better Approach — Two HashMaps Instead of a Trie
+
+> [!tip] You don't actually need the tree structure
+> The Trie's job was just to group words by prefix. A flat HashMap does the same thing — simpler, easier to shard, easier to persist.
 
 ### HashMap 1 — Prefix → Top K Results
 
-Example:
-
-`"p"   → [paris, pizza, phone] "pa"  → [paris, party, park] "par" → [paris, party]`
-
-Key:
-
-Prefix string.
-
-Value:
-
-Top K result list.
-
----
+```
+"p"     →  ["paris", "pizza", "python", ...]
+"pa"    →  ["paris", "party", "park", ...]
+"par"   →  ["paris", "party", "park"]
+"pari"  →  ["paris", "paris travel"]
+"paris" →  ["paris weather", "paris hotels", "paris city guide"]
+```
 
 ### HashMap 2 — Query → Frequency
 
-Example:
+```
+"paris"                      →  50,000,000
+"pizza near me"              →  40,000,000
+"paris city cost of living"  →  12,045
+```
 
-`"paris city cost of living" → 12045`
+### Why HashMaps Win in Production
 
-This is global popularity counter.
+| | Trie | Two HashMaps |
+|---|---|---|
+| **Lookup time** | `O(prefix length)` | `O(prefix length)` — identical |
+| **Sharding** | ❌ Painful — tree structure fights partitioning | ✅ Easy — hash the prefix key |
+| **Persistence** | ❌ Complex — must serialise pointer graph | ✅ Simple — snapshot flat map to disk |
+| **Rebuild after crash** | ❌ Rebuild entire tree | ✅ Reload flat files |
+| **Code complexity** | ❌ High | ✅ Low |
 
----
-
-## Why This Works
-
-Trie traversal:
-
-`p → a → r`
-
-HashMap lookup:
-
-`"par" → results`
-
-Both give:
-
-O(prefix length) time.
-
-But HashMap version:
-
-- Simpler.
-- Easier to shard.
-- Easier to persist snapshot.
-- Easier to rebuild.
-
-Production systems often use this flattened approach.
+> [!success] Production reality
+> Google, Redis-backed autocomplete, and most large-scale systems use this **flattened prefix → topK map** approach — not a live Trie traversed on every request.
 
 ---
 
-## Write Load Estimation
+## Evolution Summary
 
-Given:
+```mermaid
+flowchart TD
+    A["Naive Trie\nDFS on every read\nO(subtree size) ❌"] 
+    --> B["Trie with precomputed topK\nO(prefix length) ✅\nbut hard to shard"]
+    --> C["Two HashMaps\nprefix → topK\nO(prefix length) ✅\neasy to shard, simple to operate"]
+```
 
-`1B searches/day`
-
-Only search submissions update counts.
-
-Assume:
-
-`50% unique-ish queries`
-
-Each query updates ~10 prefixes.
-	Each submitted query updates multiple prefixes.
-	
-	Example:
-	
-	Query:
-	
-	`"paris travel guide"`
-	
-	Prefixes:
-	
-	`p pa par pari paris paris t ...`
-
-Total prefix updates:
-`1B × 10 = 10B prefix updates/day` 
-Here 1B is taken for unqiue as well as old search submission queries as both would update the prefixes
-
-Convert to QPS:
-
-`10B / 100,000 ≈ 100,000 writes/sec`
-
-This is high.
+> [!abstract] Key takeaways
+> - Precompute top K at each prefix node — never recompute on a read request
+> - Space-time trade-off: ~30GB storage buys instant reads at 1M QPS
+> - Two HashMaps > Trie in production — same speed, far simpler to operate
+> - 100k write QPS bottleneck → solved by batching updates (next file)

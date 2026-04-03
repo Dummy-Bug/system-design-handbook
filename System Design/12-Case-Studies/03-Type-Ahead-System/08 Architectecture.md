@@ -1,246 +1,287 @@
-[[Architecture.png]]
+# Type-Ahead System — Architecture
 
-# Flow A — TypeAhead (user typing / prefix suggestions)
-
-Goal: return top-K suggestions for a prefix in <50ms p99 with extremely high QPS.
-
-### User-visible example
-
-User types: `par` → Expect top 10 suggestions such as `["paris hotels","paris weather","park near me", ...]`.
-
-### Preconditions (client)
-
-- Debounce input (example: 200–300ms).
-    
-- Only call if `3 <= prefix.length <= 20`.
-    
-- Cancel previous in-flight request when new keystroke arrives.
-    
-- Client caches last responses for immediate reuse.
-    
-
-### Full step-by-step (very detailed)
-
-1. **Client** (debounced) issues HTTP GET to:
-    
-    `GET /api/v1/typeahead?partialSearchQuery=par`
-    
-    The request includes client headers, optional auth token, locale, and maybe personalization signals (userId, geo).
-    
-2. **API Gateway**
-    
-    - Authenticates token.
-        
-    - Applies per-IP and per-user rate limiting (token bucket).
-        
-    - Applies global QPS circuit protection (reject or degrade if overloaded).
-        
-    - Adds routing headers (version, region).
-        
-    - Checks CDN cache headers (if applicable) and forwards to Autocomplete Service.
-        
-3. **Edge / CDN (optional)**
-    
-    - If you cache top popular prefixes at CDN edge, CDN may return immediately.
-        
-    - Cache key = `typeahead:v{version}:prefix:{region}:{prefix}`.
-        
-4. **Autocomplete Service receives request**
-    
-    - It first checks local LRU cache (memory) keyed by prefix + personalization fingerprint.
-        
-    - If not found, it queries **Redis**.
-        
-5. **Redis Read**
-    
-    - Redis key pattern: `typeahead:prefix:{prefix_hash}` or `prefix:{prefix}` (choose hashed key to avoid very long keys).
-        
-    - Redis command to get top-K in descending frequency:
-        
-        `ZREVRANGE prefix:par 0 9 WITHSCORES`
-        
-        or (if you store string IDs and then resolve):
-        
-        `ZREVRANGE prefix:par 0 9 HMGET queries <id1> <id2> ...`
-        
-    - Redis returns the top 10 items sorted by score (frequency).
-        
-6. **Post-process & ranking**
-    
-    - Autocomplete service optionally applies personalization ranking (re-rank by user weight) or filters (safe search, locale).
-        
-    - If personalization is used, apply a small re-scoring factor (local in service) instead of retrieving an entirely different set.
-        
-7. **Response formation**
-    
-    - Return JSON: `{ success: true, data: [ ...top10... ] }`.
-        
-    - Add HTTP headers: `Cache-Control`, `ETag`, rate-limit info.
-        
-    - Optionally add a `staleness` header indicating snapshot age (e.g., `X-Index-Version: v20260117-1200`).
-        
-8. **Client receives & displays suggestions instantly.**
-    
-
-### Latency expectations
-
-- Local cache hit: <1ms.
-    
-- Redis read (same region): <1ms.
-    
-- Network + processing: target p50 ~ 10–20ms, p99 <50ms.
-    
-
-### Important implementation notes
-
-- **Top-K precomputed per prefix** — there is no DFS or on-demand traversal at read time.
-    
-- **Keys are immutable snapshots**. You serve from a versioned snapshot so reads are lock-free.
-    
-- **Personalization** should be a light re-rank on top of top-K to avoid extra Redis calls.
-    
-- **Edge caching** for hot prefixes reduces origin load massively.
-    
+> [!abstract] This file brings everything together.
+> Two separate flows — read and write — designed independently because they have opposite characteristics.
+> Everything in this file follows directly from the decisions made in [[06 Tries]] and [[07 Redis]].
 
 ---
 
-# Flow B — Search (user clicks a suggestion / submits full query)
+## The Full Picture
 
-Goal: record the successful query (for ranking signal) and serve full search results. Writes are asynchronous and approximate. Do not block reads.
+![[Architecture.png]]
 
-### User-visible example
+```mermaid
+flowchart TD
+    Client["🖥️ Client\n(Browser / App)"]
 
-User clicks `paris city cost of living` or presses Enter. They expect paginated search results and the system must _record_ the click/submission for ranking.
+    Client -- "a: debounced GET prefix" --> GW["API Gateway\n(auth, rate limit, routing)"]
+    Client -- "b: submit search" --> GW
 
-### Full step-by-step (very detailed)
+    GW -- "typeahead request" --> AC["Autocomplete Service"]
+    GW -- "search submission" --> SR["Search Results Service"]
 
-1. **Client** issues search request:
-    
-    `POST /api/v1/search Body: { query: "paris city cost of living", userId: "..." }`
-    
-    This is the full search submission. API may also be triggered by clicking a suggestion.
-    
-2. **API Gateway**
-    
-    - Auth, rate-limit, metrics.
-        
-    - Request routed to Search Results Service.
-        
-3. **Search Results Service**
-    
-    - Produces the user-facing search results. (This is the paginated, heavyweight result from your search index / DB / ES.)
-        
-    - Responds immediately to the client with search results (label `b` on diagram).
-        
-    - Enqueues a _write event_ to the **Queue**. The write event contains:
-        
-        `{ eventType: "SEARCH_SUBMIT", query: "paris city cost of living", userId, timestamp, requestId }`
-        
-    - Important: responding to client is synchronous and low-latency; the update of typeahead ranking is asynchronous.
-        
-4. **Queue (Kafka/SQS)**
-    
-    - Durably stores events.
-        
-    - Partitioning key should be `query` hash or `prefix` so that related updates land in same partition for aggregation.
-        
-    - Configure retention and monitor lag.
-        
-5. **Processing / Aggregator Pipeline**
-    
-    - Consumer(s) read events from the queue.
-        
-    - The consumer does cheap local aggregation (in-memory map or Redis local cache):
-        
-        `localCounts[query] += 1`
-        
-    - This aggregator batches updates and applies two reduction strategies (you proposed earlier):
-        
-        - **Batching threshold**: only flush to Redis when localCounts[query] >= BATCH_THRESHOLD (e.g., 100).
-            
-        - **Sampling**: randomly only process 1% of events to further reduce write volume (useful when traffic huge).
-            
-    - When flush condition is met, the pipeline computes **prefix updates** and writes to Redis in a single atomic operation per prefix (prefer Lua script).
-        
-6. **How aggregator writes to Redis (detailed)**
-    
-    - For the query `"paris city cost of living"` compute prefixes to update:
-        
-        `p, pa, par, pari, paris, paris , paris , ... up to 20 chars or word-level prefixes depending on design`
-        
-        (Most systems use character prefixes up to configured length).
-        
-    - For each prefix key `prefix:par`, you perform:
-        
-        1. `ZINCRBY prefix:par <delta> "paris city cost of living"` to increase score.
-            
-        2. Trim the ZSET to top-M (e.g., M=500) using:
-            
-            `ZREMRANGEBYRANK prefix:par 0 -501`
-            
-            or use a Lua script that does `ZINCRBY` + `ZREMRANGEBYRANK` atomically.
-            
-    - You also update a global query counter for analytics:
-        
-        `HINCRBY query:counts "paris city cost of living" <delta>`
-        
-        or a global ZSET `ZINCRBY global:queries <delta> "paris city cost of living"`.
-        
-7. **Snapshot & rebuild fallback**
-    
-    - In addition to incremental updates, you periodically run a full offline rebuild job from nightly analytics (to correct sampling/batching approximation).
-        
-    - Publish new snapshot version and atomically swap keys or change the pointer the Autocomplete Service reads.
-        
+    AC -- "ZRANGE prefix:par 0 9 REV" --> RR["Redis\n(ZSET — prefix → top K)"]
+    RR -- "top 10 suggestions" --> AC
+    AC -- "a: suggestions response" --> Client
 
-### Why batching & sampling
+    SR -- "b: paginated search results" --> Client
+    SR -- "enqueue write event" --> Q["Queue\n(Kafka)"]
 
-- Raw write volume is enormous. If you updated Redis for every single submit you’d overload the cluster.
-    
-- Batching reduces writes by a factor equal to the threshold.
-    
-- Sampling reduces writes probabilistically while preserving relative ordering.
-    
-- Combining both gives large write reduction while maintaining useful ranking signals.
-    
+    Q --> AGG["Aggregator\n(sample + batch)"]
+    AGG -- "ZINCRBY after batching" --> RW["Redis\n(ZSET update)"]
+```
 
-### Redis atomicity & correctness
-
-- Use Lua scripts to make `ZINCRBY` + `ZREMRANGEBYRANK` atomic to avoid race conditions.
-    
-- Use consistent key naming and versioning to perform atomic swaps on rebuild.
-    
+> [!info] Two completely separate paths
+> - **Path A (TypeAhead)** — read path, latency critical, served from Redis in < 1ms
+> - **Path B (Search Submit)** — write path, async, goes through a queue before touching Redis
 
 ---
 
-# Redis key design and commands (practical)
+## Path A — TypeAhead (Read Path)
 
-- **Prefix ZSET key**: `typeahead:v{version}:prefix:{prefix}`  
-    Use versioned keys for atomic snapshot swaps.
-    
-- **Query count hash**: `typeahead:counts` (HASH) or `typeahead:global` (ZSET)
-    
-- **Redis read**:
-    
-    `ZREVRANGE typeahead:v42:prefix:par 0 9 WITHSCORES`
-    
-- **Redis incremental write** (Lua pseudo):
-    
-    `local key = KEYS[1] -- prefix key local member = ARGV[1] -- query local delta = tonumber(ARGV[2]) redis.call('ZINCRBY', key, delta, member) redis.call('ZREMRANGEBYRANK', key, 0, -501) -- keep top 500 return 1`
-    
-- **Global counter**:
-    
-    `HINCRBY typeahead:counts "paris city cost of living" <delta>`
-    
+> [!question] Goal
+> Return top 10 suggestions for a prefix in **< 50ms P99** at up to **1M QPS**.
+
+### Step-by-Step Flow
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant CDN
+    participant Gateway as API Gateway
+    participant AC as Autocomplete Service
+    participant Redis
+
+    Client->>Gateway: GET /api/v1/typeahead?partialSearchQuery=par
+    Note over Client: Debounced 250ms, prefix 3–20 chars
+
+    Gateway->>Gateway: Auth + Rate limit check
+    Gateway->>CDN: Check CDN cache
+    alt Cache HIT (hot prefix)
+        CDN-->>Client: ⚡ Return cached suggestions instantly
+    else Cache MISS
+        CDN->>AC: Forward request
+        AC->>AC: Check local LRU cache
+        alt Local cache HIT
+            AC-->>Client: Return in < 1ms
+        else Local cache MISS
+            AC->>Redis: ZRANGE prefix:par 0 9 REV
+            Redis-->>AC: Top 10 suggestions by score
+            AC->>AC: Optional: apply personalisation re-rank
+            AC-->>Client: 200 OK — suggestions
+        end
+    end
+```
+
+### Each Component Explained
+
+**API Gateway**
+- Authenticates the request token
+- Applies rate limiting — per-IP and per-user (token bucket algorithm)
+- Rejects requests if the system is overloaded (circuit breaker)
+- Routes to the Autocomplete Service
+
+**CDN (Edge Cache)**
+Hot prefixes like `"par"`, `"the"`, `"how"` are queried millions of times per second. Caching them at the CDN edge means those requests never reach the origin servers at all.
+
+```
+Cache key: typeahead:v{version}:{region}:{prefix}
+
+Example:   typeahead:v42:us-east:par
+```
+
+> [!tip] CDN cache hit rate for type-ahead is very high
+> The same popular prefixes get queried constantly. A well-tuned CDN absorbs 80–90% of read traffic before it hits your infrastructure.
+
+**Autocomplete Service**
+- Checks its own **local LRU cache** first (in-process memory, microsecond lookup)
+- On miss, queries Redis
+- Optionally applies a lightweight personalisation re-rank on top of the Redis results (no extra Redis calls)
+
+**Redis**
+```redis
+ZRANGE prefix:par 0 9 REV WITHSCORES
+```
+Returns top 10 members of the sorted set ordered by score (frequency) in descending order. Executes in `O(log N + 10)` — under 1ms.
+
+### Latency Budget
+
+```
+CDN cache hit:           ~5ms    (network to nearest edge node)
+Local service cache hit: ~1ms    (in-process memory)
+Redis read (same region):~1ms
+Network + processing:    ~5–15ms
+─────────────────────────────────
+P50 target:              ~10ms ✅
+P99 target:              ~50ms ✅
+```
 
 ---
 
-# Putting it all together — short sequence diagrams
+## Path B — Search Submit (Write Path)
 
-### TypeAhead (read)
+> [!question] Goal
+> Record every completed search to update popularity rankings — **without blocking the read path or overwhelming Redis.**
 
-`Client --(debounced GET prefix)--> API Gateway --> Autocomplete Service --> Redis ZSET (ZREVRANGE) --> Autocomplete Service --> API Gateway --> Client`
+### Step-by-Step Flow
 
-### Search Submit (write)
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Gateway as API Gateway
+    participant SR as Search Results Service
+    participant Kafka
+    participant AGG as Aggregator
+    participant Redis
 
-`Client (click) --> API Gateway --> Search Results Service (responds) --> Enqueue event --> Q`
+    Client->>Gateway: POST /api/v1/search {query: "paris city cost of living"}
+    Gateway->>SR: Forward request
+
+    SR-->>Client: 200 OK — paginated search results
+    Note over SR,Client: User gets results immediately ✅
+
+    SR->>Kafka: Enqueue event {query, userId, timestamp}
+    Note over SR,Kafka: Fire and forget — async ✅
+
+    Kafka->>AGG: Consumer reads events
+    AGG->>AGG: localCounts["paris city..."] += 1
+    
+    alt Sampling: random 1% pass
+        AGG->>AGG: Proceed
+    else 99% dropped
+        AGG->>AGG: Discard event
+    end
+
+    alt Batch threshold reached (count ≥ 100)
+        AGG->>Redis: ZINCRBY prefix:par <delta> "paris city cost of living"
+        AGG->>Redis: ZINCRBY prefix:paris <delta> "paris city cost of living"
+        Note over AGG,Redis: ~10 prefix updates per query
+    end
+```
+
+### Each Component Explained
+
+**Search Results Service**
+- Returns paginated search results to the user synchronously — this is the user-facing response
+- ==Immediately after responding==, enqueues a write event to Kafka
+- The user never waits for the ranking update — they already have their results
+
+**Kafka (Queue)**
+- Durably stores every search event
+- Acts as a buffer between the high-volume write path and Redis
+- Partition key = query hash, so related prefix updates land in the same partition
+
+> [!info] Why Kafka and not direct writes?
+> Without Kafka, every search submission would directly hit Redis. At 1M QPS that's instant overload.
+> Kafka absorbs the burst, lets the aggregator consume at a controlled pace, and provides durability — if the aggregator crashes, events aren't lost.
+
+**Aggregator**
+Applies the two write reduction strategies from [[07 Redis]]:
+
+```
+Raw events:             100,000/sec
+After 1% sampling:        1,000/sec
+After 100x batching:         10/sec  ← actual Redis writes
+```
+
+When flushing, it uses a **Lua script** to make the update atomic:
+
+```lua
+-- Atomic: increment score + trim to top 500
+local key    = KEYS[1]   -- e.g. "prefix:par"
+local member = ARGV[1]   -- e.g. "paris city cost of living"
+local delta  = ARGV[2]   -- e.g. 100 (batched increment)
+
+redis.call('ZINCRBY', key, delta, member)
+redis.call('ZREMRANGEBYRANK', key, 0, -501)  -- keep only top 500
+```
+
+> [!info] Why Lua? Why atomic?
+> Without atomicity, two aggregators could ZINCRBY the same prefix simultaneously and then both try to trim — one trim might delete entries the other just added. The Lua script runs as a single unit on Redis, so this race condition can't happen.
+
+---
+
+## Snapshot Rebuild — The Safety Net
+
+> [!warning] Approximation accumulates errors over time
+> Sampling and batching introduce drift. Over days/weeks, Redis counts diverge from reality — a query that stopped trending might still rank high from old accumulated score.
+
+The fix: **periodic full rebuild from offline analytics.**
+
+```mermaid
+flowchart LR
+    DW["Data Warehouse\n(exact counts, updated nightly)"]
+    --> Job["Offline Rebuild Job\n(runs every few hours)"]
+    --> NewSnap["New Redis snapshot\nprefix:v43:*"]
+    --> Swap["Atomic key swap\nv42 → v43"]
+    --> AC["Autocomplete Service\nreads from v43"]
+```
+
+```
+New snapshot built at:  typeahead:v43:prefix:*
+Old snapshot was:       typeahead:v42:prefix:*
+
+Atomic swap: update config pointer from v42 → v43
+Autocomplete Service picks up v43 on next request
+Old keys expire after TTL
+```
+
+> [!success] This gives the best of both worlds
+> - Incremental updates keep rankings fresh in near-real-time
+> - Periodic full rebuild corrects accumulated approximation errors
+> - Atomic swap means zero downtime during rebuild
+
+---
+
+## Redis Key Design
+
+| Key pattern | Type | Purpose |
+|---|---|---|
+| `typeahead:v{n}:prefix:{prefix}` | ZSET | Top K suggestions for a prefix, scored by frequency |
+| `typeahead:counts` | HASH | Global query → exact count (for analytics) |
+
+```
+Read:   ZRANGE typeahead:v42:prefix:par 0 9 REV WITHSCORES
+Write:  ZINCRBY typeahead:v42:prefix:par 100 "paris city cost of living"
+Trim:   ZREMRANGEBYRANK typeahead:v42:prefix:par 0 -501
+Count:  HINCRBY typeahead:counts "paris city cost of living" 100
+```
+
+> [!tip] Why versioned keys?
+> When a new snapshot is built, it writes to `v43:*` keys while `v42:*` still serves live traffic. Once `v43` is fully built and verified, we atomically swap the pointer. Zero downtime. Zero stale reads during rebuild.
+
+---
+
+## Complete Component Summary
+
+```mermaid
+mindmap
+  root((Type-Ahead Architecture))
+    Read Path
+      Client debounce 250ms
+      API Gateway auth + rate limit
+      CDN edge cache hot prefixes
+      Autocomplete Service local LRU
+      Redis ZSET ZRANGE top 10
+    Write Path
+      Search Results Service async enqueue
+      Kafka durable event buffer
+      Aggregator sample 1% + batch 100x
+      Redis ZINCRBY + Lua atomic trim
+    Reliability
+      Snapshot rebuild every few hours
+      Atomic key swap zero downtime
+      Kafka replay on aggregator crash
+```
+
+---
+
+## NFR Verification
+
+| NFR | Target | How achieved |
+|---|---|---|
+| Read latency P99 | < 50ms | CDN → local cache → Redis, all sub-millisecond |
+| Availability | 99.99% | CDN + multiple AC replicas + Redis cluster |
+| Write throughput | 100k raw events/sec | Kafka buffers, aggregator reduces to ~10 Redis writes/sec |
+| Consistency | Eventual | Acceptable — rankings update in near-real-time, full rebuild corrects drift |
+| Storage | ~30GB | Fits in Redis cluster RAM |
