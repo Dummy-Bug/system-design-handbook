@@ -56,7 +56,8 @@ Each file uses this style:
 - No rigid section headings required — structure each file around how the concept naturally explains itself
 
 ### Current active phase
-**Phase 3 — Core System Design Concepts**
+**Phase 3 — Core System Design Concepts — COMPLETED ✅**
+**Phase 5 — Caching — IN PROGRESS**
 Syllabus file: `System Design/01-Syllabus/03-Core-Concepts.md`
 Notes folder: `System Design/04-Core-Concepts/`
 

@@ -1,75 +1,104 @@
-## Phase 5 — Caching
+# Phase 5 — Caching
 
-> HLD relevance: Caching is mentioned in almost every case study.
-> Type-ahead, news feed, chat, URL shortener, leaderboard — all rely on it.
+> [!abstract] Caching is mentioned in almost every case study. Type-ahead, news feed, chat, URL shortener, leaderboard — all rely on it. Know it well.
 
-### 4.1 Caching Fundamentals
-- What caching is — store expensive results closer to the consumer
+---
+
+### 5.1 — Caching Fundamentals
+
+*Store expensive results closer to the consumer*
+
+- What caching is — avoid recomputing or re-fetching expensive results
 - Cache hierarchy — local in-process (Guava/Caffeine) → distributed (Redis) → CDN
 - Cache hit vs miss — hit ratio should be above 90% for caching to be worth it
 - What to cache — expensive DB queries, computed results, session data, static assets
-- What NOT to cache — user-specific highly sensitive data, real-time prices/inventory
-- Local in-process cache vs distributed cache — tradeoffs (speed vs consistency across nodes)
+- What NOT to cache — real-time prices/inventory, highly sensitive user data
+- Local vs distributed cache — speed vs consistency across nodes
+- [[05-Caching/01-Fundamentals|Notes →]]
 
-### 4.2 Cache Writing Strategies
+---
+
+### 5.2 — Cache Writing Strategies
+
+*When do you write to the cache? When do you skip it?*
+
 - Cache-aside (lazy loading) — app checks cache first, reads DB on miss, populates cache
-  - Pro: only caches what's needed; Con: first request always slow
 - Read-through — cache sits in front of DB, loads on miss automatically
-- Write-through — write to cache AND DB synchronously
-  - Pro: always consistent; Con: write latency increases
-- Write-back (write-behind) — write to cache, async persist to DB
-  - Pro: fast writes; Con: data loss if cache crashes before flush
-- Write-around — write directly to DB, skip cache
-  - Use for write-once data (logs, audit trails)
-- Tradeoff table — consistency vs write speed vs data loss risk
+- Write-through — write to cache AND DB synchronously (consistent, slower writes)
+- Write-back (write-behind) — write to cache, async persist to DB (fast, risk of data loss)
+- Write-around — write directly to DB, skip cache (write-once data: logs, audit trails)
+- [[05-Caching/02-Writing-Strategies|Notes →]]
 
-### 4.3 Cache Eviction Policies
+---
+
+### 5.3 — Cache Eviction Policies
+
+*Cache is full — what gets thrown out?*
+
 - LRU (Least Recently Used) — evict item not accessed longest, most common
 - LFU (Least Frequently Used) — evict item accessed least often, better for skewed access
 - TTL (Time To Live) — time-based expiry, simplest invalidation
-- FIFO — evict oldest inserted, rarely used
-- When to use LRU vs LFU — LRU for temporal locality, LFU for stable hot items
+- LRU vs LFU — LRU for temporal locality, LFU for stable hot items (leaderboard)
+- [[05-Caching/03-Eviction-Policies|Notes →]]
 
-### 4.4 Cache Invalidation
-- Why it's the hardest problem — keeping cache consistent with source of truth
+---
+
+### 5.4 — Cache Invalidation
+
+*The hardest problem in caching — keeping cache consistent with the DB*
+
 - TTL-based — simple, stale window exists, good enough for most cases
 - Event-driven — invalidate on write event (CDC, message queue)
 - Write-through as invalidation — always updates cache on write
 - Cache versioning — embed version in cache key, old keys naturally expire
 - Stale-while-revalidate — serve stale, refresh in background (news feed, type-ahead)
+- [[05-Caching/04-Cache-Invalidation|Notes →]]
 
-### 4.5 Distributed Caching
-- Single-node cache doesn't scale — memory limit, SPOF
-- Consistent hashing for distribution — minimal remapping on node add/remove
-- Cache coherence — multiple nodes can have different values
-- Redis Cluster — 16384 hash slots, gossip protocol
-- Replication in cache — read replicas for availability
+---
 
-### 4.6 Cache Problems & Solutions
-- Cache stampede (Thundering herd) — key expires, 10k requests hit DB simultaneously
-  - Solution: mutex on first miss, probabilistic early expiry, background refresh
-- Hot key problem — single key receiving millions of req/sec (celebrity tweet)
-  - Solution: replicate hot key across nodes, local in-process replica
-- Cold start — empty cache on deploy or flush
-  - Solution: cache warming before switching traffic
-- Cache penetration — requests for non-existent keys bypass cache, hammer DB
-  - Solution: cache null result with short TTL, or Bloom filter at cache layer
-- Cache avalanche — many keys expire at the same time, DB gets slammed
-  - Solution: add jitter to TTL values, stagger expiry
+### 5.5 — Distributed Caching
 
-### 4.7 Redis Deep Dive
-- Architecture — single-threaded event loop, why it's incredibly fast
-- Data structures and case study usage
-  - String — rate limit counters (INCR), session tokens, simple flags
-  - Sorted Set — leaderboard (ZADD/ZRANGE), sliding window rate limiting, priority queue
-  - List — task queue (LPUSH/BRPOP), recent activity feed
-  - Set — unique online users, tags, user social connections
-  - Hash — user profile fields, shopping cart
-  - HyperLogLog — unique visitor count, distinct search queries
-  - Bitmap — daily active user bitmap, feature flag per user
-  - Stream — event log with consumer groups (Kafka-lite for lower scale)
-- Redis Sentinel — monitors primaries, elects new primary on failure
-- Redis Cluster — sharding across nodes via hash slots
-- Redis as distributed lock — SET key value NX PX timeout, Redlock for multi-node
-- Redis as rate limiter — INCR + EXPIRE for fixed window, Sorted Set for sliding window
-- Persistence — RDB (snapshot, small file) vs AOF (every write, durable) vs hybrid
+*Single node doesn't scale — how do you distribute a cache?*
+
+- Single-node cache — memory limit, SPOF, doesn't scale horizontally
+- Consistent hashing — minimal remapping when nodes are added or removed
+- Cache coherence — multiple nodes can have different values for the same key
+- Replication — read replicas for availability, not just scale
+- [[05-Caching/05-Distributed-Caching|Notes →]]
+
+---
+
+### 5.6 — Cache Problems & Solutions
+
+*Five failure modes every interviewer asks about*
+
+- Cache stampede (thundering herd) — key expires, 10k requests hit DB simultaneously → mutex on miss, probabilistic early expiry
+- Hot key — single key receiving millions of req/sec (celebrity tweet) → replicate across nodes, local in-process replica
+- Cold start — empty cache on deploy → cache warming before switching traffic
+- Cache penetration — requests for non-existent keys bypass cache → cache null with short TTL, or Bloom filter
+- Cache avalanche — many keys expire simultaneously → add jitter to TTL values
+- [[05-Caching/06-Cache-Problems|Notes →]]
+
+---
+
+### 5.7 — Redis
+
+*The standard distributed cache — know its data structures and when to use each*
+
+**Must know — data structures:**
+- String — rate limit counters (INCR), session tokens
+- Sorted Set — leaderboard (ZADD/ZRANGE), sliding window rate limiting
+- Hash — user profile fields, shopping cart
+- List — task queue (LPUSH/BRPOP), recent activity feed
+- Set — unique online users, social connections
+
+**Must know — patterns:**
+- Redis as distributed lock — SET key value NX PX timeout
+- Redis as rate limiter — INCR + EXPIRE (fixed window), Sorted Set (sliding window)
+- Redis Sentinel — monitors primary, elects new primary on failure
+
+**Nice to know (not required for L4):**
+- HyperLogLog, Bitmap, Stream — niche, case-study specific
+- Redis Cluster hash slot internals — SDE-3 territory
+- RDB vs AOF persistence — know they exist, don't deep dive
+- [[05-Caching/07-Redis|Notes →]]
