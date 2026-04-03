@@ -75,8 +75,8 @@ Work through in this order — tick off as completed:
 - [x] 3.11 Network Partitions → `11-Network-Partitions/`
 - [x] 3.12 CAP Theorem → `12-CAP-Theorem/`
 - [x] 3.13 PACELC Theorem → `13-PACELC/`
-- [x] 3.14 State Machines → `15-State-Machines/`
-- [ ] 3.15 Security → `14-Security/`
+- [x] 3.14 Security → `14-Security/`
+- [x] 3.15 State Machines → `15-State-Machines/`
 - [x] 3.16 NFRs → `16-NFRs/`
 
 ### How to start a session
