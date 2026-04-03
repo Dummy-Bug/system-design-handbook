@@ -2,7 +2,7 @@
 
 > [!abstract] This file brings everything together.
 > Two separate flows — read and write — designed independently because they have opposite characteristics.
-> Everything in this file follows directly from the decisions made in [[06 Tries]] and [[07 Redis]].
+> Everything in this file follows directly from the decisions made in [[06 Tries]] and [[08 Redis]].
 
 ---
 
@@ -12,23 +12,23 @@
 
 ```mermaid
 flowchart TD
-    Client["🖥️ Client\n(Browser / App)"]
+    Client["🖥️ Client (Browser / App)"]
 
-    Client -- "a: debounced GET prefix" --> GW["API Gateway\n(auth, rate limit, routing)"]
+    Client -- "a: debounced GET prefix" --> GW["API Gateway (auth, rate limit, routing)"]
     Client -- "b: submit search" --> GW
 
     GW -- "typeahead request" --> AC["Autocomplete Service"]
     GW -- "search submission" --> SR["Search Results Service"]
 
-    AC -- "ZRANGE prefix:par 0 9 REV" --> RR["Redis\n(ZSET — prefix → top K)"]
+    AC -- "ZRANGE prefix:par 0 9 REV" --> RR["Redis (ZSET — prefix → top K)"]
     RR -- "top 10 suggestions" --> AC
     AC -- "a: suggestions response" --> Client
 
     SR -- "b: paginated search results" --> Client
-    SR -- "enqueue write event" --> Q["Queue\n(Kafka)"]
+    SR -- "enqueue write event" --> Q["Queue (Kafka)"]
 
-    Q --> AGG["Aggregator\n(sample + batch)"]
-    AGG -- "ZINCRBY after batching" --> RW["Redis\n(ZSET update)"]
+    Q --> AGG["Aggregator (sample + batch)"]
+    AGG -- "ZINCRBY after batching" --> RW["Redis (ZSET update)"]
 ```
 
 > [!info] Two completely separate paths
@@ -176,7 +176,7 @@ sequenceDiagram
 > Kafka absorbs the burst, lets the aggregator consume at a controlled pace, and provides durability — if the aggregator crashes, events aren't lost.
 
 **Aggregator**
-Applies the two write reduction strategies from [[07 Redis]]:
+Applies the two write reduction strategies from [[08 Redis]]:
 
 ```
 Raw events:             100,000/sec
