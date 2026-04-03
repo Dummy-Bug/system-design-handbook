@@ -7,6 +7,8 @@
 - Latency, Throughput, Bandwidth — three different bottlenecks, three different solutions
 - Percentiles (P50/P95/P99/P999) — why averages lie and which percentile to target per system type
 - Latency vs Throughput tradeoff — optimizing one can hurt the other
+- Tail latency amplification — sequential calls compound, parallel calls increase failure probability
+- Jitter — variance in latency, matters more than raw latency for streaming systems
 - Interview checklist — assess all three metrics, attach percentile targets before designing
 - 📁 Notes: `04-Core-Concepts/01-Performance-Metrics/`
 
@@ -32,48 +34,66 @@
 - 📁 Notes: `04-Core-Concepts/04-Reliability/`
 
 ### 2.5 Fault Tolerance
-- Failure modes — crash, slow response, wrong answer
-- Graceful degradation — return partial results rather than total failure
-- Redundancy — the primary tool for fault tolerance
-- Failover — detecting failure and switching to backup
-- Bulkhead pattern — isolate failures so one component doesn't cascade
+- Failure modes — crash, slow response, byzantine (wrong answer)
+- Graceful degradation — return partial results rather than total failure, reliability vs availability tradeoff
+- Bulkhead pattern — isolate thread/connection pools so one service can't starve others
+- Timeout — don't wait forever, connect + read + write timeouts
+- Retry + exponential backoff + jitter — retry smartly, prevent retry storms
+- Circuit Breaker — open/closed/half-open states, stop trying when service is known broken
+- Idempotency before retrying non-safe operations
+- 📁 Notes: `04-Core-Concepts/06-Fault-Tolerance/`
 
 ### 2.6 Durability
 - Data survives crashes, power loss, disk failure
-- Write-Ahead Log (WAL) — log the operation before applying it
-- Replication as durability — copies on multiple nodes/racks/regions
-- Backup strategies — full, incremental, differential
+- Durability vs Availability — independent guarantees (Redis = available not durable, Postgres = both)
+- Write-Ahead Log (WAL) — append-only sequential log, crash-safe, basis for replication
+- Replication as durability — node → data center → multi-region layers
+- Synchronous vs asynchronous replication — RPO = 0 vs lower latency tradeoff
+- Backup strategies — full, incremental, middle ground (weekly full + daily incremental)
+- Backup frequency determines RPO — continuous WAL archiving for RPO in seconds
+- Replication ≠ backup — replication copies corruption instantly, backups protect against logical failures
+- 📁 Notes: `04-Core-Concepts/07-Durability/`
 
 ### 2.7 Scalability
 - Vertical scaling (scale up) — bigger machine, has a ceiling
 - Horizontal scaling (scale out) — more machines, near-infinite
 - Stateless vs stateful services — stateless is easy to scale horizontally
+- Three bottleneck chain — app servers → database → network
+- Load Balancing — algorithms (round robin, least connections, IP hashing, weighted)
+- L4 vs L7 load balancing — protocol-driven decision, NAT, connection tables
+- API Gateway — auth, rate limiting, versioning, three-layer architecture (L4 NLB → GW → internal LB)
 - Auto-scaling — reactive (CPU/memory metric) vs predictive (schedule)
+- Connection draining — stop new requests, complete in-flight, then terminate
+- Cold start — pre-baked AMIs (90s), warm pools (5s), predictive scaling (0s during spike)
 - Database as the most common bottleneck — scale app tier first, then DB
+- 📁 Notes: `04-Core-Concepts/05-Scalability/`
 
 ### 2.8 Concurrency & Locking
 - Race conditions — two operations interfere, wrong result
 - Optimistic locking — read, compute, write only if nothing changed (CAS)
-- Pessimistic locking — lock the row before reading, others wait
+- Pessimistic locking — lock the row before reading, others wait (2PL)
 - When to use optimistic vs pessimistic — contention level determines the choice
 - Deadlocks — what causes them, how to prevent (lock ordering, timeouts)
 - Read-Write locks — multiple readers allowed, single writer
 - MVCC (Multi-Version Concurrency Control)
   - Readers don't block writers, writers don't block readers
   - Snapshot isolation — each transaction sees a consistent snapshot
-  - How PostgreSQL implements it — xmin/xmax on rows
+- Idempotency — preventing duplicate operations (payments, order creation)
 - Distributed locking
-  - Redis-based lock — SET NX PX, Redlock algorithm
-  - ZooKeeper-based lock — ephemeral nodes
+  - Redis-based lock — SET NX PX, know it exists
   - When you need distributed locking vs DB-level locking
+- ~~ZooKeeper-based locks~~ — out of scope for SDE-2
+- ~~Redlock algorithm internals~~ — out of scope for SDE-2
+- ~~xmin/xmax PostgreSQL internals~~ — database internals, not system design
 
 ### 2.9 Transaction Isolation Levels
-- Dirty read, non-repeatable read, phantom read, lost update — what each means
+- Dirty read, non-repeatable read, phantom read, lost update — what each means and which isolation level prevents each
 - READ COMMITTED — no dirty reads, PostgreSQL default
 - REPEATABLE READ — no dirty or non-repeatable reads, MySQL default
 - SERIALIZABLE — full isolation, slowest
-- Snapshot isolation — what most modern databases actually use
+- Snapshot isolation — what most modern databases actually use (via MVCC)
 - Choosing the right level — hotel reservation needs higher isolation than a view counter
+- Connection to concurrency — isolation levels are the DB's answer to the same problems locking solves
 
 ### 2.10 Consistency Models
 - Strong consistency — every read sees the latest write
