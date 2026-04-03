@@ -176,7 +176,8 @@ sequenceDiagram
 > Kafka absorbs the burst, lets the aggregator consume at a controlled pace, and provides durability — if the aggregator crashes, events aren't lost.
 
 **Aggregator**
-Applies the two write reduction strategies from [[08 Redis]]:
+Applies the two write reduction strategies from 
+[[09-Redis-Optimizations]]
 
 ```
 Raw events:             100,000/sec

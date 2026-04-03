@@ -18,3 +18,4 @@
 | 06-Bandwidth-vs-Latency-vs-Throughput.md | Three different bottlenecks, three different solutions |
 | 07-Percentiles.md | P50/P95/P99/P999, why averages lie |
 | 08-Interview-Cheatsheet.md | How to apply all of this in a design interview |
+| Interview-Questions/ | SDE-1, SDE-2, SDE-3 questions with full answers |
