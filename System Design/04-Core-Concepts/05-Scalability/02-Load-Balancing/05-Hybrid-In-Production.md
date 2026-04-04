@@ -25,18 +25,18 @@ None of these overlap. Each solves a problem the others can't:
 ```mermaid
 flowchart TD
     subgraph Internet["Internet"]
-        Player["Valorant Player\nUDP game client"]
-        InstaUser["Instagram User\nMobile app / browser"]
+        Player["Valorant Player<br/>UDP game client"]
+        InstaUser["Instagram User<br/>Mobile app / browser"]
     end
 
     subgraph Edge["Edge — Public Facing"]
-        NLB_Game["L4 NLB\nUDP port 7777\nIP hashing\nNo content inspection"]
-        NLB_HTTP["L4 NLB\nTCP port 443\nDistributes across\nAPI Gateway instances"]
+        NLB_Game["L4 NLB<br/>UDP port 7777<br/>IP hashing<br/>No content inspection"]
+        NLB_HTTP["L4 NLB<br/>TCP port 443<br/>Distributes across<br/>API Gateway instances"]
     end
 
     subgraph GWCluster["API Gateway Cluster — Private"]
-        GW1["API Gateway Instance 1\nSSL termination\nJWT validation\nRate limiting\nURL routing"]
-        GW2["API Gateway Instance 2\nSSL termination\nJWT validation\nRate limiting\nURL routing"]
+        GW1["API Gateway Instance 1<br/>SSL termination<br/>JWT validation<br/>Rate limiting<br/>URL routing"]
+        GW2["API Gateway Instance 2<br/>SSL termination<br/>JWT validation<br/>Rate limiting<br/>URL routing"]
     end
 
     subgraph GameServers["Game Servers — Private"]
@@ -46,9 +46,9 @@ flowchart TD
     end
 
     subgraph AppServices["App Services — Private"]
-        ILB_U["Internal L4 LB\nUser Service pool"]
-        ILB_F["Internal L4 LB\nFeed Service pool"]
-        ILB_P["Internal L4 LB\nPayment Service pool"]
+        ILB_U["Internal L4 LB<br/>User Service pool"]
+        ILB_F["Internal L4 LB<br/>Feed Service pool"]
+        ILB_P["Internal L4 LB<br/>Payment Service pool"]
         US1["User Server A"]
         US2["User Server B"]
         FS1["Feed Server A"]
@@ -57,24 +57,24 @@ flowchart TD
     end
 
     subgraph DataLayer["Data Layer — Private"]
-        PGB["PgBouncer L4\nConnection pooling"]
+        PGB["PgBouncer L4<br/>Connection pooling"]
         PG_Primary["Postgres Primary"]
         PG_Replica["Postgres Replica"]
     end
 
-    Player -->|"UDP port 7777\n128 packets/sec"| NLB_Game
-    InstaUser -->|"HTTPS port 443\nJWT token"| NLB_HTTP
+    Player -->|"UDP port 7777 / 128 packets/sec"| NLB_Game
+    InstaUser -->|"HTTPS port 443 / JWT token"| NLB_HTTP
 
-    NLB_Game -->|"IP hash → same server\nper player"| GS1
+    NLB_Game -->|"IP hash → same server per player"| GS1
     NLB_Game --> GS2
     NLB_Game --> GS3
 
     NLB_HTTP --> GW1
     NLB_HTTP --> GW2
 
-    GW1 -->|"/api/user/*\nX-User-Id: 98765"| ILB_U
-    GW1 -->|"/api/feed/*\nX-User-Id: 98765"| ILB_F
-    GW2 -->|"/api/checkout/*\nX-User-Id: 98765"| ILB_P
+    GW1 -->|"/api/user/* X-User-Id: 98765"| ILB_U
+    GW1 -->|"/api/feed/* X-User-Id: 98765"| ILB_F
+    GW2 -->|"/api/checkout/* X-User-Id: 98765"| ILB_P
 
     ILB_U --> US1
     ILB_U --> US2
@@ -82,7 +82,7 @@ flowchart TD
     ILB_F --> FS2
     ILB_P --> PS1
 
-    US1 -->|"PostgreSQL protocol\nTCP port 5432"| PGB
+    US1 -->|"PostgreSQL protocol / TCP port 5432"| PGB
     US2 --> PGB
     FS1 --> PGB
     FS2 --> PGB

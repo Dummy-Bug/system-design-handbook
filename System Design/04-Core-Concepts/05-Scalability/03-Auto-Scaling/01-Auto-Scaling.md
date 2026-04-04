@@ -27,9 +27,9 @@ Auto-scaling is a continuous monitoring loop:
 
 ```mermaid
 flowchart LR
-    M["Monitor\nmetrics"] --> E["Evaluate\nthresholds"]
-    E -->|"threshold crossed"| A["Trigger\nscaling action"]
-    A --> V["Verify\nnew state"]
+    M["Monitor<br/>metrics"] --> E["Evaluate<br/>thresholds"]
+    E -->|"threshold crossed"| A["Trigger<br/>scaling action"]
+    A --> V["Verify<br/>new state"]
     V --> M
 ```
 

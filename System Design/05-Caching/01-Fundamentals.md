@@ -1,5 +1,3 @@
-# Caching Fundamentals
-
 ## What Is Caching
 
 > [!info] Don't recompute or re-fetch something you've already computed. Store the result somewhere fast and serve it from there next time.
@@ -21,19 +19,19 @@ Same idea as Dynamic Programming memoization — store expensive results so you 
 
 > [!info] Three layers — each faster but smaller and less shared than the next.
 
-```
-Fastest                                                    Slowest
-    │                                                          │
-    ▼                                                          ▼
-Local in-process     →     Distributed cache     →     Database
-(Guava, Caffeine)          (Redis, Memcached)           (disk)
+```mermaid
+flowchart LR
+    A["🟢 Local In-Process<br/>(Guava, Caffeine)<br/>~nanoseconds<br/>no network hop<br/>per-server only"]
+    B["🟡 Distributed Cache<br/>(Redis, Memcached)<br/>~1ms<br/>one network hop<br/>shared across all servers"]
+    C["🔴 Database<br/>(disk)<br/>~10ms+<br/>network + disk I/O<br/>source of truth"]
 
-~nanoseconds               ~1ms                         ~10ms+
-no network hop             one network hop              network + disk I/O
-per-server only            shared across all servers    source of truth
-```
+    A -->|slower| B
+    B -->|slower| C
 
-**CDN** sits at the edge — geographically close to the user. For static assets only. Reduces latency by serving from the nearest location instead of your data center.
+    style A fill:#d4edda,stroke:#28a745,color:#000
+    style B fill:#fff3cd,stroke:#ffc107,color:#000
+    style C fill:#f8d7da,stroke:#dc3545,color:#000
+```
 
 ---
 
@@ -41,24 +39,33 @@ per-server only            shared across all servers    source of truth
 
 > [!info] Ask one question: "If this data is 500ms stale, does anything break?"
 
-```
-Cache it:
-  Expensive to compute or fetch     → feed ranking, search results
-  Read frequently                   → user profiles, session tokens
-  Okay to be slightly stale         → like counts, follower counts
-  Static or rarely changes          → images, JS/CSS, config
+```mermaid
+flowchart LR
+    subgraph DO["✅ Cache It"]
+        A["Expensive to compute<br/>feed ranking, search results"]
+        B["Read frequently<br/>user profiles, session tokens"]
+        C["Okay to be slightly stale<br/>like counts, follower counts"]
+        D["Static or rarely changes<br/>images, JS/CSS, config"]
+    end
 
-Don't cache it:
-  Real-time data                    → stock prices, live inventory
-                                      stale data = user buys at wrong price
-                                      stale inventory = double booking
-  Highly sensitive data             → passwords, payment details
-                                      cache is often less secured than DB
-  One-time use data                 → OTPs, single-use tokens
-                                      not worth the memory
+    subgraph DONT["❌ Don't Cache It"]
+        E["Real-time data<br/>stock prices, live inventory<br/><i>stale = wrong price / double booking</i>"]
+        F["Highly sensitive data<br/>passwords, payment details<br/><i>cache is less secured than DB</i>"]
+        G["One-time use data<br/>OTPs, single-use tokens<br/><i>not worth the memory</i>"]
+    end
+
+    style DO fill:#d4edda,stroke:#28a745,color:#000
+    style DONT fill:#f8d7da,stroke:#dc3545,color:#000
+    style A fill:#c3e6cb,stroke:#28a745,color:#000
+    style B fill:#c3e6cb,stroke:#28a745,color:#000
+    style C fill:#c3e6cb,stroke:#28a745,color:#000
+    style D fill:#c3e6cb,stroke:#28a745,color:#000
+    style E fill:#f5c6cb,stroke:#dc3545,color:#000
+    style F fill:#f5c6cb,stroke:#dc3545,color:#000
+    style G fill:#f5c6cb,stroke:#dc3545,color:#000
 ```
 
-> [!important] Caching is primarily a **read** optimization — same data served many times from cache instead of DB. Writes can be cached too but come with trade-offs (covered in Writing Strategies).
+> [!important] Caching is primarily a **read** optimization — same data served many times from cache instead of DB. Writes can be cached too but come with trade-offs.
 
 ---
 

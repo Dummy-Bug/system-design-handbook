@@ -35,9 +35,9 @@ Auto-scaling signals the load balancer: "stop sending new requests to Server B."
 ```mermaid
 flowchart LR
     LB["Load Balancer"]
-    A["Server A\n✓ active"]
-    B["Server B\n⏳ draining"]
-    C["Server C\n✓ active"]
+    A["Server A<br/>✓ active"]
+    B["Server B<br/>⏳ draining"]
+    C["Server C<br/>✓ active"]
 
     LB -->|"new requests"| A
     LB -.->|"NO new requests"| B

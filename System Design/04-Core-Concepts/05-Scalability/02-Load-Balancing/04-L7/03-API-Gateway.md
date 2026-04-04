@@ -64,22 +64,22 @@ The gateway decides *which service* to route to. But each service runs on multip
 
 ```mermaid
 flowchart TD
-    Client["Client\nMobile App / Browser"]
+    Client["Client<br/>Mobile App / Browser"]
 
     subgraph Public["Public — Internet Facing"]
-        NLB["L4 NLB\nDistributes TCP connections\nacross gateway instances\nNo SSL, no content inspection"]
+        NLB["L4 NLB<br/>Distributes TCP connections<br/>across gateway instances<br/>No SSL, no content inspection"]
     end
 
     subgraph GWCluster["API Gateway Cluster — Private"]
-        GW1["Gateway Instance 1\nSSL termination\nJWT validation\nRate limiting\nURL routing"]
-        GW2["Gateway Instance 2\nSSL termination\nJWT validation\nRate limiting\nURL routing"]
-        GW3["Gateway Instance 3\nSSL termination\nJWT validation\nRate limiting\nURL routing"]
+        GW1["Gateway Instance 1<br/>SSL termination<br/>JWT validation<br/>Rate limiting<br/>URL routing"]
+        GW2["Gateway Instance 2<br/>SSL termination<br/>JWT validation<br/>Rate limiting<br/>URL routing"]
+        GW3["Gateway Instance 3<br/>SSL termination<br/>JWT validation<br/>Rate limiting<br/>URL routing"]
     end
 
     subgraph Services["Services — Private Network"]
-        ILB_U["Internal LB\nUser Service"]
-        ILB_F["Internal LB\nFeed Service"]
-        ILB_P["Internal LB\nPayment Service"]
+        ILB_U["Internal LB<br/>User Service"]
+        ILB_F["Internal LB<br/>Feed Service"]
+        ILB_P["Internal LB<br/>Payment Service"]
         US1["User Server A"]
         US2["User Server B"]
         FS1["Feed Server A"]
