@@ -5,14 +5,14 @@
 
 ### 9.1 The 45-Minute Structure
 
-| Time | Step | What to do |
-|---|---|---|
-| 0–5 min | Requirements | Clarify functional + non-functional, define scope |
-| 5–10 min | Estimation | QPS, storage, bandwidth — drive architecture decisions |
-| 10–15 min | API Design | Key endpoints, request/response, idempotency |
-| 15–25 min | High-Level Design | Core components, data flow, read/write paths |
-| 25–40 min | Deep Dive | 2-3 most critical components in detail |
-| 40–45 min | Bottlenecks | What breaks at 10x, what you'd improve |
+| Time      | Step              | What to do                                             |
+| --------- | ----------------- | ------------------------------------------------------ |
+| 0–5 min   | Requirements      | Clarify functional + non-functional, define scope      |
+| 5–10 min  | Estimation        | QPS, storage, bandwidth — drive architecture decisions |
+| 10–15 min | API Design        | Key endpoints, request/response, idempotency           |
+| 15–25 min | High-Level Design | Core components, data flow, read/write paths           |
+| 25–40 min | Deep Dive         | 2-3 most critical components in detail                 |
+| 40–45 min | Bottlenecks       | What breaks at 10x, what you'd improve                 |
 
 ### 9.2 Requirements Clarification — Questions to Ask
 

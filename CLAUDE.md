@@ -18,6 +18,12 @@ Work through the syllabus at `System Design/01-Syllabus/` topic by topic, buildi
 3. **Never skip ahead** — do not move to the next topic until the user confirms the current one is understood.
 4. **Never write notes before the user has confirmed understanding** — explain first, write after.
 
+### How to explain concepts — follow this exactly
+- **One concept at a time.** Never dump multiple sub-topics in one message. Explain one thing, ask if it makes sense, wait for confirmation, then continue.
+- **Always use scale to justify design decisions.** Don't just say "use Hash instead of String". Show what happens at 10 million users — how much wasted data, how much wasted network traffic, why it matters. Numbers make the trade-off real.
+- **Build from the problem, not the solution.** Don't say "Redis has sorted sets, here's what they do." Say "you have a leaderboard problem, here's why a normal list doesn't work, here's what sorted sets give you."
+- **Use concrete before abstract.** Real example first, generalisation second. Never the other way around.
+
 ### Note file format (use this every time)
 
 Notes are split across **multiple files per topic** (not one big file). Typical structure:
