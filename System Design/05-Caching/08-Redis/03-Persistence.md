@@ -94,10 +94,10 @@ This is what Redis recommends for production.
 
 ## Summary
 
-```
-RDB     → snapshot every N minutes, fast restart, small file, some data loss
-AOF     → log every write, durable, large file, slow restart
-Hybrid  → RDB for base state + AOF for recent writes → recommended for production
-```
+| Mode | How it works | Restart speed | File size | Data loss risk |
+|---|---|---|---|---|
+| RDB | Snapshot every N minutes | Fast | Small | Up to N minutes |
+| AOF | Log every write | Slow | Large | Near zero |
+| Hybrid | RDB for base + AOF for recent writes | Fast | Medium | Near zero — recommended for production |
 
 > [!important] For most caching use cases, some data loss on crash is acceptable — cache is a copy of DB data anyway. RDB alone is often fine. Hybrid is for when you can't afford even a few minutes of cache miss after a restart.

@@ -83,10 +83,10 @@ Increases startup time                  → boot is slower if warming is synchro
 
 ## The Full Picture
 
-```
-Refresh-Ahead    → keep hot keys alive, refresh before TTL fires, prevents stampede
-Cache Warming    → fill cache proactively at startup or before traffic spike
-```
+| Strategy | When it runs | Problem it solves | Limitation |
+|---|---|---|---|
+| Refresh-Ahead | Before TTL expires (proactive) | Prevents expiry misses on hot keys | Key must already exist in cache |
+| Cache Warming | At startup / before traffic spike | Prevents cold cache on deploy | Warms data that may not be requested |
 
 > [!important] These two patterns solve **different problems**:
 > - **Cache Warming** — solves the cold cache problem. Cache is empty, nothing to serve yet.

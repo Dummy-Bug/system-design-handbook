@@ -253,20 +253,13 @@ flowchart LR
 
 ## The Full Picture
 
-```mermaid
-flowchart TD
-    A["Which invalidation strategy?"]
-    A --> B["TTL-based<br/>simple, always set as safety net<br/>stale window exists"]
-    A --> C["Event-driven<br/>instant on DB write<br/>needs infrastructure"]
-    A --> D["Write-through<br/>update cache on write<br/>no miss after write, slower writes"]
-    A --> E["Cache versioning<br/>change the key, old expires naturally<br/>best for CDN static assets"]
-    A --> F["Stale-while-revalidate<br/>serve stale, refresh in background<br/>good for feeds and type-ahead"]
-    style B fill:#d4edda,stroke:#28a745,color:#000
-    style C fill:#d4edda,stroke:#28a745,color:#000
-    style D fill:#d4edda,stroke:#28a745,color:#000
-    style E fill:#fff3cd,stroke:#ffc107,color:#000
-    style F fill:#d4edda,stroke:#28a745,color:#000
-```
+| Strategy | How it works | Stale window | Trade-off |
+|---|---|---|---|
+| TTL-based | Key auto-deletes after timer | Up to TTL duration | Simple — always use as safety net |
+| Event-driven | Delete key on every DB write | None | Instant — needs infrastructure |
+| Write-through | Update key on every DB write | None | No miss after write — slower writes |
+| Cache versioning | Change the key, old expires naturally | None | Best for CDN — two lookups for DB-backed data |
+| Stale-while-revalidate | Serve stale, refresh in background | One request | Great for feeds and type-ahead |
 
 > [!important] Most production systems combine strategies:
 > TTL as the safety net + event-driven for critical data + stale-while-revalidate for feeds.

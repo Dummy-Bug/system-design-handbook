@@ -211,18 +211,10 @@ flowchart LR
 
 ## Summary
 
-```mermaid
-flowchart TD
-    subgraph Topics["Distributed Caching — Key Concepts"]
-        A["Consistent Hashing<br/>minimal remapping on node change<br/>use always"]
-        B["Cache Coherence<br/>async replication for speed<br/>primary reads for simplicity"]
-        C["Replication<br/>availability + read throughput"]
-        D["Two-Level Caching<br/>L1 local (ns) + L2 Redis (ms)"]
-        E["Node Failure<br/>consistent hashing limits blast radius<br/>replicas = seamless failover"]
-    end
-    style A fill:#d4edda,stroke:#28a745,color:#000
-    style B fill:#d4edda,stroke:#28a745,color:#000
-    style C fill:#d4edda,stroke:#28a745,color:#000
-    style D fill:#d4edda,stroke:#28a745,color:#000
-    style E fill:#d4edda,stroke:#28a745,color:#000
-```
+| Concept | What it does | When to use |
+|---|---|---|
+| Consistent hashing | Minimal key remapping on node add/remove | Always |
+| Cache coherence | Keep replicas in sync — async for speed, primary reads for simplicity | Whenever you have replicas |
+| Replication | Availability + read throughput | Any production cache |
+| Two-level caching | L1 local (nanoseconds) + L2 Redis (~1ms) | High-traffic systems |
+| Node failure handling | Consistent hashing limits blast radius, replicas give seamless failover | Always |

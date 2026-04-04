@@ -145,13 +145,13 @@ Next read after write is always a miss     → slight latency spike after writes
 
 ## The Full Picture
 
-```
-Cache-aside    → app manages cache, lazy, most common, slight staleness possible
-Read-through   → cache manages itself on miss, cleaner app code
-Write-through  → write to both synchronously, always consistent, slower writes
-Write-back     → write to cache only, fastest writes, risk of data loss
-Write-around   → skip cache on write, good for write-once data
-```
+| Strategy | Who manages cache | When DB is written | Trade-off |
+|---|---|---|---|
+| Cache-aside | App | On miss (lazy) | Most common — slight staleness possible |
+| Read-through | Cache itself | On miss (lazy) | Cleaner app code — cache must know DB |
+| Write-through | App | Synchronously on every write | Always consistent — slower writes |
+| Write-back | App | Asynchronously later | Fastest writes — risk of data loss |
+| Write-around | App | Directly, cache skipped | Good for write-once data — next read is a miss |
 
 > [!important] Most systems use **cache-aside for reads** + **write-through or write-around for writes** as the default combination. Write-back only when write speed is critical and some data loss is acceptable.
 
