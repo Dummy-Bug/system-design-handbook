@@ -18,7 +18,7 @@ Read request
 ```
 
 App is responsible for populating and managing the cache. Data only gets cached when actually requested.
-
+	
 **What's good:**
 ```
 Only caches what's needed     → no wasted memory
@@ -143,37 +143,6 @@ Next read after write is always a miss     → slight latency spike after writes
 
 ---
 
-## Refresh-Ahead
-
-> [!info] Proactively refresh cache before TTL expires. Users never see a miss.
-
-```
-Key TTL = 60 seconds
-At T=45s → background job detects key is about to expire
-         → fetches fresh data from DB
-         → updates cache
-At T=60s → key would have expired, but it's already fresh
-         → users keep hitting cache hits, no miss, no stampede
-```
-
-**What's good:**
-```
-Zero cache misses on hot keys      → seamless experience
-Prevents stampede on TTL expiry    → DB never sees the spike
-```
-
-**What's bad:**
-```
-May refresh data never requested again    → wasted DB reads
-Requires background refresh mechanism    → more complexity
-```
-
-**Use when:** hot keys with predictable access patterns — trending posts, homepage content, leaderboard top 10.
-
-> [!tip] Stampede = a cache key expires and thousands of simultaneous requests all miss and hit the DB at once. Refresh-ahead prevents this by refreshing before expiry. Covered in depth in [[06-Cache-Problems]].
-
----
-
 ## The Full Picture
 
 ```
@@ -182,7 +151,8 @@ Read-through   → cache manages itself on miss, cleaner app code
 Write-through  → write to both synchronously, always consistent, slower writes
 Write-back     → write to cache only, fastest writes, risk of data loss
 Write-around   → skip cache on write, good for write-once data
-Refresh-ahead  → proactive refresh, no misses on hot keys, prevents stampede
 ```
 
 > [!important] Most systems use **cache-aside for reads** + **write-through or write-around for writes** as the default combination. Write-back only when write speed is critical and some data loss is acceptable.
+
+> [!tip] Proactive cache population strategies (Refresh-Ahead, Cache Warming) are covered in [[04-Population-Strategies]] — after TTL and eviction are explained in [[03-Eviction-Policies]].

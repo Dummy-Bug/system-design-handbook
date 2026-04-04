@@ -1,5 +1,3 @@
-# Cache Problems
-
 ## Cache Stampede
 
 > [!info] A hot key's TTL expires. Thousands of requests arrive at the same moment — all get a cache miss simultaneously. All of them go to the DB at once.

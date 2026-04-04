@@ -43,7 +43,7 @@ News feed, search results, user sessions
 
 **Where it fails:**
 ```
-2am report query runs once → now it's "most recently used"
+2 am report query runs once → now it's "most recently used"
 → evicts your homepage query which runs millions of times daily
 → wrong call
 ```
@@ -83,6 +83,27 @@ LFU still keeps it → count is too high to evict
 
 ---
 
+## FIFO — First In First Out
+
+> [!info] Evict the oldest inserted item, regardless of how often or recently it was accessed.
+
+```
+Items inserted: A → B → C → D
+Cache full, need space
+→ evict A (first inserted)
+```
+
+**Why it's rarely used:**
+```
+Insertion order ≠ usefulness
+A might still be the hottest key in the cache
+FIFO doesn't care — it evicts A anyway
+```
+
+Only useful for ordered data where recency of insertion genuinely matters. Almost never the right choice in practice.
+
+---
+
 ## TTL — Time To Live
 
 > [!info] Time-based expiry. Key is deleted after a set duration regardless of access patterns or memory pressure.
@@ -110,35 +131,5 @@ Stampede risk             → many keys with same TTL expire simultaneously → 
 **Use for:** almost everything as a safety net. Even if you use LRU/LFU, always set a TTL so stale data doesn't live forever.
 
 ---
-
-## FIFO — First In First Out
-
-> [!info] Evict the oldest inserted item, regardless of how often or recently it was accessed.
-
-```
-Items inserted: A → B → C → D
-Cache full, need space
-→ evict A (first inserted)
-```
-
-**Why it's rarely used:**
-```
-Insertion order ≠ usefulness
-A might still be the hottest key in the cache
-FIFO doesn't care — it evicts A anyway
-```
-
-Only useful for ordered data where recency of insertion genuinely matters. Almost never the right choice in practice.
-
----
-
-## Summary
-
-```
-LRU    → evict least recently accessed — default, good for changing access patterns
-LFU    → evict least frequently accessed — good for stable hot items, rarely used
-TTL    → time-based expiry — always set as a safety net, prevents stale data
-FIFO   → evict oldest inserted — rarely used, insertion order ≠ usefulness
-```
 
 > [!important] TTL ≠ eviction. TTL expires keys by time. Eviction removes keys by memory pressure. They are independent — both can apply to the same key.
