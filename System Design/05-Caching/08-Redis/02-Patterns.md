@@ -6,11 +6,14 @@
 
 Multiple servers run the same background job — send email digests, process a payment, clean up expired sessions. Without coordination, every server picks up the same job simultaneously.
 
-```
-No lock:
-  Server 1 picks up payment job → starts processing
-  Server 2 picks up payment job → starts processing
-  → payment charged twice
+```mermaid
+flowchart LR
+    subgraph NoLock["Without Lock"]
+        S1["Server 1 picks up payment job<br/>starts processing"]
+        S2["Server 2 picks up payment job<br/>starts processing"]
+        S1 & S2 --> R["Payment charged twice ✗"]
+        style R fill:#f8d7da,stroke:#dc3545,color:#000
+    end
 ```
 
 You need only one server to run the job at a time. That's a distributed lock.
@@ -29,24 +32,32 @@ PX 5000  → auto-expire after 5000ms
 → key already exists: do nothing, nil    → someone else has it, skip
 ```
 
-In practice:
-
-```
-Server 1: SET lock:payment:123 NX PX 5000 → OK   ✓ got the lock, process payment
-Server 2: SET lock:payment:123 NX PX 5000 → nil  ✗ lock taken, skip
+```mermaid
+flowchart LR
+    A["SET lock:payment:123 NX PX 5000"]
+    A -->|"key doesn't exist → OK"| B["Server 1 got the lock ✓<br/>process payment"]
+    A -->|"key exists → nil"| C["Server 2 skipped ✓<br/>lock already taken"]
+    style B fill:#d4edda,stroke:#28a745,color:#000
+    style C fill:#fff3cd,stroke:#ffc107,color:#000
 ```
 
 **Why the expiry?**
 
-Server 1 gets the lock then crashes mid-job. Without expiry:
+Server 1 gets the lock then crashes mid-job:
 
+```mermaid
+flowchart LR
+    subgraph NoExpiry["Without PX 5000"]
+        A["Server 1 crashes"] --> B["lock:payment:123 stays forever"]
+        B --> C["No server can ever process this payment ✗<br/>stuck forever"]
+        style C fill:#f8d7da,stroke:#dc3545,color:#000
+    end
+    subgraph WithExpiry["With PX 5000"]
+        D["Server 1 crashes"] --> E["Lock auto-releases after 5 seconds"]
+        E --> F["Next server picks it up and processes ✓"]
+        style F fill:#d4edda,stroke:#28a745,color:#000
+    end
 ```
-lock:payment:123 stays forever
-→ no server can ever process this payment again
-→ stuck forever
-```
-
-With `PX 5000` — lock auto-releases after 5 seconds even if the server that set it dies.
 
 ---
 
@@ -65,23 +76,25 @@ User makes a request
 → if count > 100 → reject
 ```
 
-```
-14:00:00 → count = 1,   EXPIRE 60s set
-14:00:30 → count = 50   ✓
-14:00:59 → count = 100  ✓
-14:01:00 → count = 101  → rejected ✗
-14:01:01 → new key, count resets to 1
+```mermaid
+flowchart LR
+    A["14:00:00 → count = 1<br/>EXPIRE 60s set"] --> B["14:00:30 → count = 50 ✓"]
+    B --> C["14:00:59 → count = 100 ✓"]
+    C --> D["14:01:00 → count = 101 → rejected ✗"]
+    D --> E["14:01:01 → new key<br/>count resets to 1 ✓"]
+    style D fill:#f8d7da,stroke:#dc3545,color:#000
+    style E fill:#d4edda,stroke:#28a745,color:#000
 ```
 
 Simple — one integer key per user per minute. Resets automatically when key expires.
 
 **The boundary problem:**
 
-```
-14:00:50 → user fires 100 requests → all allowed ✓  (window 1)
-14:01:10 → user fires 100 requests → all allowed ✓  (window 2)
-
-200 requests in 20 seconds — even though limit is 100/min
+```mermaid
+flowchart LR
+    A["14:00:50 → 100 requests<br/>all allowed ✓ (window 1)"] --> B["14:01:10 → 100 requests<br/>all allowed ✓ (window 2)"]
+    B --> C["200 requests in 20 seconds<br/>limit is supposed to be 100/min ✗"]
+    style C fill:#f8d7da,stroke:#dc3545,color:#000
 ```
 
 The window only asks "how many in this bucket?" — not "how many in the last 60 seconds?". At the boundary, a user can double their limit by straddling two windows.
@@ -103,23 +116,28 @@ if count > 100 → reject
 
 No boundary problem — window slides with every request:
 
-```
-T=14:00:50 → user fires 100 requests
-T=14:01:10 → user tries another request
-
-Sliding window: "how many between 14:00:10 and 14:01:10?"
-→ those 100 requests from 14:00:50 are still inside
-→ count = 100 → rejected ✗
-```
-
-**Trade-off:**
-
-```
-Fixed window    → 1 integer key per user per minute     → tiny memory
-Sliding window  → 1 sorted set entry per request        → more memory, exact accuracy
+```mermaid
+flowchart LR
+    A["T=14:00:50<br/>user fires 100 requests"] --> B["T=14:01:10<br/>user tries another request"]
+    B --> C["Sliding window checks:<br/>'how many between 14:00:10 and 14:01:10?'"]
+    C --> D["Those 100 requests from 14:00:50<br/>are still inside the window"]
+    D --> E["count = 100 → rejected ✗ correctly"]
+    style E fill:#d4edda,stroke:#28a745,color:#000
 ```
 
-> [!tip] For SDE-2: know both approaches and the trade-off. Fixed window is simpler but exploitable at boundaries. Sliding window is accurate but heavier. Redis commands are a bonus — the interviewer cares more about the trade-off.
+**Fixed Window vs Sliding Window:**
+
+```mermaid
+flowchart LR
+    subgraph Fixed["Fixed Window"]
+        F1["1 integer key per user per minute<br/>tiny memory ✓<br/>boundary exploit possible ✗"]
+        style F1 fill:#fff3cd,stroke:#ffc107,color:#000
+    end
+    subgraph Sliding["Sliding Window"]
+        S1["1 sorted set entry per request<br/>more memory ✗<br/>exact accuracy ✓"]
+        style S1 fill:#d4edda,stroke:#28a745,color:#000
+    end
+```
 
 ---
 
@@ -127,19 +145,22 @@ Sliding window  → 1 sorted set entry per request        → more memory, exact
 
 One Redis primary goes down — all cache reads and writes fail — every request falls through to DB — DB collapses.
 
-Sentinel is a monitoring process that watches your Redis primary and automatically promotes a replica when the primary dies.
+**Sentinel** is a monitoring process that watches your Redis primary and automatically promotes a replica when the primary dies.
 
-```
-Normal state:
-  Sentinel watches Primary ──replicates──▶ Replica 1
-                                        ──replicates──▶ Replica 2
-
-Primary dies:
-  Sentinels detect failure
-  → majority vote among Sentinel nodes
-  → Replica 1 promoted to primary
-  → app told new primary address
-  → Replica 2 now replicates from Replica 1
+```mermaid
+flowchart LR
+    subgraph Normal["Normal State"]
+        SN["Sentinel<br/>watching"] --> PN["Primary"]
+        PN -->|"replicates"| R1N["Replica 1"]
+        PN -->|"replicates"| R2N["Replica 2"]
+        style PN fill:#d4edda,stroke:#28a745,color:#000
+    end
+    subgraph Failover["Primary Dies"]
+        SF["Sentinels detect failure<br/>majority vote"] --> PF["Replica 1 promoted<br/>to Primary ✓"]
+        PF -->|"replicates"| R2F["Replica 2 now follows<br/>new primary"]
+        SF --> APP["App told new<br/>primary address"]
+        style PF fill:#d4edda,stroke:#28a745,color:#000
+    end
 ```
 
 Your app doesn't talk to Redis directly — it asks Sentinel "who is the current primary?" and Sentinel points it to the right node.
@@ -150,12 +171,16 @@ If one Sentinel loses its network connection to the primary, it might think the 
 
 **The unavoidable gap:**
 
-```
-Primary dies → Sentinels detect → vote → promote → app reconnects
-→ ~10–30 seconds of Redis being unavailable
+```mermaid
+flowchart LR
+    A["Primary dies"] --> B["Sentinels detect"] --> C["Majority vote"] --> D["Promote replica"] --> E["App reconnects"]
+    B2["~10–30 seconds of Redis unavailable<br/>every cache read fails → DB gets burst traffic"]
+    A --> B2
+    style B2 fill:#fff3cd,stroke:#ffc107,color:#000
+    style E fill:#d4edda,stroke:#28a745,color:#000
 ```
 
-During that window every cache read fails and requests hit DB. This is an accepted trade-off — Sentinel minimises the window but doesn't eliminate it. Design your system to handle short DB burst traffic gracefully.
+During that window every cache read fails and requests hit DB. This is an accepted trade-off — Sentinel minimises the window but doesn't eliminate it.
 
 ---
 
@@ -164,27 +189,41 @@ During that window every cache read fails and requests hit DB. This is an accept
 Sentinel handles failover — what happens when a node dies.
 Cluster handles sharding — what happens when data is too big for one node.
 
-```
-One Redis node → ~64GB RAM limit
-1 billion users × 1KB profile = 1TB of data → doesn't fit
+```mermaid
+flowchart LR
+    A["One Redis node<br/>~64GB RAM limit"] --> B["1 billion users × 1KB profile<br/>= 1TB of data"]
+    B --> C["Doesn't fit on one node ✗"]
+    style C fill:#f8d7da,stroke:#dc3545,color:#000
 ```
 
-Redis Cluster splits data across multiple nodes automatically:
+Redis Cluster splits data across multiple nodes automatically using **key slots** (0–16383):
 
-```
-Node 1 → owns key slots 0     to 5460
-Node 2 → owns key slots 5461  to 10922
-Node 3 → owns key slots 10923 to 16383
-
-SET user:123:profile → hashes to slot 5432 → goes to Node 1
-SET user:456:profile → hashes to slot 7891 → goes to Node 2
+```mermaid
+flowchart LR
+    subgraph Cluster["Redis Cluster"]
+        N1["Node 1<br/>slots 0 → 5460"]
+        N2["Node 2<br/>slots 5461 → 10922"]
+        N3["Node 3<br/>slots 10923 → 16383"]
+    end
+    A["SET user:123:profile"] -->|"hashes to slot 5432"| N1
+    B["SET user:456:profile"] -->|"hashes to slot 7891"| N2
+    style N1 fill:#d4edda,stroke:#28a745,color:#000
+    style N2 fill:#d4edda,stroke:#28a745,color:#000
+    style N3 fill:#d4edda,stroke:#28a745,color:#000
 ```
 
 Your app doesn't need to know which node holds which key — the cluster handles routing. Each node also has its own replicas for failover, so you get sharding and availability together.
 
-```
-Sentinel  → one primary + replicas, automatic failover on failure
-Cluster   → many primaries, data sharded across them, each with replicas
-```
+**Sentinel vs Cluster:**
 
-> [!tip] For SDE-2: know Cluster exists and why (data too large for one node). You don't need the internals.
+```mermaid
+flowchart LR
+    subgraph Sentinel["Sentinel"]
+        S1["One primary + replicas<br/>automatic failover on failure<br/>data fits on one node"]
+        style S1 fill:#fff3cd,stroke:#ffc107,color:#000
+    end
+    subgraph Cluster["Cluster"]
+        C1["Many primaries<br/>data sharded across them<br/>each primary has its own replicas"]
+        style C1 fill:#d4edda,stroke:#28a745,color:#000
+    end
+```

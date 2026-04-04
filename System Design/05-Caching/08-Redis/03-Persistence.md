@@ -2,18 +2,16 @@
 
 > [!info] Redis is RAM. RAM is wiped on crash or restart. Persistence is how Redis saves its data to disk so it can recover — not for querying like a real DB, just for crash recovery.
 
-Without persistence:
-
-```
-Redis crashes → restarts → all keys gone → cold start
-→ every request is a cache miss → DB collapses
-```
-
-With persistence:
-
-```
-Redis crashes → restarts → loads data from disk → warm cache restored
-→ DB never sees the spike
+```mermaid
+flowchart LR
+    subgraph Without["Without Persistence"]
+        A1["Redis crashes"] --> A2["Restarts → all keys gone"] --> A3["Cold start<br/>every request is a cache miss"] --> A4["DB collapses ✗"]
+        style A4 fill:#f8d7da,stroke:#dc3545,color:#000
+    end
+    subgraph With["With Persistence"]
+        B1["Redis crashes"] --> B2["Restarts → loads data from disk"] --> B3["Warm cache restored<br/>DB never sees the spike ✓"]
+        style B3 fill:#d4edda,stroke:#28a745,color:#000
+    end
 ```
 
 Disk is only touched on crash recovery. Normal reads and writes still go to RAM — persistence doesn't slow down your cache.
@@ -24,27 +22,38 @@ Disk is only touched on crash recovery. Normal reads and writes still go to RAM 
 
 Every N minutes, Redis takes a full snapshot of everything in memory and writes it to disk.
 
-```
-T=0min  → snapshot saved to disk
-T=5min  → snapshot saved to disk
-T=7min  → Redis crashes
-
-On restart:
-→ loads snapshot from T=5min
-→ 2 minutes of writes lost
+```mermaid
+flowchart LR
+    A["T=0min<br/>snapshot saved"] --> B["T=5min<br/>snapshot saved"] --> C["T=7min<br/>Redis crashes ✗"]
+    C --> D["On restart:<br/>loads snapshot from T=5min"]
+    D --> E["2 minutes of writes lost ⚠️"]
+    style C fill:#f8d7da,stroke:#dc3545,color:#000
+    style E fill:#fff3cd,stroke:#ffc107,color:#000
+    style D fill:#d4edda,stroke:#28a745,color:#000
 ```
 
 **What's good:**
-```
-Small file         → compact binary snapshot
-Fast restart       → load one file, done
-Low overhead       → snapshot runs in background, doesn't block reads/writes
+
+```mermaid
+flowchart LR
+    subgraph Good["RDB strengths"]
+        A["Small file<br/>compact binary snapshot"]
+        B["Fast restart<br/>load one file, done"]
+        C["Low overhead<br/>snapshot runs in background<br/>doesn't block reads/writes"]
+    end
+    style A fill:#d4edda,stroke:#28a745,color:#000
+    style B fill:#d4edda,stroke:#28a745,color:#000
+    style C fill:#d4edda,stroke:#28a745,color:#000
 ```
 
 **What's bad:**
-```
-Data loss          → always lose data since last snapshot
-Not suitable for   → anything where losing even 1 minute of data is unacceptable
+
+```mermaid
+flowchart LR
+    subgraph Bad["RDB weakness"]
+        A["Data loss<br/>always lose writes since last snapshot<br/>not suitable where even 1 min loss is unacceptable"]
+    end
+    style A fill:#f8d7da,stroke:#dc3545,color:#000
 ```
 
 ---
@@ -53,39 +62,51 @@ Not suitable for   → anything where losing even 1 minute of data is unacceptab
 
 Every write command gets logged to a file on disk immediately.
 
-```
-SET user:123 "John"   → appended to file
-INCR page:views       → appended to file
-ZADD leaderboard 9500 → appended to file
-
-Redis crashes → replays every command from log → full recovery
-→ almost zero data loss
+```mermaid
+flowchart LR
+    A["SET user:123 'John'<br/>→ appended to file"] --> B["INCR page:views<br/>→ appended to file"] --> C["ZADD leaderboard 9500<br/>→ appended to file"]
+    C --> D["Redis crashes"]
+    D --> E["Replay every command from log<br/>→ full recovery ✓<br/>almost zero data loss"]
+    style D fill:#f8d7da,stroke:#dc3545,color:#000
+    style E fill:#d4edda,stroke:#28a745,color:#000
 ```
 
 **What's good:**
-```
-Durable            → logs every write, minimal data loss
-Configurable sync  → can flush to disk every command, every second, or let OS decide
+
+```mermaid
+flowchart LR
+    subgraph Good["AOF strengths"]
+        A["Durable<br/>logs every write, minimal data loss"]
+        B["Configurable sync<br/>flush every command, every second,<br/>or let OS decide"]
+    end
+    style A fill:#d4edda,stroke:#28a745,color:#000
+    style B fill:#d4edda,stroke:#28a745,color:#000
 ```
 
 **What's bad:**
-```
-Large file         → every command logged, file grows forever
-Slow restart       → replaying thousands of commands takes time
+
+```mermaid
+flowchart LR
+    subgraph Bad["AOF weaknesses"]
+        A["Large file<br/>every command logged, grows forever"]
+        B["Slow restart<br/>replaying thousands of commands takes time"]
+    end
+    style A fill:#f8d7da,stroke:#dc3545,color:#000
+    style B fill:#f8d7da,stroke:#dc3545,color:#000
 ```
 
 ---
 
 ## Hybrid — RDB + AOF Together
 
-```
-AOF  → for durability, minimal data loss on crash
-RDB  → for fast restarts, compact recovery file
-
-On crash:
-  → load RDB snapshot first   ← restore base state quickly
-  → replay only AOF entries since the snapshot ← fill in the gap
-  → faster than full AOF replay, more durable than RDB alone
+```mermaid
+flowchart LR
+    A["Redis crashes"] --> B["Load RDB snapshot<br/>restore base state quickly ✓"]
+    B --> C["Replay only AOF entries<br/>since the last snapshot"]
+    C --> D["Faster than full AOF replay ✓<br/>More durable than RDB alone ✓"]
+    style B fill:#d4edda,stroke:#28a745,color:#000
+    style C fill:#fff3cd,stroke:#ffc107,color:#000
+    style D fill:#d4edda,stroke:#28a745,color:#000
 ```
 
 This is what Redis recommends for production.
