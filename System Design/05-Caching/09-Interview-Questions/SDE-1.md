@@ -4,24 +4,30 @@
 
 ---
 
-## Q1 — What is a cache and why do we use it?
+## Q1 — What Is a Cache?
 
 > [!question] What is a cache? Give me a one-line definition and a real-world example.
 
-> [!success] Answer
+> [!success]- Answer
 >
-> **What it is:**
+> **Definition:**
 > A cache is a fast, temporary storage layer that holds copies of data so future requests can be served faster without hitting the original source.
 >
 > The key idea — avoid repeating expensive work by storing the result closer to where it's needed. The expense could be a slow DB query, a network call to a third-party API, or an expensive computation.
 >
 > **Real-world analogy:**
-> Placing your daily reading book on your study table instead of the bookshelf in another room. The book is the same — but the access time is drastically reduced. You don't move the bookshelf, you just keep a copy closer.
+> Placing your daily reading book on your desk instead of walking to the bookshelf in another room every time. The book is the same — but the access time is drastically reduced. You don't move the bookshelf, you just keep a copy closer.
 >
 > **In production:**
-> - Caching a third-party API response so you don't call the API on every request — saves latency and avoids rate limits
-> - Caching a DB query result so 10,000 users reading the same profile don't all trigger 10,000 DB queries
-> - Caching a computed feed so you don't re-rank 500 posts for every page load
+> ```
+> Third-party API response  → cache it → avoid calling API on every request
+>                              saves latency, avoids rate limits
+>
+> DB query result           → cache it → 10,000 users reading same profile
+>                              don't trigger 10,000 DB queries
+>
+> Computed feed             → cache it → don't re-rank 500 posts on every load
+> ```
 >
 > > [!tip] Interview framing
 > > *"A cache is a fast temporary storage layer that holds copies of expensive-to-fetch data closer to the requester — avoiding repeated DB queries, API calls, or computations."*
@@ -32,7 +38,7 @@
 
 > [!question] What is a cache hit and a cache miss? Walk me through the full flow for both.
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **Cache Hit:**
 > Request comes in → data found in cache → returned immediately. DB never touched.
@@ -40,14 +46,15 @@
 > **Cache Miss:**
 > Request comes in → data not in cache → fetch from DB → **store result in cache** → return to client.
 >
-> The critical step candidates forget: **store in cache after a miss**. If you miss and don't store, every future request for the same data is also a miss — cache never helps.
->
 > ```
-> Hit:  Request → Cache → Return ✓  (fast)
+> Hit:  Request → Cache → Return ✓  (fast, ~1ms)
 >
 > Miss: Request → Cache (empty) → DB → Store in Cache → Return
->               next request → Cache → Return ✓  (fast now)
+>                next request  → Cache → Return ✓  (fast now)
 > ```
+>
+> **The critical step candidates forget: store in cache after a miss.**
+> If you miss and don't store, every future request for the same data is also a miss — the cache never helps.
 >
 > > [!important] The miss flow has two jobs — fetch the data AND populate the cache. Skip the second step and your cache is useless.
 >
@@ -56,17 +63,17 @@
 
 ---
 
-## Q3 — What is TTL and why do we set one?
+## Q3 — What Is TTL and Why Do We Set One?
 
 > [!question] What is TTL? Why do we set one? What happens if you don't?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **What TTL is:**
-> TTL (Time To Live) is a timer on a cache key. When the timer fires, the key is deleted automatically — regardless of whether the data is stale or not. It's purely time-based.
+> TTL (Time To Live) is a timer on a cache key. When the timer fires, the key is deleted automatically — regardless of whether the data has changed or not. It's purely time-based.
 >
 > **Why we set one:**
-> Cache doesn't automatically know when the DB changes. If a user updates their profile, the cache still has the old value. TTL ensures the key eventually expires so the next request fetches fresh data from DB.
+> The cache doesn't automatically know when the DB changes. If a user updates their profile, the cache still has the old value. TTL ensures the key eventually expires so the next request fetches fresh data from DB.
 >
 > It's a safety net — even if you forget to manually invalidate a key, it won't live forever.
 >
@@ -76,7 +83,7 @@
 > No TTL set → cache key lives forever
 > → cache serves old profile indefinitely
 > → user sees their own stale data forever
-> → also burns memory with keys never needed again
+> → memory fills up with keys never needed again
 > ```
 >
 > **Choosing TTL values:**
@@ -89,7 +96,7 @@
 > > [!important] TTL is a timer, not an invalidation strategy. It doesn't react to DB changes — it only reacts to time. The data can become stale the moment after it's cached and TTL won't know.
 >
 > > [!tip] Interview framing
-> > *"TTL is a safety net — it guarantees no key lives forever. Without it, stale data can be served indefinitely and memory fills up with keys that are never needed again. Always set a TTL even if you use other invalidation strategies."*
+> > *"TTL is a safety net — it guarantees no key lives forever. Without it, stale data is served indefinitely and memory fills up with keys never needed again. Always set a TTL even if you use other invalidation strategies."*
 
 ---
 
@@ -97,7 +104,7 @@
 
 > [!question] What is cache eviction? How is it different from TTL? Give an example where eviction fires but TTL hasn't expired.
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **The difference:**
 >
@@ -111,13 +118,14 @@
 > **Example where eviction fires before TTL:**
 > ```
 > Key "user:123:profile" set with TTL = 5 minutes
-> At T=3min → cache fills up with other data
+>
+> At T=3min → cache fills up with other hot data
 > → LRU eviction fires → "user:123:profile" hasn't been accessed recently
 > → evicted at T=3min, 2 minutes before TTL would have fired
 > ```
 >
 > **Most common eviction policy — LRU (Least Recently Used):**
-> The key you haven't accessed the longest gets evicted first. Redis uses LRU by default. The intuition — if you haven't needed it recently, you probably won't need it soon.
+> The key you haven't accessed the longest gets evicted first. Redis uses LRU by default. The intuition: if you haven't needed it recently, you probably won't need it soon.
 >
 > > [!important] TTL = time-based expiry. Eviction = memory-pressure-based removal. Two separate mechanisms, both can apply to the same key.
 >
@@ -130,7 +138,7 @@
 
 > [!question] A senior engineer says "just add a cache" to fix slow performance. What questions do you ask before doing that?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **The most important question first — should we even cache?**
 >
@@ -146,20 +154,22 @@
 >
 > Is staleness acceptable?
 >   → Stock prices, live inventory → don't cache
->   → User profiles, feed content → fine
+>   → User profiles, feed content → fine to cache
 >
 > Is the fetch actually expensive?
->   → If DB query takes 1ms, caching adds complexity for no gain
+>   → If DB query takes 1ms, caching adds complexity for no real gain
 > ```
 >
-> **If yes to all three — then ask implementation questions:**
-> - Which layer? (CDN, Redis, local in-process)
-> - What data structure? (simple string vs hash vs sorted set)
-> - What TTL per data type?
-> - What eviction policy?
-> - What write strategy? (cache-aside, write-through, write-back)
+> **If yes to all — then ask implementation questions:**
+> ```
+> Which layer?        CDN, Redis, local in-process?
+> What data structure? String vs Hash vs Sorted Set?
+> What TTL?           Per data type?
+> What eviction?      LRU, LFU, TTL-only?
+> What write strategy? Cache-aside, write-through, write-back?
+> ```
 >
 > > [!danger] Cache added on top of a slow query is a band-aid. Fix the root cause first — add an index, optimise the query. Then add caching on top of a fast query to make it faster.
 >
 > > [!tip] Interview framing
-> > *"Before adding a cache I'd ask — is this data read frequently enough to justify it, is staleness acceptable, and is the fetch actually expensive? If yes to all three, then decide layer, data structure, TTL, and eviction policy. Otherwise fix the root cause first."*
+> > *"Before adding a cache I'd ask — is the data read frequently enough to justify it, is staleness acceptable, and is the fetch actually expensive? If yes to all three, then decide layer, data structure, TTL, and eviction policy. Otherwise fix the root cause first."*

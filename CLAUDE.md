@@ -33,7 +33,17 @@ Notes are split across **multiple files per topic** (not one big file). Typical 
 01-<Main-Concept>.md    ← deep-dive explanation
 02-<Sub-Topic>.md       ← follow-on detail (e.g. when to use, trade-offs)
 03-Interview-Cheatsheet.md ← quick-reference for revision
+Interview-Questions/
+  SDE-1.md              ← 5 foundational questions (definitions, basics)
+  SDE-2.md              ← 5 scenario questions (trade-offs, reasoning)
+  SDE-3.md              ← 5 architecture questions (open-ended, no single right answer)
 ```
+
+**Interview question file format:**
+- Each question uses `> [!question]` callout
+- Answer is in a **collapsed** `> [!success]-` callout (hidden until clicked in Obsidian)
+- Answer contains: detailed explanation of WHY it's correct, followed by `> [!tip] Interview framing` with a concise speakable answer
+- All 16 Core Concepts topics have SDE-1/2/3 files in their `Interview-Questions/` folder
 
 Each file uses this style:
 
