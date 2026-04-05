@@ -57,11 +57,9 @@
 - Hotspot problem — celebrity row or timestamp key hammers one shard
 
 ### 3.7 MVCC (Multi-Version Concurrency Control)
-- Readers don't block writers, writers don't block readers
-- Each transaction sees a snapshot of the DB at transaction start
-- How PostgreSQL implements it — xmin/xmax version stamps per row
-- Vacuum process — garbage collects old row versions
-- Write skew — MVCC doesn't prevent it, needs SERIALIZABLE
+- Readers don't block writers, writers don't block readers — why this matters at scale
+- Each transaction sees a consistent snapshot of the DB at transaction start
+- Write skew — MVCC doesn't prevent it, needs SERIALIZABLE isolation
 - Directly applies to: hotel reservation, auction, ticket booking case studies
 
 ### 3.8 Change Data Capture (CDC)
@@ -131,12 +129,51 @@
 - Content-addressable storage — hash of content = key, enables deduplication
 
 ### 3.15 NewSQL
-- Problem it solves — SQL semantics + horizontal scaling
-- Google Spanner — globally distributed, TrueTime for external consistency
-- CockroachDB — distributed SQL, MVCC, Raft per range
-- When to mention — global systems needing strong consistency at scale (stock broker, banking)
+- Problem it solves — SQL semantics + horizontal scaling (best of both worlds)
+- Google Spanner — globally distributed, TrueTime for external consistency (Google interviews)
+- Amazon Aurora — distributed SQL, storage-compute separation, multi-region reads (Amazon interviews)
+- Azure Cosmos DB — multi-model, tunable consistency levels, global distribution (Microsoft interviews)
+- When to mention — global systems needing strong consistency at scale (stock broker, banking, payments)
 
-### 3.16 Choosing the Right Database
+### 3.17 Connection Pooling
+- Why raw DB connections are expensive — TCP handshake + auth + memory per connection
+- Connection pool — reuse a fixed set of open connections across many app threads
+- What happens without it — DB runs out of connections under load, new requests rejected
+- PgBouncer (PostgreSQL), HikariCP (Java), RDS Proxy (Amazon) — same concept, different tools
+- When to mention — any time DB becomes the bottleneck under high concurrency
+
+### 3.18 Read/Write Splitting
+- Pattern — route all writes to primary, all reads to read replicas at the application layer
+- Why — reads vastly outnumber writes in most systems; replicas absorb read traffic
+- Trade-off — replica lag means reads may be slightly stale (eventual consistency)
+- When it breaks — user writes something, immediately reads it back, hits a lagged replica (read-your-own-writes violation)
+- Fix — route a user's own reads to primary for a short window after they write
+- Used by: Amazon Aurora, MySQL with ProxySQL, PostgreSQL with PgBouncer
+
+### 3.19 Cursor-based Pagination vs Offset Pagination
+- Offset pagination — LIMIT 20 OFFSET 10000 — simple but breaks at scale
+  - Full table scan up to the offset on every request
+  - Unstable under concurrent writes — rows shift, items duplicated or skipped
+- Cursor-based pagination — "give me 20 items after this ID/timestamp"
+  - Stable — cursor points to a specific row, unaffected by inserts/deletes
+  - O(1) with an index — no scan needed
+  - Trade-off — no random page access ("jump to page 50"), only next/prev
+- Use cursor pagination for feeds, timelines, infinite scroll — anything at scale
+- Offset is acceptable for admin UIs with small datasets and no concurrent writes
+
+### 3.20 OLTP vs OLAP
+- OLTP (Online Transaction Processing) — operational DB, low-latency reads/writes, short transactions
+  - PostgreSQL, MySQL, DynamoDB — your production DB
+  - Optimised for: INSERT/UPDATE/SELECT on individual rows
+- OLAP (Online Analytical Processing) — analytical DB, large aggregations, full scans
+  - Redshift, BigQuery, Snowflake — your data warehouse
+  - Optimised for: GROUP BY, COUNT, SUM across millions of rows
+- Never run analytics queries against your production OLTP DB at scale
+  - Full table scans compete with live traffic → latency spikes → user impact
+- Pattern — CDC or ETL pipeline copies OLTP data → data warehouse → analytics queries run there
+- When to mention — any time an interviewer asks "how would you generate reports / analytics"
+
+### 3.21 Choosing the Right Database
 - SQL — complex queries, joins, strong consistency, financial data
 - Key-Value — ultra-fast simple lookups, caching, sessions, leaderboards
 - Document — flexible schema, nested data, product catalogs, profiles
