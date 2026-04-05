@@ -119,7 +119,7 @@ Work through in this order — tick off as completed:
 - [x] 3.1 DB Fundamentals → `01-DB-Fundamentals.md`
 - [x] 3.2 ACID Properties → `02-ACID.md`
 - [x] 3.3 SQL Databases → `03-SQL/` (01-Relational-Model, 02-Normalisation, 03-Denormalisation, 04-Joins, 05-Views)
-- [ ] 3.4 Database Indexing → `04-Indexing/` (01-Indexes, 02-BTree, 03-LSM-Tree, 04-Hash-Index)
+- [x] 3.4 Database Indexing → `04-Indexing/` (01-Indexes, 02-Hash-Index, 03-BTree, 04-LSM-Tree)
 - [ ] 3.5 Database Replication → `05-Replication.md`
 - [ ] 3.6 Database Sharding → `06-Sharding.md`
 - [ ] 3.7 MVCC → `07-MVCC.md`

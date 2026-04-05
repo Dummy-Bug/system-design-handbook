@@ -30,7 +30,7 @@
 - Composite index — leftmost prefix rule, column order matters
 - Covering index — query satisfied entirely from index, no table lookup
 - When NOT to index — low-cardinality columns, write-heavy tables
-- B+ Tree — how range scans work, why databases prefer it
+- B+ Tree — what it is, how it's structured, why databases prefer it, how range scans work, why inserts stay fast
 - LSM Tree — write-optimized (MemTable → SSTable → compaction), used in Cassandra, RocksDB
 - Hash index — O(1) equality only, no range queries
 
