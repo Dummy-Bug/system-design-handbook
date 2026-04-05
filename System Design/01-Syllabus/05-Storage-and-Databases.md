@@ -23,16 +23,16 @@
 - Joins — inner, left, right, full outer
 - Views — virtual tables for read simplification
 - Materialized views — precomputed, cached on disk, used for expensive aggregations
-- Query optimization — how indexes speed up reads
 
 ### 3.4 Database Indexing (Deep Dive)
+- Query optimization — how indexes speed up reads
 - Why indexes — O(n) table scan vs O(log n) index lookup
-- B+ Tree — how range scans work, why databases prefer it
-- LSM Tree — write-optimized (MemTable → SSTable → compaction), used in Cassandra, RocksDB
-- Hash index — O(1) equality only, no range queries
 - Composite index — leftmost prefix rule, column order matters
 - Covering index — query satisfied entirely from index, no table lookup
 - When NOT to index — low-cardinality columns, write-heavy tables
+- B+ Tree — how range scans work, why databases prefer it
+- LSM Tree — write-optimized (MemTable → SSTable → compaction), used in Cassandra, RocksDB
+- Hash index — O(1) equality only, no range queries
 
 ### 3.5 Database Replication
 - Primary-Replica — all writes to primary, reads from replicas
