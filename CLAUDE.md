@@ -39,11 +39,24 @@ Interview-Questions/
   SDE-3.md              ← 5 architecture questions (open-ended, no single right answer)
 ```
 
+### How to write notes — follow this exactly
+
+**Notes must read like the full interactive explanation, not a summary.**
+
+The user reads notes to revise — they must be able to understand the concept completely from the notes alone, without needing to remember the conversation. This means:
+
+- **Include the problem first, then the solution.** Don't just state the concept — show why it's needed. Start from the naive approach (e.g. "what if we stored users in a CSV?"), show where it breaks, then introduce the concept as the fix.
+- **Keep all the examples from the session.** If Instagram Stories was used to explain schema-on-read, that example goes in the notes. Real examples are what make concepts stick.
+- **Keep all the flows and comparisons.** If you drew a before/after, it goes in the notes as a code block.
+- **Do not compress or summarise.** A note that says "schema-on-read means structure interpreted at read time" is useless. The note should explain it the way you explained it in the session — with the Instagram Stories table of nulls vs the flexible JSON documents.
+- **Write for a reader who has forgotten the conversation.** Every concept should be self-contained and fully explained.
+
 **Interview question file format:**
 - Each question uses `> [!question]` callout
 - Answer is in a **collapsed** `> [!success]-` callout (hidden until clicked in Obsidian)
 - Answer contains: detailed explanation of WHY it's correct, followed by `> [!tip] Interview framing` with a concise speakable answer
-- All 16 Core Concepts topics have SDE-1/2/3 files in their `Interview-Questions/` folder
+- All discussed topics must have SDE-1/2/3 files in their `Interview-Questions/` folder
+- **Only write interview question files after the interactive Q&A session — never generate them in bulk for topics not yet discussed**
 
 Each file uses this style:
 
@@ -73,9 +86,10 @@ Each file uses this style:
 
 ### Current active phase
 **Phase 3 — Core System Design Concepts — COMPLETED ✅**
-**Phase 5 — Caching — IN PROGRESS**
-Syllabus file: `System Design/01-Syllabus/03-Core-Concepts.md`
-Notes folder: `System Design/04-Core-Concepts/`
+**Phase 4 — Caching — COMPLETED ✅**
+**Phase 5 — Storage & Databases — IN PROGRESS**
+Syllabus file: `System Design/01-Syllabus/05-Storage-and-Databases.md`
+Notes folder: `System Design/06-Storage-and-Databases/`
 
 ### Topic order within Phase 3
 Work through in this order — tick off as completed:
@@ -95,6 +109,29 @@ Work through in this order — tick off as completed:
 - [x] 3.14 Security → `14-Security/`
 - [x] 3.15 State Machines → `15-State-Machines/`
 - [x] 3.16 NFRs → `16-NFRs/`
+
+### Topic order within Phase 5 — Storage & Databases
+Work through in this order — tick off as completed:
+- [x] 3.1 DB Fundamentals → `01-DB-Fundamentals.md`
+- [ ] 3.2 ACID Properties → `02-ACID.md`
+- [ ] 3.3 SQL Databases → `03-SQL.md`
+- [ ] 3.4 Database Indexing → `04-Indexing.md`
+- [ ] 3.5 Database Replication → `05-Replication.md`
+- [ ] 3.6 Database Sharding → `06-Sharding.md`
+- [ ] 3.7 MVCC → `07-MVCC.md`
+- [ ] 3.8 Change Data Capture → `08-CDC.md`
+- [ ] 3.9 Key-Value Stores → `09-Key-Value-Stores.md`
+- [ ] 3.10 Document Stores → `10-Document-Stores.md`
+- [ ] 3.11 Column-Family Stores → `11-Column-Family.md`
+- [ ] 3.12 Search Engines → `12-Search-Engines.md`
+- [ ] 3.13 Graph Databases → `13-Graph-Databases.md`
+- [ ] 3.14 Blob Storage → `14-Blob-Storage.md`
+- [ ] 3.15 NewSQL → `15-NewSQL.md`
+- [ ] 3.17 Connection Pooling → `17-Connection-Pooling.md`
+- [ ] 3.18 Read/Write Splitting → `18-Read-Write-Splitting.md`
+- [ ] 3.19 Cursor Pagination → `19-Cursor-Pagination.md`
+- [ ] 3.20 OLTP vs OLAP → `20-OLTP-OLAP.md`
+- [ ] 3.21 Choosing the Right DB → `21-Choosing-DB.md`
 
 ### How to start a session
 User will say something like "let's continue" or "next topic" or a topic name.
