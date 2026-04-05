@@ -41,14 +41,18 @@ Interview-Questions/
 
 ### How to write notes — follow this exactly
 
-**Notes must read like the full interactive explanation, not a summary.**
+**Notes must be narrative and conversational — not bullet points and definitions.**
+
+The gold standard is the Availability notes at `System Design/04-Core-Concepts/03-Availability/`. Read those before writing any new notes. That is the style to match.
 
 The user reads notes to revise — they must be able to understand the concept completely from the notes alone, without needing to remember the conversation. This means:
 
+- **Narrative and conversational tone throughout.** Notes should read like an explanation, not a reference doc. Write in flowing prose with code blocks to illustrate — not as a list of definitions. A note that just says "2NF — every non-key column depends on the whole PK" is useless without the reasoning behind it.
 - **Include the problem first, then the solution.** Don't just state the concept — show why it's needed. Start from the naive approach (e.g. "what if we stored users in a CSV?"), show where it breaks, then introduce the concept as the fix.
-- **Keep all the examples from the session.** If Instagram Stories was used to explain schema-on-read, that example goes in the notes. Real examples are what make concepts stick.
+- **Keep all the examples from the session.** If Instagram Stories was used to explain schema-on-read, that example goes in the notes. If Kylie Jenner was used to explain write-heavy hotspots, she goes in the notes. Real examples are what make concepts stick.
+- **Keep all the reasoning from the session.** If the user asked "so we can afford inconsistency in read-heavy DBs?" and you explained inconsistency windows — that reasoning goes in the notes. The question-and-answer reasoning is exactly what makes the concept click.
 - **Keep all the flows and comparisons.** If you drew a before/after, it goes in the notes as a code block.
-- **Do not compress or summarise.** A note that says "schema-on-read means structure interpreted at read time" is useless. The note should explain it the way you explained it in the session — with the Instagram Stories table of nulls vs the flexible JSON documents.
+- **Do not compress or summarise.** A note that says "schema-on-read means structure interpreted at read time" is useless. The note should explain it the way you explained it in the session — with the full reasoning, the full example, the full trade-off discussion.
 - **Write for a reader who has forgotten the conversation.** Every concept should be self-contained and fully explained.
 
 **Interview question file format:**
@@ -113,8 +117,8 @@ Work through in this order — tick off as completed:
 ### Topic order within Phase 5 — Storage & Databases
 Work through in this order — tick off as completed:
 - [x] 3.1 DB Fundamentals → `01-DB-Fundamentals.md`
-- [ ] 3.2 ACID Properties → `02-ACID.md`
-- [ ] 3.3 SQL Databases → `03-SQL.md`
+- [x] 3.2 ACID Properties → `02-ACID.md`
+- [ ] 3.3 SQL Databases → `03-SQL/` (01-Relational-Model, 02-Joins, 03-Normalisation, 04-Views, 05-Query-Optimisation)
 - [ ] 3.4 Database Indexing → `04-Indexing.md`
 - [ ] 3.5 Database Replication → `05-Replication.md`
 - [ ] 3.6 Database Sharding → `06-Sharding.md`
