@@ -4,11 +4,9 @@
 
 ---
 
-## Q1 — Error Budget Policy Decision
-
 > [!question] Your error budget is 80% burned with 2 weeks left in the month. The product team wants to ship a major feature release. What do you do?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **The situation:**
 > 80% burned in 2 weeks means you're trending toward burning 160% by month end — you're already on track for an SLA breach. The release decision can't be made in isolation.
@@ -39,11 +37,9 @@
 
 ---
 
-## Q2 — Setting a Realistic SLO
-
 > [!question] You're designing a payment service. Your manager says "set the SLO at 99.999%". What questions do you ask before agreeing?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **99.999% means 26 seconds of downtime per month.** Before agreeing, validate whether this is achievable and necessary.
 >
@@ -77,11 +73,9 @@
 
 ---
 
-## Q3 — Dependency SLO Math
-
 > [!question] Your service depends on three external APIs. Each has 99.9% uptime SLA. What is the maximum SLO you can realistically promise?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **It depends on how your service uses them — sequential or parallel.**
 >
@@ -119,11 +113,9 @@
 
 ---
 
-## Q4 — SLO for a New Service
-
 > [!question] A new service is launching next week with zero historical data. Your manager asks you to define SLOs. How do you approach it?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **You cannot commit to a meaningful SLO without data.**
 >
@@ -150,11 +142,9 @@
 
 ---
 
-## Q5 — Cross-Team SLO Conflict
-
 > [!question] Two teams are arguing. Team A's service calls Team B's service. Team A has a 99.9% SLO. Team B has a 99.5% SLO. Team A's engineering lead is furious. Why, and how do you resolve it?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **Why Team A is furious:**
 > Team A mathematically cannot achieve 99.9% if it depends on Team B at 99.5%. Every time Team B is down, Team A is also down — Team B's failures directly burn Team A's error budget without Team A doing anything wrong.

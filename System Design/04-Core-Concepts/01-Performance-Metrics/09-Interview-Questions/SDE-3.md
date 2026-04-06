@@ -4,11 +4,9 @@
 
 ---
 
-## Q1 — P99 Fine, P99.9 Blown
-
 > [!question] Your P99 latency is fine at 180ms but your P99.9 is 4 seconds. What could cause this and would you fix it?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **Common causes of P99 fine but P99.9 blown:**
 >
@@ -45,11 +43,9 @@
 
 ---
 
-## Q2 — Parallel Services Tail Latency Math
-
 > [!question] You have three services called in parallel. Their P99 latencies are 100ms, 150ms, and 200ms. What is the P99 of the combined response?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **When services run in parallel, the combined response waits for the slowest one.**
 >
@@ -112,11 +108,9 @@
 
 ---
 
-## Q3 — Optimize for P50, Not P99
-
 > [!question] A senior engineer says "we should optimize for P50 latency, not P99 — most users are fine." How do you respond?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **Challenge the premise first.**
 >
@@ -154,21 +148,3 @@
 >
 > > [!tip] Interview framing
 > > *"I'd push back on P50 — it means half the users are slow. The right floor for any user-facing system is P95 minimum, P99 for critical paths. P50 optimization is only appropriate for background jobs where no user is waiting on the result."*
-
----
-
-## Key Concepts to Remember
-
-> [!summary] SDE-3 Mental Models
->
-> **Tail latency amplification (sequential):**
-> Each additional sequential hop worsens combined P99 — percentiles don't add linearly.
->
-> **Tail latency amplification (parallel):**
-> Each additional parallel call increases the probability of hitting a slow tail — combined P99 degrades with every dependency added.
->
-> **P99.9 investigation tools:**
-> Distributed tracing → find the exact slow requests → identify the hop → correlate with GC, locks, retries, cold start.
->
-> **The P50 trap:**
-> Optimizing for median hides tail suffering. Always target the percentile that reflects your worst acceptable user experience — not your average one.

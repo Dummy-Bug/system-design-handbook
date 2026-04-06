@@ -4,11 +4,9 @@
 
 ---
 
-## Q1 — Tiered SLOs for Multi-Tier Customers
-
 > [!question] You're designing SLOs for a global payments platform serving both free users and enterprise customers paying $500k/year. How do you structure the SLOs?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **Tier the SLOs by customer value — but don't neglect free users:**
 >
@@ -46,11 +44,9 @@
 
 ---
 
-## Q2 — Resisting SLO Tightening
-
 > [!question] Your team has maintained 99.95% availability for 6 months — well above your 99.9% SLO. Your VP says "great, let's raise the SLO to 99.95%". You push back. Why?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **The math — tightening the SLO halves the error budget:**
 > ```
@@ -90,11 +86,9 @@
 
 ---
 
-## Q3 — 2am Incident — Hacky Fix vs Proper Fix
-
 > [!question] You're on call. Your service SLO is 99.9%. At 2am you detect an incident — error rate is 2%. You estimate fixing it properly takes 4 hours. A hacky fix takes 20 minutes but introduces tech debt. Your error budget has 30 minutes left this month. What do you do?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **The math forces the decision:**
 > ```
@@ -134,11 +128,9 @@
 
 ---
 
-## Q4 — Monthly SLO Window Trap
-
 > [!question] Your SLO is measured monthly. A massive incident takes down your service for 6 hours on the 1st of the month. Your VP says "we're fine, we have the rest of the month to recover". What's wrong with this thinking?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **Mathematically — the budget is gone, you can't recover it:**
 > ```
@@ -181,11 +173,9 @@
 
 ---
 
-## Q5 — Building an SLO Program From Scratch
-
 > [!question] You're a new SRE at a company. They have no SLOs defined at all — just a vague "we try to keep the service up". Walk me through how you build an SLO program from scratch.
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **Culture first — without buy-in, the program dies:**
 > SLOs only work if both engineering and product own them. The shift from "we try to keep it up" to "we commit to 99.9% with defined consequences" is a cultural change, not just a technical one. Get leadership aligned before writing a single target number.

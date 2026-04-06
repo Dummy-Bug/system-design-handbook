@@ -4,8 +4,6 @@
 
 ---
 
-## Q1 — WAL and Crash Recovery
-
 > [!question] You're designing a payment system. A user initiates a transfer — debit Alice, credit Bob. Halfway through, the app server crashes. When it restarts, how does the database ensure Alice's money isn't lost permanently?
 
 > [!success]- Answer
@@ -33,8 +31,6 @@
 > > *"On restart the DB scans the WAL for incomplete transactions — those with no COMMIT marker. It uses the WAL entries to reverse the partial changes. If it finds a COMMIT marker, it replays the transaction instead. Same WAL, opposite direction — that's the difference between atomicity and durability."*
 
 ---
-
-## Q2 — Isolation Failure and Lost Updates
 
 > [!question] You're building an e-commerce checkout. Two users add the last item in stock to their cart simultaneously and both hit "place order" at the same time. Both see "Order confirmed". How did this happen and which ACID property failed?
 
@@ -75,8 +71,6 @@
 > > *"Isolation failed — specifically a lost update. Both transactions read stock=1 simultaneously, both decided to proceed, T2's write overwrote T1's. Consistency then broke as a consequence — stock went to -1. Fix with pessimistic locking (SELECT FOR UPDATE) or optimistic locking with version numbers."*
 
 ---
-
-## Q3 — fsync=off with Replication
 
 > [!question] A junior engineer says "we can turn off fsync to make writes 3x faster — we have replication anyway, so if this server dies we just failover to the replica." Is he right?
 
@@ -123,8 +117,6 @@
 
 ---
 
-## Q4 — Dual-Write and ACID Boundaries
-
 > [!question] Your app uses full ACID guarantees on the database. You add Kafka — on order placed, write to DB and publish to Kafka. DB write succeeds, Kafka publish fails. Is ACID still protecting you?
 
 > [!success]- Answer
@@ -154,8 +146,6 @@
 > > *"ACID only covers what happens inside a single database transaction. The moment you write to two systems — DB and Kafka — you have a dual-write problem. Fix it with the Outbox Pattern: write the event to an outbox table in the same DB transaction, then a separate process reliably ships it to Kafka."*
 
 ---
-
-## Q5 — Stale Read vs Lost Update
 
 > [!question] A user reports: "I transferred money and it showed successful, but when I refreshed the page the balance was back to the original amount." Which ACID property failed and what's the most likely cause?
 

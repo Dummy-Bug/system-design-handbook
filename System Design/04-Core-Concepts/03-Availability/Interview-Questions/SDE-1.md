@@ -4,8 +4,6 @@
 
 ---
 
-## Q1 — What is Availability?
-
 > [!question] What is availability? Give me a one-line definition and tell me how it's measured.
 
 > [!success]- Answer
@@ -27,8 +25,6 @@
 > > *"Availability is the percentage of time a system is operational and successfully serving requests. Measured as uptime divided by total time (uptime + downtime) × 100."*
 
 ---
-
-## Q2 — Availability vs Reliability
 
 > [!question] What is the difference between availability and reliability? They sound the same — convince me they're not.
 
@@ -56,8 +52,6 @@
 > > *"Availability is about uptime — is the system responding? Reliability is about correctness — is it responding with the right answer? Byzantine failures are the hardest case — the system is up and looks healthy but producing wrong results. Monitoring availability is easy, monitoring reliability requires knowing what correct looks like."*
 
 ---
-
-## Q3 — The Nines of Availability
 
 > [!question] What are the "nines" of availability? Why is the jump from 99.9% to 99.99% much harder than from 99% to 99.9%?
 
@@ -93,8 +87,6 @@
 
 ---
 
-## Q4 — Planned vs Unplanned Downtime
-
 > [!question] What is the difference between planned and unplanned downtime? Should planned downtime count against your availability SLO?
 
 > [!success]- Answer
@@ -129,8 +121,6 @@
 > > *"Planned downtime should count against SLO — from the user's perspective downtime is downtime. If you must exclude it, define strict constraints in the SLA. But the best systems achieve zero-downtime deployments — rolling, blue-green, canary — so planned downtime doesn't exist."*
 
 ---
-
-## Q5 — SPOF and Redundancy
 
 > [!question] Your service has a single database. It goes down — your entire service goes down. What is this called and what's the solution?
 

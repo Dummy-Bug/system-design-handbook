@@ -4,11 +4,9 @@
 
 ---
 
-## Q1 — Video Streaming Platform
-
 > [!question] You're designing a video streaming platform like YouTube. An interviewer asks you to define the performance targets. Which metrics do you pick, which percentiles, and why?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **Metrics to track:**
 >
@@ -32,15 +30,13 @@
 > Bandwidth = concurrent streams × average bitrate. This is used for capacity planning, not per-request measurement.
 >
 > > [!tip] Interview framing
-> > *"For video streaming I'd track time to first frame at P99, sustained throughput per stream at P95, and jitter. Bandwidth is a capacity planning number — at peak concurrent streams × average bitrate we size CDN and origin capacity accordingly. The how — CDN, adaptive bitrate — comes when we design the architecture, not here."*
+> > *"For video streaming I'd track time to first frame at P99, sustained throughput per stream at P95, and jitter. Bandwidth is a capacity planning number — at peak concurrent streams × average bitrate we size CDN and origin capacity accordingly."*
 
 ---
 
-## Q2 — SLI vs SLO Mismatch
-
 > [!question] Your service has P99 latency of 800ms but your SLO target is P99 < 200ms. The team suggests increasing the SLO to 800ms to match reality. What do you say?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **Changing the SLO to match bad performance is wrong.**
 >
@@ -67,11 +63,9 @@
 
 ---
 
-## Q3 — Sequential Service Calls
-
 > [!question] You have two services called sequentially — Service A (P99 = 50ms) and Service B (P99 = 50ms). What is the P99 latency of the combined request?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **Not 100ms. It's worse.**
 >
@@ -100,11 +94,9 @@
 
 ---
 
-## Q4 — Average Looks Good, Users Complain
-
 > [!question] Your service has great average latency of 20ms but users are complaining about slow experience. What do you investigate first and how?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **Investigate P99 immediately — average is meaningless when users are complaining.**
 >
@@ -132,11 +124,9 @@
 
 ---
 
-## Q5 — Ride-Hailing Performance Targets
-
 > [!question] You're designing a ride-hailing app like Uber. What metrics, what percentiles, and why?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **Metrics to track:**
 >

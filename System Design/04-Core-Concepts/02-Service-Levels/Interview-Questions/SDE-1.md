@@ -4,11 +4,9 @@
 
 ---
 
-## Q1 — SLI vs SLO vs SLA
-
 > [!question] What is the difference between SLI, SLO, and SLA? Give a one-line definition for each.
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **What each one is:**
 >
@@ -34,11 +32,9 @@
 
 ---
 
-## Q2 — Why SLO Is Stricter Than SLA
-
 > [!question] Why is the SLO always set stricter than the SLA? What happens if you set them equal?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **Why stricter:**
 > SLO acts as an internal buffer. If you're optimising to hit your SLO, the SLA gets satisfied automatically. The gap between SLO and SLA gives you room to catch and fix problems before they become a customer-facing breach.
@@ -69,11 +65,9 @@
 
 ---
 
-## Q3 — Error Budget
-
 > [!question] What is an error budget and how do you use it?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **What it is:**
 > Error budget is the acceptable failure allowance derived from your SLO. It's the 100% minus your SLO target.
@@ -109,11 +103,9 @@
 
 ---
 
-## Q4 — Downtime Calculation
-
 > [!question] Your service has 99.9% SLO. How many minutes of downtime are you allowed per month?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **The calculation:**
 > ```
@@ -137,11 +129,9 @@
 
 ---
 
-## Q5 — What Makes a Good SLI
-
 > [!question] A product manager wants to add a new SLI — "number of features shipped per sprint". You push back. Why?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > **The fundamental problem:**
 > SLIs must measure what the **user actually experiences**. "Features shipped per sprint" measures engineering output — it has nothing to do with whether users are having a good experience.

@@ -4,8 +4,6 @@
 
 ---
 
-## Q1 — What is ACID?
-
 > [!question] What is ACID? What does each letter stand for?
 
 > [!success]- Answer
@@ -25,8 +23,6 @@
 > > *"ACID is a set of four guarantees that ensure database transactions are reliable. Atomicity — all or nothing. Consistency — valid state to valid state. Isolation — concurrent transactions don't interfere. Durability — committed data survives permanently, including crashes and power loss."*
 
 ---
-
-## Q2 — Why does ACID matter?
 
 > [!question] Why does ACID matter? Give me a real-world example where violating even one property causes a visible problem for the user.
 
@@ -55,8 +51,6 @@
 > > *"Take a bank transfer — debit Alice, credit Bob. Atomicity ensures both happen or neither does. Consistency ensures balances can't go negative. Isolation ensures two transfers on the same account don't interfere. Durability ensures a confirmed transfer isn't lost if the server crashes a second later."*
 
 ---
-
-## Q3 — What is the WAL?
 
 > [!question] What is the WAL and why does every ACID-compliant database need one?
 
@@ -89,8 +83,6 @@
 
 ---
 
-## Q4 — Atomicity vs Durability
-
 > [!question] What is the difference between atomicity and durability? They both seem to deal with crashes — convince me they're separate guarantees.
 
 > [!success]- Answer
@@ -109,15 +101,13 @@
 > Same WAL, opposite direction:
 > ```
 > Incomplete transaction → WAL used to UNDO  (atomicity)
-> Committed transaction → WAL used to REDO  (durability)
+> Committed transaction  → WAL used to REDO  (durability)
 > ```
 >
 > > [!tip] Interview framing
 > > *"Atomicity deals with crashes during a transaction — roll back to clean state. Durability deals with crashes after commit — the committed state is permanent. Same WAL mechanism, different job: atomicity uses it to undo incomplete work, durability uses it to redo committed work."*
 
 ---
-
-## Q5 — fsync and Durability
 
 > [!question] What is fsync and why does turning it off break the D in ACID?
 
@@ -131,7 +121,7 @@
 >                                       ↓ maybe later → actual disk
 > ```
 >
-> `fsync()` forces the OS to flush the RAM buffer to physical disk before returning success. The database blocks and waits until the data has physically hit the disk.
+> `fsync()` forces the OS to flush the RAM buffer to physical disk before returning success. The database blocks and waits until the data has physically hit the disk — this forced round-trip is what makes writes feel slow.
 >
 > ```
 > With fsync:

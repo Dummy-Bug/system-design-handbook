@@ -4,11 +4,9 @@
 
 ---
 
-## Q1 — What is latency?
-
 > [!question] What is latency? Give me a one-line definition and a real-world example.
 
-> [!success] Answer
+> [!success]- Answer
 > Latency is the total time from the moment a request leaves the client to when the response arrives back.
 >
 > **Real-world example:** You click "Pay" on Amazon. The time between your click and the "Order Confirmed" page appearing = latency.
@@ -18,11 +16,9 @@
 
 ---
 
-## Q2 — Throughput vs Bandwidth
-
 > [!question] What is the difference between throughput and bandwidth?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > | | Definition | Unit |
 > |---|---|---|
@@ -38,11 +34,9 @@
 
 ---
 
-## Q3 — Why P99 over average?
-
 > [!question] What is P99 latency and why do we care about it more than average latency?
 
-> [!success] Answer
+> [!success]- Answer
 > **P99 = 99% of requests complete within this time.** The remaining 1% take longer.
 >
 > **Why averages lie:**
@@ -60,11 +54,9 @@
 
 ---
 
-## Q4 — Which percentile per system?
-
 > [!question] Which percentile would you use for a payment system vs a social media feed? Why?
 
-> [!success] Answer
+> [!success]- Answer
 >
 > | System | Percentile | Reason |
 > |---|---|---|
@@ -78,11 +70,9 @@
 
 ---
 
-## Q5 — Latency vs Throughput tradeoff
-
 > [!question] What is the latency vs throughput tradeoff? Give a simple example of when optimizing one hurts the other.
 
-> [!success] Answer
+> [!success]- Answer
 > Optimizing for throughput often increases latency for individual requests, and vice versa.
 >
 > **Classic example — batching:**

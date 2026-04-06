@@ -4,8 +4,6 @@
 
 ---
 
-## Q1 — Primary-Replica Failover
-
 > [!question] Your service runs across two data centres — primary and replica. The primary goes down. Your replica promotes to primary. You measured 30 seconds of downtime during this failover. What caused those 30 seconds, and how would you reduce it?
 
 > [!success]- Answer
@@ -63,8 +61,6 @@
 
 ---
 
-## Q2 — Multi-Region Deployment
-
 > [!question] Your service is deployed in a single region. You're expanding to multiple regions. Walk me through the availability and consistency trade-offs your users will experience.
 
 > [!success]- Answer
@@ -120,8 +116,6 @@
 > > *"Multi-region improves availability but breaks consistency guarantees — causal, monotonic reads, and read-your-own-writes may all fail. Read-your-own-writes is the most user-visible: user updates something and immediately sees the old value. Mitigate with sticky sessions or version tokens so writes and reads hit the same replica until sync completes."*
 
 ---
-
-## Q3 — Eliminating SPOFs at Every Layer
 
 > [!question] You're tasked with getting your service from 99.9% to 99.99% availability. Walk me through how you systematically find and eliminate SPOFs.
 
@@ -186,8 +180,6 @@
 
 ---
 
-## Q4 — Available But Feels Unreliable
-
 > [!question] Your monitoring shows 99.9% availability. But users are complaining the service "feels broken". How is this possible and what do you investigate?
 
 > [!success]- Answer
@@ -242,8 +234,6 @@
 > > *"Availability only measures 'did it respond' — not 'did it respond correctly'. Investigate P99 latency (averages hide tail pain), semantic errors (200 OK with wrong data — only detectable with synthetic transactions), and consistency violations (read-your-own-writes, monotonic reads). Business metrics like conversion rate will drop before infrastructure metrics flag anything."*
 
 ---
-
-## Q5 — Startup "We Don't Need HA"
 
 > [!question] You're consulting for a startup. Their CTO says "we have 100 users, we don't need high availability." How do you respond?
 

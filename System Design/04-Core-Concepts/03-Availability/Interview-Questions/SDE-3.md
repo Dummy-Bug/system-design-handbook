@@ -4,8 +4,6 @@
 
 ---
 
-## Q1 — Black Friday Preparation
-
 > [!question] Your e-commerce platform has 99.9% SLO. Black Friday is in 3 weeks. Traffic is expected to spike 20x. Walk me through how you prepare.
 
 > [!success]- Answer
@@ -76,8 +74,6 @@
 
 ---
 
-## Q2 — Honest Assessment of 99.999%
-
 > [!question] Your VP wants to commit 99.999% availability to a new enterprise customer. You're the lead engineer. What's your honest assessment?
 
 > [!success]- Answer
@@ -142,8 +138,6 @@
 > > *"26 seconds/month means zero human response time — every failover must be automated. Achieving it requires multi-region active-active, self-healing infrastructure, sub-second detection, and a dedicated SRE programme. I'd present the VP with what it costs to do it right and let them decide if the contract value justifies that investment. If they commit without the infrastructure, that's a contractual liability waiting to happen."*
 
 ---
-
-## Q3 — Ride-Hailing Matching Service Isolation
 
 > [!question] You're designing a ride-hailing platform. The matching service (driver ↔ rider) calls 5 downstream services: payments, maps, driver profiles, surge pricing, and notifications. Any one of them going down can take matching down with it. How do you architect matching to be resilient?
 
