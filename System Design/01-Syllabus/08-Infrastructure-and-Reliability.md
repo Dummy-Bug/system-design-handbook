@@ -11,6 +11,16 @@
 - Inter-service communication — sync (REST/gRPC) vs async (Kafka/queue)
 - When to split — bounded by domain, not by technical layer
 
+### 7.1b Backend-for-Frontend (BFF) Pattern
+- Problem: mobile app needs a lightweight response (small payload, fewer fields), web dashboard needs a rich response (full detail, multiple entities joined). One API can't serve both well.
+- BFF: a thin API layer per client type that aggregates and transforms backend service responses
+  - Mobile BFF → calls 3 backend services, returns a compact combined response
+  - Web BFF → calls the same 3 services but returns full detail with extra fields
+- Why not just have the client make multiple calls? — mobile on 3G making 5 round trips is unacceptable; BFF reduces to 1 call from the client's perspective
+- Trade-off: another service to maintain, can become a dumping ground for business logic (keep it thin — aggregation and transformation only)
+- Alternative: GraphQL solves a similar problem by letting the client specify exactly which fields it needs
+- When to mention: any case study with mobile + web clients (chat, news feed, ride-sharing)
+
 ### 7.2 Resilience Patterns
 
 #### Circuit Breaker
@@ -37,6 +47,15 @@
 #### Bulkhead Pattern
 - Isolate resources per downstream — separate thread pool per dependency
 - One slow downstream can only exhaust its own pool, not the entire service
+
+#### Health Check Patterns
+- **Shallow health check** — `GET /health` returns 200 if the process is running. No dependency checks. Fast, used by load balancers to know if the instance is alive.
+- **Deep health check** — `GET /health/ready` checks DB connectivity, Redis connectivity, disk space, downstream services. Returns 503 if any critical dependency is down.
+- **Liveness vs Readiness** (Kubernetes terminology, but the concept is universal)
+  - Liveness: "is this process alive?" — if no, restart it
+  - Readiness: "can this process serve traffic?" — if no, stop sending traffic but don't restart (maybe DB is temporarily down)
+- Load balancer uses shallow checks to route traffic. Monitoring uses deep checks to alert on dependency failures.
+- Key interview point: "I'd expose a shallow /health for the load balancer to detect dead instances quickly, and a deep /health/ready that checks DB and Redis — if a dependency is down, the LB stops routing to that instance while it recovers."
 
 ### 7.3 Rate Limiting
 > This is its own case study — know all 5 algorithms deeply

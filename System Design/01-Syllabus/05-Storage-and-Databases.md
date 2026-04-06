@@ -8,6 +8,13 @@
 - Schema-on-write vs schema-on-read
 - Storage engines — how databases store data on disk (row-oriented vs column-oriented)
 - **Currency must never be stored as float or double** — See `Fundamentals/Binary Number Rounding.md` for the full explanation.
+- **Soft deletes vs hard deletes**
+  - Hard delete: `DELETE FROM users WHERE id = 42` — row is gone forever
+  - Soft delete: `UPDATE users SET deleted_at = NOW() WHERE id = 42` — row stays, filtered out in queries
+  - Why soft delete: audit trail (who deleted what, when), undo/recovery, replication safety (tombstones), legal compliance (retain records for N years)
+  - Trade-off: queries must always include `WHERE deleted_at IS NULL`, storage grows forever without archival
+  - Cassandra tombstones: Cassandra uses soft deletes internally — a delete writes a tombstone marker, compaction eventually cleans it up
+  - Directly applies to: any system with user-facing delete (messages, posts, accounts)
 
 ### 3.2 ACID Properties
 - Atomicity — all or nothing
@@ -33,6 +40,13 @@
 - B+ Tree — what it is, how it's structured, why databases prefer it, how range scans work, why inserts stay fast
 - LSM Tree — write-optimized (MemTable → SSTable → compaction), used in Cassandra, RocksDB
 - Hash index — O(1) equality only, no range queries
+- **Write amplification**
+  - The ratio of data written to disk vs data written by the application — a single 1KB write can cause 10KB+ of actual disk I/O
+  - B+ Tree: random inserts cause page splits, each split rewrites an entire page (often 4–16KB) for a small insert
+  - LSM Tree: data is written to MemTable, flushed to SSTable, then rewritten multiple times during compaction — a single write may be compacted 3–5 times
+  - Trade-off: LSM has higher write amplification but sequential writes (fast on SSD/HDD); B+ Tree has lower amplification but random writes (slower on HDD)
+  - Why it matters: write amplification determines SSD lifespan (limited write cycles) and actual disk throughput
+  - Interview mention: "LSM trees trade write amplification during compaction for fast sequential writes — the total bytes written to disk are higher than B+ Tree, but each individual write is cheaper because it's sequential"
 
 ### 3.5 Database Replication
 - Primary-Replica — all writes to primary, reads from replicas

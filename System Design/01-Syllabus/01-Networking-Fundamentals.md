@@ -105,3 +105,17 @@
 - GraphQL — query language, when it helps (mobile, flexible clients), N+1 problem
 - API Gateway — routing, auth, rate limiting, transformation, the entry point for all case studies
 - Idempotency keys — essential for reservation, payment, auction APIs
+- **Async API pattern (long-running operations)**
+  - Problem: some operations take minutes — video transcoding, report generation, large data export
+  - Return `202 Accepted` with a job ID — client doesn't wait
+  - Client polls a status endpoint: `GET /jobs/{id}` → `{ status: "processing" }` / `{ status: "complete", result_url: "..." }`
+  - Alternative: provide a callback/webhook URL at submission, server calls it when done
+  - Use in: YouTube transcoding, Dropbox sync, any async processing pipeline
+- **Webhooks**
+  - Push-based notification: external service calls YOUR endpoint when an event happens
+  - Opposite of polling — instead of asking "any updates?" every 5 seconds, the source tells you immediately
+  - Example: Stripe fires `POST /your-server/webhook` with `{ event: "payment.succeeded", data: {...} }` when a charge completes
+  - Security: verify webhook signature (HMAC) to ensure it came from the real source, not an attacker
+  - Reliability: webhook delivery is at-least-once — your handler must be idempotent (same event delivered twice should not double-process)
+  - Retry: if your endpoint returns 5xx, the sender retries with exponential backoff
+  - Directly applies to: Payment System, Notification System, any third-party integration

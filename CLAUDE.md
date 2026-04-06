@@ -125,7 +125,7 @@ Work through in this order — tick off as completed:
 - [x] 3.7 MVCC → `07-MVCC.md`
 - [x] 3.8 Change Data Capture → `08-CDC/`
 - [x] 3.9 Key-Value Stores → `09-Key-Value-Stores/`
-- [ ] 3.10 Document Stores → `10-Document-Stores.md`
+- [x] 3.10 Document Stores → `10-Document-Stores/`
 - [ ] 3.11 Column-Family Stores → `11-Column-Family.md`
 - [ ] 3.12 Search Engines → `12-Search-Engines.md`
 - [ ] 3.13 Graph Databases → `13-Graph-Databases.md`

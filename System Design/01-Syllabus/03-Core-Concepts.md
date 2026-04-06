@@ -84,6 +84,14 @@
 - MVCC — readers don't block writers, snapshot isolation
 - Idempotency — UUID per operation, POST needs idempotency key
 - Distributed locking — Redis SET NX PX + TTL
+- **Redlock (distributed lock across multiple Redis nodes)**
+  - Problem: single-node Redis lock — if that Redis dies, the lock vanishes, two clients both think they hold it
+  - Redlock algorithm: acquire lock on majority (3 out of 5) of independent Redis nodes
+  - If majority acquired within timeout → lock is held; if not → release all and retry
+  - Survives any 2 Redis node failures — truly distributed, unlike single-node SET NX
+  - Trade-off: slower (must contact 5 nodes), more complex, still debated (Martin Kleppmann's critique)
+  - When to use: critical sections across distributed services (payment deduction, seat reservation)
+  - When single-node lock is fine: non-critical deduplication, rate limiting, cache warming mutex
 - [[08-Concurrency-Locking/00-Overview|Notes →]]
 
 ---

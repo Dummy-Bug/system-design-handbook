@@ -64,7 +64,33 @@
   - Stock broker — trade events, order book updates
   - CDC pipeline — database changes streamed to Kafka via Debezium
 
-### 6.5b Backpressure
+### 6.5b Message Broker Comparison — Kafka vs RabbitMQ vs SQS
+- **When to use Kafka**
+  - High-throughput event streaming — millions of events/sec
+  - You need message replay (reprocess from any offset)
+  - Long retention — keep events for days/weeks
+  - Ordering matters (per partition)
+  - Event sourcing, CDC pipelines, log aggregation, stream processing
+  - Use in: Ad Click Aggregation, News Feed, CDC, Stock Broker, any event-driven pipeline
+- **When to use RabbitMQ**
+  - Task queues — distribute work across workers, each task processed once
+  - Complex routing needed (exchanges, bindings, headers-based routing)
+  - Priority queues (Kafka has no native priority)
+  - Lower latency per message than Kafka for small payloads
+  - Use in: Notification System (email/SMS tasks), Distributed Task Queue, Job Scheduler
+- **When to use SQS**
+  - Already on AWS and want zero operational overhead (fully managed, no brokers to run)
+  - Simple task distribution — no ordering guarantee needed (standard SQS)
+  - FIFO SQS adds ordering and exactly-once delivery but at lower throughput (~300 msg/sec per group)
+  - Visibility timeout built-in (same concept as competing consumers)
+  - Use in: simple async processing, image resizing, email sending on AWS
+- **Quick decision rule**
+  - Event stream (high throughput, replay, ordering) → Kafka
+  - Task queue (work distribution, complex routing, priority) → RabbitMQ
+  - Simple task queue on AWS (zero ops, managed) → SQS
+- **Key interview point** — "I'd use Kafka for the event streaming pipeline because I need ordering, replay capability, and high throughput. For the async task processing layer, I'd use RabbitMQ or SQS — simpler, supports priority, and each task needs exactly-once processing not event replay."
+
+### 6.5c Backpressure
 - **What it is** — when a consumer can't keep up with a producer, the system must signal the producer to slow down rather than let the queue grow unbounded or drop messages silently
 - **Why queuing alone isn't enough** — a queue absorbs short bursts, but sustained overload just shifts the problem: queue depth grows, memory fills, latency explodes. You need a mechanism to push back.
 - **How backpressure works in practice**
@@ -102,6 +128,27 @@
 - Lambda architecture — batch layer (accurate, delayed) + speed layer (approximate, real-time)
 - Kappa architecture — stream-only, reprocess by replaying Kafka topic
 - Applies to: ad click aggregation, top-K heavy hitters, real-time analytics
+
+### 6.7b Batch Processing (MapReduce / Spark)
+- **MapReduce — the original**
+  - Google invented it (2004 paper) — mentioning it in a Google interview is a positive signal
+  - Map phase: each node processes its local data chunk, emits (key, value) pairs
+  - Shuffle phase: framework groups all values by key across nodes
+  - Reduce phase: aggregate values per key (count, sum, merge)
+  - Example: word count across 1TB of web pages — Map emits (word, 1), Reduce sums counts per word
+  - Hadoop = open-source implementation of MapReduce + HDFS (distributed file system)
+  - Limitation: every step reads/writes to disk — slow for iterative algorithms
+- **Spark — faster MapReduce**
+  - In-memory processing — intermediate results stay in RAM, not written to disk between steps
+  - DAG (Directed Acyclic Graph) execution — optimizes multi-step pipelines instead of rigid map-reduce phases
+  - 10–100x faster than Hadoop MapReduce for iterative workloads
+  - Used for: batch ETL, ML training, log analysis, recommendation batch jobs
+- **When batch processing appears in interviews**
+  - Reconciliation: nightly batch compares your data against external source (Payment System, Ad Clicks)
+  - Reprocessing: replay Kafka topic through batch job to rebuild a corrupted index or fix a bug in aggregation
+  - Analytics: aggregate raw events into daily/hourly rollup tables for dashboards
+  - Lambda architecture: batch layer (accurate, slow) + speed layer (approximate, fast)
+- **Key interview point** — "For the real-time dashboard I'd use Kafka + stream processing. For the billing report I'd use a nightly batch job — reprocess the raw event log from S3 for exact counts. The stream gives approximate real-time; the batch gives exact numbers for invoicing."
 
 ### 6.8 Schema Evolution
 - Why it matters — producers and consumers update independently, schema must be compatible
