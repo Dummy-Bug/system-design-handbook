@@ -54,21 +54,34 @@ The WAL is the single source of truth for what actually happened. The data files
 
 ## Why writes feel slow — fsync
 
-For durability to hold, the WAL write must be confirmed by the disk — not just handed to the OS buffer. The database calls `fsync()` to force the OS to flush its write buffer to physical storage before returning success.
+For durability to hold, the WAL write must be confirmed by the actual disk — not just handed to the OS. The problem is that when the database tells the OS "write this to disk", the OS doesn't do it immediately. It puts the data in a **RAM buffer** first and says "done ✓" — because RAM is fast and batching writes is more efficient.
 
 ```
-DB writes to OS buffer → OS may hold in RAM for performance
-DB calls fsync() → OS flushes RAM buffer → physical disk write confirmed
-→ now the data truly survives a power cut ✓
+Without fsync:
+DB → "write this" → OS → RAM buffer → "done ✓"  ← OS is lying
+                                           ↓ maybe later → actual disk
 ```
 
-`fsync()` is slow — it forces a round-trip to disk. This is why:
-- Writes on an HDD are slow (~10ms per fsync)
-- NVMe SSDs are faster but still bounded by the physical write
-- Systems that turn off fsync (some cloud DBs in non-durable mode) are fast but sacrifice durability guarantees
+From the database's perspective the write succeeded. From reality's perspective, the data is still in RAM. One power cut and it's gone — even though the database told the client "committed".
 
-> [!danger] Never turn off fsync in production for financial or transactional data
-> Some databases allow `fsync=off` for testing or speed. This completely breaks the D in ACID — a power cut will corrupt or lose committed transactions. Fine for a test environment. Catastrophic for production money or bookings.
+`fsync()` is the database forcing the OS to stop lying:
+
+```
+With fsync:
+DB → "write this" → OS → RAM buffer → fsync() → physical disk → "done ✓"
+```
+
+The database blocks and waits until the OS confirms the data has physically hit the disk. Only then does it return "commit successful" to the client. This is why writes feel slow — you are literally waiting for a physical disk write to complete on every committed transaction.
+
+This forced round-trip to disk is what makes writes slow. There's no shortcut — the database must wait for the physical write to complete before it can respond.
+
+```
+HDD:      ~10ms per fsync   ← mechanical seek + write
+NVMe SSD: ~0.1ms per fsync  ← still bounded by physical write, just much faster
+```
+
+> [!danger] Never turn off fsync for financial or transactional data
+> Some databases expose `fsync=off` for testing or speed. This completely breaks the D in ACID — a power cut will corrupt or lose committed transactions. The OS buffer gets wiped, and no WAL survives to recover from. Fine for a throwaway test environment. Catastrophic for money, bookings, or anything a user was told succeeded.
 
 ---
 
