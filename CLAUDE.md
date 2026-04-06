@@ -122,9 +122,9 @@ Work through in this order — tick off as completed:
 - [x] 3.4 Database Indexing → `04-Indexing/` (01-Indexes, 02-Hash-Index, 03-BTree, 04-LSM-Tree)
 - [x] 3.5 Database Replication → `05-Replication/`
 - [x] 3.6 Database Sharding → `06-Sharding/`
-- [ ] 3.7 MVCC → `07-MVCC.md`
+- [x] 3.7 MVCC → `07-MVCC.md`
 - [x] 3.8 Change Data Capture → `08-CDC/`
-- [ ] 3.9 Key-Value Stores → `09-Key-Value-Stores.md`
+- [x] 3.9 Key-Value Stores → `09-Key-Value-Stores/`
 - [ ] 3.10 Document Stores → `10-Document-Stores.md`
 - [ ] 3.11 Column-Family Stores → `11-Column-Family.md`
 - [ ] 3.12 Search Engines → `12-Search-Engines.md`

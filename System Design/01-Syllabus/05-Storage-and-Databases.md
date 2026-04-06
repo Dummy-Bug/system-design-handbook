@@ -72,20 +72,9 @@
 ### 3.9 Key-Value Stores
 - Data model — key → value
 - Use cases — sessions, caching, leaderboards, rate limiting, feature flags
-- Redis — single-threaded event loop, in-memory, extremely fast
-  - String — counters, tokens, simple KV
-  - List — queues, activity feeds, recent items
-  - Set — unique members, tags, social connections
-  - Sorted Set — leaderboards, rate limiting windows, priority queues
-  - Hash — user profiles, object fields
-  - HyperLogLog — approximate unique count (DAU, unique views)
-  - Bitmap — per-user feature flags, daily active tracking
-  - Stream — append-only log, consumer groups (mini Kafka)
-  - Persistence — RDB snapshot vs AOF (append-only file)
-  - Redis Sentinel — high availability, automatic failover
-  - Redis Cluster — horizontal sharding via hash slots
-- DynamoDB — managed, consistent hashing, tunable consistency, global tables
+- Redis — single-threaded event loop, in-memory, extremely fast(deepDive)
 - Memcached — simple, multi-threaded, no persistence, pure caching
+- DynamoDB — managed, (deepDive)
 
 ### 3.10 Document Stores
 - Data model — JSON documents, nested objects, arrays, dynamic schema

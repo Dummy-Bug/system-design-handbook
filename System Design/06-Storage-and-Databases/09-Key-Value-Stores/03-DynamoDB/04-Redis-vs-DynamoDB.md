@@ -1,0 +1,72 @@
+# Redis vs DynamoDB
+
+> [!info] Both are key-value stores. Both are fast. The question is not which is better — it's which access pattern you're solving for.
+
+---
+
+## The core difference
+
+```
+Redis      →  in-memory, sub-millisecond, single-node ceiling, rich data structures
+DynamoDB   →  disk-backed, low millisecond, scales infinitely, managed sharding
+```
+
+Redis keeps everything in RAM. A read is a RAM lookup — ~200ns. DynamoDB reads from SSD-backed storage — still fast, but microseconds not nanoseconds.
+
+DynamoDB manages sharding automatically across as many servers as needed. Redis needs manual sharding via Redis Cluster. At truly massive scale (billions of rows), DynamoDB is operationally simpler.
+
+---
+
+## When to use Redis
+
+```
+✓  Sub-millisecond latency is a hard requirement (real-time leaderboards, session tokens)
+✓  Rich data structures needed (Sorted Sets for rankings, Lists for queues, HyperLogLog)
+✓  Pub/Sub or Streams for event processing
+✓  Data fits in RAM (or you're fine sharding manually)
+✓  Cache layer in front of another database
+```
+
+---
+
+## When to use DynamoDB
+
+```
+✓  Data is too large for RAM — billions of rows, terabytes of data
+✓  Write-heavy at massive scale (likes, events, activity logs)
+✓  Simple access patterns — lookup by key, range by sort key
+✓  Don't want to manage infrastructure (fully managed on AWS)
+✓  Multi-region low latency via Global Tables
+```
+
+---
+
+## Side by side
+
+| | Redis | DynamoDB |
+|---|---|---|
+| Storage | RAM | SSD (disk-backed) |
+| Latency | ~200ns (sub-millisecond) | Low millisecond |
+| Scale | Manual sharding (Redis Cluster) | Auto-sharding, infinite scale |
+| Data structures | String, Hash, List, Sorted Set, Stream | Key-value only (partition + sort key) |
+| Persistence | Optional (RDB/AOF) | Always persistent |
+| Managed | Self-hosted or Redis Cloud | Fully managed (AWS) |
+| Multi-region | Manual setup | Global Tables (built-in) |
+| Best for | Cache, real-time, pub/sub | Massive persistent KV at scale |
+
+---
+
+## The typical pattern in production
+
+They're not mutually exclusive. Most large systems use both:
+
+```
+Request → Redis (cache, sub-millisecond)
+           ↓ cache miss
+         DynamoDB (persistent store, millisecond)
+```
+
+Redis is the hot layer. DynamoDB is the source of truth. Redis absorbs the read traffic, DynamoDB handles durability and scale.
+
+> [!tip] Interview framing
+> "For a cache layer I'd use Redis — sub-millisecond, rich data structures. For persistent storage of billions of events I'd use DynamoDB — auto-sharding, fully managed, handles write-heavy workloads without me managing Redis Cluster. In practice both often coexist — Redis in front, DynamoDB behind."
