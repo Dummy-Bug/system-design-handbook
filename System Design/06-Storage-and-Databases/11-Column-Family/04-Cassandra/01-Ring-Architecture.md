@@ -71,3 +71,33 @@ The client doesn't need to know the ring topology. It connects to any node, that
 
 > [!important] Masterless architecture
 > Every node in Cassandra can be a coordinator. There is no primary node bottleneck. This is a deliberate design choice for availability — if any node goes down, other nodes continue serving requests without an election or failover.
+
+---
+
+## Gossip — how every node knows the ring
+
+The coordinator can only route to the right node if it knows the full ring topology — which nodes are alive, and which node owns which range. But if there's no master to ask, how does every node know this?
+
+The answer is the **gossip protocol**. Every second, each node picks 1–3 random neighbours and exchanges what it knows about the cluster — which nodes are alive, which are down, and who owns which range of the ring. Each neighbour merges that information with what it already knows and passes it on in the next round.
+
+```
+Node A → tells Node C → "Node B is alive, owns range 33–66%"
+Node C → tells Node E → same info + everything C knows
+Node E → tells Node B → merged picture from across the cluster
+```
+
+It spreads exactly like gossip in an office — no single person tells everyone, but within a few seconds everyone knows everything. After a few rounds, every node has a complete, consistent picture of the entire ring with no central server involved.
+
+This is what makes the coordinator pattern work. When a client connects to any node, that node already has the full ring map locally. It computes the owner with a hash, and routes directly — no lookup, no master to ask.
+
+```
+Cassandra:
+Client → Any Node → "I already know the ring, key X is on Node C" → Node C
+                     (pure local computation via gossip-maintained ring map)
+```
+
+> [!info] Gossip protocol
+> A decentralised communication pattern where each node periodically shares its known cluster state with a few random neighbours. Information propagates exponentially — within seconds, every node converges on the same view of the cluster.
+
+> [!important] Gossip is also how failures are detected
+> If a node stops responding to gossip messages, its neighbours mark it as suspect, then down. The cluster reroutes traffic away from it automatically — no human intervention, no central monitor required.

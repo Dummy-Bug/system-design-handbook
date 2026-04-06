@@ -108,13 +108,7 @@
   - Compaction — merging SSTables, reclaiming space for tombstones
   - Query-first data modeling — design tables around query patterns
 - **Bigtable** — Google's wide-column store (HBase is the open-source equivalent) **(Google-specific — must know)**
-  - Architecture differs from Cassandra: storage is delegated to GFS/Colossus (not local disk), compute (tablet servers) is separate from storage
-  - Tablet servers handle reads/writes; master assigns tablets; Chubby (distributed lock) for coordination
-  - Rows sorted lexicographically by row key — row key design is critical (hotspot risk with sequential keys)
-  - Column families defined at schema time; individual columns dynamic
-  - Timestamps on every cell — multiple versions of a value stored automatically
-  - Used internally at Google for: Search indexing, Gmail, Google Maps, Analytics
-  - vs Cassandra: Bigtable is masterful + GFS-backed; Cassandra is peer-to-peer + local storage. Bigtable leans on Google infra; Cassandra is more portable/open.
+  - difference in cassandra and big table is good enough for sde-2
 - Use cases — chat message history, IoT/time-series, write-heavy event logs, analytics, Google-scale indexing
 
 ### 3.12 Search Engines
