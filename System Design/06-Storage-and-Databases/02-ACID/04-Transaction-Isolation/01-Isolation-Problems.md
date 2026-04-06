@@ -86,24 +86,35 @@ Phantom Read        → new ROWS appeared or existing rows disappeared
 
 ## Problem 4 — Lost Update
 
-Two transactions read the same value, both compute an update based on it, both write — one overwrites the other.
+Two transactions read the same committed value, both compute an update based on it, both write — one overwrites the other.
+
+> [!important] The read is not stale — both transactions read the correct, committed value. The problem is a **write-write conflict**: neither transaction knows the other is also in progress, both independently decide to write, and the second write silently stomps the first.
 
 ```sql
--- Both transactions read balance = 1000
+-- Both transactions read balance = 1000 (correct, committed value)
 
 -- Transaction A: adds $500
-SELECT balance FROM accounts WHERE id = 123;  -- gets 1000
--- (gap — B also reads and computes)
+SELECT balance FROM accounts WHERE id = 123;  -- gets 1000 ← correct
+-- (gap — B also reads the same correct value)
 UPDATE accounts SET balance = 1500 WHERE id = 123;  -- 1000 + 500
 
--- Transaction B: adds $200 (based on the 1000 it read earlier)
+-- Transaction B: adds $200 (based on the 1000 it also correctly read)
 UPDATE accounts SET balance = 1200 WHERE id = 123;  -- 1000 + 200 ← overwrites A
 
 -- Correct result: 1000 + 500 + 200 = $1700
 -- Actual result:  $1200  ← A's $500 deposit is gone
 ```
 
-> [!danger] This is the race condition from concurrency — now with a formal name.
+This also explains the **hotel double-booking** problem — both users read "room available" (correct, committed value), both decide to book, both write. Neither read was stale. The conflict is purely in the concurrent writes.
+
+```
+T1: read → room available = true  ← correct committed value
+T2: read → room available = true  ← correct committed value
+T1: write → available = false
+T2: write → available = false     ← both succeed, double booking
+```
+
+> [!danger] Lost update is a write-write conflict, not a stale read problem.
 > Solved by pessimistic locking (`SELECT FOR UPDATE`) or SERIALIZABLE isolation.
 
 ---
@@ -115,4 +126,4 @@ UPDATE accounts SET balance = 1200 WHERE id = 123;  -- 1000 + 200 ← overwrites
 | Dirty Read | Read uncommitted data that gets rolled back | No read isolation |
 | Non-Repeatable Read | Same row, different value within one transaction | Another transaction committed between reads |
 | Phantom Read | New rows appear/disappear within one transaction | Another transaction inserted/deleted between reads |
-| Lost Update | One write overwrites another's committed write | Both transactions read stale value before writing |
+| Lost Update | One write overwrites another's committed write | Both transactions read the same correct value, both write — write-write conflict |
