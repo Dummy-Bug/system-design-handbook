@@ -20,6 +20,7 @@ Work through the syllabus at `System Design/01-Syllabus/` topic by topic, buildi
 
 ### How to explain concepts — follow this exactly
 - **One concept at a time.** Never dump multiple sub-topics in one message. Explain one thing, ask if it makes sense, wait for confirmation, then continue.
+- **Strictly interactive — never dump.** Ask after every single idea. Do not move to the next point until the user replies. Even if the next point feels closely related, stop and wait.
 - **Always use scale to justify design decisions.** Don't just say "use Hash instead of String". Show what happens at 10 million users — how much wasted data, how much wasted network traffic, why it matters. Numbers make the trade-off real.
 - **Build from the problem, not the solution.** Don't say "Redis has sorted sets, here's what they do." Say "you have a leaderboard problem, here's why a normal list doesn't work, here's what sorted sets give you."
 - **Use concrete before abstract.** Real example first, generalisation second. Never the other way around.
@@ -72,7 +73,8 @@ Each file uses this style:
   > [!danger] Common trap / myth
   ```
 
-- **Code blocks for visual diagrams and flows** (not actual code):
+- **Mermaid diagrams for all visuals** — use mermaid blocks (```mermaid) for architecture diagrams, flows, comparisons, and disk layout visuals. Do not use plain ASCII art or code blocks for diagrams.
+- **Code blocks for flows where mermaid doesn't fit** (e.g. disk layout representations, before/after comparisons):
   ```
   Write → Node A → replicates → Node B
   Read  → Node B → stale data returned
