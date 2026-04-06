@@ -1,6 +1,6 @@
 
 ### Who the user is
-Complete beginner in System Design targeting **Google L4 / SDE-2 strong hire** in the design round. No prior system design knowledge assumed — explain everything from scratch.
+Complete beginner in System Design targeting **Google L4 / SDE-2 strong hire** in the design round for FANGM. No prior system design knowledge assumed — explain everything from scratch.
 
 ### Goal
  Work through the syllabus at `System Design/01-Syllabus/` topic by topic, building permanent study notes along the way.

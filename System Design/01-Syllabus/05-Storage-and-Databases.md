@@ -188,7 +188,46 @@
 - Blob/Object — large unstructured files, media, backups
 - Apply this in every case study data model section
 
-### 3.22 Distributed Transactions (2PC & Saga)
+### 3.22 Data Modeling (Schema Design from Requirements)
+> Directly applies to: every single case study — the data model is where interviewers see if you actually understand the system
+
+- **The process** — requirements → entities → relationships → access patterns → schema
+  - List the nouns from functional requirements → those are your entities
+  - List the verbs → those are your relationships and operations
+  - List the read queries you need to support → those drive indexing and denormalization decisions
+- **Normalize first, denormalize with justification**
+  - Start with 3NF — no duplicate data, every column depends on the whole primary key
+  - Denormalize only when a specific read query would require expensive joins at scale
+  - Always state the tradeoff: "I'm denormalizing X into Y to avoid a join on the hot read path — the cost is maintaining consistency on writes"
+- **Embedding vs Referencing (Document DBs)**
+  - Embed when: data is read together, 1:few relationship, rarely updated independently (e.g., order + order items)
+  - Reference when: data is shared across entities, many:many relationship, updated independently (e.g., user → posts)
+  - Embed limit: MongoDB documents max 16MB — if embedded array can grow unbounded, reference instead
+- **Many-to-Many modeling**
+  - SQL: junction/join table (e.g., `user_roles` with `user_id` + `role_id`)
+  - NoSQL: denormalize both sides — store role IDs in user doc AND user IDs in role doc. Accept the write amplification.
+  - Graph DB: native edge between nodes — no junction table needed
+- **Modeling for access patterns (NoSQL / Cassandra)**
+  - "Query-first" design — one table per query pattern, duplicate data across tables
+  - Partition key = how you distribute data; clustering key = how you sort within a partition
+  - Example: chat messages — partition by `(conversation_id)`, cluster by `(timestamp)` → efficient range scan for "last 50 messages in this chat"
+- **Common schema patterns interviewers expect**
+  - User table + profile (1:1 or embedded)
+  - User → Posts (1:many, reference by user_id FK)
+  - Followers (many:many, junction table or adjacency list)
+  - Event/activity log (append-only, partition by time)
+  - Hierarchical data (adjacency list, materialized path, or nested set)
+- **Red flags interviewers watch for**
+  - No primary key discussion
+  - Using auto-increment ID as shard key (sequential = hotspot)
+  - Storing derived data without explaining cache invalidation
+  - Not considering the write path when designing for reads
+
+---
+
+### 3.23 Distributed Transactions (2PC & Saga)
+> Moved from 3.22 — renumbered after Data Modeling insertion
+
 - The problem — ACID gives you transactions within one DB; what do you do when a transaction spans two services or two databases?
 - **2-Phase Commit (2PC)**
   - Phase 1 (Prepare) — coordinator asks all participants "can you commit?" — each participant locks resources and votes yes/no
@@ -209,7 +248,7 @@
   - Saga when: you need availability and can tolerate brief inconsistency (e.g., order + inventory + payment microservices)
 - Directly applies to: hotel reservation, auction, payment system, stock broker case studies
 
-### 3.23 Geospatial Indexing
+### 3.24 Geospatial Indexing
 - The problem — "find all drivers within 2km of this user" — a standard B+Tree index cannot answer this without a full table scan
 - Why a normal index fails — location is 2D (lat/lng); a B+Tree is 1D. You can't range-scan two dimensions simultaneously.
 - **Geohash** — encode a (lat, lng) pair into a single string by recursively dividing the world into a grid

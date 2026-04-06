@@ -11,7 +11,24 @@
 - Inter-service communication — sync (REST/gRPC) vs async (Kafka/queue)
 - When to split — bounded by domain, not by technical layer
 
-### 7.1b Backend-for-Frontend (BFF) Pattern
+### 7.1b Service Mesh & Sidecar Pattern
+- **Problem** — in a microservices architecture, every service needs: mTLS, retries, circuit breaking, observability, traffic routing. Implementing this in every service's code is duplicated effort and inconsistent.
+- **Sidecar proxy** — a lightweight proxy process deployed alongside every service instance (same pod in K8s). All inbound/outbound traffic flows through the sidecar.
+  - The sidecar handles: TLS termination, retries, circuit breaking, load balancing, metrics collection, distributed tracing injection
+  - The application code knows nothing about this — it just sends plain HTTP/gRPC to localhost
+- **Service mesh** — the collection of all sidecars + a control plane that configures them
+  - **Istio** — most well-known service mesh; uses Envoy as the sidecar proxy
+  - **Linkerd** — lighter alternative, Rust-based proxy
+  - Control plane pushes configuration (retry policies, routing rules, mTLS certs) to all sidecars
+- **What it enables**
+  - mTLS everywhere without application code changes — sidecar handles cert rotation
+  - Traffic splitting — route 5% of traffic to canary version (canary deployment without app-level logic)
+  - Observability for free — every sidecar emits latency, error rate, request count metrics
+- **Trade-off** — adds latency per hop (extra network hop through sidecar), operational complexity, resource overhead per pod
+- **When to mention** — any large microservices architecture where the interviewer asks "how do you handle service-to-service security?" or "how do you get observability across services?"
+- **When NOT to mention** — small systems, monoliths, or when you only have 2-3 services. Overkill for simple architectures.
+
+### 7.1c Backend-for-Frontend (BFF) Pattern
 - Problem: mobile app needs a lightweight response (small payload, fewer fields), web dashboard needs a rich response (full detail, multiple entities joined). One API can't serve both well.
 - BFF: a thin API layer per client type that aggregates and transforms backend service responses
   - Mobile BFF → calls 3 backend services, returns a compact combined response
@@ -178,7 +195,38 @@
   - Conflict resolution: two clients edit the same file offline → server gets two different chunk lists → create a conflict copy (Dropbox approach) or apply CRDT merge (Google Docs approach)
 - Directly applies to: Dropbox, Google Drive, YouTube, Gmail case studies
 
-### 7.9b Deployment Strategies
+### 7.9b Data Migration at Scale
+> Comes up when interviewers ask: "how do you migrate from the old system to this new one?"
+
+- **Why it's hard** — you can't stop a production system to migrate. Users are reading and writing the entire time. A bad migration corrupts data or causes downtime.
+- **Dual-write pattern**
+  - Write to both old and new system simultaneously during migration
+  - Read from old system (source of truth) until migration verified
+  - Problem: if one write fails and the other succeeds, data diverges → need reconciliation
+  - Better alternative: use CDC from old DB to populate new DB (avoids dual-write consistency risk)
+- **Backfill strategy**
+  - Migrate historical data in batches — scan old DB in chunks (cursor-based, not OFFSET), write to new DB
+  - Rate-limit the backfill to avoid overwhelming either database
+  - Track progress with a checkpoint (last migrated ID) — safe to restart on failure
+  - Run backfill on a read replica of the old DB to avoid impacting production reads
+- **Shadow traffic / dark reads**
+  - After backfill, route a copy of live read traffic to the new system (but don't serve the response to users)
+  - Compare responses between old and new system — log discrepancies
+  - Once discrepancy rate drops to zero → switch reads to new system
+- **The full migration playbook (4 phases)**
+  1. **Backfill** — copy historical data from old → new
+  2. **CDC / dual-write** — stream ongoing writes to new system in real time
+  3. **Shadow reads** — validate new system returns correct results
+  4. **Cutover** — switch reads to new system, stop writes to old system, decommission old
+- **Rollback plan** — keep old system running and writable for N days after cutover. If something breaks, reverse the read path back to old.
+- **Schema migration specifically**
+  - Never run `ALTER TABLE` with a lock on a large production table — it blocks all writes
+  - Use online schema migration tools (gh-ost for MySQL, pg_repack for PostgreSQL) that copy data to a new table in the background
+  - Expand-and-contract pattern: add new column → backfill → deploy code that writes both → deploy code that reads new → drop old column
+- **When to mention** — any case study where you're replacing a database (SQL → NoSQL migration), splitting a monolith DB, or the interviewer asks "what if requirements change and you need to re-shard?"
+
+### 7.9c Deployment Strategies
+> Moved from 7.9b — renumbered after Data Migration insertion
 - **Rolling deploy** — replace instances one at a time; old and new versions briefly run simultaneously
   - Zero downtime, but mixed-version window means your API must be backward compatible during rollout
   - Rollback = slow (must re-roll every instance back)
