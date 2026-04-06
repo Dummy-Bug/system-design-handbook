@@ -136,6 +136,8 @@ Work through in this order — tick off as completed:
 - [ ] 3.19 Cursor Pagination → `19-Cursor-Pagination.md`
 - [ ] 3.20 OLTP vs OLAP → `20-OLTP-OLAP.md`
 - [ ] 3.21 Choosing the Right DB → `21-Choosing-DB.md`
+- [ ] 3.22 Distributed Transactions (2PC & Saga) → `22-Distributed-Transactions.md`
+- [ ] 3.23 Geospatial Indexing → `23-Geospatial-Indexing.md`
 
 ### How to start a session
 User will say something like "let's continue" or "next topic" or a topic name.

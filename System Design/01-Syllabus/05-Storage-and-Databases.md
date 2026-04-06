@@ -7,7 +7,7 @@
 - Structured vs unstructured vs semi-structured data
 - Schema-on-write vs schema-on-read
 - Storage engines — how databases store data on disk (row-oriented vs column-oriented)
-- **Currency must never be stored as float or double** — binary floating point cannot represent 0.1 exactly; `0.1 + 0.2 = 0.30000000000000004` in IEEE 754. Always store money as integers (cents: $9.99 → 999) or use a Decimal/Numeric type. See `Fundamentals/Binary Number Rounding.md` for the full explanation. Applies to: Payment System, Banking Ledger, Auction, Stock Broker case studies.
+- **Currency must never be stored as float or double** — See `Fundamentals/Binary Number Rounding.md` for the full explanation.
 
 ### 3.2 ACID Properties
 - Atomicity — all or nothing
@@ -104,7 +104,15 @@
   - Read path — MemTable → Bloom filter check → SSTable scan
   - Compaction — merging SSTables, reclaiming space for tombstones
   - Query-first data modeling — design tables around query patterns
-- Use cases — chat message history, IoT/time-series, write-heavy event logs, analytics
+- **Bigtable** — Google's wide-column store (HBase is the open-source equivalent) **(Google-specific — must know)**
+  - Architecture differs from Cassandra: storage is delegated to GFS/Colossus (not local disk), compute (tablet servers) is separate from storage
+  - Tablet servers handle reads/writes; master assigns tablets; Chubby (distributed lock) for coordination
+  - Rows sorted lexicographically by row key — row key design is critical (hotspot risk with sequential keys)
+  - Column families defined at schema time; individual columns dynamic
+  - Timestamps on every cell — multiple versions of a value stored automatically
+  - Used internally at Google for: Search indexing, Gmail, Google Maps, Analytics
+  - vs Cassandra: Bigtable is masterful + GFS-backed; Cassandra is peer-to-peer + local storage. Bigtable leans on Google infra; Cassandra is more portable/open.
+- Use cases — chat message history, IoT/time-series, write-heavy event logs, analytics, Google-scale indexing
 
 ### 3.12 Search Engines
 - Inverted index — maps terms to document IDs, the core data structure
@@ -182,3 +190,43 @@
 - Search — full-text, ranked results, faceting
 - Blob/Object — large unstructured files, media, backups
 - Apply this in every case study data model section
+
+### 3.22 Distributed Transactions (2PC & Saga)
+- The problem — ACID gives you transactions within one DB; what do you do when a transaction spans two services or two databases?
+- **2-Phase Commit (2PC)**
+  - Phase 1 (Prepare) — coordinator asks all participants "can you commit?" — each participant locks resources and votes yes/no
+  - Phase 2 (Commit/Abort) — if all voted yes, coordinator sends commit; if any voted no, sends abort
+  - Problem: coordinator is a single point of failure; participants hold locks the entire time → blocking protocol
+  - Problem: if coordinator crashes after Phase 1, participants are stuck holding locks indefinitely (in-doubt transaction)
+  - Used by: Google Spanner (with TrueTime to bound uncertainty), some distributed SQL engines
+  - Verdict: strong consistency, but high latency and availability risk — avoid in high-throughput systems
+- **Saga pattern** — alternative to 2PC for microservices
+  - Break a distributed transaction into a sequence of local transactions, each publishing an event/message
+  - If any step fails, execute compensating transactions to undo the previous steps
+  - Choreography — each service listens for events and reacts (decentralised, harder to debug)
+  - Orchestration — a central saga orchestrator tells each service what to do next (easier to reason about, single point of control)
+  - Trade-off: eventual consistency (the system is briefly inconsistent mid-saga), no atomicity guarantee across services
+  - Compensating transactions must be idempotent — if a rollback is retried, it must not double-reverse
+- When 2PC, when Saga?
+  - 2PC when: you need true atomicity and can afford latency (e.g., financial ledger on Spanner)
+  - Saga when: you need availability and can tolerate brief inconsistency (e.g., order + inventory + payment microservices)
+- Directly applies to: hotel reservation, auction, payment system, stock broker case studies
+
+### 3.23 Geospatial Indexing
+- The problem — "find all drivers within 2km of this user" — a standard B+Tree index cannot answer this without a full table scan
+- Why a normal index fails — location is 2D (lat/lng); a B+Tree is 1D. You can't range-scan two dimensions simultaneously.
+- **Geohash** — encode a (lat, lng) pair into a single string by recursively dividing the world into a grid
+  - The longer the Geohash string, the smaller (more precise) the cell
+  - Nearby locations share a common prefix — proximity becomes a string prefix query
+  - Edge case: two locations on opposite sides of a cell boundary can have completely different hashes despite being physically close → always query the 8 surrounding cells too
+  - Stored as a regular indexed string column → standard B+Tree index handles it
+- **S2 cells (Google's library)** — divides the sphere into a hierarchy of cells using a space-filling Hilbert curve
+  - Each cell has a 64-bit integer ID — nearby cells have numerically close IDs
+  - Used internally at Google Maps, Google Earth, and Uber
+  - Better than Geohash for uniform area coverage; no edge distortion at poles
+  - Know this exists for Google interviews specifically — mentioning S2 is a strong signal
+- **PostGIS** — PostgreSQL extension that adds native geospatial types (POINT, POLYGON) and a GiST index for 2D spatial queries
+  - Enables `ST_DWithin(location, target, radius)` efficiently
+  - Used when your data is relational and you need geospatial queries alongside SQL joins
+- Practical pattern — store both raw lat/lng (for display) and a Geohash or S2 cell ID (for proximity indexing)
+- Directly applies to: Taxi Platform, any location-aware system design

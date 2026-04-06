@@ -159,6 +159,21 @@
   - Conflict resolution: two clients edit the same file offline → server gets two different chunk lists → create a conflict copy (Dropbox approach) or apply CRDT merge (Google Docs approach)
 - Directly applies to: Dropbox, Google Drive, YouTube, Gmail case studies
 
+### 7.9b Deployment Strategies
+- **Rolling deploy** — replace instances one at a time; old and new versions briefly run simultaneously
+  - Zero downtime, but mixed-version window means your API must be backward compatible during rollout
+  - Rollback = slow (must re-roll every instance back)
+- **Blue-green** — two identical environments (blue = live, green = new version); switch traffic at load balancer
+  - Instant rollback — just point LB back to blue
+  - Cost: double the infrastructure during the switch window
+  - DB migration must be backward compatible — both blue and green point to the same DB
+- **Canary** — route a small % of traffic (1–5%) to the new version; watch error rate and latency; expand or rollback
+  - Best for risk reduction on high-traffic systems — real traffic validates the new version before full rollout
+  - Requires traffic splitting at load balancer or API gateway level
+  - Used by Google, Netflix, Amazon as standard practice
+- **Feature flags** — deploy code disabled, enable for % of users without redeployment (covered in Supplementary)
+- Key interview point: always pair deployment strategy with DB migration strategy — schema changes must be backward compatible across versions during rollout
+
 ### 7.10 Adaptive Bitrate Streaming (HLS / DASH)
 > Directly applies to: YouTube, Netflix, any video streaming case study
 

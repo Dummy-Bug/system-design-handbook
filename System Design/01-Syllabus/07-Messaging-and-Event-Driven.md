@@ -64,6 +64,19 @@
   - Stock broker — trade events, order book updates
   - CDC pipeline — database changes streamed to Kafka via Debezium
 
+### 6.5b Backpressure
+- **What it is** — when a consumer can't keep up with a producer, the system must signal the producer to slow down rather than let the queue grow unbounded or drop messages silently
+- **Why queuing alone isn't enough** — a queue absorbs short bursts, but sustained overload just shifts the problem: queue depth grows, memory fills, latency explodes. You need a mechanism to push back.
+- **How backpressure works in practice**
+  - Consumer lag monitoring — track how far behind consumers are (Kafka consumer group lag)
+  - Threshold breach → alert → scale consumers horizontally
+  - If consumers can't scale fast enough → producer-side load shedding (drop low-priority requests, return 429)
+  - TCP has built-in backpressure (receive window) — application-level queues do not, you must build it
+- **Kafka-specific** — Kafka does not push back on producers; the producer side must observe consumer lag metrics and decide to shed load or pause
+- **gRPC** — has native flow control; the receiver can pause the sender by not consuming bytes from the network buffer
+- **Key interview point** — "I'd monitor consumer lag on the Kafka topic. If lag exceeds X, I'd trigger an autoscaling event to add consumer instances. If lag continues to grow despite scaling, I'd enable load shedding at the API gateway — drop non-critical writes and return 503 with Retry-After."
+- Directly applies to: Ad Click Aggregation, Notification System, any write-heavy streaming pipeline
+
 ### 6.6 Event-Driven Architecture
 - Event sourcing — store state as sequence of immutable events, reconstruct by replay
   - Projection — build a read model by replaying events
