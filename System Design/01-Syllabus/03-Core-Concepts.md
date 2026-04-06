@@ -104,7 +104,7 @@
 - Four anomalies — dirty read, non-repeatable read, phantom read, lost update
 - READ COMMITTED → REPEATABLE READ → SERIALIZABLE
 - Snapshot isolation — what DBs actually implement
-- [[09-Transaction-Isolation/00-Overview|Notes →]]
+- [[System Design/06-Storage-and-Databases/02-ACID/04-Transaction-Isolation/00-Overview|Notes →]]
 
 ---
 
@@ -115,7 +115,7 @@
 - Spectrum: Linearizable → Strong → Causal → Monotonic → Read-Your-Writes → Eventual
 - Each model — what it guarantees, what it doesn't, real-world example
 - Stricter consistency = lower availability during partition
-- [[10-Consistency-Models/00-Overview|Notes →]]
+- [[System Design/04-Core-Concepts/09-Consistency-Models/00-Overview|Notes →]]
 
 ---
 
@@ -127,7 +127,7 @@
 - Split-brain — both nodes think they're primary, quorum (floor(N/2)+1) prevents it
 - R + W > N — guarantees seeing latest write
 - Quorum = a number, Consensus = a process (Raft, Paxos)
-- [[11-Network-Partitions/00-Overview|Notes →]]
+- [[System Design/04-Core-Concepts/10-Network-Partitions/00-Overview|Notes →]]
 
 ---
 
@@ -139,7 +139,7 @@
 - C in CAP = linearizability specifically, not just any consistency
 - CP (ZooKeeper, Spanner) — stop serving rather than serve stale
 - AP (Cassandra, DynamoDB) — serve stale rather than go down
-- [[12-CAP-Theorem/00-Overview|Notes →]]
+- [[System Design/04-Core-Concepts/11-CAP-Theorem/00-Overview|Notes →]]
 
 ---
 
@@ -150,7 +150,7 @@
 - Extends CAP: IF partition → A vs C, ELSE (normal) → L vs C
 - PA/EL (Cassandra, DynamoDB), PC/EC (Zookeeper, Spanner), PA/EC (MongoDB), PC/EL = invalid
 - Consistency always costs latency — even when nothing is broken
-- [[13-PACELC/00-Overview|Notes →]]
+- [[System Design/04-Core-Concepts/12-PACELC/00-Overview|Notes →]]
 
 ---
 
@@ -163,7 +163,7 @@
 - Access token (15min) + refresh token (30 days) — 401 triggers silent refresh
 - HttpOnly cookie for refresh token — protected from XSS
 - Encryption in transit (TLS) + at rest (AES-256) — both required
-- [[14-Security/00-Overview|Notes →]]
+- [[System Design/04-Core-Concepts/13-Security/00-Overview|Notes →]]
 
 ---
 
@@ -175,7 +175,7 @@
 - State IS the version number — optimistic locking built into one WHERE clause
 - Timeout transitions — background job (lazy expiry breaks queries by status)
 - Persist both — status column + events table, written atomically
-- [[15-State-Machines/00-Overview|Notes →]]
+- [[System Design/04-Core-Concepts/14-State-Machines/00-Overview|Notes →]]
 
 ---
 
@@ -187,4 +187,4 @@
 - Availability → redundancy, multi-AZ | Consistency → quorum, CP DB
 - Latency → cache, CDN | Throughput → sharding, queues
 - Conflicting NFRs — name the conflict, pick a winner, state what you give up
-- [[16-NFRs/00-Overview|Notes →]]
+- [[System Design/04-Core-Concepts/15-NFRs/00-Overview|Notes →]]

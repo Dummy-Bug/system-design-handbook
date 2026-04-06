@@ -135,8 +135,6 @@ COMMIT;
 
 ---
 
-## Connection to Locking (Previous Topic)
-
 > [!important] Isolation levels and locking solve the same problems at different layers
 
 ```

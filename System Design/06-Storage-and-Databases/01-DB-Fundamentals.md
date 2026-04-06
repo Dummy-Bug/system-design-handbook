@@ -1,7 +1,3 @@
-# Database Fundamentals
-
----
-
 ## Why Not Just Use Files?
 
 Before databases existed, people stored data in flat files — CSVs, text files. It works fine for a handful of records. But imagine you're building Instagram and you store 100 million users in a CSV:
@@ -165,7 +161,7 @@ Stores data **row by row** on disk:
 [3, Charlie, charlie@..., 22, London]
 ```
 
-When Instagram loads Alice's full profile — name, email, age, city all at once — one disk read gets you everything. Fast.
+When Instagram loads Alice's full profile — name, email, age, city all at once — one disk read gets you everything. Fast and it will also fetch other rows that are present inside that disk block.
 
 **Use for:** individual record reads and writes — user profiles, orders, transactions.
 

@@ -31,38 +31,6 @@ The database is now in a **corrupt state** — the total money in the system no 
 
 ---
 
-## The same problem everywhere
-
-This isn't just a banking problem. Any operation that requires multiple writes to complete correctly has this failure mode:
-
-```
-E-commerce order:
-  Step 1: Charge customer's card     ✓
-  CRASH
-  Step 2: Create order record        ✗
-  → customer charged, no order created
-  → customer contacts support, refund issued manually
-  → operational nightmare
-
-Hotel booking:
-  Step 1: Mark room as unavailable   ✓
-  CRASH
-  Step 2: Create booking record      ✗
-  → room blocked, no booking exists
-  → room appears unavailable but no one has it
-  → revenue lost
-
-Ticket system:
-  Step 1: Deduct ticket from inventory  ✓
-  CRASH
-  Step 2: Assign ticket to user          ✗
-  → ticket gone from inventory, nobody owns it
-```
-
-In every case: partial completion leaves the system in a state that is worse than if the operation had never started at all.
-
----
-
 ## What ACID provides
 
 ACID is a set of four guarantees designed to make multi-step database operations safe. Instead of "two separate writes that might be interrupted," ACID gives you a **transaction** — a unit of work that either completes entirely or leaves no trace.

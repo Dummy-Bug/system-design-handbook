@@ -6,7 +6,7 @@
 
 ## The guarantee
 
-A transaction is an indivisible unit. From the database's perspective, a transaction either happened completely or never happened at all. There is no observable in-between.
+A transaction is an **indivisible unit**. From the database's perspective, a transaction either happened completely or never happened at all. There is no observable in-between.
 
 ```
 Transfer $100 (Alice → Bob):
@@ -52,23 +52,42 @@ The WAL is always written first, always to disk, before any changes to actual da
 
 ## Rollback vs crash recovery
 
-Atomicity works in two scenarios:
+**Explicit rollback** — the server is alive, your code decides to abort:
 
-**Explicit rollback** — your application code decides to abort:
 ```sql
 BEGIN;
 UPDATE accounts SET balance = balance - 100 WHERE id = 'alice';
 -- discover Alice has insufficient funds
-ROLLBACK;  -- Alice's balance restored, no partial state
+ROLLBACK;  -- your code runs this, server is fine, DB undoes the deduct
 ```
 
-**Crash recovery** — the server dies mid-transaction:
+The server never crashed. Your application chose to abort. The database reverses what it did and restores Alice's balance. The `ROLLBACK` command is explicitly executed.
+
+**Crash recovery** — the server dies mid-transaction, `ROLLBACK` never runs:
+
 ```
-DB restarts → replays WAL → finds uncommitted transaction → rolls it back
+BEGIN
+  WAL: "about to deduct $100 from Alice (was $500)"
+  deduct $100 from Alice  ✓
+  CRASH  ← server dies here. ROLLBACK never executes. Ever.
+```
+
+On restart:
+
+```
+DB boots up
+→ reads WAL
+→ sees a transaction that started but never received a COMMIT marker
+→ "this transaction is incomplete — undo it"
+→ uses WAL entry to restore Alice to $500
 → clean state, as if the transaction never ran
 ```
 
-Both end in the same place: no partial state persists.
+The `ROLLBACK` command is completely irrelevant here. The WAL is what saves you — it recorded Alice's old value *before* the change was applied. The database uses that record on restart to reverse the incomplete work, with no application code involved at all.
+
+> [!important] The key distinction
+> **Explicit rollback** = your code aborts while the server is alive. The DB executes the undo immediately.
+> **Crash recovery** = server dies, `ROLLBACK` never runs, DB uses the WAL on restart to undo the incomplete transaction automatically.
 
 ---
 
