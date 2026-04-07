@@ -7,6 +7,9 @@ Complete beginner in System Design targeting **Google L4 / SDE-2 strong hire** i
  Work through the syllabus at `System Design/01-Syllabus/` topic by topic, building permanent study notes along the way.
 
 ### How each session works — follow this exactly
+
+**No dumping of contents or concepts, step by step and make it interactive**
+
 1. **Study mode first** — user says a topic name or "go". Explain that topic from scratch, beginner-friendly, with real-world analogies and examples. No jargon without explanation.
 2. **Notes mode second** — once the user confirms they understood ("got it", "makes sense", "next"), write the notes as a proper `.md` file into the correct folder under `System Design/04-Core-Concepts/` (or whichever phase folder is active).
 3. **Never skip ahead** — do not move to the next topic until the user confirms the current one is understood.
@@ -63,7 +66,7 @@ Each file uses this style:
   > [!danger] Common trap / myth
   ```
 
-- **Mermaid diagrams for all visuals** — use mermaid blocks (```mermaid) for architecture diagrams, flows, comparisons, and disk layout visuals. Do not use plain ASCII art or code blocks for diagrams.
+- **Mermaid diagrams for all visuals** — use mermaid blocks (```mermaid) for architecture diagrams, flows, comparisons, and disk layout visuals. Do not use plain ASCII art or code blocks for diagrams and \n should not be present in mermaid diagram.
 - **Code blocks for flows where mermaid doesn't fit** (e.g. disk layout representations, before/after comparisons):
   ```
   Write → Node A → replicates → Node B
