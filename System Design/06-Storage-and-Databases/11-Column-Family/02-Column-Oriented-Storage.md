@@ -85,9 +85,9 @@ Column-family stores don't just change the layout on disk — they also change *
 
 ```mermaid
 flowchart LR
-    W["Client Write"] --> WAL["WAL\n(disk, append-only)"]
-    WAL --> MT["MemTable\n(in memory, sorted)"]
-    MT -->|"flush when full"| SS["SSTable\n(disk, sorted, immutable)"]
+    W["Client Write"] --> WAL["WAL - disk, append-only"]
+    WAL --> MT["MemTable - in memory, sorted"]
+    MT -->|"flush when full"| SS["SSTable - disk, sorted, immutable"]
     SS -->|"compaction"| SS2["Merged SSTable"]
 ```
 

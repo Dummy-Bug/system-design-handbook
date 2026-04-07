@@ -96,8 +96,8 @@ Because rows are sorted, all hours for `tweet_1#IN` are **physically adjacent on
 
 ```mermaid
 flowchart LR
-    Q["Query: tweet_1#IN\nfor last 24 hours"] --> S["Sequential scan\nof contiguous disk section"]
-    S --> R["24 rows returned\nin one pass"]
+    Q["Query: tweet_1#IN for last 24 hours"] --> S["Sequential scan of contiguous disk section"]
+    S --> R["24 rows returned in one pass"]
 ```
 
 Compare this to SQL, where those same 24 rows could be scattered across hundreds of disk blocks depending on insert order. SQL would have to chase pointers all over disk — many random reads instead of one sequential scan.

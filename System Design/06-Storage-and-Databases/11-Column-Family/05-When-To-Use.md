@@ -67,10 +67,10 @@ This is called a **full table scan** — and in a distributed Cassandra cluster,
 
 ```mermaid
 flowchart TD
-    Q["Query: all tweets\nwith impressions > 10k"] --> N1["Node 1\nscan all partitions"]
-    Q --> N2["Node 2\nscan all partitions"]
-    Q --> N3["Node 3\nscan all partitions"]
-    N1 --> R["Merge results\nacross cluster"]
+    Q["Query: all tweets with impressions > 10k"] --> N1["Node 1 - scan all partitions"]
+    Q --> N2["Node 2 - scan all partitions"]
+    Q --> N3["Node 3 - scan all partitions"]
+    N1 --> R["Merge results across cluster"]
     N2 --> R
     N3 --> R
     R --> SLOW["Catastrophically slow"]
@@ -87,8 +87,8 @@ When you need both fast writes *and* cross-entity queries, the answer is not to 
 
 ```mermaid
 flowchart LR
-    W["Write"] --> C["Cassandra\n(raw data, fast writes)"]
-    C -->|"CDC / stream"| ES["Elasticsearch\n(global index)"]
+    W["Write"] --> C["Cassandra - raw data, fast writes"]
+    C -->|"CDC / stream"| ES["Elasticsearch - global index"]
     Q1["Query by entity + time"] --> C
     Q2["Query across all entities"] --> ES
 ```

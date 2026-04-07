@@ -98,10 +98,10 @@ Comments are **unbounded** — they grow forever, have no upper limit, and users
 
 ```mermaid
 graph LR
-    Post["posts collection\npost_id: 1\ncaption: Sunset in Goa"]
-    C1["comments collection\ncomment_id: 101\npost_id: 1\nuser: rahul"]
-    C2["comments collection\ncomment_id: 102\npost_id: 1\nuser: priya"]
-    C3["comments collection\ncomment_id: 103\npost_id: 1\nuser: ..."]
+    Post["posts collection - post_id: 1 - caption: Sunset in Goa"]
+    C1["comments collection - comment_id: 101 - post_id: 1 - user: rahul"]
+    C2["comments collection - comment_id: 102 - post_id: 1 - user: priya"]
+    C3["comments collection - comment_id: 103 - post_id: 1 - user: ..."]
     Post -.->|"referenced by post_id"| C1
     Post -.->|"referenced by post_id"| C2
     Post -.->|"referenced by post_id"| C3

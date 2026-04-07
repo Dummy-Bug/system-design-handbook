@@ -66,10 +66,10 @@ The MongoDB-specific piece is **mongos** — a query router that sits between yo
 ```mermaid
 graph TD
     App["App Server"]
-    App -->|"query"| Mongos["mongos\n(query router)"]
-    Mongos -->|"hash(shard_key) → Shard 1"| Shard1["Shard 1\n(replica set)"]
-    Mongos -->|"hash(shard_key) → Shard 2"| Shard2["Shard 2\n(replica set)"]
-    Mongos -->|"hash(shard_key) → Shard 3"| Shard3["Shard 3\n(replica set)"]
+    App -->|"query"| Mongos["mongos - query router"]
+    Mongos -->|"hash(shard_key) → Shard 1"| Shard1["Shard 1 - replica set"]
+    Mongos -->|"hash(shard_key) → Shard 2"| Shard2["Shard 2 - replica set"]
+    Mongos -->|"hash(shard_key) → Shard 3"| Shard3["Shard 3 - replica set"]
 ```
 
 Your application connects to mongos as if it's a single MongoDB instance. mongos knows which shard holds which key ranges, routes the query, returns the result. The sharding is completely transparent to the application.
