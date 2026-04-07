@@ -26,8 +26,8 @@
 - **Why Java did this**: backward compatibility. Generic code needed to work with pre-Java-5 libraries that used raw types.
 - **Interview question**: "Can you check if a List is a List<String> at runtime?" → No, due to type erasure. The generic type is erased at compile time.
 
-### 2.3 Wildcards — `?`, `extends`, `super`
-- **Unbounded wildcard `?`** — `List<?>` means "list of something, I don't know what." You can read from it (get `Object`) but can't write to it (compiler doesn't know what type is safe to add).
+### 2.3 Wildcards — ?, extends, super
+- Unbounded wildcard ? — List <?> means "list of something, I don't know what." You can read from it (get `Object`) but can't write to it (compiler doesn't know what type is safe to add).
 - **Upper bounded `? extends T`** — `List<? extends Number>` means "list of Number or any subclass (Integer, Double, etc.)." You can **read** as Number, but **can't write** (might be a `List<Integer>`, adding a `Double` would be wrong).
 - **Lower bounded `? super T`** — `List<? super Integer>` means "list of Integer or any superclass (Number, Object)." You can **write** Integers, but reading gives you `Object` (might be a `List<Object>`).
 - **Why this exists**: enables writing flexible methods that work with class hierarchies without casting.
