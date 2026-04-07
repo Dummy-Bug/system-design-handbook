@@ -1,3 +1,4 @@
+for every session check the **syllabus @"System Design/01-Syllabus/05-Storage-and-Databases.md"** then check the @"System Design/06-Storage-and-Databases" and see what is   topic to running and yet to complete if nothing is incompelet start new topic by checking the syllabus
 
 ### Who the user is
 Complete beginner in System Design targeting **Google L4 / SDE-2 strong hire** in the design round for FANGM. No prior system design knowledge assumed — explain everything from scratch.
