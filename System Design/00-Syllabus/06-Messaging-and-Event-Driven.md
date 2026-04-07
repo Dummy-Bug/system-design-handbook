@@ -1,4 +1,4 @@
-## Phase 7 — Messaging & Event-Driven Systems
+## Phase 6 — Messaging & Event-Driven Systems
 
 > HLD relevance: Notification system, ad click aggregation, news feed, web crawler,
 > chat, stock broker, job scheduler — all use async messaging.

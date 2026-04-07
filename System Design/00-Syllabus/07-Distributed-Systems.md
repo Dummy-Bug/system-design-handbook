@@ -1,4 +1,4 @@
-## Phase 6 — Distributed Systems
+## Phase 7 — Distributed Systems
 
 > HLD relevance: Key-Value Store, Distributed DB, Chat, Dropbox, Collaborative Editing,
 > Stock Broker, Hotel Reservation — all require deep distributed systems knowledge.

@@ -13,7 +13,7 @@
 - What to cache — expensive DB queries, computed results, session data, static assets
 - What NOT to cache — real-time prices/inventory, highly sensitive user data
 - Local vs distributed cache layers — speed vs consistency across nodes
-- [[01-Fundamentals|Notes →]]
+- [[System Design/04-Caching/01-Fundamentals|Notes →]]
 
 ---
 
