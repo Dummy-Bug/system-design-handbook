@@ -1,5 +1,3 @@
-# Reliability vs Availability
-
 > [!question] Both measure how "healthy" a system is. So why are they different?
 > Because a system can be perfectly available and completely broken at the same time.
 

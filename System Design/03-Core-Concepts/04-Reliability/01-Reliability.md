@@ -1,5 +1,3 @@
-# Reliability
-
 > [!question] Your system is up and users can reach it. But are they getting correct answers?
 > That's reliability. And it's a completely different problem from availability.
 

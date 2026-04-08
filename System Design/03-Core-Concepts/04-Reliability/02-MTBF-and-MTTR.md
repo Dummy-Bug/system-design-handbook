@@ -1,5 +1,3 @@
-# MTBF and MTTR
-
 > [!question] Your system is reliable right now. But how does it behave across weeks and months?
 > MTBF and MTTR are the two numbers that answer that question.
 
@@ -59,10 +57,10 @@ These two numbers directly calculate your availability:
 Availability = MTBF / (MTBF + MTTR)
 
 Example:
-MTBF = 100 hours (fails once every 100 hours)
+MTBF = 99 hours (fails once every 99 hours)
 MTTR = 1 hour (takes 1 hour to recover)
 
-Availability = 100 / (100 + 1) = 99%
+Availability = 99 / (99 + 1) = 99/100 = 99%
 ```
 
 Want 99.9%? Either make MTBF much larger (fail less often) or make MTTR much smaller (recover faster). Two completely different engineering strategies.

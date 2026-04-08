@@ -13,5 +13,5 @@
 | 01-Reliability.md | What reliability is and available-but-wrong examples |
 | 02-MTBF-and-MTTR.md | How often things break vs how fast you recover |
 | 03-RTO-and-RPO.md | Maximum acceptable downtime vs maximum acceptable data loss |
-| 04-Reliability-vs-Availability.md | Why they're independent problems with different solutions |
+| 03b-Standby-and-Replication-Patterns.md | Warm vs hot standby, sync vs async replication cost |
 | 05-Interview-Cheatsheet.md | How to use reliability concepts in a design interview |
