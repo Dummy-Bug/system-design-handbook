@@ -56,13 +56,6 @@
 - Compacted topics — keep only latest value per key (good for state/changelog)
 - Exactly-once — idempotent producer (no duplicate messages) + transactional API
 - Kafka as event log — replay history, rebuild state from scratch, unlike traditional queues
-- Use cases across case studies
-  - Notification system — event triggers notification fan-out
-  - Ad click aggregation — click events stream through Kafka into aggregator
-  - News feed — activity events (post, like, follow) drive feed updates
-  - Web crawler — URL frontier distributed via Kafka
-  - Stock broker — trade events, order book updates
-  - CDC pipeline — database changes streamed to Kafka via Debezium
 
 ### 6.5b Message Broker Comparison — Kafka vs RabbitMQ vs SQS
 - **When to use Kafka**
