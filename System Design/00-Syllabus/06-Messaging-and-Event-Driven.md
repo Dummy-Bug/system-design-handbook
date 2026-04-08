@@ -81,7 +81,6 @@
   - Event stream (high throughput, replay, ordering) → Kafka
   - Task queue (work distribution, complex routing, priority) → RabbitMQ
   - Simple task queue on AWS (zero ops, managed) → SQS
-- **Key interview point** — "I'd use Kafka for the event streaming pipeline because I need ordering, replay capability, and high throughput. For the async task processing layer, I'd use RabbitMQ or SQS — simpler, supports priority, and each task needs exactly-once processing not event replay."
 
 ### 6.5c Backpressure
 - **What it is** — when a consumer can't keep up with a producer, the system must signal the producer to slow down rather than let the queue grow unbounded or drop messages silently
