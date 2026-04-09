@@ -1,5 +1,3 @@
-## Why Not Just Use Files?
-
 Before databases existed, people stored data in flat files — CSVs, text files. It works fine for a handful of records. But imagine you're building Instagram and you store 100 million users in a CSV:
 
 ```
