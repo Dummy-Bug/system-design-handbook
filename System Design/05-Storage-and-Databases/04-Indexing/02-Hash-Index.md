@@ -82,3 +82,35 @@ Hash Index:
 > [!info] **Hash Index** — runs the column value through a hash function to find a slot in a hash table. That slot stores a pointer to the actual row. O(1) exact lookup. Range queries completely impossible.
 
 > [!important] Hash index is only worth using when you know with certainty you will only ever need exact lookups on that column — never ranges, never LIKE, never ORDER BY. For everything else, you need a different index structure — one that keeps values sorted.
+
+---
+
+## When to Actually Use a Hash Index
+
+The limitation is real — but so is the O(1) speed. The systems where hash indexes shine are the ones where every query is an exact match and range queries simply never happen.
+
+**Session stores / auth tokens**
+
+```sql
+WHERE session_token = 'abc123xyz'
+```
+
+You always look up a session by exact token. Never "give me all sessions after 3pm." Hash index is perfect — millions of logins per second, O(1) every time. Redis does exactly this.
+
+**User login — email lookup**
+
+```sql
+WHERE email = 'alice@gmail.com'
+```
+
+Login is always exact match. You never query `WHERE email LIKE 'a%'`. Pure O(1), no range queries ever needed.
+
+**Cache / key-value lookups**
+
+```
+GET user:4521847
+```
+
+Every cache lookup is exact key → value. This is why Redis is built entirely on hash tables internally — it's a system designed exclusively for exact lookups at speed.
+
+The pattern is the same across all three: you have a key you know exactly, and you just need the value back fast. No filtering, no sorting, no ranges. The moment your query needs anything other than `=`, you're back to B+ Tree.

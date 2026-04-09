@@ -1,7 +1,3 @@
-# B+ Tree
-
----
-
 ## The Problem Hash Index Left Unsolved
 
 Hash index gives you O(1) exact lookups — perfect for `WHERE email = 'alice@gmail.com'`. But it completely breaks down the moment you ask for a range.
@@ -80,11 +76,11 @@ graph TD
     R --> R1["Leaf: N-Q"]
     R --> R2["Leaf: S-U"]
     R --> R3["Leaf: X-Z"]
-    L1 -->|"linked"| L2
-    L2 -->|"linked"| L3
-    L3 -->|"linked"| R1
-    R1 -->|"linked"| R2
-    R2 -->|"linked"| R3
+    L1 -.->|"linked"| L2
+    L2 -.->|"linked"| L3
+    L3 -.->|"linked"| R1
+    R1 -.->|"linked"| R2
+    R2 -.->|"linked"| R3
 
     style Root fill:#dbeafe,stroke:#3b82f6,color:#000
     style L fill:#dbeafe,stroke:#3b82f6,color:#000
@@ -119,9 +115,9 @@ graph TD
     R --> R1["Leaf: N-Q — STOP at R"]
     R --> R2["Leaf: S-U"]
     R --> R3["Leaf: X-Z"]
-    L1 -->|"follow chain"| L2
-    L2 -->|"follow chain"| L3
-    L3 -->|"follow chain"| R1
+    L1 -.->|"follow chain"| L2
+    L2 -.->|"follow chain"| L3
+    L3 -.->|"follow chain"| R1
 
     style L1 fill:#fef08a,stroke:#ca8a04,color:#000
     style L2 fill:#fef08a,stroke:#ca8a04,color:#000
@@ -287,10 +283,10 @@ graph TD
     IR --> L3["eve@ | frank@"]
     IR --> L4["grace@ | henry@"]
     IR --> L5["iris@"]
-    L1 -->|"linked"| L2
-    L2 -->|"linked"| L3
-    L3 -->|"linked"| L4
-    L4 -->|"linked"| L5
+    L1 -.->|"linked"| L2
+    L2 -.->|"linked"| L3
+    L3 -.->|"linked"| L4
+    L4 -.->|"linked"| L5
 
     style NewRoot fill:#dbeafe,stroke:#3b82f6,color:#000
     style IL fill:#dbeafe,stroke:#3b82f6,color:#000
@@ -308,19 +304,39 @@ The tree grew taller from the root — always balanced. Every leaf is at the sam
 
 ## Why This Is Fast
 
+**Lookups** are O(log n) — binary search from root to leaf, at most one comparison per level.
+
+**Writes** are also O(log n) — and splits don't change that. Here's why.
+
+When you insert, you traverse root → leaf. That path is log n levels deep — it's the height of the tree. If a split is needed, it propagates back **upward along that same path**. It can never go sideways, never touch other branches.
+
+```
+Tree height = 27 levels (log₂ of 100M rows)
+
+Worst case: every node on the path is full
+  → split leaf           → 1 split
+  → split parent         → 1 split
+  → split grandparent    → 1 split
+  → ... up to root       → 1 split (tree grows one level)
+
+Total splits = 27 = tree height = log n
+```
+
+Each split is O(1) — divide the node in half, push one key up. You're never touching other branches, never shifting millions of entries like a sorted array would require.
+
 ```
 Insert into B+ Tree:
-  Step 1 → traverse root to correct leaf    → O(log n)
-  Step 2 → insert into leaf                 → fast, small node
-  Step 3 → split if full                    → at most log n splits upward
-  Total  → O(log n)                         ✓
+  Traverse down    → O(log n)   find the right leaf
+  Insert           → O(1)       add to leaf
+  Splits upward    → O(log n)   at most one split per level on the path back up
+  Total            → O(log n)   ✓
 
 Insert into sorted array:
-  Step 1 → find position                    → O(log n)
-  Step 2 → shift everything after           → O(n)    ✗
+  Find position    → O(log n)
+  Shift everything after        → O(n)    ✗
 ```
 
-At 100 million rows, log₂(100M) ≈ 27. Every insert touches at most 27 nodes. Every lookup takes at most 27 comparisons.
+The splits are bounded by the height of the tree, and height is always log n because the tree stays balanced. That's the whole point of the split mechanism — instead of one node growing unbounded, it stays small, and height only grows by 1 when the root itself splits.
 
 ---
 
