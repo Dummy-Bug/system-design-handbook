@@ -110,18 +110,17 @@
 - Inbox Pattern — consumer stores message ID before processing, skips duplicates
 
 ### 6.7 Stream Processing
-- Stream processing vs batch — process events as they arrive vs processing large chunks
+- Why stream processing — time-based aggregations, not possible with plain Kafka consumer
 - Windowing — aggregate events over a time window
   - Tumbling window — fixed non-overlapping (hourly click counts)
   - Sliding window — overlapping (clicks in last 60 minutes, updated per minute)
   - Session window — based on user activity gaps
 - Watermarks — handle late-arriving events, define how long to wait before closing window
 - Stateful stream processing — maintain running counts, joins across streams
-- Lambda architecture — batch layer (accurate, delayed) + speed layer (approximate, real-time)
-- Kappa architecture — stream-only, reprocess by replaying Kafka topic
+- Checkpointing — snapshot state + offset to S3, crash recovery via Kafka replay
 - Applies to: ad click aggregation, top-K heavy hitters, real-time analytics
 
-### 6.7b Batch Processing (MapReduce / Spark)
+### 6.8 Batch Processing (MapReduce / Spark)
 - **MapReduce — the original**
   - Google invented it (2004 paper) — mentioning it in a Google interview is a positive signal
   - Map phase: each node processes its local data chunk, emits (key, value) pairs
@@ -139,10 +138,22 @@
   - Reconciliation: nightly batch compares your data against external source (Payment System, Ad Clicks)
   - Reprocessing: replay Kafka topic through batch job to rebuild a corrupted index or fix a bug in aggregation
   - Analytics: aggregate raw events into daily/hourly rollup tables for dashboards
-  - Lambda architecture: batch layer (accurate, slow) + speed layer (approximate, fast)
 - **Key interview point** — "For the real-time dashboard I'd use Kafka + stream processing. For the billing report I'd use a nightly batch job — reprocess the raw event log from S3 for exact counts. The stream gives approximate real-time; the batch gives exact numbers for invoicing."
 
-### 6.8 Schema Evolution
+### 6.9 Lambda and Kappa Architecture
+- **Lambda architecture** — batch layer (accurate, delayed) + speed layer (approximate, real-time) + serving layer merges both
+  - Batch layer reprocesses all historical data periodically for correctness
+  - Speed layer processes live events for low latency
+  - Problem: two codebases doing the same logic, must be kept in sync
+- **Kappa architecture** — stream-only, reprocess by replaying Kafka topic
+  - Single codebase — stream processor handles both live and historical data
+  - Historical reprocessing: replay Kafka topic from offset 0 through a new consumer group
+  - Simpler operationally, requires long Kafka retention or cold storage (S3) as source of truth
+- **When to use which**
+  - Lambda: when batch accuracy is non-negotiable (billing, compliance) and you can afford two pipelines
+  - Kappa: when you want operational simplicity and your stream processor can handle replay at scale
+
+### 6.10 Schema Evolution
 - Why it matters — producers and consumers update independently, schema must be compatible
 - Backward compatibility — new consumer can read old messages
 - Forward compatibility — old consumer can read new messages
