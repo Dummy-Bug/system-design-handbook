@@ -27,6 +27,24 @@ User posts a photo:
 
 For most consumer systems — Instagram, Twitter, news feeds — async replication is the right choice. A post appearing a few milliseconds later on a replica is invisible to users.
 
+### The physical flow — async
+
+The primary writes to its WAL, applies the change, and immediately returns success. The replica has a persistent TCP connection open and streams WAL entries in the background via offset — it tracks where it left off and asks for everything after that position.
+
+```
+Primary:
+  1. Write to WAL
+  2. Apply to data
+  3. → "success" to app   ← doesn't wait for anyone
+
+Replica (background, via persistent TCP):
+  4. "give me entries after offset 500"
+  5. Receives WAL entry
+  6. Applies it to its own data
+```
+
+The primary never waits for the replica. The replica catches up on its own time.
+
 ---
 
 ## Sync Replication — for when data loss is unacceptable
@@ -50,6 +68,43 @@ User transfers money:
 
 Used for financial systems, payment ledgers, and anything where "we told the user it succeeded but then lost the data" is a serious problem.
 
+### The physical flow — sync
+
+The primary writes to its WAL, pushes the entry to the replica over the persistent TCP connection, and **holds the success response** until it receives an ACK back.
+
+```
+Primary:
+  1. Write to WAL
+  2. Apply to data
+  3. Push WAL entry to replica over TCP
+  4. WAIT...
+
+Replica:
+  5. Receives WAL entry
+  6. Writes it to its own WAL on disk  ← durable first
+  7. → sends ACK back over the same TCP connection
+
+Primary:
+  8. Receives ACK
+  9. → "success" to app   ← only now
+```
+
+The replica doesn't need to fully apply the change before ACK-ing — it only needs to confirm it wrote the entry to its own WAL. That's enough, because the WAL is on disk. If the replica crashes before applying, it will read its own WAL on restart and apply the pending entry then.
+
+```
+Replica crashes before applying:
+  → restarts
+  → reads its own WAL
+  → sees unapplied entry
+  → applies it
+  → data recovered ✓
+```
+
+This is why the guarantee holds: when the user sees "success", at least one replica has the write durably on disk — even if it hasn't applied it yet.
+
+> [!important] What if both primary and replica crash simultaneously?
+> The replica wrote to its WAL before ACK-ing. WAL is on disk — it survives crashes. When the replica restarts it replays its WAL and recovers the entry. The only scenario where data is truly lost is if the replica's disk itself fails — hardware failure, not a replication design problem.
+
 ---
 
 ## Semi-Sync Replication — the pragmatic middle ground
@@ -68,6 +123,31 @@ Result:
 ```
 
 This is what MySQL semi-sync replication does. It's widely used in financial and e-commerce systems that need durability without fully sacrificing write speed.
+
+### The physical flow — semi-sync
+
+Same as sync, but the primary only waits for the **fastest replica** to ACK. The others receive the WAL entry asynchronously in the background.
+
+```
+Primary:
+  1. Write to WAL
+  2. Apply to data
+  3. Push WAL entry to all replicas over TCP
+  4. WAIT for any one ACK...
+
+Replica 1 (fast):
+  5. Writes to its own WAL
+  6. → ACK
+
+Replica 2, 3 (slow or lagging):
+  5. Receive entry in background, apply later
+
+Primary:
+  7. Receives ACK from Replica 1
+  8. → "success" to app   ← doesn't wait for Replica 2 or 3
+```
+
+Data loss now requires two simultaneous failures — the primary and the one replica that ACK'd both have to lose their disks at the same time. That's an extremely unlikely hardware event, which is why semi-sync is considered durable enough for most financial systems.
 
 ---
 
