@@ -65,4 +65,44 @@ Write arrives at primary
 → replica is now in sync
 ```
 
-This is why CDC (Change Data Capture) is so natural — it taps into the exact same WAL stream that replication already uses. The mechanism already exists; CDC just adds another reader.
+---
+
+## How the primary streams WAL to replicas
+
+The replica opens a **persistent TCP connection** to the primary — a long-lived network connection that stays open. Once connected, the replica tells the primary exactly where it left off:
+
+```
+Replica ──── TCP connection ────► Primary
+               "I'm at position 500, send me everything after"
+```
+
+From that point, the primary pushes WAL entries down the wire in real time. The moment a new entry is written to the WAL, it goes straight to the replica — this is a live push stream, not a poll.
+
+```
+Primary writes entry 501 to WAL
+  → immediately pushes entry 501 to replica over TCP
+  → replica receives it
+  → replica applies it to its own data
+  → replica is now in sync
+```
+
+### What happens when a replica disconnects
+
+Say the replica crashes for 2 hours. During those 2 hours, the primary kept writing — entries 501 through 2000 were written. The replica missed all of them.
+
+When it reconnects, it asks for everything from entry 501. But here's the problem — the primary doesn't keep the WAL forever. Old entries get cleaned up to save disk space.
+
+```
+Replica asks: "send me from entry 501"
+Primary:      "entry 501 doesn't exist anymore, I deleted it"
+Replica:       ??? stuck — can't catch up from the stream alone
+```
+
+At this point the replica needs a **full snapshot** — the primary sends a complete copy of its current data, and the replica rebuilds from scratch. Only then does streaming resume from that point forward.
+
+```
+Primary → sends full snapshot → Replica rebuilds from scratch
+        → then resumes streaming WAL from that point forward
+```
+
+This is why replication lag and replica downtime matters in practice. A replica that's been down too long can't just reconnect and catch up — recovery becomes a full re-sync, which is expensive on a large database.
