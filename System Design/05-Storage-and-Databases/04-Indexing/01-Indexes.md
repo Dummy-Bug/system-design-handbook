@@ -1,7 +1,3 @@
-# Query Optimisation & Indexes
-
----
-
 ## The Problem — Full Table Scan
 
 You have a users table with 100 million rows. Someone runs:
@@ -125,20 +121,20 @@ The fix is a **Composite Index** — one index built on both columns together:
 CREATE INDEX idx_country_age ON users(country, age);
 ```
 
-Now the index is sorted by country first, then by age within each country:
+Now the index is sorted by country first, then by age within each country. Each entry still stores a row pointer — exactly like a single-column index, just with a wider key:
 
 ```
 Index (country, age):
-  UK, 20
-  UK, 24
-  UK, 25  ← jump straight here
-  UK, 25
-  UK, 26
-  US, 19
-  US, 25
+  UK, 20  → row 892,341
+  UK, 24  → row 12,445,231
+  UK, 25  → row 4,521,847   ← jump straight here
+  UK, 25  → row 7,234,123   ← second UK-25 user, second pointer
+  UK, 26  → row 67,234,901
+  US, 19  → row 3,112,008
+  US, 25  → row 5,892,004
 ```
 
-One lookup finds exactly country = 'UK' AND age = 25. No scanning.
+The B+ Tree sorts on the combined key `(country, age)` instead of a single value. When the matching entries are found, the row pointers are right there — same direct fetch. One lookup finds exactly country = 'UK' AND age = 25. No scanning.
 
 ---
 
@@ -210,14 +206,18 @@ Most valuable when: high row count, few columns selected. Fetching millions of r
 
 ---
 
-## Summary
-
 ```
 Full table scan     → O(n), checks every row — collapses at scale
+
 Index               → O(log n), binary search on sorted B+ Tree
+
 Composite index     → filter on multiple columns, database picks only one without it
+
 Leftmost prefix     → composite index only works if query starts from leftmost column
+
 Covering index      → composite index that includes SELECT columns — zero table fetches
+
 Low cardinality     → don't index (gender, is_active) — finds too many rows to help
+
 Write-heavy table   → think twice — every write updates all indexes
 ```
