@@ -1,6 +1,4 @@
-# Isolation Levels
-
-> [!abstract] Four standard isolation levels — each preventing more problems than the last, each costing more in performance. Plus snapshot isolation — what databases actually implement.
+> [!abstract] Isolation levels are the formal specification of how much one transaction can see of another's in-progress work. Too little isolation — race conditions and dirty reads. Too much — performance collapses. This folder covers the four problems, the four levels, and how to choose the right combination for any system.
 
 ---
 
@@ -92,9 +90,6 @@ SERIALIZABLE      → prevents: all four
 ```
 
 Snapshot isolation fills the gap — it's what real databases use because it's cheaper than SERIALIZABLE but safer than textbook REPEATABLE READ.
-
-> [!important] In interviews — say "snapshot isolation" not just "REPEATABLE READ"
-> It shows you know what databases actually implement, not just textbook theory.
 
 ---
 

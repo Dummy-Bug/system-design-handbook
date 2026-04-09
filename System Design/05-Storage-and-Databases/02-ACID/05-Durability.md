@@ -1,5 +1,3 @@
-# Durability
-
 > [!info] Durability — once a transaction is committed, that data survives forever. Crashes, power loss, hardware failure — none of it can undo a committed transaction.
 
 ---
@@ -54,7 +52,7 @@ The WAL is the single source of truth for what actually happened. The data files
 
 ## Why writes feel slow — fsync
 
-For durability to hold, the WAL write must be confirmed by the actual disk — not just handed to the OS. The problem is that when the database tells the OS "write this to disk", the OS doesn't do it immediately. It puts the data in a **RAM buffer** first and says "done ✓" — because RAM is fast and batching writes is more efficient.
+For durability to hold, the WAL write must be confirmed by the actual disk — not just handed to the OS. The problem is that when the database tells the OS "write this to disk", the OS doesn't do it immediately. It puts the data in a **RAM buffer** first and says done ✓ — because RAM is fast and batching writes are more efficient.
 
 ```
 Without fsync:
@@ -68,10 +66,10 @@ From the database's perspective the write succeeded. From reality's perspective,
 
 ```
 With fsync:
-DB → "write this" → OS → RAM buffer → fsync() → physical disk → "done ✓"
+DB → "write this" → OS → RAM buffer → fsync() → physical disk → done ✓
 ```
 
-The database blocks and waits until the OS confirms the data has physically hit the disk. Only then does it return "commit successful" to the client. This is why writes feel slow — you are literally waiting for a physical disk write to complete on every committed transaction.
+The **database blocks and waits until the OS confirms** the data has physically hit the disk. Only then does it return "commit successful" to the client. This is why writes feel slow — you are literally waiting for a physical disk write to complete on every committed transaction.
 
 This forced round-trip to disk is what makes writes slow. There's no shortcut — the database must wait for the physical write to complete before it can respond.
 

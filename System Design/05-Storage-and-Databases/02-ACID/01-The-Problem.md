@@ -33,7 +33,7 @@ The database is now in a **corrupt state** — the total money in the system no 
 
 ## What ACID provides
 
-ACID is a set of four guarantees designed to make multi-step database operations safe. Instead of "two separate writes that might be interrupted," ACID gives you a **transaction** — a unit of work that either completes entirely or leaves no trace.
+ACID is a set of four guarantees designed to make **multi-step database operations** safe. Instead of "two separate writes that might be interrupted," ACID gives you a **transaction** — a unit of work that either completes entirely or leaves no trace.
 
 ```
 BEGIN TRANSACTION;

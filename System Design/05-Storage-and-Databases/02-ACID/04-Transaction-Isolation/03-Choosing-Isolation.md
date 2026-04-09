@@ -55,8 +55,8 @@ SELECT * FROM rooms WHERE id = 1 FOR UPDATE;  -- explicit lock
 UPDATE rooms SET available = false WHERE id = 1;
 COMMIT;
 ```
-- Developer explicitly locks the row
-- Snapshot isolation prevents phantom reads
+- Developer explicitly locks the row — prevents the lost update (double booking)
+- Snapshot isolation gives a consistent read view throughout the transaction — you won't see a different value for the same row mid-transaction
 - Better performance than SERIALIZABLE
 - Risk: developer must remember to add `FOR UPDATE` on every critical path
 
@@ -120,8 +120,6 @@ COMMIT;
 > Stripe and similar payment companies use **REPEATABLE READ + explicit locking** — senior engineers who know what they're doing, need the performance at scale. Smaller teams → SERIALIZABLE as a safety net.
 
 ---
-
-## Summary Decision Table
 
 | System | Isolation Level | Locking | Reason |
 |---|---|---|---|

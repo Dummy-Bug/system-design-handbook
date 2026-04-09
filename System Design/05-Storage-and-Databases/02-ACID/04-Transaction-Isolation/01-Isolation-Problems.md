@@ -2,8 +2,6 @@
 
 > [!abstract] When two transactions run concurrently without proper isolation, four specific things go wrong. Isolation levels are defined by which of these they prevent.
 
----
-
 ## Problem 1 — Dirty Read
 
 Reading data from another transaction that hasn't committed yet — and might get rolled back.
@@ -118,8 +116,6 @@ T2: write → available = false     ← both succeed, double booking
 > Solved by pessimistic locking (`SELECT FOR UPDATE`) or SERIALIZABLE isolation.
 
 ---
-
-## Summary
 
 | Problem | What happens | Caused by |
 |---|---|---|
