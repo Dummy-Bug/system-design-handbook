@@ -59,6 +59,11 @@ Hadoop = HDFS + MapReduce. The open-source implementation of Google's original p
 Between every phase, data is **written to and read from disk**:
 
 ```
+Map → disk → Shuffle → disk → Reduce → disk
+```
+
+Expanded:
+```
 Map output    → written to local disk
 Shuffle       → read from disk, transferred over network, written to disk
 Reduce input  → read from disk
