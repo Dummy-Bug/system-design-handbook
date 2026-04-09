@@ -1,8 +1,4 @@
-# Failover
-
 > [!question] The primary database server dies. What happens next? How fast does the system recover, and what data is at risk?
-
----
 
 ## What failover is
 
@@ -83,17 +79,33 @@ With semi-sync:
 
 ## Avoiding split-brain during failover
 
-A dangerous failure mode: the primary doesn't actually die — it becomes unreachable due to a network issue. The replica gets promoted (thinks primary is dead). Now both think they are primary.
+A dangerous failure mode: **the primary doesn't actually die — it becomes unreachable** due to a network issue. The replica gets promoted (thinks primary is dead). Now both think they are primary.
+
+The key thing to understand here is that **unreachable** depends on **which direction** the network is broken. The primary and replica can't talk to each other — but the primary can still be perfectly reachable by the app servers.
 
 ```
-Primary is isolated by network partition (alive but unreachable)
-→ health check times out → replica promoted → "new primary"
-→ old primary: "I'm still primary, accepting writes"
-→ new primary: "I'm primary, accepting writes"
-→ two primaries, diverging data ✗
+App servers ──────────────────► Primary ✓  (writes still flowing in)
+                │
+                │  ✗ broken link (health check fails here)
+                │
+App servers ──► Replica         (promoted to new primary)
 ```
 
-Fix: **STONITH (Shoot The Other Node In The Head)** — the failover process explicitly fences the old primary (powers it off, revokes its DB credentials, removes it from the network) before the new primary starts accepting writes. Brutal name, effective solution.
+From the primary's perspective: nothing is wrong. App servers are sending writes, it's processing them normally. It has no idea the replica just got promoted.
+
+From the replica's perspective: it can't reach the primary, so it assumes the primary is dead and promotes itself.
+
+Both are now accepting writes. Both believe they are correct. Data diverges silently.
+
+```
+Old primary: user A posts a photo   → written to "old primary"
+New primary: user B posts a photo   → written to "new primary"
+→ two diverging histories, no way to automatically reconcile ✗
+```
+
+Fix: **STONITH (Shoot The Other Node In The Head)** — before the new primary starts accepting writes, the failover process explicitly fences the old primary: powers it off, revokes its database credentials, or removes it from the network entirely. The old primary is forcibly killed so it cannot continue accepting writes — even if it thinks it's healthy.
+
+Brutal name, effective solution. The point is: you cannot have two primaries, even briefly. It's safer to hard-kill the old primary than to let split-brain play out.
 
 > [!tip] Interview framing
 > "On primary failure, Patroni automatically promotes the most up-to-date replica. With async replication there's a small data loss window — any writes that hadn't replicated before the crash are lost. For systems where that's unacceptable I'd use semi-sync replication, requiring at least one replica to confirm before returning success."

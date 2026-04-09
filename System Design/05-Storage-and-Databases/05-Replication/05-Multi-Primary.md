@@ -1,8 +1,4 @@
-# Multi-Primary Replication
-
 > [!question] Primary-replica removes the SPOF on reads but the primary is still a single point of failure for writes. What if you need multiple nodes accepting writes?
-
----
 
 ## What multi-primary is
 
@@ -54,13 +50,65 @@ Partition heals:
 
 ## Conflict resolution strategies
 
-When two nodes accept conflicting writes to the same row, something has to give.
+When two nodes accept conflicting writes to the same row, something has to give. You have three options — each with a different trade-off.
 
-**Last Write Wins (LWW)** — the write with the later timestamp wins. Simple, automatic, lossy. One of the two writes is silently discarded. Works for: social feeds, profile updates where losing one concurrent update is tolerable. Fails for: financial data, inventory counts.
+---
 
-**Application-level merge** — the application defines how to merge conflicting versions. Complex but correct. Used in Google Docs (operational transformation), shopping carts (add quantities rather than overwrite), collaborative editors.
+**Last Write Wins (LWW)**
 
-**CRDT (Conflict-free Replicated Data Types)** — data structures mathematically designed to merge without conflict. A G-Counter (grow-only counter) can be incremented on two nodes simultaneously and always merged correctly. Used for: distributed counters, sets, registers where the merge semantics can be defined upfront.
+The write with the later timestamp wins. The other write is silently discarded.
+
+```
+Node A at T=10.001s: username → "alice_new"
+Node B at T=10.002s: username → "alice_123"
+
+LWW picks Node B's write (later timestamp)
+"alice_new" is silently gone ✗
+```
+
+Simple and automatic — no extra logic needed. But one of the two writes is just thrown away, and the user who wrote "alice_new" is never told their update was lost. They see "success" and then discover their change disappeared.
+
+Works for: social feed posts, profile picture updates — scenarios where losing one of two near-simultaneous updates is annoying but not catastrophic.
+
+Fails completely for: financial data, inventory counts. If two nodes both process "deduct 100 from account balance" and LWW picks only one, you've lost a transaction silently.
+
+---
+
+**Application-level merge**
+
+Instead of discarding one write, the application defines how to combine both versions into one correct result.
+
+The classic example is a shopping cart. If you add "headphones" on your phone and "keyboard" on your laptop at the same time, and both writes reach different nodes — you don't want LWW to throw one away. You want both items in the cart.
+
+```
+Node A: cart = ["headphones"]
+Node B: cart = ["keyboard"]
+
+Merge: cart = ["headphones", "keyboard"] ✓
+```
+
+Google Docs does something similar — when two users edit the same line simultaneously, it uses **operational transformation** to figure out how to apply both edits without either one overwriting the other.
+
+Complex to implement correctly. You have to define the merge logic upfront for every data type your system has. But it's the only option when data loss is unacceptable and you still need multi-primary.
+
+---
+
+**CRDT (Conflict-free Replicated Data Types)**
+
+A smarter version of application-level merge — but instead of writing custom merge logic, you use **data structures that are mathematically designed to always merge correctly**, no matter what order the updates arrive in.
+
+A simple example: a **G-Counter** (grow-only counter). Say you have a "likes" counter on a post. Two nodes both receive a like at the same time:
+
+```
+Node A: likes = 5, increments to 6
+Node B: likes = 5, increments to 6
+
+Merge: likes = 7  ✓  (not 6 — both increments are preserved)
+```
+
+A regular counter would pick one (LWW gives you 6, losing one like). A G-Counter tracks each node's count separately and adds them all together on merge — so both increments survive.
+
+CRDTs work for counters, sets, registers, and a few other structures where the merge semantics can be defined mathematically. They don't work for arbitrary data — you can't CRDT a username field where two conflicting values genuinely cannot be merged.
 
 ---
 
