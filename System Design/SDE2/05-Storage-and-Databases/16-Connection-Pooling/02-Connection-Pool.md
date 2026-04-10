@@ -1,4 +1,3 @@
-# Connection Pool
 
 ## The fix — open connections once, reuse them forever
 
@@ -117,17 +116,49 @@ If you have multiple app servers, each maintains its own pool. Total connections
 
 ---
 
-## Tools
+## Why the app pool alone is not enough — you also need PgBouncer
 
-| Tool | Use case |
-|---|---|
-| **PgBouncer** | Postgres — sits as a proxy between app and DB, pools connections at the infrastructure level |
-| **HikariCP** | Java apps — connection pool library, extremely low overhead |
-| **RDS Proxy** | AWS managed — sits in front of RDS/Aurora, handles pooling automatically |
+The app-level pool works per app server instance. Each app server maintains its own fixed pool of connections. This is fine when you have a handful of servers.
 
-PgBouncer is particularly powerful because it pools at the infrastructure level — even if your app doesn't implement pooling, PgBouncer intercepts connections and reuses them.
+But when you scale horizontally, the math turns against you:
 
----
+```
+10 app servers  × 10 connections each = 100 connections to Postgres   ✓ fine
+
+50 app servers  × 10 connections each = 500 connections to Postgres   ⚠ getting heavy
+
+200 app servers × 10 connections each = 2,000 connections to Postgres ✗ Postgres collapses
+```
+
+Each connection costs ~8MB RAM on the DB server. 2,000 connections = 16GB just for connection overhead before a single query runs. Postgres has a hard limit on max connections — beyond it, new connections are simply rejected.
+
+The app pool has no visibility across servers. App Server 1 doesn't know App Server 2 has idle connections. Each one just keeps its own pool open regardless.
+
+**PgBouncer fixes this by sitting between all your app servers and the DB as a single shared pool.**
+
+```
+App Server 1   ──┐
+App Server 2   ──┤
+App Server 3   ──┼──► PgBouncer (30 real DB connections) ──► Postgres
+...            ──┤
+App Server 200 ──┘
+```
+
+All 200 app servers talk to PgBouncer. PgBouncer maintains only 30 real connections to Postgres. Postgres sees 30 steady warm connections — regardless of how many app servers you add.
+
+So both work together, at different levels:
+
+```
+App pool    → reduces overhead per app server (local reuse)
+PgBouncer   → caps total connections hitting Postgres as you scale (global safety)
+```
+
+| Tool          | Use case                                                                          |
+| ------------- | --------------------------------------------------------------------------------- |
+| **PgBouncer** | Postgres — sits as infrastructure-level proxy, shared pool across all app servers |
+| **HikariCP**  | Java apps — app-level connection pool library, extremely low overhead             |
+| **RDS Proxy** | AWS managed — sits in front of RDS/Aurora, handles pooling automatically          |
+
 
 ## The complete picture
 
@@ -139,7 +170,7 @@ flowchart LR
         A3[App Server 3 - Pool: 10 conns]
     end
     subgraph PgBouncer
-        PB[Connection Pooler - 30 total connections]
+        PB[Shared Pool - 30 real DB connections]
     end
     subgraph Database
         DB[(Postgres - 4 cores)]
@@ -150,7 +181,7 @@ flowchart LR
     PB --> DB
 ```
 
-1,000 app threads share 30 DB connections. The DB sees 30 steady, warm connections — not 1,000 fresh ones. Query throughput is maximised.
+1,000 app threads across all servers share 30 DB connections. The DB sees 30 steady warm connections — not thousands. Query throughput is maximised, memory overhead stays flat no matter how many app servers you add.
 
 > [!tip] Interview framing
-> "Under high concurrency, raw DB connections become the bottleneck — each one costs TCP handshake, TLS, auth, and ~8MB of RAM on the DB server. I'd use a connection pool like PgBouncer — open a fixed set of connections at startup, reuse them across requests. Pool size ≈ DB CPU cores × 2. This keeps the DB focused on running queries instead of managing connection overhead."
+> "Under high concurrency, raw DB connections become the bottleneck — each one costs TCP handshake, TLS, auth, and ~8MB of RAM on the DB server. I'd use an app-level pool like HikariCP to reuse connections locally, and PgBouncer in front of the DB to cap total connections globally as we scale horizontally. Pool size ≈ DB CPU cores × 2."

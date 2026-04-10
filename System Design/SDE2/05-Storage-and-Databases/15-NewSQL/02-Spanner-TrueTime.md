@@ -8,7 +8,8 @@ On a single node this is trivial — one clock, one counter, one source of truth
 
 Across data centers in New York and Tokyo, it's hard. You can't use a central version counter — every cross-region transaction would need to reach that counter, adding 150ms+ of latency per transaction. At millions of TPS, that counter becomes an impossible bottleneck.
 
-You could use local clocks — but clocks on different machines are never perfectly in sync. Even with NTP (Network Time Protocol), clocks drift by a few milliseconds. A 2ms drift means a transaction in Tokyo that actually happened *after* one in New York might appear to have happened *before* it. Wrong ordering → wrong results → money disappears or appears from nowhere.
+You could use local clocks — but clocks on different machines are never perfectly in sync. Even with NTP (Network Time Protocol), clocks drift by a few milliseconds. A 2ms drift means a transaction in Tokyo that actually happened *after* one in New York might appear to have happened *before* it. 
+Wrong ordering → wrong results → money disappears or appears from nowhere.
 
 ---
 
@@ -16,7 +17,7 @@ You could use local clocks — but clocks on different machines are never perfec
 
 Google's insight was to put **atomic clocks and GPS receivers** in every Spanner data center.
 
-Atomic clocks are accurate to within nanoseconds. GPS signals are globally synchronized. Together they give each data center an extremely precise, globally coordinated sense of time.
+**Atomic clocks are accurate to within nanoseconds**. GPS signals are globally synchronized. Together they give each data center an extremely precise, globally coordinated sense of time.
 
 But here's the honest part — even atomic clocks have some tiny uncertainty. Spanner doesn't pretend otherwise. Instead of giving you a single timestamp, it gives you a **bounded uncertainty window**:
 

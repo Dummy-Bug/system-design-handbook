@@ -1,15 +1,12 @@
-# Pagination — Interview Cheatsheet
-
 ## The two approaches
 
 ```
 Offset:  SELECT * FROM tweets ORDER BY id DESC LIMIT 100 OFFSET N
+
 Cursor:  SELECT * FROM tweets WHERE id < cursor ORDER BY id DESC LIMIT 100
 ```
 
 ---
-
-## Offset problems
 
 > [!question] Why is OFFSET pagination a problem at scale?
 
@@ -24,8 +21,6 @@ Cursor:  SELECT * FROM tweets WHERE id < cursor ORDER BY id DESC LIMIT 100
 > > "OFFSET pagination has two issues — it degrades to a full scan at depth, and it's unstable under concurrent writes. New inserts shift the result set, causing duplicates across pages."
 
 ---
-
-## Cursor pagination
 
 > [!question] How does cursor-based pagination work and why is it better?
 

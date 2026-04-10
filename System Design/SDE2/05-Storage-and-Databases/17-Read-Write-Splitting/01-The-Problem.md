@@ -1,3 +1,5 @@
+> [!info] In most systems, reads vastly outnumber writes — often 100:1. Forcing both through a single database node means reads and writes compete for the same connections, locks, and CPU. Read/Write Splitting routes writes to a primary node and reads to replica nodes, scaling each independently.
+
 # The Problem — One Node For Everything
 
 ## Reads vastly outnumber writes
@@ -20,7 +22,7 @@ If your database is one node handling both reads and writes simultaneously, two 
 
 **Problem 1 — Connection pool exhaustion**
 
-Your connection pool has a fixed size — say 20 connections. At 100:1 read/write ratio, reads are consuming most of those connections constantly. A write arrives and has to wait in queue behind a flood of reads. Write latency spikes even though the write itself is simple.
+Your connection pool has a fixed size — say 20 connections. At 100:1 read/write ratio, reads are consuming most of those connections constantly. **A write arrives and has to wait in queue behind a flood of reads**. Write latency spikes even though the write itself is simple.
 
 **Problem 2 — Lock contention**
 

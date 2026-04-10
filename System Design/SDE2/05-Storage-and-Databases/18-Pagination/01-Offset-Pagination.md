@@ -1,4 +1,4 @@
-# Offset Pagination
+> [!info] You never fetch all 50 million rows — you paginate. The question is how. Offset pagination is simple but breaks at scale and under concurrent writes. Cursor-based pagination is stable, index-efficient, and the correct choice for any feed or infinite scroll at scale.
 
 ## The naive approach
 
@@ -33,9 +33,27 @@ OFFSET 50,000:
 → 50,000 rows of wasted work, every single request
 ```
 
-This bypasses the B+ tree index entirely for the skipped rows. The index can find where to start, but the DB still has to traverse 50,000 index entries just to count them before it can begin returning results.
+You might think the B+ tree index on `created_at` saves you here — the index has tweets sorted by timestamp, so surely the DB can just jump directly to position 50,001?
 
-At page 1 — fine. At page 500 with OFFSET 50,000 — the DB is doing a massive scan on every request. Under load, this hammers the database.
+No. The index stores values in sorted order, but it does not store position numbers. There is no entry in the index that says "this is row number 50,001." The DB has to start at the top of the index and count through 50,000 entries one by one before it knows where to begin returning results.
+
+```
+Index (sorted by created_at DESC):
+  entry 1     → tweet at T=1000  → row pointer
+  entry 2     → tweet at T=999   → row pointer
+  entry 3     → tweet at T=998   → row pointer
+  ...
+  entry 50,001 → tweet at T=500  → row pointer ← this is what you want
+
+OFFSET 50,000:
+→ start at entry 1
+→ count... 1, 2, 3 ... 49,999, 50,000  (all thrown away)
+→ now return entry 50,001 onwards
+```
+
+Think of it like a book with no page numbers. To get to chapter 50 you have to flip through chapters 1 to 49 first. You cannot skip.
+
+At page 1 — fine. At page 500 with OFFSET 50,000 — the DB is doing this massive count on every single request. Under load, this hammers the database.
 
 Most users won't scroll to page 500 — true. But at scale, even a small percentage of users doing deep pagination creates serious DB load.
 
@@ -75,7 +93,7 @@ Despite its problems, offset pagination is fine when:
 
 - The dataset is small (a few thousand rows at most)
 - Writes are infrequent — the list doesn't shift much between page fetches
-- You need page number navigation ("jump to page 50")
+- **You need page number navigation** ("jump to page 50")
 
 Admin panels, internal tools, search results with small result sets — offset is perfectly reasonable here. The instability and scan cost only matter at scale.
 

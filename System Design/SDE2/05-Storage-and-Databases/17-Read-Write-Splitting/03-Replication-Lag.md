@@ -1,10 +1,8 @@
-# Replication Lag and Read-Your-Own-Writes
-
 ## The lag problem
 
 Replication is asynchronous. The primary writes to the WAL, the replica streams it and applies it — but there's a small delay. Under normal conditions this is 10-100ms. Under heavy write load or a slow network, it can be more.
 
-This means a replica is always slightly behind the primary. It's serving data that is almost — but not exactly — current.
+This means a replica **is always slightly behind the primary**. It's serving data that is almost — but not exactly — current.
 
 ```
 Time 0ms:   User posts a tweet → written to Primary ✓

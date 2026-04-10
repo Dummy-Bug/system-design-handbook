@@ -1,5 +1,3 @@
-# Cursor-Based Pagination
-
 ## The insight
 
 The problem with OFFSET is that it's a position in a moving list. The fix is to anchor to a **specific row** instead — one that doesn't move regardless of what gets inserted or deleted around it.
@@ -89,8 +87,11 @@ This makes cursor pagination incompatible with page-number UIs — the kind wher
 
 ```
 Infinite scroll          → cursor-based  (Twitter, Instagram, news feeds)
+
 Next / Previous only     → cursor-based  (any sequential navigation)
+
 Page number UI           → offset        (only for small datasets, infrequent writes)
+
 Admin panels             → offset is fine (small data, no concurrent write pressure)
 ```
 

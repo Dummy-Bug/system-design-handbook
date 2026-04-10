@@ -1,3 +1,6 @@
+>[!info] Opening a database connection is expensive
+>TCP handshake, TLS negotiation, authentication, memory allocation. At high concurrency, paying that cost on every request kills your DB. A connection pool pays that cost once at startup and reuses connections across thousands of requests.
+
 # The Cost of Opening a Database Connection
 
 ## The naive approach

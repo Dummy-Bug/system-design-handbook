@@ -1,5 +1,3 @@
-# NewSQL — Interview Cheatsheet
-
 ## What problem does NewSQL solve?
 
 SQL gives you ACID but hits a scale ceiling (~50k TPS on a single node). Sharding SQL breaks cross-shard ACID. Cassandra scales but is eventually consistent. NewSQL gives you ACID + horizontal scale together.
@@ -16,8 +14,6 @@ SQL gives you ACID but hits a scale ceiling (~50k TPS on a single node). Shardin
 
 ---
 
-## Google Spanner — TrueTime
-
 > [!question] How does Spanner achieve globally ordered transactions without a central coordinator?
 
 > [!success]-
@@ -32,8 +28,6 @@ SQL gives you ACID but hits a scale ceiling (~50k TPS on a single node). Shardin
 
 ---
 
-## Spanner Transactions
-
 > [!question] How does Spanner handle two transactions touching the same row simultaneously?
 
 > [!success]-
@@ -43,8 +37,6 @@ SQL gives you ACID but hits a scale ceiling (~50k TPS on a single node). Shardin
 > > "Spanner uses row-level locking. The TrueTime ordering determines which transaction commits first. The second transaction detects the conflict at commit time and rolls back — same as optimistic locking, but with guaranteed global ordering."
 
 ---
-
-## When to use
 
 > [!question] Would you use Spanner for a social media feed? Why or why not?
 

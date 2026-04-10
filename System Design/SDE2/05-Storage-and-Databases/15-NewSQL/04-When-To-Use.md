@@ -1,5 +1,3 @@
-# When To Use NewSQL
-
 ## The decision comes down to two axes
 
 ```

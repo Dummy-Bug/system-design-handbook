@@ -1,4 +1,3 @@
-# Google Spanner — Transactions
 
 ## How transactions work on top of TrueTime
 

@@ -1,5 +1,3 @@
-# Connection Pooling — Interview Cheatsheet
-
 ## The cost of a fresh connection
 
 ```
@@ -11,10 +9,6 @@ Memory (Postgres): ~8MB  (dedicated OS process per connection)
 Total per connection: 6-10ms + 5-10MB RAM
 ```
 
----
-
-## What a connection pool does
-
 > [!question] Why is opening a DB connection on every request a problem at scale?
 
 > [!success]-
@@ -24,8 +18,6 @@ Total per connection: 6-10ms + 5-10MB RAM
 > > "Raw connections are expensive — TCP, TLS, auth, and Postgres spawns a full OS process per connection consuming ~8MB RAM. At 10k RPS that's 80GB RAM just for overhead. A connection pool opens a fixed set of connections at startup and reuses them — the setup cost is paid once, not per request."
 
 ---
-
-## Pool sizing
 
 > [!question] How do you decide how many connections to put in the pool?
 

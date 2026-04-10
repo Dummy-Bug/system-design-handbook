@@ -1,5 +1,3 @@
-# Read/Write Splitting — Interview Cheatsheet
-
 ## The pattern
 
 ```
@@ -21,8 +19,6 @@ Reads : Writes = 100 : 1 in most systems
 
 ---
 
-## How replication works
-
 > [!question] How do replicas stay in sync with the primary?
 
 > [!success]-
@@ -32,8 +28,6 @@ Reads : Writes = 100 : 1 in most systems
 > > "Replicas tail the primary's WAL via a persistent streaming connection. Changes flow continuously as they happen — not polled. The delay between primary write and replica apply is replication lag, typically 10-100ms."
 
 ---
-
-## Replication lag + Read-Your-Own-Writes
 
 > [!question] A user posts a tweet and immediately refreshes their feed — the tweet is missing. What happened and how do you fix it?
 
