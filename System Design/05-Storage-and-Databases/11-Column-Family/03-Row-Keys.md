@@ -1,8 +1,4 @@
-# Column Families and Row Keys
-
 Column-oriented storage solves the write problem. But there are two more ideas that make column-family stores genuinely powerful for analytics and time-series use cases: **column families** and **row keys**. These two concepts work together to make range queries fast and disk I/O minimal.
-
----
 
 ## Column families — grouping related columns
 
@@ -23,7 +19,7 @@ block-beta
   A["impressions ✅"] B["clicks ✅"] C["retweets ✅"] D["country ❌"] E["city ❌"] F["region ❌"]
 ```
 
-The database reads left to right across the block. `country`, `city`, and `region` are loaded from disk and immediately thrown away — wasted I/O.
+**The database reads left to right across the block**. `country`, `city`, and `region` are loaded from disk and immediately thrown away — wasted I/O.
 
 The fix is to store related columns together in their own section of disk. That grouping is called a **column family**:
 
@@ -57,8 +53,11 @@ Row Key                    | engagement                           | geo
                            | impressions | clicks   | retweets    | country | city
 ---------------------------|-------------|----------|-------------|---------|-------
 tweet_1#IN#2026-04-01-03pm |    4200     |   310    |    89       |   IN    | Mumbai
+
 tweet_1#IN#2026-04-01-04pm |    5100     |   400    |    91       |   IN    | Mumbai
+
 tweet_1#US#2026-04-01-03pm |    1100     |   200    |    45       |   US    | NYC
+
 tweet_2#IN#2026-04-01-03pm |    9800     |   750    |   210       |   IN    | Delhi
 ```
 

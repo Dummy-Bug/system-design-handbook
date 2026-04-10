@@ -1,5 +1,3 @@
-# Elasticsearch Architecture
-
 ## The Scaling Problem
 
 An inverted index on a single machine works fine for millions of documents. But at 1 billion product descriptions, you can't fit the entire index in one machine's memory or disk. You need to split it.

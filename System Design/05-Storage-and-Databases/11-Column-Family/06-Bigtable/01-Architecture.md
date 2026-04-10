@@ -1,8 +1,5 @@
-# Bigtable Architecture
 
-Bigtable is Google's wide-column store — the system that stores data for Google Search, Gmail, Google Maps, and YouTube. It was published as a research paper in 2006 and directly inspired both Cassandra and HBase. Understanding its architecture is mostly about understanding how it differs from Cassandra, since the data model (column families, row keys, sparse cells) is largely the same.
-
----
+> [!abstract] Bigtable is Google's wide-column store, published as a research paper in 2006. It directly inspired Cassandra (data model) and HBase (open-source equivalent).
 
 ## Tablets — the unit of data
 

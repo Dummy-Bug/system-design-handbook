@@ -1,5 +1,3 @@
-# Ranking — TF-IDF and BM25
-
 ## The Ranking Problem
 
 The inverted index tells you *which* documents match a query. But when 10,000 documents all contain the word "headphones", which one goes first?

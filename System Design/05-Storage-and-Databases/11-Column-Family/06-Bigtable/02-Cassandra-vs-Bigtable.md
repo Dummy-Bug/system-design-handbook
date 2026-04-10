@@ -1,12 +1,10 @@
-# Cassandra vs Bigtable
-
 Cassandra was directly inspired by two systems — Bigtable (for the data model) and Amazon Dynamo (for the replication model). So they share a lot of DNA: column families, row keys, sparse cells, LSM trees. The differences are architectural, and they matter for interviews because they determine which system fits which problem.
 
 ---
 
 ## Architecture — masterless vs master + tablet servers
 
-The most fundamental difference. Cassandra has no master node at all. Every node is equal, every node can be a coordinator, and every node knows the full ring topology via gossip.
+The most fundamental difference. **Cassandra has no master node at all. Every node is equal, every node can be a coordinator, and every node knows the full ring topology via gossip**.
 
 Bigtable has a master node that holds the tablet assignment map — which tablet server owns which row range. Clients must ask the master before they can route a request to the right tablet server.
 
@@ -56,7 +54,7 @@ Bigtable tablet server dies:
 
 Cassandra gives you a dial. Every read and write can be configured independently — ONE for maximum throughput, QUORUM for balanced consistency, ALL for strong consistency. You choose the trade-off per operation, and the R+W>N formula determines whether you get strong or eventual consistency.
 
-Bigtable is strongly consistent within a single row by default. There is no tuning required — a read always returns the latest committed write for that row. This is possible because only one tablet server owns a given row at any time, so there is no risk of two servers having conflicting versions.
+Bigtable is strongly consistent within a single row by default. **There is no tuning required** — a read always returns the latest committed write for that row. This is possible because only one tablet server owns a given row at any time, so there is no risk of two servers having conflicting versions.
 
 ```
 Cassandra:  tunable — ONE / QUORUM / ALL per operation

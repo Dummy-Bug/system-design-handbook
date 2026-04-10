@@ -1,5 +1,3 @@
-# Inverted Index
-
 ## The Key Insight — Flip the Question
 
 A normal database index answers: "Does this document contain this word?"

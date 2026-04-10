@@ -61,7 +61,7 @@ The moment you don't know your row key, Cassandra becomes a liability.
     → the time filter narrows rows per entity, but you still scan every entity
 ```
 
-That last one is the common interview trap. Adding a time range doesn't help if you still don't have a specific entity to start from. The time filter reduces how many rows you read *per entity*, but you still have to visit every entity. At billions of rows across millions of entities, this is catastrophically slow.
+That last one is the common interview trap.**Adding a time range doesn't help if you still don't have a specific entity to start from** The time filter reduces how many rows you read *per entity*, but you still have to visit every entity. At billions of rows across millions of entities, this is catastrophically slow.
 
 This is called a **full table scan** — and in a distributed Cassandra cluster, it means querying every node, reading every partition, across the entire dataset.
 

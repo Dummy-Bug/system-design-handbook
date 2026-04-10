@@ -1,5 +1,3 @@
-# Column-Oriented Storage
-
 The root cause of SQL's write inefficiency is not a query planner issue or a locking issue — it's a physical storage decision. SQL stores data **row by row**. Column-family stores flip that and store data **column by column**. This one change has massive consequences for both write performance and read efficiency.
 
 ---

@@ -1,8 +1,6 @@
-# Where Search Engines Fit in System Design
-
 ## Elasticsearch Is Always a Secondary Index
 
-This is the most important architectural point. Elasticsearch is never your source of truth. Your relational database (PostgreSQL, MySQL) holds the canonical data. Elasticsearch holds a derived copy optimized for search.
+This is the most important architectural point. **Elasticsearch is never your source of truth**. Your relational database (PostgreSQL, MySQL) holds the canonical data. Elasticsearch holds a derived copy optimized for search.
 
 ```
 User adds/updates product

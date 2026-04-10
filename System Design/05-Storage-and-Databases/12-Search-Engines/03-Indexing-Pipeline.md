@@ -1,5 +1,3 @@
-# Indexing Pipeline
-
 ## The Problem With Raw Text
 
 You can't dump raw product descriptions straight into the inverted index. Raw text has inconsistencies that break matching.
