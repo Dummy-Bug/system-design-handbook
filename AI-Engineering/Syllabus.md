@@ -10,19 +10,19 @@
 
 > Why this phase matters: strong AI engineers are still strong software engineers. Most failures in production AI systems are not caused by "not enough model knowledge" — they are caused by weak APIs, poor async design, bad retries, missing observability, and unclear ownership boundaries.
 
-### 1.1 Python / TypeScript for AI systems
-- Python essentials for AI engineering
-  - typing, dataclasses / Pydantic, async/await, generators, context managers
-  - package management, virtual environments, reproducible dependencies
-  - notebooks vs production code — when each is appropriate
-- TypeScript essentials if your stack is web-heavy
-  - typed API clients, schema validation, streaming response handling
+### 1.1 Python for AI systems
+- typing, dataclasses / Pydantic, async/await, generators, context managers
+- package management, virtual environments, lockfiles, reproducible dependencies
+- FastAPI essentials — request validation, dependency injection, streaming endpoints, background work
+- notebooks vs scripts vs production services — when each is appropriate
+- testing AI plumbing — mocks for model providers, golden test cases for prompts, contract tests for tools
 
 ### 1.2 APIs, networking, and integration plumbing
 - HTTP, gRPC, WebSockets, SSE/streaming responses
 - request timeouts, retries, exponential backoff, idempotency keys
 - auth patterns — API keys, OAuth, service-to-service auth
 - webhooks, background jobs, event-driven pipelines
+- cancellation propagation, client disconnects, and partial-stream failure handling
 
 ### 1.3 Data formats and ingestion basics
 - JSON, JSONL, CSV, Parquet, Avro
@@ -40,6 +40,8 @@
 - feature flags, config management, secret management
 - CI/CD for prompts, flows, and model config changes
 - reproducibility — prompt version, model version, retrieval version, tool version
+- environment promotion — dev vs staging vs prod for prompts, indexes, and tool integrations
+- golden-path smoke tests before rollout
 
 ---
 
@@ -52,6 +54,7 @@
 - overfitting vs underfitting
 - label leakage and data contamination
 - offline metric improvement vs real product improvement
+- class imbalance, sampling bias, and distribution shift
 
 ### 2.2 Metrics
 - classification metrics — precision, recall, F1, ROC-AUC
@@ -70,6 +73,7 @@
 - gold set creation
 - disagreement between reviewers
 - feedback loops — thumbs up/down, edits, human overrides, escalations
+- reviewer guidelines, label audits, and segment coverage
 
 ---
 
@@ -94,6 +98,7 @@
 - deterministic vs creative settings
 - streaming responses
 - structured output / JSON schema / tool call generation
+- context-window budgeting and output truncation failure modes
 
 ### 3.4 Model choice
 - frontier model vs smaller cheap model
@@ -105,6 +110,7 @@
 ### 3.5 Common LLM failure modes
 - hallucination
 - context dilution in long prompts
+- lost-in-the-middle effects
 - brittle formatting
 - prompt injection
 - shallow reasoning on multi-step tasks
@@ -134,6 +140,7 @@
 - defensive prompting for parseable output
 - forcing citations and evidence references
 - separating reasoning from final answer when needed
+- schema validation, repair loops, and when to fail closed instead of guessing
 
 ### 4.4 Context engineering
 - deciding what belongs in the prompt vs what belongs in retrieval vs what belongs in a tool
@@ -164,6 +171,12 @@
 - OCR and parsing errors
 - deduplication and canonicalization
 - metadata extraction
+- source-of-truth strategy — full refresh vs incremental sync vs CDC
+- document versioning and canonical IDs
+- ACL extraction and permission metadata propagation
+- delete handling / tombstones
+- re-chunking and re-embedding migrations
+- freshness SLAs, backfills, repair jobs, and indexing lag
 - chunking strategy
   - fixed-size chunking
   - semantic chunking
@@ -177,13 +190,19 @@
 - lexical retrieval — BM25
 - hybrid retrieval — vector + lexical
 - metadata filters and tenant filters
+- multi-tenant index design — per-tenant namespace vs shared index + filters
+- index update patterns — append, upsert, rebuild
 
 ### 5.4 Retrieval quality improvements
+- query classification and routing
 - query rewriting
 - multi-query retrieval
 - decomposition for multi-hop questions
+- parent-child retrieval / document expansion
 - rerankers / cross-encoders
+- score fusion in hybrid retrieval
 - citation validation and groundedness checks
+- abstain / no-answer behavior when evidence is weak
 
 ### 5.5 Beyond document RAG
 - SQL retrieval
@@ -198,6 +217,16 @@
 - answer groundedness
 - citation correctness
 - stale-document detection
+- no-answer precision / abstention quality
+- permission leakage tests
+- retrieval latency and tail behavior
+
+### 5.7 RAG operations in production
+- dual-index rollout and shadow evaluation before cutover
+- re-embedding after parser or model changes
+- monitoring ingest lag, parse failure rate, indexing lag, and delete propagation
+- rollback strategy when a new chunking or embedding setup hurts recall
+- permission drift detection between source systems and the index
 
 ---
 
@@ -210,6 +239,7 @@
 - tool schema design
 - narrow tool contracts vs overly generic tools
 - making tool outputs machine-friendly for the next model step
+- tool versioning and backwards-compatible schema changes
 
 ### 6.2 Workflow vs agent
 - deterministic workflow — known steps, fixed routing
@@ -230,6 +260,7 @@
 - timeouts and cancellation
 - human approval gates for risky actions
 - side-effect safety — sending emails, updating payroll, deleting records
+- idempotency tokens for write-capable tools
 
 ### 6.5 Tool ecosystem design
 - MCP-style tool servers and external tool adapters
@@ -278,9 +309,11 @@
 - background jobs + queues + graph orchestration together
 - concurrency and shared-state safety
 
-### 7.7 Framework judgment
+### 7.7 Framework judgment and comparison
 - when LangGraph is the right tool
-- when a plain task queue plus deterministic services is enough
+- when a plain FastAPI service plus task queue is enough
+- LangGraph vs Temporal / Step Functions for durable business workflows
+- when orchestration should stay outside the model loop
 - avoiding over-agentification
 
 ---
@@ -293,6 +326,7 @@
 - define the task precisely
 - build gold datasets and regression suites
 - coverage by user segment, failure mode, and risk class
+- slice metrics by tenant, language, query type, and document source
 
 ### 8.2 Offline evaluation
 - exact-match and rubric-based evaluation
@@ -324,6 +358,7 @@
 - retrieval traces — which chunks were fetched and why
 - redaction-safe logging
 - drift detection across model versions, prompt versions, and index versions
+- attach prompt version, tool version, embedding version, and experiment ID to every trace
 
 ### 8.6 Experimentation and rollout
 - A/B testing
@@ -343,12 +378,15 @@
 - hosted foundation model platforms
 - self-hosted open models
 - tradeoffs: control, privacy, cost, latency, maintenance
+- model gateway / unified provider abstraction
 
 ### 9.2 Inference systems basics
 - prompt length and output length as cost drivers
+- token budgeting — system prompt, retrieved context, tool output, response budget
 - batching
 - streaming
 - rate limiting
+- provider quotas, concurrency limits, and connection management
 - retries and circuit breakers
 - fallback models and cascade strategies
 
@@ -364,8 +402,10 @@
 - quantization
 - KV cache intuition
 - vLLM / TGI / Triton-level awareness — not implementation internals, but enough to reason about throughput and latency
+- continuous batching intuition
 
 ### 9.5 Platform primitives
+- model gateway
 - model registry
 - prompt registry
 - eval registry
@@ -379,6 +419,13 @@
 - dead-letter queues
 - backpressure
 - graceful degradation when the model or vector DB is down
+
+### 9.7 Capacity planning and unit economics
+- requests/sec, concurrent requests, and p50 / p95 / p99 latency budgets
+- tokens per request, requests per user per day, and monthly cost projection
+- corpus size, chunk count, embedding footprint, and index storage growth
+- cost per successful task, not just cost per request
+- budget guards, rate caps, and kill switches for runaway spend
 
 ---
 
@@ -404,6 +451,7 @@
 - contamination risks
 - balancing easy and hard examples
 - preserving evaluation holdout sets
+- mining production traces safely for fine-tuning candidates
 
 ### 10.4 Deployment and governance
 - model versioning
@@ -432,6 +480,7 @@
 - RBAC / ABAC-aware retrieval
 - data residency and retention
 - redaction and PII handling
+- permission checks at retrieval time vs answer time
 
 ### 11.3 Safe tool execution
 - sandboxing
@@ -501,8 +550,15 @@
 - query validation
 - guardrails against destructive queries
 
+### 12.8 AI platform / LLM gateway
+- unified model access across providers
+- routing, fallback, quotas, and cost controls
+- tracing, eval hooks, and prompt / model versioning
+- policy enforcement and safe rollout of model changes
+
 For every case study, practice this sequence:
 - requirements and risk classification
+- workload sizing — users, QPS, token budget, corpus size, freshness SLA
 - model choice
 - retrieval / tool strategy
 - orchestration choice
@@ -519,6 +575,7 @@ For every case study, practice this sequence:
 
 ### 13.1 The answer structure
 - what is the task?
+- what is the scale — users, QPS, documents, tokens, latency target?
 - what accuracy / latency / cost / safety bar matters?
 - should this be rules, classical ML, RAG, fine-tuning, or an agent?
 - what are the core components?
@@ -527,6 +584,7 @@ For every case study, practice this sequence:
 
 ### 13.2 What interviewers want to hear
 - explicit tradeoffs, not buzzwords
+- numbers, not adjectives
 - why you chose a model, not just the model name
 - why a workflow is safer than an agent, or vice versa
 - what metric proves success
@@ -547,6 +605,16 @@ For every case study, practice this sequence:
 - tool schema causes malformed calls
 - latency explodes after adding long context
 - model upgrade regresses a key user segment
+- re-embedding or re-chunking rollout destroys retrieval recall
+- permission filter bug exposes the wrong tenant's documents
+
+### 13.5 Numbers you should always estimate
+- requests/sec and concurrency
+- prompt tokens, retrieved tokens, output tokens
+- corpus size, chunk count, and index size
+- ingest lag and freshness SLA
+- p50 / p95 latency budget by stage
+- monthly spend and cost per successful task
 
 ---
 
@@ -564,6 +632,18 @@ For every case study, practice this sequence:
   - enterprise automation, tool execution correctness, permissions, auditability, human approval flows
 
 ---
+
+## What “Strong Hire SDE-2” Means for This Syllabus
+
+- You can build and ship a single-agent or workflow-based LLM application end-to-end.
+- You can explain when not to use an agent.
+- You can design a RAG system and talk about chunking, indexing, retrieval quality, reranking, citations, freshness, and permissions.
+- You can implement LangGraph orchestration with state, persistence, interrupts, and debugging.
+- You can define offline and online evals instead of hand-waving about "accuracy."
+- You can reason about latency, cost, retries, rate limits, caching, fallbacks, and capacity.
+- You can identify prompt injection, data leakage, permission, and tool-safety risks.
+- You can explain RAG vs fine-tuning vs deterministic software clearly and defensibly.
+
 ---
 
 ## Suggested Study Order
@@ -579,3 +659,13 @@ If your current work is already **LLM apps + LangGraph**, prioritise:
 - Phase 7 — LangGraph orchestration
 - Phase 8 — Evaluation and observability
 - Phase 9 — Serving, reliability, and cost
+
+---
+
+## Minimum Hands-On Proof That You’re Actually Interview-Ready
+
+- Build a streaming FastAPI chat service with retries, tracing, and structured output validation
+- Build a production-style RAG pipeline with ingestion, re-indexing, ACL-aware retrieval, citations, and offline evals
+- Build a tool-using workflow with approval gates, idempotent side effects, and failure recovery
+- Build one evaluation harness that compares prompt / model / retrieval changes before rollout
+- For each project, be able to explain workload estimates, latency budget, failure modes, rollout plan, and cost model

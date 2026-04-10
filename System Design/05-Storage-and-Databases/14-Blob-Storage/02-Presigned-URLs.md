@@ -1,5 +1,3 @@
-# Pre-signed URLs
-
 ## The private file problem
 
 Object storage gives you a key that maps to a URL pointing at a file. For a public YouTube video — fine. Anyone can have that URL, the video is meant to be public.

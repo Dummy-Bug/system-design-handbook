@@ -1,5 +1,3 @@
-# Graph Database Use Cases
-
 ## The Rule of Thumb
 
 > Reach for a graph database when **relationships are the primary thing you're querying**, not the data itself. The moment you find yourself doing 3+ hop joins in SQL, that's your signal.
@@ -44,7 +42,7 @@ The graph database finds this pattern in milliseconds — fast enough to block t
 
 ## 3. Recommendations — Amazon, Netflix, Spotify
 
-You're right that Netflix and Amazon use ML for recommendations. But the data those ML models work on is often structured as a graph.
+Netflix and Amazon use ML for recommendations. But the data those ML models work on is often structured as a graph.
 
 ```
 (Alice) ──[BOUGHT]──▶ (iPhone 15)

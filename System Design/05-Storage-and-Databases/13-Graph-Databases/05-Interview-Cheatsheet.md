@@ -1,10 +1,8 @@
-# Graph Databases — Interview Cheatsheet
-
 ## One-Line Definition
 
 > [!info]
 > A NoSQL database where entities are **nodes** and relationships are **edges** stored with direct disk pointers — making multi-hop relationship traversal O(1) per hop instead of O(n) per SQL join.
-
+no 
 ---
 
 ## Why Not SQL?

@@ -1,4 +1,4 @@
-# Object Storage Model
+> [!info] Object storage is a system designed for one thing only — storing massive, unstructured files cheaply and reliably. No queries, no rows, no schema. Just: put file in, get key back. Use key to get file. Dumb but powerful.
 
 ## The problem with storing files in a database
 
@@ -15,14 +15,11 @@ You technically *can* shove a file into a database via a BLOB or BYTEA column. B
 
 The database chokes. It was never designed for this.
 
----
-
 ## What object storage is
 
 Object storage is a completely different kind of system — built specifically for large, unstructured files. Amazon S3 is the most famous example.
 
 Think of it like a **massive, flat filing cabinet in the cloud**.
-
 - You put a file in → you get back a **unique key** (essentially a path like `videos/user_42/intro.mp4`)
 - You want the file later → you use that key to fetch it
 
@@ -64,7 +61,7 @@ Bucket: my-youtube-videos
 Key:    videos/user_42/intro.mp4
 ```
 
-The `/` in the key is just a naming convention — it looks like a folder path but S3 treats it as a plain string. The entire storage system is one giant flat list of keys inside a bucket.
+The `/` in the key is just a naming convention — i**t looks like a folder path but S3 treats it as a plain string**. The entire storage system is one giant flat list of keys inside a bucket.
 
 This is different from a filesystem where directories actually exist as objects. In S3, "folders" are an illusion created by key prefixes.
 
