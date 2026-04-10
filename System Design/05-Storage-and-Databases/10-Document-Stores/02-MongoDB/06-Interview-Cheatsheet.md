@@ -1,7 +1,3 @@
-# MongoDB — Interview Cheatsheet
-
----
-
 ## The mental model
 
 ```
@@ -9,7 +5,6 @@ MongoDB = flexible JSON documents + indexes on any field (including arrays/neste
         + replica sets + write concern + mongos sharding
 ```
 
----
 
 ## Embedding vs Referencing
 

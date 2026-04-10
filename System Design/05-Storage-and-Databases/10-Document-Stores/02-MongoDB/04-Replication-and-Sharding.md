@@ -72,6 +72,36 @@ Your application connects to mongos as if it's a single MongoDB instance. mongos
 
 ---
 
+## Why mongos feels different from Cassandra and Postgres
+
+MongoDB has a dedicated routing layer in front of the shards.
+
+```mermaid
+flowchart LR
+    App1["App"] --> M["mongos"]
+    M --> MS1["Mongo Shard 1"]
+    M --> MS2["Mongo Shard 2"]
+    M --> MS3["Mongo Shard 3"]
+```
+
+That is different from Cassandra. Cassandra does not have a separate `mongos`-style router process. The client can talk to any Cassandra node, and that node becomes the **coordinator** for the request. The coordinator figures out which replicas own the partition, forwards the request, waits for enough responses based on the consistency level, and returns the result.
+
+```mermaid
+flowchart LR
+    App2["App"] --> C1["Any Cassandra node"]
+    C1 --> R1["Replica 1"]
+    C1 --> R2["Replica 2"]
+    C1 --> R3["Replica 3"]
+```
+
+So Cassandra still has routing behavior, but the routing is handled by an ordinary cluster node acting as coordinator, not by a dedicated router tier.
+
+Plain Postgres is different again. It usually has no built-in distributed query router because plain Postgres is not a natively sharded distributed database. If you shard Postgres, the routing is usually pushed into the application or into an additional system such as Citus.
+
+> [!important] MongoDB = dedicated router (`mongos`). Cassandra = any contacted node can coordinate. Plain Postgres = no native distributed router because sharding is not the default model.
+
+---
+
 ## Summary
 
 ```
@@ -82,6 +112,10 @@ Write concern  →  w:0 (fire/forget) → w:1 (primary) → w:majority (quorum)
 Sharding       →  consistent hashing on shard key, each shard is a replica set
 
 mongos         →  transparent query router, app talks to one endpoint
+
+Cassandra      →  no separate router tier, any node can act as coordinator
+
+Postgres       →  no native sharded query router in plain Postgres
 ```
 
 > [!tip] Interview framing

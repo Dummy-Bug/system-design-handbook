@@ -1,8 +1,4 @@
-# MongoDB — Limitations
-
 > [!info] MongoDB's flexibility is real, but it comes with hard trade-offs. Understanding the limitations is what makes you credible in an interview — anyone can say "use MongoDB for flexible schema", but knowing where it breaks and why is what matters.
-
----
 
 ## No cross-document joins
 
@@ -42,7 +38,7 @@ UNIQUE            →  only enforced if you explicitly create a unique index
 CHECK constraint  →  doesn't exist
 ```
 
-Your application code becomes the last line of defence. A bug that writes a document with a missing required field will succeed silently. You won't know until a read fails because the field isn't there.
+**Your application code becomes the last line of defence**. A bug that writes a document with a missing required field will succeed silently. You won't know until a read fails because the field isn't there.
 
 ```
 SQL:      INSERT INTO users (email) VALUES (NULL)  → rejected by DB ✗
@@ -58,7 +54,7 @@ This is why MongoDB is wrong for:
 
 ## 16MB document size limit
 
-A single MongoDB document cannot exceed 16MB. For most use cases this is never a concern. But it becomes a hard constraint when you embed unbounded data.
+A single MongoDB **document** cannot exceed 16MB. For most use cases this is never a concern. But it becomes a hard constraint when you embed unbounded data.
 
 ```
 50,000 comments × 200 bytes each = 10MB → approaching the limit
@@ -102,4 +98,4 @@ Denormalization cost       →  update propagation is your problem, not the DB's
 ```
 
 > [!danger] Common interview trap
-> "MongoDB is flexible so I'll use it everywhere." Wrong. Use it where variable schema and document-centric access patterns are the dominant need. Financial data, relational data with complex joins, and anything needing strict integrity belongs in SQL.
+> MongoDB is flexible so I'll use it everywhere. Wrong. Use it where variable schema and document-centric access patterns are the dominant need. Financial data, relational data with complex joins, and anything needing strict integrity belongs in SQL.
