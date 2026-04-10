@@ -3,6 +3,31 @@
 > This is the destination. Everything in Phases 1–10 feeds directly into these 32 systems.
 > Use the same structure every time — it builds muscle memory for interviews.
 
+### SDE-2 Depth Bar For This Phase
+- A baseline architecture is not enough; you should be able to discuss tradeoffs, failure modes, and scaling path.
+- For the same case study, SDE-2 means more than SDE-1 but less than SDE-3: stronger design depth without needing full senior-level operational ownership.
+- You should be able to explain why a design works, what breaks first, and what your next evolution step would be.
+
+### Same Case Study, Different Tiers
+- SDE-1: basic components, simple bottlenecks, simple mitigations.
+- SDE-2: clearer tradeoffs, stronger data-model and async reasoning, more realistic failure handling, better scaling discussion.
+- SDE-3: deeper correctness boundary, migration plan, multi-region implications, observability, and disaster recovery.
+
+### Example: Chat Across Tiers
+- SDE-1: WebSocket vs polling, message storage, offline delivery, basic ordering intuition.
+- SDE-2: connection service, ordering by conversation, group fan-out, push on reconnect, presence tradeoffs, message IDs.
+- SDE-3: cross-region conversation ownership, reconnect dedup, hotspot rooms, media-path split, consistency boundary and migration path.
+
+### Example: News Feed Across Tiers
+- SDE-1: basic feed generation, cache, pagination.
+- SDE-2: fan-out on write vs read, hybrid strategy, celebrity problem, ranking, activity pipeline.
+- SDE-3: rebuild path, denormalized read-model recovery, multi-region write ownership, ranking fallback and observability.
+
+### Example: Payment Across Tiers
+- SDE-1: idempotency, simple payment flow, safe retry awareness.
+- SDE-2: ledger, Saga vs 2PC, reconciliation, audit trail, external gateway callback handling.
+- SDE-3: business exactly-once boundary, dispute / reversal flows, operational recovery after partial failure, migration and correctness monitoring.
+
 ### Structure for Every Case Study
 1. **Functional Requirements** — what the system does (2-3 core features)
 2. **Non-Functional Requirements** — scale, latency, availability, consistency

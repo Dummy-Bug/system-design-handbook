@@ -3,6 +3,12 @@
 > HLD relevance: Key-Value Store, Distributed DB, Chat, Dropbox, Collaborative Editing,
 > Stock Broker, Hotel Reservation — all require deep distributed systems knowledge.
 
+### SDE-2 Depth Bar For This Phase
+- Know the practical distributed-systems primitives that appear in common interview systems.
+- Be able to explain consistent hashing, replication, quorum, leader election, idempotency, consensus, and clocks at a real engineering level.
+- Understand distributed transactions and conflict resolution well enough to defend tradeoffs.
+- This is deeper than SDE-1 awareness, but not yet the same operational bar as SDE-3.
+
 ### 5.1 Why Distributed Systems Are Hard
 - Two Generals Problem — you can never be 100% sure the other side received your message
 - This is why every distributed protocol has retries, acknowledgments, and idempotency

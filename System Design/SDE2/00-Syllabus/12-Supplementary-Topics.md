@@ -3,6 +3,11 @@
 > These topics are not core phases but come up in interviews and case study deep dives.
 > Study these after completing Phases 1–9. Don't start here.
 
+### SDE-2 Depth Bar For This Phase
+- Know these topics well enough to strengthen a design when relevant.
+- Do not start here, but do not ignore them once the core path is done.
+- Use them to sound production-aware: observability, reconciliation, OLTP vs OLAP, feature flags, graceful degradation.
+
 ### Observability (Comes Up in Every Production System)
 When an interviewer asks "how would you monitor this system?" — use these.
 

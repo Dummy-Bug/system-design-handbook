@@ -3,6 +3,12 @@
 > HLD relevance: This is HOW you present everything you've learned.
 > Knowing the theory is not enough — you need to communicate it in 45 minutes under pressure.
 
+### SDE-2 Depth Bar For This Phase
+- Drive the interview with structure, not just scattered knowledge.
+- Make clear tradeoffs and justify them with requirements and scale.
+- Cover the full design before deep diving, then go meaningfully deep on the hardest component.
+- Sound like someone who can build and operate the system, not just name technologies.
+
 ### 9.1 The 45-Minute Structure
 
 | Time      | Step              | What to do                                             |

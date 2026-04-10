@@ -1,3 +1,14 @@
+## Phase 3 — Core Concepts
+
+> HLD relevance: these are the concepts you will use to justify almost every design choice.
+> SDE-2 depth means you should be able to explain what a concept buys you, what it costs, and when it should or should not be used.
+
+### SDE-2 Depth Bar For This Phase
+- Know the common performance, reliability, consistency, and concurrency concepts correctly.
+- Be able to connect each concept to a real design choice or failure mode.
+- Go deeper than SDE-1 on things like isolation levels, CAP/PACELC, partitions, and state machines.
+- Stop short of SDE-3 operational depth unless the topic truly requires it.
+
 ### 2.1 — Performance Metrics
 
 *Why averages lie and what P99 actually means*

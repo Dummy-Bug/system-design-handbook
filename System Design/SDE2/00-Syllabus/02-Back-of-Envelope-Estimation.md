@@ -3,6 +3,12 @@
 > HLD relevance: Every Google interview starts with estimation.
 > It drives your architecture — do you need sharding? caching? CDN?
 
+### SDE-2 Depth Bar For This Phase
+- Estimate enough to justify architecture, not just to produce numbers.
+- Separate reads from writes, average from peak, metadata from media.
+- Use estimates to explain when you need caching, replicas, queues, sharding, or CDN.
+- Be able to identify the dominant bottleneck for common systems like feeds, chat, notifications, and video.
+
 ### 8.1 Numbers to Memorize
 
 **Latency (Jeff Dean's numbers)**

@@ -3,6 +3,11 @@
 > HLD relevance: These algorithms appear inside the deep-dive sections of specific case studies.
 > Don't over-invest here — know each algorithm well enough to explain why you'd use it.
 
+### SDE-2 Depth Bar For This Phase
+- Know where these algorithms fit in system design, not just their textbook definitions.
+- Be able to explain why Trie, inverted index, graph search, heap, skip list, and consistent hashing show up in real systems.
+- Connect each one to a concrete case study and scaling implication.
+
 ### 10.1 Trie (Prefix Tree)
 - Data structure — tree where each node = one character
 - Insert, search, prefix search all O(L) where L = string length

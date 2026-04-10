@@ -3,6 +3,12 @@
 > HLD relevance: These patterns appear in the deep-dive sections of every case study.
 > Rate limiter is its own case study. Geo-spatial for Uber. ID generation for URL shortener.
 
+### SDE-2 Depth Bar For This Phase
+- Know the common production patterns that make systems survivable: retries, circuit breakers, rate limiting, health checks, deployment strategy, migration strategy.
+- Be able to talk about service boundaries, sidecars, BFF, geo setup, and storage patterns with real tradeoffs.
+- Explain how systems degrade, recover, and roll out safely.
+- This is where SDE-2 starts sounding production-ready instead of diagram-only.
+
 ### 7.1 Microservices vs Monolith
 - Monolith — single deployable unit, simple to start, harder to scale teams
 - Microservices — independently deployable, team autonomy, operational overhead

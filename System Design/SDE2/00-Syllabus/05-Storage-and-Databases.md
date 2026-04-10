@@ -3,6 +3,12 @@
 > HLD relevance: Every case study has a data storage layer.
 > This phase teaches you how to pick the right DB and design its schema, replication, and sharding.
 
+### SDE-2 Depth Bar For This Phase
+- Know the major storage families and the workloads they fit.
+- Be able to reason about indexing, replication, sharding, MVCC, CDC, and distributed transactions.
+- Compare SQL, NoSQL, search, blob storage, and analytical systems using access patterns and correctness needs.
+- Explain how schema and data-model choices affect scale, latency, and migration difficulty.
+
 ### 3.1 Database Fundamentals
 - Structured vs unstructured vs semi-structured data
 - Schema-on-write vs schema-on-read
@@ -265,5 +271,4 @@
   - Using auto-increment ID as shard key (sequential = hotspot)
   - Storing derived data without explaining cache invalidation
   - Not considering the write path when designing for reads
-
 

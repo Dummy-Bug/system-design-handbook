@@ -4,6 +4,13 @@
 
 ---
 
+### SDE-2 Depth Bar For This Phase
+
+- Know the main cache read/write patterns and when to choose each.
+- Be able to discuss invalidation, stale reads, distributed caching, and hot-key handling.
+- Explain common cache failures like stampede, avalanche, and penetration with concrete mitigations.
+- Use Redis confidently for typical interview use cases, but do not treat it as a magic answer.
+
 ### 4.1 — Caching Fundamentals
 
 *Store expensive results closer to the consumer*

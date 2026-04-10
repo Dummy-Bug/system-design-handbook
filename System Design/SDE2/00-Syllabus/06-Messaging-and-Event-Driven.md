@@ -3,6 +3,12 @@
 > HLD relevance: Notification system, ad click aggregation, news feed, web crawler,
 > chat, stock broker, job scheduler — all use async messaging.
 
+### SDE-2 Depth Bar For This Phase
+- Know why queues, topics, and logs exist and when to choose each.
+- Be able to explain delivery guarantees, ordering, fan-out, backpressure, and replay.
+- Go deep on Kafka at the design level: partitions, offsets, consumer groups, replication, retention.
+- Understand event-driven patterns like outbox, CQRS, stream processing, and schema evolution well enough to use them in real designs.
+
 ### 6.1 Why Message Queues Exist
 - Decouple producers from consumers — they don't need to know about each other
 - Buffer traffic spikes — queue absorbs burst, consumers drain at their pace

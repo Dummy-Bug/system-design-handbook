@@ -3,6 +3,12 @@
 > HLD relevance: Every case study starts with a client talking to a server over a network.
 > This phase gives you the vocabulary and building blocks for every architecture diagram.
 
+### SDE-2 Depth Bar For This Phase
+- Know the full request path end to end and explain where latency and failure happen.
+- Understand the practical differences between TCP, UDP, HTTP versions, WebSocket, SSE, reverse proxy, API gateway, and CDN.
+- Be able to connect networking choices to concrete case studies like chat, streaming, Gmail, and notification systems.
+- Go beyond definitions: explain when a networking choice changes architecture or operational behavior.
+
 ### 1.1 How the Internet Works
 - What happens when you type google.com — full end-to-end story
 - IP addresses — IPv4 vs IPv6
