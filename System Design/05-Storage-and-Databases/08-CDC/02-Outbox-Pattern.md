@@ -1,5 +1,3 @@
-# The Outbox Pattern
-
 > [!question] Your app needs to save data to the database AND publish an event to Kafka. How do you guarantee both happen, or neither happens?
 
 ---

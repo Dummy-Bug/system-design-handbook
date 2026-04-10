@@ -2,6 +2,8 @@
 
 > [!question] You have a Postgres database powering your app. Three other systems need to stay in sync with it. How do you do it without things silently going out of sync?
 
+> [!abstract] CDC solves one of the most dangerous problems in distributed systems — keeping multiple systems in sync with your database without ever writing to two systems at once. Every time you have a search index, a cache, or a data warehouse sitting next to your primary DB, CDC is the answer to how they stay consistent.
+
 ---
 
 ## The problem — dual write
@@ -104,7 +106,7 @@ Write request arrives
 
 These three writes are the price of the D in ACID — the guarantee that committed data survives a crash. You cannot skip them. They happen with or without CDC.
 
-Debezium reads the WAL after the commit entry appears — like a silent observer reading over the database's shoulder. It does not ask Postgres to write anything extra. The user got their success response long before Debezium even starts reading.
+**Debezium reads the WAL after the commit entry appears** — like a silent observer reading over the database's shoulder. It does not ask Postgres to write anything extra. The user got their success response long before Debezium even starts reading.
 
 ```
 User writes → 3 writes happen → user gets "success"

@@ -1,4 +1,5 @@
-# DynamoDB — Data Model
+> [!info] DynamoDB is AWS's fully managed key-value store. No servers to provision, no indexes to tune manually, no replication to configure. You define a partition key, optionally a sort key, and DynamoDB handles everything else — sharding, replication across 3 availability zones, scaling up and down automatically.
+
 
 > [!info] DynamoDB has two keys: a partition key that routes your data to the right server, and an optional sort key that orders your data within that server. Everything else — joins, flexible queries, schema — is your problem to solve upfront in how you model your data.
 

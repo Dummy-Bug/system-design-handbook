@@ -1,8 +1,4 @@
-# Memcached
-
 > [!info] Memcached is a simple, multi-threaded, in-memory cache. It predates Redis and has one job — store strings in RAM and return them fast. No data structures, no persistence, no replication. Just raw caching throughput.
-
----
 
 ## What Memcached is
 
@@ -36,11 +32,9 @@ Same hardware. Up to 16x the throughput for pure cache reads.
 
 ---
 
-## When multithreading actually matters — Scenario B
+## When multithreading actually matters
 
 This advantage is only real in a specific scenario: small values, extreme read throughput, where RAM is not the bottleneck but CPU is.
-
-**Scenario B recap** (from Redis Single-Threaded notes):
 
 ```
 10M feature flags × 100 bytes = 1GB RAM used (out of 256GB) ← RAM is fine
@@ -51,20 +45,16 @@ Redis:      CPU overloaded at 200%, requests queue up, latency spikes ✗
 Memcached:  16 cores absorb 2M ops/sec easily ✓
 ```
 
-In Scenario B, Memcached's multithreading is a genuine win.
-
-In Scenario A (large values, moderate traffic), you're RAM-bound — adding more CPU cores helps nothing. Memcached offers zero advantage there.
-
 ---
 
 ## Why Memcached is rare in new systems today
 
-Redis caught up. For Scenario B specifically:
+Redis caught up:
 
 ```
-Scenario B options:
-  1. Memcached             → multi-threaded, handles 2M ops/sec on one node
-  2. Redis + sharding      → shard reads across 3 Redis nodes, each at 700K ops/sec
+1. Memcached             → multi-threaded, handles 2M ops/sec on one node
+   
+2. Redis + sharding      → shard reads across 3 Redis nodes, each at 700K ops/sec
                              → same throughput, plus all Redis features
 
 With Redis Cluster, sharding is handled automatically.
