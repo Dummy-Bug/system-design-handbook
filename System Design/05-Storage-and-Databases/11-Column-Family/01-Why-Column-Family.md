@@ -2,7 +2,6 @@
 
 The best way to understand column-family stores is to start with a problem that breaks every other database type — and watch them fail one by one.
 
----
 
 ## The problem — Twitter analytics at scale
 
@@ -89,7 +88,7 @@ Document stores like MongoDB could store each tweet's analytics as a nested docu
 
 But documents assume a **consistent shape** — every document has roughly the same fields. Analytics data is inherently **sparse**. Tweet A might have data for 30 countries, tweet B only for 3. Storing this in documents gets wasteful and messy — you end up with large nested objects full of absent fields.
 
-More importantly, document stores weren't built to handle the update pattern here. Every impression event requires fetching the document, modifying a nested counter, and writing the whole document back. Same waste problem as SQL.
+More importantly, document stores weren't built to handle the update pattern here. **Every impression event requires fetching the document, modifying a nested counter, and writing the whole document back**. Same waste problem as SQL.
 
 ---
 
@@ -99,13 +98,14 @@ Three databases, three different failure modes:
 
 ```
 SQL          → hits write throughput ceiling (~5-10k/sec), wastes disk I/O reading whole rows
+
 Key-Value    → no range queries — every related key is a separate round-trip
+
 Document     → poor fit for sparse data, same row-read waste on frequent updates
 ```
 
 Column-family stores were designed specifically to solve all three at once:
 - **Write throughput** — built on LSM trees, absorb millions of writes/sec natively
 - **Range queries** — row keys are sorted, so related data sits together on disk
-- **Sparse data** — missing cells don't exist at all, no NULLs, no wasted space
+- **Sparse data** — **missing cells don't exist at all, no NULLs, no wasted space**
 
-The rest of the notes explain exactly how they pull this off.
