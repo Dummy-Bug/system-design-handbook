@@ -1,8 +1,5 @@
-# Cross-Shard Joins
-
 > [!question] Before sharding, JOINs were free — all your tables were on one server. After sharding, related data might be on different servers. The database can't JOIN across servers. Now what?
 
----
 
 ## Why JOINs break across shards
 
@@ -50,7 +47,7 @@ FROM tweets JOIN users ON tweets.user_id = users.user_id
 → database engine cannot JOIN across two different servers ✗
 ```
 
-The database engine can only JOIN tables on the same server. It has no concept of reaching out to another server mid-query.
+**The database engine can only JOIN tables on the same server**. It has no concept of reaching out to another server mid-query.
 
 ---
 

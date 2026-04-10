@@ -1,5 +1,3 @@
-# What is Sharding?
-
 > [!question] You've added read replicas. Reads are fine. But writes are still bottlenecked and your disk is nearly full. What do you do?
 
 ---
@@ -40,13 +38,48 @@ Each server now holds 250 million rows instead of 1 billion. Writes are distribu
 
 ---
 
+## Sharding is basically multiple primaries — with one key difference
+
+Each shard is its own independent primary accepting writes for its slice of data. So yes — sharding is multiple primaries at the end of the day.
+
+But there's a critical difference from what we discussed in multi-primary replication:
+
+In **multi-primary**, multiple nodes accept writes for the **same data** — that's where conflicts happen. User A updates the same row on Node 1 and Node 2 simultaneously, and the system has to figure out which write wins.
+
+In **sharding**, each node owns a **completely different slice of data** — there's no overlap. Shard 1 owns users 1–250M, Shard 2 owns users 250M–500M. They will never get a conflicting write for the same row because they never share rows.
+
+```
+Multi-primary:
+  Node A and Node B both own user_id 423 → conflict possible ✗
+
+Sharding:
+  Shard 1 owns user_id 423
+  Shard 2 owns user_id 600,000,000
+  → they never touch each other's data → no conflicts ✓
+```
+
+Sharding gives you the write scalability of multi-primary without the conflict problem — because the data is partitioned, not replicated.
+
+And in practice, each shard usually also has its own replicas for read scalability and fault tolerance:
+
+```
+Shard 1 Primary → Shard 1 Replica 1
+                → Shard 1 Replica 2
+Shard 2 Primary → Shard 2 Replica 1
+                → Shard 2 Replica 2
+```
+
+Sharding for write scalability. Replication within each shard for read scalability and availability. The two work together.
+
+---
+
 ## Vertical Partitioning — splitting by column
 
 Everything above is **horizontal sharding** — splitting rows across servers. But there's another axis: splitting by column.
 
 Say your users table has 50 columns — name, email, bio, profile picture URL, privacy settings, notification preferences, last_login, follower_count, and so on. Most queries only need 2 or 3 of those. But every time you query a row, the database loads the entire row from disk — all 50 columns — even if you only asked for name and email.
 
-The fix is **vertical partitioning** — split the wide table into narrower tables by access pattern:
+The fix is **vertical partitioning** — split the wide table into narrower tables by **access pattern**:
 
 ```
 users_core      → user_id, username, email          (every query needs this)

@@ -1,5 +1,3 @@
-# The Shard Key
-
 > [!question] You've decided to shard. Now what column do you shard on? This is the most important decision in sharding — get it wrong and you've built an uneven system that breaks under load.
 
 ---
@@ -20,7 +18,7 @@ Shard 2 (USA)     → 340 million users → very busy ✗
 Shard 3 (Vatican) → 800 users         → basically idle ✗
 ```
 
-Low cardinality — only ~200 distinct values. Data distribution is wildly uneven. India's shard is a permanent hotspot.
+**Low cardinality** — only ~200 distinct values. Data distribution is wildly uneven. India's shard is a permanent hotspot.
 
 **Bad shard key — created_at (time-based):**
 
@@ -49,8 +47,11 @@ Only 2-3 distinct values. Can never distribute evenly no matter how many shards 
 
 ```
 High cardinality   → billions of unique values → distributes evenly ✓
+
 Immutable          → user_id never changes → row never needs to move shards ✓
+
 Always queryable   → every query includes user_id → always know which shard ✓
+
 Even distribution  → no single user_id has disproportionate data ✓
 ```
 
@@ -62,8 +63,11 @@ Every query says "give me data for user_id X" — you hash X, route to the corre
 
 ```
 1. High cardinality   → many distinct values → rows distribute evenly across shards
+   
 2. Immutable          → never changes → a row never needs to migrate to a different shard
+   
 3. Evenly distributed → no single value dominates → no hotspot shards
+   
 4. Always present     → appears in every query → you always know which shard to hit
 ```
 
@@ -80,4 +84,4 @@ The shard key distributes rows evenly. It cannot distribute *request volume* eve
 
 **Fix for read hotspots:** cache the hot row in Redis. The DB shard only handles cache misses.
 
-**Fix for write hotspots:** add a random suffix to the shard key for high-volume rows, spreading writes across multiple shards. Reads must then query all suffixes and aggregate — a trade-off.
+**Fix for write hotspots:** add a random suffix to the shard key for high-volume rows, spreading writes across multiple shards. **Reads must then query all suffixes and aggregate** — a trade-off.

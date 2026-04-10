@@ -1,5 +1,3 @@
-# Resharding
-
 > [!question] Your system launched with 4 shards. Two years later you have 10x users. You need more shards. How do you do this without taking the system down?
 
 ---
@@ -28,7 +26,9 @@ And this isn't one row — it's potentially hundreds of millions of rows migrati
 
 ## Strategy 1 — Over-shard upfront (best)
 
-Start with far more shards than you need on day one — say 256 shards — even if you only have 4 physical servers. Map multiple virtual shards to each physical server:
+The core idea: **separate virtual shards from physical servers from day one.**
+
+On day one you only have 4 servers. But instead of creating 4 shards (one per server), you create 256 virtual shards and map groups of them onto your 4 servers. Each server thinks it owns 64 shards, not 1.
 
 ```
 Day 1 (4 servers):
@@ -36,18 +36,36 @@ Day 1 (4 servers):
   Server B → virtual shards 65–128
   Server C → virtual shards 129–192
   Server D → virtual shards 193–256
-
-When you add Server E:
-  Move virtual shards 1–50 from Server A to Server E
-  → entire virtual shard moves as a unit
-  → no row-level migration, just reassigning ownership
-  → Server A now handles shards 51–64, Server E handles 1–50
 ```
 
-No row-level migration. You're moving ownership of whole shards, not individual rows. The data physically copies once per virtual shard, not once per row. Far safer and faster.
+The 256 shards cost almost nothing upfront — they're just logical partitions. A virtual shard is just a range of keys with a label. No extra hardware, no extra cost, no performance hit. You're just deciding in advance how the key space is divided.
+
+Now, two years later, your traffic has 10x'd and Server A is overwhelmed. You add Server E. Instead of a row-level migration, you simply reassign ownership of some virtual shards:
+
+```
+Server A was: shards 1–64
+Move shards 1–50 to Server E → Server E now owns those shards
+Server A now: shards 51–64 only (much lighter load)
+```
+
+The data for shards 1–50 physically copies from Server A to Server E once — as a whole shard, not row by row. Once copied, routing updates and Server E starts serving those keys. Server A is immediately relieved.
+
+No row-level migration. No query routing confusion. No double-write complexity. Just move the whole shard as a unit.
+
+Compare this to if you had only created 4 shards upfront:
+
+```
+4 shards, need to split Shard 1 into two halves:
+→ which rows go left half? which go right?
+→ copy half the rows to new shard while writes are landing
+→ routing is ambiguous during migration
+→ dangerous, complex, slow
+```
+
+With 256 virtual shards you never split a shard — you just move whole shards to new servers. The hard problem (splitting) is replaced with the easy problem (moving).
 
 > [!important] Over-sharding upfront is cheap. Emergency resharding under load is not.
-> Adding virtual shard capacity costs almost nothing at design time. Running an emergency live migration at 3am under production load is catastrophic. Always over-shard upfront.
+> Adding 256 virtual shards at design time costs nothing. Running a live row-level migration at 3am under production traffic is catastrophic. Always over-shard upfront — it is the single best resharding decision you can make before launch.
 
 ---
 

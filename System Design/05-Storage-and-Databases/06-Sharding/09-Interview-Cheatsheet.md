@@ -1,7 +1,3 @@
-# Sharding — Interview Cheatsheet
-
----
-
 ## When to mention sharding
 
 ```

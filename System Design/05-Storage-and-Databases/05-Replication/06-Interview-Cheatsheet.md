@@ -35,7 +35,7 @@ Replication is simpler, safer, and sufficient for most read-heavy systems. Shard
 
 **Failover**
 
-> "I'd use Patroni for automated failover. On primary failure it promotes the most up-to-date replica and redirects traffic — typically a 20-30 second write outage. To reduce data loss I'd configure semi-sync for critical writes."
+> I'd use Patroni for automated failover. On primary failure it promotes the most up-to-date replica and redirects traffic — typically a 20-30 second write outage. To reduce data loss I'd configure semi-sync for critical writes.
 
 **Multi-primary (only if global)**
 

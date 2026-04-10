@@ -1,8 +1,4 @@
-# Consistent Hashing
-
 > [!question] Hash-based sharding works great — until you add or remove a shard. Then almost all your data routes to the wrong place. How do you fix this?
-
----
 
 ## The problem with naive hashing
 
@@ -32,30 +28,32 @@ The same happens when a shard goes down — all its keys must remap instantly to
 
 Place both shards and keys on a ring (0 to 2³²). Each key is assigned to the **first shard clockwise** from its hash position on the ring.
 
-```
-          Shard1 (hash: 10)
-         /
-Ring: 0 ──────────── Shard2 (hash: 90)
-         \
-          Shard3 (hash: 200) ── Shard4 (hash: 300)
-
-Key with hash 50  → first shard clockwise → Shard2
-Key with hash 150 → first shard clockwise → Shard3
-Key with hash 250 → first shard clockwise → Shard4
+```mermaid
+graph LR
+    S1["Shard 1 (hash: 10)"] -->|"clockwise"| S2["Shard 2 (hash: 90)"]
+    S2 -->|"clockwise"| S3["Shard 3 (hash: 200)"]
+    S3 -->|"clockwise"| S4["Shard 4 (hash: 300)"]
+    S4 -->|"wraps around"| S1
+    K1["Key hash 50"] -.->|"first shard clockwise"| S2
+    K2["Key hash 150"] -.->|"first shard clockwise"| S3
+    K3["Key hash 250"] -.->|"first shard clockwise"| S4
 ```
 
 Now add a 5th shard between Shard2 and Shard3 (hash position 120):
 
+```mermaid
+graph LR
+    subgraph before["Before"]
+        B1["Shard 1"] --> B2["Shard 2"] --> B3["Shard 3"] --> B4["Shard 4"] --> B1
+    end
+    subgraph after["After — Shard 5 added at hash 120"]
+        A1["Shard 1"] --> A2["Shard 2"] --> A5["Shard 5 NEW"] --> A3["Shard 3"] --> A4["Shard 4"] --> A1
+    end
+    M["Keys hash 90–120 migrate to Shard 5"] -.-> A5
+    U["All other keys — untouched"] -.-> A3
 ```
-Before: Shard1 ── Shard2 ── Shard3 ── Shard4
-After:  Shard1 ── Shard2 ── Shard5 ── Shard3 ── Shard4
 
-Only keys that were between Shard2 and Shard3 (hash 90–200) and now fall
-in the Shard2→Shard5 slice (hash 90–120) need to move.
-
-Everything else → completely untouched ✓
-~1/N of data remaps instead of ~80% ✓
-```
+Only keys that sat between Shard2 and Shard5 (hash 90–120) need to move. Everything else stays completely untouched — ~1/N of data remaps instead of ~80%.
 
 The same property applies when a shard is removed — only the keys that were owned by the removed shard move to the next clockwise neighbour. Everything else stays put.
 
@@ -81,8 +79,11 @@ Each shard now owns many small arcs scattered around the ring instead of one lar
 
 ```
 Cassandra     → routes writes/reads to the correct node on the ring
+
 DynamoDB      → same concept, underpins the Dynamo architecture
+
 Memcached     → distributes cache keys across cluster nodes
+
 CDN routing   → routes user requests to the nearest edge server
 ```
 

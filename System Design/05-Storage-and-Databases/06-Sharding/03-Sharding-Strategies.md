@@ -1,5 +1,3 @@
-# Sharding Strategies
-
 > [!question] You have a shard key. Now how do you decide which row goes to which shard?
 
 There are three strategies. Each solves a different problem and creates a different one.
@@ -29,7 +27,7 @@ Range-based with time-ordered IDs:
   Shard 4 (new users) → ALL new writes ✗
 ```
 
-Range-based sharding is useful when you *want* data locality — archiving old logs and only querying recent ones, for example. But for general user data with sequential IDs, it creates a permanent write hotspot on the latest shard.
+Range-based sharding is useful when you *want* data locality — archiving old logs and only querying recent ones, for example. But for general user data with sequential IDs, **it creates a permanent write hotspot on the latest shard**.
 
 ---
 
@@ -43,7 +41,7 @@ shard = hash(user_id) % N
 
 Even distribution — no hotspots, no sequential clustering. user_id 1 might hash to Shard 3, user_id 2 to Shard 1, user_id 3 to Shard 3 again. The distribution looks random and is statistically even. This is the standard approach.
 
-**The problem:** no control over where related data lands. user_id 1 and their best friend might end up on completely different shards. Range queries across shards require hitting every shard and aggregating results — scatter-gather.
+**The problem:** no control over where related data lands. **user_id 1 and their best friend might end up on completely different shards**. Range queries across shards require hitting every shard and aggregating results — scatter-gather.
 
 ```
 Hash-based:
@@ -69,7 +67,7 @@ Directory (lookup table):
   user_id 500M → Shard 2   ← deliberately co-located with user 1
 ```
 
-Full control over placement. If user 1 and their friends need to live on the same shard for JOIN performance, you can explicitly place them there. Moving a user to a different shard is just an update to the directory — no rehashing, no data migration.
+Full control over placement. If user 1 and their friends need to live on the same shard for JOIN performance, you can explicitly place them there. Moving a user to a different shard still requires migrating their actual data — copy rows to the new shard, update the directory entry, delete from the old shard. What directory-based sharding avoids is bulk rehashing — you choose exactly which users to move, rather than triggering a mass redistribution every time a new shard is added.
 
 **The problem:** every single read and write must first consult this directory — an extra network hop on every query. And the directory itself becomes a **SPOF** — if it goes down, nothing in the system can route anywhere. The directory must be highly available and extremely fast, which means it needs its own replication and caching, adding complexity.
 
