@@ -1,8 +1,4 @@
-# Document Stores — Positioning
-
 > [!info] A document store wins when your data has variable structure and your access patterns are document-centric. The moment you need joins, strict constraints, or extreme write throughput with time-series data, you've outgrown it.
-
----
 
 ## When document stores beat SQL
 

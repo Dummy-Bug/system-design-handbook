@@ -1,8 +1,4 @@
-# MongoDB — Indexes
-
 > [!info] MongoDB can index any field — including fields buried inside arrays and nested objects. Without indexes, every query scans every document. With the right indexes, queries are O(log n) regardless of collection size. Same B-tree mechanics as SQL, applied to a flexible document structure.
-
----
 
 ## The problem without indexes
 
@@ -29,14 +25,18 @@ db.users.createIndex({ "email": 1 })
 ```
 
 ```mermaid
-graph TD
-    Root["B-tree Root"]
-    Root --> N1["priya@example.com"]
-    Root --> N2["rahul@example.com"]
-    Root --> N3["zara@example.com"]
-    N1 --> D43["→ doc_id: 43"]
-    N2 --> D42["→ doc_id: 42"]
-    N3 --> D91["→ doc_id: 91"]
+flowchart TD
+    Root["B-tree root"]
+
+    Root --> E1["email: priya@example.com"]
+    Root --> E2["email: rahul@example.com"]
+    Root --> E3["email: zara@example.com"]
+
+    E1 --> P43["pointer: doc_id 43"]
+    E2 --> P42["pointer: doc_id 42"]
+    E3 --> P91["pointer: doc_id 91"]
+
+    P42 --> D42["fetch user document 42"]
 ```
 
 Query `email = "rahul@example.com"` → B-tree lookup → doc_id: 42 → fetch document. One operation.

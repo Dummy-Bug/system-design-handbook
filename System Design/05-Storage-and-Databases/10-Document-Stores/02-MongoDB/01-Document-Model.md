@@ -1,8 +1,4 @@
-# MongoDB — Document Model
-
 > [!info] MongoDB stores JSON objects — called documents — instead of rows. No fixed schema. Two documents in the same collection can have completely different fields, different nesting, different arrays. The database stores whatever you give it.
-
----
 
 ## The problem with SQL for variable data
 
@@ -26,7 +22,7 @@ ALTER TABLE products ADD COLUMN resolution VARCHAR;  -- null for everything exce
 ALTER TABLE products ADD COLUMN megapixels INT;      -- null for everything except cameras
 ```
 
-Your table is now mostly nulls. Every new product category means another ALTER TABLE. At scale, ALTER TABLE on a live table with 100M rows locks the table and takes hours.
+Your table is now mostly nulls. Every new product category means another ALTER TABLE. At scale, ALTER TABLE on a live table with 100M rows locks the table and takes hours.wh
 
 This is the **schema-on-write** problem — SQL forces you to define the shape before you write the data.
 

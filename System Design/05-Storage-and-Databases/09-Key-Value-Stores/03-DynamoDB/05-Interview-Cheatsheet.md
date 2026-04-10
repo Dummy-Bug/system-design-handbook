@@ -1,16 +1,17 @@
-# DynamoDB — Interview Cheatsheet
-
----
-
 ## The mental model in one block
 
 ```
 Partition key  →  consistent hashing → which server (O(1) routing)
+
 Sort key       →  LSM tree → order within that server (range queries)
+
 GSI            →  second copy of data with different partition key
+
 Global Tables  →  async multi-region replication, eventual consistency
+
 Consistency    →  tunable per read (eventual = cheap, strong = 2x cost)
 ```
+
 
 ---
 

@@ -1,5 +1,3 @@
-# MongoDB — Embedding vs Referencing
-
 > [!info] This is the most important data modelling decision in MongoDB. Every time you have two related entities, you choose: embed one inside the other, or store them separately and reference by ID. Get this wrong and you either fetch too much data or make too many round trips.
 
 ---

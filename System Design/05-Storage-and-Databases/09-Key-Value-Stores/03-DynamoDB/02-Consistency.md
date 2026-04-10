@@ -1,12 +1,10 @@
-# DynamoDB — Consistency
-
 > [!info] Every write in DynamoDB is replicated to 3 servers across availability zones. What happens when you read immediately after writing depends on which consistency mode you choose — and DynamoDB lets you pick per read, not per table.
 
 ---
 
 ## Why consistency is a question at all
 
-When you write to DynamoDB, the write goes to a primary node and replicates to 2 replicas asynchronously. The write is acknowledged once 2 of 3 nodes confirm it (quorum write). But the third replica might lag behind by a few milliseconds.
+When you write to DynamoDB, the write goes to a primary node and replicates to 2 replicas **asynchronously**. The write is acknowledged once 2 of 3 nodes confirm it (quorum write). But the third replica might lag behind by a few milliseconds.
 
 If you immediately read after writing, you might hit that lagging replica and see stale data.
 
@@ -16,7 +14,7 @@ Read 10ms later → hits replica that hasn't caught up yet
 → returns "old@example.com"  ✗
 ```
 
-DynamoDB gives you a choice about how to handle this.
+DynamoDB gives you a choice about how tso handle this.
 
 ---
 
@@ -82,8 +80,6 @@ An Indian user reads → hits Mumbai → no cross-continental trip.
 > [!important] Global Tables replication is **asynchronous** — same as multi-primary replication you've seen elsewhere. This means Global Tables reads are eventually consistent across regions. If a US user and an Indian user edit the same record simultaneously, DynamoDB uses last-writer-wins conflict resolution.
 
 ---
-
-## Summary
 
 ```
 Single region:

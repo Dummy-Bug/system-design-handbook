@@ -1,8 +1,5 @@
-# DynamoDB — Query API and Indexes
-
 > [!info] Most people use DynamoDB like a hashmap — put a value in, get it back by key. But DynamoDB has a full query API that lets you do range queries within a partition, and Global Secondary Indexes that let you query by a completely different key. Understanding this is what separates "I've used DynamoDB" from "I know how to model data in DynamoDB."
 
----
 
 ## Three ways to read data
 
@@ -61,14 +58,17 @@ A GSI is a second copy of your data, stored with a different partition key and s
 
 **Example:** Your primary table is `likes` with `user_id` as partition key. That's great for "all likes by user 42." But now you need "all likes on post 123."
 
-Without a GSI, you'd have to scan the entire table. With a GSI:
-
+Without a GSI, you'd have to scan the entire table.
 ```
 Primary table:
   Partition key: user_id
   Sort key: created_at
   → fast for: all likes by a user
+```
 
+With a GSI:
+
+```
 GSI:
   Partition key: post_id
   Sort key: created_at

@@ -10,7 +10,7 @@
 You're building Instagram. Users post photos, like posts, watch stories. At 500M users you're generating billions of writes per day — every like, every view, every scroll event.
 
 A single SQL server with a B+ tree index handles reads fine — O(log n) lookup, fast enough. But billions of writes per day overwhelm a single machine. You need to shard.
-
+okay why 
 DynamoDB is sharding built into the database itself. You don't manage it — you just define a partition key and DynamoDB handles the rest.
 
 ---

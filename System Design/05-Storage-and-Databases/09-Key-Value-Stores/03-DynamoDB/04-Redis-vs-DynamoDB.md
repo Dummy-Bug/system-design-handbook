@@ -1,8 +1,4 @@
-# Redis vs DynamoDB
-
 > [!info] Both are key-value stores. Both are fast. The question is not which is better — it's which access pattern you're solving for.
-
----
 
 ## The core difference
 
@@ -13,7 +9,7 @@ DynamoDB   →  disk-backed, low millisecond, scales infinitely, managed shardin
 
 Redis keeps everything in RAM. A read is a RAM lookup — ~200ns. DynamoDB reads from SSD-backed storage — still fast, but microseconds not nanoseconds.
 
-DynamoDB manages sharding automatically across as many servers as needed. Redis needs manual sharding via Redis Cluster. At truly massive scale (billions of rows), DynamoDB is operationally simpler.
+DynamoDB manages sharding automatically across as many servers as needed. **Redis needs manual sharding via Redis Cluster**. At truly massive scale (billions of rows), DynamoDB is operationally simpler.
 
 ---
 
@@ -26,8 +22,6 @@ DynamoDB manages sharding automatically across as many servers as needed. Redis 
 ✓  Data fits in RAM (or you're fine sharding manually)
 ✓  Cache layer in front of another database
 ```
-
----
 
 ## When to use DynamoDB
 

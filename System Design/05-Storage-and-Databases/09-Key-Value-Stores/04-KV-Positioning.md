@@ -1,12 +1,10 @@
-# Key-Value Stores — Positioning
-
 > [!info] A Key-Value store is the right tool when your access pattern is simple — give me everything for this key, or give me a range within this key. The moment you need joins, multi-dimensional filtering, or flexible schema, you've outgrown KV.
 
 ---
 
 ## The core trade-off
 
-KV stores give up query flexibility to gain speed and scale.
+**KV stores give up query flexibility to gain speed and scale**.
 
 ```
 SQL         →  any query you want, at the cost of complexity and scaling difficulty
@@ -28,7 +26,7 @@ This is not a flaw — it's the design. You pre-compute your access patterns int
 → works identically whether you have 1M or 1B users
 ```
 
-SQL with a primary key index also does this fast — but sharding SQL at 1B users is operationally painful. KV stores (DynamoDB especially) shard automatically.
+SQL with a primary key index also does this fast — **but sharding SQL at 1B users is operationally painful**. KV stores (DynamoDB especially) shard automatically.
 
 **Write-heavy event storage**
 

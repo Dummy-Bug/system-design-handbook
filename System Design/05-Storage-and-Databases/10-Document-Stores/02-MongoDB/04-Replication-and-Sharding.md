@@ -1,12 +1,9 @@
-# MongoDB — Replication and Sharding
-
 > [!info] MongoDB's replication and sharding follow the same fundamentals covered in the database replication and sharding notes — primary-replica, consistent hashing, quorum writes. The MongoDB-specific pieces are: replica sets as the replication unit, write concern levels for tunable durability, and mongos as the transparent query router.
 
----
 
 ## Replica Sets — MongoDB's replication unit
 
-A replica set is one primary and one or more secondaries. All writes go to the primary. Secondaries replicate asynchronously.
+A replica set is one primary and one or more secondaries. All writes go to the primary. **Secondaries replicate asynchronously**.
 
 ```mermaid
 graph TD
@@ -27,8 +24,7 @@ If the primary goes down, the secondaries hold an election and promote one of th
 Write concern controls how many nodes must confirm a write before MongoDB returns success to your application. You set it per-operation.
 
 ```
-w: 0        →  fire and forget — don't even wait for primary acknowledgement
-               fastest, zero durability guarantee
+w: 0        →  fire and forget — don't even wait for primary acknowledgement ,fastest, zero durability guarantee
                use for: metrics, analytics, logs where losing a write is acceptable
 
 w: 1        →  primary confirmed (default)
@@ -80,8 +76,11 @@ Your application connects to mongos as if it's a single MongoDB instance. mongos
 
 ```
 Replica set    →  1 primary + N secondaries, automatic failover
+
 Write concern  →  w:0 (fire/forget) → w:1 (primary) → w:majority (quorum)
+
 Sharding       →  consistent hashing on shard key, each shard is a replica set
+
 mongos         →  transparent query router, app talks to one endpoint
 ```
 
