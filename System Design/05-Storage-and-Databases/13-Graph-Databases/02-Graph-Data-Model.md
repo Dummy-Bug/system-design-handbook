@@ -1,4 +1,5 @@
-# Graph Data Model
+> [!info] What is a Graph Database?
+> A NoSQL database where data is stored as **nodes** (entities) and **edges** (relationships between entities). Optimized for traversing relationships — following connections from one entity to another across multiple hops.
 
 ## The Three Building Blocks
 
@@ -80,7 +81,7 @@ Compare to SQL: each join's cost grows with the size of the table being joined.
 
 ## Deletion — The Edge Cleanup Requirement
 
-Because nodes store pointers to edges, and edges store pointers to nodes, deleting a node carelessly would leave dangling pointers.
+Because **nodes store pointers to edges, and edges store pointers to nodes**, deleting a node carelessly would leave dangling pointers.
 
 If you delete Bob's node without removing the `FRIENDS_WITH` edge, Alice's edge pointer now points to a block that no longer contains a valid node.
 

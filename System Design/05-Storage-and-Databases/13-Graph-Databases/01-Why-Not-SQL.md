@@ -1,6 +1,3 @@
-> [!info] What is a Graph Database?
-> A NoSQL database where data is stored as **nodes** (entities) and **edges** (relationships between entities). Optimized for traversing relationships — following connections from one entity to another across multiple hops.
-
 # Why SQL Breaks for Relationship Queries
 
 ## The LinkedIn Problem

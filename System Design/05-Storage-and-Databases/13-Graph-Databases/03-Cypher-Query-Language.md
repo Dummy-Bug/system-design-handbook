@@ -1,5 +1,3 @@
-# Cypher Query Language
-
 ## The Design Philosophy
 
 Cypher is Neo4j's query language. It was designed to look like the graph itself — so you can read a query and immediately visualize the pattern it's matching.
