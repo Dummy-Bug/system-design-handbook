@@ -1,4 +1,3 @@
-# Delivery Guarantees and Idempotency
 
 > [!info] RabbitMQ's practical delivery model is at-least-once. Messages are protected from silent loss through acknowledgments and redelivery, but duplicate processing is still possible. Idempotent consumers are what make the business result safe.
 

@@ -1,4 +1,3 @@
-# Retry Queues and Dead Letter Queue (DLQ)
 
 > [!info] In RabbitMQ, immediate requeue can create hot retry loops. A better retry design uses dedicated retry queues with TTL and dead-letter routing, and sends permanently failing messages to a DLQ.
 

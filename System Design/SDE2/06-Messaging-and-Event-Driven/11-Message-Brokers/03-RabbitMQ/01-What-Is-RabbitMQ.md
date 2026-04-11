@@ -1,94 +1,54 @@
 
-> [!info] RabbitMQ is a message broker built around the idea of **routing**. You don't publish a message directly to a queue — you publish it to an **exchange**, and the exchange decides which queue (or queues) should receive it based on routing rules you define. This routing layer is what sets RabbitMQ apart from simpler brokers like SQS.
+> [!info] RabbitMQ is a message broker — a server that sits between producers and consumers, accepting messages from one side and routing them to the other. The producer never talks to the consumer directly. Everything goes through RabbitMQ.
 
 ---
 
-## Why a routing layer matters
+## The problem RabbitMQ solves
 
-SQS is straightforward: one queue, producers write to it, consumers read from it. Perfect for simple task distribution.
+Imagine your e-commerce platform needs to do three things every time an order is placed: update inventory, send a confirmation email, and notify the fraud detection service. The naive approach is to call all three services directly from the order service.
 
-But in real systems, the same event often needs to reach different sets of consumers depending on its content. An ad click during a fraud investigation campaign needs to go to the fraud queue AND the analytics queue, but NOT the billing queue (billing is paused for that campaign). How do you express that routing logic?
+```
+Order Service → inventoryService.reserve()
+             → emailService.sendConfirmation()
+             → fraudService.check()
+```
 
-With plain SQS you'd need the producer to know about every queue and decide which ones to write to — coupling the producer to consumer topology. Every time you add a new consumer, you'd need to change the producer.
+This works until it doesn't. If the email service is slow, the order response waits. If fraud detection crashes, the whole order fails. And every time you add a new downstream service, you change the order service.
 
-RabbitMQ solves this with the exchange layer.
+RabbitMQ puts a broker in the middle. The order service publishes one message — "order placed" — and walks away. RabbitMQ takes it from there.
+
+```
+Order Service → RabbitMQ → inventory.queue   → Inventory Worker
+                         → email.queue       → Email Worker
+                         → fraud.queue       → Fraud Worker
+```
+
+The order service doesn't know how many consumers exist. It doesn't care if email is slow or if fraud detection restarts. It just publishes and moves on.
 
 ---
 
-## The RabbitMQ mental model
+## Exchanges — the routing layer SQS doesn't have
+
+In SQS, the producer writes directly to a queue by name. You know the queue, you publish to it. Simple — but if three services need the same message, the producer has to send it three times to three different queues. The producer is now coupled to every downstream consumer.
+
+RabbitMQ puts an **exchange** between the producer and the queues. The producer sends to the exchange with a routing key. The exchange applies rules to decide which queue(s) the message lands in — one queue, multiple queues, or none.
 
 ```
-Producer → Exchange → Queue(s) → Consumer(s)
+SQS:
+  Producer → queue_name → Queue
+
+RabbitMQ:
+  Producer → exchange + routing_key → [ routing rules ] → Queue A
+                                                         → Queue B
+                                                         → Queue C
 ```
 
-The producer only knows about the exchange. The exchange knows about the queues. The queues know about the consumers.
+The producer never names a queue. It just says "here is the message, here is the key" — the exchange handles distribution. Add a new consumer queue, bind it to the exchange, and it starts receiving messages without any change to the producer.
 
-```
-Ad Click API publishes to exchange "ad.events":
-  { click_id: 1001, campaign_id: 77, type: "display" }
-
-Exchange "ad.events" routes to:
-→ analytics.queue  ← Analytics workers pick this up
-→ billing.queue    ← Billing workers pick this up
-→ fraud.queue      ← Fraud workers pick this up
-
-Each worker fleet operates independently.
-Analytics can be down for maintenance while Billing continues processing.
-```
-
-The producer published once. Three independent queues each got their own copy. The producer doesn't know how many consumers exist.
+There are four exchange types (direct, fanout, topic, headers) — each with different routing behaviour. They're covered in depth in the exchange files.
 
 ---
 
-## The exchange is the routing brain
+> [!important] RabbitMQ deletes messages after they are acknowledged. There is no replay. Once a message is ACKed, it's gone. If you need to re-process historical events, RabbitMQ is the wrong tool.
 
-The exchange receives every published message and decides where to send it. The routing decision is controlled by two things:
-
-**Exchange type** — the routing algorithm (direct, fanout, topic, headers). Covered in detail in the next file.
-
-**Bindings** — the configuration connecting an exchange to a queue. You define these at setup time.
-
-```
-Exchange: ad.events (fanout type)
-Bindings:
-  → analytics.queue
-  → billing.queue
-  → fraud.queue
-
-All three queues are bound to this exchange.
-Every message published to ad.events goes to all three.
-```
-
-You change routing by changing bindings — not by changing producer code. Add a new analytics service? Create a new queue, bind it to the exchange, done. No producer changes needed.
-
----
-
-## Producer → Exchange → Queue → Consumer — why four separate hops?
-
-It might seem like extra complexity compared to "producer → queue → consumer". Here's why each hop exists:
-
-**Producer → Exchange**: The producer declares intent ("this happened"), not destination. It doesn't know which queues care about this event.
-
-**Exchange → Queue(s)**: The broker applies routing logic. The exchange can copy the message to one queue, multiple queues, or zero queues depending on the bindings.
-
-**Queue → Consumer**: The queue holds the message durably until a consumer is ready. Standard ACK-based delivery. Consumer crashes? Message reappears.
-
-The four-hop model gives you **separation of routing logic from delivery logic**. The exchange handles routing; the queue handles reliable delivery. They're different concerns solved by different parts of the system.
-
----
-
-## What RabbitMQ is best at
-
-RabbitMQ shines for use cases where:
-
-**Task distribution with routing** — you have workers that should receive different subsets of events based on type, source, or content. RabbitMQ's exchange/binding model handles this natively without producer changes.
-
-**Multiple independent worker pools** — different teams own different queues. The analytics team manages their queue, the billing team manages theirs. RabbitMQ's per-queue configuration (DLQ, retry policies, prefetch) lets each team tune their queue independently.
-
-**Priority queues** — RabbitMQ has native support for per-message priority. Higher priority messages bubble up and get consumed first. Kafka has no native priority support.
-
-**Low-to-medium throughput with complex routing** — tens of thousands of messages per second with rich routing rules. RabbitMQ handles this easily. For millions per second with simple routing, Kafka is better.
-
-> [!important] RabbitMQ deletes messages after consumers ACK them — just like SQS. This means there is no replay. If you need to reprocess events from yesterday, they're gone. If replay is a requirement, use Kafka.
-
-> [!tip] **Interview framing:** "I'd use RabbitMQ when I need flexible broker-side routing — the same event going to different queues based on type or routing key, without coupling the producer to consumer topology. For simple task distribution with no routing needs, SQS is simpler. For event streams that need replay, Kafka."
+> [!tip] **Interview framing:** "I'd use RabbitMQ when I need per-message routing and guaranteed task delivery — for example, order processing where each order needs to reach inventory, email, and fraud services based on routing rules. The broker tracks ACKs and redelivers on consumer crash. If I needed to replay events or handle millions of events per second, I'd use Kafka instead — but for task queues where each message is a unit of work, RabbitMQ is the right fit."
