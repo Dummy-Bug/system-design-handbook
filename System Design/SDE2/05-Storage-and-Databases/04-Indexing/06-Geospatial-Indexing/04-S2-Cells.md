@@ -22,7 +22,7 @@ SELECT * FROM drivers WHERE geohash LIKE 'bab12%';
 SELECT * FROM drivers WHERE s2_cell_id BETWEEN 123456789 AND 123567890;
 ```
 
-Integer range queries on a B+ Tree are fast — integers compare in a single CPU instruction. This is slightly more efficient than string prefix matching at very large scale.
+**Integer range queries on a B+ Tree are fast** — integers compare in a single CPU instruction. This is slightly more efficient than string prefix matching at very large scale.
 
 ---
 

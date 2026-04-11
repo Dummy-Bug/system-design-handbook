@@ -23,10 +23,13 @@ OLAP databases use **column-oriented storage** — all values of a column are st
 
 ```
 Row-oriented (OLTP):
+
 Row 1: [user_id=1, name="Alice", email="alice@...", country="IN"]
+
 Row 2: [user_id=2, name="Bob",   email="bob@...",   country="US"]
 
 Column-oriented (OLAP):
+
 user_id column: [1, 2, 3, 4, 5, ...]
 name column:    [Alice, Bob, Carol, ...]
 country column: [IN, US, BR, IN, US, ...]
@@ -51,9 +54,13 @@ That's why BigQuery can scan a billion rows in seconds while PostgreSQL would ta
 
 | Database | Who uses it |
 |---|---|
-| BigQuery | Google — fully managed, serverless |
+| BigQuery | Google — fully managed, serverless columnar warehouse |
 | Redshift | Amazon — columnar warehouse, tight AWS integration |
 | Snowflake | Cloud-agnostic, very popular in data teams |
+| ClickHouse | Open-source, extremely fast columnar DB for real-time analytics |
+| Apache Druid | Real-time analytics on event streams (used at Twitter, Airbnb) |
+| Apache Hive | SQL on top of Hadoop — batch analytics on massive data lakes |
+| Presto / Trino | Distributed SQL query engine — runs analytical queries across multiple data sources |
 
 ---
 

@@ -1,5 +1,3 @@
-# Choosing the Right Database
-
 > [!info] The golden rule
 > Start with SQL. Move away only when you have a specific reason — a scale problem, an access pattern SQL can't handle efficiently, or a data model that doesn't fit tables. Never pick a exotic database because it sounds impressive.
 
@@ -49,7 +47,7 @@ In-memory key-value store. O(1) lookup in microseconds — every API request is 
 Persistence isn't needed — losing sessions just means users get logged out. The source of truth (user account) lives safely in MySQL.
 
 **Why not DynamoDB:**
-- DynamoDB also supports TTL but expired items can linger for up to 48 hours — a security risk for session tokens
+- DynamoDB also supports TTL but **expired items can linger for up to 48 hours** — a security risk for session tokens
 - DynamoDB charges per read/write unit — millions of session lookups per day makes the bill painful
 - DynamoDB adds a network hop to AWS infrastructure; Redis on a local instance is microseconds faster
 - DynamoDB's strengths (global distribution, managed scale) don't apply to a session store
@@ -70,7 +68,7 @@ Nested objects fit naturally — images, variants, and attributes are all embedd
 
 **Why not DynamoDB:**
 - DynamoDB is optimised for known, predictable access patterns
-- "Filter by any combination of 20 different attributes" is unpredictable — MongoDB's rich query engine handles this; DynamoDB requires secondary indexes for each access pattern, which gets painful fast
+- "Filter by any combination of 20 different attributes" is unpredictable — MongoDB's rich query engine handles this; **DynamoDB requires secondary indexes for each access pattern**, which gets painful fast
 
 **Why not SQL:**
 - Every new product category would require ALTER TABLE to add new columns
@@ -104,7 +102,7 @@ Query: SELECT * FROM messages
 **Elimination reasoning:**
 - SQL — write throughput at 100B messages/day would require massive sharding; joins not needed anyway
 - Document store — schema flexibility not needed, fixed message structure
-- Key-value — can't do range scans (last 50 messages)
+- Key-value — **can't do range scans** (last 50 messages)
 - Graph DB — no relationship traversal needed
 - No relationships involved, no flexible schema needed, writes dominate → Cassandra
 

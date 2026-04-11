@@ -1,4 +1,5 @@
-# The Problem — Why You Can't Mix Analytics with Live Traffic
+> [!info] The core idea
+> OLTP and OLAP are two fundamentally different types of database workloads. OLTP serves your live users — fast, small operations. OLAP serves your analysts — slow, massive scans. They cannot share the same database at scale.
 
 ## The scenario
 

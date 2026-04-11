@@ -131,6 +131,18 @@
 - Split serving DB from analytical warehouse.
 - CDC into warehouse is a common bridge.
 
+### 5.20a OLAP Internals (SDE-3 depth)
+- Columnar storage format: why storing by column beats row-store for analytical scans.
+- Parquet / ORC / Capacitor — what they are and why they compress so well (similar values grouped together).
+- Predicate pushdown: filter at the storage layer before loading data into memory.
+- Vectorized execution: process columns in batches instead of row-by-row.
+- Partitioning and clustering: BigQuery partition pruning, Snowflake micro-partitions, Redshift sort keys.
+- Data lake vs data warehouse distinction — when each makes sense.
+- ClickHouse MergeTree: columnar + sorted + merge-on-read — how it achieves near-real-time analytics.
+- Apache Druid: real-time OLAP on event streams — ingestion vs query path.
+- Materialized views and pre-aggregation: when to precompute instead of scanning raw data.
+- Senior-level depth: explain the full data pipeline — prod DB → CDC/ETL → warehouse → dashboard — and where each component can fail.
+
 ### 5.21 Geospatial Indexing
 - Geohash, quadtree, S2 awareness.
 - Nearby lookup vs moving-object update tradeoffs.

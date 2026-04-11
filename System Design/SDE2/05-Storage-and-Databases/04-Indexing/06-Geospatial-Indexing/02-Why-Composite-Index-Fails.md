@@ -65,5 +65,3 @@ The index narrows by `lat` efficiently. But within that lat band, it has to scan
 This isn't a matter of writing a better query or adding more indexes. The B+ Tree data structure simply cannot understand 2D space. It's built for 1D sorted data.
 
 To solve this, you need to **encode the 2D location (lat, lng) into a single 1D value** that captures spatial proximity — so that nearby locations produce similar values, and a normal B+ Tree index can find them with a range query.
-
-That's exactly what Geohash does.

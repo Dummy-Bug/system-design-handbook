@@ -42,14 +42,23 @@ You only need the `country` column. But because all columns are stored together,
 
 ## OLTP examples
 
-| Database | Notes |
-|---|---|
-| PostgreSQL | Most popular open-source relational OLTP DB |
-| MySQL | Widely used, especially in web stacks |
-| DynamoDB | Managed NoSQL, still OLTP — optimized for fast single-item reads/writes |
+| Database | Type | Notes |
+|---|---|---|
+| PostgreSQL | Relational | Most popular open-source relational DB |
+| MySQL | Relational | Widely used, especially in web stacks |
+| Oracle DB | Relational | Enterprise relational, heavily used in banking/finance |
+| DynamoDB | NoSQL (Key-Value) | AWS managed, fast single-item reads/writes |
+| Cassandra | NoSQL (Wide-Column) | High-throughput writes, time-series, activity feeds |
+| MongoDB | NoSQL (Document) | Flexible JSON documents, common in web apps |
+| Redis | NoSQL (Key-Value) | In-memory, used for caching and session storage |
+| CockroachDB | NewSQL | Distributed, ACID-compliant, Postgres-compatible |
+| Google Spanner | NewSQL | Globally distributed, ACID with TrueTime |
 
-> [!important] DynamoDB is OLTP, not OLAP
-> Even though DynamoDB is NoSQL and scales horizontally, it's still an OLTP system — it's built for fast, low-latency operations on individual items, not analytical scans.
+> [!important] NoSQL ≠ OLAP
+> Cassandra, MongoDB, DynamoDB are all OLTP — they're built for fast, low-latency operations on individual records. NoSQL just means "not relational." It says nothing about OLTP vs OLAP.
+
+> [!important] NewSQL is still OLTP
+> CockroachDB and Spanner give you distributed scale + ACID — but they're still serving live transactional traffic, not analytical batch queries. That makes them OLTP.
 
 ---
 
