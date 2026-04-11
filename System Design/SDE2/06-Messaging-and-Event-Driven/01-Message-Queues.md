@@ -1,5 +1,3 @@
-# Why Message Queues Exist
-
 > [!info] A message queue is a buffer that sits between a producer (the thing that creates work) and a consumer (the thing that does the work). The producer drops a message and walks away. The consumer picks it up when it's ready. They never talk to each other directly.
 
 ---
