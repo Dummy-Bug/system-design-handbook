@@ -1,5 +1,9 @@
-> [!info] DynamoDB is AWS's fully managed key-value store. No servers to provision, no indexes to tune manually, no replication to configure. You define a partition key, optionally a sort key, and DynamoDB handles everything else — sharding, replication across 3 availability zones, scaling up and down automatically.
+> [!info] DynamoDB is AWS's fully managed wide-column store. No servers to provision, no indexes to tune manually, no replication to configure. You define a partition key, optionally a sort key, and DynamoDB handles everything else — sharding, replication across 3 availability zones, scaling up and down automatically.
 
+AWS markets DynamoDB as a "key-value store" because the simplest use case is: give it a key, get back an item. But that label is misleading. A partition key can return multiple items. A sort key lets you query ranges of items within a partition. You can get back one item, many items, or a sorted slice — that's wide-column behavior, not pure key-value.
+
+True key-value (Redis): one key → exactly one value, always.
+DynamoDB: partition key → one partition containing many rows, sorted by sort key. Much richer.
 
 > [!info] DynamoDB has two keys: a partition key that routes your data to the right server, and an optional sort key that orders your data within that server. Everything else — joins, flexible queries, schema — is your problem to solve upfront in how you model your data.
 

@@ -1,9 +1,6 @@
-# Saga Pattern — Overview
+> [!info] The Saga pattern
+>  breaks a distributed transaction into a sequence of local transactions — one per service. Each service commits locally and triggers the next step. If any step fails, **compensating transactions** run in reverse to undo the previous steps.
 
-> [!info] Plain-English definition
-> The Saga pattern breaks a distributed transaction into a sequence of local transactions — one per service. Each service commits locally and triggers the next step. If any step fails, **compensating transactions** run in reverse to undo the previous steps.
-
----
 
 ## The core insight
 

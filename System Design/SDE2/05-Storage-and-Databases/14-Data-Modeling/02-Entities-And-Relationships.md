@@ -31,9 +31,9 @@ Verbs in requirements become relationships. There are three types:
 - User → Posts (one user has many posts)
 - Implemented with a foreign key on the "many" side: `posts.user_id`
 
-**Many:Many** — both sides can have multiple of the other
-- User ↔ User (follows)
-- User ↔ Post (likes)
+**Many:Many** — neither side maps to just one of the other
+- User → Like → Post: one user can like many posts, and one post can be liked by many users
+- User → Follow → User: one user can follow many users, and one user can be followed by many users
 - Implemented with a **junction table** containing both foreign keys
 
 ---
@@ -73,6 +73,29 @@ follows (
 ```
 
 Both columns point to `users`. The naming makes the direction of the relationship explicit — `follower_id` is doing the following, `following_id` is being followed.
+
+Here's what the table looks like with real data:
+
+```
+follower_id  | following_id | created_at
+-------------|--------------|------------
+user_1       | user_2       | 2024-01-01    ← user_1 follows user_2
+user_1       | user_3       | 2024-01-02    ← user_1 follows user_3
+user_2       | user_1       | 2024-01-03    ← user_2 follows user_1
+user_3       | user_1       | 2024-01-04    ← user_3 follows user_1
+```
+
+Notice that `user_1` appears multiple times in `follower_id`. This is why `user_id` alone can never be the primary key — a PK must be unique per row, and no single column here is unique.
+
+But the combination of `(follower_id, following_id)` is always unique — a user can only follow someone once. That composite PK also enforces this business rule for free:
+
+```sql
+-- Try to make user_1 follow user_2 again
+INSERT INTO follows (follower_id, following_id) VALUES ('user_1', 'user_2');
+-- ERROR: duplicate key violates primary key constraint ✗
+```
+
+No extra application code needed — the DB rejects the duplicate automatically.
 
 ---
 

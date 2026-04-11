@@ -1,3 +1,6 @@
+> [!info] Why this matters
+> Data modeling is where interviewers judge whether you actually understand the system. Anyone can say "use Cassandra" — but can you design the schema, pick the right indexes, and explain why? The data model section of a case study is where strong candidates separate themselves.
+
 # The Data Modeling Process
 
 ## The wrong way
@@ -22,7 +25,14 @@ Instagram requirements:
 - Users can like and comment on posts
 - Users can see a feed of posts from people they follow
 
-Nouns: **user, post, photo, comment, like, feed**
+Nouns: **user, post, photo, comment, like, follow**
+
+Not every noun becomes a table. Before writing any schema, filter out the nouns that aren't real stored entities:
+
+- **Photo** — not a separate entity. It's an attribute of Post (stored as a URL pointing to S3). Photo lives as a column on the posts table, not its own table.
+- **Feed** — not a stored entity at all. A feed is a computed result — "show me recent posts from people I follow." It's derived from Posts + Follows at query time, or precomputed and cached in Redis. There is no `feeds` table.
+
+What remains as actual entities: **user, post, comment, like, follow**
 
 These become your tables (or collections, or documents, depending on your DB choice).
 
