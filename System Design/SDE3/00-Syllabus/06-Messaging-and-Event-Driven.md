@@ -1,98 +1,39 @@
-## Phase 6 - Messaging and Event-Driven Systems
+## Phase 6 — Messaging & Event-Driven (SDE-3 Extension)
 
-> HLD relevance: queues, logs, and event-driven workflows appear everywhere once systems get large enough.
-> SDE-3 depth means you should be able to reason about ordering, replay, lag, backpressure, and exactly-once claims without hand-waving.
+> **Prerequisite:** Full mastery of SDE-2 Messaging (Kafka basics, Partitions, Consumer Groups, DLQ, Delivery Guarantees, Outbox Pattern, Stream vs. Batch basics).
+> **SDE-3 Focus:** Moving from "how to use a queue" to "how to orchestrate global event streams, manage exactly-once state at scale, and operate PB-scale pipelines."
 
-### SDE-3 depth bar for this phase
-- Know the difference between a task queue, a broker, and an event log.
-- Be able to explain end-to-end delivery guarantees, not just broker guarantees.
-- Be able to discuss replay, retention, compaction, and consumer lag operationally.
-- Tie patterns like outbox, CDC, CQRS, and batch correction back to real systems like payments, feeds, and analytics.
+### 6.1 — Global Event Orchestration (Extension of SDE-2 6.5)
+*In SDE-2, you know Kafka replication. In SDE-3, you manage cross-continent event flow.*
 
-### 6.1 Why Message Queues Exist
-- Decouple producers from consumers.
-- Smooth traffic spikes.
-- Move slow or unreliable side effects off the synchronous request path.
-- Enable replay, auditability, and downstream fan-out.
+- **Cross-Region Replication (MirrorMaker2 / Confluent Replicator):** Beyond "copying data"—managing "Active-Active" event streams. Handling "Cycle Detection" and "Infinite Loops" in bi-directional replication.
+- **Global Event Ordering:** The "Impossible" Problem—why you can't have global strict ordering. Designing for "Per-User" or "Per-Entity" ordering across regions using "Home Region" routing.
+- **Producer-Side Locality:** Routing events to the nearest regional broker and using "Async Background Replication" to the central hub.
 
-### 6.2 Core Concepts
-- Producer -> queue/topic -> consumer.
-- Point-to-point queue vs publish-subscribe topic.
-- Ack, nack, requeue, and redelivery.
-- Visibility timeout / message lease.
-- DLQ, delay queues, retry queues, and poison-message handling.
+### 6.2 — Exactly-Once Operationalization (Extension of SDE-2 6.3 & 6.5)
+*In SDE-2, you know Exactly-Once exists. In SDE-3, you implement it at 1M+ QPS.*
 
-### 6.3 Delivery Guarantees
-- At-most-once: possible loss, no duplicates.
-- At-least-once: retries create duplicates, consumer must be idempotent.
-- Exactly-once: usually a narrow claim about a specific boundary, not a whole distributed workflow.
-- Senior-level depth: explain where dedup lives and what still can go wrong.
+- **Kafka Transactions at Scale:** The performance cost of `processing.guarantee=exactly_once`. Tuning "Transaction Timeouts" and "Commit Intervals" for high-throughput pipelines.
+- **Idempotency Across Service Boundaries:** Beyond the DB—how to maintain exactly-once state when an event triggers an external API call (which doesn't support your transaction).
+- **Zombie Fencing in Streams:** Using "Fencing Tokens" to ensure a crashed/slow worker doesn't overwrite the state of a new worker.
 
-### 6.4 Fan-out vs Competing Consumers
-- Competing consumers for work distribution.
-- Fan-out for one event driving many downstream systems.
-- Fan-out on write vs fan-out on read in feed systems.
-- When each pattern shifts cost from write path to read path or vice versa.
+### 6.3 — High-Volume Partition Management (Extension of SDE-2 6.5)
+*In SDE-2, you know Partitions. In SDE-3, you manage the "Partition Storm."*
 
-### 6.5 Apache Kafka (Deep Dive)
-- Brokers, topics, partitions, offsets.
-- Producer batching, linger, compression, partitioner choice.
-- Consumer groups and partition ownership.
-- Leader / follower replication and ISR.
-- Retention, segment files, and compaction.
-- Rebalancing and the operational pain around it.
-- Lag monitoring and what lag actually means.
-- Senior-level depth: be able to explain why Kafka is an event log first and a queue second.
+- **The "10k Partition" Problem:** Why having too many partitions kills Kafka performance (Zookeeper/KRaft metadata bloat, file descriptor limits).
+- **Partition Rebalancing Mitigation:** Beyond "adding members"—how to prevent a "Rebalance Storm" where the entire cluster stops processing for minutes when one node blips. (Static Membership, Incremental Rebalancing).
+- **Hot Partition Isolation:** Detecting and "Shunting" a high-volume key (e.g., a celebrity user) to a dedicated high-capacity topic to protect the rest of the fleet.
 
-### 6.5b Message Broker Comparison - Kafka vs RabbitMQ vs SQS
-- Kafka: replay, retention, high-throughput stream, partition ordering.
-- RabbitMQ: rich routing and task-queue semantics.
-- SQS: managed queue with low ops burden.
-- Senior-level expectation: choose based on the actual workflow, not popularity.
+### 6.4 — Advanced Stream Processing (Extension of SDE-2 6.7 & 6.9)
+*In SDE-2, you know Windowing. In SDE-3, you manage PB-scale state.*
 
-### 6.5c Backpressure
-- Queue depth is a symptom, not a solution.
-- Consumer lag as a pressure signal.
-- Scaling consumers vs throttling producers.
-- Load shedding and priority dropping when downstream cannot recover fast enough.
-- Tail-latency and data-loss tradeoffs under overload.
+- **Large-Scale State Management (RocksDB/Flink):** Managing 10TB+ of local state for windowed joins. Handling "Checkpointing" to S3 without stalling the pipeline.
+- **Stateful Reprocessing (The "Replay" Strategy):** How to fix a bug in your stream logic and "Backfill" 1 month of data without doubling your infrastructure or losing live events.
+- **Late-Event Handling & Watermark Skew:** What to do when one region's clock drifts by 10 minutes—how to "Close the Window" safely without losing data.
 
-### 6.6 Event-Driven Architecture
-- Event sourcing.
-- CQRS.
-- Outbox pattern.
-- Inbox pattern.
-- CDC-driven read-model updates.
-- Materialized views and denormalized projections.
-- Senior-level depth: explain how you keep read models correct enough and rebuildable.
+### 6.5 — Messaging Economics & Tiered Storage (Extension of SDE-2 6.5)
+*In SDE-2, you know Retention. In SDE-3, you optimize the $100k/month Kafka bill.*
 
-### 6.7 Stream Processing
-- Tumbling, sliding, and session windows.
-- Watermarks and late-arriving events.
-- Stateful processing and checkpointing.
-- Exactly-once vs effectively-once semantics in practice.
-- State store growth and recovery behavior.
-
-### 6.8 Batch Processing (MapReduce / Spark)
-- Why batch still matters even in "real-time" systems.
-- Reconciliation, exact recomputation, historical backfill, and replay.
-- Spark as the practical batch / large-scale transform tool.
-- Senior-level depth: know when batch is the correctness layer and stream is the freshness layer.
-
-### 6.9 Lambda and Kappa Architecture
-- Lambda: batch layer + speed layer + serving layer.
-- Kappa: stream-only plus replay.
-- Operational cost of duplicated logic in Lambda.
-- Retention and replay requirements that Kappa imposes.
-
-### 6.10 Schema Evolution
-- Backward compatibility vs forward compatibility.
-- Avro + schema registry.
-- Protobuf for strongly typed internal contracts.
-- Version rollout problems when producers and consumers move independently.
-
-### 6.11 What SDE-3 Should Be Comfortable Saying
-- "I would use at-least-once plus idempotent consumer here because it is simpler and safe enough."
-- "Exactly-once at the broker does not magically give exactly-once business behavior."
-- "I need replay because I expect schema bugs, backfills, and read-model rebuilds."
-- "If lag keeps growing, I need admission control or throttling, not just a bigger queue."
+- **Tiered Storage (Kafka / Pulsar):** Moving "Cold" segments to S3 automatically while keeping them searchable. Reducing disk costs by 80-90%.
+- **Zero-Copy Optimization:** Understanding the "Sendfile" system call—why Kafka is fast and how to ensure your consumers stay in the "Zero-Copy Path."
+- **Payload Compression Strategies:** Comparing Zstd vs. Snappy for different workloads. Why "Batching" is the secret to compression ratio.

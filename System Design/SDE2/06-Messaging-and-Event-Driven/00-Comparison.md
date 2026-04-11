@@ -1,6 +1,6 @@
-> [!info] Three terms, one source of confusion. A **message queue** is a data structure. A **message broker** is the infrastructure system that hosts queues (and more). A **task queue** is a specific usage pattern — "distribute background jobs to workers." Understanding these as three different layers, not three names for the same thing, is what separates clear system design from hand-wavy answers.
+> [!info] Three terms, one source of confusion.
+>  A **message queue** is a data structure. A **message broker** is the infrastructure system that hosts queues (and more). A **task queue** is a specific usage pattern — "distribute background jobs to workers." Understanding these as three different layers, not three names for the same thing, is what separates clear system design from hand-wavy answers.
 
----
 
 ## The confusion — why these terms overlap
 

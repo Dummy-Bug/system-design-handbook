@@ -1,118 +1,39 @@
-## Phase 7 - Distributed Systems
+## Phase 7 — Distributed Systems (SDE-3 Extension)
 
-> HLD relevance: this is where senior-level interviews often get decided.
-> SDE-3 depth means you should be able to explain what happens when the network is unreliable, clocks drift, writes conflict, leaders fail, and replicas disagree.
+> **Prerequisite:** Full mastery of SDE-2 Distributed Systems (Consistent Hashing, Replication basics, Quorum, Leader Election, Distributed Transactions like 2PC/Saga, Idempotency, Clocks, Consensus basics like Raft).
+> **SDE-3 Focus:** Moving from "how a distributed primitive works" to "how to build and operate globally distributed, strongly consistent, and resilient systems at scale."
 
-### SDE-3 depth bar for this phase
-- Know the main distributed-systems primitives well enough to explain their write path, failure behavior, and operational tradeoffs.
-- Compare at least two approaches for replication, coordination, and transaction handling.
-- Be able to explain what correctness guarantee your system actually ends up with.
-- Be able to connect these topics to KV stores, chat, payments, collaborative editing, and distributed databases.
+### 7.1 — Global Consensus & External Consistency (Extension of SDE-2 5.8 & 5.9)
+*In SDE-2, you know Raft. In SDE-3, you build globally strongly consistent state.*
 
-### 7.1 Why Distributed Systems Are Hard
-- Partial failure means one node can be slow while others are healthy.
-- Retries create duplicates and reorderings.
-- There is no shared memory and no perfectly trustworthy global clock.
-- Two Generals Problem awareness: perfect coordination is impossible on an unreliable network.
-- Senior-level expectation: reason in terms of failure scenarios, not ideal behavior.
+- **Multi-Paxos vs. Raft Operationalization:** Beyond "Majority Vote"—how to handle "Leadership Handoff" and "Zombie Leaders" in cross-region clusters.
+- **TrueTime & Spanner Mechanics (The SDE-3 Bar):** Understanding how to achieve "External Consistency" using Atomic Clocks/GPS without a global central lock.
+- **Clock Drift & Uncertainty Intervals:** Handling the reality that "Now" is a range, not a point in time, and how it impacts the "Wait-Time" for transaction commit.
 
-### 7.2 Consistent Hashing
-- Why modulo hashing causes mass remapping on node membership change.
-- Ring-based placement and clockwise ownership.
-- Virtual nodes for better distribution and smoother rebalancing.
-- Operational concerns: hot partitions, uneven workloads, node add / remove shock.
-- Where it fits: distributed cache, KV stores, CDN routing, partition ownership.
+### 7.2 — Conflict-Free Replicated Data Types (CRDTs) (Extension of SDE-2 5.10)
+*In SDE-2, you know G-Counter. In SDE-3, you build complex convergent state.*
 
-### 7.3 Replication Strategies
-- Single-leader replication: simple write path, lagged replicas, failover risk.
-- Multi-leader replication: better write locality, conflict pain.
-- Leaderless replication: availability and parallelism, harder correctness model.
-- Quorum reads and writes (R + W > N).
-- Read repair, anti-entropy, hinted handoff.
-- Senior-level depth: compare these by latency, conflict risk, and operational complexity.
+- **Complex CRDTs (RGA, LWW-Set, Map):** Moving beyond simple counters—designing collaborative text editors and globally distributed shopping carts that converge without a server arbiter.
+- **Metadata Overhead Management:** Handling the "Tombstone Bloat" in CRDTs where the metadata for deleted items can grow larger than the data itself.
+- **CRDT vs. OT Tradeoffs (Senior Depth):** When to use which for a specific case study (e.g., Google Docs vs. Figma).
 
-### 7.4 Conflict Resolution
-- Last-write-wins and where it loses valid writes.
-- Version vectors / vector clocks to detect concurrency.
-- Application-level merge logic for domain-specific conflict handling.
-- Conflict avoidance by routing writes to a single authority when possible.
-- Senior-level expectation: know when avoiding conflicts is cheaper than resolving them.
+### 7.3 — Advanced Replication & Anti-Entropy (Extension of SDE-2 5.3 & 5.12)
+*In SDE-2, you know Quorum. In SDE-3, you manage the "Long Tail" of data divergence.*
 
-### 7.5 Leader Election
-- Why systems need a single writer or coordinator.
-- Raft-style randomized timeouts and terms.
-- ZooKeeper / etcd style ephemeral-node election.
-- Epoch numbers and fencing tokens to reject stale leaders.
-- Election storms and slow network as practical failure sources.
+- **Multi-Cloud Replication:** How to build a system where data is replicated across AWS and GCP simultaneously to survive a single cloud provider outage.
+- **Optimized Merkle Tree Repair:** Using "Incremental Merkle Trees" to find and fix data divergence in TB-sized shards without a full data scan.
+- **Hinted Handoff at Scale:** Managing the "Replay Buffer" for 10,000+ nodes when a rack or region goes down for 24 hours.
 
-### 7.6 Distributed Transactions
-- Why local DB transactions do not solve cross-service correctness.
-- 2PC: prepare / commit flow, blocking risk, coordinator failure.
-- Saga choreography vs orchestration.
-- Reservation / hold-confirm as an alternative pattern in booking-like flows.
-- Outbox pattern for DB write + event publish.
-- Senior-level depth: compare payment, booking, and inventory workflows explicitly.
+### 7.4 — Coordination-Free Architectures (SDE-3 Exclusive)
+*Moving beyond the "Central ZooKeeper" bottleneck.*
 
-### 7.7 Idempotency
-- API-level idempotency with request key.
-- Consumer-level idempotency for retry-safe async processing.
-- Natural vs synthetic idempotency.
-- Idempotency key storage, replay semantics, and retention window.
-- DB uniqueness constraint as a hard backstop.
+- **Coordination-Free Designs:** Identifying workloads that don't need consensus and can use "Causal Consistency" or "Eventual Convergence" to achieve infinite scale.
+- **CALM Theorem:** Understanding which problems are "Monotonic" and can be solved without coordination (e.g., grow-only sets).
+- **Sticky Consistency:** Designing systems where a user has "Strong Consistency" with their own data but "Eventual Consistency" with others' to save 100ms+ of global latency.
 
-### 7.8 Message Delivery Guarantees
-- At-most-once, at-least-once, exactly-once.
-- Delivery guarantee at one boundary does not imply end-to-end business correctness.
-- Exactly-once often means dedup plus transactional state update in a narrow scope.
-- Senior-level expectation: explain where duplicates can still appear.
+### 7.5 — Failure Detection & Membership (Extension of SDE-2 5.11)
+*In SDE-2, you know Heartbeats. In SDE-3, you manage 10,000+ nodes.*
 
-### 7.9 Distributed Clocks and Time
-- Wall-clock drift and why timestamps cannot define truth by themselves.
-- Lamport clocks for happens-before ordering.
-- Vector clocks for conflict detection.
-- Leases, expiry, and time-based coordination risk.
-- TrueTime awareness for globally ordered systems like Spanner.
-
-### 7.10 Consensus Algorithms
-- What consensus actually solves: one agreed sequence of decisions.
-- Raft: leader election, log replication, commit index, safety, terms.
-- Quorum is a voting threshold; consensus is a process for one agreed history.
-- Paxos awareness only, unless the interview explicitly asks deeper.
-- Senior-level depth: be able to explain why consensus is expensive but sometimes unavoidable.
-
-### 7.11 CRDTs (Conflict-free Replicated Data Types)
-- Convergence without central coordination.
-- G-Counter as the mental-model starter.
-- OR-Set awareness for more realistic data.
-- Good fit for collaborative or merge-heavy domains.
-- Tradeoff: metadata overhead and more complex data model.
-
-### 7.12 OT vs CRDT
-- OT uses a central order and transforms operations against prior edits.
-- CRDTs allow convergence without a single serialization point.
-- Offline editing support is much easier with CRDT-style merge.
-- Operational complexity and metadata overhead differ significantly.
-- Senior-level expectation: justify the choice for collaborative editing systems.
-
-### 7.13 Failure Detection
-- Heartbeats as the simple baseline.
-- Gossip protocol for scalable membership dissemination.
-- Phi accrual failure detector awareness.
-- False positives under network jitter and the cost of reacting too aggressively.
-
-### 7.14 Merkle Trees
-- Hash-tree comparison to find divergence cheaply.
-- Anti-entropy repair in leaderless stores.
-- Useful in large replica repair scenarios where full compare is too expensive.
-
-### 7.15 Coordination Services
-- ZooKeeper and etcd as coordination systems, not general-purpose databases.
-- Leader election, distributed locks, config management, service discovery.
-- Linearizable writes and why coordination systems must be treated as critical dependencies.
-- Senior-level expectation: know when to avoid using coordination for every problem.
-
-### 7.16 What SDE-3 Should Be Comfortable Saying
-- "I do not get global exactly-once here, so I am relying on idempotency plus reconciliation."
-- "I choose single-leader replication because conflict avoidance is cheaper than conflict resolution for this domain."
-- "I need fencing tokens, otherwise an old leader can still write after lease expiry."
-- "This system is available during partition only because I am accepting stale or conflicting state."
+- **Scalable Gossip Protocols (SWIM):** How nodes discover each other and detect failures in a 10,000+ node cluster without a central bottleneck.
+- **Phi Accrual Failure Detectors:** Using suspicion scores instead of binary "Up/Down" flags to adapt to noisy/congested networks.
+- **Fencing Tokens & Distributed Leasing:** Ensuring that a "Slow Leader" is correctly fenced off from writing to the DB when its lease expires.

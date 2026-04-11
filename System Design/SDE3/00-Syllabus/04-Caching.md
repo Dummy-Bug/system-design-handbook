@@ -1,86 +1,32 @@
-# Phase 4 - Caching
+## Phase 4 — Caching (SDE-3 Extension)
 
-> HLD relevance: caching appears in almost every system, but at SDE-3 level the bar is not "add Redis".
-> You should be able to explain what to cache, where to cache it, how it becomes stale, how it fails under skew, and what consistency guarantees the product actually needs.
+> **Prerequisite:** Full mastery of SDE-2 Caching (Patterns like Cache-aside, Write-through, Eviction like LRU/LFU, TTLs, Distributed Caching with Redis, Basic cache problems like Stampede/Penetration).
+> **SDE-3 Focus:** Moving from "how to use a cache" to "how to orchestrate global cache tiers, edge compute, and cache-consistency at global scale."
 
-### SDE-3 depth bar for this phase
-- Know the common cache patterns and their write-path tradeoffs.
-- Explain cache correctness, not just cache speed.
-- Be able to discuss multi-layer caching, hotspot management, and cache failure modes under real load.
-- Tie caching choices to product semantics like read-your-writes, staleness windows, and operational cost.
+### 4.1 — Global Cache Orchestration (Extension of SDE-2 4.1 & 4.5)
+*In SDE-2, you know Redis. In SDE-3, you manage a multi-region global cache fabric.*
 
-### 4.1 Caching Fundamentals
-- What to cache: expensive DB reads, derived responses, hot metadata, rendered fragments, static assets.
-- What not to cache: highly sensitive data, fast-changing correctness-critical state, write-heavy values with low reuse.
-- Local in-process cache vs distributed cache vs CDN.
-- Hit ratio, miss ratio, and why a cache with poor hit ratio can cost more than it saves.
-- Working set size vs total dataset size.
+- **Multi-Region Cache Sync:** Handling cache consistency when a write happens in US-East but the read happens in Asia-South. "Invalidate-All" vs. "Sync-to-All" tradeoffs.
+- **Cache Warming at Scale:** Proactively populating the cache for 100M+ keys without crushing the DB during a new region rollout or after a massive cluster failure.
+- **Global Hot-Key Mitigation:** Beyond local in-memory replicas—using "Edge Caching" and "Anycast" to absorb a 100M+ QPS spike for a single key (e.g., a celebrity's live tweet).
 
-### 4.2 Cache Writing and Reading Strategies
-- Cache-aside: simplest and most common; app owns miss handling.
-- Read-through: cache layer loads from backing store on miss.
-- Write-through: keep DB and cache aligned synchronously; safer reads, slower writes.
-- Write-back / write-behind: fastest writes, more risk on crash.
-- Write-around: avoid polluting cache with write-only data.
-- Refresh-ahead: proactively warm hot keys before TTL expiry.
-- Senior-level depth: explain which pattern you would choose and why for feed, payment, leaderboard, or profile systems.
+### 4.2 — Edge Compute & Cache Logic (Extension of SDE-2 4.1 & 1.10)
+*In SDE-2, you use a CDN for static files. In SDE-3, you move logic to the Edge.*
 
-### 4.3 Cache Eviction Policies
-- LRU for temporal locality.
-- LFU for stable skew and long-lived hot items.
-- FIFO as a baseline but rarely ideal.
-- TTL as expiry, not really an eviction policy.
-- Memory pressure, eviction churn, and how policy interacts with workload.
+- **Compute@Edge (Fastly VCL / Cloudflare Workers):** Moving auth, A/B testing, and "Personalized Feed Fragments" to the edge to avoid the 100ms round-trip to the origin.
+- **Cache Key Normalization at Edge:** Using edge logic to strip query params, normalize headers (e.g., `Accept-Encoding`), and increase cache hit ratios by 20%+.
+- **ESI (Edge Side Includes):** Stitching together a page from multiple cached fragments with different TTLs at the edge server.
 
-### 4.4 Cache Invalidation
-- TTL-based invalidation as the default simplification.
-- Event-driven invalidation using write events or CDC.
-- Write-through as an implicit invalidation strategy.
-- Versioned keys and namespace bumping during deploys.
-- Stale-while-revalidate for low-risk reads.
-- Senior-level depth: describe acceptable staleness window and what user-visible inconsistency it creates.
+### 4.3 — Advanced Cache Consistency (Extension of SDE-2 4.4)
+*In SDE-2, you know TTLs. In SDE-3, you manage strict consistency.*
 
-### 4.5 Distributed Caching
-- Why one cache node becomes a bottleneck.
-- Sharding across cache nodes.
-- Consistent hashing to reduce key remapping during scale events.
-- Replication and failover.
-- Two-level caching: local L1 + distributed L2.
-- Cache cluster rebalance and warm-up concerns after node add / remove.
+- **Lease-Based Caching:** Using leases (e.g., Facebook's McRouter approach) to prevent a "Stale Write" from overwriting a "Fresh Write" during high concurrency.
+- **Probabilistic Early Recomputation (PER):** Avoiding the "Cache Stampede" not just with locks, but by having a small % of clients recompute the key *before* it expires based on a probability curve.
+- **Two-Level Distributed Invalidation:** How a central DB write triggers an invalidation event that propagates to 50+ Redis clusters globally in <200ms.
 
-### 4.6 Cache Correctness and Coherence
-- Read-your-writes problems when cache and DB are not updated in the same path.
-- Multi-node coherence issues when each app instance has local cache.
-- Replica lag plus cache can compound staleness.
-- Serving stale data intentionally vs accidentally.
-- Product-level decision: stale feed is okay, stale payment balance is not.
+### 4.4 — Caching Economics & Observability (Extension of SDE-2 4.1 & 12)
+*In SDE-2, you track Hit Ratio. In SDE-3, you optimize the "Total Cost of Ownership" (TCO).*
 
-### 4.7 Cache Problems and Solutions
-- Stampede / thundering herd on hot-key expiry.
-- Avalanche when many keys expire together.
-- Penetration when nonexistent keys keep hitting origin.
-- Cold start after deploy or failover.
-- Hot key meltdown where one key becomes the whole system's bottleneck.
-- Common mitigations: request coalescing, mutex on miss, TTL jitter, negative caching, local replication of ultra-hot items.
-
-### 4.8 Scaling Cache Infrastructure
-- Hot-key replication.
-- Pinning or special-casing skewed keys.
-- Tiered cache with edge + local + distributed layers.
-- Memory economics: do not cache everything just because you can.
-- Cache observability: hit ratio, miss latency, eviction rate, hot-key detection.
-
-### 4.9 Redis Deep Dive
-- Strings, hashes, lists, sets, sorted sets, bitmaps, HyperLogLog.
-- Sorted sets for leaderboards and sliding-window rate limiting.
-- Atomic operations, Lua scripts, and why race-free multi-step ops matter.
-- Pipelining and batching.
-- Persistence awareness: RDB, AOF, hybrid.
-- Sentinel and Cluster awareness.
-- Distributed lock caveat: lease expiry and fencing problems.
-
-### 4.10 What SDE-3 Should Be Comfortable Saying
-- "I would start with cache-aside, but I need to call out the stale-read window explicitly."
-- "This cache helps p99 only if the hot working set actually fits in memory."
-- "I need a hot-key strategy here because celebrity traffic will dominate one key."
-- "I would not promise read-your-writes from cache unless the write path updates it synchronously or versions the data."
+- **Cache Hit Ratio vs. Origin Latency:** Calculating the "Sweet Spot" where adding 1TB of RAM to Redis saves $10k/month in DB scaling costs.
+- **The "Uncacheable" Problem:** Identifying workloads where caching actually *increases* latency (e.g., high-churn metadata) and knowing when to "Bypass Cache" entirely.
+- **Negative Caching at Scale:** Protecting against a "DDoS of 404s" by caching the *absence* of data with Bloom filters and short-lived "No-Found" entries.
