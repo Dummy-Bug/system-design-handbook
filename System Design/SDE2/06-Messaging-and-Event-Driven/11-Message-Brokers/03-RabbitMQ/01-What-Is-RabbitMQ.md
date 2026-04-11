@@ -1,3 +1,4 @@
+
 > [!info] RabbitMQ is a message broker built around the idea of **routing**. You don't publish a message directly to a queue — you publish it to an **exchange**, and the exchange decides which queue (or queues) should receive it based on routing rules you define. This routing layer is what sets RabbitMQ apart from simpler brokers like SQS.
 
 ---

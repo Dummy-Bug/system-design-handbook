@@ -1,5 +1,5 @@
 
-> [!info] A delay queue holds a message invisibly for a specified duration, then makes it visible to consumers. The consumer never sees it until the delay expires — from the consumer's perspective the message just appears when it's ready to be processed.
+> [!info] A delay queue holds a message invisibly for a specified duration, then makes it visible to consumers. The consumer never sees it until the delay expires — from the consumer's perspective, the message just appears when it's ready to be processed.
 
 
 ## The problem
@@ -45,7 +45,7 @@ The queue stores a `visible_after` timestamp on each message. Workers only see m
 ```
 Message enqueued at 10:00:00 with 30 minute delay
 → visible_after = 10:30:00
-→ Workers poll the queue at 10:15:00 → message doesn't exist for them
+→ Workers poll at 10:15:00 → message doesn't exist for them
 → Workers poll at 10:30:01 → message appears → picked up
 ```
 
@@ -63,7 +63,7 @@ When each entity has its own individual schedule, cron forces you to scan all en
 
 ---
 
-## Retry with exponential backoff — delay queues in action
+## Retry with exponential backoff
 
 A payment fails. But why it failed determines how you retry.
 
@@ -72,8 +72,7 @@ A payment fails. But why it failed determines how you retry.
 ```
 Payment fails → reason: "provider_unavailable"
 → Drop message in delay queue with 30 min delay, retry_count: 1
-
-30 minutes later → worker picks it up → succeeds ✓
+→ 30 minutes later → worker picks it up → succeeds ✓
 ```
 
 **Payment failure** — card declined, insufficient funds. Retrying in minutes is pointless. But retrying over days makes sense — the user might top up their account, get paid, or update their card.
@@ -81,31 +80,18 @@ Payment fails → reason: "provider_unavailable"
 This is exactly what Netflix does:
 
 ```
-Day 0  → charge fails (insufficient funds) → notify user → enqueue retry for Day 1
-Day 1  → retry → still failing → enqueue retry for Day 3
-Day 3  → retry → still failing → enqueue retry for Day 7
-Day 7  → retry → still failing → enqueue retry for Day 14
+Day 0  → charge fails (insufficient funds) → notify user → schedule retry for Day 1
+Day 1  → retry → still failing → schedule retry for Day 3
+Day 3  → retry → still failing → schedule retry for Day 7
+Day 7  → retry → still failing → schedule retry for Day 14
 Day 14 → retry → still failing → suspend account
 ```
 
-The user consented to the subscription — Netflix keeps trying over days hoping they sort out their payment. Each retry is a delay queue message with a multi-day delay. The only difference from a technical retry is you also send the user a notification so they know to act.
-
-```
-Payment failure reason → "card_declined"
-→ Notify user: "Your payment failed, please update your card"
-→ Drop message in delay queue with 1 day delay, retry_count: 1
-
-Day 1 → retry → still failing
-→ Notify user again
-→ Drop message in delay queue with 2 day delay, retry_count: 2
-...
-```
-
-Each retry is a new message with a longer delay. The delay queue handles the timing — the worker just processes the result and enqueues the next step.
+The user consented to the subscription — Netflix keeps trying over days hoping they sort out their payment. Each retry is a delay queue message with a longer delay. The only difference from a technical retry is you also notify the user so they know to act.
 
 ---
 
-## WhatsApp disappearing messages — delay queues in action
+## WhatsApp disappearing messages
 
 When you enable disappearing messages, every message you send needs to be deleted exactly 7 days later. That's a per-message schedule — each message has its own deletion time.
 
@@ -118,7 +104,7 @@ Jan 8 at 10:00 → message becomes visible in queue
 → Worker picks it up → deletes message from DB → done
 ```
 
-100 million messages sent per day = 100 million independently timed deletion events queued up. Each one fires exactly 7 days after its message was sent. A cron job scanning for "messages older than 7 days" every minute would be scanning billions of rows constantly.
+100 million messages sent per day = 100 million independently timed deletion events queued up. Each one fires exactly 7 days after its message was sent.
 
 ---
 
@@ -137,4 +123,4 @@ Email verification expiry      → invalidate token exactly 24 hours after sendi
 
 > [!danger] Don't use delay queues for condition-based triggers. "Send notification when driver is 5 minutes away" is not time-based — it's triggered by an ETA condition being met. Delay queues are for purely time-based scheduling only. Condition-based triggers belong in a different pattern (event-driven, polling, or push from the service that detects the condition).
 
-> [!tip] **Interview framing:** "I'd use a delay queue here rather than a cron job — the schedule is per-entity, not global. Each entity gets its own message with its own timer. No DB scanning, scales to any number of users, and each job fires exactly when it's supposed to. For retries, I'd use exponential backoff — each failed attempt enqueues the next retry with a doubled delay."
+> [!tip] **Interview framing:** "I'd use a delay queue here rather than a cron job — the schedule is per-entity, not global. Each entity gets its own message with its own timer. No DB scanning, scales to any number of users, and each job fires exactly when it's supposed to. For retries, I'd use exponential backoff — each failed attempt enqueues the next retry with a longer delay."
