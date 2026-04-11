@@ -1,130 +1,25 @@
-## Phase 2 - Back of Envelope Estimation
+## Phase 2 — Back of Envelope Estimation (SDE-3 Extension)
 
-> HLD relevance: estimation is where architecture stops being generic.
-> SDE-3 depth means you should identify the dominant cost driver, not just compute average QPS.
+> **Prerequisite:** Full mastery of SDE-2 Estimation (QPS, Storage, Bandwidth, Memory, Server counts).
+> **SDE-3 Focus:** Moving from "capacity planning" to "system-level feasibility and cost engineering."
 
-### SDE-3 depth bar for this phase
-- Estimate the system in the order that changes architecture decisions.
-- Identify what actually dominates: fan-out, bandwidth, cross-region latency, storage growth, hot-key skew, or queue lag.
-- Split averages from peaks and explain p95 / p99 consequences.
-- Use estimates to justify migration path, not just initial design.
+### 2.1 — Cost Engineering & Cloud Economics (SDE-3 Exclusive)
+*In SDE-2, you estimate servers. In SDE-3, you estimate the bill.*
 
-### 2.1 Numbers to Memorize
+- **Egress Costs:** The "Hidden Killer." Estimating the cost of moving data out of a region or between AZs. Designing to minimize "Cross-AZ" traffic (which can be 50% of a networking bill).
+- **Storage Tiering Economics:** Calculating the ROI of moving 1PB from S3 Standard to Glacier Deep Archive. Factoring in "Retrieval Costs" vs. "Storage Costs."
+- **Spot vs. On-Demand Math:** Designing workloads that can handle interruptions to achieve 70-90% cost savings. Estimating the "Interruption Rate" impact on SLOs.
 
-**Latency**
-| Operation | Rough latency |
-|---|---|
-| RAM access | ~100 ns |
-| SSD random read | ~100-200 us |
-| HDD seek | ~10 ms |
-| same-datacenter network | ~0.5 ms |
-| cross-region network | ~100-150 ms |
+### 2.2 — Performance Bound Estimation (Extension of SDE-2 8.1)
+*In SDE-2, you memorize latency numbers. In SDE-3, you estimate the "Speed of Light" limit.*
 
-**Data sizes**
-- short text message: ~200 bytes
-- user profile: ~1 KB
-- image: ~300 KB to 1 MB
-- short compressed video: tens of MB
+- **Tail Latency Amplification Math:** Calculating why a system with 10 parallel sub-calls, each with 1% failure/slowness, results in a ~10% overall failure/slowness rate.
+- **Queueing Theory (Little's Law):** `L = λW`. Estimating how many requests are "in flight" and how that impacts memory pressure and thread pool sizing.
+- **Fan-out Depth vs. Latency:** Estimating the impact of a 3-level deep microservice chain on the total P99 latency budget.
 
-**Traffic rules of thumb**
-- peak traffic is usually 3x to 5x average
-- social systems are often read-heavy but celebrity-skewed
-- media dominates storage and bandwidth, not metadata
-- global traffic is usually uneven across regions and time zones
+### 2.3 — Extreme Scale Feasibility (Extension of SDE-2 8.4)
+*In SDE-2, you justify sharding. In SDE-3, you justify "Radical Architecture."*
 
-### 2.2 Estimation Framework (Use This Order Every Time)
-
-**Step 1 - product workload**
-- DAU / MAU
-- actions per user per day
-- read QPS vs write QPS
-- sync path vs async path
-
-**Step 2 - peak load**
-- average QPS
-- peak multiplier
-- burstiness and traffic spikes
-- regional split if global
-
-**Step 3 - storage**
-- record size
-- retention
-- replication factor
-- hot / warm / cold storage split
-
-**Step 4 - bandwidth**
-- ingress bandwidth
-- egress bandwidth
-- fan-out amplification
-- CDN offload percentage
-
-**Step 5 - compute / memory**
-- working-set size
-- hot-key / hot-shard risk
-- rough server and cache footprint
-- consumer count for async systems
-
-**Step 6 - latency budget**
-- request budget by hop
-- cache hit vs miss path
-- p95 / p99 budget
-- cross-service amplification
-
-### 2.3 Senior-Level Estimation Concerns
-- Fan-out amplification in feeds and notifications.
-- Write amplification in indexes, replicas, and event-driven pipelines.
-- Cross-region latency tax when strong consistency is required.
-- Hot partitions caused by celebrity users, skewed tenants, or timestamp-based keys.
-- Queue drain time under backlog conditions.
-- Reconciliation / backfill cost for historical reprocessing.
-
-### 2.4 Practice Estimations
-
-**1. News Feed**
-- post write QPS vs feed read QPS
-- fan-out cost
-- celebrity skew
-- cache footprint of recent feeds
-
-**2. Chat System**
-- concurrent connections
-- message QPS
-- message history growth
-- media path vs text path split
-
-**3. Video Streaming**
-- ingest bandwidth
-- transcode expansion
-- CDN egress vs origin egress
-- storage tiering
-
-**4. Payment System**
-- write-heavy ledger storage
-- external-gateway callback volume
-- reconciliation batch size
-- audit retention cost
-
-**5. Ad Click Aggregation**
-- raw click ingest rate
-- stream processor throughput
-- state-store size
-- nightly exact recomputation size
-
-**6. Distributed Task Queue**
-- producer QPS
-- worker throughput
-- retry amplification
-- worst-case queue backlog drain time
-
-### 2.5 When Estimation Changes Architecture
-- QPS > 10K: cache, read replicas, and async side effects become common.
-- QPS > 100K: sharding, queue partitioning, and hotspot mitigation become design-level topics.
-- Storage in TB / PB scale: storage tiering and lifecycle management matter.
-- Fan-out-heavy systems: the write path may be harder than the read path.
-- Global systems: regional placement and consistency cost may dominate more than raw compute.
-
-### 2.6 What Strong SDE-3 Estimation Sounds Like
-- "The dominant cost here is not request QPS, it is feed fan-out on write."
-- "The metadata is cheap; CDN egress and transcode storage dominate the bill."
-- "Average traffic is irrelevant here. The peak plus skew drives the shard design."
-- "If I choose cross-region quorum, I am paying the speed-of-light tax on every write."
+- **The "Billions" Bar:** What happens when a counter hits 2^32? When a single table has 1 Trillion rows? When a Kafka topic has 10,000 partitions?
+- **Global Write Propagation:** Estimating the latency of a "Strongly Consistent Global Write" (limited by the speed of light across the Atlantic/Pacific).
+- **Write Amplification Estimation:** Beyond DB-level—estimating the total I/O cost of a single user action across DB, Cache, Search Index, and Analytics.

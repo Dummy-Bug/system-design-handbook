@@ -1,5 +1,7 @@
 # Window Types in Stream Processing
 
+> [!info] Events arrive continuously. To aggregate them into meaningful counts or sums, you need to bucket them into time windows. There are three window types: tumbling (fixed, non-overlapping — "orders per minute"), sliding (overlapping — "transactions in the last 5 minutes"), and session (dynamic size based on user inactivity — "pages in one visit"). Each answers a different question.
+
 Events arrive continuously. To aggregate them, you need to **bucket them into windows**.
 
 There are three window types, each solving a different problem.

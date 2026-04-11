@@ -1,6 +1,6 @@
 # CDC Basics
 
-## What is CDC?
+> [!info] CDC (Change Data Capture) is a technique for capturing every INSERT, UPDATE, and DELETE that happens in a database and streaming those changes in real-time to other systems. Instead of polling a table with "any new rows?", CDC subscribes to the database's transaction log (the WAL in Postgres) and receives changes as they happen — with millisecond latency and near-zero overhead on the database.
 
 CDC — **Change Data Capture** — is a technique for capturing every change (INSERT, UPDATE, DELETE) that happens in a database and streaming those changes in real-time to other systems.
 

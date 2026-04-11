@@ -1,5 +1,7 @@
 # Backpressure Signals
 
+> [!info] Kafka has no built-in mechanism to tell producers "slow down." It will accept messages until disk is full. Backpressure in a Kafka-based system is an external pattern you build: Prometheus scrapes lag metrics, Grafana visualizes them, Alertmanager fires when lag crosses a threshold, and that triggers auto-scaling consumers or throttling producers. None of it comes for free.
+
 ## The Problem
 
 Kafka has no built-in mechanism to tell producers "slow down." Unlike SQS (which can block producers when queue is full), Kafka will happily accept messages until disk is full.

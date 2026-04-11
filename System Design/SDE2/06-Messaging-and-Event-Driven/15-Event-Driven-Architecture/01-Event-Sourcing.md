@@ -1,24 +1,27 @@
-# Event Sourcing
-
-## What is Event Sourcing?
-
-Event Sourcing is a **design pattern** — a decision about how you store data.
-
-Instead of storing the current state of an entity and updating it, you store every **event that happened** to it. Current state is derived by replaying those events.
+> [!info] Event sourcing is a decision about how you store data. Instead of storing the current state of an entity and updating it in place, you store every event that ever happened to it. Current state is not stored — it's derived by replaying the events from the beginning.
 
 ---
 
-## Normal Approach vs Event Sourcing
+## The problem with mutable state
 
-### Normal (mutable state)
+In a normal system, you have an orders table. When an order ships, you update the `status` column to `"shipped"`. Simple. But now you've lost history.
+
 ```
 orders table:
 | order_id | status    | amount |
 | 123      | shipped   | $49.99 |
 ```
-Every status change = UPDATE the row. Previous states are gone forever.
 
-### Event Sourcing (append-only events)
+Six months later: "We got a customer complaint. They say their order was cancelled and recharged without explanation. What happened to order 123?" You have no idea. The row shows `shipped`. There's no record of how it got there — no timestamps, no intermediate states, nothing. The database has been overwriting the past the entire time.
+
+This is fine for most systems. But for payments, banking, or anything that needs a full audit trail, losing the history is unacceptable.
+
+---
+
+## What event sourcing does instead
+
+Instead of one row per entity that gets updated, you have one row per event that ever happened to the entity. Only INSERTs, never UPDATEs.
+
 ```
 order_events table:
 | order_id | event            | data                        | ts    |
@@ -28,51 +31,38 @@ order_events table:
 | 123      | OrderShipped     | { tracking: UPS123 }        | 10:05 |
 | 123      | OrderDelivered   | {}                          | 10:30 |
 ```
-Only INSERTs, never UPDATEs. Events are **immutable**.
 
-Current state of order_123 = replay all 5 events in order.
-
----
-
-## Why Event Sourcing?
-
-### Problems with mutable state
-- **No audit trail** — you can't answer "when did payment happen?" or "did a bug skip a state?"
-- **No history** — impossible to reconstruct past states for debugging or compliance
-- **Race conditions** — two services updating the same row simultaneously
-
-### What Event Sourcing gives you
-- **Full audit trail** — every transition recorded with timestamp and context
-- **Time travel** — reconstruct state at any point in time by replaying up to that timestamp
-- **Bug detection** — illegal transitions (created → delivered, skipping paid) are visible
-- **Event replay** — rebuild derived data, fix bugs by replaying with corrected logic
-
----
-
-## Diagram
+Current state of order 123? Replay all 5 events in order. Start from nothing, apply each event, end up at the final state.
 
 ```mermaid
-graph TD
-    subgraph Write Side
-        A[Service] -->|append only| ES[(Event Store\norder_events table)]
-    end
-
-    subgraph Read Side
-        ES -->|replay events| S[Current State\norder_123 = shipped]
-    end
-
-    ES -->|time travel| T[State at 10:02\norder_123 = paid]
+graph LR
+    E1[OrderCreated] --> E2[PaymentConfirmed] --> E3[OrderShipped] --> E4[OrderDelivered]
+    E4 --> CS[Current State: delivered]
 ```
+
+Now that customer complaint is easy to answer. You can see every state transition, with timestamps and the data that caused each one. Nothing is gone.
 
 ---
 
-## The Replay Performance Problem
+## What you gain
 
-If order_123 has 10,000 events, replaying all 10,000 every time you need current state is slow.
+**Full audit trail** — every transition is recorded with timestamp and context. "When did payment happen?" — row 3, 10:02. "Did a bug skip a state?" — you can see if PaymentInitiated appeared without a PaymentConfirmed following it.
 
-### Solution: Snapshots
+**Time travel** — reconstruct state at any past point in time. "What was the status of order 123 at 10:04?" — replay events up to that timestamp. You stop after `OrderShipped`. State at 10:04 = shipped.
 
-Periodically compute and save a snapshot of current state:
+**Bug detection and replay** — you deployed a bug that miscalculated refund amounts for 3 days. With mutable state, those rows are already wrong. With event sourcing, the raw events are untouched. Fix the bug, replay the events through the fixed logic, rebuild the correct state.
+
+**Event streaming** — every new event can be published to Kafka or a similar system. Other services subscribe and react in real-time. The event store becomes the source of truth for the entire system's history.
+
+---
+
+## The replay performance problem
+
+If order 123 has 10,000 events, replaying all 10,000 every time you need current state is slow.
+
+**Solution: snapshots**
+
+Periodically compute and save the current state as a snapshot.
 
 ```
 Snapshot at event #1000:
@@ -83,52 +73,47 @@ Events #1001 → #1005:
 ```
 
 To get current state:
-1. Load latest snapshot
-2. Replay only events **after** the snapshot
-
-Instead of replaying 1005 events → replay 5.
+1. Load the latest snapshot (cheap — one row)
+2. Replay only events after the snapshot (5 events instead of 1005)
 
 ```mermaid
 graph LR
-    E1[Events 1-1000] --> SN[Snapshot #1000\ncurrent state]
+    E1[Events 1-1000] --> SN[Snapshot #1000]
     SN --> E2[Events 1001-1005]
     E2 --> CS[Current State]
-
     style E1 fill:#aaa,color:#fff
     style SN fill:#4a9,color:#fff
 ```
 
-**Snapshot frequency**: typically every N events (e.g., every 100 or 1000), or on a time schedule.
+Snapshot frequency is typically every N events (100 or 1000) or on a time schedule.
 
 ---
 
-## The Complex Query Problem
+## The complex query problem — why CQRS comes next
 
-Event sourcing solves writes well. But complex read queries are painful:
+Event sourcing handles writes beautifully. But reads become painful.
 
-> "Show all orders in payment_pending for users in California, sorted by amount"
+"Show all orders in payment_pending for users in California, sorted by amount."
 
-You'd have to replay events for every order across millions of rows — completely impractical.
+With event sourcing, there's no `status` column you can query. You'd have to replay every order's events for every user in California. Completely impractical at scale.
 
-**Solution**: Maintain a separate read-optimized table that listens to events and keeps current state pre-computed. This is **CQRS** (covered next).
-
----
-
-## When to Use Event Sourcing
-
-**Good fit:**
-- Financial systems (payments, banking) — audit trail is mandatory
-- Order management — need full history of state transitions
-- Collaborative tools (Google Docs) — every edit is an event
-- Any domain where "how did we get here?" matters
-
-**Bad fit:**
-- Simple CRUD with no history requirements
-- High-frequency updates where replay cost is prohibitive without careful snapshotting
-- Teams unfamiliar with the pattern (high operational complexity)
+The solution is to maintain a separate read-optimized table that listens to events and keeps current state pre-computed. This is CQRS — covered in the next file.
 
 ---
 
-## Key Insight
+## When to use event sourcing
 
-> Event Sourcing trades write simplicity (just append) for read complexity (must replay or maintain projections). The audit trail and time-travel capabilities are the payoff. Use it when history is a first-class requirement, not just a nice-to-have.
+Event sourcing is genuinely useful when:
+- You need a full audit trail (financial systems, payments, banking)
+- You need to reconstruct state at any past moment (compliance, debugging)
+- State changes are meaningful business events, not just data mutations
+- You want to feed downstream systems with a stream of events (order tracking, notifications)
+
+It adds complexity you don't need when:
+- The domain is simple CRUD with no history requirements
+- Updates happen at high frequency (millions of events per entity — snapshots become mandatory)
+- The team isn't familiar with the pattern (operational overhead is real)
+
+> [!important] Event sourcing trades write simplicity (just append) for read complexity (must replay or maintain projections). The audit trail and time-travel capabilities are the payoff. Use it when history is a first-class requirement, not a nice-to-have.
+
+> [!tip] **Interview framing:** "I'd use event sourcing for the payment and order state — every state transition is a meaningful event that compliance requires us to store. For the dashboard queries I'd project those events into a read-optimized table via CQRS so reads stay fast without replaying thousands of events."

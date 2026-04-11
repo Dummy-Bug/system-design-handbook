@@ -1,5 +1,7 @@
 # Why Batch Processing
 
+> [!info] Stream processing handles events as they arrive in real-time. Batch processing handles data at rest — huge historical datasets that can't fit in memory and need to be processed across many machines in parallel. When someone says "rebuild the recommendation index from scratch" or "generate this month's billing report", they're describing a batch job, not a stream.
+
 ## Stream Processing Isn't Always Enough
 
 Stream processing handles live events as they arrive. But some problems require processing **historical data at rest** — data that already exists, sitting in files or object storage.
@@ -53,4 +55,4 @@ This is the foundation of **MapReduce** — Google's solution to this problem (2
 | **Billing reports** | Exact counts required — stream gives approximate, batch gives exact |
 | **ML training** | Train models on historical data in bulk |
 
-**Key interview point:** "For the real-time dashboard I'd use stream processing. For the monthly billing report I'd use a batch job — reprocess the raw event log from S3 for exact counts."
+> [!tip] **Interview framing:** "For the real-time dashboard I'd use stream processing. For the monthly billing report I'd use a batch job — reprocess the raw event log from S3 for exact counts. The stream gives approximate real-time; the batch gives exact numbers for invoicing."

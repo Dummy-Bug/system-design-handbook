@@ -1,5 +1,7 @@
 # Kappa Architecture
 
+> [!info] Kappa architecture is the response to Lambda's biggest pain point: maintaining two separate codebases (batch + stream) that compute the same thing. Kappa throws away the batch layer and uses only a stream processor. Historical reprocessing happens by replaying Kafka from the beginning with a new consumer group — same code, same logic, no drift.
+
 ## The Core Idea
 
 Lambda's pain is two codebases. Kappa's answer: **use one**.

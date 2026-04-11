@@ -1,5 +1,7 @@
 # Lambda vs Kappa — Comparison
 
+> [!info] Lambda runs batch + stream in parallel and merges results — accurate but operationally expensive (two codebases). Kappa runs stream only and replays history when needed — simpler but requires your stream processor to handle replay at scale. The choice comes down to whether batch-level accuracy is a hard requirement, or whether operational simplicity is worth more.
+
 ## Side by Side
 
 | | Lambda | Kappa |

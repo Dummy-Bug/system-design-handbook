@@ -1,6 +1,6 @@
 # Consumer Lag
 
-## What is Consumer Lag?
+> [!info] Consumer lag is the gap between how fast messages are being produced and how fast they are being consumed. It's measured as the difference between the latest offset in a partition and the consumer's current offset. Growing lag is the early warning signal that your consumers are falling behind — if you don't act, the queue fills up, latency explodes, and eventually messages start dropping.
 
 Consumer lag is the gap between how fast messages are being produced and how fast they are being consumed.
 
@@ -74,6 +74,4 @@ Consumer lag is the **early warning signal** for backpressure. By the time Kafka
 
 ---
 
-## Interview Talking Point
-
-> "The first thing I'd instrument is consumer lag per partition. If lag is growing monotonically, the consumer can't keep up and we need to either scale consumers, throttle producers, or shed load — in that order."
+> [!tip] **Interview framing:** "The first thing I'd instrument is consumer lag per partition. If lag is growing monotonically, the consumer can't keep up and we need to either scale consumers, throttle producers, or shed load — in that order. Prometheus + Grafana with a lag threshold alert is the standard production setup."

@@ -1,6 +1,6 @@
 # Load Shedding
 
-## What is Load Shedding?
+> [!info] Load shedding is the deliberate decision to drop messages when the system can't keep up. It sounds bad — you're losing data on purpose — but the alternative is worse: unbounded lag, full disk, and eventual total failure. The art is choosing *which* messages to drop (analytics events, not billing records) and *where* to drop them (at the producer, not at the consumer after wasting resources processing them).
 
 Load shedding is the deliberate dropping of messages when the system cannot keep up. Instead of letting lag grow unboundedly and eventually crashing the system, you intentionally discard lower-priority work.
 
