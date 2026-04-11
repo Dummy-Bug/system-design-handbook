@@ -1,8 +1,4 @@
-# Delivery Guarantees
-
 > [!info] A delivery guarantee defines what the queue promises about whether and how many times a message will be delivered to a consumer. There are three levels — at-most-once, at-least-once, and exactly-once. Understanding the trade-offs between them is a core system design skill.
-
----
 
 ## Why this matters
 
@@ -47,7 +43,7 @@ The message got processed twice. The notification fires twice. The thumbnail get
 
 **The risk:** duplicate processing. For notifications this means the user gets the same push notification twice. For payments this means the user gets charged twice. For thumbnail generation it's just wasted CPU.
 
-**When to use it:** almost everywhere. It's the default for most production systems — Kafka, SQS, RabbitMQ all default to at-least-once. The duplicate problem is handled at the consumer level (see below).
+**When to use it:** almost everywhere. It's the default for most production systems — Kafka, SQS, RabbitMQ all default to at-least-once. The duplicate problem is handled at the consumer level
 
 ---
 
@@ -82,6 +78,7 @@ An **idempotent consumer** is one where processing the same message twice produc
 ```
 First delivery of photo_posted_123:
 → Notification Service checks DB: "have I sent this notification already?"
+
 → No → sends notifications → writes { event_id: "photo_posted_123", status: "sent" } to DB
 
 Second delivery of photo_posted_123 (due to crash/retry):

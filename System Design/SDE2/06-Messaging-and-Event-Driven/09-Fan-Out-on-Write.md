@@ -1,55 +1,74 @@
-# Fan-Out on Write
 
-> [!info] Fan-out on write means when a user posts, you immediately update all their followers' feeds in the background. By the time any follower opens the app, the post is already sitting in their feed — fast reads, background writes.
+> [!info] Fan-out on write means when a user posts, you immediately push that post into all their followers' feeds in the background. There's a small window where the fan-out is still in progress — but once it completes, reads are instant because the work was already done at write time.
 
----
 
 ## The problem
 
 A user posts a photo. 500 followers need to see it in their feed. You have two choices:
 
-1. Update all 500 feeds right now, at post time
-2. Do nothing now, compute the feed when each follower opens the app
+1. Push the post into all 500 feeds right now, at post time — reads are instant later
+2. Do nothing now, compute each follower's feed when they open the app — reads are slow later
 
-Fan-out on write is option 1 — do the work upfront so reads are instant.
+Fan-out on write is option 1. You pay the cost at write time so every read is O(1).
+
+The term "fan-out" just means spreading one thing out to many. One post fans out to 500 feed entries — like a fan spreading open from a single point.
 
 ---
 
-## Why async — never block the user
+## Why async — never block the poster
 
-Even with only 500 followers, you never do feed updates synchronously in the user's post request. The user doesn't care if their followers' feeds are updated — they just want their post to go live. Making them wait for 500 DB inserts is a terrible experience.
+Even with 500 followers, you never do feed updates synchronously during the user's post request. Alice doesn't care whether Bob's feed is updated — she just wants her post to go live. Making her wait for 500 DB inserts is terrible.
 
 ```
 User hits Post
-→ Save post to DB (post_id: 789, user_id: Alice)
+→ Save post to DB: { post_id: 789, user_id: Alice }
 → Drop one message in queue: { event: "post_created", post_id: 789, user_id: Alice }
-→ Return "Posted!" to Alice   ← Alice is done in ~200ms
+→ Return "Posted!" to Alice in ~200ms ✓
 
 Queue holds the message.
 Feed Service picks it up in the background.
 ```
 
+One message into the queue. The fan-out happens inside the Feed Service — not in Alice's request path.
+
 ---
 
-## The full fan-out on write flow
+## The full fan-out flow
+
+```mermaid
+graph TD
+    A[Alice posts] --> DB[(Posts DB)]
+    A --> Q[Queue]
+    Q --> FS[Feed Service]
+    FS --> FL[(Followers DB)]
+    FL --> |500 follower IDs| FS
+    FS --> F1[Bob's feed]
+    FS --> F2[Charlie's feed]
+    FS --> F3[Dave's feed]
+    FS --> F4[...497 more]
+```
 
 **Step 1 — Feed Service picks up the message**
 ```
-Reads from queue: { event: "post_created", post_id: 789, user_id: Alice }
+{ event: "post_created", post_id: 789, user_id: Alice }
 ```
 
-**Step 2 — Fetch all of Alice's followers**
+**Step 2 — Fetch Alice's followers**
 ```sql
-SELECT follower_id FROM followers WHERE following_id = Alice
-→ returns [Bob, Charlie, Dave, ... 500 followers]
+SELECT follower_id FROM followers WHERE following_id = 'Alice'
+→ [Bob, Charlie, Dave ... 500 total]
 ```
 
-**Step 3 — Insert post into every follower's feed**
+**Step 3 — Insert into every follower's feed**
+
+500 individual inserts would be slow — one round trip per insert. Instead, batch them:
 ```sql
-INSERT INTO feeds (user_id, post_id) VALUES (Bob, 789)
-INSERT INTO feeds (user_id, post_id) VALUES (Charlie, 789)
-... 500 inserts (done in batches of 50 for performance)
+INSERT INTO feeds (user_id, post_id) VALUES
+  (Bob, 789), (Charlie, 789), (Dave, 789) ...
+-- 50 rows per batch, 10 batches total for 500 followers
 ```
+
+Batching 50 at a time means 10 DB round trips instead of 500. Same result, 50x fewer network calls.
 
 **Step 4 — ACK the queue**
 ```
@@ -58,17 +77,17 @@ Feed Service sends ACK → message deleted from queue
 
 **Step 5 — Bob opens Instagram**
 ```sql
-SELECT post_id FROM feeds WHERE user_id = Bob ORDER BY created_at DESC LIMIT 20
-→ post_id 789 is already there, instant read
+SELECT post_id FROM feeds WHERE user_id = 'Bob' ORDER BY created_at DESC LIMIT 20
+→ post_id 789 is already there ← instant, pre-computed
 ```
 
 ---
 
 ## The crash problem — and the fix
 
-What if Feed Service crashes after 250 inserts? The message never got ACKed. Visibility timeout expires, message reappears, Feed Service picks it up again and does all 500 inserts. Now 250 followers get duplicate feed entries.
+Feed Service crashes after 250 inserts. The message never got ACKed. Visibility timeout expires, message reappears, Feed Service picks it up again and re-runs all 500 inserts. The first 250 followers get duplicate feed entries.
 
-**Fix — DB-level idempotency**
+**Fix: DB-level idempotency**
 
 Put a unique constraint on `(user_id, post_id)` in the feeds table. Use `ON CONFLICT DO NOTHING` on every insert.
 
@@ -80,30 +99,15 @@ ON CONFLICT (user_id, post_id) DO NOTHING
 Now redelivery is completely harmless:
 
 ```
-First delivery  → inserts 500 feed entries
-Crash at 250    → message redelivered
-Second delivery → tries all 500 inserts again
-                → first 250 already exist → skipped silently
-                → last 250 inserted fresh
-                → done correctly, no duplicates
+First delivery  → inserts rows 1–250 → crashes
+Second delivery → tries all 500 again
+                → rows 1–250 already exist → skipped silently
+                → rows 251–500 inserted fresh
+                → done correctly, zero duplicates
 ```
 
-> [!important] DB-level idempotency via unique constraint is the most reliable approach — enforced at the storage layer, not in application code. No race conditions possible. Application-level "check before insert" has a race condition window between the check and the insert.
+> [!important] DB-level idempotency via unique constraint is the most reliable approach — enforced at the storage layer, not in application code. An application-level "check then insert" has a race condition window between the check and the insert. The DB constraint has no such gap.
 
 ---
 
-## When to use fan-out on write
-
-Fan-out on write works well when follower counts are manageable — typically under ~10,000 followers. The write cost at post time is bounded and predictable.
-
-```
-Normal user posts (500 followers)
-→ 1 queue message
-→ 500 DB inserts in background
-→ Fast reads for all followers
-→ Total cost: manageable
-```
-
-> [!danger] Fan-out on write breaks down for celebrities. A celebrity with 10 million followers posting triggers 10 million DB inserts instantly. That's a massive write spike that can overwhelm your DB. Use fan-out on read for celebrities instead.
-
-> [!tip] **Interview framing:** "For normal users I'd use fan-out on write — drop a post_created event in the queue, the Feed Service fetches the follower list and writes to each follower's feed asynchronously. Inserts are idempotent via a unique constraint on (user_id, post_id) so retries are safe. Reads are then O(1) — the feed is pre-computed and waiting."
+> [!tip] **Interview framing:** "For normal users I'd use fan-out on write — drop a post_created event into a queue, the Feed Service fetches the follower list and writes to each follower's feed in batched inserts asynchronously. Inserts are idempotent via a unique constraint on (user_id, post_id) so retries are safe. Reads are O(1) — the feed is pre-computed. Fan-out on write breaks down for celebrities — that's where fan-out on read comes in."

@@ -1,8 +1,5 @@
-# Fan-Out on Read
 
 > [!info] Fan-out on read means you do nothing at post time. When a follower opens the app, you fetch the posts live at that moment. No pre-computation, no upfront writes — the feed is assembled on demand.
-
----
 
 ## Why fan-out on write breaks for celebrities
 
@@ -24,6 +21,17 @@ This is completely unacceptable. You can't let one user's post bring down your i
 
 Do nothing at post time. Just save the post to the DB.
 
+```mermaid
+graph TD
+    K[Kylie posts] --> PDB[(Posts DB)]
+    B[Bob opens app] --> FS[Feed Service]
+    FS --> FDB[(Followers DB)]
+    FDB -->|who does Bob follow?| FS
+    FS --> PDB
+    PDB -->|fetch recent posts from followed accounts| FS
+    FS -->|assembled feed| B
+```
+
 ```
 Kylie posts photo
 → Save post to DB: { post_id: 999, user_id: Kylie, created_at: now }
@@ -41,6 +49,21 @@ Bob opens app
           ORDER BY created_at DESC LIMIT 20
 → Assemble feed from results
 → Return to Bob
+```
+
+```mermaid
+sequenceDiagram
+    participant Bob
+    participant FeedService
+    participant FollowersDB
+    participant PostsDB
+
+    Bob->>FeedService: open app — give me my feed
+    FeedService->>FollowersDB: who does Bob follow?
+    FollowersDB-->>FeedService: [Kylie, Taylor, Nike ...]
+    FeedService->>PostsDB: fetch recent posts from those accounts
+    PostsDB-->>FeedService: posts sorted by created_at
+    FeedService-->>Bob: assembled feed
 ```
 
 The feed is computed live every time Bob opens the app. No pre-computed feed table needed.
@@ -70,6 +93,20 @@ The fix for read cost is caching — cache the assembled feed for each user for 
 ## The hybrid approach — what Instagram and Twitter actually do
 
 Neither pure fan-out on write nor pure fan-out on read works at scale. The real answer is a hybrid:
+
+```mermaid
+graph TD
+    NU[Normal user posts] --> Q[Queue]
+    Q --> FS1[Feed Service]
+    FS1 -->|fan-out on write| FT[(Feeds Table)]
+
+    CE[Celebrity posts] --> PDB[(Posts DB)]
+
+    B[Bob opens app] --> FS2[Feed Service]
+    FS2 -->|pre-computed entries| FT
+    FS2 -->|live fetch celebrity posts| PDB
+    FS2 -->|merge + sort| B
+```
 
 ```
 Normal user posts (< ~10,000 followers)
@@ -120,6 +157,65 @@ Bob opens Instagram
 ```
 
 The result feels instant to Bob because Step 1 is a fast pre-computed lookup, and Steps 2-4 hit cached data for celebrity posts.
+
+---
+
+## How the two sets get merged — chronological sort
+
+After fetching both sets, Feed Service merges them and sorts by `created_at`. Kylie's post gets no special treatment — it slots into wherever it belongs based on when she posted.
+
+```
+Pre-computed feed (normal users):     Live fetched (celebrities):
+Dave    10:00                         Kylie   09:50
+Charlie 09:45
+Bob     09:30
+
+Merged and sorted:
+1. Dave    10:00
+2. Kylie   09:50  ← slides into position 2 based on timestamp
+3. Charlie 09:45
+4. Bob     09:30
+```
+
+If Kylie posted most recently, she's at the top. If she posted 3 days ago, she's buried under everything newer.
+
+---
+
+## Chronological vs ranked feed
+
+The merge above is a **chronological feed** — posts ordered purely by time. Simple, predictable, what Twitter used to do.
+
+Instagram doesn't do pure chronological anymore. They use a **ranking algorithm** — every candidate post gets scored by an ML model based on:
+
+```
+Recency              → how recently was it posted?
+Relationship         → how often do you interact with this account?
+Interest             → do you usually engage with this type of content?
+Post type            → video vs photo vs reel
+Engagement signals   → how many likes/comments in the first 30 minutes?
+```
+
+The feed you see isn't "most recent 20 posts." It's "the 20 posts the model thinks you're most likely to engage with."
+
+> [!important] Feed ranking is a separate layer on top of the architecture. The hybrid fan-out system produces a pool of candidate posts. A ranking model then scores and reorders them. In a system design interview, describe the architecture first (fan-out on write + fan-out on read hybrid), then mention ranking as an optional layer on top if asked how Instagram decides what to show.
+
+```mermaid
+sequenceDiagram
+    participant Bob
+    participant FeedService
+    participant FeedsTable
+    participant FollowersDB
+    participant PostsDB
+
+    Bob->>FeedService: open app — give me my feed
+    FeedService->>FeedsTable: fetch pre-computed feed for Bob
+    FeedsTable-->>FeedService: 20 posts from normal users ✓
+    FeedService->>FollowersDB: who are Bob's celebrity follows?
+    FollowersDB-->>FeedService: [Kylie, Taylor, Nike ...]
+    FeedService->>PostsDB: fetch recent posts from celebrities
+    PostsDB-->>FeedService: celebrity posts (cached)
+    FeedService-->>Bob: merged + sorted top 20
+```
 
 ---
 

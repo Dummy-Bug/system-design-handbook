@@ -1,5 +1,3 @@
-# Message Ordering
-
 > [!info] Queues do not guarantee message ordering by default — especially when multiple workers are consuming in parallel. Ordering must be designed explicitly, using a combination of client-side sequence numbers and server-side timestamps.
 
 ---
@@ -34,7 +32,39 @@ Multiple workers processing in parallel destroys ordering. The queue hands out m
 
 First instinct: stamp each message with the client's clock, sort by timestamp at the consumer.
 
-The problem: the network doesn't guarantee delivery order. "hey" might leave Alice's phone first but arrive at the server after "how are you" due to network jitter. And client clocks are unreliable — two users' phones can be slightly out of sync, making cross-user timestamp comparison meaningless.
+Two things break this.
+
+**Problem 1 — Network jitter reorders messages in transit**
+
+Alice sends both messages in the right order, at the right time. But the network is not a perfect pipe.
+
+```
+Alice sends:
+"hey"         at client_ts: 10:00:00.100  → takes 200ms to reach server
+"how are you" at client_ts: 10:00:00.150  → takes  20ms to reach server
+
+Server receives:
+"how are you" arrives at 10:00:00.170  ← arrives first
+"hey"         arrives at 10:00:00.300  ← arrives second, despite being sent first
+```
+
+If the server trusts client timestamps, it sorts them correctly: "hey" then "how are you". But the server received them in the wrong order and processed "how are you" first. Without a reorder buffer, the damage is already done.
+
+**Problem 2 — Client clocks drift**
+
+Every phone has its own clock. Those clocks are not perfectly in sync — they can be off by hundreds of milliseconds or even seconds.
+
+```
+Alice's phone clock: 10:00:00.100  (slightly fast)
+Bob's phone clock:   10:00:00.050  (slightly slow)
+
+Alice sends "hey"           with client_ts: 10:00:00.100
+Bob  sends "yeah I'm here"  with client_ts: 10:00:00.050
+
+Sorted by client_ts: Bob's message appears first — even though Alice sent first
+```
+
+You're now ordering a conversation based on whose phone clock happens to be more accurate. That's not a system — that's luck.
 
 ---
 

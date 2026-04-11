@@ -1,8 +1,6 @@
-# Priority Queues
 
 > [!info] A priority queue breaks the normal FIFO rule — messages with higher priority are processed before lower priority messages, regardless of when they arrived.
 
----
 
 ## The problem
 
