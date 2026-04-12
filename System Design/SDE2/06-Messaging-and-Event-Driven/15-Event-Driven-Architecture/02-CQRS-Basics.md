@@ -1,4 +1,8 @@
-> [!info] CQRS (Command Query Responsibility Segregation) separates your write model from your read model. Writes go to one place optimized for consistency and event ordering. Reads come from a different place optimized for fast queries. They're kept in sync by an event listener that reacts to every write and updates the read model accordingly.
+
+> [!info] Command Query Responsibility Segregation 
+> separates your write model from your read model.
+> - Writes go to one place optimized for consistency and event ordering. 
+> - Reads come from a different place optimized for fast queries. They're kept in sync by an event listener that reacts to every write and updates the read model accordingly.
 
 ---
 
