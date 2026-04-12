@@ -1,6 +1,6 @@
-# Lambda Architecture
 
-> [!info] Lambda architecture runs two separate pipelines in parallel — a batch layer for accuracy and a speed layer for real-time — then merges their results in a serving layer. The insight is that you can't get both low latency and guaranteed accuracy from a single system, so you run both and combine them. The cost is maintaining two codebases that compute the same thing.
+> [!info] Lambda architecture runs two separate pipelines in parallel — a batch layer for accuracy and a speed layer for real-time — then merges their results in a serving layer. 
+> The insight is that you can't get both low latency and guaranteed accuracy from a single system, so you run both and combine them. The cost is maintaining two codebases that compute the same thing.
 
 ## The Problem It Solves
 

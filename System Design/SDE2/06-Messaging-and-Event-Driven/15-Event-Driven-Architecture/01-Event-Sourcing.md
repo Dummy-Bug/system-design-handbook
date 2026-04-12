@@ -1,4 +1,6 @@
-> [!info] Event sourcing is a decision about how you store data. Instead of storing the current state of an entity and updating it in place, you store every event that ever happened to it. Current state is not stored — it's derived by replaying the events from the beginning.
+
+> [!info] Event sourcing 
+> is a decision about how you store data. Instead of storing the current state of an entity and updating it in place, you store every event that ever happened to it. Current state is not stored — it's derived by replaying the events from the beginning.
 
 ---
 
@@ -24,11 +26,17 @@ Instead of one row per entity that gets updated, you have one row per event that
 
 ```
 order_events table:
-| order_id | event            | data                        | ts    |
+
+| order_id | event            | data                       |ts  
+
 | 123      | OrderCreated     | { user: u1, items: [...] }  | 10:00 |
+
 | 123      | PaymentInitiated | { amount: $49.99 }          | 10:01 |
+
 | 123      | PaymentConfirmed | { txn_id: txn_456 }         | 10:02 |
+
 | 123      | OrderShipped     | { tracking: UPS123 }        | 10:05 |
+
 | 123      | OrderDelivered   | {}                          | 10:30 |
 ```
 
@@ -58,7 +66,7 @@ Now that customer complaint is easy to answer. You can see every state transitio
 
 ## The replay performance problem
 
-If order 123 has 10,000 events, replaying all 10,000 every time you need current state is slow.
+If order 123 has 10,000 events, replaying all 10,000 every time you need to derive current state is slow.
 
 **Solution: snapshots**
 
