@@ -1,4 +1,9 @@
-> [!info] The decision between SQS, RabbitMQ, and Kafka comes down to one question asked before any feature comparison: what is the nature of the thing being sent? Is it a job to be done once? An event to be broadcast to specific services? A fact to be kept in history and replayed? The answer determines the broker. Everything else is tuning.
+
+> [!info] The decision between SQS, RabbitMQ, and Kafka comes down to one question asked before any feature comparison:
+>  what is the nature of the thing being sent? 
+>  - Is it a job to be done once? 
+>  - An event to be broadcast to specific services?
+>  - A fact to be kept in history and replayed? The answer determines the broker. Everything else is tuning.
 
 ---
 
@@ -6,7 +11,61 @@
 
 Every system design resource will give you a feature comparison table. Kafka has partitions. RabbitMQ has exchanges. SQS has visibility timeout. But picking a broker by features leads to over-engineering — you end up adding Kafka to a system that just needs email workers, or using SQS for a pipeline that needs event replay.
 
-The right question to start with:
+The right question to start with is not "what features do I need?" — it's "what is the nature of the thing I'm sending?"
+
+---
+
+## Job vs Event — the most important distinction
+
+Before anything else, you need to know whether you're dealing with a **job** or an **event**. These are fundamentally different things, and conflating them leads to the wrong broker every time.
+
+A **job** is a command. It says: *"Someone needs to do this work."*
+
+```
+User uploads a video → "resize this video to 720p"
+User places an order → "send a confirmation email to user@gmail.com"
+```
+
+A job belongs to one worker. Once that worker does the work, the message is useless — delete it. Nobody else needs to know that a video was resized. It was a unit of work, assigned, executed, gone.
+
+An **event** is a fact. It says: *"This thing happened."*
+
+```
+User clicked Nike's ad → "nike_ad_click at 14:03:22"
+```
+
+That fact doesn't belong to anyone. Multiple completely independent systems care about it for completely different reasons:
+
+```
+Billing     → charge Nike $1.00
+Fraud       → check if this was a bot
+Analytics   → update click-through rate dashboard
+ML model    → retrain ad ranking with new signal
+```
+
+Nobody "owns" this fact. It happened, it's recorded, and any system — including ones that don't exist yet — should be able to read it.
+
+The clearest test is: **after one system reads it, should it be deleted?**
+
+```
+Job:   "resize this video"
+         → video worker reads it
+         → video resized
+         → delete ✓ — no one else needs this
+
+Event: "Nike ad was clicked"
+         → billing reads it    → still there
+         → fraud reads it      → still there
+         → analytics reads it  → still there
+         → delete? Never — other systems still need it
+                               — replay is the whole point
+```
+
+Jobs are instructions to one consumer. Events are facts broadcast to the world. This single distinction determines your broker.
+
+---
+
+## The decision ladder
 
 ```
 1. Is this a job? (work to be done once, then gone)

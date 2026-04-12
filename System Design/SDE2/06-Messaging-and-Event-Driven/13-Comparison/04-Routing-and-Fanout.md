@@ -1,4 +1,3 @@
-# Routing and Fanout
 
 > [!info] RabbitMQ stands out for broker-side routing. SQS is a simple queue and usually relies on SNS or application-side routing for fanout. Kafka fanout happens through topic subscription and multiple consumer groups.
 
@@ -81,7 +80,9 @@ So Kafka fanout is not "copy to many queues." It is "many groups independently r
 
 ```text
 SQS       -> simple queue, fanout usually via SNS or app logic
+
 RabbitMQ  -> exchange routes to one or many queues
+
 Kafka     -> topic is shared history, fanout via multiple consumer groups
 ```
 
@@ -93,7 +94,6 @@ Kafka     -> topic is shared history, fanout via multiple consumer groups
 > [!danger] What it doesn't guarantee
 > Putting many consumers on one SQS queue does not create fanout. They compete; they do not each get a copy.
 
----
 
 > [!tip] Interview framing
 > "If I need rich broker-side routing, RabbitMQ is strongest. If I'm on AWS and just need fanout to worker queues, I'd typically use SNS plus SQS. If I need multiple services to independently read the same retained stream, Kafka is the better fit."

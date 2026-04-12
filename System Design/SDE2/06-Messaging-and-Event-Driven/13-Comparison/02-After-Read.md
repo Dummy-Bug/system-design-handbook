@@ -1,4 +1,3 @@
-# What Happens After Read
 
 > [!info] The biggest behavioral difference between SQS/RabbitMQ and Kafka appears after a consumer reads a message. In SQS and RabbitMQ, the consumer is taking responsibility for a work item. In Kafka, the consumer is reading from retained history.
 
@@ -42,7 +41,7 @@ After the consumer reads:
 - if the consumer sends `ACK`, RabbitMQ deletes it
 - if the consumer crashes before `ACK`, RabbitMQ redelivers it
 
-This is also work-queue behavior, but with richer routing before the queue.
+**This is also work-queue behavior, but with richer routing before the queue.**
 
 The consumer is again taking responsibility for a piece of work.
 
@@ -71,6 +70,7 @@ The consumer is not removing the event from shared history.
 
 ```text
 SQS / RabbitMQ -> read means taking responsibility for pending work
+
 Kafka          -> read means moving through retained event history
 ```
 
@@ -82,9 +82,8 @@ That is one of the most important distinctions in the entire comparison.
 > SQS and RabbitMQ optimize for work completion semantics. Kafka optimizes for retained shared event history.
 
 > [!danger] What it doesn't guarantee
-> "Consumer read the message" does not mean the same thing across these systems. Treating them as equivalent leads to wrong design choices.
+> Consumer read the message does not mean the same thing across these systems. Treating them as equivalent leads to wrong design choices.
 
----
 
 > [!tip] Interview framing
-> "In SQS and RabbitMQ, consumption is about finishing a work item with retry on failure. In Kafka, consumption is about advancing an offset through a retained log that other groups can still read."
+> In SQS and RabbitMQ, consumption is about finishing a work item with retry on failure. In Kafka, consumption is about advancing an offset through a retained log that other groups can still read.

@@ -1,6 +1,6 @@
-# Consumer Lag
 
-> [!info] Consumer lag is the gap between how fast messages are being produced and how fast they are being consumed. It's measured as the difference between the latest offset in a partition and the consumer's current offset. Growing lag is the early warning signal that your consumers are falling behind — if you don't act, the queue fills up, latency explodes, and eventually messages start dropping.
+> [!info] Consumer lag is the gap between how fast messages are being produced and how fast they are being consumed. 
+> It's measured as the difference between the latest offset in a partition and the consumer's current offset. Growing lag is the early warning signal that your consumers are falling behind — if you don't act, the queue fills up, latency explodes, and eventually messages start dropping.
 
 Consumer lag is the gap between how fast messages are being produced and how fast they are being consumed.
 

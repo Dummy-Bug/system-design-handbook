@@ -1,4 +1,3 @@
-# Replay and Retention
 
 > [!info] Kafka is built around retained history and replay. SQS and RabbitMQ hold pending work for processing, not long-term event history.
 

@@ -1,4 +1,3 @@
-# Ordering and Throughput
 
 > [!info] SQS, RabbitMQ, and Kafka make different trade-offs between ordering and scalability. Kafka has the cleanest large-scale story through partitions. SQS makes ordering an explicit queue-type trade-off. RabbitMQ ordering becomes fragile once concurrency and retries appear.
 
@@ -67,7 +66,9 @@ This makes Kafka strong for high-scale ordered-by-key event streams.
 
 ```text
 SQS       -> ordering possible, but queue-type dependent and throughput-limited
+
 RabbitMQ  -> ordering fragile once parallelism and retries start
+
 Kafka     -> ordering per partition with horizontal scaling through partitions
 ```
 
@@ -77,9 +78,8 @@ Kafka     -> ordering per partition with horizontal scaling through partitions
 > Kafka provides the most scalable ordering model through partitions. SQS and RabbitMQ can preserve order in narrower circumstances.
 
 > [!danger] What it doesn't guarantee
-> "Queue order" does not mean end-to-end business completion order, especially in RabbitMQ and SQS under parallel processing and retries.
+> Queue order does not mean end-to-end business completion order, especially in RabbitMQ and SQS under parallel processing and retries.
 
----
 
 > [!tip] Interview framing
-> "If I need large-scale ordered-by-key processing, Kafka is usually the cleanest fit because partitions are the unit of both ordering and horizontal scale. RabbitMQ ordering is fragile under concurrency, and SQS FIFO trades throughput for sequencing."
+> If I need large-scale ordered-by-key processing, Kafka is usually the cleanest fit because partitions are the unit of both ordering and horizontal scale. RabbitMQ ordering is fragile under concurrency, and SQS FIFO trades throughput for sequencing.

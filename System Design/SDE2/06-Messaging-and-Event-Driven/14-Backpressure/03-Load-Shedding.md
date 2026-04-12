@@ -1,10 +1,8 @@
-# Load Shedding
 
-> [!info] Load shedding is the deliberate decision to drop messages when the system can't keep up. It sounds bad — you're losing data on purpose — but the alternative is worse: unbounded lag, full disk, and eventual total failure. The art is choosing *which* messages to drop (analytics events, not billing records) and *where* to drop them (at the producer, not at the consumer after wasting resources processing them).
+> [!info] Load shedding is the deliberate dropping of messages when the system cannot keep up. Instead of letting lag grow unboundedly and eventually crashing the system, you intentionally discard lower-priority work.
+> The art is choosing *which* messages to drop (analytics events, not billing records) and *where* to drop them (at the producer, not at the consumer after wasting resources processing them).
 
-Load shedding is the deliberate dropping of messages when the system cannot keep up. Instead of letting lag grow unboundedly and eventually crashing the system, you intentionally discard lower-priority work.
 
----
 
 ## When is Load Shedding Acceptable?
 
@@ -18,7 +16,7 @@ The answer depends entirely on **what the message represents**:
 | Metrics / telemetry | Yes | Approximate data is fine |
 | Audit log | No | Compliance requires completeness |
 
-**Rule of thumb**: If losing the message causes **data inconsistency or financial harm**, never drop. If it causes **approximate analytics**, dropping is acceptable.
+**Rule of thumb**: If losing the message causes data inconsistency or financial harm, never drop. If it causes approximate analytics then dropping is acceptable.
 
 ---
 
@@ -65,8 +63,11 @@ if message_age > 5_minutes:
 
 ```
 1. Scale consumers + partitions     ← first, always try this
+   
 2. Throttle producer                ← if scaling isn't enough
+   
 3. Shed load at producer            ← if throttling isn't enough
+   
 4. Shed load at consumer            ← last resort when backlog already exists
 ```
 

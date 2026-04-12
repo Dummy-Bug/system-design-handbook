@@ -1,4 +1,3 @@
-# Scaling Consumers
 
 ## First Line of Defense Against Lag
 

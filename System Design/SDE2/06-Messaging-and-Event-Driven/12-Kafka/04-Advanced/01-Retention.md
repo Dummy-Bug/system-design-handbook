@@ -1,4 +1,3 @@
-# Retention and Log Compaction: Kafka's Cleaning Crew
 
 > [!info] Kafka is a persistent log, but it's not "infinite." Since Google processes 100k ad clicks per second, we'd need petabytes of storage every year just to keep them all. We must have a "Cleaning Crew" (the Retention policy) that automatically deletes old data.
 
@@ -21,11 +20,13 @@ Kafka gives us two different cleaning methods for these two scenarios.
 This is how Kafka handles **Events** (like ad-clicks). You treat Kafka like a trash can that automatically empties itself on a timer.
 
 ### Time-based Retention (The default)
+
 You tell Kafka: *"I only care about the last 7 days."*
 - After 7 days, Kafka just deletes the oldest files. 
 - **The Reasoning:** If your **Billing Service** crashes, you have a full week to fix it and "replay" those 7 days of data to catch up. After that, we assume the data is no longer useful for daily operations.
 
 ### Size-based Retention
+
 You tell Kafka: *"I only have 500 GB of disk space on this server. Never go above that."*
 - Once you hit 500 GB, Kafka deletes the oldest data to make room for the new stuff. 
 - **The Goal:** This is a "Safety Switch." You're choosing "Server Stability" over "History."
@@ -46,6 +47,7 @@ Imagine you are building a **User Profile Service**.
 If you use normal "Retention," Kafka would store all 3 messages. But you only care about the *latest* city (**Delhi**). 
 
 ### The Solution: Compact by Key
+
 You tell Kafka: *"I only care about the **LATEST** message for each unique Key (`user_id`)."*
 
 The Kafka **Compactor** (the cleaning crew) walks through the log and deletes the "old news."

@@ -1,3 +1,4 @@
+
 > [!info] SQS, RabbitMQ, and Kafka are all message brokers — they all sit between producers and consumers. But they solve different core problems, and treating them as interchangeable "message queues" leads to wrong design decisions. The real distinction is what each one is at its core: SQS is a managed task queue, RabbitMQ is a routing-first broker, and Kafka is a retained event log.
 
 ---
@@ -42,6 +43,7 @@ Ad click event arrives at exchange "ad.events"
 
 Bindings:
 "display.*"       → analytics.queue        ← Analytics workers get it
+
 "*.fraud_watch"   → fraud.queue            ← Fraud workers get it
 
 Result: two separate queues each receive the message
@@ -76,7 +78,9 @@ This is fundamentally different from SQS and RabbitMQ. The message is not "consu
 
 ```
 SQS       → a job that needs to be done once, then gone
+
 RabbitMQ  → a message that needs to reach the right destination(s), then gone
+
 Kafka     → an event that happened, kept in the log for everyone to read
 ```
 
