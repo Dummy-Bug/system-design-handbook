@@ -1,6 +1,6 @@
 ## Phase 13 — Operating Systems for Senior Engineers (SDE-3+)
 
-> **Prerequisite:** Basic understanding of processes, threads, and memory from SDE-2 (Concurrency & Locking).
+> **Prerequisite:** [[System Design/SDE2/00-Syllabus/13-Operating-Systems|SDE-2 Operating Systems Fundamentals]] and mastery of SDE-2 Core Concepts (Concurrency & Locking).
 > **SDE-3 Focus:** Moving beyond "it runs on Linux" to understanding how the kernel-space/user-space boundary, I/O path, and memory subsystem dictate the performance and reliability of high-scale systems.
 
 ### 13.1 — The Execution Model & Scheduling
