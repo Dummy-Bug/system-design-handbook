@@ -1,4 +1,3 @@
-# Offset Storage and Batch Commits
 
 > [!info] Consumers track their own offsets — but where do they store them? In-memory isn't safe across crashes. Kafka solves this with an internal topic called __consumer_offsets, and consumers commit in batches to keep overhead negligible.
 

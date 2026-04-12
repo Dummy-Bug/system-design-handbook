@@ -1,8 +1,6 @@
-# Kafka Offsets
 
 > [!info] Every message in Kafka has a number — its offset. This is its permanent position in the log. Consumers use offsets to track where they are and what to read next. Kafka doesn't track this for consumers — each consumer owns its own position.
 
----
 
 ## What an offset is
 
@@ -39,7 +37,9 @@ graph TD
 
 ```
 Billing Service    → last committed: offset 1000 → next read: 1001
+
 Fraud Service      → last committed: offset 850  → next read: 851
+
 ML Service         → last committed: offset 0    → replaying from beginning
 ```
 

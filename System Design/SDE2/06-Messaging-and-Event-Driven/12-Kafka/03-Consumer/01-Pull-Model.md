@@ -1,4 +1,3 @@
-# Consumer Pull Model and Batching
 
 > [!info] Kafka uses a **Pull-based** model where the Consumer (the reader) decides when and how much data to read. This protects the Consumer from being overwhelmed by spikes in data.
 
@@ -6,9 +5,9 @@
 
 ## The "Buffet" vs. "Overwhelming Waiter"
 
-Most messaging systems "push" data to you as fast as it arrives. 
+Most messaging systems push data to you as fast as it arrives. 
 - **Push:** A waiter brings you plates of food as fast as the kitchen cooks them. If you are slow, your table overflows and you crash.
-- **Pull (Kafka):** Data sits at the "Buffet" (the Broker). *You* (the Consumer) walk up and grab as much as you can handle.
+- **Pull (Kafka):** Data sits at the Buffet (the Broker). *You* (the Consumer) walk up and grab as much as you can handle.
 
 If your **Billing Service** is processing 10,000 clicks/sec and a spike of 100,000 clicks/sec happens, your service won't crash. It will just keep pulling its 10,000/sec, and the rest will safely wait on the Broker's disk.
 

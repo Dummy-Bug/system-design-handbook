@@ -1,4 +1,3 @@
-# Commit Before vs After — Delivery Guarantees in Kafka
 
 > [!info] When a consumer commits its offset determines what happens on crash and restart. Commit before processing = risk losing messages. Commit after processing = risk duplicates. There is no free lunch — pick your poison and design around it.
 

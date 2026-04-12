@@ -1,4 +1,3 @@
-# Consumer Groups
 
 > [!info] A consumer group is a set of consumer instances that work together to consume a topic. Kafka assigns each partition to exactly one consumer in the group — no two consumers share a partition. This is how Kafka scales consumption without locking or coordination.
 
@@ -117,7 +116,7 @@ If you need 10 consumer instances processing in parallel, you need at least 10 p
 
 ## Multiple consumer groups on the same topic
 
-Different services form different consumer groups. Each group gets its own independent view of the topic — all messages, from the beginning.
+Different services form different consumer groups. **Each group gets its own independent view of the topic** — all messages, from the beginning.
 
 ```mermaid
 graph TD

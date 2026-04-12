@@ -1,4 +1,3 @@
-# Producers and Partitioners
 
 > [!info] The **Producer** is the application that sends data to Kafka. Its most critical job is deciding **which partition** to send each message to. This is handled by the **Partitioner**.
 
@@ -9,6 +8,7 @@
 A Topic is split into multiple **Partitions** (lanes). Before sending a message, the Producer must choose a lane.
 
 ### 1. Round-Robin (No Key)
+
 If you don't care about the order of events, you can just spread the data evenly across all partitions.
 - Message 1 → Partition 0
 - Message 2 → Partition 1
@@ -19,6 +19,7 @@ If you don't care about the order of events, you can just spread the data evenly
 **Cons:** Ruining the order. If "Message 1" and "Message 4" are for the same user, they might be processed out of order if Partition 0 is slower than Partition 1.
 
 ### 2. Key-based Hashing (The Partitioner)
+
 If you need **ordering**, you provide a **Key** (like `user_id` or `patient_id`).
 
 The Producer runs the key through a **Hashing Function**:
@@ -28,7 +29,9 @@ No matter how many millions of messages you send, if the key is `user_123`, the 
 
 ```
 Producer → {Key: "Nike", Val: "Click"} → Partitioner → [Partition 1]
+
 Producer → {Key: "Adidas", Val: "Click"} → Partitioner → [Partition 0]
+
 Producer → {Key: "Nike", Val: "Click"} → Partitioner → [Partition 1] (Always!)
 ```
 

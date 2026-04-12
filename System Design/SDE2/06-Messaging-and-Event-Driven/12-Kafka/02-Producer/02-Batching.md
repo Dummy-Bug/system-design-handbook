@@ -1,8 +1,6 @@
-# Producer Batching and Throughput
 
 > [!info] Kafka achieves massive scale not just by where it sends data, but **how** it sends it. By grouping messages into **Batches**, Kafka reduces the overhead on the CPU, the Network Card (NIC), and the Disk.
 
----
 
 ## The "Postal Service" Problem (Overhead)
 

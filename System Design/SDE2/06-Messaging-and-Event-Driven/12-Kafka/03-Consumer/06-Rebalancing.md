@@ -1,4 +1,3 @@
-# Consumer Group Rebalancing
 
 > [!info] Rebalancing is when Kafka redistributes partition assignments among consumers in a group. It happens automatically whenever the group membership changes — a consumer joins, leaves, or crashes. During a rebalance, all consumers in the group pause briefly.
 
@@ -8,8 +7,11 @@
 
 ```
 1. A new consumer instance joins the group   → partitions need to be redistributed
+   
 2. A consumer crashes or times out           → its partitions need to be reassigned
+   
 3. A consumer gracefully shuts down          → its partitions need to be reassigned
+   
 4. New partitions are added to the topic     → new partitions need to be assigned
 ```
 
@@ -59,6 +61,19 @@ sequenceDiagram
 ```
 
 Consumer A takes over Partition 2 (previously owned by Consumer C). It resumes from Consumer C's last committed offset — no messages are skipped, no messages are lost.
+
+One consumer holding multiple partitions is completely normal. Consumer A now reads both Partition 0 and Partition 2 in the same `poll()` loop — the Kafka client library multiplexes them internally. Your application code just calls `poll()` and gets records from whichever partition has messages ready. You don't manage the two partitions separately.
+
+The fundamental rule is asymmetric:
+
+```
+One partition → at most one consumer at a time (within a group)
+One consumer  → can hold any number of partitions
+```
+
+The first half is what guarantees ordering — two consumers can never read the same partition simultaneously. The second half is how Kafka survives failures — dead consumers' partitions are absorbed by whoever is left.
+
+This is also why having more partitions than consumers is normal and expected. 6 partitions, 3 consumers → each consumer holds 2 partitions from the start. The only case that wastes resources is the reverse: more consumers than partitions. The extra consumers sit completely idle — there are no partitions left to assign them.
 
 ---
 
