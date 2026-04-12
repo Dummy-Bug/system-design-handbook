@@ -1,10 +1,10 @@
-for every session check the **syllabus @"System Design/01-Syllabus/06-Messaging-and-Event-Driven"** then check the @"System Design/06-Messaging-and-Event-Driven" and see what topic is running and yet to complete if nothing is incompelete start new topic by checking the syllabus
+for every session check the syllabus @"System Design/SDE2/00-Syllabus/07-Distributed-Systems.md" then check the @"System Design/SDE2/07-Distributed-Systems.md" and see what topic is running and yet to complete if nothing is incompelete start new topic by checking the syllabus
 
 ### Who the user is
 Complete beginner in System Design targeting **Google L4 / SDE-2 strong hire** in the design round for FANGM. No prior system design knowledge assumed — explain everything from scratch.
 
 ### Goal
- Work through the syllabus at `System Design/01-Syllabus/` topic by topic, building permanent study notes along the way.
+ Work through the syllabus at `System Design/SDE2/01-Syllabus/` topic by topic, building permanent study notes along the way.
 
 ### How each session works — follow this exactly
 
