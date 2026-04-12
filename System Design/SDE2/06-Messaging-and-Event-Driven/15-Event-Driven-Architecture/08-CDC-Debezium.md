@@ -1,4 +1,3 @@
-# CDC — Debezium
 
 ## What is Debezium?
 
@@ -12,11 +11,11 @@ It is the most widely used CDC tool in production systems.
 
 ```mermaid
 graph TD
-    PG[(Postgres)] -->|logical replication slot| D[Debezium Connector\nrunning on Kafka Connect]
-    D -->|publish change events| K[Kafka Topic\ne.g. postgres.public.outbox]
-    K --> C1[Consumer 1\nOrder Service]
-    K --> C2[Consumer 2\nRead Model Updater]
-    K --> C3[Consumer 3\nSearch Index]
+    PG[(Postgres)] -->|logical replication slot| D[Debezium Connector running on Kafka Connect]
+    D -->|publish change events| K[Kafka Topic e.g. postgres.public.outbox]
+    K --> C1[Consumer 1 Order Service]
+    K --> C2[Consumer 2 Read Model Updater]
+    K --> C3[Consumer 3 Search Index]
 ```
 
 ### Components
@@ -52,7 +51,7 @@ WAL entry 2: LSN 0/1A00100 — INSERT outbox (1, OrderCreated)
 WAL entry 3: LSN 0/1A00200 — UPDATE outbox SET published=true
 ```
 
-Debezium tracks the last LSN it successfully processed and stores it in Kafka (in a dedicated internal topic).
+Debezium tracks the last LSN it successfully processed and stores it in Kafka (in a **dedicated internal topic**).
 
 ---
 
@@ -137,7 +136,7 @@ Postgres keeps WAL segments until all replication slots have consumed them. If D
 - Postgres disk can fill up
 - **Risk**: DB crashes due to full disk
 
-**Fix**: monitor replication slot lag. If Debezium is down too long, drop the slot to let Postgres clean up WAL — and accept that you'll need to replay from a snapshot when Debezium comes back.
+**Fix**: monitor replication slot lag. **If Debezium is down too long, drop the slot to let Postgres clean up WAL** — and accept that you'll need to replay from a snapshot when Debezium comes back.
 
 ---
 

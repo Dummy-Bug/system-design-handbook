@@ -1,4 +1,3 @@
-# Data Skew and Hot Keys
 
 ## What Is Data Skew
 

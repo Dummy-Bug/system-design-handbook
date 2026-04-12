@@ -1,5 +1,3 @@
-# Combiner — Local Pre-Aggregation
-
 ## The Network Bottleneck
 
 In basic MapReduce, Map emits one pair per line:

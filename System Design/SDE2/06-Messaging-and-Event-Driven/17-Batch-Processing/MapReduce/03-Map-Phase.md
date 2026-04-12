@@ -1,4 +1,3 @@
-# Map Phase
 
 ## What Map Does
 

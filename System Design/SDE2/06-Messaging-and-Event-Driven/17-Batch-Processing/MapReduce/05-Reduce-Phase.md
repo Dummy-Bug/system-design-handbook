@@ -1,5 +1,3 @@
-# Reduce Phase
-
 ## What Reduce Does
 
 After Shuffle, each reducer machine has all pairs for its assigned keys, grouped into lists:

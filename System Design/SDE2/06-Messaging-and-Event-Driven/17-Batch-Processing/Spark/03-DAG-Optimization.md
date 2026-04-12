@@ -1,5 +1,3 @@
-# DAG Optimization
-
 ## What Is a DAG
 
 DAG = **Directed Acyclic Graph**.

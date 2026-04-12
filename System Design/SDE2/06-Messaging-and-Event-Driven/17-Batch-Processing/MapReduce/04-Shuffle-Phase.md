@@ -1,4 +1,3 @@
-# Shuffle Phase
 
 ## What Shuffle Actually Is
 
@@ -6,7 +5,9 @@ Shuffle is **not a separate machine or node**. It is the process of mapper machi
 
 ```
 Mapper Machine 1  ──→  directly sends pairs  ──→  Reducer Machine A
+
 Mapper Machine 2  ──→  directly sends pairs  ──→  Reducer Machine A
+
 Mapper Machine 3  ──→  directly sends pairs  ──→  Reducer Machine A
 ```
 

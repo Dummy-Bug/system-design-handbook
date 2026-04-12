@@ -1,6 +1,6 @@
-# Kappa Architecture
 
-> [!info] Kappa architecture is the response to Lambda's biggest pain point: maintaining two separate codebases (batch + stream) that compute the same thing. Kappa throws away the batch layer and uses only a stream processor. Historical reprocessing happens by replaying Kafka from the beginning with a new consumer group — same code, same logic, no drift.
+> [!info] Kappa is the response to Lambda's biggest pain point: maintaining two separate codebases (batch + stream) that compute the same thing. 
+> Kappa throws away the batch layer and uses only a stream processor. Historical reprocessing happens by replaying Kafka from the beginning with a new consumer group — same code, same logic, no drift.
 
 ## The Core Idea
 
@@ -20,13 +20,13 @@ Kappa:   stream pipeline only              (one codebase)
 Kafka consumers track their position via offsets. A consumer can seek to **any offset** — including offset 0 (the very beginning of the topic).
 
 To reprocess historical data:
-
 1. Create a new consumer group
 2. Set its offset to 0
 3. Let it consume all events from the beginning — same stream processor, same code
 
 ```
 Normal consumer group:   reads from latest offset → processes live events
+
 Reprocessing group:      reads from offset 0      → replays all history
 ```
 

@@ -1,5 +1,3 @@
-# Outbox Pattern — The Problem
-
 ## The Dual Write Problem
 
 When a service needs to write to a database AND publish an event to Kafka, it has to do two separate writes. This is called a **dual write**.

@@ -1,5 +1,3 @@
-# Schema Registry
-
 ## What It Is
 
 A **Schema Registry** is a central store for message schemas. It acts as a gatekeeper — producers must register and validate their schema before publishing. Consumers fetch the schema to deserialize messages.

@@ -5,7 +5,6 @@
 ## The Problem It Solves
 
 Some systems have two conflicting requirements for the same data:
-
 1. **Real-time** — show results updated every second (live dashboard)
 2. **Accurate** — produce exact numbers for billing/compliance (monthly report)
 
@@ -35,7 +34,7 @@ Lambda Architecture runs **two separate pipelines** in parallel.
                   answers queries
 ```
 
-**Batch layer** — periodically reprocesses all historical data (S3) using Spark. Slow but 100% accurate. Runs every hour or every day.
+**Batch layer** — periodically reprocesses all historical data (S3) using Spark or MapReduce. Slow but 100% accurate. Runs every hour or every day.
 
 **Speed layer** — stream processor handles live events as they arrive. Fast but covers only recent data since last batch run.
 

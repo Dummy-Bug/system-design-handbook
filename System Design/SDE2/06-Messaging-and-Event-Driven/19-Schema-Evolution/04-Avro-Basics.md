@@ -1,5 +1,3 @@
-# Avro Basics
-
 ## What Is Avro
 
 Avro is a schema format developed by Apache, commonly used with Kafka. Unlike Protobuf which uses field numbers, Avro uses **field names** — same as JSON.

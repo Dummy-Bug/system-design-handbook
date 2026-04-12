@@ -1,4 +1,3 @@
-# Stateful Stream Processing
 
 ## What "Stateful" Means
 

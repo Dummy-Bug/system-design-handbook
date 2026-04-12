@@ -1,5 +1,3 @@
-# Avro End-to-End Flow
-
 ## Producer Side (Avro Serializer)
 
 The Avro serializer handles everything automatically — your code just sends an Order object.

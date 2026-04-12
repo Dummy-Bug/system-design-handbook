@@ -1,4 +1,3 @@
-# Inbox + Outbox Combined
 
 ## How They Work Together
 
@@ -93,7 +92,7 @@ Rule: For terminal external calls — act first, mark processed after.
 ## When to Use Inbox + Outbox Together
 
 Use this combined pattern when:
-- You are consuming from Kafka AND producing to Kafka
+- **You are consuming from Kafka AND producing to Kafka**
 - You need atomic consistency between the incoming event, your DB state, and the outgoing event
 - Example: Order Service consuming `OrderShipped` and producing `SendShippingEmail`
 

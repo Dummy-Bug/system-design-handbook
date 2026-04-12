@@ -1,4 +1,3 @@
-# Inbox + Outbox — Full End-to-End Flow
 
 ## Scenario
 

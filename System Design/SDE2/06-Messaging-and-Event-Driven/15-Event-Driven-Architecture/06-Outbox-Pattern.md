@@ -1,5 +1,3 @@
-# Outbox Pattern — The Solution
-
 ## The Fix: Write Events Inside the Same Transaction
 
 Instead of publishing directly to Kafka, write the event to a special **outbox table** inside the same DB transaction as your business write.
@@ -22,7 +20,9 @@ Either both rows are written or neither. The event is now durably stored inside 
 
 ```
 outbox table:
+
 | id | event_type   | payload                          | published | created_at |
+
 | 1  | OrderCreated | { order_id: 123, amount: 49.99 } | false     | 10:00:00   |
 | 2  | OrderShipped | { order_id: 456, tracking: UPS } | true      | 10:01:00   |
 | 3  | OrderCreated | { order_id: 789, amount: 29.99 } | false     | 10:02:00   |
@@ -58,7 +58,7 @@ graph TD
 
 ---
 
-## Failure Scenarios (Now Safe)
+## Failure Scenarios
 
 ### App crashes after DB write
 - Both orders and outbox rows are written (transaction committed)

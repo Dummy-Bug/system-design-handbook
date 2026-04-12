@@ -1,5 +1,3 @@
-# CQRS Read Models
-
 ## What is a Read Model?
 
 A read model (also called a **projection**) is a pre-computed, denormalized table maintained specifically for fast reads. It is built by listening to events from the write side and updating accordingly.
@@ -10,13 +8,16 @@ A read model (also called a **projection**) is a pre-computed, denormalized tabl
 
 ```
 Write side (event store):
-| order_id | event            | data                       | ts    |
+| order_id | event            | data                       | ts 
 | 123      | OrderCreated     | { user: u1, amount: 49.99 }| 10:00 |
+
 | 123      | PaymentConfirmed | { txn_id: txn_456 }        | 10:02 |
+
 | 123      | OrderShipped     | { tracking: UPS123 }       | 10:05 |
 
 Read model (projection):
 | order_id | current_status | amount | user_id | user_state  | tracking |
+
 | 123      | shipped        | $49.99 | u1      | California  | UPS123   |
 ```
 

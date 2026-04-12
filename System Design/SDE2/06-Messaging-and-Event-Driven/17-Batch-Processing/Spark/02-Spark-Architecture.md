@@ -1,5 +1,3 @@
-# Spark Architecture
-
 ## Two Types of Nodes
 
 ```
@@ -43,7 +41,9 @@ Worker 3 → loads chunk 3 into RAM
 **Step 3 — Workers execute in RAM:**
 ```
 Worker 1 RAM:  filter → [ERROR_404, ERROR_500, ERROR_404] → count → {ERROR_404:2, ERROR_500:1}
+
 Worker 2 RAM:  filter → [ERROR_500, ERROR_404]            → count → {ERROR_500:1, ERROR_404:1}
+
 Worker 3 RAM:  filter → [ERROR_503, ERROR_404, ERROR_500] → count → {ERROR_503:1, ERROR_404:1, ERROR_500:1}
 ```
 

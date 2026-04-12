@@ -1,18 +1,10 @@
-# CDC Basics
 
-> [!info] CDC (Change Data Capture) is a technique for capturing every INSERT, UPDATE, and DELETE that happens in a database and streaming those changes in real-time to other systems. Instead of polling a table with "any new rows?", CDC subscribes to the database's transaction log (the WAL in Postgres) and receives changes as they happen — with millisecond latency and near-zero overhead on the database.
+> [!info] Change Data Capture is a technique for capturing every INSERT, UPDATE, and DELETE that happens in a database and streaming those changes in real-time to other systems. 
+> Instead of polling a table with "any new rows?", CDC subscribes to the database's transaction log (the WAL in Postgres) and receives changes as they happen — with millisecond latency and near-zero overhead on the database.
 
-CDC — **Change Data Capture** — is a technique for capturing every change (INSERT, UPDATE, DELETE) that happens in a database and streaming those changes in real-time to other systems.
-
-Instead of polling a table for new rows, you **subscribe to the database's transaction log** and receive changes as they happen.
-
----
-
-## Polling vs Tailing
-
-These are two fundamentally different approaches to detecting new data.
 
 ### Polling
+
 You repeatedly ask the DB: "is there anything new?"
 
 ```
@@ -28,10 +20,12 @@ t=15s: Poller: any new rows? → DB: no
 - DB load scales with polling frequency, not with actual data volume
 
 ### Tailing (CDC)
+
 You subscribe once. The DB **pushes** changes to you as they happen.
 
 ```
 t=10:00:00.001: row inserted → CDC receives it instantly → publish
+
 t=10:00:05.234: row inserted → CDC receives it instantly → publish
 (no unnecessary queries in between)
 ```
@@ -84,7 +78,9 @@ CDC captures every change at the row level:
 
 ```
 INSERT: { op: "c", table: "outbox", after: { id: 1, event_type: "OrderCreated", ... } }
+
 UPDATE: { op: "u", table: "outbox", before: { published: false }, after: { published: true } }
+
 DELETE: { op: "d", table: "orders", before: { order_id: 123 } }
 ```
 

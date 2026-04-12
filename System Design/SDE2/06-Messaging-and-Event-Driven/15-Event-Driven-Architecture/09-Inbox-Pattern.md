@@ -1,7 +1,3 @@
-# Inbox Pattern
-
-## What is the Inbox Pattern?
-
 The Inbox Pattern is the **consumer-side equivalent of the Outbox Pattern**. It solves the duplicate processing problem that arises from Kafka's at-least-once delivery guarantee.
 
 When Kafka delivers the same event twice (crash before offset commit, rebalance, etc.), the consumer must detect and skip the duplicate. The inbox table is where it tracks which events have already been processed.
@@ -101,7 +97,7 @@ graph TD
 
 ## Inbox Table Cleanup
 
-The inbox table grows forever if not cleaned up. Old entries (processed days ago) can be safely deleted:
+The inbox table grows forever if not cleaned up. Old entries processed days ago can be safely deleted:
 
 ```sql
 DELETE FROM inbox WHERE processed_at < NOW() - INTERVAL '7 days'

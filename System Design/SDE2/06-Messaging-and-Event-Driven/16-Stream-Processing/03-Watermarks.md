@@ -1,4 +1,3 @@
-# Watermarks and Late Event Handling
 
 ## The Problem: Events Arrive Out of Order
 
@@ -18,7 +17,7 @@ Your tumbling window for `12:00–12:01` has already closed and emitted its resu
 
 Keep every window open indefinitely, waiting for late events. 
 
-Problem: you never emit results. Useless for real-time use cases.
+**Problem:** you never emit results. Useless for real-time use cases.
 
 ---
 

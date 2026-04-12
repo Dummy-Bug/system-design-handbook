@@ -1,8 +1,7 @@
-# CQRS Consistency
 
 ## The Consistency Problem
 
-In CQRS, the write side and read side are updated **asynchronously**. After a command succeeds, the read model is not immediately updated — the event has to travel through Kafka and be processed by the listener first.
+In CQRS,write side and read side are updated **asynchronously** After a command succeeds, the read model is not immediately updated — the event has to travel through Kafka and be processed by the listener first.
 
 ```
 t=0ms:  OrderShipped event appended to event store ✓

@@ -1,4 +1,3 @@
-# Checkpointing and Crash Recovery
 
 ## The Problem
 

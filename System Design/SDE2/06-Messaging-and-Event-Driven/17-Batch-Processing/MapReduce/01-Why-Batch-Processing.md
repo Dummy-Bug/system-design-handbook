@@ -1,6 +1,6 @@
-# Why Batch Processing
 
-> [!info] Stream processing handles events as they arrive in real-time. Batch processing handles data at rest — huge historical datasets that can't fit in memory and need to be processed across many machines in parallel. When someone says "rebuild the recommendation index from scratch" or "generate this month's billing report", they're describing a batch job, not a stream.
+> [!info] Stream processing handles events as they arrive in real-time. Batch processing handles data at rest — 
+> Huge historical datasets that can't fit in memory and need to be processed across many machines in parallel. When someone says "rebuild the recommendation index from scratch" or "generate this month's billing report", they're describing a batch job, not a stream.
 
 ## Stream Processing Isn't Always Enough
 

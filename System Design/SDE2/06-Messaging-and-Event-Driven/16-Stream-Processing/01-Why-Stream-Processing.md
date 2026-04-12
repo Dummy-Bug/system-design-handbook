@@ -1,7 +1,3 @@
-# Why Stream Processing
-
-## The Problem With Plain Kafka Consumption
-
 A standard Kafka consumer processes one event at a time:
 
 ```
@@ -17,30 +13,6 @@ But some problems require reasoning **across multiple events over time**:
 - "Count orders per minute for a dashboard"
 
 A single event doesn't have enough information to answer these questions. You need **aggregations over time windows**.
-
----
-
-## Why Not Just Use Redis?
-
-Redis feels like a natural fit — sorted sets, TTLs, fast lookups. But let's stress test it.
-
-**Requirement:** sum of spend per user in the last 5 minutes, updated every second.
-
-What you'd need to implement in Redis:
-
-```
-1. ZADD user:123:spends <timestamp> <amount>   # on every transaction
-2. ZRANGEBYSCORE user:123:spends <now-5min> <now>  # fetch events in window
-3. sum all amounts in application code          # aggregate yourself
-4. ZREMRANGEBYSCORE user:123:spends 0 <now-5min>   # clean up old entries
-```
-
-You're writing all of this yourself. Now multiply by:
-- 10 different aggregation types (sum, count, avg, max, p99)
-- 5 different window sizes
-- Millions of users
-
-You've now built a **custom stream processing engine on top of Redis** — with no fault tolerance for mid-computation state, no distributed execution, and no framework support.
 
 ---
 

@@ -1,4 +1,3 @@
-# Protobuf
 
 ## What Is Protobuf
 

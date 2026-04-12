@@ -1,10 +1,4 @@
-# MapReduce Overview
-
-## What Is MapReduce
-
 MapReduce is a programming model for processing large datasets in parallel across many machines. Google invented it in 2004 to process petabytes of web crawl data.
-
-> Mentioning MapReduce in a Google interview is a positive signal — they literally invented it.
 
 The core idea: **bring computation to the data, not data to the computation.**
 
@@ -14,7 +8,7 @@ Each machine processes its local chunk. The framework coordinates everything els
 
 ## The 3 Phases
 
-There are only two types of machines: **mapper machines** and **reducer machines**. There is no separate "shuffle machine" — shuffle is just the name for the data transfer process between them.
+There are only two types of machines: **mapper machines** and **reducer machines**. shuffle is just the name for the data transfer process between them.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -30,7 +24,7 @@ There are only two types of machines: **mapper machines** and **reducer machines
 └─────────────────────┬───────────────────────────────────┘
                       │  SHUFFLE = mapper machines directly
                       │  send pairs to reducer machines
-                      │  over the network (no middle node)
+                      │  over the network
                       ▼
 ┌─────────────────────────────────────────────────────────┐
 │  REDUCE PHASE  (runs on reducer machines)               │

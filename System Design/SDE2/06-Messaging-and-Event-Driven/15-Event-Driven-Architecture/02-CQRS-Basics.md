@@ -82,8 +82,11 @@ Write side: one event store (source of truth)
       ↓
 Event listeners:
   → PostgreSQL read model  (for relational queries: orders, users, joins)
+  
   → Elasticsearch index    (for full-text search: search orders by description)
+  
   → Redis cache            (for fast key lookups: user's current order status)
+  
   → Cassandra table        (for time-series: user's order history per month)
 ```
 

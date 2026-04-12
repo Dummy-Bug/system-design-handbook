@@ -1,6 +1,6 @@
-# Why Schema Evolution Matters
 
-> [!info] Producers and consumers in a distributed system deploy independently — you can never guarantee they update at the same time. When a producer adds a new field to its message format, the consumer may not know about it yet. Schema evolution is the practice of changing message formats in a way that doesn't break existing producers or consumers. Two rules govern this: backward compatibility (new consumers can read old messages) and forward compatibility (old consumers can read new messages).
+> [!info] Schema evolution is the practice of changing message formats in a way that doesn't break existing producers or consumers. 
+> Two rules govern this: backward compatibility (new consumers can read old messages) and forward compatibility (old consumers can read new messages).
 
 ## The Problem
 

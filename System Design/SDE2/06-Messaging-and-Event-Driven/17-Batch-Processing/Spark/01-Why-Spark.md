@@ -1,5 +1,3 @@
-# Why Spark
-
 ## The MapReduce Disk Bottleneck
 
 MapReduce writes intermediate results to disk between every phase:
