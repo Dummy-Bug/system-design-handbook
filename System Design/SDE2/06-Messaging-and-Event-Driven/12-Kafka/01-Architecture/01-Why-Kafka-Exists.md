@@ -1,20 +1,22 @@
-# Why Kafka Exists
 
 > [!info] Kafka is not a traditional message queue. It is a persistent, append-only log that retains events for days or weeks, allows any number of consumers to read independently, and never deletes a message just because one consumer read it.
 
----
 
 ## The problem traditional queues can't solve
 
-You're building Google's ad click pipeline. Every ad click needs to be processed by 4 systems:
-- Billing — charge the advertiser per click
-- Recommendations — feed the click into the ML engine
-- Analytics — store for reporting
-- Fraud Detection — check for click fraud
+You're building Google's ad click pipeline. Every time someone clicks a Nike ad, four things have to happen.
 
-That's a pub/sub problem — one event, 4 subscribers. A traditional queue handles this fine at small scale.
+**Billing** has to charge Nike for the click. Nike agreed to pay $0.50 per click — the moment a click lands, that charge has to be recorded.
 
-Now add the real numbers: **Google processes 8.5 billion ad clicks per day — roughly 100,000 clicks per second.**
+**Fraud Detection** has to check whether the click is real before billing happens. Google Ads is worth hundreds of billions of dollars, and bad actors know it. A competitor can write a bot that clicks Nike's ad 50,000 times a day — draining their entire budget so Nike's ad disappears and the competitor's ad takes the top slot. Industry estimates put fraudulent ad clicks at 20–40% of all clicks globally. So before billing Nike for a click, the system has to ask: same IP clicking 300 times in the last hour? Known bot fingerprint? Click pattern humanly possible? This has to happen in real time — because if you bill first and investigate later, you've already charged Nike for fake clicks.
+
+**Analytics** has to store every click so Nike's marketing team can see a dashboard — clicks by hour, by city, by ad copy. Not just "did this click happen" but stored in a way you can later ask: give me all clicks for Nike, grouped by hour, for the last 30 days. You can't run those queries on the same database handling live billing writes — at this volume, writes would block reads and the whole thing collapses.
+
+**Recommendations** has to feed the click into the ML engine. Google's ad ranking model learns from what users click. Every click is a training signal — this user clicked a running shoe ad, which updates the model's understanding of what this user is interested in, which changes which ads they see next.
+
+That's a pub/sub problem — one event, 4 independent subscribers, each doing something completely different with the same data.
+
+A traditional queue handles this fine at small scale. Now add the real numbers: **Google processes 8.5 billion ad clicks per day — roughly 100,000 clicks per second.**
 
 A traditional queue like RabbitMQ maxes out at ~50,000–100,000 messages/sec on good hardware. At 100,000 clicks/sec you're at the ceiling before even accounting for 4 consumers each needing to process every message.
 
@@ -38,9 +40,9 @@ sequenceDiagram
     Q->>Q: DELETE message permanently
 ```
 
-This works fine when you only care about processing events once. But what happens when you need to add a new consumer later?
+This works fine when you only care about processing events once. Adding a new consumer to RabbitMQ or SQS is easy — bind a new queue to the exchange and it starts receiving messages from that point forward. That's not the problem.
 
-**The replay problem:**
+The problem is when a new consumer needs **past** events — historical data that was already consumed and deleted.
 
 Tomorrow your team wants to add a 5th service — a new ML pipeline that needs the last 30 days of click history to train a model. With a traditional queue, those 30 days of events are gone. Every message was deleted the moment it was consumed. The new service can only start receiving events from today onwards.
 
