@@ -1,4 +1,3 @@
-# In-Sync Replicas (ISR)
 
 > [!info] ISR is a dynamic list of replicas that are caught up with the leader within a configurable time threshold. With acks=all, the leader only waits for ISR members — not all replicas. This prevents one slow broker from tanking write latency for everyone.
 

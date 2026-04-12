@@ -54,6 +54,7 @@ Messages within a partition are strictly ordered. Messages across partitions are
 
 ```
 Partition 0: Nike click 1 → Nike click 2 → Nike click 3  ← strict order guaranteed
+
 Partition 1: Adidas click 1 → Adidas click 2             ← strict order guaranteed
 
 But:

@@ -73,7 +73,7 @@ This is what makes Kafka economical at massive scale. You can store petabytes of
 
 In most systems you put a load balancer in front of your servers. The client talks to the LB, the LB routes to a server. At Google scale that becomes the bottleneck.
 
-At 100,000 events/sec with 4 consumer services each reading every event: that's 500,000 messages/sec flowing through one machine. At 1KB per message, that's ~4 Gigabits/sec — the LB's network card saturates before you've even accounted for replication traffic between brokers.
+At 100,000 events/sec with 5 consumer services each reading every event: that's 500,000 messages/sec flowing through one machine. At 1KB per message, that's ~4 Gigabits/sec — the LB's network card saturates before you've even accounted for replication traffic between brokers.
 
 Kafka eliminates the middleman with a **smart client** model. The Kafka SDK that ships with every producer and consumer handles routing itself.
 
