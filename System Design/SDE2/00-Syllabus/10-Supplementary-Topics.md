@@ -61,6 +61,7 @@ When an interviewer asks "how would you monitor this system?" — use these.
 - Mention in: any system where you want to reduce deployment risk
 
 ### Reconciliation
+
 > Comes up in Payment System, Banking Ledger, Ad Click Aggregation
 
 - **What it is** — a periodic batch job that compares your internal records against an external source of truth to find and fix discrepancies
@@ -80,6 +81,7 @@ When an interviewer asks "how would you monitor this system?" — use these.
   - Alert on reconciliation failures immediately — a discrepancy that isn't caught within 24 hours becomes much harder to reverse
 
 ### Graceful Degradation Examples
+
 Know one example per major case study type:
 - Chat — if message store is down, accept messages to queue, deliver when recovered
 - News feed — if ranking service is down, serve unranked chronological feed
