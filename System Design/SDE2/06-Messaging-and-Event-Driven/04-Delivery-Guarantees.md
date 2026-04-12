@@ -1,3 +1,4 @@
+
 > [!info] A delivery guarantee defines what the queue promises about whether and how many times a message will be delivered to a consumer. There are three levels — at-most-once, at-least-once, and exactly-once. Understanding the trade-offs between them is a core system design skill.
 
 ## Why this matters
