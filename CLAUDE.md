@@ -132,4 +132,10 @@ Each file uses this style:
   `09-Failures-And-Edge-Cases.md`
 
 
+  - **Both Deep Dives and Potential Deep Dives are always covered in full.** Main deep dives are what a strong candidate volunteers unprompted. Potential deep dives are what the interviewer might push on. Both get the same depth of notes and the same interactive interview → debrief → notes flow. Never skip potential deep dives — treat them as mandatory, not optional.
+
   - **Every case study is done twice.** First at average MAU (e.g. 100M users). Then the exact same case study is repeated at Google scale (billions of users). The Google scale version goes into a separate subfolder: `System Design/SDE2/11-Case-Studies/<system-name>-Google-Scale/`
+
+  - **Notes must be fully reasoned — never shallow.** Every option discussed must include: why it was considered, what its trade-offs are, why it wins or loses against alternatives, and all implementation details. The gold standard for reasoning depth is `System Design/SDE2/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/02-DB/08-Read-Your-Own-Writes.md` — read it before writing any deep dive notes. That file shows the expected level of detail: full option comparison, implementation mechanics, efficiency analysis, and a clear verdict with reasoning.
+
+  - **For each new case study, follow the structure of the URL Shortener** — same checkpoint order, same folder layout, same file naming convention, same depth of reasoning in notes.

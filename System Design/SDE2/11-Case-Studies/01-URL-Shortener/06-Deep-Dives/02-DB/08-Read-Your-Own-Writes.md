@@ -55,27 +55,94 @@ The window is small — typically a few seconds is enough for async replication 
 
 ## How to implement it
 
-**Option 1 — sticky session after creation**
+Two options exist. They look similar but have a critical difference in efficiency.
 
-When the creation response is returned, set a short-lived flag for that user (in a cookie, a session store, or a header). For the next 10-30 seconds, the app server checks this flag and routes reads for that user to the primary shard.
+---
 
-```
-Create URL → set cookie: ryow_until = now + 30 seconds
-Read URL   → if ryow_until > now AND same user → route to primary
-           → else → route to secondary
-```
+### Option 1 — cookie-based sticky routing (the right approach)
 
-**Option 2 — read from primary for the first N seconds after write**
-
-The app server tracks recent writes in memory (or a small cache). If a short code was written within the last 30 seconds, route its reads to the primary.
+When the creation response is returned, include a short-lived cookie in the response:
 
 ```
-Write x7k2p9 → record in local cache: x7k2p9 → written_at = now
-Read x7k2p9  → check cache → written_at = 5 seconds ago → route to primary
-Read x7k2p9  → check cache → written_at = 2 minutes ago → route to secondary
+HTTP 200 OK
+Set-Cookie: ryow_until=1713000030; Path=/; HttpOnly
+
+{
+  "data": { "short_url": "bit.ly/x7k2p9" }
+}
 ```
 
-Both approaches work. The key point is that this is a **targeted routing rule** — it affects one user for one URL for a short window. It does not make the system synchronous. Availability is barely impacted.
+`ryow_until` is just a Unix timestamp — `now + 30 seconds`. The cookie carries no shard info, no IPs, nothing sensitive.
+
+On the next redirect request, the browser automatically sends this cookie back:
+
+```
+GET /x7k2p9
+Cookie: ryow_until=1713000030
+```
+
+The app server's routing logic:
+
+```
+1. Extract short_code from path → x7k2p9
+2. Check cookie: ryow_until present AND ryow_until > now?
+   → YES → route to primary
+   → NO  → route to secondary
+3. hash(short_code) → consistent hashing → shard number
+4. Look up shard's primary or secondary IP from etcd
+5. Route query accordingly
+```
+
+**Where are the primary/secondary IPs stored?**
+
+In etcd — the service registry. Every shard's topology lives there:
+
+```
+etcd:
+  shard-1/primary    → 10.0.1.1
+  shard-1/secondaries → [10.0.1.2, 10.0.1.3]
+  shard-2/primary    → 10.0.1.4
+  shard-2/secondaries → [10.0.1.5, 10.0.1.6]
+  ...
+```
+
+App servers read this on startup and cache it locally. When a shard's primary changes due to failover, etcd updates the entry and notifies all app servers via a watch. The app server always knows the current primary without hardcoding IPs anywhere.
+
+**Why this is efficient:**
+
+The cookie decision happens entirely in the app server's memory — no extra network calls. The consistent hashing lookup is local computation. The etcd topology is cached locally. Zero extra round trips on the redirect path.
+
+---
+
+### Option 2 — write tracking in Redis (worse)
+
+The app server writes a short-lived Redis key every time a URL is created:
+
+```
+Write x7k2p9 → SET ryow:x7k2p9 1 EX 30
+Read x7k2p9  → GET ryow:x7k2p9
+             → found → route to primary
+             → not found → route to secondary
+```
+
+This solves the cross-app-server problem — any app server can check Redis for any short code. Unlike tracking in local memory, it works across a fleet.
+
+**Why this is worse:**
+
+Every single redirect — 100k/sec — now does an extra Redis lookup before the actual cache lookup. Most of those lookups return nothing. The URL was created days ago, the Redis key expired long ago, but you're still paying a Redis round trip to confirm that fact.
+
+```
+Option 1 → extra work per redirect: 0 network calls (cookie check is in-memory)
+Option 2 → extra work per redirect: 1 Redis GET (100k/sec × 1 extra call = 100k extra Redis ops/sec)
+```
+
+You're paying 100k extra Redis operations per second to handle a problem that affects 1k users/sec for 30 seconds. The cost is completely disproportionate to the benefit.
+
+---
+
+### The verdict
+
+**Option 1 wins.** Cookie carries the expiry timestamp, app server uses consistent hashing to find the shard, etcd provides the primary IP. No extra network calls on the redirect path. Clean, efficient, targeted.
 
 ---
 
