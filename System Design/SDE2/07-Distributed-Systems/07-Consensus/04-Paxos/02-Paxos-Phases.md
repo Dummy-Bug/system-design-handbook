@@ -99,6 +99,8 @@ sequenceDiagram
 
 DB-1 retries with a higher number — say N=3 — and goes back to Phase 1.
 
+→ See [[03-Paxos-Retry-Cases]] for the two cases that play out when DB-1 retries
+
 ---
 
 ## The rule that prevents data loss
@@ -140,4 +142,3 @@ If a node was down during several writes and comes back, it does **log replay** 
 
 ---
 
-→ See [[03-Paxos-Livelock]] for what happens when proposers keep racing and how this leads to Raft

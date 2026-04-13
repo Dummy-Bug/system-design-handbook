@@ -54,5 +54,3 @@ A proposer only needs majority to proceed — not all nodes.
 
 ---
 
-→ See [[02-Paxos-Phases]] for how a write actually works in Paxos — Phase 1 and Phase 2
-→ See [[03-Paxos-Livelock]] for the livelock problem and why Raft replaced Paxos
