@@ -88,7 +88,7 @@ flowchart LR
     LB -- "keys → Cluster 3" --> C3["Cluster 3Replica A Replica B"]
 ```
 
-![[System Design/SDE2/12-Case-Studies/05-Key-Value-Store/Images/01-Base-Architecture.png]]
+![[12-Old-Case-Studies/05-Key-Value-Store/Images/01-Base-Architecture.png]]
 
 The Load Balancer applies a **hash function** to the key and uses the result to decide which cluster owns it:
 

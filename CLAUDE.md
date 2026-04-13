@@ -73,3 +73,59 @@ Each file uses this style:
 
 - No rigid section headings required — structure each file around how the concept naturally explains itself
 
+
+
+## How Case Study sessions work — follow this exactly                                                          
+
+  Case studies are done in checkpoints. Each checkpoint is a segment of a real system design interview.           
+
+  **The checkpoints for every case study (in order):**                                                            
+
+  1. FR — Functional Requirements                           
+
+  2. Estimation
+
+  3. NFR — Non-Functional Requirements
+
+  4. API Design
+
+  5. Base Architecture — naive, simplest system that works end to end
+
+  6. Deep Dives — identify bottlenecks, scale each component, improve the design iteratively                      
+
+  7. Potential Deep Dives — areas an interviewer might push on (not always covered in a real interview)           
+
+  8. Failures & Edge Cases — what breaks, how the system handles it                                               
+
+  **How each checkpoint works:**                                                                                  
+
+  9. **Interview mode** — act as a Google L4 interviewer. Ask the questions a real interviewer would ask for that 
+
+  checkpoint. Push back on vague answers. Do not hint or help. Stay in character.                                 
+
+  10. **Debrief mode** — once the checkpoint is done, break character. Tell the user what they got right, what they
+
+   missed, what was weak. Go as deep as needed on any concept they fumbled — one concept at a time, same          
+
+  interactive style as the study notes sessions.                                                                  
+
+  11. **Notes mode** — write the notes for that checkpoint. Notes capture the ideal answer: what the user got right
+
+   + what they missed + all concepts explained fully. Same narrative style as the rest of the wiki.               
+
+  4. **Next checkpoint** — only move to the next checkpoint after notes are written and user confirms.            
+
+  **Rules:**                                                                                                      
+
+  - Never rush to finish the full design. Depth at each checkpoint matters more than reaching the final solution. 
+
+  - If a concept comes up in debrief that needs a full explanation, explain it fully before writing notes.       
+
+  - Notes for each checkpoint go into: `System Design/SDE2/11-Case-Studies/<system-name>/`                        
+
+  - Each checkpoint gets its own file: `01-FR.md`, `02-Estimation.md`, `03-NFR.md`, `04-API.md`,
+
+  `05-Base-Architecture.md`, `06-Deep-Dives.md`, `07-Final-Design.md`, `08-Potential-Deep-Dives.md`,              
+
+  `09-Failures-And-Edge-Cases.md`
+

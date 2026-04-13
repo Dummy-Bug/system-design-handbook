@@ -201,7 +201,7 @@
   - Conflict resolution: two clients edit the same file offline → server gets two different chunk lists → create a conflict copy (Dropbox approach) or apply CRDT merge (Google Docs approach)
 - Directly applies to: Dropbox, Google Drive, YouTube, Gmail case studies
 
-### 7.9b Data Migration at Scale
+### 7.10 Data Migration at Scale
 > Comes up when interviewers ask: "how do you migrate from the old system to this new one?"
 
 - **Why it's hard** — you can't stop a production system to migrate. Users are reading and writing the entire time. A bad migration corrupts data or causes downtime.
@@ -231,7 +231,7 @@
   - Expand-and-contract pattern: add new column → backfill → deploy code that writes both → deploy code that reads new → drop old column
 - **When to mention** — any case study where you're replacing a database (SQL → NoSQL migration), splitting a monolith DB, or the interviewer asks "what if requirements change and you need to re-shard?"
 
-### 7.9c Deployment Strategies
+### 7.11 Deployment Strategies
 > Moved from 7.9b — renumbered after Data Migration insertion
 - **Rolling deploy** — replace instances one at a time; old and new versions briefly run simultaneously
   - Zero downtime, but mixed-version window means your API must be backward compatible during rollout
@@ -247,7 +247,7 @@
 - **Feature flags** — deploy code disabled, enable for % of users without redeployment (covered in Supplementary)
 - Key interview point: always pair deployment strategy with DB migration strategy — schema changes must be backward compatible across versions during rollout
 
-### 7.10 Adaptive Bitrate Streaming (HLS / DASH)
+### 7.12 Adaptive Bitrate Streaming (HLS / DASH)
 > Directly applies to: YouTube, Netflix, any video streaming case study
 
 - **Problem** — users have different and changing network speeds; serving a fixed-quality video causes buffering on slow connections or wastes bandwidth on fast ones

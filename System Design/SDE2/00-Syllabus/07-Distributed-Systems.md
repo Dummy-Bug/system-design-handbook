@@ -83,22 +83,29 @@
   - GPS and atomic clocks — satellites, GPS time signal, GPS primary + atomic backup, military correction
   - Uncertainty window — [earliest, latest] interval, commit wait, Spanner external consistency
 
-### 5.9 CRDTs ← not started
+### 5.9 CRDTs ✓
 - Merge concurrent writes without coordination, always converges
 - G-Counter — grow-only counter, per-node count, merge = max per node
 - OT vs CRDT — Google Docs interviewers will ask this directly
 
-### 5.10 Failure Detection ← not started
-- Heartbeats — periodic ping, simple but chatty at scale
-- Gossip protocol — nodes randomly share state, failure info propagates like an epidemic
-- Phi Accrual Failure Detector — probabilistic suspicion score, adapts to network jitter
+### 5.10 Failure Detection ✓
+- Heartbeats — periodic ping, simple but chatty at scale, O(n²) problem
+- Dead node detection — last heartbeat timestamp, timeout trade-off
+- New node detection — seed nodes, bootstrap into cluster
+- Gossip protocol — counter table, O(log n) spread, epidemic propagation
+- Phi Accrual Failure Detector — sliding window, mean + variance, suspicion score, Cassandra default φ=8
 
-### 5.11 Merkle Trees ← not started
+### 5.11 Merkle Trees ✓
 - Hash tree — each node = hash of its children
 - Compare two trees — find diverged subtree in O(log n) instead of O(n)
 - Anti-entropy — replicas compare Merkle trees to find what's out of sync
+- Only needed for leaderless architectures — leader-based use WAL replay
 
-### 5.12 Coordination Services ← not started
-- ZooKeeper — znodes, watches, ephemeral nodes (partially covered in 5.7)
+### 5.12 Coordination Services ✓
+- ZooKeeper — znodes, watches, ephemeral nodes (covered in 5.7)
   - Use for: leader election, distributed locks, service discovery, config management
-- etcd — Raft-based, simpler API, Kubernetes control plane backbone
+- etcd — distributed /etc, Raft-based, strongly consistent, watch support, CP in CAP
+  - Leases and TTL — auto-expiry, lease renewal, stuck lock prevention
+  - Fencing tokens — false expiry, monotonic token, DB as enforcer
+  - Lock vs job tracking — global lock vs per-record PENDING/IN_FLIGHT/DONE pattern
+  - Kubernetes control plane backbone
