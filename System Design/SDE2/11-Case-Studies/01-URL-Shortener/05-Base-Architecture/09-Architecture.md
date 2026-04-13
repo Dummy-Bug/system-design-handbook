@@ -107,7 +107,7 @@ The browser never asks the app server for the destination explicitly. It hits th
 graph TD
     C[Client / Browser] -->|POST /api/v1/urls| AS[App Server]
     C -->|GET /x7k2p9| AS
-    AS -->|SELECT / INSERT| DB[(Database\nurls table)]
+    AS -->|SELECT / INSERT| DB[(Database urls table)]
     AS -->|301 redirect| C
 ```
 

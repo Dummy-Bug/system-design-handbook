@@ -8,14 +8,14 @@
 
 ```mermaid
 graph TD
-    C[Client / Browser] -->|HTTPS| CLB[Cloud Load Balancer\nmanaged, replicated by provider]
-    CLB --> GW1[API Gateway 1\nZone A]
-    CLB --> GW2[API Gateway 2\nZone B]
-    CLB --> GW3[API Gateway 3\nZone C]
-    GW1 & GW2 & GW3 --> AS[App Server Fleet\nauto-scaled]
-    AS -->|check local cache first| LC[Local In-Process Cache\nhot keys only]
-    AS -->|cache lookup| RC[Redis Cluster\n~27GB steady state]
-    AS -->|cache miss| DB[(DB Shards\n8 shards × 3 replicas)]
+    C[Client / Browser] -->|HTTPS| CLB[Cloud Load Balancer managed by provider]
+    CLB --> GW1[API Gateway 1 Zone A]
+    CLB --> GW2[API Gateway 2 Zone B]
+    CLB --> GW3[API Gateway 3 Zone C]
+    GW1 & GW2 & GW3 --> AS[App Server Fleet auto-scaled]
+    AS -->|check local cache first| LC[Local In-Process Cache hot keys only]
+    AS -->|cache lookup| RC[Redis Cluster ~27GB steady state]
+    AS -->|cache miss| DB[(DB Shards 8 shards x 3 replicas)]
     RC -->|miss| DB
 ```
 
