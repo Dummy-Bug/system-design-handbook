@@ -45,31 +45,43 @@
 
 ---
 
-### 5.7 Consensus ← in progress
+### 5.7 Consensus ✓
 - What consensus means — all non-faulty nodes agree on the same value
 - Why it's hard — Two Generals Problem, clocks can't be trusted
 
-#### Raft ← in progress
-- What is Raft — designed for understandability over Paxos ✓
-- Leader election — randomized timeouts, heartbeats, re-election, election safety rule ✓
-- Term numbers — ghost leader problem, how term numbers force old leader to step down ✓
-- Log replication — WAL, AppendEntries, majority ack, commit, state machine ✓
-- Log replication failure cases — 3 crash scenarios ✓
-- **Fencing tokens** ✓
-- **ZooKeeper-based election** ✓
+#### Raft ✓
+- What is Raft — designed for understandability over Paxos
+- Leader election — randomized timeouts, heartbeats, re-election, election safety rule
+- Term numbers — ghost leader problem, how term numbers force old leader to step down
+- Log replication — WAL, AppendEntries, majority ack, commit, state machine
+- Log replication failure cases — 3 crash scenarios
+- Fencing tokens ✓
+
+#### ZooKeeper ✓
+- ZooKeeper-based election — ephemeral nodes, watches, TCP heartbeat, ZAB protocol
+- Leader election flow — race to create ephemeral node, watch on deletion, new race begins
+
+#### Redis Distributed Locks ✓
+- SETNX + TTL, async replication gap failure scenario
+- Redlock — acquire on majority of independent Redis nodes
+- Redis vs ZooKeeper — speed vs correctness, async vs consensus replication
 
 #### Paxos ✓
-- Brief awareness only — proposer, acceptor, learner roles, two phases
-- Why Raft replaced it in practice
+- What is Paxos — proposer, acceptor, learner roles, proposal numbers, quorum
+- Two phases — Prepare/Promise, Accept, value inheritance rule
+- Retry cases — Case 1 (DB-2 still in Phase 1), Case 2 (DB-2 already committed)
+- Livelock — randomized backoff, designate-a-leader fix, why Raft replaced Paxos
 
 ---
 
-### 5.8 Distributed Clocks & Time ← not started
-- Clocks drift — you cannot trust wall clock time across machines
-- Lamport Clocks — logical counter, increment on each event, max+1 on receive
-  - Gives happens-before ordering, not wall-clock time
-- Vector Clocks — one counter per node, detects concurrent writes
-- Google TrueTime — GPS + atomic clocks, bounded uncertainty window (awareness only)
+### 5.8 Distributed Clocks & Time ✓
+- Clock drift — crystal oscillator, T=1/f, PPM, why clocks diverge
+- NTP — atomic clocks, GPS hierarchy, T1-T4 delay estimation, slewing, 1-10ms accuracy limit
+- Lamport Clocks — logical counter, 3 rules, happens-before ordering, limitation (can't detect concurrency)
+- Vector Clocks — one counter per node, 3 rules, causality vs concurrency detection, conflict detection
+- TrueTime ✓
+  - GPS and atomic clocks — satellites, GPS time signal, GPS primary + atomic backup, military correction
+  - Uncertainty window — [earliest, latest] interval, commit wait, Spanner external consistency
 
 ### 5.9 CRDTs ← not started
 - Merge concurrent writes without coordination, always converges
@@ -87,6 +99,6 @@
 - Anti-entropy — replicas compare Merkle trees to find what's out of sync
 
 ### 5.12 Coordination Services ← not started
-- ZooKeeper — znodes, watches, ephemeral nodes
+- ZooKeeper — znodes, watches, ephemeral nodes (partially covered in 5.7)
   - Use for: leader election, distributed locks, service discovery, config management
 - etcd — Raft-based, simpler API, Kubernetes control plane backbone

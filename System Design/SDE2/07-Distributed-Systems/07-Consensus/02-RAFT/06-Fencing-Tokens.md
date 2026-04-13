@@ -94,4 +94,4 @@ Whenever you see a monotonically increasing number being passed around and check
 
 ---
 
-→ Next: [[07-ZooKeeper-Election]] — how ZooKeeper uses this same idea to manage leader election across services
+→ Next: [[01-ZooKeeper-Election]] — how ZooKeeper uses this same idea to manage leader election across services
