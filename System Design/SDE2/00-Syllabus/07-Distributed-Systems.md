@@ -55,10 +55,10 @@
 - Term numbers — ghost leader problem, how term numbers force old leader to step down ✓
 - Log replication — WAL, AppendEntries, majority ack, commit, state machine ✓
 - Log replication failure cases — 3 crash scenarios ✓
-- **Fencing tokens** ← not covered yet
-- **ZooKeeper-based election** ← not covered yet
+- **Fencing tokens** ✓
+- **ZooKeeper-based election** ✓
 
-#### Paxos ← not covered yet
+#### Paxos ✓
 - Brief awareness only — proposer, acceptor, learner roles, two phases
 - Why Raft replaced it in practice
 
