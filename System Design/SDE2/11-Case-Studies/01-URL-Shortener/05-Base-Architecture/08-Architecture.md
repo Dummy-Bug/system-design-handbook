@@ -4,6 +4,20 @@
 
 ---
 
+## The components
+
+The base architecture has exactly two components — an app server and a database. Nothing else.
+
+The temptation is to immediately add an API Gateway in front of the app server. API gateways give you rate limiting, auth, and request routing across multiple services. But for a base architecture with a single app server, it adds complexity without adding value. You skip it here and add it in deep dives when you actually need it — for example, when you split creation and redirect into separate services.
+
+```
+Client → App Server → Database
+```
+
+That's it. Two boxes.
+
+---
+
 ## Short code generation decision
 
 For base architecture: **random 6-character base62 string + DB collision check.**
@@ -12,23 +26,6 @@ For base architecture: **random 6-character base62 string + DB collision check.*
 - Unique index on short_code column makes collision check fast (O log n, not full scan)
 - Simple to implement, works end to end
 - Known weakness: collision rate grows as DB fills up — flagged as a deep dive improvement
-
----
-
-## The database schema
-
-One table. Everything lives here.
-
-```
-urls
--------------------------------
-id          BIGINT PRIMARY KEY    ← internal row ID, never exposed
-short_code  VARCHAR(6) UNIQUE     ← indexed, the thing users see
-long_url    TEXT                  ← what we redirect to
-created_at  TIMESTAMP             ← when it was created
-```
-
-`short_code` has a unique index. This is what makes collision checks fast and what enforces the uniqueness guarantee at the storage layer.
 
 ---
 
@@ -120,17 +117,19 @@ One app server. One database. That's it.
 
 ## Known limitations — flagged for deep dives
 
+The base architecture is intentionally simple. The point is not to handle every problem — the point is to build the simplest thing that works end to end, name the limitations honestly, and let the deep dives fix them one by one.
+
 | Limitation | Why it matters | Deep dive fix |
 |---|---|---|
-| No caching | Every redirect hits DB — 100k reads/sec is too much for one DB | Add Redis cache in front of DB |
-| Single DB | 250TB over 10 years cannot fit on one machine | DB sharding |
-| Collision retries | Increase as DB fills up | Pre-generated key database |
+| 100k reads/sec | Single Postgres handles ~10k-50k reads/sec — it falls over at this load | Caching (Redis) |
+| 250TB over 10 years | Cannot fit on a single machine | DB sharding |
+| Collision retries | Increase as DB fills up, write latency degrades | Pre-generated key database |
 | No fault isolation | Creation and redirect share the same app server and DB | Separate services |
 | Peak traffic | Average 100k/sec, peak 1M+/sec — DB will fall over | Caching + load balancing |
 
-The base architecture is intentionally simple. Every limitation above is a known trade-off, not a mistake. You name them — and that tells the interviewer exactly where the deep dives are going.
+Caching is the more urgent fix. Even if your DB had infinite storage, it would fall over under read load long before storage becomes a problem. That's why caching is deep dive number one — not sharding.
 
 ---
 
 > [!tip] Interview framing
-> "For the base architecture: one app server, one DB with a urls table. Creation flow — generate a random 6-char base62 string, check for collision via unique index, insert. Redirect flow — look up the short code, return a 301. The DB will not scale to 250TB on one machine and 100k reads/sec will need a cache — those are the first two deep dives."
+> "For the base architecture: client hits the app server directly — no API gateway needed yet. One app server, one DB. Creation flow — generate a random 6-char base62 string, check for collision via unique index, insert. Redirect flow — look up the short code, return a 301. A single Postgres instance handles roughly 10k-50k reads/sec — 100k QPS will overwhelm it, so caching is the first deep dive. 250TB over 10 years won't fit on one machine, so sharding is the second."

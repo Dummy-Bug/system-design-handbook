@@ -89,13 +89,15 @@ Each file uses this style:
 
   4. API Design
 
-  5. Base Architecture — naive, simplest system that works end to end
+  5. DB Selection & Schema — access patterns, DB type choice with justification, schema design, indexes
 
-  6. Deep Dives — identify bottlenecks, scale each component, improve the design iteratively                      
+  6. Base Architecture — naive, simplest system that works end to end
 
-  7. Potential Deep Dives — areas an interviewer might push on (not always covered in a real interview)           
+  7. Deep Dives — identify bottlenecks, scale each component, improve the design iteratively                      
 
-  8. Failures & Edge Cases — what breaks, how the system handles it                                               
+  8. Potential Deep Dives — areas an interviewer might push on (not always covered in a real interview)           
+
+  9. Failures & Edge Cases — what breaks, how the system handles it                                               
 
   **How each checkpoint works:**                                                                                  
 
