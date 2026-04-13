@@ -129,3 +129,5 @@ Each file uses this style:
 
   `09-Failures-And-Edge-Cases.md`
 
+
+  - **Every case study is done twice.** First at average MAU (e.g. 100M users). Then the exact same case study is repeated at Google scale (billions of users). The Google scale version goes into a separate subfolder: `System Design/SDE2/11-Case-Studies/<system-name>-Google-Scale/`
