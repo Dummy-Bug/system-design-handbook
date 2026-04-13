@@ -23,10 +23,27 @@ Two machines generating an ID at the exact same millisecond get different machin
 
 ## Encoding a Snowflake ID in base64
 
-A Snowflake ID is 64 bits. Base64 packs 6 bits per character:
+A Snowflake ID is 64 bits. How many base64 characters do we need to represent it?
+
+**Step 1 — how many bits does one base64 character hold?**
 
 ```
-64 bits / 6 bits per character = 10.67 → 11 characters
+2^1 = 2   → not enough
+2^2 = 4   → not enough
+2^3 = 8   → not enough
+2^4 = 16  → not enough
+2^5 = 32  → not enough
+2^6 = 64  ✓
+
+So 1 base64 character = 6 bits
+```
+
+**Step 2 — how many characters to encode 64 bits?**
+
+```
+Total bits         = 64
+Bits per character = 6
+Characters needed  = 64 / 6 = 10.67 → round up to 11 characters
 ```
 
 So a full base64 encoding of a Snowflake ID gives an **11-character short code**:

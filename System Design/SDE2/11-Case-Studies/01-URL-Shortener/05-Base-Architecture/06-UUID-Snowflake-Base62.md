@@ -22,21 +22,37 @@ Every character in base62 is safe to use directly in a URL — no percent-encodi
 
 ## The math — does it get shorter?
 
-Base62 packs slightly fewer bits per character than base64. Specifically:
+**Step 1 — how many bits per base62 character?**
+
+Base62 has 62 possible values per character. 62 doesn't land exactly on a power of 2, so we use logarithms:
 
 ```
-base64 → 2^6 = 64  → 6 bits per character
-base62 → log2(62) ≈ 5.95 bits per character
+We need: 2^x = 62
+x = log2(62) = log(62) / log(2) = 1.792 / 0.301 ≈ 5.95 bits per character
 ```
 
-For a Snowflake ID (64 bits):
+Compare to base64:
 ```
-64 bits / 5.95 bits per char = 10.75 → 11 characters
+base64 → 2^6 = 64  → exactly 6 bits per character
+base62 → 2^5.95    → ≈ 5.95 bits per character  (slightly less)
 ```
 
-For a UUID (128 bits):
+The difference is tiny — base62 packs just barely less information per character than base64.
+
+**Step 2 — how many characters to encode a Snowflake ID (64 bits)?**
+
 ```
-128 bits / 5.95 bits per char = 21.5 → 22 characters
+Total bits         = 64
+Bits per character = 5.95  (base62)
+Characters needed  = 64 / 5.95 = 10.75 → round up to 11 characters
+```
+
+**Step 3 — how many characters to encode a UUID (128 bits)?**
+
+```
+Total bits         = 128
+Bits per character = 5.95  (base62)
+Characters needed  = 128 / 5.95 = 21.5 → round up to 22 characters
 ```
 
 Switching from base64 to base62 does not meaningfully change the length. Both give 11 characters for a Snowflake ID and 22 characters for a UUID.

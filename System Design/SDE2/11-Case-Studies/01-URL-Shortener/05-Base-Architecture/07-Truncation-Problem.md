@@ -6,6 +6,29 @@
 
 ## The temptation
 
+**Step 1 — how many bits do we actually need to cover 50 billion URLs?**
+
+We need 2^n ≥ 50 billion. Build up from known anchors:
+
+```
+2^10 = 1,024               ≈ 1 thousand
+2^20 = 1,048,576           ≈ 1 million
+2^30 = 1,073,741,824       ≈ 1 billion     ← not enough
+2^33 = 8,589,934,592       ≈ 8.5 billion   ← not enough
+2^35 = 34,359,738,368      ≈ 34 billion    ← not enough
+2^36 = 68,719,476,736      ≈ 68 billion    ✓  (68B > 50B)
+```
+
+So **36 bits is enough** to cover our entire 10-year URL space.
+
+**Step 2 — how many base62 characters does 36 bits encode to?**
+
+```
+Total bits         = 36
+Bits per character = 5.95  (base62)
+Characters needed  = 36 / 5.95 = 6.05 → round up to 6 characters  ✓
+```
+
 From the math:
 ```
 We need to cover 50 billion unique URLs over 10 years
