@@ -191,4 +191,4 @@ A smarter routing strategy where:
 - When a cluster is added or removed, **only a small fraction of keys need to move**
 - The surviving clusters absorb only their fair share — not everything at once
 
-That strategy is **Consistent Hashing** → [[05-Consistent-Hashing]]
+That strategy is **Consistent Hashing** → [[12-Old-Case-Studies/05-Key-Value-Store/05-Consistent-Hashing]]

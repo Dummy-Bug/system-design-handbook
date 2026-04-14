@@ -75,68 +75,77 @@ Each file uses this style:
 
 
 
-## How Case Study sessions work — follow this exactly                                                          
+## How Case Study sessions work — follow this exactly
 
-  Case studies are done in checkpoints. Each checkpoint is a segment of a real system design interview.           
+  Case studies are done in checkpoints. Each checkpoint is a segment of a real system design interview.
 
-  **The checkpoints for every case study (in order):**                                                            
+  **The checkpoints for every case study (in order):**
 
-  1. FR — Functional Requirements                           
+  1. FR — Functional Requirements
 
-  2. Estimation
+  2. Estimation
 
-  3. NFR — Non-Functional Requirements
+  3. NFR — Non-Functional Requirements
 
-  4. API Design
+  4. API Design
 
-  5. DB Selection & Schema — access patterns, DB type choice with justification, schema design, indexes
+  5. Deep Dives — ID generation, DB design, caching, peak traffic, fault isolation, system-specific deep dives
 
-  6. Base Architecture — naive, simplest system that works end to end
+  6. Base Architecture — naive, simplest system that works end to end
 
-  7. Deep Dives — identify bottlenecks, scale each component, improve the design iteratively                      
+  7. Failures & Edge Cases — what breaks, how the system handles it
 
-  8. Potential Deep Dives — areas an interviewer might push on (not always covered in a real interview)           
+  8. Final Design — updated architecture diagram reflecting all deep dive decisions
 
-  9. Failures & Edge Cases — what breaks, how the system handles it                                               
+  9. Observability — SLIs, SLOs, alerting, error budget
 
-  **How each checkpoint works:**                                                                                  
+  **How each checkpoint works:**
 
-  9. **Interview mode** — act as a Google L4 interviewer. Ask the questions a real interviewer would ask for that 
+  1. **Interview mode** — act as a Google L4 interviewer. Ask the questions a real interviewer would ask for that checkpoint. Push back on vague answers. Do not hint or help. Stay in character.
 
-  checkpoint. Push back on vague answers. Do not hint or help. Stay in character.                                 
+  2. **Debrief mode** — once the checkpoint is done, break character. Tell the user what they got right, what they missed, what was weak. Go as deep as needed on any concept they fumbled — one concept at a time, same interactive style as the study notes sessions.
 
-  10. **Debrief mode** — once the checkpoint is done, break character. Tell the user what they got right, what they
+  3. **Notes mode** — write the notes for that checkpoint. Notes capture the ideal answer: what the user got right + what they missed + all concepts explained fully. Same narrative style as the rest of the wiki.
 
-   missed, what was weak. Go as deep as needed on any concept they fumbled — one concept at a time, same          
+  4. **Next checkpoint** — only move to the next checkpoint after notes are written and user confirms.
 
-  interactive style as the study notes sessions.                                                                  
+  **Rules:**
 
-  11. **Notes mode** — write the notes for that checkpoint. Notes capture the ideal answer: what the user got right
+  - Never rush to finish the full design. Depth at each checkpoint matters more than reaching the final solution.
 
-   + what they missed + all concepts explained fully. Same narrative style as the rest of the wiki.               
+  - If a concept comes up in debrief that needs a full explanation, explain it fully before writing notes.
 
-  4. **Next checkpoint** — only move to the next checkpoint after notes are written and user confirms.            
+  - Notes for each checkpoint go into: `System Design/SDE2/11-Case-Studies/<system-name>/`
 
-  **Rules:**                                                                                                      
+  - **Folder layout (follow this exactly for every case study):**
+    ```
+    01-FR.md
+    02-Estimation.md
+    03-NFR.md
+    04-API.md
+    05-Deep-Dives/
+      01-Short-Code-Generation/   (or equivalent ID generation for the system)
+      02-DB/                      (DB choice, schema, indexes, read/write/delete flows)
+      03-Caching/
+      04-Peak-Traffic/
+      05-Fault-Isolation/
+      06-<system-specific>/       (add subfolders as needed per system)
+    06-Base-Architecture/
+      01-Base-Architecture.md     (simple end-to-end diagram + all flows)
+    07-Failures-And-Edge-Cases/
+    08-Final-Design/
+    09-Observability/
+    ```
 
-  - Never rush to finish the full design. Depth at each checkpoint matters more than reaching the final solution. 
-
-  - If a concept comes up in debrief that needs a full explanation, explain it fully before writing notes.       
-
-  - Notes for each checkpoint go into: `System Design/SDE2/11-Case-Studies/<system-name>/`                        
-
-  - Each checkpoint gets its own file: `01-FR.md`, `02-Estimation.md`, `03-NFR.md`, `04-API.md`,
-
-  `05-Base-Architecture.md`, `06-Deep-Dives.md`, `07-Final-Design.md`, `08-Potential-Deep-Dives.md`,              
-
-  `09-Failures-And-Edge-Cases.md`
-
+  - **Reference implementations:**
+    - URL Shortener: `System Design/SDE2/11-Case-Studies/01-URL-Shortener/` — deep dive numbering reference
+    - Pastebin: `System Design/SDE2/11-Case-Studies/02-Pastebin/` — most recent, follow this structure
 
   - **Both Deep Dives and Potential Deep Dives are always covered in full.** Main deep dives are what a strong candidate volunteers unprompted. Potential deep dives are what the interviewer might push on. Both get the same depth of notes and the same interactive interview → debrief → notes flow. Never skip potential deep dives — treat them as mandatory, not optional.
 
   - **Google Scale versions are done after ALL case studies are completed at normal scale.** First finish every case study at average MAU (e.g. 100M users). Once all case studies are done, repeat all of them at Google scale (billions of users). The Google scale version goes into a separate subfolder: `System Design/SDE2/11-Case-Studies/<system-name>-Google-Scale/`
   - **Google Scale versions must cover SDE-3 and SDE-3+ gaps** — specifically: multi-region architecture (GeoDNS, active-active regions, cross-region replication), observability (SLOs, distributed tracing, alerting), and migration planning (zero-downtime shard migrations, live data migrations). These topics are out of scope at normal scale but become mandatory at Google scale where billions of users make every gap a crisis.
 
-  - **Notes must be fully reasoned — never shallow.** Every option discussed must include: why it was considered, what its trade-offs are, why it wins or loses against alternatives, and all implementation details. The gold standard for reasoning depth is `System Design/SDE2/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/02-DB/08-Read-Your-Own-Writes.md` — read it before writing any deep dive notes. That file shows the expected level of detail: full option comparison, implementation mechanics, efficiency analysis, and a clear verdict with reasoning.
+  - **Notes must be fully reasoned — never shallow.** Every option discussed must include: why it was considered, what its trade-offs are, why it wins or loses against alternatives, and all implementation details. The gold standard for reasoning depth is `System Design/SDE2/11-Case-Studies/01-URL-Shortener/05-Deep-Dives/02-DB/08-Read-Your-Own-Writes.md` — read it before writing any deep dive notes. That file shows the expected level of detail: full option comparison, implementation mechanics, efficiency analysis, and a clear verdict with reasoning.
 
-  - **For each new case study, follow the structure of the URL Shortener** — same checkpoint order, same folder layout, same file naming convention, same depth of reasoning in notes.
+  - **For each new case study, follow the structure of the Pastebin case study** — same checkpoint order, same folder layout, same file naming convention, same depth of reasoning in notes.
