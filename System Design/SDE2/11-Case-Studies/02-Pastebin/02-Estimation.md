@@ -9,10 +9,15 @@
 ```
 MAU:                10M
 DAU:                20% × 10M = 2M
+
 Writes per DAU:     0.5 pastes/day  (occasional tool, not daily habit)
+
 Read:write ratio:   100:1           (pastes are read many more times than created)
+
 Peak multiplier:    3×              (Pastebin doesn't go viral — 3× is realistic)
+
 Paste size:         ~10KB           (100 lines × 100 chars = 10,000 bytes)
+
 Retention:          10 years
 ```
 
