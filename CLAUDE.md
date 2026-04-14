@@ -89,15 +89,13 @@ Each file uses this style:
 
   4. API Design
 
-  5. Deep Dives — ID generation, DB design, caching, peak traffic, fault isolation, system-specific deep dives
+  5. Deep Dives — ID generation, DB design, caching, peak traffic, system-specific deep dives, fault isolation + failures & edge cases (always last)
 
   6. Base Architecture — naive, simplest system that works end to end
 
-  7. Failures & Edge Cases — what breaks, how the system handles it
+  7. Final Design — updated architecture diagram reflecting all deep dive decisions
 
-  8. Final Design — updated architecture diagram reflecting all deep dive decisions
-
-  9. Observability — SLIs, SLOs, alerting, error budget
+  8. Observability — SLIs, SLOs, alerting, error budget
 
   **How each checkpoint works:**
 
@@ -123,19 +121,19 @@ Each file uses this style:
     02-Estimation.md
     03-NFR.md
     04-API.md
-    05-Deep-Dives/
+    05-Base-Architecture.md
+    06-Deep-Dives/
       01-Short-Code-Generation/   (or equivalent ID generation for the system)
       02-DB/                      (DB choice, schema, indexes, read/write/delete flows)
       03-Caching/
       04-Peak-Traffic/
-      05-Fault-Isolation/
-      06-<system-specific>/       (add subfolders as needed per system)
-    06-Base-Architecture/
-      01-Base-Architecture.md     (simple end-to-end diagram + all flows)
-    07-Failures-And-Edge-Cases/
-    08-Final-Design/
-    09-Observability/
+      05-<system-specific>/       (add subfolders as needed per system)
+      XX-Fault-Isolation/         (always last deep dive subfolder — covers fault isolation + all failures & edge cases)
+    07-Final-Design/
+    08-Observability/
     ```
+
+  - **Fault-Isolation is always the last subfolder in Deep-Dives.** It covers both the fault isolation strategy and all failure/edge case scenarios (component down, cascade failures, data corruption, etc.). There is no separate top-level Failures-And-Edge-Cases folder.
 
   - **Reference implementations:**
     - URL Shortener: `System Design/SDE2/11-Case-Studies/01-URL-Shortener/` — deep dive numbering reference

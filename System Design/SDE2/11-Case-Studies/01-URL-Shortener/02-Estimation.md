@@ -48,6 +48,7 @@ Each URL entry stores:
 Short URL code  →  ~50 bytes
 Long URL        →  ~250 bytes  (average URL length)
 ID + metadata   →  ~200 bytes  (timestamps, user info, expiry)
+
 Total per entry →  ~500 bytes
 ```
 
