@@ -11,15 +11,18 @@ The core table. Every message ever sent lives here.
 ```
 Table: messages
 
-Partition Key: conversation_id       → routes to the right DynamoDB partition
+Partition Key: conversation_id       → routes to the right                                             DynamoDB partition
+
 Sort Key:      timestamp#message_id  → composite: chronological order + collision safety
 
 Attributes:
   message_id      (string)   → unique ID, client-generated (UUID or Snowflake)
+  
   sender_id       (string)   → who sent the message
   receiver_id     (string)   → denormalized — avoids extra lookup to conversations table
+  
   content         (string)   → the message text
-  s3_ref          (string)   → nullable — pointer to S3 if message is archived to cold storage
+  s3_ref          (string)   → nullable — pointer to S3 if                                   message is archived to cold storage
 ```
 
 ---
