@@ -10,6 +10,7 @@
 MAU              → 500M users
 DAU              → 20% of MAU = 100M DAU   (80/20 principle)
 Messages per day → 10 messages per user per day
+
 Total writes/day → 100M × 10 = 1B messages/day
 ```
 

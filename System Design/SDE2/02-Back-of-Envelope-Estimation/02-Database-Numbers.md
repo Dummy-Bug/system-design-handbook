@@ -91,7 +91,9 @@ Mongo's write throughput is higher than Postgres for document writes because it 
 ```
 Write throughput per node:   100,000 – 200,000 writes/sec
 Read throughput per node:    50,000  – 80,000  reads/sec
+
 Write latency:               0.5 – 2 ms    ← writes go to memtable (RAM) first
+
 Read latency:                5   – 10 ms   ← may need to check multiple SSTables
 ```
 
