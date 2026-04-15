@@ -100,6 +100,43 @@ If you need 20 servers at peak, run 22–25. Losing one server during peak shoul
 
 ---
 
+## Connection server capacity — persistent connections are different
+
+Regular app servers handle **request-response** — a client connects, sends a request, gets a response, disconnects. The connection lives for milliseconds.
+
+Chat systems, WebSocket servers, and any real-time system are different. Connections are **persistent** — a user connects and stays connected for hours, waiting for messages. The server holds that connection open the entire time.
+
+**The classic model — one thread per connection — collapses fast:**
+
+```
+1 thread stack           → ~1 MB RAM
+10M concurrent users     → 10M threads × 1 MB = 10 TB RAM
+```
+
+No machine has 10 TB of RAM. This is why the naive "one thread per connection" model fails for real-time systems.
+
+**The fix — async I/O (epoll on Linux):**
+
+Instead of one thread per connection, one thread watches thousands of connections simultaneously. The OS monitors all open connections via epoll and only wakes the thread when a connection actually has data to process. Between events, the thread is free to handle other connections.
+
+```
+Async I/O capacity per server  → ~50k–100k concurrent connections
+100M DAU, 10% online at once   → 10M concurrent connections
+Servers needed                 → 10M / 100k = ~100 connection servers
+```
+
+This is why chat systems always have a dedicated **connection service** — a horizontally scalable fleet of servers whose only job is to hold open WebSocket connections. The rest of the system (message routing, storage, delivery) is separate.
+
+```
+Stateless app server:        1k–5k req/sec
+Connection server (async):   50k–100k concurrent persistent connections
+```
+
+> [!important] Persistent connections change your server count math
+> For a request-response API, you size servers by QPS. For a real-time system, you size connection servers by **concurrent users online**, not by message throughput. These are very different numbers. 10M users online simultaneously requires ~100 connection servers regardless of whether they're sending 1 message/hour or 100 messages/hour.
+
+---
+
 ## Cache sizing — the 80/20 rule
 
 Not all data needs to be in cache — only the hot fraction that gets the most traffic.

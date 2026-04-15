@@ -18,17 +18,6 @@ That's it. Two boxes.
 
 ---
 
-## Short code generation decision
-
-For base architecture: **random 6-character base62 string + DB collision check.**
-
-- Random 6-char base62 covers 62^6 = ~56 billion combinations — enough for 10 years
-- Unique index on short_code column makes collision check fast (O log n, not full scan)
-- Simple to implement, works end to end
-- Known weakness: collision rate grows as DB fills up — flagged as a deep dive improvement
-
----
-
 ## Creation flow — end to end
 
 ```
@@ -36,7 +25,7 @@ For base architecture: **random 6-character base62 string + DB collision check.*
    POST /api/v1/urls
    { "long_url": "https://very-long-url.com/with/path" }
 
-2. App server generates a random 6-char base62 string
+2. App server generates a random 6-char string
    e.g. → x7k2p9
 
 3. App server queries DB:

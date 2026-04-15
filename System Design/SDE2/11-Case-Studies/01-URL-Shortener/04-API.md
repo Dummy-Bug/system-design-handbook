@@ -6,7 +6,7 @@
 
 ## Endpoint 1 — Shorten a URL
 
-```
+```http
 POST /api/v1/urls
 
 Request Body:

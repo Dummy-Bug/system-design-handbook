@@ -87,4 +87,3 @@ The database never sees the request. At 100k reads/sec, if 80% of requests are s
 
 ---
 
-**Next:** How big does the cache need to be to achieve 80% hit rate? The answer is surprisingly small — once you apply the 80-20 rule correctly.
