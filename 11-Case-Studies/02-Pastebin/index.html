@@ -10,31 +10,31 @@
       
       
       
-        <link rel="canonical" href="https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/08-Fault-Isolation/03-DB-Shard-Primary-Down/">
+        <link rel="canonical" href="https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/">
       
       
-        <link rel="prev" href="../02-Redis-Down/">
+        <link rel="prev" href="../01-URL-Shortener/09-Observability/05-Error-Budget/">
       
       
-        <link rel="next" href="../04-KGS-Down/">
+        <link rel="next" href="01-FR/">
       
       
         
       
       
-      <link rel="icon" href="../../../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>03 DB Shard Primary Down - System Design</title>
+        <title>Pastebin - System Design</title>
       
     
     
-      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -53,9 +53,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#what-happens-immediately" class="md-skip">
+        <a href="#pastebin" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +92,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../../../.." title="System Design" class="md-header__button md-logo" aria-label="System Design" data-md-component="logo">
+    <a href="../.." title="System Design" class="md-header__button md-logo" aria-label="System Design" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              03 DB Shard Primary Down
+              Pastebin
             
           </span>
         </div>
@@ -187,7 +187,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../../../.." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -219,7 +219,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../../" class="md-tabs__link">
+        <a href="../01-URL-Shortener/" class="md-tabs__link">
           
   
   
@@ -260,7 +260,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../../../.." title="System Design" class="md-nav__button md-logo" aria-label="System Design" data-md-component="logo">
+    <a href="../.." title="System Design" class="md-nav__button md-logo" aria-label="System Design" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -278,7 +278,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -367,8 +367,6 @@
                 
   
   
-    
-  
   
   
     
@@ -406,15 +404,17 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_1" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../" class="md-nav__link ">
+            <a href="../01-URL-Shortener/" class="md-nav__link ">
               
   
   
@@ -438,7 +438,7 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2_1">
             <span class="md-nav__icon md-icon"></span>
             
@@ -458,7 +458,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../01-FR/" class="md-nav__link">
+      <a href="../01-URL-Shortener/01-FR/" class="md-nav__link">
         
   
   
@@ -486,7 +486,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../02-Estimation/" class="md-nav__link">
+      <a href="../01-URL-Shortener/02-Estimation/" class="md-nav__link">
         
   
   
@@ -514,7 +514,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../03-NFR/" class="md-nav__link">
+      <a href="../01-URL-Shortener/03-NFR/" class="md-nav__link">
         
   
   
@@ -542,7 +542,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../04-API/" class="md-nav__link">
+      <a href="../01-URL-Shortener/04-API/" class="md-nav__link">
         
   
   
@@ -570,7 +570,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../05-Base-Architecture/" class="md-nav__link">
+      <a href="../01-URL-Shortener/05-Base-Architecture/" class="md-nav__link">
         
   
   
@@ -595,10 +595,8 @@
                 
   
   
-    
   
   
-  
     
     
       
@@ -625,11 +623,13 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_7" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_1_7" >
         
           
           <label class="md-nav__link" for="__nav_2_1_7" id="__nav_2_1_7_label" tabindex="0">
@@ -650,7 +650,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_7_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2_1_7">
             <span class="md-nav__icon md-icon"></span>
             
@@ -738,7 +738,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-Short-Code-Generation/01-Raw-IDs/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/01-Short-Code-Generation/01-Raw-IDs/" class="md-nav__link">
         
   
   
@@ -766,7 +766,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-Short-Code-Generation/02-Hashing/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/01-Short-Code-Generation/02-Hashing/" class="md-nav__link">
         
   
   
@@ -794,7 +794,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-Short-Code-Generation/03-Random-Collision-Check/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/01-Short-Code-Generation/03-Random-Collision-Check/" class="md-nav__link">
         
   
   
@@ -822,7 +822,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-Short-Code-Generation/04-UUID-Base64-Trim/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/01-Short-Code-Generation/04-UUID-Base64-Trim/" class="md-nav__link">
         
   
   
@@ -850,7 +850,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-Short-Code-Generation/05-Snowflake-Base64/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/01-Short-Code-Generation/05-Snowflake-Base64/" class="md-nav__link">
         
   
   
@@ -878,7 +878,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-Short-Code-Generation/06-UUID-Snowflake-Base62/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/01-Short-Code-Generation/06-UUID-Snowflake-Base62/" class="md-nav__link">
         
   
   
@@ -906,7 +906,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-Short-Code-Generation/07-Truncation-Problem/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/01-Short-Code-Generation/07-Truncation-Problem/" class="md-nav__link">
         
   
   
@@ -1014,7 +1014,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02-DB/01-DB-Choice/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/02-DB/01-DB-Choice/" class="md-nav__link">
         
   
   
@@ -1042,7 +1042,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02-DB/02-Schema/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/02-DB/02-Schema/" class="md-nav__link">
         
   
   
@@ -1070,7 +1070,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02-DB/03-Why-Sharding/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/02-DB/03-Why-Sharding/" class="md-nav__link">
         
   
   
@@ -1098,7 +1098,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02-DB/04-Sharding-Key/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/02-DB/04-Sharding-Key/" class="md-nav__link">
         
   
   
@@ -1126,7 +1126,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02-DB/05-Consistent-Hashing/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/02-DB/05-Consistent-Hashing/" class="md-nav__link">
         
   
   
@@ -1154,7 +1154,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02-DB/06-How-Many-Shards/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/02-DB/06-How-Many-Shards/" class="md-nav__link">
         
   
   
@@ -1182,7 +1182,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02-DB/07-Replication/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/02-DB/07-Replication/" class="md-nav__link">
         
   
   
@@ -1210,7 +1210,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02-DB/08-Read-Your-Own-Writes/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/02-DB/08-Read-Your-Own-Writes/" class="md-nav__link">
         
   
   
@@ -1312,7 +1312,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../03-Caching/01-Why-Caching/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/03-Caching/01-Why-Caching/" class="md-nav__link">
         
   
   
@@ -1340,7 +1340,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../03-Caching/02-Cache-Size/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/03-Caching/02-Cache-Size/" class="md-nav__link">
         
   
   
@@ -1368,7 +1368,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../03-Caching/03-Cache-Strategy/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/03-Caching/03-Cache-Strategy/" class="md-nav__link">
         
   
   
@@ -1396,7 +1396,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../03-Caching/04-Eviction-Policy/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/03-Caching/04-Eviction-Policy/" class="md-nav__link">
         
   
   
@@ -1424,7 +1424,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../03-Caching/05-Updated-Flow/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/03-Caching/05-Updated-Flow/" class="md-nav__link">
         
   
   
@@ -1526,7 +1526,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04-Peak-Traffic/01-The-Spike-Problem/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/01-The-Spike-Problem/" class="md-nav__link">
         
   
   
@@ -1554,7 +1554,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04-Peak-Traffic/03-Load-Balancing/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/03-Load-Balancing/" class="md-nav__link">
         
   
   
@@ -1582,7 +1582,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04-Peak-Traffic/04-API-GW-SPOF/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/04-API-GW-SPOF/" class="md-nav__link">
         
   
   
@@ -1610,7 +1610,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04-Peak-Traffic/05-Updated-Architecture/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/05-Updated-Architecture/" class="md-nav__link">
         
   
   
@@ -1702,7 +1702,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04-Peak-Traffic/02-Hot-Key-Problem/01-Detection/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/02-Hot-Key-Problem/01-Detection/" class="md-nav__link">
         
   
   
@@ -1730,7 +1730,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04-Peak-Traffic/02-Hot-Key-Problem/02-Local-App-Cache/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/02-Hot-Key-Problem/02-Local-App-Cache/" class="md-nav__link">
         
   
   
@@ -1758,7 +1758,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04-Peak-Traffic/02-Hot-Key-Problem/03-Redis-Key-Replication/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/02-Hot-Key-Problem/03-Redis-Key-Replication/" class="md-nav__link">
         
   
   
@@ -1786,7 +1786,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04-Peak-Traffic/02-Hot-Key-Problem/04-Broadcast-Promotion/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/02-Hot-Key-Problem/04-Broadcast-Promotion/" class="md-nav__link">
         
   
   
@@ -1896,7 +1896,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-Pre-Generated-Keys/01-Collision-At-Scale/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/06-Pre-Generated-Keys/01-Collision-At-Scale/" class="md-nav__link">
         
   
   
@@ -1924,7 +1924,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-Pre-Generated-Keys/02-Bloom-Filter/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/06-Pre-Generated-Keys/02-Bloom-Filter/" class="md-nav__link">
         
   
   
@@ -1952,7 +1952,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-Pre-Generated-Keys/03-Key-Pool/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/06-Pre-Generated-Keys/03-Key-Pool/" class="md-nav__link">
         
   
   
@@ -1980,7 +1980,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-Pre-Generated-Keys/04-KGS-Sequential-Generation/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/06-Pre-Generated-Keys/04-KGS-Sequential-Generation/" class="md-nav__link">
         
   
   
@@ -2008,7 +2008,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-Pre-Generated-Keys/05-Redis-INCR-vs-KGS/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/06-Pre-Generated-Keys/05-Redis-INCR-vs-KGS/" class="md-nav__link">
         
   
   
@@ -2106,7 +2106,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../07-Cold-Storage/01-The-Problem/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/07-Cold-Storage/01-The-Problem/" class="md-nav__link">
         
   
   
@@ -2134,7 +2134,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../07-Cold-Storage/02-Tiered-Storage/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/07-Cold-Storage/02-Tiered-Storage/" class="md-nav__link">
         
   
   
@@ -2162,7 +2162,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../07-Cold-Storage/03-Detecting-Cold-URLs/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/07-Cold-Storage/03-Detecting-Cold-URLs/" class="md-nav__link">
         
   
   
@@ -2195,10 +2195,8 @@
                 
   
   
-    
   
   
-  
     
     
       
@@ -2221,11 +2219,13 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_7_7" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_1_7_7" >
         
           
           <label class="md-nav__link" for="__nav_2_1_7_7" id="__nav_2_1_7_7_label" tabindex="0">
@@ -2246,7 +2246,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_7_7_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_7_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2_1_7_7">
             <span class="md-nav__icon md-icon"></span>
             
@@ -2264,7 +2264,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../01-Fault-Isolation/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/08-Fault-Isolation/01-Fault-Isolation/" class="md-nav__link">
         
   
   
@@ -2292,7 +2292,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../02-Redis-Down/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/08-Fault-Isolation/02-Redis-Down/" class="md-nav__link">
         
   
   
@@ -2317,35 +2317,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    03 DB Shard Primary Down
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../01-URL-Shortener/06-Deep-Dives/08-Fault-Isolation/03-DB-Shard-Primary-Down/" class="md-nav__link">
         
   
   
@@ -2361,90 +2336,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#what-happens-immediately" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What happens immediately
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#reads-mostly-unaffected" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Reads — mostly unaffected
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#writes-fail-for-60-seconds" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Writes — fail for 60 seconds
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ryow-fails-for-a-precise-window-of-users" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        RYOW — fails for a precise window of users
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#complete-impact-summary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Complete impact summary
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#after-failover-completes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        After failover completes
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2457,7 +2348,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../04-KGS-Down/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/08-Fault-Isolation/04-KGS-Down/" class="md-nav__link">
         
   
   
@@ -2485,7 +2376,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../05-Other-Failures/" class="md-nav__link">
+      <a href="../01-URL-Shortener/06-Deep-Dives/08-Fault-Isolation/05-Other-Failures/" class="md-nav__link">
         
   
   
@@ -2587,7 +2478,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../08-Final-Design/01-Final-Design/" class="md-nav__link">
+      <a href="../01-URL-Shortener/08-Final-Design/01-Final-Design/" class="md-nav__link">
         
   
   
@@ -2689,7 +2580,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../09-Observability/01-SLI-SLO-Connection/" class="md-nav__link">
+      <a href="../01-URL-Shortener/09-Observability/01-SLI-SLO-Connection/" class="md-nav__link">
         
   
   
@@ -2717,7 +2608,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../09-Observability/02-Measuring-Latency/" class="md-nav__link">
+      <a href="../01-URL-Shortener/09-Observability/02-Measuring-Latency/" class="md-nav__link">
         
   
   
@@ -2745,7 +2636,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../09-Observability/03-Measuring-Availability/" class="md-nav__link">
+      <a href="../01-URL-Shortener/09-Observability/03-Measuring-Availability/" class="md-nav__link">
         
   
   
@@ -2773,7 +2664,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../09-Observability/04-Alerting/" class="md-nav__link">
+      <a href="../01-URL-Shortener/09-Observability/04-Alerting/" class="md-nav__link">
         
   
   
@@ -2801,7 +2692,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../09-Observability/05-Error-Budget/" class="md-nav__link">
+      <a href="../01-URL-Shortener/09-Observability/05-Error-Budget/" class="md-nav__link">
         
   
   
@@ -2842,8 +2733,10 @@
                 
   
   
+    
   
   
+  
     
     
       
@@ -2877,17 +2770,15 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../../02-Pastebin/" class="md-nav__link ">
+            <a href="./" class="md-nav__link md-nav__link--active">
               
   
   
@@ -2905,13 +2796,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+              <label class="md-nav__link md-nav__link--active" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -2931,7 +2822,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/01-FR/" class="md-nav__link">
+      <a href="01-FR/" class="md-nav__link">
         
   
   
@@ -2959,7 +2850,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/02-Estimation/" class="md-nav__link">
+      <a href="02-Estimation/" class="md-nav__link">
         
   
   
@@ -2987,7 +2878,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/03-NFR/" class="md-nav__link">
+      <a href="03-NFR/" class="md-nav__link">
         
   
   
@@ -3015,7 +2906,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/04-API/" class="md-nav__link">
+      <a href="04-API/" class="md-nav__link">
         
   
   
@@ -3043,7 +2934,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/05-Base-Architecture/" class="md-nav__link">
+      <a href="05-Base-Architecture/" class="md-nav__link">
         
   
   
@@ -3207,7 +3098,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/01-Short-Code-Generation/01-Requirements/" class="md-nav__link">
+      <a href="06-Deep-Dives/01-Short-Code-Generation/01-Requirements/" class="md-nav__link">
         
   
   
@@ -3235,7 +3126,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/01-Short-Code-Generation/02-Approaches/" class="md-nav__link">
+      <a href="06-Deep-Dives/01-Short-Code-Generation/02-Approaches/" class="md-nav__link">
         
   
   
@@ -3263,7 +3154,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/01-Short-Code-Generation/03-Redis-Counter/" class="md-nav__link">
+      <a href="06-Deep-Dives/01-Short-Code-Generation/03-Redis-Counter/" class="md-nav__link">
         
   
   
@@ -3291,7 +3182,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/01-Short-Code-Generation/04-Custom-Alias/" class="md-nav__link">
+      <a href="06-Deep-Dives/01-Short-Code-Generation/04-Custom-Alias/" class="md-nav__link">
         
   
   
@@ -3395,7 +3286,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/02-DB/01-DB-Choice/" class="md-nav__link">
+      <a href="06-Deep-Dives/02-DB/01-DB-Choice/" class="md-nav__link">
         
   
   
@@ -3423,7 +3314,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/02-DB/02-Content-Addressable-Storage/" class="md-nav__link">
+      <a href="06-Deep-Dives/02-DB/02-Content-Addressable-Storage/" class="md-nav__link">
         
   
   
@@ -3451,7 +3342,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/02-DB/03-Ref-Counting/" class="md-nav__link">
+      <a href="06-Deep-Dives/02-DB/03-Ref-Counting/" class="md-nav__link">
         
   
   
@@ -3479,7 +3370,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/02-DB/04-Schema-And-Indexes/" class="md-nav__link">
+      <a href="06-Deep-Dives/02-DB/04-Schema-And-Indexes/" class="md-nav__link">
         
   
   
@@ -3507,7 +3398,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/02-DB/05-Write-Read-Delete-Flows/" class="md-nav__link">
+      <a href="06-Deep-Dives/02-DB/05-Write-Read-Delete-Flows/" class="md-nav__link">
         
   
   
@@ -3535,7 +3426,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/02-DB/06-Sharding/" class="md-nav__link">
+      <a href="06-Deep-Dives/02-DB/06-Sharding/" class="md-nav__link">
         
   
   
@@ -3635,7 +3526,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/03-Caching/01-Why-Cache/" class="md-nav__link">
+      <a href="06-Deep-Dives/03-Caching/01-Why-Cache/" class="md-nav__link">
         
   
   
@@ -3663,7 +3554,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/03-Caching/02-What-To-Cache-And-How/" class="md-nav__link">
+      <a href="06-Deep-Dives/03-Caching/02-What-To-Cache-And-How/" class="md-nav__link">
         
   
   
@@ -3691,7 +3582,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/03-Caching/03-Cache-Sizing/" class="md-nav__link">
+      <a href="06-Deep-Dives/03-Caching/03-Cache-Sizing/" class="md-nav__link">
         
   
   
@@ -3719,7 +3610,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/03-Caching/04-Cache-Invalidation/" class="md-nav__link">
+      <a href="06-Deep-Dives/03-Caching/04-Cache-Invalidation/" class="md-nav__link">
         
   
   
@@ -3813,7 +3704,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/04-Peak-Traffic/01-Hot-Key-Problem/" class="md-nav__link">
+      <a href="06-Deep-Dives/04-Peak-Traffic/01-Hot-Key-Problem/" class="md-nav__link">
         
   
   
@@ -3913,7 +3804,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/05-Fault-Isolation/01-Why-Fault-Isolation/" class="md-nav__link">
+      <a href="06-Deep-Dives/05-Fault-Isolation/01-Why-Fault-Isolation/" class="md-nav__link">
         
   
   
@@ -3941,7 +3832,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/05-Fault-Isolation/02-Service-Split/" class="md-nav__link">
+      <a href="06-Deep-Dives/05-Fault-Isolation/02-Service-Split/" class="md-nav__link">
         
   
   
@@ -3969,7 +3860,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/05-Fault-Isolation/03-DB-Standby/" class="md-nav__link">
+      <a href="06-Deep-Dives/05-Fault-Isolation/03-DB-Standby/" class="md-nav__link">
         
   
   
@@ -3997,7 +3888,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/05-Fault-Isolation/04-Circuit-Breaker/" class="md-nav__link">
+      <a href="06-Deep-Dives/05-Fault-Isolation/04-Circuit-Breaker/" class="md-nav__link">
         
   
   
@@ -4099,7 +3990,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/06-Async-S3-Upload/01-Why-Async-Upload/" class="md-nav__link">
+      <a href="06-Deep-Dives/06-Async-S3-Upload/01-Why-Async-Upload/" class="md-nav__link">
         
   
   
@@ -4127,7 +4018,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/06-Async-S3-Upload/02-Failure-Problem/" class="md-nav__link">
+      <a href="06-Deep-Dives/06-Async-S3-Upload/02-Failure-Problem/" class="md-nav__link">
         
   
   
@@ -4155,7 +4046,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/06-Async-S3-Upload/03-State-Machine/" class="md-nav__link">
+      <a href="06-Deep-Dives/06-Async-S3-Upload/03-State-Machine/" class="md-nav__link">
         
   
   
@@ -4183,7 +4074,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/06-Async-S3-Upload/04-Retry-Strategy/" class="md-nav__link">
+      <a href="06-Deep-Dives/06-Async-S3-Upload/04-Retry-Strategy/" class="md-nav__link">
         
   
   
@@ -4211,7 +4102,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/06-Async-S3-Upload/05-Read-Path-Behaviour/" class="md-nav__link">
+      <a href="06-Deep-Dives/06-Async-S3-Upload/05-Read-Path-Behaviour/" class="md-nav__link">
         
   
   
@@ -4313,7 +4204,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/07-Expiry-Cleanup-Job/01-Why-Cleanup-Job/" class="md-nav__link">
+      <a href="06-Deep-Dives/07-Expiry-Cleanup-Job/01-Why-Cleanup-Job/" class="md-nav__link">
         
   
   
@@ -4341,7 +4232,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/07-Expiry-Cleanup-Job/02-Cleanup-Flow/" class="md-nav__link">
+      <a href="06-Deep-Dives/07-Expiry-Cleanup-Job/02-Cleanup-Flow/" class="md-nav__link">
         
   
   
@@ -4369,7 +4260,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/07-Expiry-Cleanup-Job/03-Distributed-Workers/" class="md-nav__link">
+      <a href="06-Deep-Dives/07-Expiry-Cleanup-Job/03-Distributed-Workers/" class="md-nav__link">
         
   
   
@@ -4397,7 +4288,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/07-Expiry-Cleanup-Job/04-Watchdog/" class="md-nav__link">
+      <a href="06-Deep-Dives/07-Expiry-Cleanup-Job/04-Watchdog/" class="md-nav__link">
         
   
   
@@ -4425,7 +4316,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/07-Expiry-Cleanup-Job/05-Indexing-Strategy/" class="md-nav__link">
+      <a href="06-Deep-Dives/07-Expiry-Cleanup-Job/05-Indexing-Strategy/" class="md-nav__link">
         
   
   
@@ -4519,7 +4410,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/06-Deep-Dives/08-Updated-Architecture/01-Updated-Architecture/" class="md-nav__link">
+      <a href="06-Deep-Dives/08-Updated-Architecture/01-Updated-Architecture/" class="md-nav__link">
         
   
   
@@ -4629,7 +4520,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/07-Observability/01-SLI-SLO-Connection/" class="md-nav__link">
+      <a href="07-Observability/01-SLI-SLO-Connection/" class="md-nav__link">
         
   
   
@@ -4657,7 +4548,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/07-Observability/02-Measuring-Latency/" class="md-nav__link">
+      <a href="07-Observability/02-Measuring-Latency/" class="md-nav__link">
         
   
   
@@ -4685,7 +4576,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/07-Observability/03-Measuring-Availability/" class="md-nav__link">
+      <a href="07-Observability/03-Measuring-Availability/" class="md-nav__link">
         
   
   
@@ -4713,7 +4604,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/07-Observability/04-Alerting/" class="md-nav__link">
+      <a href="07-Observability/04-Alerting/" class="md-nav__link">
         
   
   
@@ -4741,7 +4632,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../02-Pastebin/07-Observability/05-Error-Budget/" class="md-nav__link">
+      <a href="07-Observability/05-Error-Budget/" class="md-nav__link">
         
   
   
@@ -4831,7 +4722,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../../03-WhatsApp/" class="md-nav__link ">
+            <a href="../03-WhatsApp/" class="md-nav__link ">
               
   
   
@@ -4875,7 +4766,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/01-FR/" class="md-nav__link">
+      <a href="../03-WhatsApp/01-FR/" class="md-nav__link">
         
   
   
@@ -4903,7 +4794,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/02-Estimation/" class="md-nav__link">
+      <a href="../03-WhatsApp/02-Estimation/" class="md-nav__link">
         
   
   
@@ -4931,7 +4822,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/03-NFR/" class="md-nav__link">
+      <a href="../03-WhatsApp/03-NFR/" class="md-nav__link">
         
   
   
@@ -4959,7 +4850,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/04-API/" class="md-nav__link">
+      <a href="../03-WhatsApp/04-API/" class="md-nav__link">
         
   
   
@@ -5055,7 +4946,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/04-Real-Time-Comms/01-The-Problem/" class="md-nav__link">
+      <a href="../03-WhatsApp/04-Real-Time-Comms/01-The-Problem/" class="md-nav__link">
         
   
   
@@ -5083,7 +4974,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/04-Real-Time-Comms/02-Short-Polling/" class="md-nav__link">
+      <a href="../03-WhatsApp/04-Real-Time-Comms/02-Short-Polling/" class="md-nav__link">
         
   
   
@@ -5111,7 +5002,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/04-Real-Time-Comms/03-Long-Polling/" class="md-nav__link">
+      <a href="../03-WhatsApp/04-Real-Time-Comms/03-Long-Polling/" class="md-nav__link">
         
   
   
@@ -5139,7 +5030,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/04-Real-Time-Comms/04-SSE/" class="md-nav__link">
+      <a href="../03-WhatsApp/04-Real-Time-Comms/04-SSE/" class="md-nav__link">
         
   
   
@@ -5167,7 +5058,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/04-Real-Time-Comms/05-WebSockets/" class="md-nav__link">
+      <a href="../03-WhatsApp/04-Real-Time-Comms/05-WebSockets/" class="md-nav__link">
         
   
   
@@ -5195,7 +5086,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/04-Real-Time-Comms/06-Comparison/" class="md-nav__link">
+      <a href="../03-WhatsApp/04-Real-Time-Comms/06-Comparison/" class="md-nav__link">
         
   
   
@@ -5297,7 +5188,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/05-Base-Architecture/01-Overview/" class="md-nav__link">
+      <a href="../03-WhatsApp/05-Base-Architecture/01-Overview/" class="md-nav__link">
         
   
   
@@ -5325,7 +5216,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/05-Base-Architecture/02-WebSocket-Connection-Flow/" class="md-nav__link">
+      <a href="../03-WhatsApp/05-Base-Architecture/02-WebSocket-Connection-Flow/" class="md-nav__link">
         
   
   
@@ -5353,7 +5244,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/05-Base-Architecture/03-Message-Send-Flow/" class="md-nav__link">
+      <a href="../03-WhatsApp/05-Base-Architecture/03-Message-Send-Flow/" class="md-nav__link">
         
   
   
@@ -5381,7 +5272,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/05-Base-Architecture/04-Chat-History-Flow/" class="md-nav__link">
+      <a href="../03-WhatsApp/05-Base-Architecture/04-Chat-History-Flow/" class="md-nav__link">
         
   
   
@@ -5409,7 +5300,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/05-Base-Architecture/05-API-GW-And-LB/" class="md-nav__link">
+      <a href="../03-WhatsApp/05-Base-Architecture/05-API-GW-And-LB/" class="md-nav__link">
         
   
   
@@ -5585,7 +5476,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/01-DB/01-DB-Choice/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/01-DB/01-DB-Choice/" class="md-nav__link">
         
   
   
@@ -5613,7 +5504,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/01-DB/02-Schema/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/01-DB/02-Schema/" class="md-nav__link">
         
   
   
@@ -5641,7 +5532,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/01-DB/03-Tiered-Storage/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/01-DB/03-Tiered-Storage/" class="md-nav__link">
         
   
   
@@ -5669,7 +5560,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/01-DB/04-Sharding/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/01-DB/04-Sharding/" class="md-nav__link">
         
   
   
@@ -5697,7 +5588,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/01-DB/06-Updated-Architecture/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/01-DB/06-Updated-Architecture/" class="md-nav__link">
         
   
   
@@ -5795,7 +5686,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/00-Overview/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/00-Overview/" class="md-nav__link">
         
   
   
@@ -5823,7 +5714,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/01-Detection/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/01-Detection/" class="md-nav__link">
         
   
   
@@ -5851,7 +5742,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/02-Salting/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/02-Salting/" class="md-nav__link">
         
   
   
@@ -5879,7 +5770,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/03-Dynamic-N/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/03-Dynamic-N/" class="md-nav__link">
         
   
   
@@ -5907,7 +5798,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/04-Read-Query/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/04-Read-Query/" class="md-nav__link">
         
   
   
@@ -5935,7 +5826,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/05-Registry/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/05-Registry/" class="md-nav__link">
         
   
   
@@ -5963,7 +5854,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/06-Edge-Cases/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/06-Edge-Cases/" class="md-nav__link">
         
   
   
@@ -6087,7 +5978,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/01-The-Problem/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/01-The-Problem/" class="md-nav__link">
         
   
   
@@ -6115,7 +6006,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/02-Client-Timestamps/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/02-Client-Timestamps/" class="md-nav__link">
         
   
   
@@ -6143,7 +6034,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/03-Time-Machine-Problem/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/03-Time-Machine-Problem/" class="md-nav__link">
         
   
   
@@ -6171,7 +6062,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/04-Server-Timestamps/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/04-Server-Timestamps/" class="md-nav__link">
         
   
   
@@ -6199,7 +6090,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/05-Dedicated-Timestamp-Service/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/05-Dedicated-Timestamp-Service/" class="md-nav__link">
         
   
   
@@ -6227,7 +6118,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/06-Per-User-Sequence/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/06-Per-User-Sequence/" class="md-nav__link">
         
   
   
@@ -6255,7 +6146,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/07-Per-Conversation-Sequence/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/07-Per-Conversation-Sequence/" class="md-nav__link">
         
   
   
@@ -6283,7 +6174,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/08-Redis-INCR/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/08-Redis-INCR/" class="md-nav__link">
         
   
   
@@ -6311,7 +6202,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/09-Full-Ordering-Flow/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/09-Full-Ordering-Flow/" class="md-nav__link">
         
   
   
@@ -6339,7 +6230,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/10-Schema-Update/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/10-Schema-Update/" class="md-nav__link">
         
   
   
@@ -6367,7 +6258,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/11-Display-Time/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/11-Display-Time/" class="md-nav__link">
         
   
   
@@ -6395,7 +6286,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/12-Updated-Architecture/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/02-Message-Ordering/12-Updated-Architecture/" class="md-nav__link">
         
   
   
@@ -6513,7 +6404,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/01-The-Problem/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/01-The-Problem/" class="md-nav__link">
         
   
   
@@ -6541,7 +6432,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/02-Detecting-Offline/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/02-Detecting-Offline/" class="md-nav__link">
         
   
   
@@ -6569,7 +6460,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/03-Naive-Mailbox/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/03-Naive-Mailbox/" class="md-nav__link">
         
   
   
@@ -6597,7 +6488,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/04-Message-Id-Only/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/04-Message-Id-Only/" class="md-nav__link">
         
   
   
@@ -6625,7 +6516,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/05-Why-Not-Kafka/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/05-Why-Not-Kafka/" class="md-nav__link">
         
   
   
@@ -6653,7 +6544,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/06-Last-Delivered-Seq/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/06-Last-Delivered-Seq/" class="md-nav__link">
         
   
   
@@ -6681,7 +6572,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/07-Pending-Deliveries-Table/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/07-Pending-Deliveries-Table/" class="md-nav__link">
         
   
   
@@ -6709,7 +6600,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/08-Write-Flow/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/08-Write-Flow/" class="md-nav__link">
         
   
   
@@ -6737,7 +6628,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/09-Push-Notifications/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/09-Push-Notifications/" class="md-nav__link">
         
   
   
@@ -6765,7 +6656,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/10-Notification-Payload/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/10-Notification-Payload/" class="md-nav__link">
         
   
   
@@ -6793,7 +6684,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/11-Internet-Turns-On/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/11-Internet-Turns-On/" class="md-nav__link">
         
   
   
@@ -6821,7 +6712,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/12-Notification-Reply/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/12-Notification-Reply/" class="md-nav__link">
         
   
   
@@ -6849,7 +6740,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/13-Updated-Architecture/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/13-Updated-Architecture/" class="md-nav__link">
         
   
   
@@ -6963,7 +6854,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/01-The-Three-Ticks/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/01-The-Three-Ticks/" class="md-nav__link">
         
   
   
@@ -6991,7 +6882,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/02-Naive-Status-Column/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/02-Naive-Status-Column/" class="md-nav__link">
         
   
   
@@ -7019,7 +6910,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/03-Status-Table/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/03-Status-Table/" class="md-nav__link">
         
   
   
@@ -7047,7 +6938,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/04-Delivered-Ack/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/04-Delivered-Ack/" class="md-nav__link">
         
   
   
@@ -7075,7 +6966,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/05-Read-Receipt-Flow/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/05-Read-Receipt-Flow/" class="md-nav__link">
         
   
   
@@ -7103,7 +6994,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/06-APNs-Not-Reliable/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/06-APNs-Not-Reliable/" class="md-nav__link">
         
   
   
@@ -7131,7 +7022,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/07-Notification-Banner/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/07-Notification-Banner/" class="md-nav__link">
         
   
   
@@ -7159,7 +7050,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/08-Phone-Off-Three-Days/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/08-Phone-Off-Three-Days/" class="md-nav__link">
         
   
   
@@ -7187,7 +7078,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/09-Offline-Status-Sync/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/09-Offline-Status-Sync/" class="md-nav__link">
         
   
   
@@ -7215,7 +7106,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/11-Updated-Architecture/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/11-Updated-Architecture/" class="md-nav__link">
         
   
   
@@ -7367,7 +7258,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/01-Read-Receipts/01-Mutual-Rule/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/01-Read-Receipts/01-Mutual-Rule/" class="md-nav__link">
         
   
   
@@ -7395,7 +7286,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/01-Read-Receipts/02-Where-To-Store-Flag/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/01-Read-Receipts/02-Where-To-Store-Flag/" class="md-nav__link">
         
   
   
@@ -7423,7 +7314,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/01-Read-Receipts/03-Client-vs-Server-Check/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/01-Read-Receipts/03-Client-vs-Server-Check/" class="md-nav__link">
         
   
   
@@ -7451,7 +7342,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/01-Read-Receipts/04-How-Mutual-Rule-Enforces/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/01-Read-Receipts/04-How-Mutual-Rule-Enforces/" class="md-nav__link">
         
   
   
@@ -7553,7 +7444,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/02-Last-Seen/01-What-Is-Last-Seen/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/02-Last-Seen/01-What-Is-Last-Seen/" class="md-nav__link">
         
   
   
@@ -7581,7 +7472,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/02-Last-Seen/02-How-It-Gets-Recorded/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/02-Last-Seen/02-How-It-Gets-Recorded/" class="md-nav__link">
         
   
   
@@ -7609,7 +7500,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/02-Last-Seen/03-How-Alice-Sees-It/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/02-Last-Seen/03-How-Alice-Sees-It/" class="md-nav__link">
         
   
   
@@ -7637,7 +7528,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/02-Last-Seen/04-Privacy-And-Mutual-Rule/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/02-Last-Seen/04-Privacy-And-Mutual-Rule/" class="md-nav__link">
         
   
   
@@ -7665,7 +7556,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/02-Last-Seen/05-vs-Read-Receipts/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/02-Last-Seen/05-vs-Read-Receipts/" class="md-nav__link">
         
   
   
@@ -7789,7 +7680,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/05-Inbox/01-Inbox-Load-Flow/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/05-Inbox/01-Inbox-Load-Flow/" class="md-nav__link">
         
   
   
@@ -7817,7 +7708,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/05-Inbox/02-N%2B1-And-Denormalization/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/05-Inbox/02-N%2B1-And-Denormalization/" class="md-nav__link">
         
   
   
@@ -7845,7 +7736,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/05-Inbox/03-Conversations-Table-Schema/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/05-Inbox/03-Conversations-Table-Schema/" class="md-nav__link">
         
   
   
@@ -7873,7 +7764,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/05-Inbox/04-LSM-Tree-And-Immutable-Keys/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/05-Inbox/04-LSM-Tree-And-Immutable-Keys/" class="md-nav__link">
         
   
   
@@ -7901,7 +7792,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/05-Inbox/05-Option-A-vs-Option-B/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/05-Inbox/05-Option-A-vs-Option-B/" class="md-nav__link">
         
   
   
@@ -7929,7 +7820,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/05-Inbox/06-Redis-Sorted-Set/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/05-Inbox/06-Redis-Sorted-Set/" class="md-nav__link">
         
   
   
@@ -7957,7 +7848,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/05-Inbox/07-Unread-Count/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/05-Inbox/07-Unread-Count/" class="md-nav__link">
         
   
   
@@ -7985,7 +7876,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/05-Inbox/08-Updated-Architecture/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/05-Inbox/08-Updated-Architecture/" class="md-nav__link">
         
   
   
@@ -8087,7 +7978,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/06-Caching/01-Message-History-Cache/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/06-Caching/01-Message-History-Cache/" class="md-nav__link">
         
   
   
@@ -8115,7 +8006,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/06-Caching/02-Profile-Cache/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/06-Caching/02-Profile-Cache/" class="md-nav__link">
         
   
   
@@ -8143,7 +8034,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/06-Caching/03-Cache-Invalidation/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/06-Caching/03-Cache-Invalidation/" class="md-nav__link">
         
   
   
@@ -8171,7 +8062,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/06-Caching/04-Cold-Start-And-Coalescing/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/06-Caching/04-Cold-Start-And-Coalescing/" class="md-nav__link">
         
   
   
@@ -8199,7 +8090,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/06-Caching/05-Updated-Architecture/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/06-Caching/05-Updated-Architecture/" class="md-nav__link">
         
   
   
@@ -8301,7 +8192,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/05-Updated-Architecture/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/05-Updated-Architecture/" class="md-nav__link">
         
   
   
@@ -8387,7 +8278,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/01-Thundering-Herd/01-Redis-Sharding/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/01-Thundering-Herd/01-Redis-Sharding/" class="md-nav__link">
         
   
   
@@ -8485,7 +8376,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/02-Connection-Storm/01-The-Problem/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/02-Connection-Storm/01-The-Problem/" class="md-nav__link">
         
   
   
@@ -8513,7 +8404,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/02-Connection-Storm/02-Kafka-Queue-Delay/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/02-Connection-Storm/02-Kafka-Queue-Delay/" class="md-nav__link">
         
   
   
@@ -8541,7 +8432,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/02-Connection-Storm/03-Offline-Delivery-Fallback/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/02-Connection-Storm/03-Offline-Delivery-Fallback/" class="md-nav__link">
         
   
   
@@ -8641,7 +8532,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/03-Rate-Limiting/01-Why-Not-API-Gateway/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/03-Rate-Limiting/01-Why-Not-API-Gateway/" class="md-nav__link">
         
   
   
@@ -8669,7 +8560,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/03-Rate-Limiting/02-Connection-Server-Limit/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/03-Rate-Limiting/02-Connection-Server-Limit/" class="md-nav__link">
         
   
   
@@ -8697,7 +8588,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/03-Rate-Limiting/03-Centralised-Redis-Counter/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/03-Rate-Limiting/03-Centralised-Redis-Counter/" class="md-nav__link">
         
   
   
@@ -8725,7 +8616,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/03-Rate-Limiting/04-Client-Notification/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/03-Rate-Limiting/04-Client-Notification/" class="md-nav__link">
         
   
   
@@ -8825,7 +8716,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/04-Backpressure/01-The-Problem/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/04-Backpressure/01-The-Problem/" class="md-nav__link">
         
   
   
@@ -8853,7 +8744,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/04-Backpressure/02-In-Memory-Queue/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/04-Backpressure/02-In-Memory-Queue/" class="md-nav__link">
         
   
   
@@ -8881,7 +8772,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/04-Backpressure/03-Thread-Pool-vs-MQ/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/04-Backpressure/03-Thread-Pool-vs-MQ/" class="md-nav__link">
         
   
   
@@ -8909,7 +8800,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/04-Backpressure/04-Load-Shedding/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/04-Backpressure/04-Load-Shedding/" class="md-nav__link">
         
   
   
@@ -9079,7 +8970,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/01-Connection-Server-Failure/01-Client-Reconnect/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/01-Connection-Server-Failure/01-Client-Reconnect/" class="md-nav__link">
         
   
   
@@ -9107,7 +8998,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/01-Connection-Server-Failure/02-Registry-Cleanup/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/01-Connection-Server-Failure/02-Registry-Cleanup/" class="md-nav__link">
         
   
   
@@ -9135,7 +9026,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/01-Connection-Server-Failure/03-Stale-Registry-Fallback/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/01-Connection-Server-Failure/03-Stale-Registry-Fallback/" class="md-nav__link">
         
   
   
@@ -9163,7 +9054,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/01-Connection-Server-Failure/04-Reconnect-Storm/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/01-Connection-Server-Failure/04-Reconnect-Storm/" class="md-nav__link">
         
   
   
@@ -9259,7 +9150,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/02-DynamoDB-Failure/01-Circuit-Breaker/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/02-DynamoDB-Failure/01-Circuit-Breaker/" class="md-nav__link">
         
   
   
@@ -9287,7 +9178,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/02-DynamoDB-Failure/02-Fallback-And-Message-Loss/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/02-DynamoDB-Failure/02-Fallback-And-Message-Loss/" class="md-nav__link">
         
   
   
@@ -9385,7 +9276,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/03-Redis-Failure/01-Inbox-Redis-Failure/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/03-Redis-Failure/01-Inbox-Redis-Failure/" class="md-nav__link">
         
   
   
@@ -9413,7 +9304,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/03-Redis-Failure/02-Profile-Cache-Failure/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/03-Redis-Failure/02-Profile-Cache-Failure/" class="md-nav__link">
         
   
   
@@ -9441,7 +9332,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/03-Redis-Failure/03-Other-Redis-Failures/" class="md-nav__link">
+      <a href="../03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/03-Redis-Failure/03-Other-Redis-Failures/" class="md-nav__link">
         
   
   
@@ -9551,7 +9442,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/07-Final-Design/01-Final-Architecture/" class="md-nav__link">
+      <a href="../03-WhatsApp/07-Final-Design/01-Final-Architecture/" class="md-nav__link">
         
   
   
@@ -9653,7 +9544,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/08-Observability/01-SLI-SLO-Connection/" class="md-nav__link">
+      <a href="../03-WhatsApp/08-Observability/01-SLI-SLO-Connection/" class="md-nav__link">
         
   
   
@@ -9681,7 +9572,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/08-Observability/02-Measuring-Latency/" class="md-nav__link">
+      <a href="../03-WhatsApp/08-Observability/02-Measuring-Latency/" class="md-nav__link">
         
   
   
@@ -9709,7 +9600,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/08-Observability/03-Measuring-Availability/" class="md-nav__link">
+      <a href="../03-WhatsApp/08-Observability/03-Measuring-Availability/" class="md-nav__link">
         
   
   
@@ -9737,7 +9628,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/08-Observability/04-Alerting/" class="md-nav__link">
+      <a href="../03-WhatsApp/08-Observability/04-Alerting/" class="md-nav__link">
         
   
   
@@ -9765,7 +9656,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../03-WhatsApp/08-Observability/05-Error-Budget/" class="md-nav__link">
+      <a href="../03-WhatsApp/08-Observability/05-Error-Budget/" class="md-nav__link">
         
   
   
@@ -9826,85 +9717,48 @@
 
 
 
-  <h1>03 DB Shard Primary Down</h1>
-
-<div class="admonition info">
-<p class="admonition-title">A DB shard primary goes down</p>
-<p>With 8 shards each holding a primary and 2 secondaries, losing one primary is not a full system failure. But the impact is precise and worth understanding — reads, writes, and RYOW are all affected differently.</p>
-</div>
+<h1 id="pastebin">Pastebin<a class="headerlink" href="#pastebin" title="Permanent link">&para;</a></h1>
+<p>Design a system like pastebin.com — users paste text, get a short link, content is retrieved by anyone with the link. 10M DAU, expiring pastes, large content blobs.</p>
 <hr />
-<h2 id="what-happens-immediately">What happens immediately<a class="headerlink" href="#what-happens-immediately" title="Permanent link">&para;</a></h2>
-<p>Shard 3 primary dies. The system detects it via health checks. Leader election begins — one of the two secondaries gets promoted to primary.</p>
-<p>This process takes <strong>30-60 seconds</strong> in a typical Postgres setup with Patroni or a similar HA manager. During that window, shard 3 has no writable node.</p>
+<div class="grid cards">
+<ul>
+<li>
+<p><strong>Requirements &amp; Base Architecture</strong></p>
 <hr />
-<h2 id="reads-mostly-unaffected">Reads — mostly unaffected<a class="headerlink" href="#reads-mostly-unaffected" title="Permanent link">&para;</a></h2>
-<p>This is the counterintuitive part. Most people assume losing a primary kills reads too. It doesn't.</p>
-<p>Shard 3 had 1 primary + 2 secondaries. The primary died. <strong>The 2 secondaries are still running.</strong></p>
-<div class="highlight"><pre><span></span><code>Redirect request → Redis cache → HIT → return 301 ✓ (never touched DB)
-Redirect request → Redis cache → MISS → shard 3 needed
-                → Primary dead, but secondaries alive
-                → Route to secondary → served ✓
-</code></pre></div>
-<p>The vast majority of redirects never hit the DB at all — Redis absorbs 80%+. For the remainder that miss cache and need shard 3, the secondaries are still available and serving reads. No impact on redirects.</p>
+<ul>
+<li><a href="01-FR/">Functional Requirements</a></li>
+<li><a href="02-Estimation/">Estimation</a></li>
+<li><a href="03-NFR/">Non-Functional Requirements</a></li>
+<li><a href="04-API/">API Design</a></li>
+<li><a href="05-Base-Architecture/">Base Architecture</a></li>
+</ul>
+</li>
+<li>
+<p><strong>Deep Dives</strong></p>
 <hr />
-<h2 id="writes-fail-for-60-seconds">Writes — fail for 60 seconds<a class="headerlink" href="#writes-fail-for-60-seconds" title="Permanent link">&para;</a></h2>
-<p>Creation requests use consistent hashing to route to a specific shard. ~1/8 of all creations route to shard 3.</p>
-<div class="highlight"><pre><span></span><code>Creation request → consistent hashing → shard 3
-→ Must write to primary (writes always go to primary)
-→ Primary is dead
-→ New primary not yet elected (30-60s window)
-→ Write fails → user gets 500 error
-</code></pre></div>
-<p>During the 60-second failover window, ~1/8 of all URL creation requests fail. The other 7/8 shards are unaffected — their primaries are healthy.</p>
-<p>Once the new primary is elected, writes to shard 3 resume normally.</p>
+<ul>
+<li><a href="06-Deep-Dives/01-Short-Code-Generation/01-Requirements/">Short Code Generation</a></li>
+<li><a href="06-Deep-Dives/02-DB/01-DB-Choice/">Database</a></li>
+<li><a href="06-Deep-Dives/03-Caching/01-Why-Cache/">Caching</a></li>
+<li><a href="06-Deep-Dives/04-Peak-Traffic/01-Hot-Key-Problem/">Peak Traffic</a></li>
+<li><a href="06-Deep-Dives/05-Fault-Isolation/01-Why-Fault-Isolation/">Fault Isolation</a></li>
+<li><a href="06-Deep-Dives/06-Async-S3-Upload/01-Why-Async-Upload/">Async S3 Upload</a></li>
+<li><a href="06-Deep-Dives/07-Expiry-Cleanup-Job/01-Why-Cleanup-Job/">Expiry &amp; Cleanup</a></li>
+</ul>
+</li>
+<li>
+<p><strong>Final Design &amp; Observability</strong></p>
 <hr />
-<h2 id="ryow-fails-for-a-precise-window-of-users">RYOW — fails for a precise window of users<a class="headerlink" href="#ryow-fails-for-a-precise-window-of-users" title="Permanent link">&para;</a></h2>
-<p>Read-Your-Own-Writes uses a <code>ryow_until</code> cookie. When the cookie is valid, the app server routes the read to the shard primary — not a secondary — to guarantee the user sees their freshly created URL.</p>
-<p>This becomes a problem when the primary dies:</p>
-<div class="highlight"><pre><span></span><code>T=0s    User creates short URL → written to shard 3 primary
-        App server sets cookie: ryow_until = now + 30s
-
-T=10s   Shard 3 primary crashes
-
-T=15s   User clicks their new short URL
-        App server reads ryow_until cookie → still valid
-        Consistent hashing → shard 3 → go to primary
-        Primary is dead → request fails → 500 error
-</code></pre></div>
-<p>The user created their URL, got the short code, and now it doesn't work. From their perspective the system is broken.</p>
-<p>But the impact is narrow:</p>
-<div class="highlight"><pre><span></span><code>Users affected = created a URL on shard 3
-                 within the 30-second ryow_until window
-                 before the crash
-</code></pre></div>
-<p>After 30 seconds, the cookie expires. Those same requests route to secondaries and work fine. Only the unlucky users in that specific 30-second window on shard 3 experience the failure.</p>
-<hr />
-<h2 id="complete-impact-summary">Complete impact summary<a class="headerlink" href="#complete-impact-summary" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>Redirects (Redis hit)    → unaffected ✓
-Redirects (cache miss)   → secondaries serve them ✓
-New creations            → ~1/8 fail during 60s failover window
-RYOW reads               → fail for users who created in last 30s on shard 3
-</code></pre></div>
-<p>1/8 of the system is partially degraded for ~60 seconds. 7/8 of the system is completely unaffected. This is the value of sharding — failures are contained to a single shard.</p>
-<hr />
-<h2 id="after-failover-completes">After failover completes<a class="headerlink" href="#after-failover-completes" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>T=60s   New primary elected on shard 3
-T=60s   etcd updated: shard-3/primary → new IP
-T=60s   App servers read new topology from etcd
-T=60s   Writes to shard 3 resume
-T=60s   RYOW routes to new primary correctly
-T=60s   Full system restored
-</code></pre></div>
-<p>The only lasting concern: the new primary was a secondary that may have been slightly behind on replication. Any writes that were in-flight to the old primary when it crashed may be lost — this is the replication lag window. In practice, with synchronous replication or small async lag, this is a very small number of writes, potentially zero.</p>
-<hr />
-<div class="admonition danger">
-<p class="admonition-title">Common misconception</p>
-<p>Losing a primary does not kill reads for that shard. Secondaries are still alive and still serve read traffic. The real damage is to writes (no primary to write to) and RYOW (cookie forces read to primary which is dead).</p>
-</div>
-<hr />
-<div class="admonition tip">
-<p class="admonition-title">Interview framing</p>
-<p>"Shard primary dies → 30-60s failover window. Reads unaffected — secondaries still serve cache misses. Writes fail for ~1/8 of creations during the window — those hashing to that shard. RYOW fails for users who created a URL on that shard within the last 30 seconds — their cookie says go to primary, primary is dead. After failover, etcd updates topology, app servers pick up new primary IP, full recovery."</p>
+<ul>
+<li><a href="06-Deep-Dives/08-Updated-Architecture/01-Updated-Architecture/">Updated Architecture</a></li>
+<li><a href="07-Observability/01-SLI-SLO-Connection/">SLIs &amp; SLOs</a></li>
+<li><a href="07-Observability/02-Measuring-Latency/">Measuring Latency</a></li>
+<li><a href="07-Observability/03-Measuring-Availability/">Measuring Availability</a></li>
+<li><a href="07-Observability/04-Alerting/">Alerting</a></li>
+<li><a href="07-Observability/05-Error-Budget/">Error Budget</a></li>
+</ul>
+</li>
+</ul>
 </div>
 
 
@@ -9961,10 +9815,10 @@ T=60s   Full system restored
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
