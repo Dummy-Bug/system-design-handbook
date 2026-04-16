@@ -24,7 +24,6 @@
   --md-default-fg-color--lighter: #6b7280;
 }
 
-
 /* Header */
 [data-md-color-scheme="default"] .md-header {
   background-color: #ffffff;
@@ -171,9 +170,9 @@
   font-size: 0.87rem;
   border-radius: 5px;
   padding: 0.1em 0.4em;
-  background-color: #f3f4f6;
-  color: #5b6af5;
-  border: 1px solid #e5e7eb;
+  background-color: var(--green-light);
+  color: var(--green-dark);
+  border: 1px solid #b2e8d8;
 }
 
 .md-typeset pre code {
@@ -183,16 +182,14 @@
   padding: 0;
 }
 
-/* Code blocks */
 .md-typeset pre {
   border-radius: 10px;
   border: 1px solid #e5e7eb;
 }
 
-/* Blockquote / admonition */
 .md-typeset blockquote {
-  border-left: 3px solid #5b6af5;
-  background: #eef0fe;
+  border-left: 3px solid var(--green);
+  background: var(--green-light);
   border-radius: 0 8px 8px 0;
   padding: 0.8rem 1rem;
   color: #374151;
@@ -201,35 +198,6 @@
 /* Nav font size */
 .md-nav__item .md-nav__link {
   font-size: 0.84rem;
-}
-
-/* Home page cards */
-.md-typeset .grid.cards > ul > li,
-.md-typeset .grid.cards > :not(ul) {
-  border-radius: 14px;
-  padding: 2rem;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
-  background: #ffffff;
-}
-
-.md-typeset .grid.cards > ul > li:hover,
-.md-typeset .grid.cards > :not(ul):hover {
-  box-shadow: 0 8px 28px rgba(91,106,245,0.12);
-  transform: translateY(-3px);
-  border-color: #5b6af5;
-}
-
-/* Content width */
-.md-grid {
-  max-width: 1260px;
-}
-
-/* TOC */
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active {
-  color: #5b6af5;
-  font-weight: 600;
 }
 
 /* ── Green touches ── */
@@ -275,16 +243,31 @@
   color: var(--green-dark);
 }
 
-/* Card hover — green glow instead of purple */
+/* Home page cards */
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid.cards > :not(ul) {
+  border-radius: 14px;
+  padding: 2rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  background: #ffffff;
+}
+
 .md-typeset .grid.cards > ul > li:hover,
 .md-typeset .grid.cards > :not(ul):hover {
-  box-shadow: 0 8px 28px rgba(0,179,126,0.15);
+  box-shadow: 0 8px 28px rgba(0,179,126,0.12);
+  transform: translateY(-3px);
   border-color: var(--green);
 }
 
-/* Inline code — green tint */
-.md-typeset code {
-  color: var(--green-dark);
-  background-color: var(--green-light);
-  border-color: #b2e8d8;
+/* Wider content */
+.md-grid {
+  max-width: 1260px;
+}
+
+/* TOC */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active {
+  color: #5b6af5;
+  font-weight: 600;
 }

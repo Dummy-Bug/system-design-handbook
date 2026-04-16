@@ -5,1807 +5,819 @@
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/02-Back-of-Envelope-Estimation/01-Latency-Numbers/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/01-FR/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/02-Back-of-Envelope-Estimation/02-Database-Numbers/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/02-Estimation/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/02-Back-of-Envelope-Estimation/03-Message-Streams/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/03-NFR/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/02-Back-of-Envelope-Estimation/04-Data-Sizes/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/04-API/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/02-Back-of-Envelope-Estimation/05-Bandwidth-And-Servers/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/05-Base-Architecture/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/02-Back-of-Envelope-Estimation/06-Estimation-Framework/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/01-Short-Code-Generation/01-Raw-IDs/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/01-Performance-Metrics/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/01-Short-Code-Generation/02-Hashing/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/01-Performance-Metrics/01-Introduction/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/01-Short-Code-Generation/03-Random-Collision-Check/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/01-Performance-Metrics/02-Latency/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/01-Short-Code-Generation/04-UUID-Base64-Trim/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/01-Performance-Metrics/03-Throughput/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/01-Short-Code-Generation/05-Snowflake-Base64/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/01-Performance-Metrics/04-Latency-vs-Throughput/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/01-Short-Code-Generation/06-UUID-Snowflake-Base62/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/01-Performance-Metrics/05-Bandwidth/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/01-Short-Code-Generation/07-Truncation-Problem/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/01-Performance-Metrics/06-Bandwidth-vs-Latency-vs-Throughput/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/02-DB/01-DB-Choice/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/01-Performance-Metrics/07-Percentiles/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/02-DB/02-Schema/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/01-Performance-Metrics/08-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/02-DB/03-Why-Sharding/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/01-Performance-Metrics/09-Interview-Questions/SDE-1/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/02-DB/04-Sharding-Key/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/01-Performance-Metrics/09-Interview-Questions/SDE-2/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/02-DB/05-Consistent-Hashing/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/01-Performance-Metrics/09-Interview-Questions/SDE-3/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/02-DB/06-How-Many-Shards/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/02-Service-Levels/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/02-DB/07-Replication/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/02-Service-Levels/01-Introduction/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/02-DB/08-Read-Your-Own-Writes/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/02-Service-Levels/02-SLI/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/03-Caching/01-Why-Caching/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/02-Service-Levels/03-SLO/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/03-Caching/02-Cache-Size/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/02-Service-Levels/04-SLA/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/03-Caching/03-Cache-Strategy/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/02-Service-Levels/05-Error-Budget/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/03-Caching/04-Eviction-Policy/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/02-Service-Levels/06-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/03-Caching/05-Updated-Flow/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/02-Service-Levels/Interview-Questions/SDE-1/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/01-The-Spike-Problem/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/02-Service-Levels/Interview-Questions/SDE-2/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/03-Load-Balancing/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/02-Service-Levels/Interview-Questions/SDE-3/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/04-API-GW-SPOF/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/03-Availability/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/05-Updated-Architecture/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/03-Availability/01-Availability/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/02-Hot-Key-Problem/01-Detection/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/03-Availability/02-SPOF/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/02-Hot-Key-Problem/02-Local-App-Cache/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/03-Availability/03-N%2B1-Redundancy/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/02-Hot-Key-Problem/03-Redis-Key-Replication/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/03-Availability/04-Availability-Patterns/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/02-Hot-Key-Problem/04-Broadcast-Promotion/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/03-Availability/05-Nines-of-Availability/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/06-Pre-Generated-Keys/01-Collision-At-Scale/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/03-Availability/06-Series-vs-Parallel/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/06-Pre-Generated-Keys/02-Bloom-Filter/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/03-Availability/07-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/06-Pre-Generated-Keys/03-Key-Pool/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/03-Availability/Interview-Questions/SDE-1/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/06-Pre-Generated-Keys/04-KGS-Sequential-Generation/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/03-Availability/Interview-Questions/SDE-2/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/06-Pre-Generated-Keys/05-Redis-INCR-vs-KGS/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/03-Availability/Interview-Questions/SDE-3/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/07-Cold-Storage/01-The-Problem/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/04-Reliability/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/07-Cold-Storage/02-Tiered-Storage/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/04-Reliability/01-Reliability/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/07-Cold-Storage/03-Detecting-Cold-URLs/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/04-Reliability/02-MTBF-and-MTTR/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/08-Fault-Isolation/01-Fault-Isolation/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/04-Reliability/03-RTO-and-RPO/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/08-Fault-Isolation/02-Redis-Down/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/04-Reliability/04-MTTR-RTO/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/08-Fault-Isolation/03-DB-Shard-Primary-Down/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/04-Reliability/05-Reliability-vs-Availability/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/08-Fault-Isolation/04-KGS-Down/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/04-Reliability/06-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/06-Deep-Dives/08-Fault-Isolation/05-Other-Failures/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/04-Reliability/Interview-Questions/SDE-1/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/08-Final-Design/01-Final-Design/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/04-Reliability/Interview-Questions/SDE-2/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/09-Observability/01-SLI-SLO-Connection/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/04-Reliability/Interview-Questions/SDE-3/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/09-Observability/02-Measuring-Latency/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/09-Observability/03-Measuring-Availability/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/01-Scalability/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/09-Observability/04-Alerting/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/04-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/01-URL-Shortener/09-Observability/05-Error-Budget/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/02-Load-Balancing/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/01-FR/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/02-Load-Balancing/01-Load-Balancing/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/02-Estimation/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/02-Load-Balancing/02-Algorithms/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/03-NFR/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/02-Load-Balancing/05-Hybrid-In-Production/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/04-API/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/02-Load-Balancing/06-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/05-Base-Architecture/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/02-Load-Balancing/03-L4/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/01-Short-Code-Generation/01-Requirements/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/02-Load-Balancing/03-L4/01-Fundamentals/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/01-Short-Code-Generation/02-Approaches/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/02-Load-Balancing/03-L4/02-How-It-Works/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/01-Short-Code-Generation/03-Redis-Counter/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/02-Load-Balancing/03-L4/03-Connection-Tables/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/01-Short-Code-Generation/04-Custom-Alias/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/02-Load-Balancing/03-L4/04-Real-World/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/02-DB/01-DB-Choice/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/02-Load-Balancing/04-L7/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/02-DB/02-Content-Addressable-Storage/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/02-Load-Balancing/04-L7/01-Fundamentals/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/02-DB/03-Ref-Counting/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/02-Load-Balancing/04-L7/02-Request-Flow/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/02-DB/04-Schema-And-Indexes/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/02-Load-Balancing/04-L7/03-API-Gateway/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/02-DB/05-Write-Read-Delete-Flows/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/03-Auto-Scaling/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/02-DB/06-Sharding/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/03-Auto-Scaling/01-Auto-Scaling/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/03-Caching/01-Why-Cache/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/03-Auto-Scaling/02-Connection-Draining/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/03-Caching/02-What-To-Cache-And-How/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/03-Auto-Scaling/03-Cold-Start/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/03-Caching/03-Cache-Sizing/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/05-Scalability/03-Auto-Scaling/04-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/03-Caching/04-Cache-Invalidation/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/06-Fault-Tolerance/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/04-Peak-Traffic/01-Hot-Key-Problem/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/06-Fault-Tolerance/01-Fault-Tolerance/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/05-Fault-Isolation/01-Why-Fault-Isolation/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/06-Fault-Tolerance/02-Graceful-Degradation/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/05-Fault-Isolation/02-Service-Split/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/06-Fault-Tolerance/03-Bulkhead/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/05-Fault-Isolation/03-DB-Standby/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/06-Fault-Tolerance/04-Timeout-Retry-Backoff/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/05-Fault-Isolation/04-Circuit-Breaker/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/06-Fault-Tolerance/05-Circuit-Breaker/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/06-Async-S3-Upload/01-Why-Async-Upload/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/06-Fault-Tolerance/06-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/06-Async-S3-Upload/02-Failure-Problem/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/07-Durability/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/06-Async-S3-Upload/03-State-Machine/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/07-Durability/01-Durability/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/06-Async-S3-Upload/04-Retry-Strategy/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/07-Durability/02-WAL/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/06-Async-S3-Upload/05-Read-Path-Behaviour/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/07-Durability/03-Replication/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/07-Expiry-Cleanup-Job/01-Why-Cleanup-Job/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/07-Durability/04-Backups/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/07-Expiry-Cleanup-Job/02-Cleanup-Flow/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/07-Durability/05-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/07-Expiry-Cleanup-Job/03-Distributed-Workers/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/08-Concurrency-Locking/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/07-Expiry-Cleanup-Job/04-Watchdog/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/08-Concurrency-Locking/01-Race-Conditions/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/07-Expiry-Cleanup-Job/05-Indexing-Strategy/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/08-Concurrency-Locking/02-Pessimistic-Locking/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/06-Deep-Dives/08-Updated-Architecture/01-Updated-Architecture/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/08-Concurrency-Locking/03-Optimistic-Locking/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/07-Observability/01-SLI-SLO-Connection/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/08-Concurrency-Locking/04-Read-Write-Locks/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/07-Observability/02-Measuring-Latency/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/08-Concurrency-Locking/05-MVCC/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/07-Observability/03-Measuring-Availability/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/08-Concurrency-Locking/06-Distributed-Locking/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/07-Observability/04-Alerting/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/08-Concurrency-Locking/07-Idempotency/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/02-Pastebin/07-Observability/05-Error-Budget/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/08-Concurrency-Locking/08-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/01-FR/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/09-Consistency-Models/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/02-Estimation/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/09-Consistency-Models/01-Consistency-Models/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/03-NFR/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/09-Consistency-Models/02-When-To-Use/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/04-API/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/09-Consistency-Models/03-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/04-Real-Time-Comms/01-The-Problem/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/10-Network-Partitions/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/04-Real-Time-Comms/02-Short-Polling/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/10-Network-Partitions/01-Network-Partitions/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/04-Real-Time-Comms/03-Long-Polling/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/10-Network-Partitions/02-During-Partition/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/04-Real-Time-Comms/04-SSE/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/10-Network-Partitions/03-Split-Brain/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/04-Real-Time-Comms/05-WebSockets/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/10-Network-Partitions/04-Quorum-vs-Consensus/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/04-Real-Time-Comms/06-Comparison/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/10-Network-Partitions/05-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/05-Base-Architecture/01-Overview/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/11-CAP-Theorem/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/05-Base-Architecture/02-WebSocket-Connection-Flow/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/11-CAP-Theorem/01-CAP-Theorem/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/05-Base-Architecture/03-Message-Send-Flow/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/11-CAP-Theorem/02-CP-vs-AP/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/05-Base-Architecture/04-Chat-History-Flow/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/11-CAP-Theorem/03-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/05-Base-Architecture/05-API-GW-And-LB/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/12-PACELC/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/01-DB/01-DB-Choice/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/12-PACELC/01-PACELC-Theorem/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/01-DB/02-Schema/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/12-PACELC/02-PA-EC-The-Middle-Ground/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/01-DB/03-Tiered-Storage/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/12-PACELC/03-System-Examples/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/01-DB/04-Sharding/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/12-PACELC/04-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/01-DB/06-Updated-Architecture/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/13-Security/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/00-Overview/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/13-Security/01-Authentication-and-JWT/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/01-Detection/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/13-Security/02-Encryption/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/02-Salting/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/13-Security/03-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/03-Dynamic-N/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/14-State-Machines/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/04-Read-Query/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/14-State-Machines/01-What-Is-A-State-Machine/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/05-Registry/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/14-State-Machines/02-Implementing-In-Database/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/01-DB/05-Hot-Partition/06-Edge-Cases/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/14-State-Machines/03-Timeout-Driven-Transitions/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/02-Message-Ordering/01-The-Problem/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/14-State-Machines/04-Audit-Trail-vs-Overwrite/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/02-Message-Ordering/02-Client-Timestamps/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/14-State-Machines/05-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/02-Message-Ordering/03-Time-Machine-Problem/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/15-NFRs/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/02-Message-Ordering/04-Server-Timestamps/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/15-NFRs/01-NFRs-And-Design-Decisions/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/02-Message-Ordering/05-Dedicated-Timestamp-Service/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/03-Core-Concepts/15-NFRs/02-Conflicting-NFRs/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/02-Message-Ordering/06-Per-User-Sequence/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/01-Fundamentals/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/02-Message-Ordering/07-Per-Conversation-Sequence/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/02-Writing-Strategies/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/02-Message-Ordering/08-Redis-INCR/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/02-Writing-Strategies/01-Read-Strategies/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/02-Message-Ordering/09-Full-Ordering-Flow/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/02-Writing-Strategies/02-Write-Strategies/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/02-Message-Ordering/10-Schema-Update/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/02-Writing-Strategies/03-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/02-Message-Ordering/11-Display-Time/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/03-Eviction-Policies/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/02-Message-Ordering/12-Updated-Architecture/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/03-Eviction-Policies/01-LRU/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/01-The-Problem/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/03-Eviction-Policies/02-LFU/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/02-Detecting-Offline/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/03-Eviction-Policies/03-FIFO-and-TTL/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/03-Naive-Mailbox/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/03-Eviction-Policies/04-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/04-Message-Id-Only/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/04-Population-Strategies/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/05-Why-Not-Kafka/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/04-Population-Strategies/01-Refresh-Ahead/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/06-Last-Delivered-Seq/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/04-Population-Strategies/02-Cache-Warming/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/07-Pending-Deliveries-Table/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/04-Population-Strategies/03-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/08-Write-Flow/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/05-Cache-Invalidation/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/09-Push-Notifications/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/05-Cache-Invalidation/01-TTL-Based/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/10-Notification-Payload/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/05-Cache-Invalidation/02-Event-Driven/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/11-Internet-Turns-On/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/05-Cache-Invalidation/03-Write-Through/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/12-Notification-Reply/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/05-Cache-Invalidation/04-Cache-Versioning/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/13-Updated-Architecture/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/05-Cache-Invalidation/05-Stale-While-Revalidate/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/01-The-Three-Ticks/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/05-Cache-Invalidation/06-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/02-Naive-Status-Column/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/06-Distributed-Caching/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/03-Status-Table/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/06-Distributed-Caching/01-Why-Single-Node-Fails/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/04-Delivered-Ack/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/06-Distributed-Caching/02-Consistent-Hashing/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/05-Read-Receipt-Flow/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/06-Distributed-Caching/03-Cache-Coherence/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/06-APNs-Not-Reliable/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/06-Distributed-Caching/04-Replication/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/07-Notification-Banner/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/06-Distributed-Caching/05-Two-Level-Caching/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/08-Phone-Off-Three-Days/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/06-Distributed-Caching/06-Node-Failure/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/09-Offline-Status-Sync/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/06-Distributed-Caching/07-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/11-Updated-Architecture/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/07-Cache-Problems/00-Overview/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/01-Read-Receipts/01-Mutual-Rule/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/07-Cache-Problems/01-Cache-Stampede/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/01-Read-Receipts/02-Where-To-Store-Flag/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/07-Cache-Problems/02-Cold-Start/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/01-Read-Receipts/03-Client-vs-Server-Check/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/07-Cache-Problems/03-Cache-Penetration/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/01-Read-Receipts/04-How-Mutual-Rule-Enforces/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/07-Cache-Problems/04-Cache-Avalanche/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/02-Last-Seen/01-What-Is-Last-Seen/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/07-Cache-Problems/05-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/02-Last-Seen/02-How-It-Gets-Recorded/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/08-Redis/01-Data-Structures/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/02-Last-Seen/03-How-Alice-Sees-It/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/08-Redis/02-Patterns/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/02-Last-Seen/04-Privacy-And-Mutual-Rule/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/08-Redis/03-Persistence/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/10-Privacy-Settings/02-Last-Seen/05-vs-Read-Receipts/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/08-Redis/04-Streams/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/05-Inbox/01-Inbox-Load-Flow/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/08-Redis/05-Single-Threaded-Event-Loop/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/05-Inbox/02-N%2B1-And-Denormalization/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/09-Interview-Questions/SDE-1/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/05-Inbox/03-Conversations-Table-Schema/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/09-Interview-Questions/SDE-2/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/05-Inbox/04-LSM-Tree-And-Immutable-Keys/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/04-Caching/09-Interview-Questions/SDE-3/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/05-Inbox/05-Option-A-vs-Option-B/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/01-Fundamentals/01-Why-Not-Files/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/05-Inbox/06-Redis-Sorted-Set/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/01-Fundamentals/02-How-File-Store-Data/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/05-Inbox/07-Unread-Count/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/01-Fundamentals/03-How-DB-Store-Data/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/05-Inbox/08-Updated-Architecture/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/01-Fundamentals/04-Row-Oriented-Storage/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/06-Caching/01-Message-History-Cache/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/01-Fundamentals/05-Column-Oriented-Storage/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/06-Caching/02-Profile-Cache/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/01-The-Problem/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/06-Caching/03-Cache-Invalidation/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/02-Atomicity/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/06-Caching/04-Cold-Start-And-Coalescing/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/03-Consistency/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/06-Caching/05-Updated-Architecture/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/05-Durability/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/05-Updated-Architecture/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/06-ACID-vs-BASE/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/01-Thundering-Herd/01-Redis-Sharding/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/08-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/02-Connection-Storm/01-The-Problem/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/04-Transaction-Isolation/01-Isolation-Problems/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/02-Connection-Storm/02-Kafka-Queue-Delay/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/04-Transaction-Isolation/02-Isolation-Levels/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/02-Connection-Storm/03-Offline-Delivery-Fallback/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/04-Transaction-Isolation/03-Choosing-Isolation/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/03-Rate-Limiting/01-Why-Not-API-Gateway/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/04-Transaction-Isolation/04-Pessimistic-vs-Optimistic-Locking/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/03-Rate-Limiting/02-Connection-Server-Limit/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/04-Transaction-Isolation/05-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/03-Rate-Limiting/03-Centralised-Redis-Counter/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/04-Transaction-Isolation/06-External-Locking-Strategies/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/03-Rate-Limiting/04-Client-Notification/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/01-The-Problem/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/04-Backpressure/01-The-Problem/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/04-2PC-vs-Saga/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/04-Backpressure/02-In-Memory-Queue/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/05-Interview-Cheatsheet/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/04-Backpressure/03-Thread-Pool-vs-MQ/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/02-2PC/01-Working/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/04-Backpressure/04-Load-Shedding/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/02-2PC/02-Failures/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/01-Connection-Server-Failure/01-Client-Reconnect/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/02-2PC/03-Solutions/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/01-Connection-Server-Failure/02-Registry-Cleanup/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/02-2PC/04-2PC-In-Practice/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/01-Connection-Server-Failure/03-Stale-Registry-Fallback/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/03-Saga/01-What-Is-Saga/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/01-Connection-Server-Failure/04-Reconnect-Storm/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/03-Saga/02-Choreography/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/02-DynamoDB-Failure/01-Circuit-Breaker/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/03-Saga/03-Orchestration/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/02-DynamoDB-Failure/02-Fallback-And-Message-Loss/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/Interview-Questions/SDE-1/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/03-Redis-Failure/01-Inbox-Redis-Failure/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/Interview-Questions/SDE-2/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/03-Redis-Failure/02-Profile-Cache-Failure/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/02-ACID/Interview-Questions/SDE-3/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/03-Redis-Failure/03-Other-Redis-Failures/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/03-SQL/01-Relational-Model/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/07-Final-Design/01-Final-Architecture/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/03-SQL/02-Normalisation/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/08-Observability/01-SLI-SLO-Connection/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/03-SQL/04-Denormalisation/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/08-Observability/02-Measuring-Latency/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/03-SQL/04-Joins/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/08-Observability/03-Measuring-Availability/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/03-SQL/05-Views/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/08-Observability/04-Alerting/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
     <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/04-Indexing/01-Indexes/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/04-Indexing/02-Hash-Index/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/04-Indexing/03-B%2BTree/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/04-Indexing/04-LSM-Tree-Writes/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/04-Indexing/05-LSM-Tree-Reads/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/04-Indexing/06-Geospatial-Indexing/01-The-Problem/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/04-Indexing/06-Geospatial-Indexing/02-Why-Composite-Index-Fails/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/04-Indexing/06-Geospatial-Indexing/03-Geohash/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/04-Indexing/06-Geospatial-Indexing/04-S2-Cells/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/04-Indexing/06-Geospatial-Indexing/05-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/05-Replication/01-What-is-Replication/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/05-Replication/02-Sync-vs-Async/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/05-Replication/03-Replication-Lag/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/05-Replication/04-Failover/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/05-Replication/05-Multi-Primary/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/05-Replication/06-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/06-Sharding/01-What-is-Sharding/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/06-Sharding/02-Shard-Key/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/06-Sharding/03-Sharding-Strategies/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/06-Sharding/04-Consistent-Hashing/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/06-Sharding/05-Cross-Shard-Joins/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/06-Sharding/06-Resharding/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/06-Sharding/07-Over-Sharding/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/06-Sharding/08-Relational-DBs/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/06-Sharding/09-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/07-MVCC/01-Concurrency-Control/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/08-CDC/01-What-is-CDC/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/08-CDC/02-Outbox-Pattern/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/08-CDC/03-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/09-Pagination/01-Offset-Pagination/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/09-Pagination/02-Cursor-Pagination/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/09-Pagination/03-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/10-Connection-Pooling/01-Cost-Of-A-Connection/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/10-Connection-Pooling/02-Connection-Pool/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/10-Connection-Pooling/03-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/11-Read-Write-Splitting/01-The-Problem/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/11-Read-Write-Splitting/02-How-It-Works/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/11-Read-Write-Splitting/03-Replication-Lag/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/11-Read-Write-Splitting/04-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/01-Key-Value-Stores/00-Overview/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/01-Key-Value-Stores/01-Redis/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/01-Key-Value-Stores/02-Memcached/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/01-Key-Value-Stores/03-KV-Positioning/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/01-Key-Value-Stores/04-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/02-Document-Stores/00-Overview/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/02-Document-Stores/03-Positioning/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/02-Document-Stores/02-MongoDB/01-Document-Model/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/02-Document-Stores/02-MongoDB/02-Indexes/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/02-Document-Stores/02-MongoDB/03-Embedding-vs-Referencing/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/02-Document-Stores/02-MongoDB/04-Replication-and-Sharding/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/02-Document-Stores/02-MongoDB/05-Limitations/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/02-Document-Stores/02-MongoDB/06-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/01-Why-Column-Family/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/02-Column-Oriented-Storage/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/03-Row-Keys/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/05-When-To-Use/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/00-Overview/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/01-Ring-Architecture/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/02-Write-Path/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/03-Read-Path/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/04-Replication-Consistency/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/05-Tombstones/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/06-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/07-Query-First-Modeling/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/06-Bigtable/01-Architecture/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/06-Bigtable/02-Cassandra-vs-Bigtable/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/07-DynamoDB/01-Data-Model/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/07-DynamoDB/02-Consistency/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/07-DynamoDB/03-Query-API-and-Indexes/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/07-DynamoDB/04-Redis-vs-DynamoDB/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/07-DynamoDB/05-TTL-and-Sessions/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/03-Column-Family/07-DynamoDB/06-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/04-Search-Engines/01-Problem-With-SQL-Search/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/04-Search-Engines/02-Inverted-Index/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/04-Search-Engines/03-Indexing-Pipeline/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/04-Search-Engines/04-Ranking-TF-IDF-BM25/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/04-Search-Engines/05-Elasticsearch-Architecture/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/04-Search-Engines/06-Where-It-Fits/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/04-Search-Engines/07-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/05-Graph-Databases/01-Why-Not-SQL/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/05-Graph-Databases/02-Graph-Data-Model/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/05-Graph-Databases/03-Cypher-Query-Language/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/05-Graph-Databases/04-Use-Cases/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/05-Graph-Databases/05-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/06-Blob-Storage/01-Object-Storage-Model/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/06-Blob-Storage/02-Presigned-URLs/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/06-Blob-Storage/03-Multipart-Upload/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/06-Blob-Storage/04-Content-Addressable-Storage/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/06-Blob-Storage/05-Chunk-Level-Deduplication/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/06-Blob-Storage/06-Storage-Classes/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/06-Blob-Storage/07-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/07-NewSQL/01-The-Problem/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/07-NewSQL/02-Spanner-TrueTime/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/07-NewSQL/03-Spanner-Transactions/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/07-NewSQL/04-When-To-Use/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/07-NewSQL/05-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/08-OLTP-vs-OLAP/01-The-Problem/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/08-OLTP-vs-OLAP/02-OLTP/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/08-OLTP-vs-OLAP/03-OLAP/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/08-OLTP-vs-OLAP/04-ETL-vs-CDC/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/12-Database-Types/08-OLTP-vs-OLAP/05-Interview-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/13-Choosing-The-Right-DB/01-Decision-Framework/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/13-Choosing-The-Right-DB/02-DB-Cheatsheet/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/14-Data-Modeling/01-The-Process/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/14-Data-Modeling/02-Entities-And-Relationships/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/14-Data-Modeling/03-Access-Patterns/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/14-Data-Modeling/04-Instagram-Schema/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/05-Storage-and-Databases/14-Data-Modeling/05-Red-Flags/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/01-Message-Queues/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/02-Task-Queue/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/03-Pub-Sub/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/04-Delivery-Guarantees/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/05-Dead-Letter-Queue/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/06-Message-Ordering/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/07-Delay-Queues/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/08-Priority-Queues/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/09-Fan-Out-on-Write/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/10-Fan-Out-on-Read/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/01-What-is-a-Broker/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/01-What-Is-SQS/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/02-Standard-vs-FIFO/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/03-Timeout-and-Retries/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/04-Idempotency-and-DLQ/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/05-Scaling/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/06-Retention-and-Replay-Limits/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/07-Delay-Queues/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/08-Producer-Consumer-Model/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/09-SNS-Fan-Out/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/01-What-Is-RabbitMQ/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/02-Direct-vs-Fanout-Exchange/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/03-Topic-Exchange/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/04-Headers-Exchange/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/05-ACK-NACK-Requeue/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/06-Crash-and-Redelivery/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/07-Prefetch-and-Fairness/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/08-Durable-Queues/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/09-Delivery-Guarantees/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/10-Retries-And-DLQ/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/11-Message-Ordering/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/12-Bottlenecks/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/13-Scaling/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/01-Why-Kafka-Exists/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/02-Writes-and-Page-Cache/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/03-Topics/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/04-Partitions/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/05-Brokers/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/06-Replication/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/07-ISR/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/08-Hot-Partitions/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/02-Producer/01-Partitioners/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/02-Producer/02-Batching/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/02-Producer/03-Compression/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/03-Consumer/01-Pull-Model/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/03-Consumer/02-Offsets/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/03-Consumer/03-Offset-Storage/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/03-Consumer/04-Before-vs-After/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/03-Consumer/05-Consumer-Groups/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/03-Consumer/06-Rebalancing/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/04-Advanced/01-Retention/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/12-Kafka/04-Advanced/02-Exactly-Once-Processing/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/13-Comparison/01-Fundamental-Difference/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/13-Comparison/02-After-Read/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/13-Comparison/03-Retention/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/13-Comparison/04-Routing-and-Fanout/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/13-Comparison/05-Ordering-and-Throughput/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/13-Comparison/06-When-To-Choose-What/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/14-Backpressure/01-Consumer-Lag/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/14-Backpressure/02-Scaling-Consumers/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/14-Backpressure/03-Load-Shedding/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/14-Backpressure/04-Backpressure-Signals/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/01-Event-Sourcing/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/02-CQRS-Basics/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/03-CQRS-Read-Models/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/04-CQRS-Consistency/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/05-Dual-Write/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/06-Outbox-Pattern/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/07-CDC-Basics/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/08-CDC-Debezium/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/09-Inbox-Pattern/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/10-Inbox-Outbox-Combined/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/11-Inbox-Outbox-Full-Flow/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/16-Stream-Processing/01-Why-Stream-Processing/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/16-Stream-Processing/02-Window-Types/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/16-Stream-Processing/03-Watermarks/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/16-Stream-Processing/04-Statefullnes/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/16-Stream-Processing/05-Crash-Recovery/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/17-Batch-Processing/MapReduce/01-Why-Batch-Processing/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/17-Batch-Processing/MapReduce/02-MapReduce/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/17-Batch-Processing/MapReduce/03-Map-Phase/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/17-Batch-Processing/MapReduce/04-Shuffle-Phase/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/17-Batch-Processing/MapReduce/05-Reduce-Phase/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/17-Batch-Processing/MapReduce/06-Combiner/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/17-Batch-Processing/MapReduce/07-Hot-Keys/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/17-Batch-Processing/Spark/01-Why-Spark/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/17-Batch-Processing/Spark/02-Spark-Architecture/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/17-Batch-Processing/Spark/03-DAG-Optimization/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/18-Lambda-Kappa/01-Lambda-Architecture/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/18-Lambda-Kappa/02-Kappa-Architecture/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/18-Lambda-Kappa/03-Lambda-vs-Kappa/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/19-Schema-Evolution/01-Why-Schema-Evolution/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/19-Schema-Evolution/02-Schema-Registry/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/19-Schema-Evolution/03-Protobuf/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/19-Schema-Evolution/04-Avro-Basics/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/06-Messaging-and-Event-Driven/19-Schema-Evolution/05-Avro-Flow/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/01-Problems/01-2General-Problem/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/01-Problems/02-Network-Partitions/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/02-Consistent-Hashing/01-Consistent-Hashing/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/03-Replication/01-Replication-Strategies/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/04-Idempotency/01-Idempotency/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/05-Delivery-Guarantees/01-Delivery-Guarantees/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/06-Distributed-Transactions/01-Distributed-Transactions/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/07-Consensus/01-What-Is-Consensus/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/07-Consensus/02-RAFT/01-What-Is-Raft/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/07-Consensus/02-RAFT/02-Leader-Election/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/07-Consensus/02-RAFT/03-Term-Numbers/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/07-Consensus/02-RAFT/04-Log-Replication/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/07-Consensus/02-RAFT/05-Log-Replication-Failures/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/07-Consensus/02-RAFT/06-Fencing-Tokens/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/07-Consensus/03-Zookeeper/01-ZooKeeper-Election/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/07-Consensus/03-Zookeeper/02-Redis-Distributed-Locks/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/07-Consensus/04-Paxos/01-What-Is-Paxos/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/07-Consensus/04-Paxos/02-Paxos-Phases/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/07-Consensus/04-Paxos/03-Paxos-Retry-Cases/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/07-Consensus/04-Paxos/04-Paxos-Livelock/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/08-Distributed-Clocks/01-Clock-Drift/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/08-Distributed-Clocks/02-NTP/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/08-Distributed-Clocks/03-Lamport-Clocks/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/08-Distributed-Clocks/04-Vector-Clocks/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/08-Distributed-Clocks/05-TrueTime/01-GPS-And-Atomic-Clocks/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/08-Distributed-Clocks/05-TrueTime/02-TrueTime-Uncertainty/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/09-CRDTs/01-The-Problem/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/09-CRDTs/02-Why-Locks-Fail/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/09-CRDTs/03-G-Counter/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/09-CRDTs/04-Operational-Transform/01-Insert/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/09-CRDTs/04-Operational-Transform/02-Delete/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/09-CRDTs/04-Operational-Transform/03-OT-vs-CRDT/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/10-Failure-Detection/01-Heartbeats/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/10-Failure-Detection/02-Gossip-Protocol/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/10-Failure-Detection/03-Phi-Accrual-Failure-Detector/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/11-Merkle-Trees/01-The-Problem/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/11-Merkle-Trees/02-Hashing-And-Buckets/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/11-Merkle-Trees/03-The-Tree/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/11-Merkle-Trees/04-Anti-Entropy/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/12-Coordination-Services/01-The-Problem/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/12-Coordination-Services/02-What-Is-etcd/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/12-Coordination-Services/03-Leases-And-TTL/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/12-Coordination-Services/04-Fencing-Tokens/</loc>
-         <lastmod>2026-04-16</lastmod>
-    </url>
-    <url>
-         <loc>https://dummy-bug.github.io/system-design-handbook/07-Distributed-Systems/12-Coordination-Services/05-Lock-vs-Job-Tracking/</loc>
+         <loc>https://dummy-bug.github.io/system-design-handbook/11-Case-Studies/03-WhatsApp/08-Observability/05-Error-Budget/</loc>
          <lastmod>2026-04-16</lastmod>
     </url>
 </urlset>
