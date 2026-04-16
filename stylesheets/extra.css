@@ -24,12 +24,6 @@
   --md-default-fg-color--lighter: #6b7280;
 }
 
-/* ── Dark mode ── */
-[data-md-color-scheme="slate"] {
-  --md-primary-fg-color:        #5b6af5;
-  --md-accent-fg-color:         #818cf8;
-  --md-typeset-a-color:         #818cf8;
-}
 
 /* Header */
 [data-md-color-scheme="default"] .md-header {
