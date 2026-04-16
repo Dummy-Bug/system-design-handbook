@@ -1,3 +1,4 @@
+
 > [!info] The golden rule
 > Start with SQL. Move away only when you have a specific reason — a scale problem, an access pattern SQL can't handle efficiently, or a data model that doesn't fit tables. Never pick a exotic database because it sounds impressive.
 

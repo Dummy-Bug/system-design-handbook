@@ -1,0 +1,273 @@
+/* ── Production-grade theme ── */
+:root {
+  --md-text-font-size: 16px;
+  --md-code-font-size: 13.5px;
+
+  --brand:        #5b6af5;
+  --brand-dark:   #4451e0;
+  --brand-light:  #eef0fe;
+
+  --green:        #00b37e;
+  --green-light:  #e6f9f3;
+  --green-dark:   #00956a;
+}
+
+/* ── Light mode ── */
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color:        #5b6af5;
+  --md-primary-bg-color:        #ffffff;
+  --md-accent-fg-color:         #5b6af5;
+  --md-typeset-a-color:         #5b6af5;
+  --md-default-bg-color:        #f9f9fb;
+  --md-default-fg-color:        #111827;
+  --md-default-fg-color--light: #374151;
+  --md-default-fg-color--lighter: #6b7280;
+}
+
+/* Header */
+[data-md-color-scheme="default"] .md-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  color: #111827;
+  padding: 0.4rem 0.4rem 0 0.4rem;
+  margin-top: 4px;
+}
+
+[data-md-color-scheme="default"] .md-header__title {
+  color: #111827;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.3px;
+}
+
+/* Tabs bar */
+[data-md-color-scheme="default"] .md-tabs {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+[data-md-color-scheme="default"] .md-tabs__link {
+  color: #6b7280;
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.01em;
+  padding: 0 0.8rem;
+  transition: color 0.15s ease;
+}
+
+[data-md-color-scheme="default"] .md-tabs__link:hover {
+  color: #111827;
+}
+
+[data-md-color-scheme="default"] .md-tabs__link--active {
+  color: var(--green) !important;
+  font-weight: 700;
+  border-bottom: 2px solid var(--green);
+}
+
+/* Search bar — ShadCN style */
+[data-md-color-scheme="default"] .md-search__form {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  display: flex;
+  align-items: center;
+}
+
+[data-md-color-scheme="default"] .md-search__form:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+[data-md-color-scheme="default"] .md-search__input {
+  background-color: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #111827;
+  font-size: 0.875rem;
+  box-shadow: none !important;
+}
+
+[data-md-color-scheme="default"] .md-search__input::placeholder {
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+[data-md-color-scheme="default"] .md-search__input:focus {
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
+}
+
+[data-md-color-scheme="default"] .md-search__form:focus-within {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(0,179,126,0.12);
+}
+
+[data-md-color-scheme="default"] .md-search__icon {
+  color: #94a3b8;
+}
+
+/* Sidebar */
+[data-md-color-scheme="default"] .md-sidebar {
+  background-color: #ffffff;
+  border-right: 1px solid #f0f0f0;
+}
+
+[data-md-color-scheme="default"] .md-nav__link {
+  color: #374151;
+}
+
+[data-md-color-scheme="default"] .md-nav__link:hover,
+[data-md-color-scheme="default"] .md-nav__link--active {
+  color: #5b6af5;
+}
+
+/* Content area */
+[data-md-color-scheme="default"] .md-content {
+  background-color: #ffffff;
+}
+
+/* ── Typography ── */
+.md-typeset {
+  font-size: 1rem;
+  line-height: 1.85;
+  color: #111827;
+}
+
+.md-typeset h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.md-typeset h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-top: 2.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.md-typeset h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-top: 1.8rem;
+  color: #1f2937;
+}
+
+.md-typeset a {
+  font-weight: 500;
+}
+
+.md-typeset code {
+  font-size: 0.87rem;
+  border-radius: 5px;
+  padding: 0.1em 0.4em;
+  background-color: var(--green-light);
+  color: var(--green-dark);
+  border: 1px solid #b2e8d8;
+}
+
+.md-typeset pre code {
+  background-color: transparent;
+  color: inherit;
+  border: none;
+  padding: 0;
+}
+
+.md-typeset pre {
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+.md-typeset blockquote {
+  border-left: 3px solid var(--green);
+  background: var(--green-light);
+  border-radius: 0 8px 8px 0;
+  padding: 0.8rem 1rem;
+  color: #374151;
+}
+
+/* Nav font size */
+.md-nav__item .md-nav__link {
+  font-size: 0.84rem;
+}
+
+/* ── Green touches ── */
+
+/* Active nav item in sidebar */
+[data-md-color-scheme="default"] .md-nav__link--active {
+  color: var(--green) !important;
+  font-weight: 600;
+  background-color: var(--green-light);
+  border-radius: 6px;
+  padding-left: 0.6rem;
+  border-left: 3px solid var(--green);
+}
+
+/* h2 bottom border — green */
+.md-typeset h2 {
+  border-bottom-color: var(--green) !important;
+}
+
+/* Tip admonition — green */
+.md-typeset .admonition.tip,
+.md-typeset details.tip {
+  border-color: var(--green);
+}
+.md-typeset .admonition.tip > .admonition-title,
+.md-typeset details.tip > summary {
+  background-color: var(--green-light);
+  color: var(--green-dark);
+}
+.md-typeset .admonition.tip > .admonition-title::before,
+.md-typeset details.tip > summary::before {
+  background-color: var(--green);
+}
+
+/* Success callout — green */
+.md-typeset .admonition.success,
+.md-typeset details.success {
+  border-color: var(--green);
+}
+.md-typeset .admonition.success > .admonition-title,
+.md-typeset details.success > summary {
+  background-color: var(--green-light);
+  color: var(--green-dark);
+}
+
+/* Home page cards */
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid.cards > :not(ul) {
+  border-radius: 14px;
+  padding: 2rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  background: #ffffff;
+}
+
+.md-typeset .grid.cards > ul > li:hover,
+.md-typeset .grid.cards > :not(ul):hover {
+  box-shadow: 0 8px 28px rgba(0,179,126,0.12);
+  transform: translateY(-3px);
+  border-color: var(--green);
+}
+
+/* Wider content */
+.md-grid {
+  max-width: 1260px;
+}
+
+/* TOC */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active {
+  color: #5b6af5;
+  font-weight: 600;
+}

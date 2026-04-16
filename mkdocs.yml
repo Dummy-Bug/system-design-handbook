@@ -1,0 +1,322 @@
+site_name: System Design
+site_url: https://dummy-bug.github.io/system-design-handbook/
+site_description: System Design Interview notes — every concept explained with reasoning, scale math, and real-world examples.
+
+theme:
+  name: material
+  palette:
+    scheme: default
+    primary: white
+    accent: indigo
+  font:
+    text: Inter
+    code: JetBrains Mono
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.indexes
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search
+  - callouts
+  - exclude:
+      glob:
+        - "11-Case-Studies/*"
+        - "00-Syllabus/*"
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.details
+  - admonition
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+docs_dir: "System Design/SDE2"
+
+nav:
+  - Storage & Databases:
+    - Fundamentals:
+      - Why Not Files: "05-Storage-and-Databases/01-Fundamentals/01-Why-Not-Files.md"
+      - How Files Store Data: "05-Storage-and-Databases/01-Fundamentals/02-How-File-Store-Data.md"
+      - How DBs Store Data: "05-Storage-and-Databases/01-Fundamentals/03-How-DB-Store-Data.md"
+      - Row-Oriented Storage: "05-Storage-and-Databases/01-Fundamentals/04-Row-Oriented-Storage.md"
+      - Column-Oriented Storage: "05-Storage-and-Databases/01-Fundamentals/05-Column-Oriented-Storage.md"
+    - ACID:
+      - The Problem: "05-Storage-and-Databases/02-ACID/01-The-Problem.md"
+      - Atomicity: "05-Storage-and-Databases/02-ACID/02-Atomicity.md"
+      - Consistency: "05-Storage-and-Databases/02-ACID/03-Consistency.md"
+      - Transaction Isolation:
+        - Isolation Problems: "05-Storage-and-Databases/02-ACID/04-Transaction-Isolation/01-Isolation-Problems.md"
+        - Isolation Levels: "05-Storage-and-Databases/02-ACID/04-Transaction-Isolation/02-Isolation-Levels.md"
+        - Choosing Isolation: "05-Storage-and-Databases/02-ACID/04-Transaction-Isolation/03-Choosing-Isolation.md"
+        - Pessimistic vs Optimistic: "05-Storage-and-Databases/02-ACID/04-Transaction-Isolation/04-Pessimistic-vs-Optimistic-Locking.md"
+        - Interview Cheatsheet: "05-Storage-and-Databases/02-ACID/04-Transaction-Isolation/05-Interview-Cheatsheet.md"
+        - External Locking: "05-Storage-and-Databases/02-ACID/04-Transaction-Isolation/06-External-Locking-Strategies.md"
+      - Durability: "05-Storage-and-Databases/02-ACID/05-Durability.md"
+      - ACID vs BASE: "05-Storage-and-Databases/02-ACID/06-ACID-vs-BASE.md"
+      - Distributed Transactions:
+        - The Problem: "05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/01-The-Problem.md"
+        - 2PC Working: "05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/02-2PC/01-Working.md"
+        - 2PC Failures: "05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/02-2PC/02-Failures.md"
+        - 2PC Solutions: "05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/02-2PC/03-Solutions.md"
+        - 2PC In Practice: "05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/02-2PC/04-2PC-In-Practice.md"
+        - Saga - What Is It: "05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/03-Saga/01-What-Is-Saga.md"
+        - Saga - Choreography: "05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/03-Saga/02-Choreography.md"
+        - Saga - Orchestration: "05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/03-Saga/03-Orchestration.md"
+        - 2PC vs Saga: "05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/04-2PC-vs-Saga.md"
+        - Interview Cheatsheet: "05-Storage-and-Databases/02-ACID/07-Distributed-Transactions/05-Interview-Cheatsheet.md"
+      - Interview Cheatsheet: "05-Storage-and-Databases/02-ACID/08-Interview-Cheatsheet.md"
+    - SQL:
+      - Relational Model: "05-Storage-and-Databases/03-SQL/01-Relational-Model.md"
+      - Normalisation: "05-Storage-and-Databases/03-SQL/02-Normalisation.md"
+      - Denormalisation: "05-Storage-and-Databases/03-SQL/04-Denormalisation.md"
+      - Joins: "05-Storage-and-Databases/03-SQL/04-Joins.md"
+      - Views: "05-Storage-and-Databases/03-SQL/05-Views.md"
+    - Indexing:
+      - Indexes: "05-Storage-and-Databases/04-Indexing/01-Indexes.md"
+      - Hash Index: "05-Storage-and-Databases/04-Indexing/02-Hash-Index.md"
+      - B+ Tree: "05-Storage-and-Databases/04-Indexing/03-B+Tree.md"
+      - LSM Tree - Writes: "05-Storage-and-Databases/04-Indexing/04-LSM-Tree-Writes.md"
+      - LSM Tree - Reads: "05-Storage-and-Databases/04-Indexing/05-LSM-Tree-Reads.md"
+      - Geospatial Indexing:
+        - The Problem: "05-Storage-and-Databases/04-Indexing/06-Geospatial-Indexing/01-The-Problem.md"
+        - Why Composite Index Fails: "05-Storage-and-Databases/04-Indexing/06-Geospatial-Indexing/02-Why-Composite-Index-Fails.md"
+        - Geohash: "05-Storage-and-Databases/04-Indexing/06-Geospatial-Indexing/03-Geohash.md"
+        - S2 Cells: "05-Storage-and-Databases/04-Indexing/06-Geospatial-Indexing/04-S2-Cells.md"
+        - Interview Cheatsheet: "05-Storage-and-Databases/04-Indexing/06-Geospatial-Indexing/05-Interview-Cheatsheet.md"
+    - Replication:
+      - What is Replication: "05-Storage-and-Databases/05-Replication/01-What-is-Replication.md"
+      - Sync vs Async: "05-Storage-and-Databases/05-Replication/02-Sync-vs-Async.md"
+      - Replication Lag: "05-Storage-and-Databases/05-Replication/03-Replication-Lag.md"
+      - Failover: "05-Storage-and-Databases/05-Replication/04-Failover.md"
+      - Multi-Primary: "05-Storage-and-Databases/05-Replication/05-Multi-Primary.md"
+      - Interview Cheatsheet: "05-Storage-and-Databases/05-Replication/06-Interview-Cheatsheet.md"
+    - Sharding:
+      - What is Sharding: "05-Storage-and-Databases/06-Sharding/01-What-is-Sharding.md"
+      - Shard Key: "05-Storage-and-Databases/06-Sharding/02-Shard-Key.md"
+      - Sharding Strategies: "05-Storage-and-Databases/06-Sharding/03-Sharding-Strategies.md"
+      - Consistent Hashing: "05-Storage-and-Databases/06-Sharding/04-Consistent-Hashing.md"
+      - Cross-Shard Joins: "05-Storage-and-Databases/06-Sharding/05-Cross-Shard-Joins.md"
+      - Resharding: "05-Storage-and-Databases/06-Sharding/06-Resharding.md"
+      - Over-Sharding: "05-Storage-and-Databases/06-Sharding/07-Over-Sharding.md"
+      - Relational DBs: "05-Storage-and-Databases/06-Sharding/08-Relational-DBs.md"
+      - Interview Cheatsheet: "05-Storage-and-Databases/06-Sharding/09-Interview-Cheatsheet.md"
+    - MVCC:
+      - Concurrency Control: "05-Storage-and-Databases/07-MVCC/01-Concurrency-Control.md"
+    - Pagination:
+      - Offset Pagination: "05-Storage-and-Databases/09-Pagination/01-Offset-Pagination.md"
+      - Cursor Pagination: "05-Storage-and-Databases/09-Pagination/02-Cursor-Pagination.md"
+      - Interview Cheatsheet: "05-Storage-and-Databases/09-Pagination/03-Interview-Cheatsheet.md"
+    - Connection Pooling:
+      - Cost of a Connection: "05-Storage-and-Databases/10-Connection-Pooling/01-Cost-Of-A-Connection.md"
+      - Connection Pool: "05-Storage-and-Databases/10-Connection-Pooling/02-Connection-Pool.md"
+      - Interview Cheatsheet: "05-Storage-and-Databases/10-Connection-Pooling/03-Interview-Cheatsheet.md"
+    - Read-Write Splitting:
+      - The Problem: "05-Storage-and-Databases/11-Read-Write-Splitting/01-The-Problem.md"
+      - How It Works: "05-Storage-and-Databases/11-Read-Write-Splitting/02-How-It-Works.md"
+      - Replication Lag: "05-Storage-and-Databases/11-Read-Write-Splitting/03-Replication-Lag.md"
+      - Interview Cheatsheet: "05-Storage-and-Databases/11-Read-Write-Splitting/04-Interview-Cheatsheet.md"
+    - Database Types:
+      - Key-Value Stores:
+        - Overview: "05-Storage-and-Databases/12-Database-Types/01-Key-Value-Stores/00-Overview.md"
+        - Redis: "05-Storage-and-Databases/12-Database-Types/01-Key-Value-Stores/01-Redis.md"
+        - Memcached: "05-Storage-and-Databases/12-Database-Types/01-Key-Value-Stores/02-Memcached.md"
+        - Positioning: "05-Storage-and-Databases/12-Database-Types/01-Key-Value-Stores/03-KV-Positioning.md"
+        - Interview Cheatsheet: "05-Storage-and-Databases/12-Database-Types/01-Key-Value-Stores/04-Interview-Cheatsheet.md"
+      - Document Stores:
+        - Overview: "05-Storage-and-Databases/12-Database-Types/02-Document-Stores/00-Overview.md"
+        - MongoDB - Document Model: "05-Storage-and-Databases/12-Database-Types/02-Document-Stores/02-MongoDB/01-Document-Model.md"
+        - MongoDB - Indexes: "05-Storage-and-Databases/12-Database-Types/02-Document-Stores/02-MongoDB/02-Indexes.md"
+        - MongoDB - Embedding vs Referencing: "05-Storage-and-Databases/12-Database-Types/02-Document-Stores/02-MongoDB/03-Embedding-vs-Referencing.md"
+        - MongoDB - Replication and Sharding: "05-Storage-and-Databases/12-Database-Types/02-Document-Stores/02-MongoDB/04-Replication-and-Sharding.md"
+        - MongoDB - Limitations: "05-Storage-and-Databases/12-Database-Types/02-Document-Stores/02-MongoDB/05-Limitations.md"
+        - MongoDB - Interview Cheatsheet: "05-Storage-and-Databases/12-Database-Types/02-Document-Stores/02-MongoDB/06-Interview-Cheatsheet.md"
+        - Positioning: "05-Storage-and-Databases/12-Database-Types/02-Document-Stores/03-Positioning.md"
+      - Column Family:
+        - Why Column Family: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/01-Why-Column-Family.md"
+        - Column-Oriented Storage: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/02-Column-Oriented-Storage.md"
+        - Row Keys: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/03-Row-Keys.md"
+        - Cassandra - Overview: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/00-Overview.md"
+        - Cassandra - Ring Architecture: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/01-Ring-Architecture.md"
+        - Cassandra - Write Path: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/02-Write-Path.md"
+        - Cassandra - Read Path: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/03-Read-Path.md"
+        - Cassandra - Replication: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/04-Replication-Consistency.md"
+        - Cassandra - Tombstones: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/05-Tombstones.md"
+        - Cassandra - Interview Cheatsheet: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/06-Interview-Cheatsheet.md"
+        - Cassandra - Query First Modeling: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/04-Cassandra/07-Query-First-Modeling.md"
+        - When To Use: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/05-When-To-Use.md"
+        - Bigtable - Architecture: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/06-Bigtable/01-Architecture.md"
+        - Bigtable vs Cassandra: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/06-Bigtable/02-Cassandra-vs-Bigtable.md"
+        - DynamoDB - Data Model: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/07-DynamoDB/01-Data-Model.md"
+        - DynamoDB - Consistency: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/07-DynamoDB/02-Consistency.md"
+        - DynamoDB - Query API: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/07-DynamoDB/03-Query-API-and-Indexes.md"
+        - DynamoDB vs Redis: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/07-DynamoDB/04-Redis-vs-DynamoDB.md"
+        - DynamoDB - TTL and Sessions: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/07-DynamoDB/05-TTL-and-Sessions.md"
+        - DynamoDB - Interview Cheatsheet: "05-Storage-and-Databases/12-Database-Types/03-Column-Family/07-DynamoDB/06-Interview-Cheatsheet.md"
+      - Search Engines:
+        - Problem With SQL Search: "05-Storage-and-Databases/12-Database-Types/04-Search-Engines/01-Problem-With-SQL-Search.md"
+        - Inverted Index: "05-Storage-and-Databases/12-Database-Types/04-Search-Engines/02-Inverted-Index.md"
+        - Indexing Pipeline: "05-Storage-and-Databases/12-Database-Types/04-Search-Engines/03-Indexing-Pipeline.md"
+        - Ranking TF-IDF BM25: "05-Storage-and-Databases/12-Database-Types/04-Search-Engines/04-Ranking-TF-IDF-BM25.md"
+        - Elasticsearch Architecture: "05-Storage-and-Databases/12-Database-Types/04-Search-Engines/05-Elasticsearch-Architecture.md"
+        - Where It Fits: "05-Storage-and-Databases/12-Database-Types/04-Search-Engines/06-Where-It-Fits.md"
+        - Interview Cheatsheet: "05-Storage-and-Databases/12-Database-Types/04-Search-Engines/07-Interview-Cheatsheet.md"
+      - Graph Databases:
+        - Why Not SQL: "05-Storage-and-Databases/12-Database-Types/05-Graph-Databases/01-Why-Not-SQL.md"
+        - Graph Data Model: "05-Storage-and-Databases/12-Database-Types/05-Graph-Databases/02-Graph-Data-Model.md"
+        - Cypher Query Language: "05-Storage-and-Databases/12-Database-Types/05-Graph-Databases/03-Cypher-Query-Language.md"
+        - Use Cases: "05-Storage-and-Databases/12-Database-Types/05-Graph-Databases/04-Use-Cases.md"
+        - Interview Cheatsheet: "05-Storage-and-Databases/12-Database-Types/05-Graph-Databases/05-Interview-Cheatsheet.md"
+      - Blob Storage:
+        - Object Storage Model: "05-Storage-and-Databases/12-Database-Types/06-Blob-Storage/01-Object-Storage-Model.md"
+        - Presigned URLs: "05-Storage-and-Databases/12-Database-Types/06-Blob-Storage/02-Presigned-URLs.md"
+        - Multipart Upload: "05-Storage-and-Databases/12-Database-Types/06-Blob-Storage/03-Multipart-Upload.md"
+        - Content Addressable Storage: "05-Storage-and-Databases/12-Database-Types/06-Blob-Storage/04-Content-Addressable-Storage.md"
+        - Chunk Level Deduplication: "05-Storage-and-Databases/12-Database-Types/06-Blob-Storage/05-Chunk-Level-Deduplication.md"
+        - Storage Classes: "05-Storage-and-Databases/12-Database-Types/06-Blob-Storage/06-Storage-Classes.md"
+        - Interview Cheatsheet: "05-Storage-and-Databases/12-Database-Types/06-Blob-Storage/07-Interview-Cheatsheet.md"
+      - NewSQL:
+        - The Problem: "05-Storage-and-Databases/12-Database-Types/07-NewSQL/01-The-Problem.md"
+        - Spanner TrueTime: "05-Storage-and-Databases/12-Database-Types/07-NewSQL/02-Spanner-TrueTime.md"
+        - Spanner Transactions: "05-Storage-and-Databases/12-Database-Types/07-NewSQL/03-Spanner-Transactions.md"
+        - When To Use: "05-Storage-and-Databases/12-Database-Types/07-NewSQL/04-When-To-Use.md"
+        - Interview Cheatsheet: "05-Storage-and-Databases/12-Database-Types/07-NewSQL/05-Interview-Cheatsheet.md"
+      - OLTP vs OLAP:
+        - The Problem: "05-Storage-and-Databases/12-Database-Types/08-OLTP-vs-OLAP/01-The-Problem.md"
+        - OLTP: "05-Storage-and-Databases/12-Database-Types/08-OLTP-vs-OLAP/02-OLTP.md"
+        - OLAP: "05-Storage-and-Databases/12-Database-Types/08-OLTP-vs-OLAP/03-OLAP.md"
+        - ETL vs CDC: "05-Storage-and-Databases/12-Database-Types/08-OLTP-vs-OLAP/04-ETL-vs-CDC.md"
+        - Interview Cheatsheet: "05-Storage-and-Databases/12-Database-Types/08-OLTP-vs-OLAP/05-Interview-Cheatsheet.md"
+    - Choosing the Right DB:
+      - Decision Framework: "05-Storage-and-Databases/13-Choosing-The-Right-DB/01-Decision-Framework.md"
+      - DB Cheatsheet: "05-Storage-and-Databases/13-Choosing-The-Right-DB/02-DB-Cheatsheet.md"
+    - Data Modeling:
+      - The Process: "05-Storage-and-Databases/14-Data-Modeling/01-The-Process.md"
+      - Entities and Relationships: "05-Storage-and-Databases/14-Data-Modeling/02-Entities-And-Relationships.md"
+      - Access Patterns: "05-Storage-and-Databases/14-Data-Modeling/03-Access-Patterns.md"
+      - Instagram Schema: "05-Storage-and-Databases/14-Data-Modeling/04-Instagram-Schema.md"
+      - Red Flags: "05-Storage-and-Databases/14-Data-Modeling/05-Red-Flags.md"
+  - Messaging & Event-Driven:
+    - Message Queues: "06-Messaging-and-Event-Driven/01-Message-Queues.md"
+    - Task Queue: "06-Messaging-and-Event-Driven/02-Task-Queue.md"
+    - Pub-Sub: "06-Messaging-and-Event-Driven/03-Pub-Sub.md"
+    - Delivery Guarantees: "06-Messaging-and-Event-Driven/04-Delivery-Guarantees.md"
+    - Dead Letter Queue: "06-Messaging-and-Event-Driven/05-Dead-Letter-Queue.md"
+    - Message Ordering: "06-Messaging-and-Event-Driven/06-Message-Ordering.md"
+    - Delay Queues: "06-Messaging-and-Event-Driven/07-Delay-Queues.md"
+    - Priority Queues: "06-Messaging-and-Event-Driven/08-Priority-Queues.md"
+    - Fan-Out on Write: "06-Messaging-and-Event-Driven/09-Fan-Out-on-Write.md"
+    - Fan-Out on Read: "06-Messaging-and-Event-Driven/10-Fan-Out-on-Read.md"
+    - Message Brokers:
+      - What is a Broker: "06-Messaging-and-Event-Driven/11-Message-Brokers/01-What-is-a-Broker.md"
+      - SQS - What Is It: "06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/01-What-Is-SQS.md"
+      - SQS - Standard vs FIFO: "06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/02-Standard-vs-FIFO.md"
+      - SQS - Timeout and Retries: "06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/03-Timeout-and-Retries.md"
+      - SQS - Idempotency and DLQ: "06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/04-Idempotency-and-DLQ.md"
+      - SQS - Scaling: "06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/05-Scaling.md"
+      - SQS - Retention and Replay: "06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/06-Retention-and-Replay-Limits.md"
+      - SQS - Delay Queues: "06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/07-Delay-Queues.md"
+      - SQS - Producer Consumer: "06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/08-Producer-Consumer-Model.md"
+      - SQS - SNS Fan-Out: "06-Messaging-and-Event-Driven/11-Message-Brokers/02-SQS/09-SNS-Fan-Out.md"
+      - RabbitMQ - What Is It: "06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/01-What-Is-RabbitMQ.md"
+      - RabbitMQ - Exchanges: "06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/02-Direct-vs-Fanout-Exchange.md"
+      - RabbitMQ - Topic Exchange: "06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/03-Topic-Exchange.md"
+      - RabbitMQ - Headers Exchange: "06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/04-Headers-Exchange.md"
+      - RabbitMQ - ACK NACK: "06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/05-ACK-NACK-Requeue.md"
+      - RabbitMQ - Crash and Redelivery: "06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/06-Crash-and-Redelivery.md"
+      - RabbitMQ - Prefetch: "06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/07-Prefetch-and-Fairness.md"
+      - RabbitMQ - Durable Queues: "06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/08-Durable-Queues.md"
+      - RabbitMQ - Delivery Guarantees: "06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/09-Delivery-Guarantees.md"
+      - RabbitMQ - Retries and DLQ: "06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/10-Retries-And-DLQ.md"
+      - RabbitMQ - Ordering: "06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/11-Message-Ordering.md"
+      - RabbitMQ - Bottlenecks: "06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/12-Bottlenecks.md"
+      - RabbitMQ - Scaling: "06-Messaging-and-Event-Driven/11-Message-Brokers/03-RabbitMQ/13-Scaling.md"
+    - Kafka:
+      - Why Kafka Exists: "06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/01-Why-Kafka-Exists.md"
+      - Writes and Page Cache: "06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/02-Writes-and-Page-Cache.md"
+      - Topics: "06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/03-Topics.md"
+      - Partitions: "06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/04-Partitions.md"
+      - Brokers: "06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/05-Brokers.md"
+      - Replication: "06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/06-Replication.md"
+      - ISR: "06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/07-ISR.md"
+      - Hot Partitions: "06-Messaging-and-Event-Driven/12-Kafka/01-Architecture/08-Hot-Partitions.md"
+      - Producer - Partitioners: "06-Messaging-and-Event-Driven/12-Kafka/02-Producer/01-Partitioners.md"
+      - Producer - Batching: "06-Messaging-and-Event-Driven/12-Kafka/02-Producer/02-Batching.md"
+      - Producer - Compression: "06-Messaging-and-Event-Driven/12-Kafka/02-Producer/03-Compression.md"
+      - Consumer - Pull Model: "06-Messaging-and-Event-Driven/12-Kafka/03-Consumer/01-Pull-Model.md"
+      - Consumer - Offsets: "06-Messaging-and-Event-Driven/12-Kafka/03-Consumer/02-Offsets.md"
+      - Consumer - Offset Storage: "06-Messaging-and-Event-Driven/12-Kafka/03-Consumer/03-Offset-Storage.md"
+      - Consumer - Before vs After: "06-Messaging-and-Event-Driven/12-Kafka/03-Consumer/04-Before-vs-After.md"
+      - Consumer - Groups: "06-Messaging-and-Event-Driven/12-Kafka/03-Consumer/05-Consumer-Groups.md"
+      - Consumer - Rebalancing: "06-Messaging-and-Event-Driven/12-Kafka/03-Consumer/06-Rebalancing.md"
+      - Advanced - Retention: "06-Messaging-and-Event-Driven/12-Kafka/04-Advanced/01-Retention.md"
+      - Advanced - Exactly Once: "06-Messaging-and-Event-Driven/12-Kafka/04-Advanced/02-Exactly-Once-Processing.md"
+    - Comparison:
+      - Fundamental Difference: "06-Messaging-and-Event-Driven/13-Comparison/01-Fundamental-Difference.md"
+      - After Read: "06-Messaging-and-Event-Driven/13-Comparison/02-After-Read.md"
+      - Retention: "06-Messaging-and-Event-Driven/13-Comparison/03-Retention.md"
+      - Routing and Fanout: "06-Messaging-and-Event-Driven/13-Comparison/04-Routing-and-Fanout.md"
+      - Ordering and Throughput: "06-Messaging-and-Event-Driven/13-Comparison/05-Ordering-and-Throughput.md"
+      - When To Choose What: "06-Messaging-and-Event-Driven/13-Comparison/06-When-To-Choose-What.md"
+    - Backpressure:
+      - Consumer Lag: "06-Messaging-and-Event-Driven/14-Backpressure/01-Consumer-Lag.md"
+      - Scaling Consumers: "06-Messaging-and-Event-Driven/14-Backpressure/02-Scaling-Consumers.md"
+      - Load Shedding: "06-Messaging-and-Event-Driven/14-Backpressure/03-Load-Shedding.md"
+      - Backpressure Signals: "06-Messaging-and-Event-Driven/14-Backpressure/04-Backpressure-Signals.md"
+    - Event-Driven Architecture:
+      - Event Sourcing: "06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/01-Event-Sourcing.md"
+      - CQRS Basics: "06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/02-CQRS-Basics.md"
+      - CQRS Read Models: "06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/03-CQRS-Read-Models.md"
+      - CQRS Consistency: "06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/04-CQRS-Consistency.md"
+      - Dual Write: "06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/05-Dual-Write.md"
+      - Outbox Pattern: "06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/06-Outbox-Pattern.md"
+      - CDC Basics: "06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/07-CDC-Basics.md"
+      - CDC Debezium: "06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/08-CDC-Debezium.md"
+      - Inbox Pattern: "06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/09-Inbox-Pattern.md"
+      - Inbox + Outbox Combined: "06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/10-Inbox-Outbox-Combined.md"
+      - Full Flow: "06-Messaging-and-Event-Driven/15-Event-Driven-Architecture/11-Inbox-Outbox-Full-Flow.md"
+    - Stream Processing:
+      - Why Stream Processing: "06-Messaging-and-Event-Driven/16-Stream-Processing/01-Why-Stream-Processing.md"
+      - Window Types: "06-Messaging-and-Event-Driven/16-Stream-Processing/02-Window-Types.md"
+      - Watermarks: "06-Messaging-and-Event-Driven/16-Stream-Processing/03-Watermarks.md"
+      - Statefulness: "06-Messaging-and-Event-Driven/16-Stream-Processing/04-Statefullnes.md"
+      - Crash Recovery: "06-Messaging-and-Event-Driven/16-Stream-Processing/05-Crash-Recovery.md"
+    - Batch Processing:
+      - Why Batch Processing: "06-Messaging-and-Event-Driven/17-Batch-Processing/MapReduce/01-Why-Batch-Processing.md"
+      - MapReduce: "06-Messaging-and-Event-Driven/17-Batch-Processing/MapReduce/02-MapReduce.md"
+      - Map Phase: "06-Messaging-and-Event-Driven/17-Batch-Processing/MapReduce/03-Map-Phase.md"
+      - Shuffle Phase: "06-Messaging-and-Event-Driven/17-Batch-Processing/MapReduce/04-Shuffle-Phase.md"
+      - Reduce Phase: "06-Messaging-and-Event-Driven/17-Batch-Processing/MapReduce/05-Reduce-Phase.md"
+      - Combiner: "06-Messaging-and-Event-Driven/17-Batch-Processing/MapReduce/06-Combiner.md"
+      - Hot Keys: "06-Messaging-and-Event-Driven/17-Batch-Processing/MapReduce/07-Hot-Keys.md"
+      - Spark - Why Spark: "06-Messaging-and-Event-Driven/17-Batch-Processing/Spark/01-Why-Spark.md"
+      - Spark - Architecture: "06-Messaging-and-Event-Driven/17-Batch-Processing/Spark/02-Spark-Architecture.md"
+      - Spark - DAG Optimization: "06-Messaging-and-Event-Driven/17-Batch-Processing/Spark/03-DAG-Optimization.md"
+    - Lambda & Kappa:
+      - Lambda Architecture: "06-Messaging-and-Event-Driven/18-Lambda-Kappa/01-Lambda-Architecture.md"
+      - Kappa Architecture: "06-Messaging-and-Event-Driven/18-Lambda-Kappa/02-Kappa-Architecture.md"
+      - Lambda vs Kappa: "06-Messaging-and-Event-Driven/18-Lambda-Kappa/03-Lambda-vs-Kappa.md"
+    - Schema Evolution:
+      - Why Schema Evolution: "06-Messaging-and-Event-Driven/19-Schema-Evolution/01-Why-Schema-Evolution.md"
+      - Schema Registry: "06-Messaging-and-Event-Driven/19-Schema-Evolution/02-Schema-Registry.md"
+      - Protobuf: "06-Messaging-and-Event-Driven/19-Schema-Evolution/03-Protobuf.md"
+      - Avro Basics: "06-Messaging-and-Event-Driven/19-Schema-Evolution/04-Avro-Basics.md"
+      - Avro Flow: "06-Messaging-and-Event-Driven/19-Schema-Evolution/05-Avro-Flow.md"
