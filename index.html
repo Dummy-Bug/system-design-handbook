@@ -75,11 +75,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#system-design-case-studies" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -314,26 +309,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Home
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
       
       <a href="." class="md-nav__link md-nav__link--active">
         
@@ -351,47 +326,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#foundation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Foundation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#battleground" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Battleground
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
       
     </li>
   
@@ -9468,39 +9402,113 @@
 
 
 
-<h1 id="system-design-case-studies">System Design Case Studies<a class="headerlink" href="#system-design-case-studies" title="Permanent link">&para;</a></h1>
-<p>End-to-end walkthroughs built from real interview sessions. Every decision is justified with scale math and reasoning — not just diagrams.</p>
-<hr />
-<h2 id="foundation">Foundation<a class="headerlink" href="#foundation" title="Permanent link">&para;</a></h2>
-<p>The classics. Every interview starts here. Get these right before moving up.</p>
-<div class="grid cards">
-<ul>
-<li>
-<p><strong>URL Shortener</strong></p>
-<hr />
-<p>The classic starter. Short code generation, DB sharding, hot-key handling, cold storage, and fault isolation — every foundational concept in one system.</p>
-<p><a href="11-Case-Studies/01-URL-Shortener/">View case study →</a></p>
-</li>
-<li>
-<p><strong>Pastebin</strong></p>
-<hr />
-<p>Deceptively deep. Content-addressable storage, ref counting, async S3 uploads, expiry cleanup workers, and fault isolation.</p>
-<p><a href="11-Case-Studies/02-Pastebin/">View case study →</a></p>
-</li>
-</ul>
+<div class="cs-hero">
+  <p class="cs-hero-label">SYSTEM DESIGN INTERVIEW PREP</p>
+  <h1 class="cs-hero-title">Master System Design.<br>One Case Study at a Time.</h1>
+  <p class="cs-hero-sub">End-to-end walkthroughs built from real interview sessions. Every decision justified with scale math — not just diagrams.</p>
 </div>
-<hr />
-<h2 id="battleground">Battleground<a class="headerlink" href="#battleground" title="Permanent link">&para;</a></h2>
-<p>Complex, real-world systems with many moving parts, failure modes, and no easy answers. This is where interviews are won or lost.</p>
-<div class="grid cards">
-<ul>
-<li>
-<p><strong>WhatsApp</strong></p>
-<hr />
-<p>WebSockets, message ordering, offline delivery, read receipts, inbox sorted sets, thundering herd, and rate limiting at 500M DAU.</p>
-<p><a href="11-Case-Studies/03-WhatsApp/">View case study →</a></p>
-</li>
-</ul>
+
+<div class="cs-path-label">LEARNING PATH</div>
+
+<!-- ── FOUNDATION ── -->
+<div class="cs-level">
+  <div class="cs-level-header">
+    <div class="cs-level-badge lv1">LV 1</div>
+    <div class="cs-level-meta">
+      <div class="cs-level-title">Foundation</div>
+      <div class="cs-level-desc">The classics. Every interview starts here. Get these cold before moving up.</div>
+    </div>
+    <div class="cs-level-count">2 case studies</div>
+  </div>
+
+  <div class="cs-cards">
+
+    <a href="11-Case-Studies/01-URL-Shortener/index.md" class="cs-card">
+      <div class="cs-card-header">
+        <span class="cs-badge foundation">Foundation</span>
+      </div>
+      <div class="cs-card-title">URL Shortener</div>
+      <div class="cs-card-desc">Design bit.ly. The classic starter — every foundational concept lives here.</div>
+      <div class="cs-topics">
+        <span>Short Code Gen</span><span>DB Sharding</span><span>Caching</span><span>Hot Keys</span><span>Cold Storage</span><span>Fault Isolation</span>
+      </div>
+    </a>
+
+    <a href="11-Case-Studies/02-Pastebin/index.md" class="cs-card">
+      <div class="cs-card-header">
+        <span class="cs-badge foundation">Foundation</span>
+      </div>
+      <div class="cs-card-title">Pastebin</div>
+      <div class="cs-card-desc">Design pastebin.com. Deceptively deep — more nuance than it looks.</div>
+      <div class="cs-topics">
+        <span>Content Addressing</span><span>Ref Counting</span><span>Async Uploads</span><span>Expiry Jobs</span><span>Fault Isolation</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ── ASCENT ── -->
+<div class="cs-level locked">
+  <div class="cs-level-header">
+    <div class="cs-level-badge lv2">LV 2</div>
+    <div class="cs-level-meta">
+      <div class="cs-level-title">Ascent <span class="cs-soon">Coming Soon</span></div>
+      <div class="cs-level-desc">Mid-level systems. Real trade-offs, multiple moving parts.</div>
+    </div>
+    <div class="cs-level-count cs-locked-count">0 case studies</div>
+  </div>
+</div>
+
+<!-- ── EXPEDITION ── -->
+<div class="cs-level locked">
+  <div class="cs-level-header">
+    <div class="cs-level-badge lv3">LV 3</div>
+    <div class="cs-level-meta">
+      <div class="cs-level-title">Expedition <span class="cs-soon">Coming Soon</span></div>
+      <div class="cs-level-desc">Senior-level systems. Distributed complexity, scaling decisions under pressure.</div>
+    </div>
+    <div class="cs-level-count cs-locked-count">0 case studies</div>
+  </div>
+</div>
+
+<!-- ── SUMMIT ── -->
+<div class="cs-level locked">
+  <div class="cs-level-header">
+    <div class="cs-level-badge lv4">LV 4</div>
+    <div class="cs-level-meta">
+      <div class="cs-level-title">Summit <span class="cs-soon">Coming Soon</span></div>
+      <div class="cs-level-desc">Advanced distributed systems. This is principal-level territory.</div>
+    </div>
+    <div class="cs-level-count cs-locked-count">0 case studies</div>
+  </div>
+</div>
+
+<!-- ── BATTLEGROUND ── -->
+<div class="cs-level">
+  <div class="cs-level-header">
+    <div class="cs-level-badge lv5">LV 5</div>
+    <div class="cs-level-meta">
+      <div class="cs-level-title">Battleground</div>
+      <div class="cs-level-desc">Elite-level systems. Many failure modes, no easy answers. This is where interviews are won or lost.</div>
+    </div>
+    <div class="cs-level-count">1 case study</div>
+  </div>
+
+  <div class="cs-cards">
+
+    <a href="11-Case-Studies/03-WhatsApp/index.md" class="cs-card cs-card-elite">
+      <div class="cs-card-header">
+        <span class="cs-badge battleground">Battleground</span>
+      </div>
+      <div class="cs-card-title">WhatsApp</div>
+      <div class="cs-card-desc">500M DAU real-time messaging. WebSockets, ordering, offline delivery, read receipts, thundering herd.</div>
+      <div class="cs-topics">
+        <span>WebSockets</span><span>Msg Ordering</span><span>Offline Delivery</span><span>Read Receipts</span><span>Inbox</span><span>Thundering Herd</span><span>Rate Limiting</span>
+      </div>
+    </a>
+
+  </div>
 </div>
 
 
