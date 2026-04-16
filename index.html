@@ -317,6 +317,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="." class="md-nav__link md-nav__link--active">
         
   
@@ -333,6 +351,47 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#foundation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Foundation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#battleground" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Battleground
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -9412,6 +9471,8 @@
 <h1 id="system-design-case-studies">System Design Case Studies<a class="headerlink" href="#system-design-case-studies" title="Permanent link">&para;</a></h1>
 <p>End-to-end walkthroughs built from real interview sessions. Every decision is justified with scale math and reasoning — not just diagrams.</p>
 <hr />
+<h2 id="foundation">Foundation<a class="headerlink" href="#foundation" title="Permanent link">&para;</a></h2>
+<p>The classics. Every interview starts here. Get these right before moving up.</p>
 <div class="grid cards">
 <ul>
 <li>
@@ -9426,10 +9487,17 @@
 <p>Deceptively deep. Content-addressable storage, ref counting, async S3 uploads, expiry cleanup workers, and fault isolation.</p>
 <p><a href="11-Case-Studies/02-Pastebin/">View case study →</a></p>
 </li>
+</ul>
+</div>
+<hr />
+<h2 id="battleground">Battleground<a class="headerlink" href="#battleground" title="Permanent link">&para;</a></h2>
+<p>Complex, real-world systems with many moving parts, failure modes, and no easy answers. This is where interviews are won or lost.</p>
+<div class="grid cards">
+<ul>
 <li>
 <p><strong>WhatsApp</strong></p>
 <hr />
-<p>The hardest of the three. WebSockets, message ordering, offline delivery, read receipts, inbox sorted sets, thundering herd, and rate limiting at 500M DAU.</p>
+<p>WebSockets, message ordering, offline delivery, read receipts, inbox sorted sets, thundering herd, and rate limiting at 500M DAU.</p>
 <p><a href="11-Case-Studies/03-WhatsApp/">View case study →</a></p>
 </li>
 </ul>
