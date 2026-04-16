@@ -283,6 +283,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Design Case Studies
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="." class="md-nav__link md-nav__link--active">
         
   
@@ -299,6 +317,58 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#url-shortener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        URL Shortener
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pastebin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pastebin
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WhatsApp
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -9673,27 +9743,132 @@
 
 
 <h1 id="system-design-case-studies">System Design Case Studies<a class="headerlink" href="#system-design-case-studies" title="Permanent link">&para;</a></h1>
-<p>End-to-end system design walkthroughs — from functional requirements through deep dives to final architecture. Every decision justified with scale math and reasoning, not just diagrams.</p>
+<p>End-to-end walkthroughs built from real interview sessions. Every decision is justified — no diagrams without reasoning.</p>
 <hr />
+<h2 id="url-shortener">URL Shortener<a class="headerlink" href="#url-shortener" title="Permanent link">&para;</a></h2>
 <div class="grid cards">
 <ul>
 <li>
-<p><strong>URL Shortener</strong></p>
+<p><strong>Requirements &amp; Estimation</strong></p>
 <hr />
-<p>Short code generation, DB sharding, caching, hot-key handling, cold storage, fault isolation. The classic starter case study — every concept shows up here.</p>
-<p><a href="11-Case-Studies/01-URL-Shortener/01-FR/">Start here →</a></p>
+<ul>
+<li><a href="11-Case-Studies/01-URL-Shortener/01-FR/">Functional Requirements</a></li>
+<li><a href="11-Case-Studies/01-URL-Shortener/02-Estimation/">Estimation</a></li>
+<li><a href="11-Case-Studies/01-URL-Shortener/03-NFR/">Non-Functional Requirements</a></li>
+<li><a href="11-Case-Studies/01-URL-Shortener/04-API/">API Design</a></li>
+<li><a href="11-Case-Studies/01-URL-Shortener/05-Base-Architecture/">Base Architecture</a></li>
+</ul>
 </li>
 <li>
-<p><strong>Pastebin</strong></p>
+<p><strong>Deep Dives</strong></p>
 <hr />
-<p>Content-addressable storage, ref counting, async S3 uploads, expiry cleanup workers, fault isolation. Deceptively deep for a simple product.</p>
-<p><a href="11-Case-Studies/02-Pastebin/01-FR/">Start here →</a></p>
+<ul>
+<li><a href="11-Case-Studies/01-URL-Shortener/06-Deep-Dives/01-Short-Code-Generation/01-Raw-IDs/">Short Code Generation</a></li>
+<li><a href="11-Case-Studies/01-URL-Shortener/06-Deep-Dives/02-DB/01-DB-Choice/">Database</a></li>
+<li><a href="11-Case-Studies/01-URL-Shortener/06-Deep-Dives/03-Caching/01-Why-Caching/">Caching</a></li>
+<li><a href="11-Case-Studies/01-URL-Shortener/06-Deep-Dives/04-Peak-Traffic/01-The-Spike-Problem/">Peak Traffic</a></li>
+<li><a href="11-Case-Studies/01-URL-Shortener/06-Deep-Dives/06-Pre-Generated-Keys/01-Collision-At-Scale/">Pre-Generated Keys</a></li>
+<li><a href="11-Case-Studies/01-URL-Shortener/06-Deep-Dives/07-Cold-Storage/01-The-Problem/">Cold Storage</a></li>
+<li><a href="11-Case-Studies/01-URL-Shortener/06-Deep-Dives/08-Fault-Isolation/01-Fault-Isolation/">Fault Isolation</a></li>
+</ul>
 </li>
 <li>
-<p><strong>WhatsApp</strong></p>
+<p><strong>Final Design &amp; Observability</strong></p>
 <hr />
-<p>WebSockets, connection registry, message ordering, offline delivery, read receipts, inbox sorted sets, thundering herd, rate limiting. The hardest of the three.</p>
-<p><a href="11-Case-Studies/03-WhatsApp/01-FR/">Start here →</a></p>
+<ul>
+<li><a href="11-Case-Studies/01-URL-Shortener/08-Final-Design/01-Final-Design/">Final Architecture</a></li>
+<li><a href="11-Case-Studies/01-URL-Shortener/09-Observability/01-SLI-SLO-Connection/">SLIs &amp; SLOs</a></li>
+<li><a href="11-Case-Studies/01-URL-Shortener/09-Observability/02-Measuring-Latency/">Measuring Latency</a></li>
+<li><a href="11-Case-Studies/01-URL-Shortener/09-Observability/03-Measuring-Availability/">Measuring Availability</a></li>
+<li><a href="11-Case-Studies/01-URL-Shortener/09-Observability/04-Alerting/">Alerting</a></li>
+<li><a href="11-Case-Studies/01-URL-Shortener/09-Observability/05-Error-Budget/">Error Budget</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<hr />
+<h2 id="pastebin">Pastebin<a class="headerlink" href="#pastebin" title="Permanent link">&para;</a></h2>
+<div class="grid cards">
+<ul>
+<li>
+<p><strong>Requirements &amp; Estimation</strong></p>
+<hr />
+<ul>
+<li><a href="11-Case-Studies/02-Pastebin/01-FR/">Functional Requirements</a></li>
+<li><a href="11-Case-Studies/02-Pastebin/02-Estimation/">Estimation</a></li>
+<li><a href="11-Case-Studies/02-Pastebin/03-NFR/">Non-Functional Requirements</a></li>
+<li><a href="11-Case-Studies/02-Pastebin/04-API/">API Design</a></li>
+<li><a href="11-Case-Studies/02-Pastebin/05-Base-Architecture/">Base Architecture</a></li>
+</ul>
+</li>
+<li>
+<p><strong>Deep Dives</strong></p>
+<hr />
+<ul>
+<li><a href="11-Case-Studies/02-Pastebin/06-Deep-Dives/01-Short-Code-Generation/01-Requirements/">Short Code Generation</a></li>
+<li><a href="11-Case-Studies/02-Pastebin/06-Deep-Dives/02-DB/01-DB-Choice/">Database</a></li>
+<li><a href="11-Case-Studies/02-Pastebin/06-Deep-Dives/03-Caching/01-Why-Cache/">Caching</a></li>
+<li><a href="11-Case-Studies/02-Pastebin/06-Deep-Dives/04-Peak-Traffic/01-Hot-Key-Problem/">Peak Traffic</a></li>
+<li><a href="11-Case-Studies/02-Pastebin/06-Deep-Dives/05-Fault-Isolation/01-Why-Fault-Isolation/">Fault Isolation</a></li>
+<li><a href="11-Case-Studies/02-Pastebin/06-Deep-Dives/06-Async-S3-Upload/01-Why-Async-Upload/">Async S3 Upload</a></li>
+<li><a href="11-Case-Studies/02-Pastebin/06-Deep-Dives/07-Expiry-Cleanup-Job/01-Why-Cleanup-Job/">Expiry &amp; Cleanup</a></li>
+</ul>
+</li>
+<li>
+<p><strong>Final Design &amp; Observability</strong></p>
+<hr />
+<ul>
+<li><a href="11-Case-Studies/02-Pastebin/06-Deep-Dives/08-Updated-Architecture/01-Updated-Architecture/">Updated Architecture</a></li>
+<li><a href="11-Case-Studies/02-Pastebin/07-Observability/01-SLI-SLO-Connection/">SLIs &amp; SLOs</a></li>
+<li><a href="11-Case-Studies/02-Pastebin/07-Observability/02-Measuring-Latency/">Measuring Latency</a></li>
+<li><a href="11-Case-Studies/02-Pastebin/07-Observability/03-Measuring-Availability/">Measuring Availability</a></li>
+<li><a href="11-Case-Studies/02-Pastebin/07-Observability/04-Alerting/">Alerting</a></li>
+<li><a href="11-Case-Studies/02-Pastebin/07-Observability/05-Error-Budget/">Error Budget</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<hr />
+<h2 id="whatsapp">WhatsApp<a class="headerlink" href="#whatsapp" title="Permanent link">&para;</a></h2>
+<div class="grid cards">
+<ul>
+<li>
+<p><strong>Requirements &amp; Base Architecture</strong></p>
+<hr />
+<ul>
+<li><a href="11-Case-Studies/03-WhatsApp/01-FR/">Functional Requirements</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/02-Estimation/">Estimation</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/03-NFR/">Non-Functional Requirements</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/04-API/">API Design</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/04-Real-Time-Comms/01-The-Problem/">Real-Time Comms</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/05-Base-Architecture/01-Overview/">Base Architecture</a></li>
+</ul>
+</li>
+<li>
+<p><strong>Deep Dives</strong></p>
+<hr />
+<ul>
+<li><a href="11-Case-Studies/03-WhatsApp/06-Deep-Dives/01-DB/01-DB-Choice/">Database</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/06-Deep-Dives/02-Message-Ordering/01-The-Problem/">Message Ordering</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/06-Deep-Dives/03-Offline-Delivery/01-The-Problem/">Offline Delivery</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/06-Deep-Dives/04-Message-Status/01-The-Three-Ticks/">Message Status</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/06-Deep-Dives/05-Inbox/01-Inbox-Load-Flow/">Inbox</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/06-Deep-Dives/06-Caching/01-Message-History-Cache/">Caching</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/06-Deep-Dives/07-Peak-Traffic/01-Thundering-Herd/01-Redis-Sharding/">Peak Traffic</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/06-Deep-Dives/XX-Fault-Isolation/01-Connection-Server-Failure/01-Client-Reconnect/">Fault Isolation</a></li>
+</ul>
+</li>
+<li>
+<p><strong>Final Design &amp; Observability</strong></p>
+<hr />
+<ul>
+<li><a href="11-Case-Studies/03-WhatsApp/07-Final-Design/01-Final-Architecture/">Final Architecture</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/08-Observability/01-SLI-SLO-Connection/">SLIs &amp; SLOs</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/08-Observability/02-Measuring-Latency/">Measuring Latency</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/08-Observability/03-Measuring-Availability/">Measuring Availability</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/08-Observability/04-Alerting/">Alerting</a></li>
+<li><a href="11-Case-Studies/03-WhatsApp/08-Observability/05-Error-Budget/">Error Budget</a></li>
+</ul>
 </li>
 </ul>
 </div>
