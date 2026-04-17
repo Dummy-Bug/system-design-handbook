@@ -1,9 +1,3 @@
-
-> [!info] Non-functional requirements define how the system behaves under pressure — not what it does, but how well it does it.
-> Getting NFRs right means you can justify every architecture decision that follows. Every trade-off traces back to an NFR.
-
----
-
 ## Availability — 99.9% uptime
 
 Pastebin is a user-facing, read-heavy service. A user who can't read a paste or can't create one has a bad experience. 99.9% (three nines) gives ~8.7 hours of acceptable downtime per year — enough headroom for deployments and incidents without being so strict that it forces overly expensive infrastructure.

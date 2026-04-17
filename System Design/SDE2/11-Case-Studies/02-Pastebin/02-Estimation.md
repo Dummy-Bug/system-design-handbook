@@ -1,9 +1,4 @@
 
-> [!info] Estimation anchors every architecture decision that follows — wrong numbers here mean wrong design choices later.
-> The goal is not a precise number. The goal is a justified number you can defend and use to make design decisions.
-
----
-
 ## Assumptions
 
 ```

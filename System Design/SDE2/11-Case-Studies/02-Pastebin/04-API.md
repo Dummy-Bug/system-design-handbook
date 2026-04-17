@@ -1,9 +1,3 @@
-
-> [!info] API design is the contract between your system and the outside world — get it wrong and every client breaks.
-> Good API design is minimal, consistent, and handles failure cases explicitly.
-
----
-
 ## Create a Paste
 
 ```

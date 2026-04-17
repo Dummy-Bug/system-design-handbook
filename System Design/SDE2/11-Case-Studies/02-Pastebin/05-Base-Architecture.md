@@ -1,9 +1,3 @@
-
-> [!info] Base architecture is the simplest system that satisfies all functional requirements end to end.
-> No optimisations, no caching, no sharding — just the minimum components that make the system work correctly.
-
----
-
 ## Components
 
 ```
