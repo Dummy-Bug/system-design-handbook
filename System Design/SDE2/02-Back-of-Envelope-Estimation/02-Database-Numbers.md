@@ -2,7 +2,6 @@
 > [!info] Know the throughput ceiling of each database before you design around it
 > "Can a single Postgres instance handle this?" — you need a number to answer that, not a guess.
 
----
 
 ## PostgreSQL / MySQL (relational, SSD-backed)
 

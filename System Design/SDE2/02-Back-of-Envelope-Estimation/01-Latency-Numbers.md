@@ -2,7 +2,6 @@
 > [!info] Every architecture decision has a latency justification behind it
 > These are Jeff Dean's numbers — the standard reference every interviewer expects you to know. Memorise the order of magnitude, not the exact value.
 
----
 
 ## The numbers
 
