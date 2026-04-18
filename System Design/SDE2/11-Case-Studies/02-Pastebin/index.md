@@ -33,10 +33,10 @@ Design a system like pastebin.com — users paste text, get a short link, conten
     ---
 
     - [Updated Architecture](06-Deep-Dives/08-Updated-Architecture/01-Updated-Architecture.md)
-    - [SLIs & SLOs](07-Observability/01-SLI-SLO-Connection.md)
-    - [Measuring Latency](07-Observability/02-Measuring-Latency.md)
-    - [Measuring Availability](07-Observability/03-Measuring-Availability.md)
-    - [Alerting](07-Observability/04-Alerting.md)
-    - [Error Budget](07-Observability/05-Error-Budget.md)
+    - [SLIs & SLOs](System%20Design/SDE2/11-Case-Studies/02-Pastebin/07-Observability/01-SLI-SLO-Connection.md)
+    - [Measuring Latency](System%20Design/SDE2/11-Case-Studies/02-Pastebin/07-Observability/02-Measuring-Latency.md)
+    - [Measuring Availability](System%20Design/SDE2/11-Case-Studies/02-Pastebin/07-Observability/03-Measuring-Availability.md)
+    - [Alerting](System%20Design/SDE2/11-Case-Studies/02-Pastebin/07-Observability/04-Alerting.md)
+    - [Error Budget](System%20Design/SDE2/11-Case-Studies/02-Pastebin/07-Observability/05-Error-Budget.md)
 
 </div>

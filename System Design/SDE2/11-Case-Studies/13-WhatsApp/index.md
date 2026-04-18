@@ -34,7 +34,7 @@ Design a real-time messaging system at 500M DAU — persistent WebSocket connect
 
     ---
 
-    - [Final Architecture](01-Final-Architecture.md)
+    - [Final Architecture](System%20Design/SDE2/11-Case-Studies/13-WhatsApp/07-Final-Design/01-Final-Architecture.md)
     - [SLIs & SLOs](System%20Design/SDE2/11-Case-Studies/13-WhatsApp/08-Observability/01-SLI-SLO-Connection.md)
     - [Measuring Latency](System%20Design/SDE2/11-Case-Studies/13-WhatsApp/08-Observability/02-Measuring-Latency.md)
     - [Measuring Availability](System%20Design/SDE2/11-Case-Studies/13-WhatsApp/08-Observability/03-Measuring-Availability.md)
