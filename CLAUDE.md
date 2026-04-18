@@ -81,6 +81,8 @@ Each file uses this style:
 
   **The checkpoints for every case study (in order):**
 
+  0. **System Overview** — start every case study by explaining what the system is in plain English: what problem it solves, who uses it, and why it's an interesting design problem. Write a `00-System-Overview.md` file. This is part of the interview loop (not a separate pre-step) and comes before FR. Keep the explanation to 3-5 sentences + a real-world context callout.
+
   1. FR — Functional Requirements
 
   2. Estimation
