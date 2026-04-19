@@ -164,32 +164,32 @@ Key concepts: Consistent hashing ring with vnodes for data placement, vector clo
 
 ### Case Study → Concept Mapping
 
-| Case Study | Key Concepts from Phases 1–10 |
-|---|---|
-| URL Shortener | ID generation, Base62, caching, DB sharding |
-| Rate Limiter | All 5 algorithms, Redis, distributed counters |
-| Key-Value Store | Consistent hashing, quorum, LSM, Bloom filter |
-| Parking Lot | Optimistic locking, Redis bitmap, race conditions |
-| Type-Ahead | Trie, Redis sorted set, prefix caching |
-| Search Autocomplete | Personalization scoring, cold start, user history |
-| Distributed Task Queue | Competing consumers, visibility timeout, DLQ, retry |
-| Notification System | Kafka fan-out, multi-channel, DLQ, idempotency |
-| Web Crawler | BFS, Bloom filter, politeness, content hash |
-| Chat System | WebSockets, Kafka ordering, fan-out, offline delivery |
-| News Feed | Fan-out on write/read, Kafka, Redis cache, pagination |
-| Hotel Reservation | MVCC, SERIALIZABLE, Saga, optimistic locking |
-| Auction | Optimistic locking, WebSocket, state machine |
-| Payment System | Idempotency, exactly-once, Saga vs 2PC, audit log |
-| Banking Ledger | Event sourcing, CQRS, projection, double-entry |
-| Dropbox | Chunking, S3, dedup, delta sync, conflict resolution |
-| Uber | Geohash, Quadtree, Dijkstra, WebSocket, Redis geo |
-| Ad Clicks | Kafka, Count-Min Sketch, windowing, Lambda arch |
-| Stock Broker | Event sourcing, order book, Raft, exactly-once |
-| Web Search | Inverted index, PageRank, sharding, query pipeline |
-| YouTube | Transcoding, HLS/DASH, CDN, HyperLogLog |
-| Google Maps | A*, S2, hierarchical routing, traffic stream |
-| Google Docs | CRDT / OT, WebSocket, conflict-free merge |
-| Gmail | Inverted index, threading, SMTP, search at scale |
-| Kafka from Scratch | Append-only log, ISR, consumer groups, compaction |
-| Redis from Scratch | Consistent hashing, LRU, AOF, Sentinel, cluster |
-| DynamoDB from Scratch | Vnodes, vector clocks, quorum, Merkle trees, gossip |
+| Case Study             | Key Concepts from Phases 1–10                         |
+| ---------------------- | ----------------------------------------------------- |
+| URL Shortener          | ID generation, Base62, caching, DB sharding           |
+| Rate Limiter           | All 5 algorithms, Redis, distributed counters         |
+| Key-Value Store        | Consistent hashing, quorum, LSM, Bloom filter         |
+| Parking Lot            | Optimistic locking, Redis bitmap, race conditions     |
+| Type-Ahead             | Trie, Redis sorted set, prefix caching                |
+| Search Autocomplete    | Personalization scoring, cold start, user history     |
+| Distributed Task Queue | Competing consumers, visibility timeout, DLQ, retry   |
+| Notification System    | Kafka fan-out, multi-channel, DLQ, idempotency        |
+| Web Crawler            | BFS, Bloom filter, politeness, content hash           |
+| Chat System            | WebSockets, Kafka ordering, fan-out, offline delivery |
+| News Feed              | Fan-out on write/read, Kafka, Redis cache, pagination |
+| Hotel Reservation      | MVCC, SERIALIZABLE, Saga, optimistic locking          |
+| Auction                | Optimistic locking, WebSocket, state machine          |
+| Payment System         | Idempotency, exactly-once, Saga vs 2PC, audit log     |
+| Banking Ledger         | Event sourcing, CQRS, projection, double-entry        |
+| Dropbox                | Chunking, S3, dedup, delta sync, conflict resolution  |
+| Uber                   | Geohash, Quadtree, Dijkstra, WebSocket, Redis geo     |
+| Ad Clicks              | Kafka, Count-Min Sketch, windowing, Lambda arch       |
+| Stock Broker           | Event sourcing, order book, Raft, exactly-once        |
+| Web Search             | Inverted index, PageRank, sharding, query pipeline    |
+| YouTube                | Transcoding, HLS/DASH, CDN, HyperLogLog               |
+| Google Maps            | A*, S2, hierarchical routing, traffic stream          |
+| Google Docs            | CRDT / OT, WebSocket, conflict-free merge             |
+| Gmail                  | Inverted index, threading, SMTP, search at scale      |
+| Kafka from Scratch     | Append-only log, ISR, consumer groups, compaction     |
+| Redis from Scratch     | Consistent hashing, LRU, AOF, Sentinel, cluster       |
+| DynamoDB from Scratch  | Vnodes, vector clocks, quorum, Merkle trees, gossip   |
