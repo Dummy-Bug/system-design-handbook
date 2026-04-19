@@ -32,11 +32,11 @@ Design a system like bit.ly — takes a long URL, returns a short code, redirect
 
     ---
 
-    - [Final Architecture](08-Final-Design/01-Final-Design.md)
-    - [SLIs & SLOs](09-Observability/01-SLI-SLO-Connection.md)
-    - [Measuring Latency](09-Observability/02-Measuring-Latency.md)
-    - [Measuring Availability](09-Observability/03-Measuring-Availability.md)
-    - [Alerting](09-Observability/04-Alerting.md)
-    - [Error Budget](09-Observability/05-Error-Budget.md)
+    - [Final Architecture](System%20Design/SDE2/11-Case-Studies/02-URL-Shortener/09-Final-Design/01-Final-Design.md)
+    - [SLIs & SLOs](System%20Design/SDE2/11-Case-Studies/02-URL-Shortener/08-Observability/01-SLI-SLO-Connection.md)
+    - [Measuring Latency](System%20Design/SDE2/11-Case-Studies/02-URL-Shortener/08-Observability/02-Measuring-Latency.md)
+    - [Measuring Availability](System%20Design/SDE2/11-Case-Studies/02-URL-Shortener/08-Observability/03-Measuring-Availability.md)
+    - [Alerting](System%20Design/SDE2/11-Case-Studies/02-URL-Shortener/08-Observability/04-Alerting.md)
+    - [Error Budget](System%20Design/SDE2/11-Case-Studies/02-URL-Shortener/08-Observability/05-Error-Budget.md)
 
 </div>
