@@ -148,4 +148,6 @@ Each file uses this style:
 
   - **Notes must be fully reasoned — never shallow.** Every option discussed must include: why it was considered, what its trade-offs are, why it wins or loses against alternatives, and all implementation details. The gold standard for reasoning depth is `System Design/SDE2/11-Case-Studies/01-URL-Shortener/05-Deep-Dives/02-DB/08-Read-Your-Own-Writes.md` — read it before writing any deep dive notes. That file shows the expected level of detail: full option comparison, implementation mechanics, efficiency analysis, and a clear verdict with reasoning.
 
+  - **When arriving at a correct solution, always show the bad approaches first with rejection reasons before presenting the right answer.** The gold standard for this pattern is `System Design/SDE2/11-Case-Studies/14-Netflix/02-Base-Architecture/02-Download.md` — it shows two bad approaches with numbered scale calculations proving why each fails, then arrives at the correct solution. Every design decision that has a non-obvious answer should follow this pattern.
+
   - **For each new case study, follow the structure of the Pastebin case study** — same checkpoint order, same folder layout, same file naming convention, same depth of reasoning in notes.
