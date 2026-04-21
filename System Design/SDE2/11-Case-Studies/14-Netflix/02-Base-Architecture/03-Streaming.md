@@ -59,3 +59,6 @@ flowchart LR
 
 > [!important] Why chunks and not the full file
 > Each chunk is only 4 seconds of video. The client can switch quality between any two chunks. If the full file was one URL, you could never switch quality mid-stream.
+
+> [!tip] More on this in the deep dive
+> How the manifest file is structured, how the client picks resolution, how it switches quality mid-stream, and what HLS/DASH actually are — all covered in `03-Deep-Dives/02-Manifest-And-HLS/`.

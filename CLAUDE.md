@@ -150,4 +150,6 @@ Each file uses this style:
 
   - **When arriving at a correct solution, always show the bad approaches first with rejection reasons before presenting the right answer.** The gold standard for this pattern is `System Design/SDE2/11-Case-Studies/14-Netflix/02-Base-Architecture/02-Download.md` — it shows two bad approaches with numbered scale calculations proving why each fails, then arrives at the correct solution. Every design decision that has a non-obvious answer should follow this pattern.
 
+  - **Always use maths and numbers to justify rejection of any approach — never just say "this doesn't work".** Show the exact numbers: how many users, how much bandwidth, how many requests, what the limit is, where it breaks. "The NIC saturates at 400 users (10,000 Mbps / 25 Mbps = 400)" is correct. "This won't scale" is not acceptable. This is highest priority — every rejected approach must have a number attached to its failure.
+
   - **For each new case study, follow the structure of the Pastebin case study** — same checkpoint order, same folder layout, same file naming convention, same depth of reasoning in notes.
