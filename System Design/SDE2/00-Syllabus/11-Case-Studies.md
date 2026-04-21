@@ -125,8 +125,11 @@ Key concepts: Order matching engine (price-time priority, order book as sorted s
 **25. Web Search (Google)**
 Key concepts: Web crawler feeds inverted index, index sharding by document hash range, query processing pipeline (tokenize → stem → lookup posting lists → intersect → rank), ranking (PageRank + TF-IDF + ML features), query result cache, spelling correction (edit distance), index freshness (near-real-time vs batch rebuild)
 
-**26. Video Streaming (YouTube/Netflix)**
-Key concepts: Transcoding pipeline (raw video → multiple resolutions + formats, async Kafka-triggered worker pool), adaptive bitrate streaming (HLS/DASH — client switches quality based on bandwidth), CDN for video segment delivery, blob storage (S3) for raw and transcoded segments, metadata DB, view count with HyperLogLog, recommendation system overview
+**26. YouTube**
+Focus: user upload and processing pipeline. Key concepts: transcoding pipeline (raw video → multiple resolutions + formats, async Kafka-triggered worker pool), upload flow (chunked upload, resumable upload), blob storage (S3) for raw and transcoded segments, metadata DB, view count with HyperLogLog, recommendation system overview, content moderation pipeline
+
+**26b. Video Streaming — Netflix**
+Focus: streaming and delivery. Key concepts: adaptive bitrate streaming (HLS/DASH — client switches quality based on bandwidth), CDN for video segment delivery (pull vs push vs hybrid), manifest file structure, chunk-based delivery, DRM, resume playback. Transcoding pipeline is a black box — covered in YouTube. Netflix focus is on what happens after content is ready.
 
 ---
 
@@ -186,7 +189,8 @@ Key concepts: Consistent hashing ring with vnodes for data placement, vector clo
 | Ad Clicks              | Kafka, Count-Min Sketch, windowing, Lambda arch       |
 | Stock Broker           | Event sourcing, order book, Raft, exactly-once        |
 | Web Search             | Inverted index, PageRank, sharding, query pipeline    |
-| YouTube                | Transcoding, HLS/DASH, CDN, HyperLogLog               |
+| YouTube                | Transcoding pipeline, upload flow, Kafka workers, HyperLogLog |
+| Netflix                | HLS/DASH, adaptive bitrate, CDN pull/push/hybrid, DRM, resume playback |
 | Google Maps            | A*, S2, hierarchical routing, traffic stream          |
 | Google Docs            | CRDT / OT, WebSocket, conflict-free merge             |
 | Gmail                  | Inverted index, threading, SMTP, search at scale      |
