@@ -48,7 +48,13 @@ One node failure, if left unchecked, triggers a global outage. This is the casca
 
 ## Adaptive Bitrate as Load Shedding
 
-The fix is **adaptive bitrate as a load shedding mechanism**. Singapore detects it is overloaded and instructs all connected clients to switch to a lower quality level.
+The fix is **adaptive bitrate as a load shedding mechanism**. But first — how does Singapore know it is overloaded?
+
+Every CDN node continuously monitors its own outbound bandwidth utilisation. When utilisation crosses a threshold — say 90% of its maximum capacity — it signals clients to reduce quality. This signal travels back through the same HTTP response headers that deliver chunks. The client reads a header like `X-CDN-Quality-Cap: 480p` and honours it, fetching all subsequent chunks at that resolution regardless of what ABR would normally choose.
+
+This is different from the client-driven ABR described in the streaming deep dive. Normal ABR is the client measuring its own buffer and speed and choosing quality freely. CDN-enforced quality capping is the server overriding that decision from the outside — the CDN is saying "I don't care what your buffer looks like, serve yourself only at 480p while I'm under pressure."
+
+Singapore detects it is overloaded and instructs all connected clients to switch to a lower quality level.
 
 A user watching at 4K consumes **25 Mbps**. The same stream at 480p consumes **5 Mbps**. Dropping quality by 5× means Singapore can serve 5× as many users on the same bandwidth.
 

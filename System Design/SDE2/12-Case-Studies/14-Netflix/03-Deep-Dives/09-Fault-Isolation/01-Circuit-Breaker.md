@@ -4,9 +4,22 @@
 
 It is 9pm. Squid Game Season 3 just dropped. Your Action genre service crashes — the pod is down, not responding. Every request the BFF sends to it times out after 30 seconds.
 
-Without any protection, those 30-second timeouts stack up. BFF threads sit waiting for a response that never comes. Thread pool fills up. New requests cannot be processed. The Action service being down has now taken down the entire home feed for every user — not just the Action row.
+Without any protection, the cascade plays out like this:
 
-This is a **cascade failure**. One service dying kills everything upstream of it.
+```
+BFF has 100 worker threads
+Each thread waiting on Action service = locked for 30 seconds
+At 500,000 req/s: new requests arrive 5,000× faster than threads free up
+
+100 threads × (1 req / 30s) = ~3 req/s handled
+Incoming rate                = 500,000 req/s
+
+All 100 threads fill up in milliseconds.
+New requests queue → queue fills → requests rejected.
+Action service being down has taken down the entire home feed for every user.
+```
+
+This is a **cascade failure**. One service dying — even a non-critical one — kills everything upstream of it because it holds threads hostage.
 
 ---
 
@@ -40,17 +53,17 @@ The circuit breaker detects repeated failures and stops sending requests to a de
 ```mermaid
 stateDiagram-v2
     [*] --> Closed
-    Closed --> Open: failure threshold exceeded\n(e.g. 50% errors in 10s)
-    Open --> HalfOpen: timeout expires\n(e.g. 30 seconds)
-    HalfOpen --> Closed: probe request succeeds
-    HalfOpen --> Open: probe request fails
+    Closed --> Open: 50% errors in 10s
+    Open --> HalfOpen: 30s timeout expires
+    HalfOpen --> Closed: probe succeeds
+    HalfOpen --> Open: probe fails
 ```
 
-**Closed** — everything working. All requests go through normally.
+**Closed** — normal operation. All requests go through. The circuit breaker counts failures in a rolling window — say 50% error rate over 10 seconds. Below that threshold, nothing changes.
 
-**Open** — too many failures detected. The circuit breaker blocks all requests immediately without even attempting to contact the service. No waiting, no timeouts — instant rejection. The Action service gets zero traffic while it recovers.
+**Open** — failure threshold crossed. The circuit breaker stops forwarding requests entirely. No thread is sent to the Action service, no timeout is waited on — every incoming request to the Action thread pool gets an instant rejection. The service gets zero traffic while it recovers. BFF threads are freed immediately.
 
-**Half-Open** — after a timeout (say 30 seconds), the circuit allows one probe request through. If it succeeds, the service has recovered — circuit moves back to Closed and normal traffic resumes. If it fails, the service is still down — circuit moves back to Open and waits another 30 seconds before trying again.
+**Half-Open** — after a fixed timeout (say 30 seconds), the circuit breaker allows exactly one probe request through. If the probe succeeds, the Action service has recovered — circuit moves back to Closed, normal traffic resumes. If the probe fails, the service is still down — circuit moves back to Open for another 30 seconds.
 
 ```mermaid
 sequenceDiagram
@@ -83,10 +96,10 @@ When the Action service is down and the circuit is Open, the BFF does not return
 
 ```mermaid
 flowchart LR
-    BFF -->|fan-out| A[Action ❌ omitted]
-    BFF -->|fan-out| B[Comedy ✅]
-    BFF -->|fan-out| C[Continue Watching ✅]
-    BFF -->|fan-out| D[New Releases ✅]
+    BFF -->|fan-out| A[Action — omitted]
+    BFF -->|fan-out| B[Comedy]
+    BFF -->|fan-out| C[Continue Watching]
+    BFF -->|fan-out| D[New Releases]
     B --> Response
     C --> Response
     D --> Response
@@ -101,3 +114,16 @@ This is **graceful degradation** — the system degrades partially rather than f
 
 > [!danger] Never let one service timeout kill the whole response
 > A 30-second timeout on one genre service, multiplied across 20 genre services, means a home feed that takes 10 minutes to load in the worst case. Circuit breakers and bulkheads exist to prevent this. Without them, a single slow downstream service can make the entire home feed unusable.
+
+---
+
+## What Is NOT Affected
+
+An important boundary: this failure affects the **home feed only**. Users who are already watching a video are completely unaffected — their player is fetching chunks directly from CDN, which has nothing to do with the genre services or the BFF fan-out. The circuit breaker protects homepage loading. Active streams run on an entirely separate path.
+
+```
+Genre service down → BFF fan-out fails → homepage row missing
+                   → active streams:    unaffected (CDN path, not BFF path)
+```
+
+This is why Netflix separates concerns so aggressively. The streaming path and the browse path share almost no infrastructure — a failure in one cannot cascade into the other.

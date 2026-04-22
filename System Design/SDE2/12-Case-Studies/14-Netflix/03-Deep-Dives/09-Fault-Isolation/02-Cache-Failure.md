@@ -12,10 +12,10 @@ In the normal flow, Redis absorbs almost all read traffic. The database sees a s
 
 ```mermaid
 flowchart LR
-    Normal["Normal flow\n150M users"] --> Redis[(Redis ✅)]
-    Redis -->|cache miss only ~1%| DB[(Database)]
+    A[Normal flow — 150M users] --> Redis[(Redis)]
+    Redis -->|cache miss only 1 percent| DB[(Database)]
 
-    Failed["Redis down\n150M users"] --> DB2[(Database ❌)]
+    B[Redis down — 150M users] --> DB2[(Database — overloaded)]
 ```
 
 The database was sized to handle cache misses — a small percentage of total traffic. It was not sized to handle 100% of traffic. Under full load it collapses, taking down the home feed for every user on the platform.
@@ -100,3 +100,18 @@ sequenceDiagram
 
 > [!danger] Retry without jitter recreates the stampede
 > If 490,000 clients all retry after exactly 1 second, you have replaced one spike with another spike of equal size one second later. Jitter is not optional — it is the mechanism that prevents retries from being just as destructive as the original failure.
+
+---
+
+## What Is NOT Affected
+
+Redis holds the genre row cache — Action rows, Comedy rows, Continue Watching. That is all it holds for the homepage path. Users who are already watching a video are completely unaffected — chunks come from CDN, not from Redis.
+
+```
+Redis down → genre service cache miss → DB load spike → homepage 503s
+           → active streams:           unaffected (CDN path has no Redis dependency)
+```
+
+The load shedding and retry logic above applies only to **new homepage loads**. A user mid-stream on Squid Game notices nothing when Redis goes down. Their player keeps pulling chunks from the nearest CDN edge node as if nothing happened.
+
+This also means the scope of the failure is bounded. Even in the worst case — Redis fully down, DB fully overwhelmed, all homepage loads returning 503 — 20M users who are already watching keep watching. The platform is degraded, not dead.
