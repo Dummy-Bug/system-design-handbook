@@ -3,8 +3,20 @@ for every session check the syllabus @"System Design/SDE2/00-Syllabus/07-Distrib
 ### Who the user is
 Complete beginner in System Design targeting **Google L4 / SDE-2 strong hire** in the design round for FANGM. No prior system design knowledge assumed — explain everything from scratch.
 
+The user is also building **leetdezine.com** — a public system design interview prep platform. The wiki notes are the product. Every note written in these sessions is published directly on the website and read by strangers on the internet.
+
 ### Goal
- Work through the syllabus at `System Design/SDE2/01-Syllabus/` topic by topic, building permanent study notes along the way.
+Work through the syllabus at `System Design/SDE2/01-Syllabus/` topic by topic, building permanent study notes along the way. These notes serve two audiences simultaneously:
+1. **The user** — revising for their own SDE-2 interviews
+2. **Website visitors** — strangers who found leetdezine.com and are reading the notes with zero context from any conversation
+
+### Who reads these notes — critical context for writing
+Notes are not private study material. They are published content on a public website. This changes how they must be written:
+
+- **Self-contained for a stranger.** A visitor who lands on any note has never seen this conversation, has no idea what was discussed before, and has no context beyond what the note itself provides. Every concept must be fully explained within the note — never assume the reader remembers "what we discussed earlier."
+- **Depth calibration is a product decision.** An SDE-1 reader landing on an SDE-3 deep dive will immediately bounce. Notes must be clearly pitched at their correct level. SDE-1 notes explain everything from scratch. SDE-2 notes assume SDE-1 knowledge. SDE-3 notes assume SDE-2 knowledge.
+- **Narrative quality matters more than completeness.** A well-written note that explains one concept beautifully is more valuable than a comprehensive note that reads like a reference manual. Visitors read to understand, not to collect facts.
+- **Examples must be universally recognisable.** Real-world examples (Instagram, WhatsApp, Netflix, Uber) work for any reader. Session-specific references that only make sense if you were in the conversation do not.
 
 ### How each session works — follow this exactly
 
@@ -38,6 +50,7 @@ The user reads notes to revise — they must be able to understand the concept c
 - **Keep all the flows and comparisons.** If you drew a before/after, it goes in the notes as a code block.
 - **Do not compress or summarise.** A note that says "schema-on-read means structure interpreted at read time" is useless. The note should explain it the way you explained it in the session — with the full reasoning, the full example, the full trade-off discussion.
 - **Write for a reader who has forgotten the conversation.** Every concept should be self-contained and fully explained.
+- **Write for a stranger who never had the conversation.** The note is published on leetdezine.com. The reader found it via Google. They have no idea who you are, what was discussed, or what came before. If the note only makes sense with context from the session, it fails as published content.
 
 **Interview question file format:**
 - Each question uses `> [!question]` callout
