@@ -10,25 +10,46 @@
 
 ### Observability (Comes Up in Every Production System)
 
+Interviewers at FAANGM directly ask: "How do you know this system is healthy?" or "How do you know if your SLO is at risk?" You need to answer this in layers — not just "use Prometheus."
+
+**The four pillars:**
+
 - **Logging** — structured logs (JSON, key-value pairs), log levels (DEBUG/INFO/WARN/ERROR)
   - Aggregation — ship logs to central store (Elasticsearch/Kibana or Splunk)
-  - Use: debugging failures, audit trails
+  - Use: debugging failures, audit trails, forensic investigation after an incident
+  - Always include a correlation ID in every log line
+
 - **Metrics** — numeric measurements over time
   - Types: counter (total requests), gauge (current queue depth), histogram (latency distribution)
   - Stack: Prometheus (collect) + Grafana (visualize)
-  - Key metrics — error rate, latency P99, QPS, queue depth, cache hit ratio
-- **Distributed Tracing** — follow a request across multiple services
-  - Each request gets a trace ID, each service adds a span
-  - OpenTelemetry → Jaeger or Zipkin
-- **Alerting** — fire alert when metric crosses threshold or SLO is at risk
-  - Alert on error budget burn rate, not just raw error count
-- **Correlation ID** — tag every request with an ID, log it everywhere, trace across services
+  - Key metrics to always mention: error rate, latency P99, QPS, queue depth, cache hit ratio, DB connection pool utilisation
 
-### OLTP vs OLAP
-- OLTP — many small fast queries, low latency, normalized (PostgreSQL, MySQL, DynamoDB)
-- OLAP — few large slow queries, high throughput, denormalized (BigQuery, Redshift, Snowflake)
-- Why it matters — don't run analytics queries on your OLTP database
-- CDC pipeline: OLTP → Kafka → OLAP warehouse
+- **Distributed Tracing** — follow a single request as it travels across multiple services
+  - Each request gets a trace ID at the entry point (API gateway or load balancer)
+  - Each service adds a span — a timed segment of work with its own metadata
+  - Spans form a tree: one root span (the original request) + child spans per service hop
+  - OpenTelemetry is the standard instrumentation library → export to Jaeger or Zipkin
+  - Use case: a request is slow but all individual services look fine. Tracing shows the gap is in the network call between service B and C.
+
+- **Alerting** — fire alert when a metric crosses a threshold or an SLO is at risk
+  - Alert on error budget burn rate, not just raw error count
+  - A spike to 5% errors for 2 minutes is less critical than 0.5% errors sustained for 6 hours — burn rate captures this, raw error rate doesn't
+  - Correlation ID — tag every request with a unique ID at entry, log it in every service, trace failures across the entire call chain without a distributed tracer
+
+**SLIs, SLOs, and Error Budgets — the most important interview answer**
+
+Interviewers ask this directly. Know the three terms cold:
+
+- **SLI (Service Level Indicator)** — the actual measurement. "Our P99 latency is 120ms." "Our error rate is 0.1%."
+- **SLO (Service Level Objective)** — the internal target. "P99 latency must stay below 200ms." "Error rate must stay below 0.5%."
+- **SLA (Service Level Agreement)** — the external contract with a customer, with financial penalties. Always stricter internally than your SLO.
+- **Error budget** — the gap between 100% and your SLO. If SLO is 99.9% availability, your error budget is 0.1% — about 43 minutes of downtime per month.
+  - Budget is burning fast → freeze non-critical deploys, focus on reliability
+  - Budget is healthy → deploy freely, invest in new features
+  - This is how Google teams decide deploy velocity — not gut feel
+
+**What to say in an interview:**
+> "For observability I'd instrument three things. Metrics via Prometheus — I'd track error rate, P99 latency, and queue depth, alerting on burn rate not raw thresholds. Distributed tracing via OpenTelemetry so we can follow a request across services when something is slow. And structured logs with a correlation ID on every request so we can tie metrics, traces, and logs together during an incident. The SLO for this system I'd set at 99.9% availability — that gives us a 43-minute error budget per month to work within."
 
 ### Feature Flags
 - Deploy code disabled, enable for % of users without redeployment

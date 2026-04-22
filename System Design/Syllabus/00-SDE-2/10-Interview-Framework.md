@@ -92,7 +92,26 @@ Example: "Tell me more about your caching layer"
 - Scales reasoning — "at 100x this breaks because..."
 - Communicates clearly — interviewer can follow your thinking
 
-### 9.8 Common Mistakes to Avoid
+### 9.8 What to Say When You Don't Know
+
+Interviewers at FAANGM deliberately push you past your knowledge. They want to see how you handle uncertainty — not whether you know everything.
+
+**The wrong move:** guess confidently and be wrong. Interviewers will probe and the bluff collapses, which is worse than not knowing.
+
+**The right move:** state what you know, acknowledge the boundary, and reason from first principles.
+
+Template:
+> "I'm not certain about the exact internals here, but based on what I know about [related concept], my instinct is [reasoned guess]. I'd want to validate [specific thing] before committing to this approach."
+
+Real example — interviewer asks about Cassandra's anti-entropy mechanism in detail:
+> "I know Cassandra uses Merkle trees to detect divergence between replicas and syncs only the differing segments rather than full data. I'm less clear on the exact trigger frequency. But the key point for our design is that it's a background process — it doesn't affect write latency, and hinted handoff handles short-term node failures before anti-entropy kicks in."
+
+**Three rules:**
+1. Never go silent. A wrong answer you reason through beats a correct answer you can't explain.
+2. Always connect back to the design. "I'm not sure of the internals but here's what it means for our system."
+3. Offer to park and return. "I'd like to flag this for later — let me continue with the main design and come back to this."
+
+### 9.9 Common Mistakes to Avoid
 - Starting to design without clarifying requirements
 - Saying a technology name without knowing why ("use Kafka" → interviewer asks why → blank stare)
 - Ignoring failure scenarios — every interviewer will ask "what happens when X fails"
@@ -101,7 +120,7 @@ Example: "Tell me more about your caching layer"
 - Going too deep too early — cover the full picture first, then drill down
 - Going silent — think out loud even when you're not sure
 
-### 9.9 Diagram Conventions
+### 9.10 Diagram Conventions
 - Client → Load Balancer → App Servers → Cache → DB
 - Label databases by type: [PostgreSQL], [Redis], [Cassandra], [S3]
 - Show read path and write path separately if they differ
