@@ -1,1 +1,0 @@
-> [!abstract] A document store trades SQL's rigid schema and join capabilities for flexible, nested, queryable JSON documents. The right tool when your data has variable structure and your access patterns are document-centric — fetch everything about this entity in one read.

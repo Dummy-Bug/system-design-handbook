@@ -1,7 +1,7 @@
 
-|   |
-|---|
-|Agenda:<br><br>- Local Cache Case Study<br>    <br>- Global Cache → why?<br>    <br>- Global Cache Case Study|
+|                                                                                                               |
+| ------------------------------------------------------------------------------------------------------------- |
+| Agenda:<br><br>- Local Cache Case Study<br>    <br>- Global Cache → why?<br>    <br>- Global Cache Case Study |
 
 
 In the last class, we discussed how caching could be done at multiple layers: in-browser, using CDN for larger resources, in the application layer, or in the database layer. We initially started with the local caches and ended the class on the case study. The problem statement was:

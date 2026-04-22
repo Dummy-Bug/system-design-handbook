@@ -1,1 +1,0 @@
-> [!abstract] A Key-Value store is the simplest possible database model — a key maps to a value, that's it. No joins, no schema, no WHERE clauses. That simplicity enables extreme speed. Understanding when to reach for a KV store, and which one, is a core system design skill.
