@@ -12,6 +12,7 @@
 8. Back-of-Envelope Estimation
 9. Message Queues
 10. Interview Framework
+11. Basic Observability (bonus strong hire signal)
 
 ## Case Studies
 

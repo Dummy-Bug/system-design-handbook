@@ -99,6 +99,30 @@ When interviewer says "tell me more about X":
 - What happens if the Saga compensating transaction fails?
 - How do you detect and recover from split-brain?
 
+## What to Say When You Don't Know
+
+At SDE-3, interviewers go so deep that hitting the boundary of your knowledge is guaranteed — not possible, guaranteed. They do this deliberately to see how you handle uncertainty. This is itself a signal.
+
+**The wrong move:** guess confidently and be wrong. At SDE-3 level the interviewer knows the internals. A confident wrong answer is worse than saying you're not sure.
+
+**The right move:** state what you know, name the boundary, and reason from first principles toward an answer.
+
+Template:
+> "I know [related concept] well. From that, I'd expect [reasoned inference]. I'm less certain about [specific gap]. The implication for our design is [connect back to the problem]."
+
+**Real SDE-3 examples:**
+
+Interviewer asks about Spanner's exact 2PC coordination across Paxos groups:
+> "I know Spanner uses 2PC between Paxos groups for cross-shard transactions and TrueTime to bound timestamp uncertainty. I'm less clear on exactly how it handles coordinator failure mid-commit. But the key implication for our design is that Spanner handles this internally — we get strong consistency without implementing 2PC ourselves. The cost is higher write latency (~10–100ms vs single-region sub-ms), which for financial transactions is acceptable."
+
+Interviewer asks how Kafka exactly-once works across a network partition during a producer retry:
+> "I know the idempotent producer uses epoch + sequence numbers to deduplicate retries, and transactional API coordinates atomic writes across partitions. I'm not certain about what happens if the leader fails between the producer sending and receiving an ack — I believe the sequence number prevents duplicates on the new leader, but I'd want to verify that assumption before relying on it for payment systems. In the design I'd pair Kafka exactly-once with idempotency keys at the consumer as a defense-in-depth."
+
+**Three rules:**
+1. Never go silent. A reasoned wrong answer shows more than silence.
+2. Always connect back to the design impact. "I'm not sure of the internals but here's how it affects the system."
+3. Flag it explicitly and move on. "I'd want to verify this before shipping — let me flag it and continue." Interviewers respect intellectual honesty more than bluffing.
+
 ## Common Mistakes at SDE-3 Level
 - Designing without a failure model — every interviewer will ask "what if X fails"
 - Ignoring the migration path — saying "use Cassandra" without explaining how to get there

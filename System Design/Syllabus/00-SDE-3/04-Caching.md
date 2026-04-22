@@ -67,3 +67,47 @@
 **Operations:**
 - Redis Sentinel — monitors primary, automatically elects new primary on failure
 - Redis Cluster — sharding across nodes, 16384 hash slots, gossip-based membership
+
+## Multi-Region Caching
+
+Single-region caching is solved. At SDE-3 the hard problems are: how do you keep caches consistent across regions, and what happens to your cache when a region fails?
+
+**Cross-region cache invalidation**
+
+The problem: user updates their profile in the US region. The EU region's cache still has the old profile. How do you invalidate it?
+
+Three strategies:
+
+- **TTL-based expiry (simplest)** — let EU cache expire naturally. Stale window = TTL duration (e.g., 60 seconds). Acceptable for profile data, social feeds. Not acceptable for inventory, pricing, auth tokens.
+
+- **Pub/Sub invalidation** — US region publishes invalidation event to a global Kafka topic. EU region consumes it and deletes the key from its local Redis.
+  - Propagation delay: Kafka cross-region replication ~100–150ms. Short stale window.
+  - Risk: invalidation message lost if consumer is down → stale indefinitely. Mitigation: short TTL as a safety net (5 min), so worst case is bounded.
+  - Pattern: invalidate on write, not on read. Delete the key, don't overwrite it — let the next read populate from DB (cache-aside).
+
+- **Write-through to all regions (strongest)** — write to remote region's cache directly on every local write.
+  - Adds ~150ms latency to every write (cross-region round trip)
+  - Only viable for very small, extremely hot datasets (auth session tokens, feature flags)
+  - Not practical for user-generated content at scale
+
+**Cache warming on region failover**
+
+The problem: primary region (US-East) goes down. Traffic fails over to US-West. US-West Redis is cold — every request is a cache miss hitting an already-stressed DB.
+
+This is the cold cache thundering herd — and it's one of the most dangerous failure scenarios in multi-region systems.
+
+Three mitigation strategies:
+
+- **Proactive replication** — continuously replicate cache entries from primary region to standby region using Redis replication or a background sync process. On failover, standby cache is warm. Trade-off: doubles cache memory cost, sync lag means standby is slightly stale.
+
+- **Read-through with DB rate limiting** — on failover, add a mutex per cache key so only one request per key hits DB simultaneously. All others wait for the first to populate. Prevents thundering herd but adds latency during warmup.
+
+- **Staggered traffic cutover** — don't route 100% of traffic to the cold region instantly. Use weighted DNS (10% → 25% → 50% → 100%) over several minutes as the cache warms up naturally. Only works if primary is degraded but not fully down.
+
+**Eventual consistency of caches across regions**
+
+Accept it and design around it:
+- Define the maximum acceptable stale window per data type (session tokens: 0s, user profiles: 60s, feed content: 5m)
+- Use TTL as the ceiling, invalidation events as the floor
+- For data that must be globally consistent immediately (auth revocation, account bans) — skip the cache entirely, read from the primary DB with cross-region routing. Accept the latency for correctness.
+- Communicate the stale window in your design: "profile cache has a maximum 60s stale window across regions, which is acceptable because profile reads are not safety-critical"

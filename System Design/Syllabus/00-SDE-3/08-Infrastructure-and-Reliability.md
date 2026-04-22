@@ -162,6 +162,46 @@
 - **Canary with DB migration — expand-and-contract pattern ensures both old and new code work during rollout**
 - Feature flags — deploy code disabled, enable for % of users without redeployment
 
+## **Cost Estimation and Capacity Planning**
+
+SDE-3 interviewers occasionally ask "how much does this system cost to run?" or "is this design economically viable at scale?" Most candidates have never thought about this. Mentioning it unprompted is a strong signal.
+
+**The three dominant cost drivers for most systems:**
+
+**1. Compute**
+- 1 vCPU-hour on AWS (c5.xlarge, 4 vCPU): ~$0.17/hr → ~$1,500/year per server
+- Rule of thumb: a moderately loaded app server costs ~$1,000–2,000/year
+- At 1M QPS needing ~200 app servers → $200,000–400,000/year in compute
+- Autoscaling saves 20–40% over fixed fleet — scale to peak only when needed
+
+**2. Storage**
+- S3 Standard: ~$23/TB/month → $276/TB/year
+- S3 Glacier: ~$4/TB/month → $48/TB/year
+- DB storage (RDS gp3): ~$115/TB/month (includes IOPS)
+- Key move: identify what data is cold and move it. A 1 PB system paying S3 Standard on everything vs tiering 80% to Glacier saves ~$18M/year.
+
+**3. Egress / CDN**
+- AWS data transfer out: ~$85/TB for first 10 TB, ~$20/TB at petabyte scale
+- A system serving 1 PB/month of video at $20/TB = $20,000/month
+- Building your own CDN (Netflix Open Connect, Google GGC) or peering with ISPs eliminates 80–90% of commercial CDN cost — only viable at Netflix/Google/Meta scale
+
+**How to use this in an interview:**
+
+You don't need exact numbers. You need to show cost awareness at decision points:
+- "I'm choosing S3 Glacier for videos older than 90 days because at petabyte scale the cost difference vs Standard is significant and retrieval latency for old content is acceptable"
+- "Transcoding to 5 resolutions multiplies storage 5× — at $23/TB that's a meaningful line item, so I'd only store the 3 most-used resolutions for long-tail content"
+- "Building our own CDN is only worth it above ~10 PB/month of egress — below that, CloudFront is cheaper than the engineering cost"
+
+**Capacity planning — the SDE-3 version of estimation**
+
+Beyond "how many servers do I need now?" — capacity planning asks "how do I know when I need to add capacity before the system breaks?"
+
+- Track leading indicators, not lagging ones. CPU at 70% is a warning. 99% is a crisis.
+- Set autoscaling targets at 60–70% utilization — leaves headroom for traffic spikes before new instances boot
+- Database capacity: shard when any single shard's write QPS exceeds 70% of its capacity ceiling
+- Cache: eviction rate rising + hit ratio dropping = cache too small. Add nodes before latency degrades.
+- On-call runbook should include: "if metric X exceeds Y, do Z" — not "investigate and figure it out"
+
 ## **Adaptive Bitrate Streaming (HLS / DASH)**
 - **Problem — users have different and changing network speeds. Fixed quality → buffering on slow connections.**
 - **HLS (HTTP Live Streaming) — Apple's standard:**

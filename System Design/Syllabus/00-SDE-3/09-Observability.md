@@ -46,10 +46,39 @@
   - **Practical approach — head-based 1% for normal traffic, always-on for errors and slow requests**
 
 ## Alerting
-- Alert on error budget burn rate, not just raw error count
-- Multi-window alerting — short window (5m) for fast burns, long window (1h) for slow burns
-- Page on symptoms (user-facing error rate, latency) not causes (CPU usage, disk space)
-- Alert fatigue — too many alerts → on-call ignores them. Keep alerts actionable and rare.
+
+**Page on symptoms, not causes**
+- Page on: user-facing error rate, latency P99, availability
+- Do NOT page on: CPU usage, disk space, memory — these are causes, and a full disk doesn't mean users are affected yet
+- Corollary: a service with 100% CPU but 0% error rate is not a page. A service with 2% error rate and 10% CPU is.
+
+**Error budget burn rate alerting — why raw thresholds fail**
+
+Consider an SLO of 99.9% availability (43 min budget/month):
+- A raw alert "fire if error rate > 1%" misses a slow burn: 0.5% errors for 90 minutes quietly consumes the same budget as 5% errors for 9 minutes
+- A raw alert "fire if error rate > 0.1%" pages for brief transient blips that self-recover
+
+Burn rate is the answer: how fast are you consuming your monthly error budget right now?
+- Burn rate = 1 → consuming budget at exactly the rate that exhausts it in 30 days
+- Burn rate = 10 → consuming 10× as fast → budget exhausted in 3 days
+- Burn rate = 720 → budget exhausted in 1 hour
+
+**Multi-window alerting — the standard approach**
+Use two windows in parallel to catch both fast and slow burns:
+
+| Window | Burn Rate Threshold | What it catches |
+|---|---|---|
+| 5 minute | > 14.4× | Fast burn — something is very broken right now (page immediately) |
+| 1 hour | > 6× | Medium burn — degraded but not catastrophic, will exhaust budget in ~5 days |
+
+- Fast burn (5m window, rate > 14.4) = exhausts budget in ~2 hours. Page.
+- Slow burn (1h window, rate > 6) = exhausts budget in ~5 days. Ticket or page depending on severity.
+- Why two windows: 5m window alone has too many false positives (transient spikes). 1h window alone misses fast burns until it's too late.
+
+**Alert fatigue**
+- Too many pages → on-call ignores them → real incidents go unnoticed
+- Every alert must be: actionable (there is a specific thing to do), urgent (it cannot wait until morning), and symptomatic (a user is being affected)
+- Review and delete alerts that don't meet all three criteria
 
 ## **Chaos Engineering**
 - **Core idea — intentionally inject failures in production (or staging) to verify your system handles them**

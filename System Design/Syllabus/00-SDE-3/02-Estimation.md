@@ -64,6 +64,33 @@ Interviewers want to see reasoning, not precise numbers.
 - Read-heavy → caching, CDN, read replicas
 - Media dominates → CDN is mandatory
 
+## Google-Scale Additional Numbers
+
+At 1B+ DAU the numbers change architecture decisions that are invisible at 100M scale.
+
+**Cross-region replication bandwidth**
+- Formula: write QPS × average write size × number of regions
+- Example (WhatsApp at Google scale): 2M writes/sec × 200 bytes × 3 regions = 1.2 GB/s sustained replication traffic
+- At this volume, async replication is the only viable option — sync replication across US-EU (150ms RTT) caps write throughput
+- Private backbone bandwidth between Google/AWS/Azure regions: ~400–800 Gbps. Cross-region replication at 1.2 GB/s = ~10 Gbps. Feasible but must be budgeted.
+
+**Storage tier cost awareness**
+- S3 Standard: ~$23/TB/month
+- S3 Infrequent Access: ~$12.5/TB/month
+- S3 Glacier: ~$4/TB/month
+- Rule: data not accessed in 30+ days → move to IA. 90+ days → Glacier.
+- Example: YouTube at 1 exabyte (1M TB) total storage. If 90% is cold: 900K TB × $4 = $3.6M/month saved vs keeping it all in Standard.
+
+**CDN egress cost**
+- AWS CloudFront: ~$85/TB for first 10 TB/month, drops to ~$20/TB at petabyte scale
+- YouTube serves 250 PB/day. At $20/TB = $250,000/day in CDN egress alone.
+- This is why Google/Netflix/Meta build their own CDN and peer directly with ISPs — saves 80%+ vs commercial CDN.
+
+**At Google scale, always estimate:**
+- Cross-region replication bandwidth (not just storage)
+- Storage lifecycle cost across tiers (not just total storage)
+- CDN egress cost (not just bandwidth volume)
+
 ## Practice Estimations
 
 **URL Shortener**
@@ -100,3 +127,29 @@ Interviewers want to see reasoning, not precise numbers.
 - 20M DAU riders, 2M active drivers
 - Driver location: 2M × 1 update/4 sec = 500K writes/sec
 - → Location updates dominate. Redis geospatial or geohash index required.
+
+## Google-Scale Practice Estimations
+
+**Google Search (1B+ DAU)**
+- 1B DAU, 10 queries/day per user → 10B queries/day → ~115K QPS average, peak ~400K QPS
+- Result page: ~50 KB (HTML + metadata) → outgoing bandwidth: 400K × 50 KB = 20 GB/s at peak → CDN mandatory
+- Index size: web has ~45B indexed pages × ~10 KB per doc = 450 PB of raw index data
+- Sharded across ~1M servers. Each shard serves ~45K pages.
+- Cross-region replication of index updates: ~1M page updates/day × 10 KB × 3 regions = 30 GB/day of replication — trivial compared to serving
+- → The bottleneck is index read latency, not write throughput. Every query touches hundreds of shards in parallel (scatter-gather), so P99 tail latency amplifies severely.
+
+**Google Maps (1B+ DAU)**
+- 1B DAU, 5 map tile requests per session, 3 sessions/day → 15B tile requests/day → ~175K tile QPS average
+- Map tile: ~200 KB → outgoing: 175K × 200 KB = 35 GB/s at peak → edge CDN is the entire serving strategy
+- Real-time traffic updates: 500M location probes/day from Android devices → ~6K writes/sec globally
+- Cross-region: traffic model updated every 2 min, pushed to all 10 regions: model diff ~50 MB per update × 10 regions = 500 MB per 2 min = ~4 MB/s replication
+- Storage: full planet map tiles at all zoom levels ≈ 10–100 PB. Zoom levels 0–14 fit in ~1 PB. Zoom 15–20 (street level) = the rest.
+- → CDN hit ratio is everything. Cache miss on a tile = origin fetch = 50–150ms latency visible to user. Target >99% CDN hit rate for zoom ≤ 14.
+
+**How Google-scale changes architecture decisions**
+- At 100M users: one database cluster with read replicas is sufficient
+- At 1B users: cross-shard fan-out latency becomes a P99 problem, sharding strategy determines query shape
+- At 100M users: CDN is an optimization
+- At 1B users: CDN is the primary serving infrastructure, origin is the fallback
+- At 100M users: async cross-region replication lag of 1–2s is acceptable
+- At 1B users: 1–2s lag means millions of users see stale data simultaneously — may need region-specific consistency policies
