@@ -1,5 +1,33 @@
 for every session check the syllabus @"System Design/SDE2/00-Syllabus/07-Distributed-Systems.md" then check the @"System Design/SDE2/07-Distributed-Systems.md" and see what topic is running and yet to complete if nothing is incompelete start new topic by checking the syllabus
 
+### Platform context — leetdezine.com
+The user is building **leetdezine.com**, a level-calibrated system design interview prep platform. The wiki notes are the product — every note written in these sessions is published directly on the site.
+
+**Syllabus architecture (completed 2026-04-22):**
+- All three syllabuses (SDE-1, SDE-2, SDE-3) have been rated, fixed, and finalized
+- Each syllabus has a **Required vs Stretch** breakdown — topics marked Required must be known to pass at that level, topics marked Stretch signal readiness for the next level
+- Syllabus files live at `System Design/Syllabus/00-SDE-1/`, `00-SDE-2/`, `00-SDE-3/`
+- SDE-2 `00-Syllabus.md` was created from scratch with full Required vs Stretch tables
+- SDE-1 has `11-Basic-Observability.md` added as a bonus strong hire signal topic
+- SDE-2 `07-Distributed-Systems.md` has quorum worked example, hinted handoff depth, read repair depth, and PACELC section added
+- SDE-2 `09-Supplementary-Topics.md` has OLTP/OLAP duplicate removed and Observability expanded with SLIs/SLOs/error budget depth
+- SDE-2 `10-Interview-Framework.md` has "What to Say When You Don't Know" section added
+- SDE-3 `02-Estimation.md` has Google-scale examples (1B+ DAU, cross-region bandwidth, CDN cost)
+- SDE-3 `04-Caching.md` has multi-region caching section added (cross-region invalidation, cache warming on failover)
+- SDE-3 `09-Observability.md` has multi-window alerting with burn rate math expanded
+- SDE-3 `08-Infrastructure-and-Reliability.md` has cost estimation + capacity planning section added
+
+**Product positioning (from Codex analysis):**
+- Differentiator: "level-calibrated, interview-calibrated understanding" — nobody else makes SDE-1 vs SDE-2 vs SDE-3 depth boundaries explicit
+- Compete against HelloInterview on teaching quality, not mocks
+- Compete against ByteByteGo on reasoning-first (naive → what breaks → why fix → new tradeoff), not diagrams
+- Core promise: "study exactly what your target level expects, nothing more, nothing less"
+
+**Current content status:**
+- SDE-2 notes exist (built during prep sessions)
+- SDE-1 and SDE-3 notes folders are empty — only syllabuses exist
+- Netflix case study is in progress — API Design, Peak Traffic, Fault Isolation, Final Design, Observability still missing
+
 ### Who the user is
 Complete beginner in System Design targeting **Google L4 / SDE-2 strong hire** in the design round for FANGM. No prior system design knowledge assumed — explain everything from scratch.
 
