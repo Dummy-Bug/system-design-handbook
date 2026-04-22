@@ -25,13 +25,6 @@
 - ACL (Access Control List) — per-resource permission list. More granular, more complex.
 - When to use RBAC vs ACL — RBAC for most apps, ACL when per-file or per-resource permissions needed (Google Drive, Dropbox)
 
-## Password Security
-- Never store plaintext passwords
-- Encryption vs hashing — why hashing is right for passwords (one-way)
-- Why MD5/SHA1 are wrong for passwords (too fast, rainbow tables)
-- bcrypt — slow by design (work factor), salt built-in
-- Salting — what it is, why it prevents precomputed rainbow table attacks
-
 ## Encryption
 - Encryption in transit — TLS everywhere, even internal services. What HTTPS provides.
 - Encryption at rest — AES-256 for sensitive data on disk (PII, financial data)
@@ -41,10 +34,3 @@
 - Why HTTP alone is not safe (plain text, man-in-the-middle)
 - What TLS does — encrypts the channel, verifies server identity via certificate
 - Certificates — what they prove (server is who it claims to be)
-- HSTS — forces HTTPS even if user types http://
-
-## Common Vulnerabilities (Awareness Level)
-- SQL injection — what it is, how parameterized queries prevent it
-- XSS (Cross-Site Scripting) — what it is, how output encoding prevents it
-- CSRF (Cross-Site Request Forgery) — what it is, how CSRF tokens prevent it
-- Principle of least privilege — services and users should only have the access they need

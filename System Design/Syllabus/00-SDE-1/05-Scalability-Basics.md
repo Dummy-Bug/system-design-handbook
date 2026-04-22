@@ -45,3 +45,36 @@
 - Replication lag — replica data can be slightly behind primary
 - Read-your-own-writes problem — user writes something, immediately reads it back from a lagged replica
 - Not a replacement for caching
+
+## Rate Limiting
+- What rate limiting is — controlling how many requests a client can make in a time window
+- Why it exists — protect servers from abuse, prevent one client from starving others, cost control
+
+**Token Bucket**
+- Bucket holds up to C tokens, refills at rate R tokens/sec
+- Each request consumes one token. If bucket is empty, request is rejected.
+- Allows burst up to C requests, then enforces sustained rate R
+- Most common algorithm — used by AWS, Stripe, most APIs
+
+**Fixed Window Counter**
+- Divide time into fixed windows (e.g. 1 min). Count requests in current window.
+- Reset counter when window resets.
+- Problem: a client can send 2× the limit by sending max requests at the end of one window and max again at the start of the next
+
+**Leaky Bucket (awareness)**
+- Requests enter a queue, processed at a constant rate. Excess requests are dropped.
+- Smooths out bursts — no spikes ever reach the server
+
+**Sliding Window (awareness)**
+- More accurate than fixed window — no boundary spike problem
+- Higher memory cost — store timestamp of every request
+
+**Distributed Rate Limiting**
+- Single server rate limiting doesn't work when you have 10 app servers
+- Solution — Redis `INCR` + `EXPIRE` as a shared atomic counter
+- All servers talk to the same Redis, so the limit is enforced globally
+
+**Rate Limit Headers**
+- `X-RateLimit-Limit` — max requests allowed in the window
+- `X-RateLimit-Remaining` — how many requests left
+- `Retry-After` — how many seconds until the window resets (returned with 429)

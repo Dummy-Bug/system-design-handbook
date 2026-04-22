@@ -6,11 +6,12 @@
 2. APIs
 3. Databases
 4. Caching
-5. Scalability Basics
+5. Scalability Basics (includes Rate Limiting)
 6. Storage
 7. Security Basics
 8. Back-of-Envelope Estimation
 9. Message Queues
+10. Interview Framework
 
 ## Case Studies
 
