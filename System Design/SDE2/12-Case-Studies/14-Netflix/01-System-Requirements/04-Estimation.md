@@ -1,4 +1,4 @@
-# Estimation — Netflix
+# Netflix Scale Estimations
 
 > See `03-Streaming-Concepts.md` for a full explanation of bitrate, bandwidth, throughput and latency in streaming vs non-streaming systems.
 

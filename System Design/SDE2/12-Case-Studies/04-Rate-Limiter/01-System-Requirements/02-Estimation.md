@@ -1,3 +1,5 @@
+# Rate Limiter Scale Estimations
+
 ### Starting point — Daily Active Users
 
 Assume the rate limiter is protecting a system at Google Search scale. Total internet users are roughly 5-6B, of which about 1B use Google Search regularly. Of those, 200M are daily active users.

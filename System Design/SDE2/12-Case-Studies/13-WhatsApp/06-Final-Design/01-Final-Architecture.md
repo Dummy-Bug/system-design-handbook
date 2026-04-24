@@ -1,3 +1,4 @@
+# WhatsApp Architecture
 
 > [!info] Final WhatsApp architecture — all deep dive decisions reflected
 > This is the complete system after all deep dives. Every component here was justified through an interview session. Nothing is added speculatively.

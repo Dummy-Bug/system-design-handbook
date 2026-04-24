@@ -1,4 +1,4 @@
-# Final Design — Notification System
+# Notification System Architecture
 
 ## Architecture Diagram
 

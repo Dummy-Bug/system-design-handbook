@@ -1,3 +1,4 @@
+# URL Shortener Architecture
 
 > [!info] The complete URL Shortener — end to end
 > This is the full system after every checkpoint. Not the base architecture — the production-ready design after caching, sharding, replication, peak traffic handling, fault isolation, and pre-generated keys. Every component is here with its justification.
