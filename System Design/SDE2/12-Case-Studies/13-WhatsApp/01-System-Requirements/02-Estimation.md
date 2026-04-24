@@ -1,10 +1,5 @@
 # WhatsApp Scale Estimations
 
-> [!info] The goal of estimation
-> Estimation is not about getting exact numbers. It is about understanding the scale of the system so every design decision that follows is justified. One server or hundreds? Do we need sharding? Is bandwidth even a concern? Estimation answers all of that before you draw a single box.
-
----
-
 ## Assumptions — always state these out loud
 
 ```
