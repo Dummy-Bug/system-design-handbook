@@ -1,6 +1,7 @@
+# What is a Notification System?
 
-> [!info] What is a Notification System?
-> A notification system is the infrastructure that sends messages to users across multiple channels — push notifications, SMS, and email — when something happens inside an application. It sits between your application's backend and the outside world, taking an internal event ("user got a new message") and translating it into a delivery across whichever channel the user prefers.
+> [!info] A notification system
+> Is the infrastructure that sends messages to users across multiple channels — push notifications, SMS, and email — when something happens inside an application. It sits between your application's backend and the outside world, taking an internal event ("user got a new message") and translating it into a delivery across whichever channel the user prefers.
 
 The problem it solves is simple: your app needs to reach users even when they aren't actively using it. When someone likes your Instagram photo, Instagram's backend fires an event. That event needs to find you — on your phone screen, in your inbox, or via a text — without the app being open. The notification system is what makes that possible.
 

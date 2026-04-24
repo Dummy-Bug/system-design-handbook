@@ -1,3 +1,5 @@
+# Key-Value Store Architecture
+
 ## Final Architecture — Everything Connected
 
 This is the complete architecture reflecting every deep dive decision. The base design was: client → LB → coordinator → hash → replicas → quorum → respond. Now every component has depth behind it.

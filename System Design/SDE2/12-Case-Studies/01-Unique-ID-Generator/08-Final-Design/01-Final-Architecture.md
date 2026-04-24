@@ -1,4 +1,4 @@
-# Final Architecture
+# Unique ID Generator Architecture
 
 ## Complete architecture
 

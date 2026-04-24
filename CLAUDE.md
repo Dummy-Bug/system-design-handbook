@@ -114,6 +114,15 @@ Each file uses this style:
 
 - No rigid section headings required — structure each file around how the concept naturally explains itself
 
+- **SEO-friendly H1 headings in every file** — the H1 (`#`) inside each file must be descriptive and search-friendly. Never use the file name as the heading. Examples:
+  - `00-What-Is-Instagram.md` → `# What is Instagram?`
+  - `01-FR.md` → `# Instagram Functional Requirements`
+  - `02-Estimation.md` → `# Instagram Scale Estimations`
+  - `03-NFR.md` → `# Instagram Non-Functional Requirements`
+  - `04-API.md` → `# Instagram API Design`
+  - `05-Base-Architecture.md` → `# Instagram Base Architecture`
+  - Deep dive files → `# Instagram <Topic> — <Subtopic>` (e.g. `# Instagram Feed — Fan-Out on Write vs Read`)
+
 
 
 ## How Case Study sessions work — follow this exactly
@@ -122,7 +131,7 @@ Each file uses this style:
 
   **The checkpoints for every case study (in order):**
 
-  0. **System Overview** — start every case study by explaining what the system is in plain English: what problem it solves, who uses it, and why it's an interesting design problem. Write a `00-System-Overview.md` file. This is part of the interview loop (not a separate pre-step) and comes before FR. Keep the explanation to 3-5 sentences + a real-world context callout.
+  0. **What Is X** — start every case study by explaining what the system is in plain English: what problem it solves, who uses it, and why it's an interesting design problem. Write a `00-What-Is-<SystemName>.md` file (e.g. `00-What-Is-Instagram.md`). This is part of the interview loop (not a separate pre-step) and comes before FR. Keep the explanation to 3-5 sentences + a real-world context callout.
 
   1. FR — Functional Requirements
 
@@ -146,9 +155,13 @@ Each file uses this style:
 
   2. **Debrief mode** — once the checkpoint is done, break character. Tell the user what they got right, what they missed, what was weak. Go as deep as needed on any concept they fumbled — one concept at a time, same interactive style as the study notes sessions.
 
-  3. **Notes mode** — write the notes for that checkpoint. Notes capture the ideal answer: what the user got right + what they missed + all concepts explained fully. Same narrative style as the rest of the wiki.
+  3. **User confirms understanding** — STOP. Do not write notes yet. Wait for the user to explicitly confirm they understood (e.g. "got it", "makes sense", "write the notes"). Never write notes before this confirmation.
 
-  4. **Next checkpoint** — only move to the next checkpoint after notes are written and user confirms.
+  4. **Notes mode** — only after user confirmation, write the notes for that checkpoint. Notes capture the ideal answer: what the user got right + what they missed + all concepts explained fully. Same narrative style as the rest of the wiki.
+
+  5. **Confirm notes written** — after writing the notes, explicitly tell the user the notes are done and ask if they are happy with them before moving on.
+
+  6. **Next checkpoint** — only move to the next checkpoint after the user confirms the notes are good.
 
   **Rules:**
 
@@ -175,6 +188,8 @@ Each file uses this style:
     07-Final-Design/
     08-Observability/
     ```
+
+  - **Never reference folders by number in notes.** Folder numbers can change. Always reference by name — write `Deep-Dives/` not `06-Deep-Dives/`, write `Final-Design/` not `07-Final-Design/`.
 
   - **Fault-Isolation is always the last subfolder in Deep-Dives.** It covers both the fault isolation strategy and all failure/edge case scenarios (component down, cascade failures, data corruption, etc.). There is no separate top-level Failures-And-Edge-Cases folder.
 

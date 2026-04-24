@@ -1,4 +1,4 @@
-# Final Design — Netflix
+# Netflix Architecture
 
 > [!info] Final Netflix architecture — all deep dive decisions reflected.
 > Every component here was justified through an interview session. Nothing is added speculatively.

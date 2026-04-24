@@ -1,8 +1,4 @@
-
-> [!info] The goal of estimation
-> Estimation is not about getting exact numbers. It is about understanding the scale of the system so every design decision that follows is justified. A single machine or a thousand? Cache or no cache? One DB or sharded? Estimation answers all of that.
-
----
+# URL Shortener Scale Estimations
 
 ## Assumptions — always state these out loud
 
