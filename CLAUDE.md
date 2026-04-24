@@ -189,6 +189,8 @@ Each file uses this style:
     08-Observability/
     ```
 
+  - **Never reference folders by number in notes.** Folder numbers can change. Always reference by name — write `Deep-Dives/` not `06-Deep-Dives/`, write `Final-Design/` not `07-Final-Design/`.
+
   - **Fault-Isolation is always the last subfolder in Deep-Dives.** It covers both the fault isolation strategy and all failure/edge case scenarios (component down, cascade failures, data corruption, etc.). There is no separate top-level Failures-And-Edge-Cases folder.
 
   - **Reference implementations:**
