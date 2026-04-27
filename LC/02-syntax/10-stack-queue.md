@@ -47,6 +47,7 @@ dq.peekLast();      // look at back
 
 ## Gotchas
 
+- `Deque` is an interface — `new Deque<>()` won't compile. Always instantiate as `new ArrayDeque<>()`
 - Never use `Stack` class — use `ArrayDeque` always
 - `pop()` / `poll()` return `null` (queue) or throw exception (stack) if empty — check `isEmpty()` first
 - Stack uses `push/pop/peek`, Queue uses `offer/poll/peek` — same `peek` for both

@@ -67,7 +67,7 @@ Notes are not private study material. They are published content on a public web
 
 **Notes must be narrative and conversational — not bullet points and definitions.**
 
-The gold standard is the Availability notes at `System Design/06-Storage-Databses/05-Key-Value-Stores`. Read those before writing any new notes. That is the style to match.
+The gold standard is the Instagram Feed Generation deep dive at `System Design/SDE2/12-Case-Studies/08-Instagram/02-Deep-Dives/01-Feed-Generation/`. Read those before writing any new notes. That is the style to match.
 
 The user reads notes to revise — they must be able to understand the concept completely from the notes alone, without needing to remember the conversation. This means:
 
@@ -79,7 +79,7 @@ The user reads notes to revise — they must be able to understand the concept c
 - **Do not compress or summarise.** A note that says "schema-on-read means structure interpreted at read time" is useless. The note should explain it the way you explained it in the session — with the full reasoning, the full example, the full trade-off discussion.
 - **Write for a reader who has forgotten the conversation.** Every concept should be self-contained and fully explained.
 - **Write for a stranger who never had the conversation.** The note is published on leetdezine.com. The reader found it via Google. They have no idea who you are, what was discussed, or what came before. If the note only makes sense with context from the session, it fails as published content.
-- **Notes must follow Socratic teaching style.** Don't just state conclusions — raise the problem first, let the reader feel the tension, then reveal the answer. Structure each section as: here's the naive approach → here's the question it raises → here's where it breaks → here's the insight that fixes it. The reader should feel like they're being walked through the reasoning, not handed a reference manual.
+- **Notes must follow narrative reasoning style — not fake Socratic.** Pure Socratic (raise question → pause → answer) works in a live conversation but feels forced in writing when you answer your own questions immediately. Instead, use **narrative with embedded reasoning**: walk the reader through the thought process naturally. Show the naive approach, show where it breaks using real numbers, then reveal the fix. The reader should arrive at the conclusion themselves — not because you asked them a question, but because the story built up to it. Never state conclusions upfront. Never ask rhetorical questions and immediately answer them. Build to the answer through reasoning.
 
 **Interview question file format:**
 - Each question uses `> [!question]` callout

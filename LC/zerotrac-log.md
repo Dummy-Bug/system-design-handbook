@@ -26,7 +26,7 @@ Look at **rolling last 10** in current range:
 | # | Date | Problem | Rating | AC <30min | Day+7 re-solve | Pattern | Stuck on |
 |---|------|---------|--------|-----------|----------------|---------|----------|
 | 1 | 2026-04-27 | Minimum Operations to Reach Target Array | 1492 | Y | — (due 2026-05-04) | ad-hoc / set-dedupe | — |
-| 2 |  |  |  |  |  |  |  |
+| 2 | 2026-04-27 | Minimum Distance Between Three Equal Elements II | 1450-1500 | N (32 min) | — (due 2026-05-04) | math-reduction / greedy-on-indices | Java: new Deque<>() doesn't compile (interface), getOrDefault syntax rusty |
 | 3 |  |  |  |  |  |  |  |
 | 4 |  |  |  |  |  |  |  |
 | 5 |  |  |  |  |  |  |  |
