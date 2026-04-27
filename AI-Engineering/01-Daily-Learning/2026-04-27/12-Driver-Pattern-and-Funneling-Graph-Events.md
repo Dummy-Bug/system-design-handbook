@@ -127,7 +127,7 @@ Both sources write to the same queue. The consumer reads from one place and neve
 ```mermaid
 graph LR
     N[Node] -->|ctx.emit during execution| Q[(asyncio.Queue)]
-    D[Driver task] -->|ctx.emit on interrupt or terminal| Q
+    D[Driver task] -->|ctx.emit on interrupt| Q
     Q -->|await get| C[Consumer]
     C -->|yield serialize| F[Frontend]
 ```
@@ -159,4 +159,4 @@ sequenceDiagram
 
 ## Mental Model To Remember
 
-> [!info] Nodes own their events — they emit directly via `ctx.emit()` during execution. The driver owns graph-level signals — it watches the stream and translates `__interrupt__` and `terminal_response` into queue events. One queue, two writers, one reader. The consumer never needs to know which source an event came from.
+> [!info] Nodes own their events — they emit directly via `ctx.emit()` during execution. The driver owns graph-level signals — it watches the stream and translates `__interrupt__` into a queue event. One queue, two writers, one reader. The consumer never needs to know which source an event came from.
