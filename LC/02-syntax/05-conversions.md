@@ -12,6 +12,9 @@ String s = String.valueOf(123);    // 123 → "123"
 char[] chars = "hello".toCharArray();   // "hello" → ['h','e','l','l','o']
 String s = new String(chars);           // ['h','e','l','l','o'] → "hello"
 String s = String.valueOf(chars);       // same — both work
+
+// ⚠️ DO NOT do this — silent bug, returns "[C@1540e19d"
+String wrong = chars.toString();        // Object.toString() — NOT the string content
 ```
 
 ## char ↔ String
@@ -89,6 +92,34 @@ for (int n : nums) {
 }
 ```
 
+## Character Utility Methods
+
+```java
+Character.isDigit('5')          // true  — '0'–'9'
+Character.isLetter('a')         // true  — letters only
+Character.isLetterOrDigit('_')  // false — alphanumeric check
+Character.isUpperCase('A')      // true
+Character.isLowerCase('a')      // true
+Character.isWhitespace(' ')     // true  — space, tab, newline
+
+Character.toLowerCase('A')      // 'a'
+Character.toUpperCase('a')      // 'A'
+
+Character.getNumericValue('5')  // 5    — char digit → int (only for digits)
+// for plain digit chars, c - '0' is faster and idiomatic:
+int d = '5' - '0';              // 5
+```
+
+**Common LC pattern — clean a string to alphanumeric lowercase:**
+```java
+StringBuilder sb = new StringBuilder();
+for (char c : s.toCharArray()) {
+    if (Character.isLetterOrDigit(c)) {
+        sb.append(Character.toLowerCase(c));
+    }
+}
+```
+
 ## Quick Reference Table
 
 | From | To | Method |
@@ -151,6 +182,7 @@ Long.MIN_VALUE   // -9223372036854775808
 
 - `Integer.parseInt` not `Integer.valueOf` for String → int (valueOf returns `Integer` object)
 - `new String(chars)` and `String.valueOf(chars)` both work for char[] → String
+- **Never call `.toString()` on a `char[]`** — it returns the Object hash (e.g. `[C@1540e19d`), not the string. Silent bug, no compile error. Use `new String(chars)`.
 - `Arrays.asList` returns fixed-size list — wrap in `new ArrayList<>()` if you need to modify
 - Always use `Integer.MAX_VALUE` / `Integer.MIN_VALUE` to init min/max, never hardcode
 - `Math.pow` and `Math.sqrt` return `double` — cast to `int` if needed

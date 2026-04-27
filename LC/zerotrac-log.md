@@ -21,11 +21,11 @@ Look at **rolling last 10** in current range:
 
 ---
 
-## Range 1450-1500 (started: ___)
+## Range 1450-1500 (started: 2026-04-27)
 
 | # | Date | Problem | Rating | AC <30min | Day+7 re-solve | Pattern | Stuck on |
 |---|------|---------|--------|-----------|----------------|---------|----------|
-| 1 |  |  |  |  |  |  |  |
+| 1 | 2026-04-27 | Minimum Operations to Reach Target Array | 1492 | Y | — (due 2026-05-04) | ad-hoc / set-dedupe | — |
 | 2 |  |  |  |  |  |  |  |
 | 3 |  |  |  |  |  |  |  |
 | 4 |  |  |  |  |  |  |  |
