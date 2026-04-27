@@ -19,19 +19,19 @@ Locked Apr 2026. Optimized for 1-year DSA grind + LeetDezine + AI work at startu
 | 8:00-9:30 | LC — zerotrac medium (rating range per month, see progression below) |
 | 9:30-10:30 | Breakfast + commute |
 | 10:30-11:00 | Office settle + coffee |
-| 11:00-19:00 | Office (AI / LangGraph) |
+| 11:00-19:00 | Office |
 | 19:00-19:30 | Commute home |
 | 19:30-19:50 | Nap (20 min hard cap) |
 | 19:50-20:30 | Dinner |
 | 20:30-21:30 | Study #1 (low energy — editorials, reading, LeetDezine writing) |
 | 21:30-22:00 | Home talk / extras |
-| 22:00-23:30 | Study #2 (high energy — system design, LangGraph, contest upsolve) |
+| 22:00-23:30 | Study #2 (high energy — system design, contest upsolve) |
 | 23:30-00:00 | Fiancée call + wind down |
 | 00:00 | Sleep |
 
 **Energy match:**
 - Study #1 = passive consumption (read editorial of morning's LC, system design article, blog draft)
-- Study #2 = active output (system design case study, LangGraph experiment, hard problem)
+- Study #2 = active output (system design case study, hard problem)
 
 ## Wednesday (WFH + virtual contest)
 
