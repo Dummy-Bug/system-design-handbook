@@ -32,7 +32,7 @@ event_queue.put_nowait(event)
 ```
 
 > [!danger] What breaks
-> Two users hit `/chat` at the exact same moment. Both pipelines run concurrently in the same Python process. Both push into the same queue. The streaming service for User A reads events for User B. User A sees User B's data on screen. PII leak, broken UX, potential security incident.
+> Two users hit the streaming endpoint at the exact same moment. Both pipelines run concurrently in the same Python process. Both push into the same queue. The streaming service for User A reads events for User B. User A sees User B's data on screen. PII leak, broken UX, potential security incident.
 
 A module-level global means **one queue for the entire process** — all requests share it. There's no way for the consumer to tell "this event belongs to my request."
 
