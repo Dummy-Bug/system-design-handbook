@@ -18,18 +18,25 @@ The problem isn't that the work is too expensive — it's that the user is waiti
 
 The fix is to separate the two concerns entirely. The post API does exactly two things: save the post to the DB, and return success to the user. Fan-out happens asynchronously in the background.
 
-```
-User posts photo
-      ↓
-API saves post to DB
-      ↓
-API drops a message onto a queue  →  returns success to user immediately
-                                              ↓
-                                    Fan-out worker picks up message
-                                              ↓
-                                    Fetches all followers from DB
-                                              ↓
-                                    Pushes post into each follower's Redis sorted set
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant API as Post API
+    participant DB as Database
+    participant SQS as SQS Queue
+    participant W as Fan-Out Worker
+    participant R as Redis (Follower Feeds)
+
+    U->>API: POST /upload photo
+    API->>DB: Save post (post_id, user_id, media_url, timestamp)
+    API->>SQS: Enqueue {post_id, user_id}
+    API-->>U: 200 OK (instant)
+
+    SQS->>W: Deliver message {post_id, user_id}
+    W->>DB: Fetch all followers of user_id
+    loop For each follower
+        W->>R: ZADD feed:{follower_id} timestamp post_id
+    end
 ```
 
 The user's post is live the moment the DB write completes. Feed updates propagate in the background — the user never waits for them.
