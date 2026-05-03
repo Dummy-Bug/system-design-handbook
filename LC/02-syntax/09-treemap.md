@@ -25,8 +25,10 @@ tm.put(1, 'a'); tm.put(3, 'b'); tm.put(5, 'c'); tm.put(7, 'd');
 
 tm.firstKey();     // 1 — smallest key
 tm.lastKey();      // 7 — largest key
-tm.floorKey(4);    // 3 — largest key ≤ 4
-tm.ceilingKey(4);  // 5 — smallest key ≥ 4
+tm.floorKey(4);    // 3 — largest key ≤ 4  (inclusive)
+tm.ceilingKey(4);  // 5 — smallest key ≥ 4 (inclusive)
+tm.lowerKey(4);    // 3 — largest key < 4  (exclusive)
+tm.higherKey(4);   // 5 — smallest key > 4 (exclusive)
 ```
 
 ## Iteration

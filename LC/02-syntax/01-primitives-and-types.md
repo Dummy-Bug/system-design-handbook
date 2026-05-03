@@ -49,6 +49,25 @@ Use `long` when:
 long result = (long) a * b;  // cast one operand, Java promotes the rest
 ```
 
+## Ceiling Division
+
+Two ways to compute `ceil(a / b)`:
+
+```java
+// Option 1 — cast to double (readable)
+(int) Math.ceil((double) a / b)
+
+// Option 2 — pure integer (faster, no floating point)
+(a + b - 1) / b
+```
+
+**Why `Math.ceil(a / b)` is wrong:**
+`a / b` is integer division — remainder is discarded before `ceil` even runs.
+`7 / 3 = 2` → `Math.ceil(2) = 2` (wrong, should be 3).
+`(double)7 / 3 = 2.333` → `Math.ceil(2.333) = 3` (correct).
+
+Rule: `Math.ceil` is useless unless the input is already a decimal.
+
 ## Gotchas
 
 - `Char` doesn't exist → use `char` or `Character`

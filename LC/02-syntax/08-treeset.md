@@ -24,8 +24,10 @@ TreeSet<Integer> ts = new TreeSet<>(Arrays.asList(1, 3, 5, 7, 9));
 
 ts.first();       // 1 — smallest
 ts.last();        // 9 — largest
-ts.floor(6);      // 5 — largest element ≤ 6
-ts.ceiling(6);    // 7 — smallest element ≥ 6
+ts.floor(6);      // 5 — largest element ≤ 6  (inclusive)
+ts.ceiling(6);    // 7 — smallest element ≥ 6 (inclusive)
+ts.lower(6);      // 5 — largest element < 6  (exclusive)
+ts.higher(6);     // 7 — smallest element > 6 (exclusive)
 ```
 
 ## Iteration

@@ -15,6 +15,54 @@ String.valueOf('a')      // "a" — char → String
 "hello" + "world"        // "helloworld" — avoid in loops, use StringBuilder
 ```
 
+## indexOf — all variants
+
+```java
+String s = "leetcode";
+
+s.indexOf('e')           // 1    — first occurrence of char, -1 if not found
+s.indexOf('e', 2)        // 2    — first occurrence of char at or after index 2
+s.indexOf("eet")         // 1    — first occurrence of substring, -1 if not found
+s.indexOf("eet", 2)      // -1   — first occurrence of substring at or after index 2
+s.lastIndexOf('e')       // 2    — last occurrence of char
+s.lastIndexOf('e', 1)    // 1    — last occurrence of char at or before index 1
+```
+
+- Always returns `-1` if not found — always null-check before using the result
+- Second argument is the **starting index** (inclusive) to search from
+- Safe to pass `fromIndex > s.length()` — just returns `-1`
+
+## substring — all variants
+
+```java
+String s = "leetcode";
+
+s.substring(4)           // "code"  — index 4 to end
+s.substring(2, 6)        // "etco"  — index 2 to 5 (end is exclusive)
+s.substring(0, s.length()) // "leetcode" — full string copy
+s.substring(i, i+1)      // single char as String (when you need String not char)
+```
+
+- `end` is **exclusive** — always
+- `substring(i, i)` returns `""` — empty string, no exception
+- `substring(s.length())` returns `""` — no exception
+
+## split — all variants
+
+```java
+String s = "a,b,c";
+
+s.split(",")             // ["a", "b", "c"] — split on literal char
+s.split("\\.")           // split on dot — must escape regex special chars: . * + ? | ( ) [ ] { } ^ $
+s.split(" ")             // ["a", "b", "c"] — split on space
+s.split("", 3)           // limit: at most 3 parts — ["a", ",b,c"] if limit=2
+s.split("")              // split every char — ["a", ",", "b", ",", "c"]
+```
+
+- Returns `String[]` — iterate with for-each or index
+- Special regex chars (`.`, `*`, `+`, `|`) must be escaped with `\\`
+- For simple single-char splits, `indexOf` in a loop is faster and cleaner than `split`
+
 ## String vs StringBuilder vs StringBuffer
 
 | | Mutable | Use in LC |

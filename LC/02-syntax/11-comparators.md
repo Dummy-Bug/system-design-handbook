@@ -43,6 +43,18 @@ Arrays.sort(intervals, (a, b) -> {
 
 **Rule:** multi-line lambda needs `{}` and `return`. Single-line needs neither.
 
+## Tie-break pattern (most common in LC)
+
+```java
+// sort by first element, break ties by second element — both ascending
+Arrays.sort(buildings, (a, b) -> a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]);
+
+// sort by first ascending, second descending on tie
+Arrays.sort(buildings, (a, b) -> a[0] != b[0] ? a[0] - b[0] : b[1] - a[1]);
+```
+
+**Rule:** `a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]` — memorise this exact shape.
+
 ## Gotchas
 
 - Never use `a - b` for comparison — can overflow if values are near `Integer.MIN_VALUE`
