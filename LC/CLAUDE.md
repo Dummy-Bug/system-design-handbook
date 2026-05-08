@@ -62,9 +62,9 @@ O(?) time, O(?) space.
 ### virtual-contest-log.md
 Log by contest. Include Q1/Q2/Q3/Q4 result (Y/N/S), what you were stuck on for each N, and upsolve due date.
 
-## Current grind state (as of 2026-05-03)
+## Current grind state (as of 2026-05-07)
 
-- **Active zerotrac range:** 1500-1550 (7/9 clean ACs, rolling window almost full)
+- **Active zerotrac range:** 1600-1650 (graduated from 1550-1600 on 2026-05-07, 10/10 first-try AC)
 - **Revision due:** Week 1 of 1450-1500 batch — to be done before next new-problem week
 - **Contest rating:** ~1530 (frozen, returning after gap)
 - **Projection:** ~1680 by Dec 2026 if protocol holds
@@ -77,3 +77,22 @@ Log by contest. Include Q1/Q2/Q3/Q4 result (Y/N/S), what you were stuck on for e
 4. **Pool separation** — zerotrac = last 6 months of contests. Virtual contest = 12+ months old. Never mix
 5. **Two-week revision lock** — revision is batched, not daily. Week N's problems get revised in Week N+2, *before* any Week N+2 new problem is started. Revision = approach recall only (5-10 min per problem), not full re-solve. Hard fails get a full cold re-solve + Day+14-from-now retry.
 6. **Graduation** — bump range +50 only when rolling last 10 hits ≥7/10 first-try AC AND ≥8/10 revision (Pass + Soft fail combined), independently. See `zerotrac.md` for Pass / Soft fail / Hard fail definitions.
+
+## Derivation-over-speed clause (current phase)
+
+The user's diagnosed gap is **derivation muscle**, not pattern recognition (567 solved but mostly watched). For the current phase, self-derived ACs that overshoot the 30-min cap **count as passes for graduation**, provided no editorial/hint was used. The time overshoot is the price of training the exact muscle that was missing.
+
+**How to apply:**
+- Self-derived AC at any time → counts as pass
+- AC reached only after editorial/hint → counts as fail (cap rule still applies for hint-gating)
+- Speed pressure is trained separately via virtual contests (90-min, 4 problems) — not via the 30-min cap on practice
+
+**Expiry triggers — clause holds until BOTH are true:**
+1. Active zerotrac band reaches **1800-1850** (per zerotrac data this is the first band that is ~100% Q3 — meaning derivation is being trained at the level needed for contest Q3 solves; 1600-1700 is still mostly Q2, 1750-1800 is 50/50)
+2. Virtual contests consistently 3-solved (Q1+Q2+Q3) within 90-min window
+
+Once both are true, strict 30-min cap returns — because at that point speed is the binding constraint, not derivation.
+
+**Q4 note:** Q4-rated problems (~1900+) are out of scope for the 1700 target; that's an SDE-3/FAANG concern for 2028.
+
+When deciding graduation, do NOT silently relax the rule — call out which ACs were over-cap, then explicitly apply this clause.
