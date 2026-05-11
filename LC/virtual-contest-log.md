@@ -24,7 +24,12 @@
 
 ## Log
 
-### VC #1 — Biweekly Contest 152 (pool violation, doesn't count)
+### Biweekly Contest 152 (12+ months old, pool violation)
+**Status:** Doesn't count — was too recent when logged
+
+---
+
+### VC #1 — Biweekly Contest 152
 **Date:** 2026-04-29
 **Q1 — Unique 3-Digit Even Numbers** ([link](https://leetcode.com/problems/unique-3-digit-even-numbers/description/)) — N, 80 min total, solved on hint (three nested loops).
 

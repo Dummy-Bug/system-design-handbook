@@ -55,13 +55,32 @@ String s = "a,b,c";
 s.split(",")             // ["a", "b", "c"] — split on literal char
 s.split("\\.")           // split on dot — must escape regex special chars: . * + ? | ( ) [ ] { } ^ $
 s.split(" ")             // ["a", "b", "c"] — split on space
+s.split(" \\| ")         // split on " | " (space-pipe-space) — alternation OR
 s.split("", 3)           // limit: at most 3 parts — ["a", ",b,c"] if limit=2
 s.split("")              // split every char — ["a", ",", "b", ",", "c"]
 ```
 
 - Returns `String[]` — iterate with for-each or index
 - Special regex chars (`.`, `*`, `+`, `|`) must be escaped with `\\`
+- Alternation: `"a|b"` matches `a` OR `b` — use `\\|` to escape the pipe
 - For simple single-char splits, `indexOf` in a loop is faster and cleaner than `split`
+
+## join — concatenate array/list into string
+
+```java
+String[] arr = {"a", "b", "c"};
+List<String> list = Arrays.asList("x", "y", "z");
+
+String.join(",", arr)           // "a,b,c" — join array with separator
+String.join(",", list)          // "x,y,z" — join list with separator
+String.join("", arr)            // "abc" — no separator
+String.join(" | ", "a", "b")    // "a | b" — varargs, pass strings directly
+```
+
+- Returns `String` — the concatenated result
+- Separator goes **between** elements, not at start/end
+- Works with `String[]`, `List<String>`, or varargs
+- Faster and cleaner than manual `StringBuilder` loops for joining collections
 
 ## String vs StringBuilder vs StringBuffer
 
