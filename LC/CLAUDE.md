@@ -151,6 +151,17 @@ If any of these fail, point it out and show the cleaner version.
 
 ---
 
+## Problem solving session — Claude's role
+
+**During active problem solving, Claude's ONLY job is to log what the user is thinking.**
+
+- No hints. No nudges. No questions. No observations. No "interesting approach" commentary.
+- Stay completely silent unless the user explicitly asks for help.
+- When the user says "log it" or shares their thinking, record it faithfully.
+- Help is given ONLY when the user says "help" or explicitly asks a question.
+
+---
+
 ## Contest logging and upsolving protocol
 
 ### Three separate contest logs (do NOT mix):
