@@ -65,10 +65,10 @@ O(?) time, O(?) space.
 ### virtual-contest-log.md
 Log by contest. Include Q1/Q2/Q3/Q4 result (Y/N/S), what you were stuck on for each N, and upsolve due date.
 
-## Current grind state (as of 2026-05-07)
+## Current grind state (as of 2026-05-16)
 
-- **Active zerotrac range:** 1600-1650 (graduated from 1550-1600 on 2026-05-07, 10/10 first-try AC)
-- **Revision due:** Week 1 of 1450-1500 batch — to be done before next new-problem week
+- **Active zerotrac range:** 1700-1750 (graduated from 1650-1700 on 2026-05-16 — 7/10 first-try AC, 9/10 pass+soft-fail)
+- **Revision due:** 1650-1700 batch — due 2026-05-30 (before any 1700-1750 Week 3 problems)
 - **Contest rating:** ~1530 (frozen, returning after gap)
 - **Projection:** ~1680 by Dec 2026 if protocol holds
 
