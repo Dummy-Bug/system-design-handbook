@@ -10,7 +10,7 @@ A reference for predicting whether your code will pass on LeetCode before you su
 
 LC typical time limit: 1–2 seconds → effective budget is ~2×10⁸ ops total.
 
-If your estimated total operations exceed this → **TLE is guaranteed**.
+If your estimated total operations exceed this → **TLE is guaranteed** 
 
 ---
 
@@ -177,36 +177,3 @@ Often you only need the latest state, not the full history.
 
 Each boxed `Integer` is ~16 bytes vs 4 for `int`. If you're storing 10⁷+ small ints, switch to `int[]` or use a bitset.
 
----
-
-## The 5-second pre-submit checklist
-
-Before clicking submit:
-
-- [ ] What is the max input size?
-- [ ] What's my total ops? (Sum across all loops, not just the inner one)
-- [ ] Is total ops ≤ 2×10⁸?
-- [ ] Is my memory ≤ 256 MB?
-- [ ] Am I scanning a range that's too large (`l..r` when `r ≥ 10⁸`)?
-- [ ] Am I using `Math.pow` for integer powers? (Floating-point error risk)
-- [ ] Am I using `ArrayList<Integer>` where `int[]` works?
-
----
-
-## What to do when you suspect TLE / MLE mid-contest
-
-1. **Don't patch locally.** Patching `getPower` → `Math.pow` doesn't fix a 10⁹-iter scan.
-2. **Identify the largest term in your ops sum.** Whichever loop is the biggest — that's where the architectural fix goes.
-3. **Ask: can I merge two passes into one?** (E.g., merging "build set, then scan range" → "count while generating.")
-4. **Ask: can I derive candidates instead of enumerating the range?** (Math, sieve, prefix sums.)
-5. **Ask: can my data structure be simpler?** (HashMap → array, ArrayList → primitive array.)
-
----
-
-## Reference incident
-
-This file exists because of **Weekly Contest 502 Q2** (`contest/weekly-502-q2-count-kth-roots.md`). The TLE was a final-loop `for (int i = l; i <= r; i++)` over `[0, 10⁹]`. I had the right candidates (only ~31623 of them) but didn't trust them — scanned the full range to "verify."
-
-The fix was architectural: merge counting INTO generation. One loop. ~31623 iterations.
-
-The cost was Q2 in a live contest, and a confidence dip ("13k AC, I'm cooked"). Both avoidable with this pre-submit checklist.

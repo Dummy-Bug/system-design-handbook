@@ -71,5 +71,4 @@ Rule: `Math.ceil` is useless unless the input is already a decimal.
 ## Gotchas
 
 - `Char` doesn't exist → use `char` or `Character`
-- `s.charAt(i)` takes index `i`, not a char variable
 - Cast one operand to `long` before multiplication, not after
