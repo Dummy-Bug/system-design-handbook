@@ -45,3 +45,20 @@ Real LC contests. Every Sunday 8:00-9:30 AM.
 **Upsolve due:** 2026-05-24
 
 ---
+
+### Weekly Contest 502
+**Date:** 2026-05-17
+**Q1 —** Y (in-contest AC)
+**Q2 —** [Count K-th Roots in a Range](https://leetcode.com/problems/count-k-th-roots-in-a-range/) — N, TLE during contest (also MLE on an earlier attempt). 13k+ users AC'd it. Eventually AC'd post-contest.
+- **Stuck on:** Did NOT see that final loop `for (int i = l; i <= r; i++) if (set.contains(i)) count++` was the TLE source — l=0, r=10⁹ → 1 billion iterations. Had the right candidates generated in the set (only ~31623 entries for k=2) but didn't trust them — scanned the full [l, r] range to "verify." Patched local bugs (broken `getPower`, then `Math.pow` cast) without ever questioning whether the final scan should exist at all.
+- **Misconception that caused it:** Thought 10⁹ Java iterations would AC. Actual Java ceiling is ~10⁸ ops/sec.
+- **Upsolve:** 2026-05-17 (AC) — fix is architectural: merge counting INTO the generation loop. No set, no re-scan. Loop bounded by `r^(1/k)` ≤ 31623. Also: never use `Math.pow` for integer powers — floating-point error gives `999999999` instead of `10⁹`. Use long integer multiplication with early-break on overflow.
+**Q3 —** S (didn't attempt — Q2 ate the time)
+**Q4 —** S (didn't attempt)
+
+**Upsolve due:** 2026-05-31
+
+**Lessons logged separately:**
+- `contest/weekly-502-q2-count-kth-roots.md` — full deep dive on the bug pattern + 10⁸ ceiling cheat-sheet + n → complexity table
+
+---
