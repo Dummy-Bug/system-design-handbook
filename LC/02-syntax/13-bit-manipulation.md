@@ -168,6 +168,74 @@ Long.toBinaryString(mask);
 
 ---
 
+## Packing two ints into one long — the bit-packing trick
+
+Common pattern when you need a hashable key for an `(int x, int y)` pair (e.g., 2D coordinates in a HashSet). Idea: a `long` is 64 bits, an `int` is 32 bits → both fit, x in the top half, y in the bottom half.
+
+### The naive attempt (broken)
+
+```java
+long key = ((long) x << 32) | y;   // WRONG when y is negative
+```
+
+Two pieces of context needed to understand why this breaks:
+
+**1. Why `(long)` before the shift.**
+
+`x << 32` operates on an `int`. Java's int shifts are taken modulo 32, so `x << 32` is `x << 0` = x unchanged. The cast forces a 64-bit shift, which actually moves x into bits 32-63.
+
+**2. Why OR-ing `y` directly breaks for negatives.**
+
+When `y` (an `int`) is widened to a `long` for the OR operation, Java performs **sign extension** — it copies the sign bit into all the new upper bits.
+
+```
+y = -1 as int                 1111 1111 1111 1111 1111 1111 1111 1111  (32 ones)
+y widened to long             1111...1111 1111 1111 1111 1111 1111 1111 1111 1111  (64 ones)
+```
+
+Concrete collision: `(x = 0, y = -1)` and `(x = -1, y = -1)` both produce the all-ones long. Different pairs, same key — dedup fails.
+
+### The fix — zero out y's upper 32 bits before OR-ing
+
+Three equivalent ways, ordered most-readable → most-cryptic:
+
+**Cleanest — use `Integer.toUnsignedLong`:**
+```java
+long key = ((long) x << 32) | Integer.toUnsignedLong(y);
+```
+The JDK built-in widens int to long treating the int as unsigned — no sign extension. Reads like English. **Preferred.**
+
+**Computed mask:**
+```java
+long key = ((long) x << 32) | ((long) y & ((1L << 32) - 1));
+```
+Mask is `(1L << 32) - 1` — a long with the lower 32 bits set, upper 32 zero. AND-ing zeros out the extended sign bits.
+
+**Hex literal mask:**
+```java
+long key = ((long) x << 32) | ((long) y & 0xFFFFFFFFL);
+```
+Same as above, mask written as a hex literal. Most compact, least obvious to readers.
+
+### Why this is unique
+
+After the fix:
+- Top 32 bits of `key` = exactly the 32-bit pattern of `x`
+- Bottom 32 bits of `key` = exactly the 32-bit pattern of `y`
+
+Every distinct `(x, y)` produces a distinct long, regardless of sign. No range constants needed — works for any int values.
+
+### When to use vs the multiplication trick
+
+| Trick | Needs constant | Sign-safe | Speed |
+|---|---|---|---|
+| Multiplication `x * R + y` | Yes (R ≥ y range) | Yes (if R big enough) | Fast |
+| Bit pack `(x << 32) \| toUnsignedLong(y)` | No | Yes | Fastest |
+
+Bit pack wins when you don't know or don't want to compute the value range. Multiplication wins when the range is small and obvious (e.g., 200001 for `±10⁵` coords).
+
+---
+
 ## When to extract vs inline
 
 These methods are cheap — always inline them. Don't wrap `Integer.bitCount(n)` in a helper called `popcount(n)`. The JDK method names are the standard contest vocabulary; readers (and future you) already know them.
