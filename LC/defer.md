@@ -42,3 +42,15 @@ After each, force yourself to answer out loud:
 **Suggested order:** 202 → 1015 → 142 → 287 → 957.
 
 After 287 and 957, you should start spotting this structure in problems where it isn't obvious. That's the real win.
+
+---
+
+## Pointers to standalone deferred plans
+
+These are full deferred curricula with their own files — not problem queues like the sections above. They have detailed resume triggers, gap analysis, and ladders.
+
+| File | Topic | Resume trigger |
+|------|-------|----------------|
+| [math-plan.md](math-plan.md) | Algebra / inequality derivation / abs-value mechanics | Zerotrac ≥ 1700 OR 3+ contests blocked by math derivation |
+| [bitmask-plan.md](bitmask-plan.md) | Bitmask DP, TSP-shape, submask enumeration | Zerotrac ≥ 1900-2000 OR 3+ band problems blocked by unrecognised bitmask DP |
+
