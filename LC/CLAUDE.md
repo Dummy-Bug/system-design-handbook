@@ -91,12 +91,14 @@ The user's diagnosed gap is **derivation muscle**, not pattern recognition (567 
 - Speed pressure is trained separately via virtual contests (90-min, 4 problems) — not via the 30-min cap on practice
 
 **Expiry triggers — clause holds until BOTH are true:**
-1. Active zerotrac band reaches **1800-1850** (per zerotrac data this is the first band that is ~100% Q3 — meaning derivation is being trained at the level needed for contest Q3 solves; 1600-1700 is still mostly Q2, 1750-1800 is 50/50)
+1. Active zerotrac band reaches **1950-2000** (raised from 1800-1850 on 2026-05-18). Reasoning: contest data shows the actual gap is Q3 capability (1700-2100 rated problems, never solved in recent contests), not Q2 speed. Q3 derivation muscle is the binding constraint. Speed is trained separately via virtual contests; the cap doesn't need to bind on the practice track until Q3 derivation is deep — i.e., comfortable at 1950-2000.
 2. Virtual contests consistently 3-solved (Q1+Q2+Q3) within 90-min window
 
 Once both are true, strict 30-min cap returns — because at that point speed is the binding constraint, not derivation.
 
-**Q4 note:** Q4-rated problems (~1900+) are out of scope for the 1700 target; that's an SDE-3/FAANG concern for 2028.
+**Trade-off accepted by raising the threshold to 1950-2000:** extends the derivation-clause runway by 3 bands (1800-1850, 1850-1900, 1900-1950). Cost is that speed under cap doesn't get trained on the practice track during these bands — must be aggressively trained via virtual contests (target 1+/week minimum) and real contests (weekly, already in cadence). If virtual contest Q3 stays unsolved at the 90-min mark across 4+ consecutive contests while zerotrac progresses through 1800-1950, revisit this threshold — derivation alone isn't translating to contest output.
+
+**Q4 note:** Q4-rated problems (~2100+) are out of scope for the 1700 target; that's an SDE-3/FAANG concern for 2028. The 1800-2100 zerotrac range maps to contest Q3, which is the current rating bottleneck.
 
 When deciding graduation, do NOT silently relax the rule — call out which ACs were over-cap, then explicitly apply this clause.
 
