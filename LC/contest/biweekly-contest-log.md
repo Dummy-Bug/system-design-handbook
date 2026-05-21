@@ -80,33 +80,3 @@ return min(cost1, cost2, cost3, cost4);
 > List them. Compute cost to reach each. Take the minimum.
 > This is **enumerating valid outputs** — top-down, not bottom-up.
 
----
-
-## Full Solution
-
-```java
-class Solution {
-    public int minFlips(String s) {
-        int n = s.length();
-        int ones = 0;
-        for (char c : s.toCharArray()) if (c == '1') ones++;
-        int zeros = n - ones;
-
-        int cost1 = ones;
-        int cost2 = zeros;
-        int cost3 = ones == 0 ? 1 : ones - 1;
-
-        int cost4 = Integer.MAX_VALUE;
-        if (n >= 2) {
-            int middleOnes = ones
-                - (s.charAt(0) == '1' ? 1 : 0)
-                - (s.charAt(n-1) == '1' ? 1 : 0);
-            cost4 = (s.charAt(0) == '0' ? 1 : 0)
-                  + (s.charAt(n-1) == '0' ? 1 : 0)
-                  + middleOnes;
-        }
-
-        return Math.min(Math.min(cost1, cost2), Math.min(cost3, cost4));
-    }
-}
-```
