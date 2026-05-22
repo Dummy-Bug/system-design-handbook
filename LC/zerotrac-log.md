@@ -77,3 +77,29 @@
 | Pattern | Regret-based greedy — max-heap, push all, pop max at each '1' |
 | Revision due | 2026-06-03 |
 | Remark | Swap moves '1' LEFT → i-th '1' must end at q_i ≤ p_i. Max-heap holds "still available" values; popping at each '1' picks best remaining. Pops don't form literal assignment but sum is realizable by exchange. Family: IPO, Course Schedule III, Max Performance of a Team |
+
+---
+
+| Field | Value |
+|-------|-------|
+| Date | 2026-05-21 |
+| Link | — (Lex smallest array, |·| = permutation, sum = target) |
+| Rating | ~1830 |
+| AC | N (hinted — could not derive greedy-from-top reframe) |
+| Time | stuck → hints from LC |
+| Pattern | Greedy flip on `{1..n}` — pick largest values that fit `D = S − target` |
+| Revision due | 2026-06-04 |
+| Remark | Reframe: pick subset of `{1..n}` summing to `D/2` to flip. Greedy from `n` down always works because `{1..n}` subset sums have no gaps in `[0, S]`. Lex smallest = flip largest values (most-negative first elements dominate). Trigger: "permutation magnitudes + sign choices + target sum" |
+
+---
+
+| Field | Value |
+|-------|-------|
+| Date | 2026-05-21 |
+| Link | — (Count distinct strip-zero values, n ≤ 10^15) |
+| Rating | ~1800 |
+| AC | N (reframe came from discussion; walk self-driven once reframe was clear) |
+| Time | stuck → reframed via walkthrough |
+| Pattern | Image reframing + digit counting (digit-walk template, no memo) |
+| Revision due | 2026-06-04 |
+| Remark | Image of strip0 = {no-zero positive integers ≤ n}. Count via digit walk: Part A = Σ 9^d for d<L, Part B = walk n's digits, at each pos contribute (d_i−1)×9^(L−1−i); walk dies on 0-digit; +1 for n if no-zero. Trigger: "count over [1,n] with n ≥ 10^9 and digit-dependent property" → digit walk |

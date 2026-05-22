@@ -6,6 +6,18 @@ int x = Integer.parseInt("123");   // "123" → 123
 String s = String.valueOf(123);    // 123 → "123"
 ```
 
+## String ↔ long
+
+```java
+long n = Long.parseLong("123");    // "123" → 123L
+String s = Long.toString(n);       // 123L → "123"
+String s2 = String.valueOf(n);     // same — also works for long
+
+// Common use: get digit count of a long (n up to 10^15+)
+int digits = Long.toString(n).length();   // safer than (int)(Math.log10(n) + 1)
+                                          // log10 on big longs has precision issues
+```
+
 ## String ↔ char[]
 
 ```java
@@ -34,6 +46,28 @@ int x = (int) 'a';     // 'a' → 97
 int pos = 'c' - 'a';          // 'c' → 2
 char c = (char)(2 + 'a');     // 2 → 'c'
 ```
+
+## digit char → int value
+
+```java
+char c = '5';
+(int) c       // 53   ← ASCII code of '5', NOT the digit
+c - '0'       // 5    ← actual digit value (idiomatic)
+```
+
+**ASCII offsets for digit chars:**
+```
+'0' = 48
+'1' = 49
+'2' = 50
+...
+'5' = 53
+'9' = 57
+```
+
+Subtracting `'0'` cancels the ASCII offset. There is no implicit char-to-digit cast in Java — `(int) c` just returns the ASCII code.
+
+> [!danger] Common bug: `(int) s.charAt(i)` returns 48–57 for digit chars, not 0–9. Always use `s.charAt(i) - '0'`.
 
 ## int[] ↔ List\<Integer\>
 
@@ -126,6 +160,8 @@ for (char c : s.toCharArray()) {
 |------|----|--------|
 | `String` | `int` | `Integer.parseInt(s)` |
 | `int` | `String` | `String.valueOf(n)` |
+| `String` | `long` | `Long.parseLong(s)` |
+| `long` | `String` | `Long.toString(n)` |
 | `String` | `char[]` | `s.toCharArray()` |
 | `char[]` | `String` | `new String(chars)` |
 | `char` | `String` | `String.valueOf(c)` |

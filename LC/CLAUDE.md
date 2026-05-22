@@ -65,12 +65,14 @@ O(?) time, O(?) space.
 ### virtual-contest-log.md
 Log by contest. Include Q1/Q2/Q3/Q4 result (Y/N/S), what you were stuck on for each N, and upsolve due date.
 
-## Current grind state (as of 2026-05-16)
+## Current grind state (as of 2026-05-22)
 
-- **Active zerotrac range:** 1700-1750 (graduated from 1650-1700 on 2026-05-16 — 7/10 first-try AC, 9/10 pass+soft-fail)
-- **Revision due:** 1650-1700 batch — due 2026-05-30 (before any 1700-1750 Week 3 problems)
+- **Active zerotrac range:** 1700-1750 (resumed). Originally graduated from 1650-1700 on 2026-05-16 but then jumped to 1800-1850 prematurely after only 7/10 problems and entirely skipped 1750-1800. Pause acknowledged 2026-05-22 — returning to finish 1700-1750 (need 3 more), then full 10-problem pass at 1750-1800, before resuming 1800-1850.
+- **1700-1750 pattern gap (target for remaining 3):** monotonic stack, binary search on answer, interval/tree DP. Current 7 ACs concentrated in greedy + reframing.
+- **1800-1850 paused:** 5 problems logged, marked paused in `1800-1850.md`.
+- **Revision due:** 1650-1700 batch — due 2026-05-30.
 - **Contest rating:** ~1530 (frozen, returning after gap)
-- **Projection:** ~1680 by Dec 2026 if protocol holds
+- **Projection:** ~1680 by Dec 2026 if protocol holds (slightly later now due to backfill)
 
 ## Core protocol rules (don't break these)
 
@@ -79,14 +81,25 @@ Log by contest. Include Q1/Q2/Q3/Q4 result (Y/N/S), what you were stuck on for e
 3. **No editorial before 30 min** — even a glance counts as a fail
 4. **Pool separation** — zerotrac = last 6 months of contests. Virtual contest = 12+ months old. Never mix
 5. **Two-week revision lock** — revision is batched, not daily. Week N's problems get revised in Week N+2, *before* any Week N+2 new problem is started. Revision = approach recall only (5-10 min per problem), not full re-solve. Hard fails get a full cold re-solve + Day+14-from-now retry.
-6. **Graduation** — bump range +50 only when rolling last 10 hits ≥7/10 first-try AC AND ≥8/10 revision (Pass + Soft fail combined), independently. See `zerotrac.md` for Pass / Soft fail / Hard fail definitions.
+6. **Graduation (tightened 2026-05-22)** — bump range +50 only when ALL of the following hold for the prior band:
+   - **10 problems logged.** No skip-3 escapes. If the band has fewer than 10, you have not finished it.
+   - **≥7/10 first-submission AC.** "First-submission AC" means AC on the very first submit — not AC after a WA. WA-then-AC = soft fail.
+   - **≤1/10 hinted.** Hinted = took editorial, took a hint from Claude, or had any external nudge before reaching the approach. Hinted counts as fail, not pass.
+   - **≥8/10 pass + soft-fail combined on revision** (unchanged from prior rule).
+   See `zerotrac.md` for Pass / Soft fail / Hard fail definitions.
+
+   **Historical audit (2026-05-22):** prior graduations were called with looser counting. By the tightened rule above, 1550-1600 was 9/10 (1 hint), 1650-1700 was 6/10 first-submission (3 WAs + 1 hint), 1600-1650 and 1700-1750 were 7/10 (skip-3, ineligible). The 1750-1800 band was skipped entirely. These are now acknowledged inflations — the new rule prevents this from compounding further.
+
+7. **Header integrity** — every band's `.md` file header MUST state the actual stats: `X/10 first-submission AC`, `Y/10 hinted`, `Z WA-then-AC`. Do not write summary stats like "10/10 first-try AC" if any of those 10 were WA-then-AC or hinted. Optimistic counting is the root cause of skip-3 — premature graduation feels earned because the headers lie, and the next band lands underprepared.
+
+8. **No new band before prior band passes rule 6.** Opening a new band while the prior band's tightened-grad-check is unmet = protocol break. Caught retroactively, this triggers a backfill (return to the prior band and finish), not a header rewrite.
 
 ## Derivation-over-speed clause (current phase)
 
 The user's diagnosed gap is **derivation muscle**, not pattern recognition (567 solved but mostly watched). For the current phase, self-derived ACs that overshoot the 30-min cap **count as passes for graduation**, provided no editorial/hint was used. The time overshoot is the price of training the exact muscle that was missing.
 
 **How to apply:**
-- Self-derived AC at any time → counts as pass
+- Self-derived AC at any time → counts as pass — **provided first submission is AC.** If you submitted, got WA, then fixed and AC'd, this is **soft fail**, not pass. The derivation clause exempts time, not implementation discipline.
 - AC reached only after editorial/hint → counts as fail (cap rule still applies for hint-gating)
 - Speed pressure is trained separately via virtual contests (90-min, 4 problems) — not via the 30-min cap on practice
 
@@ -150,6 +163,26 @@ If edge cases are appearing inside the main loop as nested conditionals, stop �
 5. Does the orchestrator read cleanly — one logical step per line?
 
 If any of these fail, point it out and show the cleaner version.
+
+### Pre-submit checklist — Java-impl bug families that have recurred across bands
+
+Run this **before clicking submit**. These are the bugs that bit across 1500-1850, derived from the actual log audit on 2026-05-22:
+
+1. **Overflow / cast-to-long** — any product of values near 10^9, any `mid*mid` in binary search, any sieve `i*i`. Write `(long)a * b`, never `(long)(a * b)`. Trap: `long j = i*i` overflows int *before* assignment.
+2. **Float-cast trap** — `(int) Math.pow(1e9, 1.0/3) = 999`. Always `+1` after casting `Math.pow` or `Math.sqrt` to int.
+3. **`char` → digit value** — never `(int) s.charAt(i)` (returns ASCII 48-57). Use `s.charAt(i) - '0'`. This bug appeared at 1650-1700 #3 AND came back at 1800-1850 — three bands later, still not reflexive. See `02-syntax/05-conversions.md`.
+4. **Set vs frequency map** — if the problem says "distinct indices, may share values" (or similar), use frequency map, not Set. If you need to dedup `(int, int)` pairs, `Set<int[]>` does NOT dedup (reference equality) — encode to long or String.
+5. **`Set<int[]>` reference-equality** — array hashing is identity-based in Java. Use `Set<Long>` with bit-packing or `Set<String>`.
+6. **PriorityQueue<int[]> / Integer[] needs comparator** — `Integer[]` is not `Comparable`, throws CCE on first sift. Always supply comparator.
+7. **`if` vs `else if` in heap-update / sliding-window** — two consecutive `if`s on a boundary condition can fire twice in one iteration. Default to `else if`.
+8. **Sentinel / last-element init** — when a linear scan propagates state rightward, the last index may never get updated. Initialize all sentinels explicitly; never leave `-1` to "be obvious."
+9. **Single-candidate trap on "nearest X"** — always generate a small candidate set (e.g. P-1, P, P+1 for mirror palindrome) and take min, never assume one candidate covers all cases.
+10. **Diff-array off-by-one** — range increment is `diff[l] += v; diff[r+1] -= v`. No special case for `l == r`. Anything else double-counts.
+11. **Operator precedence** — `(freq & 1) != 0` needs parens around `freq & 1` (Java precedence makes `freq & 1 != 0` parse as `freq & (1 != 0)` — compile error or wrong).
+12. **Window not fully built before use** — when iterating with a sliding window, always add `s[j]` first, then check size, then use. Checking before adding leaves the current element out.
+13. **Window-build order matches edge cases** — also test with empty window, single element, consecutive separators.
+
+Before submitting, scan this list. If your solution touches the bug family, verify the fix is applied.
 
 ---
 
