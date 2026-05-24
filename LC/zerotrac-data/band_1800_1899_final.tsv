@@ -1,0 +1,165 @@
+1802	1673	-	Find the Most Competitive Subsequence
+1802	2934	-	Minimum Operations to Maximize Last Elements in Arrays
+1802	3703	-	Remove K-Balanced Substrings
+1803	1953	TRICK	Maximum Number of Weeks for Which You Can Work
+1804	1080	-	Insufficient Nodes in Root to Leaf Paths
+1804	2096	-	Step-By-Step Directions From a Binary Tree Node to Another
+1804	3742	-	Maximum Path Score in a Grid
+1805	1035	-	Uncrossed Lines
+1806	1073	BIT_OPS	Adding Two Negabinary Numbers
+1806	3335	MATRIX_EXP,MOD_ARITH	Total Characters in String After Transformations I
+1806	3408	-	Design Task Manager
+1807	1594	MOD_ARITH	Maximum Non Negative Product in a Matrix
+1808	1230	PROB	Toss Strange Coins
+1808	1519	-	Number of Nodes in the Sub-Tree With the Same Label
+1808	2302	-	Count Subarrays With Score Less Than K
+1809	1345	-	Jump Game IV
+1809	776	-	Split BST
+1810	1284	BITMASK,BIT_OPS	Minimum Number of Flips to Convert Binary Matrix to Zero Matrix
+1810	2642	-	Design Graph With Shortest Path Calculator
+1811	3738	-	Longest Non-Decreasing Subarray After Replacing at Most One Element
+1815	773	BITMASK	Sliding Puzzle
+1816	3026	PAIR_COUNT	Maximum Good Subarray Sum
+1817	1658	-	Minimum Operations to Reduce X to Zero
+1817	1792	GEOM	Maximum Average Pass Ratio
+1817	2787	PERM_COMB,POWER	Ways to Express an Integer as Sum of Powers
+1817	795	SUBARRAY_COUNT	Number of Subarrays with Bounded Maximum
+1818	3588	GEOM	Find Maximum Area of a Triangle
+1818	861	BIT_OPS	Score After Flipping Matrix
+1819	2055	-	Plates Between Candles
+1819	3148	-	Maximum Difference Score in a Grid
+1820	1405	-	Longest Happy String
+1822	1363	DIGIT_OPS,MOD_ARITH	Largest Multiple of Three
+1822	2217	DIGIT_OPS,PALINDROME	Find Palindrome With Fixed Length
+1822	2931	CONTRIBUTION	Maximum Spending After Buying Items
+1823	1377	PROB	Frog Position After T Seconds
+1823	1458	-	Max Dot Product of Two Subsequences
+1823	3781	PAIR_COUNT,TRICK	Maximum Score After Binary Swaps
+1824	1298	-	Maximum Candies You Can Get from Boxes
+1825	1702	TRICK	Maximum Binary String After Change
+1825	1835	BIT_OPS,XOR	Find XOR Sum of All Pairs Bitwise AND
+1825	934	-	Shortest Bridge
+1827	1095	-	Find in Mountain Array
+1827	3332	-	Maximum Points Tourist Can Earn
+1827	3752	PERM_COMB	Lexicographically Smallest Negated Permutation that Sums to Target
+1828	1754	-	Largest Merge Of Two Strings
+1828	2135	BITMASK	Count Words Obtained After Adding a Letter
+1830	790	FIB,MOD_ARITH	Domino and Tromino Tiling
+1830	980	BITMASK,PERM_COMB	Unique Paths III
+1831	2034	-	Stock Price Fluctuation 
+1832	3012	GCD_LCM	Minimize Length of Array Using Operations
+1832	3796	-	Find Maximum Value in a Constrained Sequence
+1832	755	-	Pour Water
+1834	2370	-	Longest Ideal Subsequence
+1835	995	-	Minimum Number of K Consecutive Bit Flips
+1836	1316	-	Distinct Echo Substrings
+1836	2146	-	K Highest Ranked Items Within a Price Range
+1837	1559	-	Detect Cycles in 2D Grid
+1839	2311	-	Longest Binary Subsequence Less Than or Equal to K
+1840	2332	-	The Latest Time to Catch a Bus
+1840	3186	-	Maximum Total Damage With Spell Casting
+1840	3800	BIT_OPS	Minimum Cost to Make Two Binary Strings Equal
+1841	2013	GEOM	Detect Squares
+1843	2576	PAIR_COUNT	Find the Maximum Number of Marked Indices
+1844	1411	MOD_ARITH	Number of Ways to Paint N × 3 Grid
+1844	3604	-	Minimum Time to Reach Destination in Directed Graph
+1845	1504	CONTRIBUTION,SUBARRAY_COUNT	Count Submatrices With All Ones
+1845	2598	MOD_ARITH	Smallest Missing Non-negative Integer After Operations
+1845	3558	MOD_ARITH,PARITY	Number of Ways to Assign Edge Weights I
+1845	3825	BIT_OPS	Longest Strictly Increasing Subsequence With Non-Zero Bitwise AND
+1846	1514	PROB	Path with Maximum Probability
+1846	3196	-	Maximize Total Cost of Alternating Subarrays
+1846	874	GEOM	Walking Robot Simulation
+1847	1258	-	Synonymous Sentences
+1847	3297	PERM_COMB	Count Substrings That Can Be Rearranged to Contain a String I
+1847	3676	TRIPLE_COUNT	Count Bowl Subarrays
+1848	1177	PALINDROME,PARITY	Can Make Palindrome from Substring
+1848	3180	-	Maximum Total Reward Using Operations I
+1848	3747	DIGIT_OPS	Count Distinct Integers After Removing Zeros
+1849	2059	BIT_OPS	Minimum Operations to Convert Number
+1849	3176	-	Find the Maximum Length of a Good Subsequence I
+1850	1152	-	Analyze User Website Visit Pattern
+1850	1477	-	Find Two Non-overlapping Sub-arrays Each With Target Sum
+1850	1775	MOD_ARITH	Equal Sum Arrays With Minimum Number of Operations
+1851	2162	DIGIT_OPS	Minimum Cost to Set Cooking Time
+1851	2830	-	Maximize the Profit as the Salesman
+1851	3508	-	Implement Router
+1853	1301	-	Number of Paths with Max Score
+1853	3639	-	Minimum Time to Activate String
+1853	3650	-	Minimum Cost Path with Edge Reversals
+1853	3815	-	Design Auction System
+1854	1269	MOD_ARITH,PERM_COMB	Number of Ways to Stay in the Same Place After Some Steps
+1854	1334	-	Find the City With the Smallest Number of Neighbors at a Threshold Distance
+1855	1202	-	Smallest String With Swaps
+1855	1546	-	Maximum Number of Non-Overlapping Subarrays With Sum Equals Target
+1855	2800	-	Shortest String That Contains Three Strings
+1855	3443	GEOM,PARITY	Maximum Manhattan Distance After K Changes
+1855	799	AP_SUM	Champagne Tower
+1856	2266	FIB,MOD_ARITH	Count Number of Texts
+1856	3035	PALINDROME,PARITY	Maximum Palindromes After Operations
+1857	1584	GEOM	Min Cost to Connect All Points
+1858	1744	MOD_ARITH	Can You Eat Your Favorite Candy on Your Favorite Day?
+1859	3863	-	Minimum Operations to Sort a String
+1859	3910	BITMASK,PARITY	Count Connected Subgraphs with Even Node Sum
+1860	1996	-	The Number of Weak Characters in the Game
+1860	2301	-	Match Substring After Replacement
+1861	1993	-	Operations on Tree
+1861	3342	-	Find Minimum Time to Reach Last Room II
+1864	1163	-	Last Substring in Lexicographical Order
+1864	2767	BIT_OPS,POWER	Partition String Into Minimum Beautiful Substrings
+1864	3326	DIVISORS,PRIME	Minimum Division Operations to Make Array Non Decreasing
+1864	3346	-	Maximum Frequency of an Element After Performing Operations I
+1865	2039	-	The Time When the Network Becomes Idle
+1866	1340	-	Jump Game V
+1867	1605	-	Find Valid Matrix Given Row and Column Sums
+1867	1717	TRICK	Maximum Score From Removing Substrings
+1868	1616	PALINDROME	Split Two Strings to Make Palindrome
+1868	2212	BITMASK	Maximum Points in an Archery Competition
+1868	924	-	Minimize Malware Spread
+1869	2002	BITMASK,PALINDROME	Maximum Product of the Length of Two Palindromic Subsequences
+1869	3635	-	Earliest Finish Time for Land and Water Rides II
+1871	1589	CONTRIBUTION,MOD_ARITH	Maximum Sum Obtained of Any Permutation
+1871	2008	-	Maximum Earnings From Taxi
+1872	1526	TRICK	Minimum Number of Increments on Subarrays to Form a Target Array
+1873	1001	GEOM	Grid Illumination
+1873	2975	GEOM	Maximum Square Area by Removing Fences From a Field
+1874	1015	MOD_ARITH,PIGEONHOLE	Smallest Integer Divisible by K
+1875	2808	-	Minimum Seconds to Equalize a Circular Array
+1876	1392	-	Longest Happy Prefix
+1876	1838	-	Frequency of the Most Frequent Element
+1876	955	-	Delete Columns to Make Sorted II
+1877	1234	-	Replace the Substring for Balanced String
+1877	752	-	Open the Lock
+1880	1106	-	Parsing A Boolean Expression
+1880	1536	-	Minimum Swaps to Arrange a Binary Grid
+1880	2101	GEOM	Detonate the Maximum Bombs
+1880	754	AP_SUM,PARITY	Reach a Number
+1880	858	GCD_LCM,GEOM	Mirror Reflection
+1881	1255	BITMASK	Maximum Score Words Formed by Letters
+1882	2976	-	Minimum Cost to Convert String I
+1883	2054	-	Two Best Non-Overlapping Events
+1883	3472	-	Longest Palindromic Subsequence After at Most K Operations
+1883	3514	TRIPLE_COUNT,XOR	Number of Unique XOR Triplets II
+1883	3665	-	Twisted Mirror Path Count
+1883	3923	BITMASK,GEOM	Minimum Generations to Target Point
+1885	1066	BITMASK	Campus Bikes II
+1885	1326	-	Minimum Number of Taps to Open to Water a Garden
+1885	2064	-	Minimized Maximum of Products Distributed to Any Store
+1886	2305	BITMASK	Fair Distribution of Cookies
+1889	2817	-	Minimum Absolute Difference Between Elements With Constraint
+1889	3542	-	Minimum Operations to Convert All Elements to Zero
+1891	2537	PAIR_COUNT,SUBARRAY_COUNT	Count the Number of Good Subarrays
+1891	3097	BIT_OPS	Shortest Subarray With OR at Least K II
+1892	1722	-	Minimize Hamming Distance After Swap Operations
+1892	3608	-	Minimum Time for K Connected Components
+1893	2327	FIB,MOD_ARITH	Number of People Aware of a Secret
+1894	3036	-	Number of Subarrays That Match a Pattern II
+1896	1871	-	Jump Game VII
+1896	3030	GEOM	Find the Grid of Region Average
+1896	878	GCD_LCM,MOD_ARITH	Nth Magical Number
+1897	1878	GEOM	Get Biggest Three Rhombus Sums in a Grid
+1897	2360	-	Longest Cycle in a Graph
+1897	3250	MOD_ARITH,PERM_COMB	Find the Count of Monotonic Pairs I
+1897	780	GCD_LCM	Reaching Points
+1898	2901	-	Longest Unequal Adjacent Groups Subsequence II
+1899	823	MOD_ARITH,PERM_COMB	Binary Trees With Factors

@@ -1,0 +1,144 @@
+Rating	ID	Title	Tags
+2500.1329352544	3409	Longest Subsequence With Decreasing Adjacent Difference	NONE
+2502.2554584475	3490	Count Beautiful Numbers	DIGIT_OPS,MOD_ARITH
+2502.5176603922	1938	Maximum Genetic Difference Query	XOR
+2507.1382215756	3534	Path Existence Queries in a Graph II	NONE
+2507.9960044659	2846	Minimum Edge Weight Equilibrium Queries in a Tree	GCD_LCM
+2508.6766880695	3266	Final Array State After K Multiplication Operations II	MATRIX_EXP,MOD_ARITH
+2509.3686325754	3303	Find the Occurrence of First Almost Equal Substring	NONE
+2513.0284514744	3161	Block Placement Queries	NONE
+2515.7520586008	2272	Substring With Largest Variance	TRICK
+2517.6829964848	2040	Kth Smallest Product of Two Sorted Arrays	NONE
+2519.499932424	3757	Number of Effective Subsequences	MOD_ARITH
+2521.5876597895	3241	Time Taken to Mark All Nodes	NONE
+2525.0244230374	3661	Maximum Walls Destroyed by Robots	NONE
+2529.5251086936	1632	Rank Transform of a Matrix	NONE
+2530.6462600383	3459	Length of Longest V-Shaped Diagonal Segment	NONE
+2530.6905139914	1776	Car Fleet II	NONE
+2531.6452775023	1896	Minimum Cost to Change the Final Value of Expression	NONE
+2532.0192714689	3378	Count Connected Components in LCM Graph	GCD_LCM,PRIME
+2532.6258688719	3312	Sorted GCD Pair Queries	GCD_LCM,DIVISORS
+2533.2830157959	2736	Maximum Sum Queries	NONE
+2533.3027905062	1675	Minimize Deviation in Array	NONE
+2533.7796160302	1948	Delete Duplicate Folders in System	NONE
+2537.7965575726	1595	Minimum Cost to Connect Two Groups of Points	BITMASK,MOD_ARITH
+2538.8958579924	3505	Minimum Operations to Make Elements Within K Subarrays Equal	NONE
+2539.863726397	1819	Number of Different Subsequences GCDs	GCD_LCM,PRIME
+2540.438150736	3013	Divide an Array Into Subarrays With Minimum Cost II	NONE
+2540.7699757179	3197	Find the Minimum Area to Cover All Ones II	GEOM
+2544.8104481675	3901	Good Subsequence Queries	NONE
+2544.999309348	3544	Subtree Inversion Sum	NONE
+2545.1080433595	3267	Count Almost Equal Pairs II	NONE
+2545.108406046	3287	Find the Maximum Sequence Value of Array	BITMASK
+2552.505777081	3098	Find the Sum of Subsequence Powers	NONE
+2553.2367142614	3257	Maximum Value Sum by Placing Three Rooks II	NONE
+2556.5072256577	3077	Maximum Strength of K Disjoint Subarrays	NONE
+2556.9955924939	3234	Count the Number of Substrings With Dominant Ones	NONE
+2558.3297484354	2014	Longest Subsequence Repeated k Times	PERM_COMB
+2559.4351004238	1815	Maximum Number of Groups Getting Fresh Donuts	BITMASK,MOD_ARITH
+2561.508149216	2234	Maximum Total Beauty of the Gardens	NONE
+2561.7794931859	2030	Smallest K-Length Subsequence With Occurrences of a Letter	NONE
+2566.5910742837	913	Cat and Mouse	GAME_THEORY
+2569.4068901457	3500	Minimum Cost to Divide Array Into Subarrays	NONE
+2571.552028121	1489	Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree	NONE
+2575.9570281316	1531	String Compression II	NONE
+2581.9961985753	2617	Minimum Number of Visited Cells in a Grid	NONE
+2582.0814855506	2813	Maximum Elegance of a K-Length Subsequence	TRICK,CONTRIBUTION
+2583.406911951	936	Stamping The Sequence	TRICK
+2583.9006314254	2019	The Score of Students Solving Math Expression	MOD_ARITH,BITMASK
+2584.8334198718	3563	Lexicographically Smallest String After Adjacent Removals	NONE
+2587.8725248485	1883	Minimum Skips to Arrive at Meeting On Time	NONE
+2588.8752130913	2532	Time to Cross a Bridge	NONE
+2594.135673452	964	Least Operators to Express Number	TRICK,MOD_ARITH
+2598.4563109814	3321	Find X-Sum of All K-Long Subarrays II	NONE
+2601.7404336762	3367	Maximize Sum of Weights after Edge Removals	NONE
+2604.0450098035	3594	Minimum Time to Transport All Individuals	BITMASK
+2605.3698165497	3474	Lexicographically Smallest Generated String	NONE
+2607.9418744903	2911	Minimum Changes to Make K Semi-palindromes	PALINDROME,MOD_ARITH
+2608.014730401	3510	Minimum Pair Removal to Sort Array II	NONE
+2610.0826855063	1687	Delivering Boxes from Storage to Ports	NONE
+2610.9906730644	2056	Number of Valid Move Combinations On Chessboard	BITMASK
+2614.911779573	3343	Count Number of Balanced Permutations	PERM_COMB,PRIME,MOD_ARITH
+2615.1468269481	2338	Count the Number of Ideal Arrays	PERM_COMB,DIVISORS,MOD_ARITH
+2619.7016189999	2790	Maximum Number of Groups With Increasing Length	NONE
+2620.4181842249	1830	Minimum Number of Operations to Make String Sorted	PERM_COMB,MOD_ARITH
+2621.1208072273	2281	Sum of Total Strength of Wizards	CONTRIBUTION,MOD_ARITH
+2628.6330409039	3333	Find the Original Typed String II	NONE
+2628.7957821141	2213	Longest Substring of One Repeating Character	NONE
+2633.0144045478	2499	Minimum Total Cost to Make Arrays Unequal	NONE
+2640.3824813624	1787	Make the XOR of All Segments Equal to Zero	XOR,BITMASK
+2641.6067035188	3149	Find the Minimum Cost Array Permutation	BITMASK
+2643.4108112417	3625	Count Number of Trapezoids II	GEOM,TRIPLE_COUNT
+2644.6037406331	3525	Find X Value of Array II	MOD_ARITH
+2644.8498152558	2954	Count the Number of Infection Sequences	PERM_COMB,PRIME,MOD_ARITH
+2644.9681021386	3430	Maximum and Minimum Sums of at Most Size K Subarrays	CONTRIBUTION
+2645.836955523	3590	Kth Smallest Path XOR Sum	XOR
+2647.1423924149	3671	Sum of Beautiful Subsequences	MOD_ARITH
+2647.8258771458	2386	Find the K-Sum of an Array	TRICK
+2648.1748409542	2071	Maximum Number of Tasks You Can Assign	NONE
+2650.8996457642	2097	Valid Arrangement of Pairs	NONE
+2655.2178711909	1659	Maximize Grid Happiness	BITMASK
+2658.9223715182	3261	Count Substrings That Satisfy K-Constraint II	NONE
+2661.0670044656	1923	Longest Common Subpath	NONE
+2661.736901362	3292	Minimum Number of Valid Strings to Form Target II	NONE
+2664.2117701776	3311	Construct 2D Grid Matching Graph Layout	NONE
+2666.1303987257	3139	Minimum Cost to Equalize Array	TRICK,AP_SUM
+2666.668150845	1397	Find All Good Strings	BITMASK,MOD_ARITH
+2671.1046123182	3454	Separate Squares II	GEOM
+2672.7613091907	3086	Minimum Moves to Pick K Ones	CONTRIBUTION,AP_SUM
+2677.1682592316	2791	Count Paths That Can Form a Palindrome in a Tree	PALINDROME,BITMASK
+2681.7054310332	2573	Find the String with LCP	NONE
+2688.2456356434	3181	Maximum Total Reward Using Operations II	BITMASK,MOD_ARITH
+2690.5859406179	1960	Maximum Product of the Length of Two Palindromic Substrings	PALINDROME
+2692.6778614397	3277	Maximum XOR Score Subarray Queries	XOR
+2693.5604276923	3445	Maximum Difference Between Even and Odd Frequency II	NONE
+2693.8309245934	3539	Find Sum of Array Product of Magical Sequences	MOD_ARITH,PERM_COMB
+2695.809667046	2977	Minimum Cost to Convert String II	NONE
+2697.378123783	3569	Maximize Count of Distinct Primes After Split	PRIME
+2697.6486586982	3165	Maximum Sum of Subsequence With Non-adjacent Elements	NONE
+2702.6772838353	3509	Maximum Product of Subsequences With an Alternating Sum Equal to K	NONE
+2709.4067070911	3017	Count the Number of Houses at a Certain Distance II	CONTRIBUTION,GCD_LCM
+2711.8717381409	2603	Collect Coins in a Tree	NONE
+2722.8634460016	3382	Maximum Area Rectangle With Point Constraints II	GEOM
+2723.2974277194	3414	Maximum Score of Non-overlapping Intervals	NONE
+2723.5212649775	3721	Longest Balanced Subarray II	NONE
+2735.0909781144	3117	Minimum Sum of Values by Dividing Array	NONE
+2743.9313067671	3630	Partition Array for Maximum XOR and AND	XOR,BIT_OPS
+2748.125042961	3449	Maximize the Minimum Game Score	NONE
+2758.9704056427	2902	Count of Sub-Multisets With Bounded Sum	STARS_BARS,GCD_LCM,MOD_ARITH
+2763.6510278508	3480	Maximize Subarrays After Removing One Conflicting Pair	NONE
+2764.5966131386	3441	Minimum Cost Good Caption	NONE
+2765.2533837781	803	Bricks Falling When Hit	NONE
+2768.8154223451	2836	Maximize Value of Function in a Ball Passing Game	MATRIX_EXP,MOD_ARITH
+2779.7855167601	2983	Palindrome Rearrangement Queries	PALINDROME,BITMASK
+2799.5363565342	3395	Subsequences with a Unique Middle Mode I	PERM_COMB,MOD_ARITH
+2803.7652028979	2060	Check if an Original String Exists Given Two Encoded Strings	NONE
+2805.990278358	3464	Maximize the Distance Between Points on a Square	GEOM
+2816.0706257586	2916	Subarrays Distinct Element Sum of Squares II	CONTRIBUTION,MOD_ARITH
+2817.267212602	1977	Number of Ways to Separate Numbers	PERM_COMB,MOD_ARITH
+2824.4551372454	2612	Minimum Reverse Operations	NONE
+2824.7020346271	3130	Find All Possible Stable Binary Arrays II	MOD_ARITH
+2843.655465882	3410	Maximize Subarray Sum After Removing All Occurrences of One Element	NONE
+2849.4841858619	1728	Cat and Mouse II	GAME_THEORY
+2854.6879585019	3420	Count Non-Decreasing Subarrays After K Operations	NONE
+2857.6543956169	2851	String Transformation	MATRIX_EXP,MOD_ARITH
+2859.2593177291	3145	Find Products of Elements of Big Array	BIT_OPS,DIGIT_OPS,MOD_ARITH
+2863.1378294349	770	Basic Calculator IV	NONE
+2872.0290327119	1982	Find Array Given Subset Sums	NONE
+2873.9745576413	2699	Modify Graph Edge Weights	NONE
+2917.8273567322	3022	Minimize OR of Remaining Elements Using Operations	BIT_OPS
+2924.5453871317	3486	Longest Special Path II	NONE
+2940.1641355626	3389	Minimum Operations to Make Character Frequencies Equal	NONE
+2940.548809489	3501	Maximize Active Section with Trade II	NONE
+2943.2173551759	2945	Find Maximum Non-decreasing Array Length	NONE
+2978.7961959355	2809	Minimum Time to Make Array Sum At Most x	NONE
+3018.4940165727	1719	Number Of Ways To Reconstruct A Tree	NONE
+3027.8558407399	3225	Maximum Score From Grid Operations	NONE
+3027.89612787	3435	Frequencies of Shortest Supersequences	PERM_COMB,BITMASK
+3039.3003256659	3003	Maximize the Number of Partitions After Operations	BITMASK,MOD_ARITH
+3077.2342981036	3357	Minimize the Maximum Adjacent Element Difference	NONE
+3101.4829146106	3348	Smallest Divisible Digit Product II	PRIME,DIVISORS
+3111.1274320356	3049	Earliest Second to Mark Indices II	NONE
+3112.0402038423	3245	Alternating Groups III	NONE
+3124.5016688063	3743	Maximize Cyclic Partition Score	NONE
+3773.7596150919	3235	Check if the Rectangle Corner Is Reachable	GEOM

@@ -1,0 +1,195 @@
+1500	3096	PREFIX_SUM	Minimum Levels to Gain More Points
+1500	915	-	Partition Array into Disjoint Intervals
+1501	1090	-	Largest Values From Labels
+1501	1750	-	Minimum Length of String After Deleting Similar Ends
+1501	2730	-	Find the Longest Semi-Repetitive Substring
+1502	2358	AP_SUM,TRICK	Maximum Number of Groups Entering a Competition
+1502	2661	-	First Completely Painted Row or Column
+1502	2708	BIT_OPS	Maximum Strength of a Group
+1502	3424	-	Minimum Cost to Make Arrays Identical
+1504	1461	BIT_OPS	Check If a String Contains All Binary Codes of Size K
+1504	2104	CONTRIBUTION,MONOTONIC	Sum of Subarray Ranges
+1504	2761	PRIME	Prime Pairs With Target Sum
+1504	3795	-	Minimum Subarray Length With Distinct Sum At Least K
+1504	869	BIT_OPS,DIGIT_OPS,PERM_COMB	Reordered Power of 2
+1505	1253	-	Reconstruct a 2-Row Binary Matrix
+1505	1780	BIT_OPS	Check if Number is a Sum of Powers of Three
+1505	2981	-	Find Longest Special Substring That Occurs Thrice I
+1506	1387	DIGIT_OPS	Sort Integers by The Power Value
+1506	3551	DIGIT_OPS	Minimum Swaps to Sort by Digit Sum
+1507	2105	-	Watering Plants II
+1507	892	GEOM	Surface Area of 3D Shapes
+1508	1151	-	Minimum Swaps to Group All 1's Together
+1508	1496	GEOM	Path Crossing
+1509	1647	-	Minimum Deletions to Make Character Frequencies Unique
+1509	2216	PARITY	Minimum Deletions to Make Array Beautiful
+1509	2671	-	Frequency Tracker
+1509	3233	PRIME	Find the Count of Numbers Which Are Not Special
+1509	3583	TRIPLE_COUNT	Count Special Triplets
+1511	1110	-	Delete Nodes And Return Forest
+1512	1557	-	Minimum Number of Vertices to Reach All Nodes
+1513	3365	-	Rearrange K Substrings to Form Target String
+1514	1855	-	Maximum Distance Between a Pair of Values
+1515	2849	PARITY	Determine if a Cell Is Reachable at a Given Time
+1515	3106	MOD_ARITH	Lexicographically Smallest String After Operations With Constraint
+1516	775	PAIR_COUNT	Global and Local Inversions
+1516	904	-	Fruit Into Baskets
+1517	2683	XOR	Neighboring Bitwise XOR
+1517	3160	-	Find the Number of Distinct Colors Among the Balls
+1518	3334	GCD_LCM	Find the Maximum Factor Score of Array
+1518	3531	GEOM	Count Covered Buildings
+1519	1641	PERM_COMB,STARS_BARS	Count Sorted Vowel Strings
+1519	2865	-	Beautiful Towers I
+1521	1041	GEOM	Robot Bounded In Circle
+1521	1615	-	Maximal Network Rank
+1521	1763	-	Longest Nice Substring
+1521	2971	GEOM	Find Polygon With the Largest Perimeter
+1521	3091	-	Apply Operations to Make Sum of Array Greater Than or Equal to k
+1523	1829	XOR	Maximum XOR for Each Query
+1523	3152	PARITY	Special Array II
+1523	3484	-	Design Spreadsheet
+1524	1272	-	Remove Interval
+1524	1442	XOR	Count Triplets That Can Form Two Arrays of Equal XOR
+1524	1640	-	Check Array Formation Through Concatenation
+1524	2997	BIT_OPS	Minimum Number of Operations to Make Array XOR Equal to K
+1524	3913	-	Sort Vowels by Frequency
+1525	2201	GEOM	Count Artifacts That Can Be Extracted
+1526	2918	-	Minimum Equal Sum of Two Arrays After Replacing Zeros
+1527	1921	-	Eliminate Maximum Number of Monsters
+1528	1695	-	Maximum Erasure Value
+1529	3732	-	Maximum Product of Three Elements After One Replacement
+1529	881	-	Boats to Save People
+1530	1400	PARITY	Construct K Palindrome Strings
+1530	1657	-	Determine if Two Strings Are Close
+1530	1726	PAIR_COUNT,PERM_COMB	Tuple with Same Product
+1530	2591	-	Distribute Money to Maximum Children
+1531	3824	-	Minimum K to Reduce Array Within Limit
+1532	2429	BIT_OPS	Minimize XOR
+1532	900	-	RLE Iterator
+1533	1362	GEOM	Closest Divisors
+1533	1930	PALINDROME	Unique Length-3 Palindromic Subsequences
+1533	2770	-	Maximum Number of Jumps to Reach the Last Index
+1533	3016	PERM_COMB	Minimum Number of Pushes to Type Word II
+1534	1797	-	Design Authentication Manager
+1534	3890	POWER	Integers With Multiple Sum of Two Cubes
+1534	865	-	Smallest Subtree with all the Deepest Nodes
+1535	2958	-	Length of Longest Subarray With at Most K Frequency
+1536	1861	-	Rotating the Box
+1536	2933	-	High-Access Employees
+1536	3723	DIGIT_OPS	Maximize Sum of Squares of Digits
+1537	1023	-	Camelcase Matching
+1538	2178	AP_SUM	Maximum Split of Positive Even Integers
+1539	1992	GEOM	Find All Groups of Farmland
+1540	1382	-	Balance a Binary Search Tree
+1540	2349	-	Design a Number Container System
+1540	3128	GEOM,TRIPLE_COUNT	Right Triangles
+1541	1007	-	Minimum Domino Rotations For Equal Row
+1541	1209	-	Remove All Adjacent Duplicates in String II
+1541	1229	-	Meeting Scheduler
+1541	1283	-	Find the Smallest Divisor Given a Threshold
+1541	1749	-	Maximum Absolute Sum of Any Subarray
+1541	2575	DIGIT_OPS,MOD_ARITH	Find the Divisibility Array of a String
+1541	3537	-	Fill a Special Grid
+1541	986	-	Interval List Intersections
+1542	812	GEOM	Largest Triangle Area
+1543	2811	-	Check if it is Possible to Split Array
+1544	1104	BIT_OPS	Path In Zigzag Labelled Binary Tree
+1544	1233	-	Remove Sub-Folders from the Filesystem
+1544	3468	-	Find the Number of Copy Arrays
+1544	794	TRICK	Valid Tic-Tac-Toe State
+1545	2841	-	Maximum Sum of Almost Unique Subarray
+1546	3770	PRIME	Largest Prime from Consecutive Prime Sum
+1547	758	-	Bold Words in String
+1547	954	PAIR_COUNT	Array of Doubled Pairs
+1548	1329	-	Sort the Matrix Diagonally
+1548	1599	-	Maximum Profit of Operating a Centennial Wheel
+1548	2456	-	Most Popular Video Creator
+1548	3503	PALINDROME	Longest Palindrome After Substring Concatenation I
+1548	3587	PARITY	Minimum Adjacent Swaps to Alternate Parity
+1548	3885	-	Design Event Manager
+1548	3932	POWER	Count K-th Roots in a Range
+1549	2527	TRICK,TRIPLE_COUNT,XOR	Find Xor-Beauty of Array
+1549	2780	-	Minimum Index of a Valid Split
+1550	2207	-	Maximize Number of Subsequences in a String
+1550	2208	-	Minimum Operations to Halve Array Sum
+1552	2461	-	Maximum Sum of Distinct Subarrays With Length K
+1553	3361	MOD_ARITH	Shift Distance Between Two Strings
+1556	2131	PALINDROME	Longest Palindrome by Concatenating Two Letter Words
+1556	3652	-	Best Time to Buy and Sell Stock using Strategy
+1556	3653	MOD_ARITH,XOR	XOR After Range Multiplication Queries I
+1556	3849	BIT_OPS	Maximum Bitwise XOR After Rearrangement
+1557	2007	PAIR_COUNT	Find Original Array From Doubled Array
+1558	1101	-	The Earliest Moment When Everyone Become Friends
+1558	1144	-	Decrease Elements To Make Array Zigzag
+1558	1181	-	Before and After Puzzle
+1558	1243	-	Array Transformation
+1558	2310	DIGIT_OPS,MOD_ARITH	Sum of Numbers With Units Digit K
+1559	2470	GCD_LCM	Number of Subarrays With LCM Equal to K
+1560	3693	-	Climbing Stairs II
+1561	1256	-	Encode Number
+1561	1376	-	Time Needed to Inform All Employees
+1562	1008	-	Construct Binary Search Tree from Preorder Traversal
+1562	1452	-	People Whose List of Favorite Companies Is Not a Subset of Another List
+1562	2409	-	Count Days Spent Together
+1562	856	-	Score of Parentheses
+1563	2970	-	Count the Number of Incremovable Subarrays I
+1563	3305	-	Count of Substrings Containing Every Vowel and K Consonants I
+1563	800	-	Similar RGB Color
+1565	3249	-	Count the Number of Good Nodes
+1565	3493	-	Properties Graph
+1565	846	-	Hand of Straights
+1566	769	-	Max Chunks To Make Sorted
+1567	2044	BIT_OPS	Count Number of Maximum Bitwise-OR Subsets
+1567	3243	-	Shortest Distance After Road Addition Queries I
+1568	3567	-	Minimum Absolute Difference in Sliding Submatrix
+1569	1109	-	Corporate Flight Bookings
+1569	2592	-	Maximize Greatness of an Array
+1570	1019	-	Next Greater Node In Linked List
+1571	779	BIT_OPS	K-th Symbol in Grammar
+1573	1268	-	Search Suggestions System
+1573	1423	-	Maximum Points You Can Obtain from Cards
+1573	3393	XOR	Count Paths With the Given XOR Value
+1573	931	-	Minimum Falling Path Sum
+1574	1578	-	Minimum Deletion Cost to Avoid Repeating Letters
+1574	981	-	Time Based Key-Value Store
+1575	1415	PERM_COMB	The k-th Lexicographical String of All Happy Strings of Length n
+1577	2288	-	Apply Discount to Prices
+1578	1034	-	Coloring A Border
+1578	3412	-	Find Mirror Score of a String
+1578	3868	-	Minimum Cost to Equalize Arrays Using Swaps
+1579	1743	-	Restore the Array From Adjacent Pairs
+1579	3528	MOD_ARITH	Unit Conversion I
+1579	3623	GEOM,PAIR_COUNT	Count Number of Trapezoids I
+1579	3789	-	Minimum Cost to Acquire Required Items
+1580	1839	-	Longest Substring Of All Vowels in Order
+1580	2765	-	Longest Alternating Subarray
+1581	2211	-	Count Collisions on a Road
+1581	3021	GAME_THEORY,PAIR_COUNT,PARITY	Alice and Bob Playing Flower Game
+1583	2536	-	Increment Submatrices by One
+1583	2874	TRIPLE_COUNT	Maximum Value of an Ordered Triplet II
+1584	3780	MOD_ARITH,TRIPLE_COUNT	Maximum Sum of Three Numbers Divisible by Three
+1585	1030	GEOM	Matrix Cells in Distance Order
+1588	1764	-	Form Array by Concatenating Subarrays of Another Array
+1588	1813	-	Sentence Similarity III
+1588	2844	DIGIT_OPS,MOD_ARITH	Minimum Operations to Make a Special Number
+1590	1573	PERM_COMB	Number of Ways to Split a String
+1590	1664	-	Ways to Make a Fair Array
+1590	877	GAME_THEORY	Stone Game
+1590	893	PARITY	Groups of Special-Equivalent Strings
+1590	969	-	Pancake Sorting
+1591	1286	PERM_COMB	Iterator for Combination
+1591	3207	-	Maximum Points After Enemy Battles
+1591	3355	-	Zero Array Transformation I
+1591	3828	GAME_THEORY,TRICK	Final Element After Subarray Deletions
+1591	930	PREFIX_SUM	Binary Subarrays With Sum
+1593	1577	POWER,TRIPLE_COUNT	Number of Ways Where Square of Number Is Equal to Product of Two Numbers
+1593	3228	-	Maximum Number of Operations to Move Ones to the End
+1593	3790	MOD_ARITH,PIGEONHOLE	Smallest All-Ones Multiple
+1593	3829	-	Design Ride Sharing System
+1594	822	-	Card Flipping Game
+1595	3255	STREAK	Find the Power of K-Size Subarrays II
+1596	2476	-	Closest Nodes Queries in a Binary Search Tree
+1597	1218	-	Longest Arithmetic Subsequence of Given Difference
+1597	1247	PARITY	Minimum Swaps to Make Strings Equal
+1597	2750	-	Ways to Split Array Into Good Subarrays
+1599	1048	-	Longest String Chain

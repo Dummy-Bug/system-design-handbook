@@ -1,0 +1,382 @@
+=== SUM_ARITH ===
+1104 1480 Running Sum of 1d Array
+1141 1281 Subtract the Product and Sum of Digits of an Integer
+1148 3622 Check Divisibility by Digit Sum and Product
+1151 2778 Sum of Squares of Special Elements
+1165 2824 Count Pairs Whose Sum is Less than Target
+1167 1304 Find N Unique Integers Sum up to Zero
+1181 3300 Minimum Element After Replacement With Digit Sum
+1182 2652 Sum Multiples
+1184 2544 Alternating Digit Sum
+1190 3079 Find the Sum of Encrypted Integers
+1198 3712 Sum of Elements With Frequency Divisible by K
+1198 985 Sum of Even Numbers After Queries
+1199 3432 Count Partitions with Even Sum Difference
+1199 3452 Sum of Good Numbers
+1200 3550 Smallest Index With Digit Sum Equal to Index
+1206 2574 Left and Right Sum Differences
+1212 1413 Minimum Value to Get Positive Step by Step Sum
+1213 2656 Maximum Sum With Exactly K Elements
+1215 3427 Sum of Variable Length Subarrays
+1218 2859 Sum of Values at Indices With K Set Bits
+1222 2535 Difference Between Element Sum and Digit Sum of an Array
+1228 1748 Sum of Unique Elements
+1228 3512 Minimum Operations to Make Array Sum Divisible by K
+1228 3701 Compute Alternating Sum
+1229 1800 Maximum Ascending Subarray Sum
+1245 1099 Two Sum Less Than K
+1247 3754 Concatenate Non-Zero Digits and Multiply by Sum I
+1249 1161 Maximum Level Sum of a Binary Tree
+1249 2395 Find Subarrays With Equal Sum
+1253 2908 Minimum Sum of Mountain Triplets I
+1254 1945 Sum of Digits of String After Convert
+1256 1085 Sum of Digits in the Minimum Number
+1257 2177 Find Three Consecutive Integers That Sum to a Given Number
+1257 2180 Count Integers With Even Digit Sum
+1262 3627 Maximum Median Sum of Subsequences of Size 3
+1274 1005 Maximize Sum Of Array After K Negations
+1277 1317 Convert Integer to the Sum of Two No-Zero Integers
+1280 1572 Matrix Diagonal Sum
+1282 1837 Sum of Digits in Base K
+1289 2428 Maximum Sum of an Hourglass
+1295 2815 Max Pair Sum in an Array
+1297 2913 Subarrays Distinct Element Sum of Squares I
+1298 3684 Maximize Sum of At Most K Distinct Elements
+1300 3364 Minimum Positive Sum Subarray
+1301 1877 Minimize Maximum Pair Sum in Array
+1301 2243 Calculate Digit Sum of a String
+1301 3918 Sum of Primes Between Number and Its Reverse
+1308 2342 Max Sum of a Pair With Equal Sum of Digits
+1314 2160 Minimum Sum of Four Digit Number After Splitting Digits
+1317 2130 Maximum Twin Sum of a Linked List
+1317 2221 Find Triangular Sum of an Array
+1319 3572 Maximize Y‑Sum by Picking a Triplet of Distinct X‑Values
+1323 1925 Count Square Sum Triples
+1333 2679 Sum in a Matrix
+1334 3242 Design Neighbor Sum Service
+1335 938 Range Sum of BST
+1345 1679 Max Number of K-Sum Pairs
+1347 2829 Determine the Minimum Sum of a k-avoiding Array
+1350 2578 Split With Minimum Sum
+1372 1863 Sum of All Subset XOR Totals
+1374 1038 Binary Search Tree to Greater Sum Tree
+1374 2583 Kth Largest Sum in a Binary Tree
+1376 2443 Sum of Number and Its Reverse
+1378 1013 Partition Array Into Three Parts With Equal Sum
+1387 1302 Deepest Leaves Sum
+1387 2389 Longest Subsequence With Limited Sum
+1389 1214 Two Sum BSTs
+1399 3487 Maximum Unique Subarray Sum After Deletion
+
+=== COUNT ===
+1139 1351 Count Negative Numbers in a Sorted Matrix
+1149 3184 Count Pairs That Form a Complete Day I
+1149 3870 Count Commas in Range
+1165 2824 Count Pairs Whose Sum is Less than Target
+1169 2960 Count Tested Devices After Test Operations
+1171 3833 Count Dominant Indices
+1174 1773 Count Items Matching a Rule
+1178 2586 Count the Number of Vowel Strings in Range
+1190 3827 Count Monobit Integers
+1195 2529 Maximum Count of Positive Integer and Negative Integer
+1198 3917 Count Indices With Opposite Parity
+1199 2169 Count Operations to Obtain Zero
+1199 3432 Count Partitions with Even Sum Difference
+1200 3392 Count Subarrays of Length Three With a Condition
+1201 2148 Count Elements With Strictly Smaller and Greater Elements
+1203 1688 Count of Matches in Tournament
+1205 3120 Count the Number of Special Characters I
+1209 1523 Count Odd Numbers in an Interval Range
+1214 3042 Count Prefix and Suffix Pairs I
+1215 2176 Count Equal and Divisible Pairs in an Array
+1216 3005 Count Elements With Maximum Frequency
+1218 2442 Count Number of Distinct Integers After Reverse Operations
+1248 3803 Count Residue Prefixes
+1250 2315 Count Asterisks
+1257 2180 Count Integers With Even Digit Sum
+1258 3258 Count Substrings That Satisfy K-Constraint I
+1260 2255 Count Prefixes of a Given String
+1260 2520 Count the Digits That Divide a Number
+1265 2549 Count Distinct Numbers on Board
+1269 3895 Count Digit Appearances
+1271 2006 Count Number of Pairs With Absolute Difference K
+1279 1534 Count Good Triplets
+1288 1684 Count the Number of Consistent Strings
+1307 2085 Count Common Words With One Occurrence
+1315 1180 Count Substrings with Only One Distinct Letter
+1323 1925 Count Square Sum Triples
+1323 3084 Count Substrings Starting and Ending with Given Character
+1335 2506 Count Pairs Of Similar Strings
+1341 1399 Count Largest Group
+1343 1395 Count Number of Teams
+1346 2284 Sender With Largest Word Count
+1352 1995 Count Special Quadruplets
+1354 2210 Count Hills and Valleys in an Array
+1356 2579 Count Total Number of Colored Cells
+1360 1448 Count Good Nodes in Binary Tree
+1372 3759 Count Elements With at Least K Greater Values
+1374 1267 Count Servers that Communicate
+1377 811 Subdomain Visit Count
+1380 3871 Count Commas in Range II
+1385 3185 Count Pairs That Form a Complete Day II
+1391 3775 Reverse Words With Same Vowel Count
+1397 2799 Count Complete Subarrays in an Array
+
+=== DIGIT ===
+1100 3099 Harshad Number
+1139 1295 Find Numbers with Even Number of Digits
+1141 1281 Subtract the Product and Sum of Digits of an Integer
+1148 3622 Check Divisibility by Digit Sum and Product
+1163 3232 Find if Digit Game Can Be Won
+1165 3931 Check Adjacent Digit Differences
+1181 3300 Minimum Element After Replacement With Digit Sum
+1184 2544 Alternating Digit Sum
+1189 3461 Check If Digits Are Equal in String After Operations I
+1199 3536 Maximum Product of Two Digits
+1200 3550 Smallest Index With Digit Sum Equal to Index
+1216 2553 Separate the Digits in an Array
+1222 2535 Difference Between Element Sum and Digit Sum of an Array
+1225 3438 Find Valid Pair of Adjacent Digits in String
+1235 3345 Smallest Divisible Digit Product I
+1241 2605 Form Smallest Number From Two Digit Arrays
+1247 3754 Concatenate Non-Zero Digits and Multiply by Sum I
+1253 2283 Check if Number Has Equal Digit Count and Digit Value
+1254 1945 Sum of Digits of String After Convert
+1255 3174 Clear Digits
+1256 1085 Sum of Digits in the Minimum Number
+1257 2180 Count Integers With Even Digit Sum
+1260 2520 Count the Digits That Divide a Number
+1264 1736 Latest Time by Replacing Hidden Digits
+1269 3895 Count Digit Appearances
+1282 1837 Sum of Digits in Base K
+1284 3663 Find The Least Frequent Digit
+1300 1844 Replace All Digits with Characters
+1301 2243 Calculate Digit Sum of a String
+1308 2264 Largest 3-Same-Digit Number in String
+1308 2342 Max Sum of a Pair With Equal Sum of Digits
+1314 2160 Minimum Sum of Four Digit Number After Splitting Digits
+1319 3908 Valid Digit Number
+1323 3483 Unique 3-Digit Even Numbers
+1331 2259 Remove Digit From Number to Maximize Result
+1341 1796 Second Largest Digit in a String
+1365 2231 Largest Number After Digit Swaps by Parity
+1373 1291 Sequential Digits
+1396 2566 Maximum Difference by Remapping a Digit
+1396 788 Rotated Digits
+
+=== BIT_XOR ===
+1151 1290 Convert Binary Number in a Linked List to Integer
+1172 3158 Find the XOR of Numbers Which Appear Twice
+1177 965 Univalued Binary Tree
+1180 1486 XOR Operation in an Array
+1198 3370 Smallest Number With All Set Bits
+1205 3280 Convert Date to Binary
+1206 1784 Check if Binary String Has at Most One Segment of Ones
+1206 2595 Number of Even and Odd Bits
+1218 2859 Sum of Values at Indices With K Set Bits
+1237 2864 Maximum Odd Binary Number
+1246 2932 Maximum Strong Pair XOR I
+1247 3226 Number of Bit Changes to Make Two Integers Equal
+1249 1161 Maximum Level Sum of a Binary Tree
+1257 1356 Sort Integers by The Number of 1 Bits
+1260 1305 All Elements in Two Binary Search Trees
+1282 2220 Minimum Bit Flips to Convert Number
+1287 993 Cousins in Binary Tree
+1288 3750 Minimum Number of Flips to Reverse Binary String
+1303 2331 Evaluate Boolean Binary Tree
+1307 868 Binary Gap
+1311 3191 Minimum Operations to Make Binary Array Elements Equal to One I
+1321 1582 Special Positions in a Binary Matrix
+1348 2609 Find the Longest Balanced Substring of a Binary String
+1352 3211 Generate Binary Strings Without Adjacent Zeros
+1353 1758 Minimum Changes To Make Alternating Binary String
+1355 1689 Partitioning Into Minimum Number Of Deci-Binary Numbers
+1360 1448 Count Good Nodes in Binary Tree
+1361 1980 Find Unique Binary String
+1363 3309 Maximum Possible Number by Binary Concatenation
+1363 3769 Sort Integers by Binary Reflection
+1366 2433 Find The Original Array of Prefix Xor
+1372 1863 Sum of All Subset XOR Totals
+1374 1038 Binary Search Tree to Greater Sum Tree
+1374 2583 Kth Largest Sum in a Binary Tree
+1376 1018 Binary Prefix Divisible By 5
+1380 814 Binary Tree Pruning
+1383 762 Prime Number of Set Bits in Binary Representation
+1387 3239 Minimum Number of Flips to Make Binary Grid Palindromic I
+1390 2155 All Divisions With the Highest Score of a Binary Array
+1396 1404 Number of Steps to Reduce a Number in Binary Representation to One
+
+=== PAIR_TRIP ===
+1144 1913 Maximum Product Difference Between Two Pairs
+1149 3184 Count Pairs That Form a Complete Day I
+1160 1512 Number of Good Pairs
+1165 2824 Count Pairs Whose Sum is Less than Target
+1168 3162 Find the Number of Good Pairs I
+1184 2341 Maximum Number of Pairs in Array
+1214 3042 Count Prefix and Suffix Pairs I
+1215 2176 Count Equal and Divisible Pairs in an Array
+1223 2206 Divide Array Into Equal Pairs
+1225 3438 Find Valid Pair of Adjacent Digits in String
+1246 2932 Maximum Strong Pair XOR I
+1270 2873 Maximum Value of an Ordered Triplet I
+1271 2006 Count Number of Pairs With Absolute Difference K
+1286 2352 Equal Row and Column Pairs
+1287 3852 Smallest Pair With Different Frequencies
+1295 2815 Max Pair Sum in an Array
+1301 1877 Minimize Maximum Pair Sum in Array
+1301 2748 Number of Beautiful Pairs
+1308 2342 Max Sum of a Pair With Equal Sum of Digits
+1319 3572 Maximize Y‑Sum by Picking a Triplet of Distinct X‑Values
+1332 1128 Number of Equivalent Domino Pairs
+1335 2506 Count Pairs Of Similar Strings
+1341 2023 Number of Pairs of Strings With Concatenation Equal to Target
+1345 1679 Max Number of K-Sum Pairs
+1348 3507 Minimum Pair Removal to Sort Array I
+1377 1010 Pairs of Songs With Total Durations Divisible by 60
+1385 3185 Count Pairs That Form a Complete Day II
+1389 1065 Index Pairs of a String
+
+=== PERM_COMB ===
+1152 3146 Permutation Difference between Two Strings
+1160 1920 Build Array from Permutation
+1179 3210 Find the Encrypted String
+1190 3079 Find the Sum of Encrypted Integers
+1206 3818 Minimum Prefix Removal to Make Array Strictly Increasing
+1217 3105 Longest Strictly Increasing or Strictly Decreasing Subarray
+1235 2149 Rearrange Array Elements by Sign
+1245 3402 Minimum Operations to Make Columns Strictly Increasing
+1246 2016 Maximum Difference Between Increasing Elements
+1285 1381 Design a Stack With Increment Operation
+1288 1403 Minimum Subsequence in Non-Increasing Order
+1295 2717 Semi-Ordered Permutation
+1298 3349 Adjacent Increasing Subarrays Detection I
+1299 2287 Rearrange Characters to Make Target String
+1309 1451 Rearrange Words in a Sentence
+1314 1827 Minimum Operations to Make the Array Increasing
+1333 2554 Maximum Number of Integers to Choose From a Range I
+1334 1409 Queries on a Permutation With Key
+1336 2587 Rearrange Array to Maximize Prefix Score
+1341 784 Letter Case Permutation
+1357 3517 Smallest Palindromic Rearrangement I
+1361 2165 Smallest Value of the Rearranged Number
+1362 1592 Rearrange Spaces Between Words
+1369 1370 Increasing Decreasing String
+1376 807 Max Increase to Keep City Skyline
+1387 1860 Incremental Memory Leak
+
+=== MOD_DIV ===
+1100 3099 Harshad Number
+1139 3190 Find Minimum Operations to Make All Elements Divisible by Three
+1140 2894 Divisible and Non-divisible Sums Difference
+1144 2413 Smallest Even Multiple
+1148 3622 Check Divisibility by Digit Sum and Product
+1151 2455 Average Value of Even Numbers That Are Divisible by Three
+1182 2652 Sum Multiples
+1198 3712 Sum of Elements With Frequency Divisible by K
+1215 2176 Count Equal and Divisible Pairs in an Array
+1227 3718 Smallest Missing Multiple of K
+1228 3512 Minimum Operations to Make Array Sum Divisible by K
+1235 3345 Smallest Divisible Digit Product I
+1257 2644 Find the Maximum Divisibility Score
+1264 2248 Intersection of Multiple Arrays
+1376 1018 Binary Prefix Divisible By 5
+1377 1010 Pairs of Songs With Total Durations Divisible by 60
+1390 2155 All Divisions With the Highest Score of a Binary Array
+
+=== POWER_ROOT ===
+1129 977 Squares of a Sorted Array
+1142 1137 N-th Tribonacci Number
+1151 2778 Sum of Squares of Special Elements
+1162 3274 Check if Two Chessboard Squares Have the Same Color
+1229 1725 Number Of Rectangles That Can Form The Largest Square
+1234 3643 Flip Square Submatrix Vertically
+1266 3254 Find the Power of K-Size Subarrays I
+1297 2913 Subarrays Distinct Element Sum of Squares I
+1323 1925 Count Square Sum Triples
+1328 1812 Determine Color of a Chessboard Square
+1337 3127 Make a Square with the Same Color
+1338 970 Powerful Integers
+1369 3179 Find the N-th Value After K Seconds
+
+=== GAME ===
+1163 3232 Find if Digit Game Can Be Won
+1184 2974 Minimum Number Game
+1223 3847 Find the Score Difference in a Game
+1241 2293 Min Max Game
+1267 3360 Stone Removal Game
+1269 3222 Find the Winning Player in Coin Game
+1288 3304 Find the K-th Character in String Game I
+1324 2660 Determine the Winner of a Bowling Game
+1336 1275 Find Winner on a Tic Tac Toe Game
+1382 2682 Find the Losers of the Circular Game
+1396 1306 Jump Game III
+
+=== PROB ===
+1152 2089 Find Target Indices After Sorting Array
+1157 2903 Find Indices With Index and Value Difference I
+1166 3285 Find Indices of Stable Mountains
+1171 3833 Count Dominant Indices
+1198 3917 Count Indices With Opposite Parity
+1218 2859 Sum of Values at Indices With K Set Bits
+1227 3618 Split Array by Prime Indices
+1252 2164 Sort Even and Odd Indices Independently
+1266 2200 Find All K-Distant Indices in an Array
+1269 3222 Find the Winning Player in Coin Game
+
+=== PRIME ===
+1227 3618 Split Array by Prime Indices
+1234 3591 Check if Any Element Has Prime Frequency
+1294 3115 Maximum Prime Difference
+1375 2614 Prime In Diagonal
+1378 3765 Complete Prime Number
+1383 762 Prime Number of Set Bits in Binary Representation
+
+=== PALIN ===
+1215 2108 Find First Palindromic String in the Array
+1303 2697 Lexicographically Smallest Palindrome
+1328 2396 Strictly Palindromic Number
+1357 3517 Smallest Palindromic Rearrangement I
+1387 3239 Minimum Number of Flips to Make Binary Grid Palindromic I
+
+=== GCD_LCM ===
+1184 1979 Find Greatest Common Divisor of Array
+1203 1952 Three Divisors
+1220 3658 GCD of Odd and Even Sums
+1279 2807 Insert Greatest Common Divisors in Linked List
+1397 1071 Greatest Common Divisor of Strings
+
+=== FIB ===
+1142 1137 N-th Tribonacci Number
+1380 3708 Longest Fibonacci Subarray
+
+=== GEOM ===
+1134 3024 Type of Triangle
+1170 3783 Mirror Distance of an Integer
+1213 973 K Closest Points to Origin
+1216 1848 Minimum Distance to the Target Element
+1229 1725 Number Of Rectangles That Can Form The Largest Square
+1229 2848 Points That Intersect With Cars
+1234 1184 Distance Between Bus Stops
+1234 1385 Find the Distance Value Between Two Arrays
+1243 2399 Check Distances Between Same Letters
+1247 1232 Check If It Is a Straight Line
+1249 3000 Maximum Area of Longest Diagonal Rectangle
+1259 1779 Find Nearest Point That Has the Same X or Y Coordinate
+1262 2739 Total Distance Traveled
+1266 821 Shortest Distance to a Character
+1287 3740 Minimum Distance Between Three Equal Elements I
+1294 2833 Furthest Point From Origin
+1301 806 Number of Lines To Write String
+1302 1266 Minimum Time Visiting All Points
+1303 783 Minimum Distance Between BST Nodes
+1307 1064 Fixed Point
+1310 2058 Find the Minimum and Maximum Number of Nodes Between Critical Points
+1312 3889 Mirror Frequency Distance
+1326 1476 Subrectangle Queries
+1340 976 Largest Perimeter Triangle
+1348 3195 Find the Minimum Area to Cover All Ones I
+1367 2515 Shortest Distance to Target String in a Circular Array
+1376 807 Max Increase to Keep City Skyline
+1380 1828 Queries on Number of Points Inside a Circle
+1382 849 Maximize Distance to Closest Person
+

@@ -125,14 +125,28 @@ Every solution the user writes (zerotrac, upsolve, or contest) must be reviewed 
 
 ```
 1. Comprehend      — what is input, output, the rule? Write it in ONE sentence
-2. Verify approach — trace 1-2 given examples mentally
-3. Edge cases      — 3-5 boundary cases on paper
+2. Verify approach — trace 1-2 given examples mentally  [MANDATORY WRITTEN]
+3. Edge cases      — 3-5 boundary cases on paper        [MANDATORY WRITTEN]
                      (empty input, single element, leading/trailing separator,
                       consecutive separators, max input size)
 4. Decompose       — break into sub-problems, name each one
                      ask: which sub-problem is hardest / most bug-prone? code that first
 5. Code bottom-up  — write helpers first, orchestrator last
 ```
+
+### Enforcement contract (added 2026-05-23)
+
+Steps 2 and 3 are mandatory written artifacts. Across the 1450-1850 audit, every WA-then-AC traces back to skipping these two steps. Steps 1, 4, 5 are not the failure mode — they happen naturally. Steps 2 and 3 don't.
+
+**How this is enforced during sessions:**
+- After the user derives an approach and BEFORE any code is written or requested, the user must post in chat:
+  - **Step 2:** Trace 1 given example through the proposed approach, showing state at each iteration/recurrence call.
+  - **Step 3:** List 3-5 edge cases by name (e.g., "n=1", "all same color", "all diff color", "two elements same color", "max input size").
+- Claude must **refuse to engage with code** until both are present in the conversation. If the user says "show me the code" or pastes a solution without steps 2-3 visible, Claude prompts them back to do the ritual first.
+- The ritual artifacts stay in chat. They do not need to be written into the log file — the log file follows the existing "insight + key gotcha + complexity, no full code" format.
+- Exception: if the user explicitly says "skip the ritual, I want to see how I fail" — allowed, but logged as a deliberate ritual break in that problem's entry.
+
+**Cost-benefit:** ~5 min overhead per problem. Today's House Robber V cost 60+ min and 4 WAs because the ritual was skipped — would have been caught on the first submission with `n=2, same color` traced. 12× return at minimum.
 
 ### Extract the predicate rule
 

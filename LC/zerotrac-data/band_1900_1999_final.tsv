@@ -1,0 +1,135 @@
+Rating	ID	Title	Tags
+1900.8434122725	1665	Minimum Initial Energy to Finish Tasks	NONE
+1903.1973989877	2602	Minimum Operations to Make All Array Elements Equal	AP_SUM
+1904.2279434479	2608	Shortest Cycle in a Graph	NONE
+1904.5020747926	3122	Minimum Number of Operations to Satisfy Conditions	NONE
+1904.6714229335	3081	Replace Question Marks in String to Minimize Its Value	NONE
+1908.3866125757	1124	Longest Well-Performing Interval	TRICK
+1908.8920524591	3728	Stable Subarrays With Equal Boundary and Interior Sum	AP_SUM
+1908.9411092109	3067	Count Pairs of Connectable Servers in a Weighted Tree Network	MOD_ARITH
+1909.4189035523	991	Broken Calculator	TRICK
+1909.4931160071	3298	Count Substrings That Can Be Rearranged to Contain a String II	NONE
+1909.5535861652	2585	Number of Ways to Earn Points	NONE
+1911.1959516695	873	Length of Longest Fibonacci Subsequence	FIB
+1911.7063530593	2049	Count Nodes With the Highest Score	NONE
+1911.8282317986	2296	Design a Text Editor	NONE
+1912.0829958001	1147	Longest Chunked Palindrome Decomposition	PALINDROME
+1912.1926699881	2680	Maximum OR	BIT_OPS
+1912.8440554296	1898	Maximum Number of Removable Characters	NONE
+1912.8455659711	1671	Minimum Number of Removals to Make Mountain Array	NONE
+1913.4834168162	3356	Zero Array Transformation II	NONE
+1913.6704728453	1373	Maximum Sum BST in Binary Tree	NONE
+1913.930869473	2875	Minimum Size Subarray in Infinite Array	MOD_ARITH
+1914.6717285348	2147	Number of Ways to Divide a Long Corridor	PERM_COMB
+1915.2628132733	2594	Minimum Time to Repair Cars	NONE
+1916.0689858272	1043	Partition Array for Maximum Sum	NONE
+1916.1432350156	3394	Check if Grid can be Cut into Sections	GEOM
+1917.0816751666	3669	Balanced K-Factor Decomposition	DIVISORS
+1917.1049672432	2673	Make Costs of Paths Equal in a Binary Tree	NONE
+1917.2052894619	3144	Minimum Substring Partition of Equal Character Frequency	NONE
+1917.2145829853	2398	Maximum Number of Robots Within Budget	NONE
+1917.4314822412	3002	Maximum Size of a Set After Removals	NONE
+1918.9960035055	2069	Walking Robot Simulation II	NONE
+1919.1749818083	1130	Minimum Cost Tree From Leaf Values	NONE
+1919.6391896894	1416	Restore The Array	DIGIT_OPS
+1919.7433862082	1552	Magnetic Force Between Two Balls	NONE
+1922.9521758079	2731	Movement of Robots	TRICK
+1924.964639491	1745	Palindrome Partitioning IV	PALINDROME
+1926.7059583253	1727	Largest Submatrix With Rearrangements	NONE
+1926.7598451706	3372	Maximize the Number of Target Nodes After Connecting Trees I	NONE
+1927.4000816649	1449	Form Largest Integer With Digits That Add up to Target	DIGIT_OPS
+1928.2304187946	1562	Find Latest Group of Size M	NONE
+1928.7961204946	2654	Minimum Number of Operations to Make All Array Elements Equal to 1	GCD_LCM
+1929.3184180196	1802	Maximum Value at a Given Index in a Bounded Array	AP_SUM
+1929.897343316	2018	Check if Word Can Be Placed In Crossword	NONE
+1929.9086934334	1705	Maximum Number of Eaten Apples	NONE
+1931.0849921121	1798	Maximum Number of Consecutive Values You Can Make	TRICK
+1931.7335479582	1574	Shortest Subarray to be Removed to Make Array Sorted	NONE
+1932.3730795204	996	Number of Squareful Arrays	PERM_COMB,POWER
+1933.2169470617	1964	Find the Longest Valid Obstacle Course at Each Position	NONE
+1933.9571917853	827	Making A Large Island	NONE
+1934.3556201811	1818	Minimum Absolute Sum Difference	NONE
+1934.7806230835	3133	Minimum Array End	BIT_OPS
+1936.6613414859	813	Largest Sum of Averages	NONE
+1938.0586460002	2411	Smallest Subarrays With Maximum Bitwise OR	BIT_OPS
+1938.2224916289	866	Prime Palindrome	PRIME,PALINDROME
+1938.6883365596	777	Swap Adjacent in LR String	NONE
+1939.560165526	2925	Maximum Score After Applying Operations on a Tree	NONE
+1939.9323330472	1760	Minimum Limit of Balls in a Bag	NONE
+1940.2116985812	2762	Continuous Subarrays	SUBARRAY_COUNT
+1940.6002290953	2111	Minimum Operations to Make the Array K-Increasing	NONE
+1943.095489145	3381	Maximum Subarray Sum With Length Divisible by K	MOD_ARITH
+1944.5673996888	2227	Encrypt and Decrypt Strings	NONE
+1945.5095833982	1482	Minimum Number of Days to Make m Bouquets	NONE
+1945.7515607928	1793	Maximum Score of a Good Subarray	NONE
+1947.355455517	3858	Minimum Bitwise OR From Grid	BIT_OPS
+1947.5013967785	1631	Path With Minimum Effort	NONE
+1947.8832856412	2516	Take K of Each Character From Left and Right	NONE
+1948.489500779	2509	Cycle Length Queries in a Tree	POWER
+1949.0920823355	1153	String Transforms Into Another String	NONE
+1951.2096212775	1690	Stone Game VII	GAME_THEORY
+1951.3509259668	1259	Handshakes That Don't Cross	CATALAN
+1951.5918682146	2435	Paths in Matrix Whose Sum Is Divisible by K	MOD_ARITH
+1952.7073399331	1737	Change Minimum Characters to Satisfy One of Three Conditions	NONE
+1952.7914119963	3891	Minimum Increase to Maximize Special Indices	NONE
+1953.137726744	2434	Using a Robot to Print the Lexicographically Smallest String	NONE
+1954.2533254344	1696	Jump Game VI	NONE
+1954.5247525411	3599	Partition Array to Minimize XOR	XOR
+1956.7059585934	1463	Cherry Pickup II	NONE
+1958.1499109036	3720	Lexicographically Smallest Permutation Greater Than Target	PERM_COMB
+1959.1438732568	3593	Minimum Increments to Equalize Leaf Paths	NONE
+1959.2696201953	2564	Substring XOR Queries	XOR,BITMASK
+1960.5517123728	2392	Build a Matrix With Conditions	NONE
+1960.5763266754	2350	Shortest Impossible Sequence of Rolls	NONE
+1961.4987013156	1537	Get the Maximum Score	NONE
+1962.2005269503	1642	Furthest Building You Can Reach	NONE
+1962.3314335449	802	Find Eventual Safe States	NONE
+1964.3793590858	815	Bus Routes	NONE
+1964.6174369373	3850	Count Sequences to K	PRIME,DIVISORS
+1965.1266122355	2439	Minimize Maximum of Array	AP_SUM
+1966.7067914206	1969	Minimum Non-Zero Product of the Array Elements	POWER,MOD_ARITH
+1967.3284576938	1293	Shortest Path in a Grid with Obstacles Elimination	NONE
+1967.5589835406	2872	Maximum Number of K-Divisible Components	MOD_ARITH
+1968.4923703271	3756	Concatenate Non-Zero Digits and Multiply by Sum II	DIGIT_OPS
+1969.2019235672	1943	Describe the Painting	CONTRIBUTION
+1969.2668024554	3686	Number of Stable Subsequences	MOD_ARITH
+1969.9845549158	835	Image Overlap	PAIR_COUNT
+1970.4608098164	1032	Stream of Characters	NONE
+1972.7630060106	3733	Minimum Time to Complete All Deliveries	NONE
+1973.7407637067	1488	Avoid Flood in The City	NONE
+1973.9543553342	3202	Find the Maximum Length of Valid Subsequence II	MOD_ARITH
+1975.5726300727	907	Sum of Subarray Minimums	CONTRIBUTION,MOD_ARITH
+1975.9693382075	2831	Find the Longest Equal Subarray	NONE
+1976.7214151234	1092	Shortest Common Supersequence 	NONE
+1979.1112273597	1882	Process Tasks Using Servers	NONE
+1979.1323403633	1278	Palindrome Partitioning III	PALINDROME
+1979.493040606	3138	Minimum Length of Anagram Concatenation	GCD_LCM
+1979.9454101467	2151	Maximum Good People Based on Statements	BITMASK
+1981.3072959787	2861	Maximum Number of Alloys	NONE
+1981.4460440375	3771	Total Score of Dungeon Runs	NONE
+1981.8184570058	3725	Count Ways to Choose Coprime Integers from Rows	GCD_LCM,DIVISORS
+1982.4524895112	3690	Split and Merge Array Transformation	NONE
+1982.5085994817	805	Split Array With Same Average	AP_SUM
+1983.2319731313	1250	Check If It Is a Good Array	GCD_LCM
+1983.70440706	1733	Minimum Number of People to Teach	NONE
+1984.157304677	3695	Maximize Alternating Sum Using Swaps	NONE
+1984.9685663849	2963	Count the Number of Good Partitions	PERM_COMB,MOD_ARITH
+1985.2417520906	940	Distinct Subsequences II	MOD_ARITH
+1985.2504512337	928	Minimize Malware Spread II	NONE
+1987.9947081035	3836	Maximum Score Using Exactly K Pairs	NONE
+1989.5369509422	902	Numbers At Most N Given Digit Set	DIGIT_OPS,PERM_COMB
+1989.5764824732	3844	Longest Almost-Palindromic Substring	PALINDROME
+1990.2800994214	756	Pyramid Transition Matrix	BITMASK
+1990.7738526153	963	Minimum Area Rectangle II	GEOM
+1992.0032292739	1625	Lexicographically Smallest String After Applying Operations	NONE
+1994.3618892548	927	Three Equal Parts	BIT_OPS,PARITY
+1995.2937073376	1986	Minimum Number of Work Sessions to Finish the Tasks	BITMASK
+1996.0986736442	3224	Minimum Array Changes to Make Differences Equal	PARITY
+1997.1824403719	1274	Number of Ships in a Rectangle	NONE
+1997.5972097891	3440	Reschedule Meetings for Maximum Free Time II	NONE
+1997.7013718153	2250	Count Number of Rectangles Containing Each Point	GEOM
+1998.0432529701	3620	Network Recovery Pathways	NONE
+1998.3906211301	3897	Maximum Value of Concatenated Binary Segments	BIT_OPS
+1998.889914712	2488	Count Subarrays With Median K	SUBARRAY_COUNT,TRICK
+1999.1208076854	765	Couples Holding Hands	NONE
+1999.2742892673	3886	Sum of Sortable Integers	DIGIT_OPS

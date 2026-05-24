@@ -1,0 +1,186 @@
+1700	2962	-	Count Subarrays Where Max Element Appears at Least K Times
+1700	3592	-	Inverse Coin Change
+1701	1054	-	Distant Barcodes
+1701	1774	STARS_BARS	Closest Dessert Cost
+1701	2929	PERM_COMB,STARS_BARS	Distribute Candies Among Children II
+1702	2080	-	Range Frequency Queries
+1702	2100	-	Find Good Days to Rob the Bank
+1702	958	-	Check Completeness of a Binary Tree
+1703	3767	-	Maximize Points After Choosing K Tasks
+1704	1947	BITMASK	Maximum Compatibility Score Sum
+1704	3457	PARITY	Eat Pizzas!
+1705	2672	-	Number of Adjacent Elements With the Same Color
+1707	3025	GEOM	Find the Number of Ways to Place People I
+1707	816	-	Ambiguous Coordinates
+1708	1401	GEOM	Circle and Rectangle Overlapping
+1708	2257	GEOM	Count Unguarded Cells in the Grid
+1708	2944	-	Minimum Number of Coins for Fruits
+1708	3040	-	Maximum Number of Operations With the Same Score II
+1708	826	-	Most Profit Assigning Work
+1708	901	-	Online Stock Span
+1709	2140	-	Solving Questions With Brainpower
+1709	979	-	Distribute Coins in Binary Tree
+1710	1136	-	Parallel Courses
+1710	1567	PARITY	Maximum Length of Subarray With Positive Product
+1710	3310	-	Remove Methods From Project
+1710	759	-	Employee Free Time
+1710	923	TRIPLE_COUNT	3Sum With Multiplicity
+1711	1801	-	Number of Orders in the Backlog
+1711	2385	-	Amount of Time for Binary Tree to Be Infected
+1712	1042	-	Flower Planting With No Adjacent
+1713	1372	-	Longest ZigZag Path in a Binary Tree
+1713	2406	GEOM	Divide Intervals Into Minimum Number of Groups
+1714	1781	CONTRIBUTION,SUBARRAY_COUNT	Sum of Beauty of All Substrings
+1714	2359	-	Find Closest Node to Given Two Nodes
+1714	3315	BIT_OPS	Construct the Minimum Bitwise Array II
+1715	3649	GEOM,PAIR_COUNT	Number of Perfect Pairs
+1716	2202	-	Maximize the Topmost Element After K Moves
+1718	2017	-	Grid Game
+1718	2397	BITMASK	Maximum Rows Covered by Columns
+1719	1239	BITMASK	Maximum Length of a Concatenated String with Unique Characters
+1719	3557	-	Find Maximum Number of Non Intersecting Substrings
+1720	2563	PAIR_COUNT	Count the Number of Fair Pairs
+1721	2826	-	Sorting Three Groups
+1721	3208	-	Alternating Groups II
+1721	3341	-	Find Minimum Time to Reach Last Room I
+1722	1197	-	Minimum Knight Moves
+1722	1359	MOD_ARITH,PERM_COMB	Count All Valid Pickup and Delivery Options
+1724	2070	-	Most Beautiful Item for Each Query
+1724	2261	MOD_ARITH	K Divisible Elements Subarrays
+1725	1011	-	Capacity To Ship Packages Within D Days
+1725	2416	-	Sum of Prefix Scores of Strings
+1725	3820	GEOM,TRIPLE_COUNT	Pythagorean Distance Nodes in a Tree
+1728	3439	-	Reschedule Meetings for Maximum Free Time I
+1729	1220	MOD_ARITH,PERM_COMB	Count Vowels Permutation
+1729	3499	-	Maximize Active Section with Trade I
+1730	1014	CONTRIBUTION	Best Sightseeing Pair
+1730	3447	MOD_ARITH	Assign Elements to Groups with Constraints
+1731	889	-	Construct Binary Tree from Preorder and Postorder Traversal
+1732	1273	-	Delete Tree Nodes
+1732	2786	PARITY	Visit Array Positions to Maximize Score
+1734	1292	GEOM	Maximum Side Length of a Square with Sum Less than or Equal to Threshold
+1734	2048	DIGIT_OPS	Next Greater Numerically Balanced Number
+1735	2707	-	Extra Characters in a String
+1735	3453	GEOM	Separate Squares I
+1737	1814	DIGIT_OPS,MOD_ARITH,PAIR_COUNT	Count Nice Pairs in an Array
+1737	3044	DIGIT_OPS,PRIME	Most Frequent Prime
+1739	1593	-	Split a String Into the Max Number of Unique Substrings
+1739	3694	CONTRIBUTION,GEOM	Distinct Points Reachable After Substring Removal
+1739	3776	GEOM	Minimum Moves to Balance Circular Array
+1740	1079	PERM_COMB	Letter Tile Possibilities
+1741	1145	-	Binary Tree Coloring Game
+1741	3020	DIVISORS,POWER	Find the Maximum Number of Elements in Subset
+1743	2087	GEOM	Minimum Cost Homecoming of a Robot in a Grid
+1743	3380	GEOM	Maximum Area Rectangle With Point Constraints I
+1744	1139	-	Largest 1-Bordered Square
+1744	1638	-	Count Substrings That Differ by One Character
+1745	1391	-	Check if There is a Valid Path in a Grid
+1745	1530	-	Number of Good Leaf Nodes Pairs
+1745	2502	-	Design Memory Allocator
+1745	3433	-	Count Mentions Per User
+1745	3877	XOR	Minimum Removals to Achieve Target XOR
+1746	1024	-	Video Stitching
+1746	1849	-	Splitting a String Into Descending Consecutive Values
+1747	1191	-	K-Concatenation Maximum Sum
+1748	1297	-	Maximum Number of Occurrences of a Substring
+1748	2134	-	Minimum Swaps to Group All 1's Together II
+1748	2171	-	Removing Minimum Number of Magic Beans
+1749	1111	-	Maximum Nesting Depth of Two Valid Parentheses Strings
+1749	2401	BIT_OPS	Longest Nice Subarray
+1749	2856	-	Minimum Array Length After Pair Removals
+1749	2871	BIT_OPS	Split Array Into Maximum Number of Subarrays
+1749	3577	PERM_COMB,TRICK	Count the Number of Computer Unlocking Permutations
+1751	2166	BIT_OPS	Design Bitset
+1751	2400	MOD_ARITH,PERM_COMB	Number of Ways to Reach a Position After Exactly k Steps
+1752	1135	-	Connecting Cities With Minimum Cost
+1752	939	GEOM	Minimum Area Rectangle
+1753	1216	-	Valid Palindrome III
+1753	3478	-	Choose K Elements With Maximum Sum
+1753	3628	-	Maximum Number of Subsequences After One Inserting
+1753	764	-	Largest Plus Sign
+1754	2568	BIT_OPS	Minimum Impossible OR
+1756	3112	-	Minimum Time to Visit Disappearing Nodes
+1758	1027	AP_SUM	Longest Arithmetic Subsequence
+1758	1954	AP_SUM,GEOM	Minimum Garden Perimeter to Collect Enough Apples
+1759	1541	-	Minimum Insertions to Balance a Parentheses String
+1759	2075	GEOM	Decode the Slanted Ciphertext
+1759	2498	PARITY	Frog Jump II
+1759	3835	-	Count Subarrays With Cost Less Than or Equal to K
+1759	3922	-	Minimum Flips to Make Binary String Coherent
+1760	2121	CONTRIBUTION	Intervals Between Identical Elements
+1760	3881	MOD_ARITH,PERM_COMB	Direction Assignments with Exactly K Visible People
+1761	2453	MOD_ARITH	Destroy Sequential Targets
+1761	3403	-	Find the Lexicographically Largest String From the Box I
+1762	1262	MOD_ARITH	Greatest Sum Divisible by Three
+1762	948	-	Bag of Tokens
+1763	2462	-	Total Cost to Hire K Workers
+1763	2905	-	Find Indices With Index and Value Difference II
+1763	3584	-	Maximum Product of First and Last Elements of a Subsequence
+1764	1706	-	Where Will the Ball Fall
+1764	3085	-	Minimum Deletions to Make String K-Special
+1765	875	-	Koko Eating Bananas
+1766	1914	GEOM	Cyclically Rotating a Grid
+1768	1600	-	Throne Inheritance
+1768	2718	-	Sum of Matrix After Queries
+1768	3281	GEOM	Maximize Score of Numbers in Ranges
+1769	2685	-	Count the Number of Complete Components
+1770	1146	-	Snapshot Array
+1770	3882	GEOM,XOR	Minimum XOR Path in a Grid
+1771	3282	-	Reach End of Array With Max Score
+1772	2982	-	Find Longest Special Substring That Occurs Thrice II
+1772	3170	-	Lexicographically Minimum String After Removing Stars
+1774	1238	BIT_OPS	Circular Permutation in Binary Representation
+1775	2531	-	Make Number of Distinct Characters Equal
+1775	3644	BIT_OPS	Maximum K to Sort a Permutation
+1776	3919	-	Minimum Cost to Move Between Indices
+1777	3164	MOD_ARITH,PAIR_COUNT	Find the Number of Good Pairs II
+1777	3573	-	Best Time to Buy and Sell Stock V
+1777	918	GEOM	Maximum Sum Circular Subarray
+1778	1824	-	Minimum Sideway Jumps
+1779	1016	BIT_OPS	Binary String With Substrings Representing 1 To N
+1779	1129	-	Shortest Path with Alternating Colors
+1779	1424	GEOM	Diagonal Traverse II
+1779	2369	-	Check if There is a Valid Partition For The Array
+1779	2601	PRIME	Prime Subtraction Operation
+1779	842	FIB	Split Array into Fibonacci Sequence
+1781	1895	GEOM	Largest Magic Square
+1781	2353	-	Design a Food Rating System
+1782	1171	-	Remove Zero Sum Consecutive Nodes from Linked List
+1782	1765	-	Map of Highest Peak
+1783	851	-	Loud and Rich
+1784	2952	BITMASK	Minimum Number of Coins to be Added
+1784	894	CATALAN,PERM_COMB	All Possible Full Binary Trees
+1785	1911	-	Maximum Alternating Subsequence Sum
+1785	2653	-	Sliding Subarray Beauty
+1786	1312	-	Minimum Insertion Steps to Make a String Palindrome
+1786	1510	GAME_THEORY	Stone Game IV
+1786	787	-	Cheapest Flights Within K Stops
+1786	971	-	Flip Binary Tree To Match Preorder Traversal
+1786	983	-	Minimum Cost For Tickets
+1787	1156	-	Swap For Longest Repeated Character Substring
+1787	1497	MOD_ARITH,PARITY	Check If Array Pairs Are Divisible by k
+1787	2192	-	All Ancestors of a Node in a Directed Acyclic Graph
+1787	3387	-	Maximize Amount After Two Days of Conversions
+1787	768	-	Max Chunks To Make Sorted II
+1789	3219	-	Minimum Cost for Cutting Cake II
+1789	3724	-	Minimum Operations to Transform Array
+1790	2321	-	Maximum Score Of Spliced Array
+1791	2712	-	Minimum Cost to Make All Characters Equal
+1791	2771	-	Longest Non-decreasing Subarray From Two Arrays
+1792	1245	-	Tree Diameter
+1793	1653	-	Minimum Deletions to Make String Balanced
+1793	2381	MOD_ARITH	Shifting Letters II
+1793	2615	CONTRIBUTION	Sum of Distances
+1793	3092	-	Most Frequent IDs
+1793	3376	-	Minimum Time to Break Locks I
+1794	2998	BIT_OPS,TRICK	Minimum Number of Operations to Make X and Y Equal
+1794	886	-	Possible Bipartition
+1795	966	-	Vowel Spellchecker
+1796	3001	GEOM	Minimum Moves to Capture The Queen
+1796	3814	-	Maximum Capacity Within Budget
+1797	1028	-	Recover a Tree From Preorder Traversal
+1797	1072	-	Flip Columns For Maximum Number of Equal Rows
+1797	1711	BIT_OPS,MOD_ARITH,PAIR_COUNT	Count Good Meals
+1797	1834	-	Single-Threaded CPU
+1798	3418	-	Maximum Amount of Money Robot Can Earn
+1799	1186	-	Maximum Subarray Sum with One Deletion

@@ -1,0 +1,135 @@
+Rating|ID|Title|Content
+1900.8434122725|1665|Minimum Initial Energy to Finish Tasks|
+1903.1973989877|2602|Minimum Operations to Make All Array Elements Equal|
+1904.2279434479|2608|Shortest Cycle in a Graph|
+1904.5020747926|3122|Minimum Number of Operations to Satisfy Conditions|
+1904.6714229335|3081|Replace Question Marks in String to Minimize Its Value|
+1908.3866125757|1124|Longest Well-Performing Interval|
+1908.8920524591|3728|Stable Subarrays With Equal Boundary and Interior Sum|
+1908.9411092109|3067|Count Pairs of Connectable Servers in a Weighted Tree Network|You are given an unrooted weighted tree with n vertices representing servers numbered from 0 to n - 1 , an array edges where edges[i] = [a i , b i , weight i ] represents a bidirectional edge between vertices a i and b i of weight weight i . You are also given an integer signalSpeed . Two servers a and b are connectable through a server c if: a &lt; b , a != c and b != c . The distance from c to a is divisible by signalSpeed . The distance from c to b is divisible by signalSpeed . The path from 
+1909.4189035523|991|Broken Calculator|There is a broken calculator that has the integer startValue on its display initially. In one operation, you can: multiply the number on display by 2 , or subtract 1 from the number on display. Given two integers startValue and target , return the minimum number of operations needed to display target on the calculator . &nbsp; Example 1: Input: startValue = 2, target = 3 Output: 2 Explanation: Use double operation and then decrement operation {2 -&gt; 4 -&gt; 3}. Example 2: Input: startValue = 5
+1909.4931160071|3298|Count Substrings That Can Be Rearranged to Contain a String II|You are given two strings word1 and word2 . A string x is called valid if x can be rearranged to have word2 as a prefix . Return the total number of valid substrings of word1 . Note that the memory limits in this problem are smaller than usual, so you must implement a solution with a linear runtime complexity. &nbsp; Example 1: Input: word1 = &quot;bcca&quot;, word2 = &quot;abc&quot; Output: 1 Explanation: The only valid substring is &quot;bcca&quot; which can be rearranged to &quot;abcc&quot; h
+1909.5535861652|2585|Number of Ways to Earn Points|
+1911.1959516695|873|Length of Longest Fibonacci Subsequence|
+1911.7063530593|2049|Count Nodes With the Highest Score|There is a binary tree rooted at 0 consisting of n nodes. The nodes are labeled from 0 to n - 1 . You are given a 0-indexed integer array parents representing the tree, where parents[i] is the parent of node i . Since node 0 is the root, parents[0] == -1 . Each node has a score . To find the score of a node, consider if the node and the edges connected to it were removed . The tree would become one or more non-empty subtrees. The size of a subtree is the number of the nodes in it. The score of t
+1911.8282317986|2296|Design a Text Editor|Design a text editor with a cursor that can do the following: Add text to where the cursor is. Delete text from where the cursor is (simulating the backspace key). Move the cursor either left or right. When deleting text, only characters to the left of the cursor will be deleted. The cursor will also remain within the actual text and cannot be moved beyond it. More formally, we have that 0 &lt;= cursor.position &lt;= currentText.length always holds. Implement the TextEditor class: TextEditor() I
+1912.0829958001|1147|Longest Chunked Palindrome Decomposition|
+1912.1926699881|2680|Maximum OR|
+1912.8440554296|1898|Maximum Number of Removable Characters|
+1912.8455659711|1671|Minimum Number of Removals to Make Mountain Array|
+1913.4834168162|3356|Zero Array Transformation II|
+1913.6704728453|1373|Maximum Sum BST in Binary Tree|
+1913.930869473|2875|Minimum Size Subarray in Infinite Array|
+1914.6717285348|2147|Number of Ways to Divide a Long Corridor|
+1915.2628132733|2594|Minimum Time to Repair Cars|
+1916.0689858272|1043|Partition Array for Maximum Sum|
+1916.1432350156|3394|Check if Grid can be Cut into Sections|You are given an integer n representing the dimensions of an n x n grid, with the origin at the bottom-left corner of the grid. You are also given a 2D array of coordinates rectangles , where rectangles[i] is in the form [start x , start y , end x , end y ] , representing a rectangle on the grid. Each rectangle is defined as follows: (start x , start y ) : The bottom-left corner of the rectangle. (end x , end y ) : The top-right corner of the rectangle. Note that the rectangles do not overlap. Y
+1917.0816751666|3669|Balanced K-Factor Decomposition|Given two integers n and k , split the number n into exactly k positive integers such that the product of these integers is equal to n . Return any one split in which the maximum difference between any two numbers is minimized . You may return the result in any order . &nbsp; Example 1: Input: n = 100, k = 2 Output: [10,10] Explanation: The split [10, 10] yields 10 * 10 = 100 and a max-min difference of 0, which is minimal. Example 2: Input: n = 44, k = 3 Output: [2,2,11] Explanation: Split [1, 
+1917.1049672432|2673|Make Costs of Paths Equal in a Binary Tree|
+1917.2052894619|3144|Minimum Substring Partition of Equal Character Frequency|
+1917.2145829853|2398|Maximum Number of Robots Within Budget|
+1917.4314822412|3002|Maximum Size of a Set After Removals|
+1918.9960035055|2069|Walking Robot Simulation II|
+1919.1749818083|1130|Minimum Cost Tree From Leaf Values|
+1919.6391896894|1416|Restore The Array|
+1919.7433862082|1552|Magnetic Force Between Two Balls|
+1922.9521758079|2731|Movement of Robots|
+1924.964639491|1745|Palindrome Partitioning IV|
+1926.7059583253|1727|Largest Submatrix With Rearrangements|
+1926.7598451706|3372|Maximize the Number of Target Nodes After Connecting Trees I|
+1927.4000816649|1449|Form Largest Integer With Digits That Add up to Target|
+1928.2304187946|1562|Find Latest Group of Size M|
+1928.7961204946|2654|Minimum Number of Operations to Make All Array Elements Equal to 1|
+1929.3184180196|1802|Maximum Value at a Given Index in a Bounded Array|
+1929.897343316|2018|Check if Word Can Be Placed In Crossword|You are given an m x n matrix board , representing the current state of a crossword puzzle. The crossword contains lowercase English letters (from solved words), &#39; &#39; to represent any empty cells, and &#39;#&#39; to represent any blocked cells. A word can be placed horizontally (left to right or right to left) or vertically (top to bottom or bottom to top) in the board if: It does not occupy a cell containing the character &#39;#&#39; . The cell each letter is placed in must either be &#3
+1929.9086934334|1705|Maximum Number of Eaten Apples|
+1931.0849921121|1798|Maximum Number of Consecutive Values You Can Make|
+1931.7335479582|1574|Shortest Subarray to be Removed to Make Array Sorted|
+1932.3730795204|996|Number of Squareful Arrays|
+1933.2169470617|1964|Find the Longest Valid Obstacle Course at Each Position|
+1933.9571917853|827|Making A Large Island|
+1934.3556201811|1818|Minimum Absolute Sum Difference|
+1934.7806230835|3133|Minimum Array End|
+1936.6613414859|813|Largest Sum of Averages|
+1938.0586460002|2411|Smallest Subarrays With Maximum Bitwise OR|
+1938.2224916289|866|Prime Palindrome|
+1938.6883365596|777|Swap Adjacent in LR String|
+1939.560165526|2925|Maximum Score After Applying Operations on a Tree|
+1939.9323330472|1760|Minimum Limit of Balls in a Bag|
+1940.2116985812|2762|Continuous Subarrays|You are given a 0-indexed integer array nums . A subarray of nums is called continuous if: Let i , i + 1 , ..., j be the indices in the subarray. Then, for each pair of indices i &lt;= i 1 , i 2 &lt;= j , 0 &lt;= |nums[i 1 ] - nums[i 2 ]| &lt;= 2 . Return the total number of continuous subarrays. A subarray is a contiguous non-empty sequence of elements within an array. &nbsp; Example 1: Input: nums = [5,4,2,4] Output: 8 Explanation: Continuous subarray of size 1: [5], [4], [2], [4]. Continuous 
+1940.6002290953|2111|Minimum Operations to Make the Array K-Increasing|
+1943.095489145|3381|Maximum Subarray Sum With Length Divisible by K|
+1944.5673996888|2227|Encrypt and Decrypt Strings|You are given a character array keys containing unique characters and a string array values containing strings of length 2. You are also given another string array dictionary that contains all permitted original strings after decryption. You should implement a data structure that can encrypt or decrypt a 0-indexed string. A string is encrypted with the following process: For each character c in the string, we find the index i satisfying keys[i] == c in keys . Replace c with values[i] in the stri
+1945.5095833982|1482|Minimum Number of Days to Make m Bouquets|
+1945.7515607928|1793|Maximum Score of a Good Subarray|
+1947.355455517|3858|Minimum Bitwise OR From Grid|
+1947.5013967785|1631|Path With Minimum Effort|
+1947.8832856412|2516|Take K of Each Character From Left and Right|
+1948.489500779|2509|Cycle Length Queries in a Tree|You are given an integer n . There is a complete binary tree with 2 n - 1 nodes. The root of that tree is the node with the value 1 , and every node with a value val in the range [1, 2 n - 1 - 1] has two children where: The left node has the value 2 * val , and The right node has the value 2 * val + 1 . You are also given a 2D integer array queries of length m , where queries[i] = [a i , b i ] . For each query, solve the following problem: Add an edge between the nodes with values a i and b i . 
+1949.0920823355|1153|String Transforms Into Another String|
+1951.2096212775|1690|Stone Game VII|
+1951.3509259668|1259|Handshakes That Don't Cross|
+1951.5918682146|2435|Paths in Matrix Whose Sum Is Divisible by K|
+1952.7073399331|1737|Change Minimum Characters to Satisfy One of Three Conditions|You are given two strings a and b that consist of lowercase letters. In one operation, you can change any character in a or b to any lowercase letter . Your goal is to satisfy one of the following three conditions: Every letter in a is strictly less than every letter in b in the alphabet. Every letter in b is strictly less than every letter in a in the alphabet. Both a and b consist of only one distinct letter. Return the minimum number of operations needed to achieve your goal. &nbsp; Example 1
+1952.7914119963|3891|Minimum Increase to Maximize Special Indices|
+1953.137726744|2434|Using a Robot to Print the Lexicographically Smallest String|
+1954.2533254344|1696|Jump Game VI|
+1954.5247525411|3599|Partition Array to Minimize XOR|
+1956.7059585934|1463|Cherry Pickup II|You are given a rows x cols matrix grid representing a field of cherries where grid[i][j] represents the number of cherries that you can collect from the (i, j) cell. You have two robots that can collect cherries for you: Robot #1 is located at the top-left corner (0, 0) , and Robot #2 is located at the top-right corner (0, cols - 1) . Return the maximum number of cherries collection using both robots by following the rules below : From a cell (i, j) , robots can move to cell (i + 1, j - 1) , (i
+1958.1499109036|3720|Lexicographically Smallest Permutation Greater Than Target|
+1959.1438732568|3593|Minimum Increments to Equalize Leaf Paths|
+1959.2696201953|2564|Substring XOR Queries|
+1960.5517123728|2392|Build a Matrix With Conditions|You are given a positive integer k . You are also given: a 2D integer array rowConditions of size n where rowConditions[i] = [above i , below i ] , and a 2D integer array colConditions of size m where colConditions[i] = [left i , right i ] . The two arrays contain integers from 1 to k . You have to build a k x k matrix that contains each of the numbers from 1 to k exactly once . The remaining cells should have the value 0 . The matrix should also satisfy the following conditions: The number abov
+1960.5763266754|2350|Shortest Impossible Sequence of Rolls|
+1961.4987013156|1537|Get the Maximum Score|
+1962.2005269503|1642|Furthest Building You Can Reach|
+1962.3314335449|802|Find Eventual Safe States|
+1964.3793590858|815|Bus Routes|You are given an array routes representing bus routes where routes[i] is a bus route that the i th bus repeats forever. For example, if routes[0] = [1, 5, 7] , this means that the 0 th bus travels in the sequence 1 -&gt; 5 -&gt; 7 -&gt; 1 -&gt; 5 -&gt; 7 -&gt; 1 -&gt; ... forever. You will start at the bus stop source (You are not on any bus initially), and you want to go to the bus stop target . You can travel between bus stops by buses only. Return the least number of buses you must take to tr
+1964.6174369373|3850|Count Sequences to K|You are given an integer array nums , and an integer k . Start with an initial value val = 1 and process nums from left to right. At each index i , you must choose exactly one of the following actions: Multiply val by nums[i] . Divide val by nums[i] . Leave val unchanged. After processing all elements, val is considered equal to k only if its final rational value exactly equals k . Return the count of distinct sequences of choices that result in val == k . Note: Division is rational (exact), not
+1965.1266122355|2439|Minimize Maximum of Array|
+1966.7067914206|1969|Minimum Non-Zero Product of the Array Elements|
+1967.3284576938|1293|Shortest Path in a Grid with Obstacles Elimination|
+1967.5589835406|2872|Maximum Number of K-Divisible Components|
+1968.4923703271|3756|Concatenate Non-Zero Digits and Multiply by Sum II|You are given a string s of length m consisting of digits. You are also given a 2D integer array queries , where queries[i] = [l i , r i ] . For each queries[i] , extract the substring s[l i ..r i ] . Then, perform the following: Form a new integer x by concatenating all the non-zero digits from the substring in their original order. If there are no non-zero digits, x = 0 . Let sum be the sum of digits in x . The answer is x * sum . Return an array of integers answer where answer[i] is the answe
+1969.2019235672|1943|Describe the Painting|There is a long and thin painting that can be represented by a number line. The painting was painted with multiple overlapping segments where each segment was painted with a unique color. You are given a 2D integer array segments , where segments[i] = [start i , end i , color i ] represents the half-closed segment [start i , end i ) with color i as the color. The colors in the overlapping segments of the painting were mixed when it was painted. When two or more colors mix, they form a new color 
+1969.2668024554|3686|Number of Stable Subsequences|
+1969.9845549158|835|Image Overlap|
+1970.4608098164|1032|Stream of Characters|
+1972.7630060106|3733|Minimum Time to Complete All Deliveries|
+1973.7407637067|1488|Avoid Flood in The City|Your country has 10 9 lakes. Initially, all the lakes are empty, but when it rains over the n th lake, the n th lake becomes full of water. If it rains over a lake that is full of water , there will be a flood . Your goal is to avoid floods in any lake. Given an integer array rains where: rains[i] &gt; 0 means there will be rains over the rains[i] lake. rains[i] == 0 means there are no rains this day and you&nbsp; must choose&nbsp; one lake this day and dry it . Return an array ans where: ans.le
+1973.9543553342|3202|Find the Maximum Length of Valid Subsequence II|
+1975.5726300727|907|Sum of Subarray Minimums|
+1975.9693382075|2831|Find the Longest Equal Subarray|
+1976.7214151234|1092|Shortest Common Supersequence |
+1979.1112273597|1882|Process Tasks Using Servers|
+1979.1323403633|1278|Palindrome Partitioning III|
+1979.493040606|3138|Minimum Length of Anagram Concatenation|
+1979.9454101467|2151|Maximum Good People Based on Statements|
+1981.3072959787|2861|Maximum Number of Alloys|
+1981.4460440375|3771|Total Score of Dungeon Runs|
+1981.8184570058|3725|Count Ways to Choose Coprime Integers from Rows|You are given a m x n matrix mat of positive integers. Return an integer denoting the number of ways to choose exactly one integer from each row of mat such that the greatest common divisor of all chosen integers is 1. Since the answer may be very large, return it modulo 10 9 + 7 . &nbsp; Example 1: Input: mat = [[1,2],[3,4]] Output: 3 Explanation: Chosen integer in the first row Chosen integer in the second row Greatest common divisor of chosen integers 1 3 1 1 4 1 2 3 1 2 4 2 3 of these combin
+1982.4524895112|3690|Split and Merge Array Transformation|
+1982.5085994817|805|Split Array With Same Average|
+1983.2319731313|1250|Check If It Is a Good Array|Given an array nums of&nbsp;positive integers. Your task is to select some subset of nums , multiply each element by an integer and add all these numbers.&nbsp;The array is said to be&nbsp; good&nbsp; if you can obtain a sum of&nbsp; 1 &nbsp;from the array by any possible subset and multiplicand. Return&nbsp; True &nbsp;if the array is good&nbsp; otherwise&nbsp;return&nbsp; False . &nbsp; Example 1: Input: nums = [12,5,7,23] Output: true Explanation: Pick numbers 5 and 7. 5*3 + 7*(-2) = 1 Exampl
+1983.70440706|1733|Minimum Number of People to Teach|
+1984.157304677|3695|Maximize Alternating Sum Using Swaps|
+1984.9685663849|2963|Count the Number of Good Partitions|You are given a 0-indexed array nums consisting of positive integers. A partition of an array into one or more contiguous subarrays is called good if no two subarrays contain the same number. Return the total number of good partitions of nums . Since the answer may be large, return it modulo 10 9 + 7 . &nbsp; Example 1: Input: nums = [1,2,3,4] Output: 8 Explanation: The 8 possible good partitions are: ([1], [2], [3], [4]), ([1], [2], [3,4]), ([1], [2,3], [4]), ([1], [2,3,4]), ([1,2], [3], [4]), 
+1985.2417520906|940|Distinct Subsequences II|Given a string s, return the number of distinct non-empty subsequences of s . Since the answer may be very large, return it modulo 10 9 + 7 . A subsequence of a string is a new string that is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (i.e., &quot;ace&quot; is a subsequence of &quot; a b c d e &quot; while &quot;aec&quot; is not. &nbsp; Example 1: Input: s = &quot;abc&quot; Output: 7 Expl
+1985.2504512337|928|Minimize Malware Spread II|
+1987.9947081035|3836|Maximum Score Using Exactly K Pairs|
+1989.5369509422|902|Numbers At Most N Given Digit Set|
+1989.5764824732|3844|Longest Almost-Palindromic Substring|
+1990.2800994214|756|Pyramid Transition Matrix|
+1990.7738526153|963|Minimum Area Rectangle II|
+1992.0032292739|1625|Lexicographically Smallest String After Applying Operations|
+1994.3618892548|927|Three Equal Parts|
+1995.2937073376|1986|Minimum Number of Work Sessions to Finish the Tasks|
+1996.0986736442|3224|Minimum Array Changes to Make Differences Equal|
+1997.1824403719|1274|Number of Ships in a Rectangle|
+1997.5972097891|3440|Reschedule Meetings for Maximum Free Time II|
+1997.7013718153|2250|Count Number of Rectangles Containing Each Point|You are given a 2D integer array rectangles where rectangles[i] = [l i , h i ] indicates that i th rectangle has a length of l i and a height of h i . You are also given a 2D integer array points where points[j] = [x j , y j ] is a point with coordinates (x j , y j ) . The i th rectangle has its bottom-left corner point at the coordinates (0, 0) and its top-right corner point at (l i , h i ) . Return an integer array count of length points.length where count[j] is the number of rectangles that c
+1998.0432529701|3620|Network Recovery Pathways|
+1998.3906211301|3897|Maximum Value of Concatenated Binary Segments|
+1998.889914712|2488|Count Subarrays With Median K|You are given an array nums of size n consisting of distinct integers from 1 to n and a positive integer k . Return the number of non-empty subarrays in nums that have a median equal to k . Note : The median of an array is the middle element after sorting the array in ascending order. If the array is of even length, the median is the left middle element. For example, the median of [2,3,1,4] is 2 , and the median of [8,4,3,5,1] is 4 . A subarray is a contiguous part of an array. &nbsp; Example 1:
+1999.1208076854|765|Couples Holding Hands|There are n couples sitting in 2n seats arranged in a row and want to hold hands. The people and seats are represented by an integer array row where row[i] is the ID of the person sitting in the i th seat. The couples are numbered in order, the first couple being (0, 1) , the second couple being (2, 3) , and so on with the last couple being (2n - 2, 2n - 1) . Return the minimum number of swaps so that every couple is sitting side by side . A swap consists of choosing any two people, then they st
+1999.2742892673|3886|Sum of Sortable Integers|

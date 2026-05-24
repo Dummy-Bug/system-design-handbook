@@ -1,0 +1,724 @@
+1100	3099	MOD_DIV,DIGIT	Harshad Number
+1104	1480	SUM_ARITH	Running Sum of 1d Array
+1115	3028	-	Ant on the Boundary
+1118	1394	-	Find Lucky Integer in an Array
+1120	1470	-	Shuffle the Array
+1121	1464	-	Maximum Product of Two Elements in an Array
+1125	1455	-	Check If a Word Occurs As a Prefix of Any Word in a Sentence
+1129	1450	-	Number of Students Doing Homework at a Given Time
+1129	977	POWER_ROOT	Squares of a Sorted Array
+1132	1929	-	Concatenation of Array
+1134	3024	GEOM	Type of Triangle
+1139	1295	DIGIT	Find Numbers with Even Number of Digits
+1139	1351	COUNT	Count Negative Numbers in a Sorted Matrix
+1139	3190	MOD_DIV	Find Minimum Operations to Make All Elements Divisible by Three
+1139	3856	-	Trim Trailing Vowels
+1140	2894	MOD_DIV	Divisible and Non-divisible Sums Difference
+1140	3492	-	Maximum Containers on a Ship
+1141	1281	DIGIT,SUM_ARITH	Subtract the Product and Sum of Digits of an Integer
+1142	1137	POWER_ROOT,FIB	N-th Tribonacci Number
+1142	2798	-	Number of Employees Who Met the Target
+1144	1913	PAIR_TRIP	Maximum Product Difference Between Two Pairs
+1144	2413	MOD_DIV	Smallest Even Multiple
+1147	2733	-	Neither Minimum nor Maximum
+1148	3622	MOD_DIV,DIGIT,SUM_ARITH	Check Divisibility by Digit Sum and Product
+1149	3065	-	Minimum Operations to Exceed Threshold Value I
+1149	3184	PAIR_TRIP,COUNT	Count Pairs That Form a Complete Day I
+1149	3870	COUNT	Count Commas in Range
+1151	1290	BIT_XOR	Convert Binary Number in a Linked List to Integer
+1151	1460	-	Make Two Arrays Equal by Reversing Sub-arrays
+1151	2455	MOD_DIV	Average Value of Even Numbers That Are Divisible by Three
+1151	2778	POWER_ROOT,SUM_ARITH	Sum of Squares of Special Elements
+1151	2828	-	Check if a String Is an Acronym of Words
+1152	1365	-	How Many Numbers Are Smaller Than the Current Number
+1152	2089	PROB	Find Target Indices After Sorting Array
+1152	3110	-	Score of a String
+1152	3146	PERM_COMB	Permutation Difference between Two Strings
+1152	3151	-	Special Array I
+1153	2469	-	Convert the Temperature
+1154	1502	-	Can Make Arithmetic Progression From Sequence
+1154	3861	-	Minimum Capacity Box
+1155	2351	-	First Letter to Appear Twice
+1157	2903	PROB	Find Indices With Index and Value Difference I
+1160	1512	PAIR_TRIP	Number of Good Pairs
+1160	1920	PERM_COMB	Build Array from Permutation
+1160	3131	-	Find the Integer Added to Array I
+1160	3842	-	Toggle Light Bulbs
+1161	2278	-	Percentage of Letter in String
+1161	3884	-	First Matching Character From Both Ends
+1161	961	-	N-Repeated Element in Size 2N Array
+1162	3274	POWER_ROOT	Check if Two Chessboard Squares Have the Same Color
+1163	1342	-	Number of Steps to Reduce a Number to Zero
+1163	3232	GAME,DIGIT	Find if Digit Game Can Be Won
+1163	3289	-	The Two Sneaky Numbers of Digitville
+1164	1374	-	Generate a String With Characters That Have Odd Counts
+1164	2710	-	Remove Trailing Zeros From a String
+1164	3516	-	Find Closest Person
+1164	771	-	Jewels and Stones
+1165	1446	-	Consecutive Characters
+1165	2011	-	Final Value of Variable After Performing Operations
+1165	2824	PAIR_TRIP,COUNT,SUM_ARITH	Count Pairs Whose Sum is Less than Target
+1165	3467	-	Transform Array by Parity
+1165	3931	DIGIT	Check Adjacent Digit Differences
+1166	1768	-	Merge Strings Alternately
+1166	1832	-	Check if the Sentence Is Pangram
+1166	3285	PROB	Find Indices of Stable Mountains
+1167	1304	SUM_ARITH	Find N Unique Integers Sum up to Zero
+1167	2057	-	Smallest Index With Equal Value
+1167	2185	-	Counting Words With a Given Prefix
+1167	2441	-	Largest Positive Integer That Exists With Its Negative
+1167	796	-	Rotate String
+1168	2651	-	Calculate Delayed Arrival Time
+1168	3162	PAIR_TRIP	Find the Number of Good Pairs I
+1169	2960	COUNT	Count Tested Devices After Test Operations
+1170	3783	GEOM	Mirror Distance of an Integer
+1171	3248	-	Snake in Matrix
+1171	3833	PROB,COUNT	Count Dominant Indices
+1172	1046	-	Last Stone Weight
+1172	2427	-	Number of Common Factors
+1172	3158	BIT_XOR	Find the XOR of Numbers Which Appear Twice
+1172	760	-	Find Anagram Mappings
+1173	3083	-	Existence of a Substring in a String and Its Reverse
+1173	922	-	Sort Array By Parity II
+1174	1773	COUNT	Count Items Matching a Rule
+1174	2643	-	Row With Maximum Ones
+1175	3019	-	Number of Changing Keys
+1175	3726	-	Remove Zeros in Decimal Representation
+1176	1431	-	Kids With the Greatest Number of Candies
+1176	3925	-	Concatenate Array With Reverse
+1177	3264	-	Final Array State After K Multiplication Operations I
+1177	965	BIT_XOR	Univalued Binary Tree
+1178	2586	COUNT	Count the Number of Vowel Strings in Range
+1178	905	-	Sort Array By Parity
+1179	1287	-	Element Appearing More Than 25% In Sorted Array
+1179	3210	PERM_COMB	Find the Encrypted String
+1180	1441	-	Build an Array With Stack Operations
+1180	1486	BIT_XOR	XOR Operation in an Array
+1180	3033	-	Modify the Matrix
+1181	1189	-	Maximum Number of Balloons
+1181	3300	DIGIT,SUM_ARITH	Minimum Element After Replacement With Digit Sum
+1181	852	-	Peak Index in a Mountain Array
+1182	1672	-	Richest Customer Wealth
+1182	2652	MOD_DIV,SUM_ARITH	Sum Multiples
+1182	2942	-	Find Words Containing Character
+1184	1979	GCD_LCM	Find Greatest Common Divisor of Array
+1184	2341	PAIR_TRIP	Maximum Number of Pairs in Array
+1184	2544	DIGIT,SUM_ARITH	Alternating Digit Sum
+1184	2974	GAME	Minimum Number Game
+1184	3423	-	Maximum Difference Between Adjacent Elements in a Circular Array
+1185	3612	-	Process String with Special Operations I
+1187	1880	-	Check if Word Equals Summation of Two Words
+1187	2119	-	A Number After a Double Reversal
+1188	1122	-	Relative Sort Array
+1188	747	-	Largest Number At Least Twice of Others
+1189	2951	-	Find the Peaks
+1189	3461	DIGIT	Check If Digits Are Equal in String After Operations I
+1190	3079	PERM_COMB,SUM_ARITH	Find the Sum of Encrypted Integers
+1190	3340	-	Check Balanced String
+1190	3827	COUNT	Count Monobit Integers
+1191	2769	-	Find the Maximum Achievable Number
+1192	1436	-	Destination City
+1192	2810	-	Faulty Keyboard
+1193	1323	-	Maximum 69 Number
+1193	1437	-	Check If All 1's Are at Least Length K Places Away
+1193	1528	-	Shuffle String
+1193	2418	-	Sort the People
+1194	3194	-	Minimum Average of Smallest and Largest Elements
+1195	1207	-	Unique Number of Occurrences
+1195	2529	COUNT	Maximum Count of Positive Integer and Negative Integer
+1197	3074	-	Apple Redistribution into Boxes
+1198	1200	-	Minimum Absolute Difference
+1198	2678	-	Number of Senior Citizens
+1198	3295	-	Report Spam Message
+1198	3370	BIT_XOR	Smallest Number With All Set Bits
+1198	3683	-	Earliest Time to Finish One Task
+1198	3712	MOD_DIV,SUM_ARITH	Sum of Elements With Frequency Divisible by K
+1198	3917	PROB,COUNT	Count Indices With Opposite Parity
+1198	985	SUM_ARITH	Sum of Even Numbers After Queries
+1199	1154	-	Day of the Year
+1199	1165	-	Single-Row Keyboard
+1199	2000	-	Reverse Prefix of Word
+1199	2169	COUNT	Count Operations to Obtain Zero
+1199	3432	COUNT,SUM_ARITH	Count Partitions with Even Sum Difference
+1199	3452	SUM_ARITH	Sum of Good Numbers
+1199	3536	DIGIT	Maximum Product of Two Digits
+1199	3875	-	Construct Uniform Parity Array I
+1199	929	-	Unique Email Addresses
+1200	2319	-	Check if Matrix Is X-Matrix
+1200	3392	COUNT	Count Subarrays of Length Three With a Condition
+1200	3550	DIGIT,SUM_ARITH	Smallest Index With Digit Sum Equal to Index
+1201	1491	-	Average Salary Excluding the Minimum and Maximum Salary
+1201	2124	-	Check if All A's Appears Before All B's
+1201	2148	COUNT	Count Elements With Strictly Smaller and Greater Elements
+1201	3038	-	Maximum Number of Operations With the Same Score I
+1201	3498	-	Reverse Degree of a String
+1201	997	-	Find the Town Judge
+1202	3898	-	Find the Degree of Each Vertex
+1203	1688	COUNT	Count of Matches in Tournament
+1203	1952	GCD_LCM	Three Divisors
+1203	2367	-	Number of Arithmetic Triplets
+1203	3069	-	Distribute Elements Into Two Arrays I
+1204	1869	-	Longer Contiguous Segments of Ones than Zeros
+1204	3688	-	Bitwise OR of Even Numbers in an Array
+1205	1160	-	Find Words That Can Be Formed by Characters
+1205	3120	COUNT	Count the Number of Special Characters I
+1205	3270	-	Find the Key of the Numbers
+1205	3280	BIT_XOR	Convert Date to Binary
+1206	1784	BIT_XOR	Check if Binary String Has at Most One Segment of Ones
+1206	2574	SUM_ARITH	Left and Right Sum Differences
+1206	2595	BIT_XOR	Number of Even and Odd Bits
+1206	3774	-	Absolute Difference Between Maximum and Minimum K Elements
+1206	3818	PERM_COMB	Minimum Prefix Removal to Make Array Strictly Increasing
+1207	1380	-	Lucky Numbers in a Matrix
+1207	1704	-	Determine if String Halves Are Alike
+1207	2215	-	Find the Difference of Two Arrays
+1207	2485	-	Find the Pivot Integer
+1207	2706	-	Buy Two Chocolates
+1208	1389	-	Create Target Array in the Given Order
+1208	941	-	Valid Mountain Array
+1209	1523	COUNT	Count Odd Numbers in an Interval Range
+1209	1822	-	Sign of the Product of an Array
+1209	3866	-	First Unique Even Element
+1210	3545	-	Minimum Deletions for At Most K Distinct Characters
+1211	3168	-	Minimum Number of Chairs in a Waiting Room
+1212	1413	SUM_ARITH	Minimum Value to Get Positive Step by Step Sum
+1212	1475	-	Final Prices With a Special Discount in a Shop
+1212	3046	-	Split the Array
+1213	2656	SUM_ARITH	Maximum Sum With Exactly K Elements
+1213	973	GEOM	K Closest Points to Origin
+1214	2806	-	Account Balance After Rounded Purchase
+1214	2956	-	Find Common Elements Between Two Arrays
+1214	3042	PAIR_TRIP,COUNT	Count Prefix and Suffix Pairs I
+1215	2108	PALIN	Find First Palindromic String in the Array
+1215	2176	MOD_DIV,PAIR_TRIP,COUNT	Count Equal and Divisible Pairs in an Array
+1215	3427	SUM_ARITH	Sum of Variable Length Subarrays
+1216	1848	GEOM	Minimum Distance to the Target Element
+1216	2553	DIGIT	Separate the Digits in an Array
+1216	3005	COUNT	Count Elements With Maximum Frequency
+1216	3813	-	Vowel-Consonant Score
+1217	1662	-	Check If Two String Arrays are Equivalent
+1217	3105	PERM_COMB	Longest Strictly Increasing or Strictly Decreasing Subarray
+1217	3731	-	Find Missing Elements
+1218	2442	COUNT	Count Number of Distinct Integers After Reverse Operations
+1218	2859	PROB,BIT_XOR,SUM_ARITH	Sum of Values at Indices With K Set Bits
+1218	3745	-	Maximize Expression of Three Elements
+1219	1221	-	Split a String in Balanced Strings
+1219	1299	-	Replace Elements with Greatest Element on Right Side
+1220	3442	-	Maximum Difference Between Even and Odd Frequency I
+1220	3658	GCD_LCM	GCD of Odd and Even Sums
+1221	1550	-	Three Consecutive Odds
+1221	1678	-	Goal Parser Interpretation
+1221	2414	-	Length of the Longest Alphabetical Continuous Substring
+1222	2535	DIGIT,SUM_ARITH	Difference Between Element Sum and Digit Sum of an Array
+1222	3894	-	Traffic Signal Color
+1223	1408	-	String Matching in an Array
+1223	2206	PAIR_TRIP	Divide Array Into Equal Pairs
+1223	2460	-	Apply Operations to an Array
+1223	3206	-	Alternating Groups I
+1223	3847	GAME	Find the Score Difference in a Game
+1224	1337	-	The K Weakest Rows in a Matrix
+1225	1346	-	Check If N and Its Double Exist
+1225	2357	-	Make Array Zero by Subtracting Equal Amounts
+1225	3438	PAIR_TRIP,DIGIT	Find Valid Pair of Adjacent Digits in String
+1226	1133	-	Largest Unique Number
+1226	1935	-	Maximum Number of Words You Can Type
+1227	1118	-	Number of Days in a Month
+1227	2729	-	Check if The Number is Fascinating
+1227	3618	PROB,PRIME	Split Array by Prime Indices
+1227	3718	MOD_DIV	Smallest Missing Multiple of K
+1227	844	-	Backspace String Compare
+1228	1748	SUM_ARITH	Sum of Unique Elements
+1228	3512	MOD_DIV,SUM_ARITH	Minimum Operations to Make Array Sum Divisible by K
+1228	3701	SUM_ARITH	Compute Alternating Sum
+1228	917	-	Reverse Only Letters
+1229	1725	POWER_ROOT,GEOM	Number Of Rectangles That Can Form The Largest Square
+1229	1800	SUM_ARITH	Maximum Ascending Subarray Sum
+1229	2848	GEOM	Points That Intersect With Cars
+1229	3794	-	Reverse String Prefix
+1231	1134	-	Armstrong Number
+1231	1492	-	The kth Factor of n
+1231	1967	-	Number of Strings That Appear as Substrings in Word
+1231	876	-	Middle of the Linked List
+1232	1119	-	Remove Vowels from a String
+1233	2980	-	Check if Bitwise OR Has Trailing Zeros
+1234	1009	-	Complement of Base 10 Integer
+1234	1184	GEOM	Distance Between Bus Stops
+1234	1385	GEOM	Find the Distance Value Between Two Arrays
+1234	1961	-	Check If String Is a Prefix of Array
+1234	3591	PRIME	Check if Any Element Has Prime Frequency
+1234	3643	POWER_ROOT	Flip Square Submatrix Vertically
+1234	3903	-	Smallest Stable Index I
+1234	989	-	Add to Array-Form of Integer
+1235	1816	-	Truncate Sentence
+1235	2149	PERM_COMB	Rearrange Array Elements by Sign
+1235	2154	-	Keep Multiplying Found Values by Two
+1235	2923	-	Find Champion I
+1235	3345	MOD_DIV,DIGIT	Smallest Divisible Digit Product I
+1237	1422	-	Maximum Score After Splitting a String
+1237	2864	BIT_XOR	Maximum Odd Binary Number
+1238	3522	-	Calculate Score After Performing Instructions
+1238	3541	-	Find Most Frequent Vowel and Consonant
+1239	2788	-	Split Strings by Separator
+1240	2078	-	Two Furthest Houses With Different Colors
+1240	3838	-	Weighted Word Mapping
+1241	1417	-	Reformat The String
+1241	2293	GAME	Min Max Game
+1241	2299	-	Strong Password Checker II
+1241	2347	-	Best Poker Hand
+1241	2605	DIGIT	Form Smallest Number From Two Digit Arrays
+1242	1941	-	Check if All Characters Have Equal Number of Occurrences
+1242	2309	-	Greatest English Letter in Upper and Lower Case
+1242	2716	-	Minimize String Length
+1242	3216	-	Lexicographically Smallest String After a Swap
+1242	921	-	Minimum Add to Make Parentheses Valid
+1243	2399	GEOM	Check Distances Between Same Letters
+1243	3502	-	Minimum Cost to Reach Every Position
+1243	832	-	Flipping an Image
+1244	1228	-	Missing Number In Arithmetic Progression
+1244	2965	-	Find Missing and Repeated Values
+1244	3456	-	Find Special Substring of Length K
+1245	1099	SUM_ARITH	Two Sum Less Than K
+1245	1518	-	Water Bottles
+1245	3402	PERM_COMB	Minimum Operations to Make Columns Strictly Increasing
+1246	2016	PERM_COMB	Maximum Difference Between Increasing Elements
+1246	2481	-	Minimum Cuts to Divide a Circle
+1246	2932	PAIR_TRIP,BIT_XOR	Maximum Strong Pair XOR I
+1247	1232	GEOM	Check If It Is a Straight Line
+1247	3226	BIT_XOR	Number of Bit Changes to Make Two Integers Equal
+1247	3754	DIGIT,SUM_ARITH	Concatenate Non-Zero Digits and Multiply by Sum I
+1248	1196	-	How Many Apples Can You Put into the Basket
+1248	1876	-	Substrings of Size Three with Distinct Characters
+1248	1903	-	Largest Odd Number in String
+1248	3803	COUNT	Count Residue Prefixes
+1249	1150	-	Check If a Number Is Majority Element in a Sorted Array
+1249	1161	BIT_XOR,SUM_ARITH	Maximum Level Sum of a Binary Tree
+1249	2279	-	Maximum Bags With Full Capacity of Rocks
+1249	2395	SUM_ARITH	Find Subarrays With Equal Sum
+1249	2540	-	Minimum Common Value
+1249	3000	GEOM	Maximum Area of Longest Diagonal Rectangle
+1249	3136	-	Valid Word
+1249	766	-	Toeplitz Matrix
+1250	2315	COUNT	Count Asterisks
+1250	2465	-	Number of Distinct Averages
+1250	3697	-	Compute Decimal Representation
+1250	3823	-	Reverse Letters Then Special Characters in a String
+1251	3736	-	Minimum Moves to Equal Array Elements III
+1251	830	-	Positions of Large Groups
+1252	1833	-	Maximum Ice Cream Bars
+1252	2164	PROB	Sort Even and Odd Indices Independently
+1253	2186	-	Minimum Number of Steps to Make Two Strings Anagram II
+1253	2194	-	Cells in a Range on an Excel Sheet
+1253	2283	DIGIT	Check if Number Has Equal Digit Count and Digit Value
+1253	2908	SUM_ARITH	Minimum Sum of Mountain Triplets I
+1254	1945	DIGIT,SUM_ARITH	Sum of Digits of String After Convert
+1255	1037	-	Valid Boomerang
+1255	2475	-	Number of Unequal Triplets in Array
+1255	3174	DIGIT	Clear Digits
+1255	3178	-	Find the Child Who Has the Ball After K Seconds
+1255	3386	-	Button with Longest Push Time
+1255	3668	-	Restore Finishing Order
+1256	1085	DIGIT,SUM_ARITH	Sum of Digits in the Minimum Number
+1256	1732	-	Find the Highest Altitude
+1256	2239	-	Find Closest Number to Zero
+1256	3379	-	Transformed Array
+1257	1309	-	Decrypt String from Alphabet to Integer Mapping
+1257	1356	BIT_XOR	Sort Integers by The Number of 1 Bits
+1257	2042	-	Check if Numbers Are Ascending in a Sentence
+1257	2103	-	Rings and Rods
+1257	2114	-	Maximum Number of Words Found in Sentences
+1257	2177	SUM_ARITH	Find Three Consecutive Integers That Sum to a Given Number
+1257	2180	COUNT,DIGIT,SUM_ARITH	Count Integers With Even Digit Sum
+1257	2644	MOD_DIV	Find the Maximum Divisibility Score
+1257	3880	-	Minimum Absolute Difference Between Two Values
+1258	3258	COUNT	Count Substrings That Satisfy K-Constraint I
+1258	867	-	Transpose Matrix
+1258	896	-	Monotonic Array
+1259	1213	-	Intersection of Three Sorted Arrays
+1259	1779	GEOM	Find Nearest Point That Has the Same X or Y Coordinate
+1259	2404	-	Most Frequent Even Element
+1259	2562	-	Find the Array Concatenation Value
+1259	884	-	Uncommon Words from Two Sentences
+1260	1305	BIT_XOR	All Elements in Two Binary Search Trees
+1260	2144	-	Minimum Cost of Buying Candies With Discount
+1260	2255	COUNT	Count Prefixes of a Given String
+1260	2520	COUNT,DIGIT	Count the Digits That Divide a Number
+1262	1089	-	Duplicate Zeros
+1262	2490	-	Circular Sentence
+1262	2739	GEOM	Total Distance Traveled
+1262	3159	-	Find Occurrences of an Element in an Array
+1262	3627	SUM_ARITH	Maximum Median Sum of Subsequences of Size 3
+1262	3707	-	Equal Score Substrings
+1262	3921	-	Score Validator
+1263	1456	-	Maximum Number of Vowels in a Substring of Given Length
+1263	3637	-	Trionic Array I
+1264	1736	DIGIT	Latest Time by Replacing Hidden Digits
+1264	2133	-	Check if Every Row and Column Contains All Numbers
+1264	2248	MOD_DIV	Intersection of Multiple Arrays
+1265	2549	COUNT	Count Distinct Numbers on Board
+1266	2200	PROB	Find All K-Distant Indices in an Array
+1266	2432	-	The Employee That Worked on the Longest Task
+1266	2670	-	Find the Distinct Difference Array
+1266	2785	-	Sort Vowels in a String
+1266	3254	POWER_ROOT	Find the Power of K-Size Subarrays I
+1266	821	GEOM	Shortest Distance to a Character
+1267	1282	-	Group the People Given the Group Size They Belong To
+1267	3360	GAME	Stone Removal Game
+1268	1447	-	Simplified Fractions
+1268	2325	-	Decode the Message
+1269	2032	-	Two Out of Three
+1269	2843	-	  Count Symmetric Integers
+1269	3222	GAME,PROB	Find the Winning Player in Coin Game
+1269	3895	COUNT,DIGIT	Count Digit Appearances
+1270	2363	-	Merge Similar Items
+1270	2873	PAIR_TRIP	Maximum Value of an Ordered Triplet I
+1271	1556	-	Thousand Separator
+1271	2006	PAIR_TRIP,COUNT	Count Number of Pairs With Absolute Difference K
+1271	824	-	Goat Latin
+1271	925	-	Long Pressed Name
+1272	2869	-	Minimum Operations to Collect Elements
+1273	2068	-	Check Whether Two Strings are Almost Equivalent
+1273	2138	-	Divide a String Into Groups of Size k
+1273	3912	-	Valid Elements in an Array
+1274	1005	SUM_ARITH	Maximize Sum Of Array After K Negations
+1274	1078	-	Occurrences After Bigram
+1274	2129	-	Capitalize the Title
+1275	2150	-	Find All Lonely Numbers in the Array
+1276	2558	-	Take Gifts From the Richest Pile
+1277	1317	SUM_ARITH	Convert Integer to the Sum of Two No-Zero Integers
+1277	1742	-	Maximum Number of Balls in a Box
+1278	2582	-	Pass the Pillow
+1279	1002	-	Find Common Characters
+1279	1534	COUNT	Count Good Triplets
+1279	2269	-	Find the K-Beauty of a Number
+1279	2807	GCD_LCM	Insert Greatest Common Divisors in Linked List
+1280	1572	SUM_ARITH	Matrix Diagonal Sum
+1280	2125	-	Number of Laser Beams in a Bank
+1281	1624	-	Largest Substring Between Two Equal Characters
+1281	2570	-	Merge Two 2D Arrays by Summing Values
+1282	1837	DIGIT,SUM_ARITH	Sum of Digits in Base K
+1282	2220	BIT_XOR	Minimum Bit Flips to Convert Number
+1282	2639	-	Find the Width of Columns of a Grid
+1282	2696	-	Minimum String Length After Removing Substrings
+1282	3527	-	Find the Most Common Response
+1283	1252	-	Cells with Odd Values in a Matrix
+1283	1507	-	Reformat Date
+1283	2303	-	Calculate Amount Paid in Taxes
+1284	1481	-	Least Number of Unique Integers after K Removals
+1284	1720	-	Decode XORed Array
+1284	3663	DIGIT	Find The Least Frequent Digit
+1285	1381	PERM_COMB	Design a Stack With Increment Operation
+1285	2839	-	Check if Strings Can be Made Equal With Operations I
+1285	3238	-	Find the Number of Winning Players
+1285	860	-	Lemonade Change
+1286	1047	-	Remove All Adjacent Duplicates In String
+1286	1791	-	Find Center of Star Graph
+1286	2352	PAIR_TRIP	Equal Row and Column Pairs
+1287	1103	-	Distribute Candies to People
+1287	3740	GEOM	Minimum Distance Between Three Equal Elements I
+1287	3852	PAIR_TRIP	Smallest Pair With Different Frequencies
+1287	872	-	Leaf-Similar Trees
+1287	993	BIT_XOR	Cousins in Binary Tree
+1288	1403	PERM_COMB	Minimum Subsequence in Non-Increasing Order
+1288	1684	COUNT	Count the Number of Consistent Strings
+1288	3304	GAME	Find the K-th Character in String Game I
+1288	3750	BIT_XOR	Minimum Number of Flips to Reverse Binary String
+1289	2190	-	Most Frequent Number Following Key In an Array
+1289	2428	SUM_ARITH	Maximum Sum of an Hourglass
+1290	1859	-	Sorting the Sentence
+1290	3114	-	Latest Time You Can Obtain After Replacing Characters
+1290	3417	-	Zigzag Grid Traversal With Skip
+1291	3010	-	Divide an Array Into Subarrays With Minimum Cost I
+1292	2496	-	Maximum Value of a String in an Array
+1292	3271	-	Hash Divided String
+1293	1551	-	Minimum Operations to Make Array Equal
+1293	3324	-	Find the Sequence of Strings Appeared on the Screen
+1294	1716	-	Calculate Money in Leetcode Bank
+1294	1769	-	Minimum Number of Operations to Move All Balls to Each Box
+1294	2273	-	Find Resultant Array After Removing Anagrams
+1294	2545	-	Sort the Students by Their Kth Score
+1294	2833	GEOM	Furthest Point From Origin
+1294	3115	PRIME	Maximum Prime Difference
+1295	1539	-	Kth Missing Positive Number
+1295	2224	-	Minimum Number of Operations to Convert Time
+1295	2717	PERM_COMB	Semi-Ordered Permutation
+1295	2815	PAIR_TRIP,SUM_ARITH	Max Pair Sum in an Array
+1295	3477	-	Fruits Into Baskets II
+1297	1598	-	Crawler Log Folder
+1297	2913	POWER_ROOT,SUM_ARITH	Subarrays Distinct Element Sum of Squares I
+1297	819	-	Most Common Word
+1298	3349	PERM_COMB	Adjacent Increasing Subarrays Detection I
+1298	3684	SUM_ARITH	Maximize Sum of At Most K Distinct Elements
+1298	908	-	Smallest Range I
+1299	2287	PERM_COMB	Rearrange Characters to Make Target String
+1299	3396	-	Minimum Number of Operations to Make Elements in Array Distinct
+1299	953	-	Verifying an Alien Dictionary
+1300	1790	-	Check if One String Swap Can Make Strings Equal
+1300	1844	DIGIT	Replace All Digits with Characters
+1300	3364	SUM_ARITH	Minimum Positive Sum Subarray
+1301	1646	-	Get Maximum in Generated Array
+1301	1877	PAIR_TRIP,SUM_ARITH	Minimize Maximum Pair Sum in Array
+1301	2243	DIGIT,SUM_ARITH	Calculate Digit Sum of a String
+1301	2525	-	Categorize Box According to Criteria
+1301	2740	-	Find the Value of the Partition
+1301	2748	PAIR_TRIP	Number of Beautiful Pairs
+1301	3918	SUM_ARITH	Sum of Primes Between Number and Its Reverse
+1301	806	GEOM	Number of Lines To Write String
+1302	1266	GEOM	Minimum Time Visiting All Points
+1302	1991	-	Find the Middle Index in Array
+1303	1051	-	Height Checker
+1303	1338	-	Reduce Array Size to The Half
+1303	2331	BIT_XOR	Evaluate Boolean Binary Tree
+1303	2697	PALIN	Lexicographically Smallest Palindrome
+1303	3142	-	Check if Grid Satisfies Conditions
+1303	783	GEOM	Minimum Distance Between BST Nodes
+1304	2657	-	Find the Prefix Common Array of Two Arrays
+1305	3602	-	Hexadecimal and Hexatrigesimal Conversion
+1306	1984	-	Minimum Difference Between Highest and Lowest of K Scores
+1306	3678	-	Smallest Absent Positive Greater Than Average
+1306	3788	-	Maximum Score of a Split
+1307	1064	GEOM	Fixed Point
+1307	1893	-	Check if All the Integers in a Range Are Covered
+1307	2022	-	Convert 1D Array Into 2D Array
+1307	2085	COUNT	Count Common Words With One Occurrence
+1307	804	-	Unique Morse Code Words
+1307	868	BIT_XOR	Binary Gap
+1308	2264	DIGIT	Largest 3-Same-Digit Number in String
+1308	2342	PAIR_TRIP,DIGIT,SUM_ARITH	Max Sum of a Pair With Equal Sum of Digits
+1308	3471	-	Find the Largest Almost Missing Integer
+1309	1451	PERM_COMB	Rearrange Words in a Sentence
+1309	1710	-	Maximum Units on a Truck
+1309	1897	-	Redistribute Characters to Make All Strings Equal
+1309	2500	-	Delete Greatest Value in Each Row
+1310	2058	GEOM	Find the Minimum and Maximum Number of Nodes Between Critical Points
+1311	1021	-	Remove Outermost Parentheses
+1311	3163	-	String Compression III
+1311	3191	BIT_XOR	Minimum Operations to Make Binary Array Elements Equal to One I
+1312	3606	-	Coupon Code Validator
+1312	3889	GEOM	Mirror Frequency Distance
+1314	1827	PERM_COMB	Minimum Operations to Make the Array Increasing
+1314	2160	DIGIT,SUM_ARITH	Minimum Sum of Four Digit Number After Splitting Digits
+1314	2640	-	Find the Score of All Prefixes of an Array
+1315	1180	COUNT	Count Substrings with Only One Distinct Letter
+1315	1629	-	Slowest Key
+1315	2109	-	Adding Spaces to a String
+1315	2348	-	Number of Zero-Filled Subarrays
+1316	2225	-	Find Players With Zero or One Losses
+1316	3582	-	Generate Tag for Video Caption
+1317	1313	-	Decompress Run-Length Encoded List
+1317	1343	-	Number of Sub-arrays of Size K and Average Greater than or Equal to Threshold
+1317	2130	SUM_ARITH	Maximum Twin Sum of a Linked List
+1317	2221	SUM_ARITH	Find Triangular Sum of an Array
+1317	999	-	Available Captures for Rook
+1319	3572	PAIR_TRIP,SUM_ARITH	Maximize Y‑Sum by Picking a Triplet of Distinct X‑Values
+1319	3908	DIGIT	Valid Digit Number
+1320	2079	-	Watering Plants
+1321	1582	BIT_XOR	Special Positions in a Binary Matrix
+1321	1694	-	Reformat Phone Number
+1322	1614	-	Maximum Nesting Depth of the Parentheses
+1322	1936	-	Add Minimum Number of Rungs
+1322	2446	-	Determine if Two Events Have Conflict
+1322	3857	-	Minimum Cost to Split into Ones
+1323	1925	COUNT,POWER_ROOT,SUM_ARITH	Count Square Sum Triples
+1323	2491	-	Divide Players Into Teams of Equal Skill
+1323	3084	COUNT	Count Substrings Starting and Ending with Given Character
+1323	3483	DIGIT	Unique 3-Digit Even Numbers
+1324	1344	-	Angle Between Hands of a Clock
+1324	1603	-	Design Parking System
+1324	1752	-	Check if Array Is Sorted and Rotated
+1324	2095	-	Delete the Middle Node of a Linked List
+1324	2660	GAME	Determine the Winner of a Bowling Game
+1324	3014	-	Minimum Number of Pushes to Type Word I
+1325	2073	-	Time Needed to Buy Tickets
+1325	3075	-	Maximize Happiness of Selected Children
+1326	1476	GEOM	Subrectangle Queries
+1326	3746	-	Minimum String Length After Balanced Removals
+1327	1086	-	High Five
+1328	1324	-	Print Words Vertically
+1328	1812	POWER_ROOT	Determine Color of a Chessboard Square
+1328	2396	PALIN	Strictly Palindromic Number
+1329	3090	-	Maximum Length Substring With Two Occurrences
+1330	1347	-	Minimum Number of Steps to Make Two Strings Anagram
+1331	2259	DIGIT	Remove Digit From Number to Maximize Result
+1331	2373	-	Largest Local Values in a Matrix
+1332	1128	PAIR_TRIP	Number of Equivalent Domino Pairs
+1332	1471	-	The k Strongest Values in an Array
+1332	2274	-	Maximum Consecutive Floors Without Special Floors
+1333	1805	-	Number of Different Integers in a String
+1333	2181	-	Merge Nodes in Between Zeros
+1333	2554	PERM_COMB	Maximum Number of Integers to Choose From a Range I
+1333	2679	SUM_ARITH	Sum in a Matrix
+1334	1409	PERM_COMB	Queries on a Permutation With Key
+1334	2126	-	Destroying Asteroids
+1334	2270	-	Number of Ways to Split Array
+1334	3242	SUM_ARITH	Design Neighbor Sum Service
+1334	888	-	Fair Candy Swap
+1335	2506	PAIR_TRIP,COUNT	Count Pairs Of Similar Strings
+1335	938	SUM_ARITH	Range Sum of BST
+1336	1275	GAME	Find Winner on a Tic Tac Toe Game
+1336	2587	PERM_COMB	Rearrange Array to Maximize Prefix Score
+1337	1260	-	Shift 2D Grid
+1337	2161	-	Partition Array According to Given Pivot
+1337	3127	POWER_ROOT	Make a Square with the Same Color
+1337	933	-	Number of Recent Calls
+1338	3330	-	Find the Original Typed String I
+1338	970	POWER_ROOT	Powerful Integers
+1339	3560	-	Find Minimum Log Transportation Cost
+1340	976	GEOM	Largest Perimeter Triangle
+1341	1399	COUNT	Count Largest Group
+1341	1796	DIGIT	Second Largest Digit in a String
+1341	2023	PAIR_TRIP	Number of Pairs of Strings With Concatenation Equal to Target
+1341	3217	-	Delete Nodes From Linked List Present in Array
+1341	784	PERM_COMB	Letter Case Permutation
+1341	859	-	Buddy Strings
+1342	3633	-	Earliest Finish Time for Land and Water Rides I
+1343	1395	COUNT	Count Number of Teams
+1344	1544	-	Make The String Great
+1345	1679	PAIR_TRIP,SUM_ARITH	Max Number of K-Sum Pairs
+1346	2027	-	Minimum Moves to Convert String
+1346	2284	COUNT	Sender With Largest Word Count
+1347	2390	-	Removing Stars From a String
+1347	2829	SUM_ARITH	Determine the Minimum Sum of a k-avoiding Array
+1347	2937	-	Make Three Strings Equal
+1347	3597	-	Partition String
+1347	3843	-	First Element with Unique Frequency
+1348	1029	-	Two City Scheduling
+1348	1100	-	Find K-Length Substrings With No Repeated Characters
+1348	2609	BIT_XOR	Find the Longest Balanced Substring of a Binary String
+1348	3195	GEOM	Find the Minimum Area to Cover All Ones I
+1348	3507	PAIR_TRIP	Minimum Pair Removal to Sort Array I
+1350	2053	-	Kth Distinct String in an Array
+1350	2578	SUM_ARITH	Split With Minimum Sum
+1351	1513	-	Number of Substrings With Only 1s
+1351	2895	-	Minimum Processing Time
+1351	3904	-	Smallest Stable Index II
+1352	1995	COUNT	Count Special Quadruplets
+1352	3211	BIT_XOR	Generate Binary Strings Without Adjacent Zeros
+1352	848	-	Shifting Letters
+1353	1758	BIT_XOR	Minimum Changes To Make Alternating Binary String
+1354	1244	-	Design A Leaderboard
+1354	2210	COUNT	Count Hills and Valleys in an Array
+1355	1331	-	Rank Transform of an Array
+1355	1689	BIT_XOR	Partitioning Into Minimum Number Of Deci-Binary Numbers
+1355	1894	-	Find the Student that Will Replace the Chalk
+1355	2405	-	Optimal Partition of String
+1356	2037	-	Minimum Number of Moves to Seat Everyone
+1356	2043	-	Simple Bank System
+1356	2579	COUNT	Count Total Number of Colored Cells
+1357	1957	-	Delete Characters to Make Fancy String
+1357	3517	PERM_COMB,PALIN	Smallest Palindromic Rearrangement I
+1358	2090	-	K Radius Subarray Averages
+1358	3809	-	Best Reachable Tower
+1358	746	-	Min Cost Climbing Stairs
+1360	1448	COUNT,BIT_XOR	Count Good Nodes in Binary Tree
+1360	1817	-	Finding the Users Active Minutes
+1360	2335	-	Minimum Amount of Time to Fill Cups
+1360	2379	-	Minimum Recolors to Get K Consecutive Black Blocks
+1361	1120	-	Maximum Average Subtree
+1361	1980	BIT_XOR	Find Unique Binary String
+1361	2165	PERM_COMB	Smallest Value of the Rearranged Number
+1362	1592	PERM_COMB	Rearrange Spaces Between Words
+1362	2486	-	Append Characters to String to Make Subsequence
+1363	3309	BIT_XOR	Maximum Possible Number by Binary Concatenation
+1363	3769	BIT_XOR	Sort Integers by Binary Reflection
+1364	1974	-	Minimum Time to Type Word Using Special Typewriter
+1364	2260	-	Minimum Consecutive Cards to Pick Up
+1364	3760	-	Maximum Substrings With Distinct Start
+1365	2231	DIGIT	Largest Number After Digit Swaps by Parity
+1365	3798	-	Largest Even Number
+1366	2433	BIT_XOR	Find The Original Array of Prefix Xor
+1366	3100	-	Water Bottles II
+1367	2515	GEOM	Shortest Distance to Target String in a Circular Array
+1368	1576	-	Replace All ?'s to Avoid Consecutive Repeating Characters
+1368	3095	-	Shortest Subarray With OR at Least K I
+1369	1370	PERM_COMB	Increasing Decreasing String
+1369	1608	-	Special Array With X Elements Greater Than or Equal X
+1369	3179	POWER_ROOT	Find the N-th Value After K Seconds
+1369	3674	-	Minimum Operations to Equalize Array
+1370	1854	-	Maximum Population Year
+1370	3689	-	Maximum Total Subarray Value I
+1370	914	-	X of a Kind in a Deck of Cards
+1371	2244	-	Minimum Rounds to Complete All Tasks
+1372	1863	BIT_XOR,SUM_ARITH	Sum of All Subset XOR Totals
+1372	2482	-	Difference Between Ones and Zeros in Row and Column
+1372	2899	-	Last Visited Integers
+1372	3446	-	Sort Matrix by Diagonals
+1372	3759	COUNT	Count Elements With at Least K Greater Values
+1372	748	-	Shortest Completing Word
+1373	1291	DIGIT	Sequential Digits
+1373	2610	-	Convert an Array Into a 2D Array With Conditions
+1374	1038	BIT_XOR,SUM_ARITH	Binary Search Tree to Greater Sum Tree
+1374	1267	COUNT	Count Servers that Communicate
+1374	1619	-	Mean of Array After Removing Some Elements
+1374	2583	BIT_XOR,SUM_ARITH	Kth Largest Sum in a Binary Tree
+1375	1288	-	Remove Covered Intervals
+1375	2336	-	Smallest Number in Infinite Set
+1375	2614	PRIME	Prime In Diagonal
+1376	1018	MOD_DIV,BIT_XOR	Binary Prefix Divisible By 5
+1376	2443	SUM_ARITH	Sum of Number and Its Reverse
+1376	2784	-	Check if Array is Good
+1376	807	PERM_COMB,GEOM	Max Increase to Keep City Skyline
+1377	1010	MOD_DIV,PAIR_TRIP	Pairs of Songs With Total Durations Divisible by 60
+1377	811	COUNT	Subdomain Visit Count
+1378	1013	SUM_ARITH	Partition Array Into Three Parts With Equal Sum
+1378	3314	-	Construct the Minimum Bitwise Array I
+1378	3765	PRIME	Complete Prime Number
+1379	2120	-	Execution of All Suffix Instructions Staying in a Grid
+1379	2855	-	Minimum Right Shifts to Sort the Array
+1380	1828	GEOM	Queries on Number of Points Inside a Circle
+1380	3708	FIB	Longest Fibonacci Subarray
+1380	3871	COUNT	Count Commas in Range II
+1380	814	BIT_XOR	Binary Tree Pruning
+1381	1881	-	Maximum Value after Insertion
+1381	2410	-	Maximum Matching of Players With Trainers
+1381	3819	-	Rotate Non Negative Elements
+1382	1185	-	Day of the Week
+1382	1318	-	Minimum Flips to Make a OR b Equal to c
+1382	2682	GAME	Find the Losers of the Circular Game
+1382	3375	-	Minimum Operations to Make Array Values Equal to K
+1382	797	-	All Paths From Source to Target
+1382	849	GEOM	Maximize Distance to Closest Person
+1383	3034	-	Number of Subarrays That Match a Pattern I
+1383	762	PRIME,BIT_XOR	Prime Number of Set Bits in Binary Representation
+1384	1271	-	Hexspeak
+1384	2091	-	Removing Minimum and Maximum From Array
+1384	3692	-	Majority Frequency Characters
+1385	3185	PAIR_TRIP,COUNT	Count Pairs That Form a Complete Day II
+1386	1276	-	Number of Burgers with No Waste of Ingredients
+1386	1721	-	Swapping Nodes in a Linked List
+1386	2530	-	Maximal Score After Applying K Operations
+1387	1302	SUM_ARITH	Deepest Leaves Sum
+1387	1860	PERM_COMB	Incremental Memory Leak
+1387	2389	SUM_ARITH	Longest Subsequence With Limited Sum
+1387	3239	BIT_XOR,PALIN	Minimum Number of Flips to Make Binary Grid Palindromic I
+1387	3784	-	Minimum Deletion Cost to Make All Characters Equal
+1387	937	-	Reorder Data in Log Files
+1388	2917	-	Find the K-or of an Array
+1389	1065	PAIR_TRIP	Index Pairs of a String
+1389	1214	SUM_ARITH	Two Sum BSTs
+1390	2155	MOD_DIV,BIT_XOR	All Divisions With the Highest Score of a Binary Array
+1391	1222	-	Queens That Can Attack the King
+1391	3775	COUNT	Reverse Words With Same Vowel Count
+1392	1529	-	Bulb Switcher IV
+1392	2870	-	Minimum Number of Operations to Make Array Empty
+1392	957	-	Prison Cells After N Days
+1393	2816	-	Double a Number Represented as a Linked List
+1393	2928	-	Distribute Candies Among Children I
+1393	3804	-	Number of Centered Subarrays
+1393	978	-	Longest Turbulent Subarray
+1394	2256	-	Minimum Average Difference
+1395	1668	-	Maximum Repeating Substring
+1395	2966	-	Divide Array Into Arrays With Max Difference
+1395	3648	-	Minimum Sensors to Cover Grid
+1396	1306	GAME	Jump Game III
+1396	1404	BIT_XOR	Number of Steps to Reduce a Number in Binary Representation to One
+1396	2566	DIGIT	Maximum Difference by Remapping a Digit
+1396	788	DIGIT	Rotated Digits
+1396	944	-	Delete Columns to Make Sorted
+1397	1071	GCD_LCM	Greatest Common Divisor of Strings
+1397	1176	-	Diet Plan Performance
+1397	2799	COUNT	Count Complete Subarrays in an Array
+1397	3354	-	Make Array Elements Equal to Zero
+1397	3561	-	Resulting String After Adjacent Removals
+1399	2240	-	Number of Ways to Buy Pens and Pencils
+1399	3066	-	Minimum Operations to Exceed Threshold Value II
+1399	3487	SUM_ARITH	Maximum Unique Subarray Sum After Deletion
