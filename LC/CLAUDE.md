@@ -125,8 +125,12 @@ Every solution the user writes (zerotrac, upsolve, or contest) must be reviewed 
 
 ```
 1. Comprehend      — what is input, output, the rule? Write it in ONE sentence
-2. Verify approach — trace 1-2 given examples mentally  [MANDATORY WRITTEN]
-3. Edge cases      — 3-5 boundary cases on paper        [MANDATORY WRITTEN]
+2. Recompute the richest example — find the example with a number breakdown /
+                     explanation; THAT is the spec, not the prose. Reproduce every
+                     number in it from your model. A number you can't reproduce is a
+                     missing rule — STOP and find it before coding. Other examples are
+                     quick branch-checks only.                [MANDATORY WRITTEN]
+3. Edge cases      — 3-5 boundary cases on paper            [MANDATORY WRITTEN]
                      (empty input, single element, leading/trailing separator,
                       consecutive separators, max input size)
 4. Decompose       — break into sub-problems, name each one
@@ -140,7 +144,7 @@ Steps 2 and 3 are mandatory written artifacts. Across the 1450-1850 audit, every
 
 **How this is enforced during sessions:**
 - After the user derives an approach and BEFORE any code is written or requested, the user must post in chat:
-  - **Step 2:** Trace 1 given example through the proposed approach, showing state at each iteration/recurrence call.
+  - **Step 2:** Recompute the *richest* worked example (the one with a number breakdown/explanation) through the proposed approach, reproducing every number from the model. Tracing to *confirm* is not enough — tracing to *derive* is the bar. A number the model can't reproduce is a missing rule; stop and find it before coding. (Read-error on 1600-band #4 and #5 both came from skipping/rushing this — #5's whole cost model was spelled out in the example that got ignored.)
   - **Step 3:** List 3-5 edge cases by name (e.g., "n=1", "all same color", "all diff color", "two elements same color", "max input size").
 - Claude must **refuse to engage with code** until both are present in the conversation. If the user says "show me the code" or pastes a solution without steps 2-3 visible, Claude prompts them back to do the ritual first.
 - The ritual artifacts stay in chat. They do not need to be written into the log file — the log file follows the existing "insight + key gotcha + complexity, no full code" format.
