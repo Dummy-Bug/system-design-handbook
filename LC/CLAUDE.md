@@ -211,6 +211,45 @@ Before submitting, scan this list. If your solution touches the bug family, veri
 
 ---
 
+## Pattern-Reflex Deck — capture one move per solve
+
+Lives in `patterns/deck.md`. It is the framing-level companion to `math-reflex/`: math-reflex installs *recall* (atomic facts → <5s), the deck installs *recognition* (a problem situation → the move that cracks it → <5s). The point is to permanently retire the "this should've taken seconds but cost me 5 minutes" class of fumble.
+
+**The core rule — a card is born only from a real solve.** After a problem AC's, during debrief, ask the user one question:
+
+> "What single move would have made this instant instead of slow?"
+
+If a specific framing/micro-move cost real time, that move becomes one card. If nothing did, no card. **Never invent cards from intuition or mine them from a corpus** — the move lives in the solution, not the statement, and a card with no real-time-cost behind it is noise. One move per problem, max.
+
+**Card shape (see `patterns/deck.md` for the format):** Trigger (the *felt signal* — what the user should recognize, usually a hesitation like "should this go here or there?") → Move (the mechanical response) → Anchor (the problem that birthed it) → Quiz prompt (1-line scenario; reflex answer names the move in <5s).
+
+**Drilling & graduation:** identical bar to `math-reflex/00-protocol.md` — <5s cold, mixed order, 3 consecutive days, `◐` installing → `●` graduated. Drill the deck inside the **3-minute maintenance slot** of the daily math-reflex session, mixed in with the math facts. Quiz is application-level (a mini-scenario), never "define X".
+
+**Why this and not a syllabus:** building a tagged framing-syllabus upfront is meta-work that solves zero problems and feeds the same over-scaffolding tendency behind the skip-3 history. The deck builds itself as a byproduct of reps. Keep the user grinding; harvest one card per solve.
+
+---
+
+## WA-cause tagging — every WA gets a greppable cause line
+
+Whenever a submission gets a WA (in any band log, cold re-solve, or contest upsolve), log a one-line tagged cause alongside the root-cause analysis:
+
+```
+**WA-cause [<tag>]:** one-line description — what was actually wrong.
+```
+
+The tag is a short category so all WAs across all files can be aggregated later (`grep "WA-cause"`) to see whether a failure mode is a real recurring pattern or just noise. **Do not turn a single WA into a new pre-submit checklist item** — one data point is an anecdote, not a pattern. Just tag it and move on; promote to a checklist item only when the grep shows the same tag recurring across several problems.
+
+Current tag vocabulary (extend as needed, keep tags stable so grep works):
+- `[read-error]` — misread the problem (wrong counted unit, wrong objective, missed a constraint clause)
+- `[logic-recurrence]` — DP/recurrence incomplete or base case wrong/stale
+- `[logic-accounting]` — mixed accounting models (delta vs cumulative, double-count)
+- `[impl-bug]` — correct approach, Java/implementation slip (overflow, wrong API, off-by-one)
+- `[untraced-submit]` — would have been caught by a full Step-2 trace before submitting
+
+A WA can carry more than one tag. The point is a uniform, machine-greppable record so WA analysis is data-driven, not vibes.
+
+---
+
 ## Contest logging and upsolving protocol
 
 ### Three separate contest logs (do NOT mix):
