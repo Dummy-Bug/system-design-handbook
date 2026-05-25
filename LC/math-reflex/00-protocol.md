@@ -118,6 +118,7 @@ The drill file is a *projection* of the topic syllabus through the band rating g
 | `topics/0N-topic.md` | Topic syllabus (Layer 1). Subtopics + cards, rating-bracketed. No card content. |
 | `drill/0N-band-XXXX.md` | Per-band drill projection (Layer 2). Generated from topics, mixed order, with status markers. |
 | `log.md` | Daily drill log. Date, band installed, prior bands maintained, misses, notes. |
+| `drills/YYYY-MM-DD.md` | Per-session full drill record — topics covered, every question asked with the user's answer + correct answer + verdict (✓/⚠/✗), and the resulting re-drill set. One file per dated session. Use for diagnostic sweeps and any session where the full Q/A is worth preserving. |
 
 The legacy `LC/math-reflex-syllabus.md` is **obsolete** — it was a pre-empirical guess. The empirical analyses in `LC/math-band-XXXX-XXXX.md` are the data source the topic files are built from.
 
