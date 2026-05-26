@@ -24,7 +24,8 @@ Across **1550-1600 + 1600-1650 + 1650-1700 = 27 solved problems**, these stay un
 | Pattern | # in band | Done in band? | Priority |
 |---------|-----------|---------------|----------|
 | Greedy / observation | ~22 | ✅✅✅✅ (#1,#2,#5,#6) | low — strong |
-| Math / number theory / bit | ~14 | ✅✅ (#4,#7) | low (math-reflex) |
+| Math / number theory | ~9 | ⚠️ #4,#6 both hinted → 0 clean | **CORE — needs ownership** (math-reflex = recall only) |
+| Bit operations / XOR | ~5 | ◐ #1,#7 vanilla | **CORE — distinct from math** (bitmask, XOR prefix, bit-width) |
 | Sliding window / prefix | ~10 | ✅ (#10) | med |
 | Hashing / counting | ~8 | — | med |
 | Linear / grid / counting DP | ~8 | — | med-HIGH |
@@ -52,6 +53,8 @@ Owned = **3 cold first-submission cleans**, reps 2-3 disguised/combined (rule 6)
 | Sliding window | 1 (#10) | ◐ | 2 disguised |
 | Graph / tree traversal | 1 (#9) | ◐ | 2 disguised |
 | Difference array / prefix-range | 0 (#8 had a bug) | ◯ | 3 |
+| Math / number theory | 0 (#4,#6 hinted) | ◯ | 3 — math-reflex ≠ solving |
+| Bit operations / XOR | 1 (#1,#7 vanilla) | ◐ | 2 disguised |
 | Hashing / counting | 0 | ◯ | 3 |
 | Linear / grid / counting DP | 0 | ◯ | 3 |
 | Design | 0 | ◯ | 3 |
@@ -86,33 +89,11 @@ Depth scored from how the solve actually went (times, hints, bugs). This band's 
 
 ---
 
-## GAP PATTERNS → Set A (breadth / prereq ladder, study-OK)
+## Problem sets
 
-| Pattern | Problem | rating | The move |
-|---------|---------|--------|----------|
-| Monotonic stack | **Next Greater Node In Linked List** | 1570 | classic next-greater via decreasing stack of pending indices. |
-| Tree DP | **Count the Number of Good Nodes** | 1565 | post-order DFS carrying subtree info up; count nodes whose subtree satisfies a condition. |
-| Union-Find | **The Earliest Moment When Everyone Become Friends** | 1558 | sort events by time, union, stop when one component remains. Canonical DSU intro. |
-| Interval DP | **Stone Game** | 1590 | `dp[i][j]` = best score-diff on pile range; minimax. The only interval-DP rep ≤1700 — grab it here. |
-| Heap-greedy | **Minimum Operations to Halve Array Sum** | 1550 | max-heap, always halve the current largest. |
+Problem sets are generated per the **band setup protocol** in `LC/CLAUDE.md`. See:
+- `Phase-1-Acquisition.md` — 15 intro problems (one per topic, topic-visible, easiest by AR).
+- `_Sealed-Queue-Phase2.md` — 24 derivation problems (shuffled blind, topic hidden until after solve).
+- AR data at `zerotrac-data/band_1550_1599_with_ar.tsv`.
 
-(Alt stack: Score of Parentheses [1562]. Alt tree: Time Needed to Inform All Employees [1561]. Alt DSU: Properties Graph [1565].)
-
-## Set B (derivation × comprehension — solve cold, unsolved)
-
-| Problem | rating | D×C | The trap |
-|---------|--------|-----|----------|
-| Minimum Operations to Make a Special Number | 1588 | 3×3=**9** | reframe to "keep a subsequence ending in 00/25/50/75"; deletion-count is misleading |
-| Decrease Elements To Make Array Zigzag | 1558 | 2×3=6 | two parity passes (even-low vs odd-low), each element pays max(0, self−min(neighbors)−... ); easy to misframe |
-| Ways to Split Array Into Good Subarrays | 1597 | 3×2=6 | product of gaps between consecutive 1s; off-by-one on the gap definition |
-| Maximum Number of Operations to Move Ones to the End | 1593 | 3×2=6 | count how each 1 carries past trailing 0s; observation, not simulation |
-| Number of Ways Where Square = Product of Two | 1593 | 2×3=6 | hash square counts; two symmetric triplet types, dense statement |
-
----
-
-## The plan for this band
-
-Already 10/10 logged (graduated), so the two sets are **carry-forward training**, not graduation-filling:
-1. **Set A** installs the cross-band blind spots at the *easiest* level they're available — stack, tree DP, DSU here, plus the lone interval-DP (Stone Game) which exists nowhere higher ≤1700.
-2. **Set B** continues the comprehension-depth engine.
-3. **BS-on-answer is not installable here** (absent) — that primitive must come from the 1600-1650 band.
+**Graduation (rule 6, ownership-based):** every core bucket above must reach `●` (3 cold first-submission cleans, reps 2-3 disguised). For topics with <3 in-band problems (game theory, heap, mono stack, union-find, interval DP), the band contributes what it has — shortfalls complete in adjacent bands naturally, not by cross-band peeking.

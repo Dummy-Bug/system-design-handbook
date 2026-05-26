@@ -67,11 +67,18 @@ Log by contest. Include Q1/Q2/Q3/Q4 result (Y/N/S), what you were stuck on for e
 
 ## Current grind state (as of 2026-05-26)
 
-- **Active band: 1600-1650 second-attempt backfill** (cold re-solve after the 2026-05-22 audit). Per-problem files live in `1600-1650/First-Attempt/` and `1600-1650/Second-Attempt/` (one file per problem: description + verbatim thinking + solution code). **7/10 logged: 2 clean (#3 Split Array, #7 Sum of Digit Differences), 3 soft fail (#1 HRV, #2 Caesar, #4 Min Discards), 2 hinted (#5 Min Cost Path, #6 Outlier).** Word Squares II dropped (low-value brute force). **Graduation is now ownership-based (rule 6, updated 2026-05-26)** — not "3 more to reach 10" but "every core bucket in `00-Band-Topic-Map.md` *owned* = 3 cold first-submission cleans, reps 2-3 disguised/combined." Realistic floor ~25-30 problems/band; the blind-spot trio (stack, tree DP, union-find) must be owned (3 cold cleans each, cross-band). Dominant failure mode = **read-error / comprehension** (3 of 5 misses), not algorithm.
+- **Active band: 1550-1600 ownership grind** (Phase 1 in progress — dealing blind, 15 topics). Previous active (1600-1650 second-attempt backfill) is paused until 1550-1600 ownership is complete.
+- **1600-1650 paused state:** Per-problem files live in `1600-1650/First-Attempt/` and `1600-1650/Second-Attempt/` (one file per problem: description + verbatim thinking + solution code). **7/10 logged: 2 clean (#3 Split Array, #7 Sum of Digit Differences), 3 soft fail (#1 HRV, #2 Caesar, #4 Min Discards), 2 hinted (#5 Min Cost Path, #6 Outlier).** Word Squares II dropped (low-value brute force). **Graduation is now ownership-based (rule 6, updated 2026-05-26)** — not "3 more to reach 10" but "every core bucket in `00-Band-Topic-Map.md` *owned* = 3 cold first-submission cleans, reps 2-3 disguised/combined." Realistic floor ~25-30 problems/band; the blind-spot trio (stack, tree DP, union-find) must be owned (3 cold cleans each, cross-band). Dominant failure mode = **read-error / comprehension** (3 of 5 misses), not algorithm.
 - **1600-1650 problem-selection system (built 2026-05-26, read every statement in the band):**
   - `1600-1650/00-Band-Topic-Map.md` — SPOILER: all 90 problems classified by pattern, plus the two training sets. Planning/debrief only.
   - **Two sets** (see memory `lc_two_set_problem_selection`): **Set A** = breadth/prereq ladder, one rep per untouched pattern (monotonic stack, binary-search-on-answer, tree DP, union-find, graph BFS/DFS), study allowed; **Set B** = derivation×comprehension, scored, solved cold. Interval DP confirmed absent at ≤1650.
   - `1600-1650/_Sealed-Queue.md` — SEALED shuffled blind queue + answer key. **Serve problems blind** (see memory `lc_blind_deal_protocol`): deal one bare link at a time on "next", no pattern/set/score, reveal only after solving.
+- **1550-1600 problem-selection system (built 2026-05-26):**
+  - `1550-1600/00-Band-Topic-Map.md` — SPOILER: all 83 problems classified by pattern, ownership tracker, Set A/B.
+  - `1550-1600/Phase-1-Acquisition.md` — 15 intro problems (one per topic, topic-visible, easiest per topic by AR).
+  - `1550-1600/_Sealed-Queue-Phase2.md` — 24 derivation problems, shuffled blind. Serve one bare link at a time.
+  - AR data saved at `zerotrac-data/band_1550_1599_with_ar.tsv`.
+  - **Shortfalls** (topics with <3 in-band reps): game theory, heap, mono stack, union-find (1 deriv each), interval DP (0 deriv). These stay uncapped — cross-band reps come when working adjacent bands, NOT pulled from here.
 - **After 1600-1650 graduates:** resume the backfill ladder — finish 1700-1750 (need 3 more), full pass at 1750-1800, then 1800-1850 (5 logged, paused in `1800-1850.md`).
 - **Revision due:** 1650-1700 batch — due 2026-05-30.
 - **Contest rating:** ~1530 (frozen, returning after gap)
@@ -90,7 +97,7 @@ Log by contest. Include Q1/Q2/Q3/Q4 result (Y/N/S), what you were stuck on for e
      - **Owned = 3 cold first-submission cleans on *distinct* problems** in that bucket. Rep 1 may be the vanilla form; **reps 2 and 3 must be disguised/combined instances** (the pattern is not announced — Set B style), and **rep 3 is spaced** (solved a session-or-more later, so it doubles as the retention check). A WA / hinted / editorial solve does **not** count toward the 3 — that rep resets.
      - **Blind-spot / never-done buckets get an acquisition rep first** (study-OK, Set A) that unlocks the mechanic and does **not** count toward the 3. So a blind-spot bucket = 1 acquisition + 3 cold cleans.
      - **Amortization** keeps this sane: a disguised/combined problem usually covers 2+ buckets at once (window+deque, BS+union-find, tree-DP+DFS) and counts toward *each* bucket's tally. Realistic band total ≈ **25-30 problems**, not a naive 36-40.
-     - Core = all band buckets EXCEPT pure math/number-theory/bit (math-reflex covers those) and trivial direct-simulation.
+     - Core = all band buckets EXCEPT trivial direct-simulation. **Math / number-theory / bit IS core** — math-reflex trains atomic-fact *recall* (the sub-skill, e.g. `n(n-1)/2` in <5s), but *recognizing which math applies + deriving the approach + implementing it* is core problem-solving and needs its own 3 cold cleans. Do not exempt math buckets from ownership.
    - **(B) Blind-spot patterns are mandatory and must be OWNED (cross-band).** **Monotonic stack, tree DP, and union-find** must each reach the 3-cold-clean ownership bar — install is cross-band (the 3 cleans can be spread across whichever bands they appear in). Binary-search-on-answer already has reps (1500-1550 #8) but still needs 3 cold cleans to be *owned*. Interval DP via Stone Game [1590] if pursued.
    - **Growth principle:** depth lives in reps 2-3 (the disguised forms), not rep 1. Re-solving the vanilla form teaches nothing — the confirming reps must force derivation, not re-recognition.
    - **(C) Quality bar — across all band problems.** ≥70% first-submission clean AC; ≤1 hinted per 10 problems. WA-then-AC = soft fail. (Derivation-over-speed clause exempts time, not WAs.)
@@ -212,6 +219,74 @@ Run this **before clicking submit**. These are the bugs that bit across 1500-185
 13. **Window-build order matches edge cases** — also test with empty window, single element, consecutive separators.
 
 Before submitting, scan this list. If your solution touches the bug family, verify the fix is applied.
+
+---
+
+## Band setup protocol — how to generate problem sets for any new band
+
+When starting a new band (or when the user asks to set up a band), follow this **exact** procedure. Do NOT ask the user to re-explain any of this.
+
+### Step 1 — Read every statement in the band
+- Source: `zerotrac-data/content-tsv/all_<band>_with_content.tsv` (cached HTML → clean to text).
+- Read ALL problems in the rating range, not a sample. Title-only classification produced 4 mislabels — always read the actual statement.
+
+### Step 2 — Fetch acceptance rate for every problem
+- Source: LeetCode GraphQL API. `POST https://leetcode.com/graphql` with `User-Agent` header (required — bare requests get 403).
+- Query: `{"query":"query q($t:String!){question(titleSlug:$t){stats}}","variables":{"t":"<slug>"}}`
+- Parse `acRate` from the `stats` JSON string.
+- Join with Q-position from `zerotrac-data/ratings.tsv` (columns: Rating, ID, Title, Title ZH, **Title Slug**, **Contest Slug**, **Problem Index** Q1-Q4).
+- Save to `zerotrac-data/band_<lo>_<hi>_with_ar.tsv` with columns: `Rating | ID | Title | MathTag | Slug | Contest | QPos | AR`.
+- Rate-limit: 0.5s sleep between requests, browser User-Agent header.
+
+### Step 3 — Classify every problem by topic
+- Assign each problem to one (or more) of the band's ~15 core topic buckets.
+- Core = everything EXCEPT trivial direct-simulation. **Math/number-theory and Bit/XOR are both CORE** (math-reflex trains recall only, not problem-solving).
+- Use the statement + AR + Q-position, never just the title.
+
+### Step 4 — Build Phase 1 (acquisition, dealt BLIND)
+- **One problem per topic** = the **easiest** available (highest AR, lowest Q-position).
+- Save to `<band>/Phase-1-Acquisition.md` with a tracker table (topic column is SPOILER — for logging only).
+- **Deal Phase 1 blind too** — same protocol as Phase 2. The user says "next" or "give me a problem", Claude hands ONE bare LC link with NO topic label, NO AR, NO hint. Topic is revealed ONLY after the user finishes (AC or stuck), for the debrief. Phase 1 problems are shuffled before serving so order doesn't leak topic.
+- The user works through Phase 1 before entering Phase 2. The only difference from Phase 2 is that Phase 1 picks the *easiest* problem per topic.
+
+### Step 5 — Build Phase 2 (derivation, blind shuffled)
+- **Two problems per topic** = derivation-hard, disguised/combined instances.
+- Selection basis (all four layers): (1) correct bucket, (2) Q3/Q4 contest slot, (3) low AR relative to band median, (4) statement disguises the pattern.
+- **Shuffle ALL Phase 2 problems together** (across all topics) using `random.seed(<band_low>)` for reproducibility.
+- Save to `<band>/_Sealed-Queue-Phase2.md` with topic in a SPOILER column (revealed after solve, not before).
+- Deal one bare link at a time on "next" — no topic, no AR, no Q-position visible.
+
+### Step 6 — Handle shortfalls
+- Some topics have <3 problems in the band. Note these in the sealed queue file under "Shortfalls."
+- Do NOT pull problems from adjacent bands to fill shortfalls. The band is self-sufficient; shortfalls stay uncapped and complete later when working the adjacent band naturally.
+
+### Step 7 — Handle non-clean solves (dynamic queue growth)
+- When a Phase 2 problem is solved but not clean (WA / hinted / editorial), it does NOT count toward the topic's 3 cold cleans.
+- Generate a **replacement problem** from the same topic in the same band (if supply exists), append it to the sealed queue.
+- If no more problems exist in-band for that topic, the topic stays at its current clean count — cross-band later.
+
+### Step 8 — Ownership tracker
+- Each band's `00-Band-Topic-Map.md` has an ownership tracker table: `Topic | Cold cleans | Status (◯/◐/●) | Need`.
+- After each solve, update the tracker: bump the bucket(s) the problem hit.
+- A problem that's disguised/combined (reps 2-3) bumps **every** bucket it touches (amortization).
+- Band graduates when all core buckets hit `●` (3 cold cleans each).
+
+### File layout per band (the standard)
+```
+<band>/
+  00-Band-Topic-Map.md              ← SPOILER: full classification + ownership tracker + Set A/B
+  Phase-1-Acquisition.md            ← 15 intro problems, topic-visible, with tracker
+  _Sealed-Queue-Phase2.md           ← shuffled blind queue + answer key + shortfalls
+  First-Attempt/
+    00-band-overview.md             ← band header + meta-lessons
+    01-<slug>.md ... NN-<slug>.md   ← one file per solved problem (description + thinking + code)
+  Second-Attempt/                   ← (if re-solves happen)
+    00-band-overview.md
+    01-<slug>.md ... NN-<slug>.md
+```
+
+### AR data location
+Saved at `zerotrac-data/band_<lo>_<hi>_with_ar.tsv` — reuse for analysis, do not re-fetch.
 
 ---
 

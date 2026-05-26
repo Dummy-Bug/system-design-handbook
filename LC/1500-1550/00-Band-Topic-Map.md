@@ -24,7 +24,7 @@ Two earlier claims were **wrong**, corrected by reading this band:
 | Pattern | # in band (~) | Done in band? | Priority |
 |---------|---------------|---------------|----------|
 | Greedy / observation | ~25 | ✅ (several) | low |
-| Math / number theory / bit | ~22 | ✅✅ (#7,#9) | low (math-reflex) |
+| Math / number theory / bit | ~22 | ◐ (#7,#9 vanilla) | **CORE — needs ownership** (math-reflex = recall only) |
 | Hashing / counting | ~15 | ✅✅ (#2,#3) | low-med |
 | Sliding window | ~10 | ✅ (#1) | med |
 | Linear / grid / counting DP | ~10 | — | med-HIGH |
@@ -57,6 +57,7 @@ Owned = **3 cold first-submission cleans**, reps 2-3 disguised/combined (rule 6)
 | Design | 0 | ◯ | 3 |
 | Graph BFS/DFS | 0 | ◯ | 3 |
 | Two-pointer / interval merge | 0 | ◯ | 3 |
+| Math / number theory / bit | 1 (#7,#9 vanilla) | ◐ | 2 disguised — math-reflex ≠ solving |
 | **Monotonic stack** (blind) | 0 | ◯ | acquisition + 3 |
 | **Tree DP** (blind) | 0 | ◯ | acquisition + 3 |
 
@@ -93,33 +94,8 @@ Depth from the compact remarks (times, bugs, AC/fail).
 
 ---
 
-## GAP PATTERNS → Set A (breadth / prereq ladder, study-OK)
+## Problem sets
 
-| Pattern | Problem | rating | The move |
-|---------|---------|--------|----------|
-| Monotonic stack | **Sum of Subarray Ranges** | 1504 | contribution technique: for each element, prev/next-smaller and prev/next-greater spans via monotonic stacks. The canonical mono-stack lesson. |
-| Tree DP | **Smallest Subtree with all the Deepest Nodes** | 1534 | post-order returns `(depth, subtree-root)`; combine at parent (same idiom as LCA-of-deepest-leaves). |
-| BS-on-answer (reinforce) | **Find the Smallest Divisor Given a Threshold** | 1541 | `feasible(d)=Σceil(num/d) ≤ threshold`. You did #8; this is a second clean rep. |
-| Heap-greedy | **Largest Values From Labels** | 1501 | greedy by value desc with a per-label cap; heap/sort. |
+Problem sets not yet generated for this band. When ready, follow the **band setup protocol** in `LC/CLAUDE.md` (read all statements → fetch AR → classify → Phase 1 + Phase 2).
 
-(Alt stack: Beautiful Towers I [1519]. Alt tree: Delete Nodes And Return Forest [1511]. **Union-Find: scarce here — install at 1550-1600 instead.**)
-
-## Set B (derivation × comprehension — solve cold, unsolved)
-
-| Problem | rating | D×C | The trap |
-|---------|--------|-----|----------|
-| Global and Local Inversions | 1516 | 3×2=6 | every local inversion is global → check no element moves >1 from sorted pos; one-line condition, non-obvious |
-| Count Triplets That Form Two Arrays of Equal XOR | 1524 | 3×2=6 | prefix-XOR: `pre[i]==pre[k+1]` ⇒ any j in between works; reframe from O(n³) |
-| Determine if Two Strings Are Close | 1530 | 2×3=6 | two conditions: same char-set AND same multiset of frequencies; easy to half-state |
-| Minimum Adjacent Swaps to Alternate Parity | 1548 | 3×2=6 | two target assignments (even-first / odd-first), sum of positional gaps; pick min |
-| Tuple with Same Product | 1530 | 2×2=4 | count equal products, each contributes 8 tuples; combinatorial factor easy to miss |
-
----
-
-## The plan for this band
-
-Already 9/10 logged, so the two sets are **carry-forward training**:
-1. **Set A** — install monotonic stack (Sum of Subarray Ranges) and tree DP (Smallest Subtree with Deepest Nodes) at the easiest level they appear. Reinforce BS-on-answer (already done) with Find the Smallest Divisor.
-2. **Set B** — comprehension/derivation reps, though depth ceilings are lower here than 1600+.
-3. **Union-Find: do NOT force it here** (scarce) — install at 1550-1600 (Earliest Moment Friends).
-4. **The standout band lesson: implementation discipline** — overflow/float/API bugs caused most of the friction. The pre-submit checklist in `CLAUDE.md` is the direct fix.
+**Graduation (rule 6, ownership-based):** every core bucket must reach `●` (3 cold first-submission cleans, reps 2-3 disguised). Union-Find is scarce here (~1 problem) — shortfall completes in adjacent band.

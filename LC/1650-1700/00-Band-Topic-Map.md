@@ -2,7 +2,7 @@
 
 > [!danger] SPOILER — labels every problem with its solution pattern and set. Do not read before solving. Planning + post-solve debrief only.
 
-Built 2026-05-26 by reading every statement (rating 1650-1700) from `zerotrac-data/content-tsv/`. Band is 10/10 solved (graduation audit pending — audit notes 6/10 first-submission). This map serves revision targeting + identifying carry-forward gaps into 1700+.
+Built 2026-05-26 by reading every statement (rating 1650-1700) from `zerotrac-data/content-tsv/`. Band is 10/10 solved but NOT graduated under ownership rule (rule 6) — most core buckets at 0/3 or 1/3.
 
 ---
 
@@ -28,7 +28,7 @@ These are **systematic blind spots, not band-specific gaps.** 1700+ will punish 
 | Graph BFS/DFS / flood-fill | ~12 | ✅ (#5 multi-source) | med |
 | Linear / grid / counting DP | ~12 | — | med-HIGH (knapsack/counting untouched) |
 | Prefix/suffix precompute | ~4 | ✅✅ (#4,#8) | low |
-| Math / bit / number theory | ~12 | ✅✅ (#7,#3) | low (math-reflex) |
+| Math / bit / number theory | ~12 | ◐ (#7 vanilla) | **CORE — needs ownership** (math-reflex = recall only) |
 | Heap / PQ greedy | ~7 | ❌ none | MED-HIGH gap |
 | Design (data structure) | ~5 | ❌ none | med |
 | **Monotonic stack** | 2-3 | ❌ none (both bands) | **TOP** |
@@ -59,6 +59,7 @@ Owned = **3 cold first-submission cleans**, reps 2-3 disguised/combined (rule 6)
 | Heap-greedy | 0 | ◯ | 3 |
 | Sliding window + monotonic deque | 0 | ◯ | 3 |
 | Counting / knapsack DP | 0 | ◯ | 3 |
+| Math / number theory / bit | 1 (#7 vanilla) | ◐ | 2 disguised — math-reflex ≠ solving |
 
 ---
 
@@ -85,40 +86,8 @@ Depth scored from how the solve actually went (verdicts, hints, WAs).
 
 ---
 
-## GAP PATTERNS → Set A (breadth / prereq ladder, study-OK)
+## Problem sets
 
-One canonical rep per untouched pattern, verified from statements.
+Problem sets not yet generated for this band. When ready, follow the **band setup protocol** in `LC/CLAUDE.md` (read all statements → fetch AR → classify → Phase 1 + Phase 2).
 
-| Pattern | Problem | rating | The move |
-|---------|---------|--------|----------|
-| Monotonic stack | **Car Fleet** | 1678 | sort by position desc, stack of arrival times; a fleet forms when a slower car ahead caps you. *The* canonical stack problem. |
-| Binary search on answer | **Minimum Speed to Arrive on Time** | 1675 | BS on speed; `feasible(s)=Σceil(dist/s) ≤ hour`. Float `hour` is the comprehension trap. |
-| Tree DP | **Maximum Product of Splitted Binary Tree** | 1674 | post-order subtree sums, total−sub = other side, maximize product. |
-| Union-Find | **Minimum Score of a Path Between Two Cities** | 1679 | the whole connected component of city 1 matters; min edge weight in it (DSU or BFS). Clean DSU intro. |
-| Topological sort | **Find All Possible Recipes from Given Supplies** | 1678 | Kahn's algorithm; ingredients → recipe dependency DAG. |
-| Sliding window + monotonic deque | **Longest Continuous Subarray Abs Diff ≤ Limit** | 1672 | window + two monotonic deques (max & min). Combines a strong gap (deque) with a known pattern. |
-| Heap-greedy | **Reorganize String** | 1681 | max-heap by remaining count, always place the most frequent that isn't the last placed. |
-
-(Stretch DSU: Power Grid Maintenance [1699] — DSU with deletion/structure.)
-
-## Set B (derivation × comprehension — solve cold, unsolved problems)
-
-Pattern may be familiar; chosen for non-obvious reframe + misreadable statement. `D×C`.
-
-| Problem | rating | D×C | The trap |
-|---------|--------|-----|----------|
-| Count Submatrices With Equal Frequency of X and Y | 1672 | 3×3=**9** | 2D prefix on two counts simultaneously; dense statement |
-| Minimum Addition to Make Integer Beautiful | 1680 | 3×3=**9** | greedy digit-carry (round up to kill low digits); easy to misframe |
-| Count Collisions of Monkeys on a Polygon | 1662 | 3×2=6 | `2^n − 2` complementary counting; "no collision" reframe |
-| Minimum Operations to Make the Array Alternating | 1662 | 2×3=6 | top-2 frequencies per parity class; misreadable indices |
-| Maximize Area of Square Hole in Grid | 1677 | 3×2=6 | longest run of consecutive missing bars → side; misreadable bars model |
-| Number of Ways to Select Buildings | 1656 | 3×2=6 | count "010"/"101" subsequences via running DP of prefixes |
-
----
-
-## The plan for this band
-
-This band is already 10/10 logged, so the two sets here are **carry-forward training**, not graduation-filling:
-1. **Set A is mandatory before 1700+** — the four TOP gaps (stack, BS-on-answer, tree DP, DSU) are cross-band blind spots that 1700+ will expose as unsolvable Q3s. Install them at this difficulty first.
-2. **Set B** continues the derivation engine on the comprehension sub-axis.
-3. **Revision (due 2026-05-30)** of the 10 solved is separate — approach recall, not re-read.
+**Graduation (rule 6, ownership-based):** every core bucket must reach `●` (3 cold first-submission cleans, reps 2-3 disguised). Interval DP is absent at this band — shortfall completes at 1550-1600 (Stone Game).
