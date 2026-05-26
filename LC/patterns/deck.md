@@ -49,10 +49,38 @@ The 5-minute cost is never the mechanics — it's failing to *recognize* you're 
 
 ---
 
+## Card 02 — Can't picture the edge case? Force its condition and build the instance around it  `◐`
+
+**Trigger (the felt signal):**
+You suspect an edge case might exist, you try to *imagine* an input that hits it, you fail — and you start drifting toward "I can't construct it, so it can't happen, so I'll skip guarding against it." That slide from "can't picture it" to "doesn't exist" is the trigger. (The map-vs-set fix downstream is *not* the hard part — you already know that. The hard part is not wrongly declaring the case impossible.)
+
+**Move:**
+Don't imagine the counterexample — **derive it.** Write the condition that triggers the edge as an equation, solve for the values that satisfy it, then pad the rest of the instance with whatever keeps it legal.
+- If the system is **satisfiable** → the counterexample exists; you just built it. Guard against it.
+- If the system is **contradictory** → the case is genuinely unreachable; skipping the guard is now *proven* safe, not assumed safe.
+
+**The 41-minute anchor — *Identify the Largest Outlier* (2026-05-25):**
+Stuck because "I can't build an array where sum-element and outlier collide → maybe it never happens → use a Set." Construction-by-forcing instead of imagination:
+1. Collision condition is `target == z` ⇔ `tSum = 3z`. Pick the trap value: `z = 7` ⇒ `tSum` forced to `21`.
+2. Pad legally: plant a *real* outlier `o = 3` ⇒ sum element `s = (21−3)/2 = 9` ⇒ specials must sum to 9 and hold the single `7` → `[7, 2]`.
+3. Instance: `[7, 2, 9, 3]`. `z=7` matches `x=7` against its own single self (fake); real answer `3`. **The system was satisfiable → the edge is real → freq map required.**
+Note the secondary unlock: `z` in `tSum=3z` is the **loop candidate**, not "the outlier" — that conflation was half the 41 minutes.
+
+**Why it transfers (not niche to outliers):**
+`tSum=3z` is throwaway. The *method* — "translate the edge into a solvable condition, then either build it or prove it contradictory" — is how you settle *any* "can this even happen?" doubt: unreachable-state guards, overflow-only-if inputs, can-two-things-coincide questions. It replaces gut-feel "nah, won't happen" (the thing that ships WAs) with a satisfiability check.
+
+**Family:** feeds pre-submit item 4 (set vs freq map under index-distinctness) — but this card is upstream of it: the card is *deciding the guard is needed at all*, the checklist item is the fix.
+
+**Quiz prompt:** "You think an edge case might exist but can't imagine an input that hits it. What do you do before deciding it's safe to ignore?"
+**Reflex answer:** "Write the trigger as an equation, solve it, pad to a legal instance. Satisfiable → it's real, guard it. Contradictory → proven safe."
+
+---
+
 ## Deck status
 
 | Card | Move | Born from | Status |
 |------|------|-----------|--------|
 | 01 | Ambiguous assignment → enumerate, take best | Split Array Min Diff (2026-05-25) | ◐ installing |
+| 02 | Can't picture an edge case → force its condition, build/refute the instance | Largest Outlier (2026-05-25) | ◐ installing |
 
 *(Next card slots fill as problems are solved — one move per problem, only when it cost real time.)*

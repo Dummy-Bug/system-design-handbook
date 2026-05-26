@@ -430,3 +430,103 @@ Traced on example 3 → returns 16. ✓ (first/dp-col use `i+1L`/`j+1L` to dodge
 
 **Band tally:** 5/10 done. Clean first-submission AC: **#3 only**. #1/#2/#4 soft fail (WA-then-AC), #5 hinted. **1/5 clean, 1/5 hinted** — both below bar. Dominant failure mode across the band is now unmistakable: **problem comprehension**, not algorithm/derivation. Three of five problems lost their time to reading the statement wrong.
 
+---
+
+## 6 — Identify the Largest Outlier in an Array (cold re-solve, original #7 was hinted)
+
+| Field | Value |
+|-------|-------|
+| Date | 2026-05-25 |
+| Link | https://leetcode.com/problems/identify-the-largest-outlier-in-an-array/ |
+| Rating | 1644 |
+| AC | Insight reached (hinted) — implementation pending |
+| Time | ~80 min total (41 min self-derivation before asking help, then ~40 min debrief + construction-by-forcing to internalize the edge case) |
+| Pattern | Algebraic rearrangement + HashMap freq-count lookup |
+| Verdict | **Hinted** (same recognition gap as first attempt — not a clean re-solve) |
+
+---
+
+### Thinking log (verbatim)
+
+- Solved `2x + z = tSum → x = (tSum − z)/2`; noted sum is always even so odd `(tSum − z)` skips. Working on samples.
+- Got hung up chasing a "multiple outliers" structural edge case for ~30 min. Tried to construct an array with two valid outliers; proved `2x + z = 3z ⇒ x = z` always, couldn't manufacture a contradiction. (This was a **red herring** — "largest" is in the prompt only because you enumerate valid candidates and take max, not because of an exotic structure.)
+- At 41 min, stuck. Asked for help.
+
+### The actual gap — recognition, NOT data-structure knowledge
+
+The user **knows** set vs freq map cold. The miss was *seeing* that the value-based check (`is target present?`) can alias the **same physical index** as the candidate, under the prompt's `distinct indices, may share values` clause. Without seeing the collision, the freq map looks pointless — nothing to defend against. **Do not log this as a "used Set" knowledge slip** (this mislabel is what made it recur from attempt 1).
+
+The collision fires exactly when `tSum = 3z` — and `z` here is the **loop candidate**, not the real outlier. `tSum = 3z` identifies *which single candidate self-collides* (it's the trap), not "three times the outlier." The real answer comes from a different candidate that never touches that equation.
+
+### Breakthrough — constructing the killer array (the proof the collision is real)
+
+The user could not believe the collision existed because they couldn't construct an array exhibiting it. Recipe derived together:
+1. Pick the value you want as the **trap** (the fake candidate) → call it `z`. → chose `z = 7`.
+2. `tSum` is then forced to `3z = 21`, and `7` must appear **exactly once**.
+3. Plant a *real, different* outlier `o` (≠ 7). `tSum = 2s + o` ⇒ `s = (21 − o)/2` must be whole ⇒ `o` odd. → chose `o = 3`, so sum element `s = 9`.
+4. The trap `7` must live among the **specials** (it's not 9, not 3); specials sum to 9 → `[7, 2]`.
+
+```
+[7, 2, 9, 3]   tSum = 21
+z=7: x=(21-7)/2 = 7.  x==z, count[7]=1  → INVALID.  set false-positives → claims 7
+z=3: x=(21-3)/2 = 9.  present, x≠z      → VALID, outlier 3  ✓
+z=2: x=(21-2)/2 = 9.5 → skip
+z=9: x=(21-9)/2 = 6.  absent           → invalid
+```
+Correct = **3**; naive set = `max(7,3)` = **7**. Building the array from the forcing equation IS the proof — and producing it on demand is the recognition the user was missing.
+
+### Fix
+
+Frequency map, with the self-collision guard:
+```
+if x == z:  need count[x] >= 2     // sum element & outlier same value → two distinct indices
+else:       need count[x] >= 1
+```
+Iterate every element as candidate `z`, skip odd `tSum − z`, apply the rule, take max valid `z`. O(n) time, O(n) space.
+
+### Verdict
+
+**Hinted** — does not count as a clean re-solve of original #7. The same recognition gap recurred, confirming it was mislabeled the first time (as a Set-vs-Map slip). Now reframed as a recognition trigger and carded (deck Card 02). Re-test cold on a fresh value-check-under-index-constraint problem to confirm the trigger is reflexive before claiming this graduated.
+
+**WA-cause [read-error]:** value-based validity check under an index-based constraint — `distinct indices, may share values` clause read past, never converted into "could my match alias my current index?".
+
+**Band tally:** 6/10 done. Clean first-submission AC: **#3 only**. #1/#2/#4 soft fail, #5/#6 hinted. **1/6 clean, 2/6 hinted** — well below the ≥7 clean / ≤1 hinted bar. Comprehension/recognition remains the dominant failure mode (4 of 6 lost to reading, now including this one).
+
+---
+
+## 7 — Sum of Digit Differences of All Pairs (cold re-solve, original #6 was 55 min)
+
+| Field | Value |
+|-------|-------|
+| Date | 2026-05-26 |
+| Link | https://leetcode.com/problems/sum-of-digit-differences-of-all-pairs/ |
+| Rating | ~1600 |
+| AC | **Y — first submission, clean** |
+| Time | **27 min end-to-end** (13 min approach + trace, rest coding) — First-Attempt was 55 min, **~2× faster** |
+| Pattern | Per-digit-position contribution counting via freq map |
+| Verdict | **Clean pass** (first-submission AC, self-derived, no hint) |
+
+---
+
+### Approach (insight)
+
+`O(n²)` brute force is out (constraints). Key reframe: total = sum over **each digit position** of the number of pairs that *differ* at that position. Process one position at a time. Scanning left to right with a digit-frequency map, when you reach element `i`, `count` = earlier elements sharing this digit, so `(i+1) - (count+1) = i - count` = earlier elements that **differ** here. Accumulate across all `i` and all positions. `O(d·n)` time, `O(1)` space (≤10 digit buckets). Problem guarantees all numbers have equal digit length, so `digitCount` from `nums[0]` is safe.
+
+### Step 2 / Step 3 (ritual)
+
+Trace of `[13,23,12]→4` done on paper (not transcribed — logged as paper-only per the chat exchange). Edge cases named: all-identical (`[10,10,10,10]→0`), single number → 0 by definition.
+
+### Review notes (no bug, but habit flags)
+
+- **Float-cast trap [checklist #2], latent not live:** `(int)Math.pow(10, i)` for digit extraction. AC'd only because powers of 10 ≤10¹⁵ are exactly representable as doubles. Same shape as the `999`-instead-of-`1000` trap. Habit fix: integer-only digit peel (`n%10; n/=10`) or precomputed `int[] pow10`.
+- **Intermediate-collection guideline:** `Map<Integer,Long>` over a fixed 0-9 digit range — an `int[10]`/`long[10]` is the natural fit (no boxing, `clear()` → `Arrays.fill`). Negligible at scale, noted for habit only.
+- Clean otherwise: `getDigit` predicate extracted, no nested conditionals in main loop, orchestrator reads cleanly.
+
+**Code:** `solutions/1600-1650/sum-of-digit-differences-of-all-pairs.java` (archive only — do NOT open during revision).
+
+### Verdict
+
+First clean self-derived first-submission AC of the band besides #3, and a genuine 2× speed drop (55→27) — this pattern **installed** on the first re-solve (contrast with the Outlier, whose subtle edge needed a card). No deck card: nothing cost real time.
+
+**Band tally:** 7/10 done. Clean first-submission AC: **#3, #7**. #1/#2/#4 soft fail, #5/#6 hinted. **2/7 clean, 2/7 hinted** — still below the ≥7 clean / ≤1 hinted bar, but two cleans now and the dominant failure mode (comprehension) didn't bite here. 3 left: re-solve **Word Squares II** (orig 40 min) + 2 new on untouched patterns (monotonic stack / binary-search-on-answer / interval DP).
+
