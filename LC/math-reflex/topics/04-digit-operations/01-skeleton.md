@@ -70,7 +70,7 @@ Each subtopic is rated `[required-from XXXX]`. Card titles only. Content unpacke
 ## f. Place value / extracting the i-th digit [1300]
 
 **Cards (2):**
-- f.1 — i-th digit from the right: `(n / 10^i) % 10`
+- f.1 — i-th digit from the right: `(n / 10^i) % 10`. **Compute `10^i` with integer arithmetic** (`long[] POW10` or peel) — never `(int) Math.pow(10, i)` (see Powers & Roots `e.3`: it silently works on powers of 10, which hides the bug).
 - f.2 — i-th digit from the left: count digits first, then index
 
 ---

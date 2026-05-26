@@ -63,11 +63,13 @@ Each subtopic is rated `[required-from XXXX]`. Card titles only. Content unpacke
 
 ## e. Math.pow precision trap [1200]
 
-**Cards (2):**
+**Cards (4):**
 - e.1 — `(int) Math.pow(1e9, 1.0/3) = 999` not 1000 — float-cast loses one. Always add `+ 1` and re-verify
 - e.2 — Reflex: never trust `Math.pow` returning an exact integer. Either use integer arithmetic or verify post-cast
+- e.3 — **`(int) Math.pow(10, i)` for place value — the silent-success trap.** It *works* (powers of 10 ≤ 10¹⁵ are exact doubles), which is worse than failing: the bug hides until the base isn't a clean power. Reflex fix → integer-only: precomputed `long[] POW10` or peel digits with `n % 10; n /= 10`. Never reach for `Math.pow` to extract a digit.
+- e.4 — **Why the cast is sometimes safe (the root fact):** a `double` represents every integer exactly up to `2^53 ≈ 9.0 × 10¹⁵`; beyond that the gaps exceed 1, so `(long)` casts of large `Math.pow` / `Math.sqrt` results lose information. Powers of 10 are exact only up to `10¹⁵` for this reason. "Small value → looks fine; large value → corrupts" is the same boundary.
 
-**Note:** This is CLAUDE.md item #2 of Java pre-submit checklist. Lock here.
+**Note:** e.1/e.2 are CLAUDE.md item #2 of the Java pre-submit checklist. e.3 born from *Sum of Digit Differences of All Pairs* (1600-1650, 2026-05-26) — `(int)Math.pow(10,i)` AC'd silently and only the review flagged it. e.4 is the math fact underneath the whole family. Lock all four.
 
 ---
 
@@ -133,21 +135,21 @@ Each subtopic is rated `[required-from XXXX]`. Card titles only. Content unpacke
 
 ## Card count
 
-19 atomic cards across 11 subtopics.
+21 atomic cards across 11 subtopics.
 
 | Target rating | Required cards (cumulative) |
 |---------------|------------------------------|
 | 1100-1199     | a (2) + b (2) + c (2) = **6 cards** |
-| 1200-1299     | + e (2) = **8 cards** |
-| 1300-1399     | + d (1) + h (3) = **12 cards** |
-| 1400-1499     | + f (1) + g (1) = **14 cards** |
-| 1500-1599     | + i (2) + j (2) = **18 cards** |
-| 1600-1699     | — = 18 cards |
-| 1700-1799     | + k (1) = **19 cards (full)** |
+| 1200-1299     | + e (4) = **10 cards** |
+| 1300-1399     | + d (1) + h (3) = **14 cards** |
+| 1400-1499     | + f (1) + g (1) = **16 cards** |
+| 1500-1599     | + i (2) + j (2) = **20 cards** |
+| 1600-1699     | — = 20 cards |
+| 1700-1799     | + k (1) = **21 cards (full)** |
 
 ## Notes for Socratic drill
 
-- Subtopic `b.2` and `e.1` are the two cornerstone bug-prevention cards in this topic. Both close documented CLAUDE.md Java traps. Highest install priority.
+- Subtopic `b.2`, `e.1`, and `e.3` are the cornerstone bug-prevention cards in this topic. All close documented CLAUDE.md Java traps. Highest install priority. `e.4` is the *why* (the `2^53` exact-integer boundary) — install it alongside e.3 so the fix is understood, not memorized.
 - Subtopic `a.1` (n² overflow at n ≈ 46340) ties to the same overflow family as AP triangular sum (a.2) and digit-positional values. Lock the boundary as a sibling reflex.
 - Subtopics `f` and `g` (powers of 10 and 2 reference tables) are cross-referenced from Digit Ops and Bit Ops respectively. Install once, used from three topics.
 - Subtopic `h` (power-of-n detection) — the binary AND trick for power of 2 is one of the most-asked LC reflex questions in interview screens. Lock cold.

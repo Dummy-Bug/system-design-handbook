@@ -43,7 +43,7 @@ This folder is the DSA grind log for a 1-year plan to push LC contest rating fro
 ```
 
 ### 1450-1500.md / 1500-1550.md (deep log per problem)
-Only insight, key gotcha, complexity. **No full solution code.** Format:
+Insight, key gotcha, complexity — and the full solution code is kept too (inline in the per-problem file, or in a per-problem/per-attempt file for newer bands; see the 1600-1650 per-attempt folder layout). Format:
 ```
 ### #N — Problem Name
 **Link:** url
@@ -147,7 +147,7 @@ Steps 2 and 3 are mandatory written artifacts. Across the 1450-1850 audit, every
   - **Step 2:** Recompute the *richest* worked example (the one with a number breakdown/explanation) through the proposed approach, reproducing every number from the model. Tracing to *confirm* is not enough — tracing to *derive* is the bar. A number the model can't reproduce is a missing rule; stop and find it before coding. (Read-error on 1600-band #4 and #5 both came from skipping/rushing this — #5's whole cost model was spelled out in the example that got ignored.)
   - **Step 3:** List 3-5 edge cases by name (e.g., "n=1", "all same color", "all diff color", "two elements same color", "max input size").
 - Claude must **refuse to engage with code** until both are present in the conversation. If the user says "show me the code" or pastes a solution without steps 2-3 visible, Claude prompts them back to do the ritual first.
-- The ritual artifacts stay in chat. They do not need to be written into the log file — the log file follows the existing "insight + key gotcha + complexity, no full code" format.
+- The ritual artifacts stay in chat. They do not need to be written into the log file — the log file follows the "insight + key gotcha + complexity + full solution code" format.
 - Exception: if the user explicitly says "skip the ritual, I want to see how I fail" — allowed, but logged as a deliberate ritual break in that problem's entry.
 
 **Cost-benefit:** ~5 min overhead per problem. Today's House Robber V cost 60+ min and 4 WAs because the ritual was skipped — would have been caught on the first submission with `n=2, same color` traced. 12× return at minimum.
