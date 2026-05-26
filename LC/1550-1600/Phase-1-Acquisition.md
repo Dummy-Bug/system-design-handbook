@@ -28,7 +28,7 @@
 |---|-------|---------|--------|
 | 1 | Greedy | ☐ | — |
 | 2 | Game theory | ☐ | — |
-| 3 | Sliding window | ☐ | — |
+| 3 | Sliding window | ☑ | pass — 26 min, first-submission AC, atMost(K)-atMost(K-1) trick |
 | 4 | Graph / tree traversal | ☐ | — |
 | 5 | Bit / XOR | ☐ | — |
 | 6 | Difference array | ☐ | — |
@@ -40,4 +40,4 @@
 | 12 | Monotonic stack | ☐ | — |
 | 13 | Tree DP | ☐ | — |
 | 14 | Union-Find | ☐ | — |
-| 15 | Interval DP | ☑ | pass — self-derived, correct logic, TLE→AC (memo trivial) |
+| 15 | Interval DP | ☑ | pass — self-derived, correct logic, intentional TLE→AC (memo trivial) |
