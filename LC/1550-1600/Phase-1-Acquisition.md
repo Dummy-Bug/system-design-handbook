@@ -32,12 +32,12 @@
 | 4 | Graph / tree traversal | ☐ | — |
 | 5 | Bit / XOR | ☐ | — |
 | 6 | Difference array | ☐ | — |
-| 7 | Math / number theory | ☐ | — |
-| 8 | Hashing / counting | ☐ | — |
+| 7 | Math / number theory | ☑ | soft fail (WA-then-AC) — impl bug in char selection |
+| 8 | Hashing / counting | ☑ | hinted — read-error (wrong return value) + off-by-one in merge |
 | 9 | DP | ☐ | — |
 | 10 | Design | ☐ | — |
 | 11 | Heap-greedy | ☐ | — |
 | 12 | Monotonic stack | ☐ | — |
 | 13 | Tree DP | ☐ | — |
 | 14 | Union-Find | ☐ | — |
-| 15 | Interval DP | ☐ | — |
+| 15 | Interval DP | ☑ | pass — self-derived, correct logic, TLE→AC (memo trivial) |
