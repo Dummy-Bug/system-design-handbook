@@ -65,11 +65,14 @@ O(?) time, O(?) space.
 ### virtual-contest-log.md
 Log by contest. Include Q1/Q2/Q3/Q4 result (Y/N/S), what you were stuck on for each N, and upsolve due date.
 
-## Current grind state (as of 2026-05-22)
+## Current grind state (as of 2026-05-26)
 
-- **Active zerotrac range:** 1700-1750 (resumed). Originally graduated from 1650-1700 on 2026-05-16 but then jumped to 1800-1850 prematurely after only 7/10 problems and entirely skipped 1750-1800. Pause acknowledged 2026-05-22 — returning to finish 1700-1750 (need 3 more), then full 10-problem pass at 1750-1800, before resuming 1800-1850.
-- **1700-1750 pattern gap (target for remaining 3):** monotonic stack, binary search on answer, interval/tree DP. Current 7 ACs concentrated in greedy + reframing.
-- **1800-1850 paused:** 5 problems logged, marked paused in `1800-1850.md`.
+- **Active band: 1600-1650 second-attempt backfill** (cold re-solve after the 2026-05-22 audit). Per-problem files live in `1600-1650/First-Attempt/` and `1600-1650/Second-Attempt/` (one file per problem: description + verbatim thinking + solution code). **7/10 logged: 2 clean (#3 Split Array, #7 Sum of Digit Differences), 3 soft fail (#1 HRV, #2 Caesar, #4 Min Discards), 2 hinted (#5 Min Cost Path, #6 Outlier).** Word Squares II dropped (low-value brute force). **Graduation is now ownership-based (rule 6, updated 2026-05-26)** — not "3 more to reach 10" but "every core bucket in `00-Band-Topic-Map.md` *owned* = 3 cold first-submission cleans, reps 2-3 disguised/combined." Realistic floor ~25-30 problems/band; the blind-spot trio (stack, tree DP, union-find) must be owned (3 cold cleans each, cross-band). Dominant failure mode = **read-error / comprehension** (3 of 5 misses), not algorithm.
+- **1600-1650 problem-selection system (built 2026-05-26, read every statement in the band):**
+  - `1600-1650/00-Band-Topic-Map.md` — SPOILER: all 90 problems classified by pattern, plus the two training sets. Planning/debrief only.
+  - **Two sets** (see memory `lc_two_set_problem_selection`): **Set A** = breadth/prereq ladder, one rep per untouched pattern (monotonic stack, binary-search-on-answer, tree DP, union-find, graph BFS/DFS), study allowed; **Set B** = derivation×comprehension, scored, solved cold. Interval DP confirmed absent at ≤1650.
+  - `1600-1650/_Sealed-Queue.md` — SEALED shuffled blind queue + answer key. **Serve problems blind** (see memory `lc_blind_deal_protocol`): deal one bare link at a time on "next", no pattern/set/score, reveal only after solving.
+- **After 1600-1650 graduates:** resume the backfill ladder — finish 1700-1750 (need 3 more), full pass at 1750-1800, then 1800-1850 (5 logged, paused in `1800-1850.md`).
 - **Revision due:** 1650-1700 batch — due 2026-05-30.
 - **Contest rating:** ~1530 (frozen, returning after gap)
 - **Projection:** ~1680 by Dec 2026 if protocol holds (slightly later now due to backfill)
@@ -81,14 +84,22 @@ Log by contest. Include Q1/Q2/Q3/Q4 result (Y/N/S), what you were stuck on for e
 3. **No editorial before 30 min** — even a glance counts as a fail
 4. **Pool separation** — zerotrac = last 6 months of contests. Virtual contest = 12+ months old. Never mix
 5. **Two-week revision lock** — revision is batched, not daily. Week N's problems get revised in Week N+2, *before* any Week N+2 new problem is started. Revision = approach recall only (5-10 min per problem), not full re-solve. Hard fails get a full cold re-solve + Day+14-from-now retry.
-6. **Graduation (tightened 2026-05-22)** — bump range +50 only when ALL of the following hold for the prior band:
-   - **10 problems logged.** No skip-3 escapes. If the band has fewer than 10, you have not finished it.
-   - **≥7/10 first-submission AC.** "First-submission AC" means AC on the very first submit — not AC after a WA. WA-then-AC = soft fail.
-   - **≤1/10 hinted.** Hinted = took editorial, took a hint from Claude, or had any external nudge before reaching the approach. Hinted counts as fail, not pass.
-   - **≥8/10 pass + soft-fail combined on revision** (unchanged from prior rule).
+6. **Graduation (coverage-based, updated 2026-05-26)** — the primary gate is now **TOPIC COVERAGE, not raw count.** The old count-only rule (10 logged, ≥7/10 clean) is what *let the blind spots form*: 36 problems solved across 1500-1700, zero monotonic stack / tree DP / union-find — because graduation never checked breadth, you could clear it on a narrow hashing+greedy slice and carry whole pattern families forward unsolved. Bump range +50 only when ALL hold for the prior band:
+
+   - **(A) Per-bucket OWNERSHIP — PRIMARY gate.** Every core pattern bucket in the band's `00-Band-Topic-Map.md` must be **owned, not merely touched.** One clean solve is a single data point — it can't separate skill from luck or from catching the vanilla variant, and that false confidence is what detonates at the next band.
+     - **Owned = 3 cold first-submission cleans on *distinct* problems** in that bucket. Rep 1 may be the vanilla form; **reps 2 and 3 must be disguised/combined instances** (the pattern is not announced — Set B style), and **rep 3 is spaced** (solved a session-or-more later, so it doubles as the retention check). A WA / hinted / editorial solve does **not** count toward the 3 — that rep resets.
+     - **Blind-spot / never-done buckets get an acquisition rep first** (study-OK, Set A) that unlocks the mechanic and does **not** count toward the 3. So a blind-spot bucket = 1 acquisition + 3 cold cleans.
+     - **Amortization** keeps this sane: a disguised/combined problem usually covers 2+ buckets at once (window+deque, BS+union-find, tree-DP+DFS) and counts toward *each* bucket's tally. Realistic band total ≈ **25-30 problems**, not a naive 36-40.
+     - Core = all band buckets EXCEPT pure math/number-theory/bit (math-reflex covers those) and trivial direct-simulation.
+   - **(B) Blind-spot patterns are mandatory and must be OWNED (cross-band).** **Monotonic stack, tree DP, and union-find** must each reach the 3-cold-clean ownership bar — install is cross-band (the 3 cleans can be spread across whichever bands they appear in). Binary-search-on-answer already has reps (1500-1550 #8) but still needs 3 cold cleans to be *owned*. Interval DP via Stone Game [1590] if pursued.
+   - **Growth principle:** depth lives in reps 2-3 (the disguised forms), not rep 1. Re-solving the vanilla form teaches nothing — the confirming reps must force derivation, not re-recognition.
+   - **(C) Quality bar — across all band problems.** ≥70% first-submission clean AC; ≤1 hinted per 10 problems. WA-then-AC = soft fail. (Derivation-over-speed clause exempts time, not WAs.)
+   - **(D) Revision.** ≥80% pass + soft-fail combined on the two-week revision.
    See `zerotrac.md` for Pass / Soft fail / Hard fail definitions.
 
-   **Historical audit (2026-05-22):** prior graduations were called with looser counting. By the tightened rule above, 1550-1600 was 9/10 (1 hint), 1650-1700 was 6/10 first-submission (3 WAs + 1 hint), 1600-1650 and 1700-1750 were 7/10 (skip-3, ineligible). The 1750-1800 band was skipped entirely. These are now acknowledged inflations — the new rule prevents this from compounding further.
+   **Implication of the ownership rule:** under (A)+(B), **none of 1500-1700 has truly graduated** — all four bands lack *owned* coverage (3 cold cleans) of every core bucket, and the blind-spot trio (monotonic stack, tree DP, union-find) has zero clean reps. The blind-spot trio must be owned (3 cold cleans each, cross-band) before any of those bands counts as complete. The per-band `00-Band-Topic-Map.md` is the authoritative bucket list for its ownership check.
+
+   **Historical audit (2026-05-22, count-era):** under the old tightened count rule, 1550-1600 was 9/10 (1 hint), 1650-1700 was 6/10 first-submission (3 WAs + 1 hint), 1600-1650 and 1700-1750 were 7/10 (skip-3, ineligible), 1750-1800 skipped. The coverage rule supersedes this — count was never the real signal; breadth is.
 
 7. **Header integrity** — every band's `.md` file header MUST state the actual stats: `X/10 first-submission AC`, `Y/10 hinted`, `Z WA-then-AC`. Do not write summary stats like "10/10 first-try AC" if any of those 10 were WA-then-AC or hinted. Optimistic counting is the root cause of skip-3 — premature graduation feels earned because the headers lie, and the next band lands underprepared.
 
@@ -212,6 +223,12 @@ Before submitting, scan this list. If your solution touches the bug family, veri
 - Stay completely silent unless the user explicitly asks for help.
 - When the user says "log it" or shares their thinking, record it faithfully.
 - Help is given ONLY when the user says "help" or explicitly asks a question.
+
+**Serving problems — deal BLIND (don't make the user re-explain this each session):**
+- When a band has a sealed queue (e.g. `1600-1650/_Sealed-Queue.md`), serve problems blind: on "next", hand the user **one bare LeetCode link**, with NO pattern, NO set (A/B), NO score, NO "trap" note. Reveal the set + pattern **only after** they finish, for the debrief.
+- Telling the pattern is a hint that defeats cold-derivation training. When dealing, emit only the bare link in any user-visible output (use a script that prints just the link column — do not dump the sealed file's pattern labels into view).
+- The LeetCode title/slug itself can hint the pattern — that is inherent to the problem (like a real contest), not something to hide or apologize for.
+- The pattern-labeled topic map and the sealed queue are SPOILER files; never quote their pattern/set columns to the user before a solve.
 
 ---
 
