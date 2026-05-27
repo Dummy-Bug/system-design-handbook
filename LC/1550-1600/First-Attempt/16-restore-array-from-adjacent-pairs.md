@@ -1,6 +1,6 @@
 ### #16 — Restore the Array From Adjacent Pairs
 **Link:** https://leetcode.com/problems/restore-the-array-from-adjacent-pairs/
-**Date attempted:** 2026-05-27
+**Date attempted:** 2026-05-27 ~08:30
 **Rating:** 1550–1600 band (Phase 1 acquisition)
 **Time:** 38 min (12 min approach + 26 min coding) — first-submission AC ✓
 **Pattern:** Graph / tree traversal

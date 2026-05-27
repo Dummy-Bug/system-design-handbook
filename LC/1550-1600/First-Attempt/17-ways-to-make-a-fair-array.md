@@ -1,6 +1,6 @@
 ### #17 — Ways to Make a Fair Array
 **Link:** https://leetcode.com/problems/ways-to-make-a-fair-array/
-**Date attempted:** 2026-05-27
+**Date attempted:** 2026-05-27 ~17:30
 **Rating:** 1550–1600 band (Phase 1 acquisition)
 **Time:** 30 min (15 min approach + 15 min coding) — first-submission AC ✓
 **Pattern:** Linear / grid / counting DP

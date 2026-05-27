@@ -13,12 +13,10 @@
 | 7 | Math / number theory | The k-th Lexicographical String of All Happy Strings of Length n | 87.1% | Q3 | https://leetcode.com/problems/the-k-th-lexicographical-string-of-all-happy-strings-of-length-n/ |
 | 8 | Hashing / counting | Groups of Special-Equivalent Strings | 73.6% | Q2 | https://leetcode.com/problems/groups-of-special-equivalent-strings/ |
 | 9 | Linear / grid / counting DP | Ways to Make a Fair Array | 66.9% | Q3 | https://leetcode.com/problems/ways-to-make-a-fair-array/ |
-| 10 | Design | Iterator for Combination | 72.7% | Q3 | https://leetcode.com/problems/iterator-for-combination/ |
-| 11 | Heap-greedy | Minimum Operations to Halve Array Sum | 50.2% | Q3 | https://leetcode.com/problems/minimum-operations-to-halve-array-sum/ |
-| 12 | Monotonic stack (blind) | Next Greater Node In Linked List | 64.3% | Q3 | https://leetcode.com/problems/next-greater-node-in-linked-list/ |
-| 13 | Tree DP (blind) | Construct Binary Search Tree from Preorder Traversal | 84.3% | Q4 | https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/ |
-| 14 | Union-Find (blind) | The Earliest Moment When Everyone Become Friends | 66.1% | Q3 | https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/ |
-| 15 | Interval DP (blind) | Stone Game | 73.3% | Q2 | https://leetcode.com/problems/stone-game/ |
+| 10 | Heap-greedy | Minimum Operations to Halve Array Sum | 50.2% | Q3 | https://leetcode.com/problems/minimum-operations-to-halve-array-sum/ |
+| 11 | Monotonic stack (blind) | Next Greater Node In Linked List | 64.3% | Q3 | https://leetcode.com/problems/next-greater-node-in-linked-list/ |
+| 12 | Tree DP (blind) | Construct Binary Search Tree from Preorder Traversal | 84.3% | Q4 | https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/ |
+| 13 | Interval DP (blind) | Stone Game | 73.3% | Q2 | https://leetcode.com/problems/stone-game/ |
 
 ---
 
@@ -26,18 +24,16 @@
 
 | # | Topic | Phase 1 | Status |
 |---|-------|---------|--------|
-| 1 | Greedy | ☐ | — |
+| 1 | Greedy | ☑ | pass — 58 min, first-submission AC, fix largest→smallest via double flip |
 | 2 | Game theory | ☐ | — |
 | 3 | Sliding window | ☑ | pass — 26 min, first-submission AC, atMost(K)-atMost(K-1) trick |
 | 4 | Graph / tree traversal | ☑ | pass — 38 min, first-submission AC, path graph + BFS from endpoint |
-| 5 | Bit / XOR | ☐ | — |
-| 6 | Difference array | ☐ | — |
+| 5 | Bit / XOR | ☑ | pass — 20 min, first-submission AC, subset enum (n≤16) + precompute maxOR |
+| 6 | Difference array | ☑ | pass — 40 min, first-submission AC, 2D difference array (4 corners + two prefix sweeps) |
 | 7 | Math / number theory | ☑ | soft fail (WA-then-AC) — impl bug in char selection |
 | 8 | Hashing / counting | ☑ | hinted — read-error (wrong return value) + off-by-one in merge |
 | 9 | DP | ☑ | pass — 30 min, first-submission AC, suffix odd/even prefix sums + parity flip |
-| 10 | Design | ☐ | — |
-| 11 | Heap-greedy | ☐ | — |
-| 12 | Monotonic stack | ☐ | — |
-| 13 | Tree DP | ☑ | hinted — mixed preorder/inorder index in right subtree call |
-| 14 | Union-Find | ⊘ | skipped — only in-band problem is LC premium. Deferred to 1600-1650 band. |
-| 15 | Interval DP | ☑ | pass — self-derived, correct logic, intentional TLE→AC (memo trivial) |
+| 10 | Heap-greedy | ☑ | soft fail (WA-then-AC) — used Float instead of Double, precision loss on large values |
+| 11 | Monotonic stack | ☐ | — |
+| 12 | Tree DP | ☑ | hinted — mixed preorder/inorder index in right subtree call |
+| 13 | Interval DP | ☑ | pass — self-derived, correct logic, intentional TLE→AC (memo trivial) |

@@ -1,6 +1,6 @@
 ### #15 — Construct Binary Search Tree from Preorder Traversal
 **Link:** https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/
-**Date attempted:** 2026-05-27
+**Date attempted:** 2026-05-27 ~07:00
 **Rating:** 1550–1600 band (Phase 1 acquisition — Tree DP blind spot)
 **Time:** 85 min (35 min derivation + 50 min coding/debug) — hinted
 **Pattern:** Tree DP / tree construction (blind spot)
