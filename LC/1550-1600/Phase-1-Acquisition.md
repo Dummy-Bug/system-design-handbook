@@ -29,15 +29,15 @@
 | 1 | Greedy | ☐ | — |
 | 2 | Game theory | ☐ | — |
 | 3 | Sliding window | ☑ | pass — 26 min, first-submission AC, atMost(K)-atMost(K-1) trick |
-| 4 | Graph / tree traversal | ☐ | — |
+| 4 | Graph / tree traversal | ☑ | pass — 38 min, first-submission AC, path graph + BFS from endpoint |
 | 5 | Bit / XOR | ☐ | — |
 | 6 | Difference array | ☐ | — |
 | 7 | Math / number theory | ☑ | soft fail (WA-then-AC) — impl bug in char selection |
 | 8 | Hashing / counting | ☑ | hinted — read-error (wrong return value) + off-by-one in merge |
-| 9 | DP | ☐ | — |
+| 9 | DP | ☑ | pass — 30 min, first-submission AC, suffix odd/even prefix sums + parity flip |
 | 10 | Design | ☐ | — |
 | 11 | Heap-greedy | ☐ | — |
 | 12 | Monotonic stack | ☐ | — |
-| 13 | Tree DP | ☐ | — |
-| 14 | Union-Find | ☐ | — |
+| 13 | Tree DP | ☑ | hinted — mixed preorder/inorder index in right subtree call |
+| 14 | Union-Find | ⊘ | skipped — only in-band problem is LC premium. Deferred to 1600-1650 band. |
 | 15 | Interval DP | ☑ | pass — self-derived, correct logic, intentional TLE→AC (memo trivial) |
