@@ -31,7 +31,6 @@ Across **1550-1600 + 1600-1650 + 1650-1700 = 27 solved problems**, these stay un
 | Linear / grid / counting DP | ~8 | — | med-HIGH |
 | Graph BFS/DFS / flood-fill | ~6 | ✅ (#9 tree BFS) | med |
 | Difference array / prefix-range | ~3 | ✅ (#8) | low |
-| Design (data structure) | ~5 | — | dropped — not a derivation target |
 | Game theory | ~3 | ✅ (#3) | low |
 | **Monotonic stack** | ~3 | ❌ none | **TOP** |
 | **Tree DP** | ~2 | ❌ none | **TOP** |
@@ -47,24 +46,26 @@ Across **1550-1600 + 1600-1650 + 1650-1700 = 27 solved problems**, these stay un
 
 Owned = **3 cold first-submission cleans**, reps 2-3 disguised/combined (rule 6). Marks: `◯` 0/3 · `◐` 1-2/3 · `●` owned. Prior vanilla cleans cap a bucket at 1/3. Soft-fail/hinted = 0.
 
-| Core bucket | Cold cleans | Status | Need |
-|-------------|-------------|--------|------|
-| Greedy / observation | 1 (#1,#2,#5 vanilla) | ◐ | 2 disguised |
-| Game theory | 1 (#3) | ◐ | 2 disguised |
-| Sliding window | 1 (#10) | ◐ | 2 disguised |
-| Graph / tree traversal | 1 (#9) | ◐ | 2 disguised |
-| Difference array / prefix-range | 0 (#8 had a bug) | ◯ | 3 |
-| Math / number theory | 0 (#4,#6 hinted) | ◯ | 3 — math-reflex ≠ solving |
-| Bit operations / XOR | 1 (#1,#7 vanilla) | ◐ | 2 disguised |
-| Hashing / counting | 0 | ◯ | 3 |
-| Linear / grid / counting DP | 0 | ◯ | 3 |
-| **Binary search (plain)** (added 2026-05-28) | 0 (Closest Nodes = acquisition, soft-fail) | ◯ | 3 — acquisition done, Phase-2 rep = Time Based KV Store |
-| **Heap-greedy** (gap — no in-band supply) | 0 (Min Ops to Halve soft-failed) | ◯ | acquisition re-solve + 3 cross-band |
-| **Monotonic stack** (blind) | 0 | ◯ | acquisition + 3 |
-| **Tree DP** (blind) | 0 | ◯ | acquisition + 3 |
-| **Interval DP** (Stone Game — only rep ≤1700) | 0 | ◯ | acquisition + 3 |
-| ~~Design~~ | — | — | dropped (not a derivation target) |
-| ~~Union-Find~~ (blind) | — | — | deferred → install in 1600-1650 |
+**Re-based 2026-05-28.** Under the acquisition-floor re-base, ALL prior 1550-1600 solves (#1–#24) are Phase 2 derivation reps for this band — acquisition happened at 1500-1550. The tracker below counts every clean across all 24 logged problems. Phase 1 (Group A: Game theory + Interval DP) is both clean ✓ — see `Phase-1-Acquisition.md`.
+
+| Core bucket | Cold cleans | Status | Reps | Need |
+|-------------|-------------|--------|------|------|
+| Greedy / observation | 3 | ● | #1 Max Bitwise XOR · #5 Min Cost Acquire · #20 Pancake Sorting | OWNED |
+| Bit operations / XOR | 3 | ● | #1 Max Bitwise XOR · #7 XOR Range Mult · #19 Count Max-OR Subsets | OWNED |
+| Sliding window | 2 | ◐ | #10 Power K-Size Subarrays · #14 Binary Subarrays With Sum | 1 disguised |
+| Graph / tree traversal | 2 | ◐ | #9 Unit Conversion · #16 Restore Array From Adjacent Pairs | 1 disguised |
+| Game theory | 2 | ◐ | #3 Final Element · #23 Flower Game (Phase-1 ☑) | 1 (shortfall — in-band supply exhausted) |
+| Linear / grid / counting DP | 1 | ◐ | #17 Ways to Make a Fair Array | 2 disguised |
+| Difference array / prefix-range | 1 | ◐ | #18 Increment Submatrices (2D) — #8 had off-by-one (soft) | 2 disguised |
+| **Monotonic stack** (blind-spot) | 1 | ◐ | #22 Next Greater Node (FIRST CLEAN of blind-spot trio ✓) | 2 disguised |
+| **Interval DP** (Stone Game — only rep ≤1700) | 1 | ◐ | #13 Stone Game (Phase-1 ☑) | 2 (shortfall — no more in-band) |
+| Math / number theory | 0 | ◯ | #4 hinted · #6 hinted | 3 — math-reflex ≠ solving |
+| Hashing / counting | 0 | ◯ | #2 overflow-bug · #12 hinted | 3 |
+| Backtracking | 0 | ◯ | #11 Happy Strings soft-fail | 3 |
+| Heap-greedy | 0 | ◯ | #21 Min Ops Halve soft-fail (float trap); no other in-band supply | re-solve + cross-band |
+| **Tree DP** (blind-spot) | 0 | ◯ | #15 Construct BST hinted | 3 — biggest remaining blind-spot gap |
+| **Binary search (plain)** | 0 | ◯ | #24 Closest Nodes soft-fail (TLE→AC) | 3 — Phase-2 rep = Time Based KV Store |
+| ~~Union-Find~~ (blind-spot) | — | — | deferred → install in 1600-1650 | — |
 
 ---
 
@@ -94,8 +95,8 @@ Depth scored from how the solve actually went (times, hints, bugs). This band's 
 ## Problem sets
 
 Problem sets are generated per the **band setup protocol** in `LC/CLAUDE.md`. See:
-- `Phase-1-Acquisition.md` — 15 intro problems (one per topic, topic-visible, easiest by AR).
-- `_Sealed-Queue-Phase2.md` — 24 derivation problems (shuffled blind, topic hidden until after solve).
+- `Phase-1-Acquisition.md` — **RE-BASED 2026-05-28.** The acquisition floor is **1500-1550**, so this band's Group A acquires only the two genuinely-new patterns: **game theory + interval DP**. All other patterns were acquired at 1500-1550, and their 1550-1600 problems (Pancake Sorting, Binary Subarrays, etc.) are now **Phase 2 derivation reps** for this band, not acquisitions.
+- `_Sealed-Queue-Phase2.md` — derivation problems (shuffled blind, topic hidden until after solve).
 - AR data at `zerotrac-data/band_1550_1599_with_ar.tsv`.
 
-**Graduation (rule 6, ownership-based):** every core bucket above must reach `●` (3 cold first-submission cleans, reps 2-3 disguised). For topics with <3 in-band problems (game theory, heap, mono stack, interval DP), the band contributes what it has — shortfalls complete in adjacent bands naturally, not by cross-band peeking. **Union-Find is deferred to 1600-1650** (only ~2 here); **Design is dropped** as it's not a derivation-muscle target.
+**Graduation (rule 6, ownership-based):** every core bucket above must reach `●` (3 cold first-submission cleans, reps 2-3 disguised). For topics with <3 in-band problems (game theory, heap, mono stack, interval DP), the band contributes what it has — shortfalls complete in adjacent bands naturally, not by cross-band peeking. **Union-Find is deferred to 1600-1650** (only ~2 here). (Design is excluded at every band — not a derivation/ownership target.)

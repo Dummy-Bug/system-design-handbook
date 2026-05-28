@@ -65,9 +65,10 @@ O(?) time, O(?) space.
 ### virtual-contest-log.md
 Log by contest. Include Q1/Q2/Q3/Q4 result (Y/N/S), what you were stuck on for each N, and upsolve due date.
 
-## Current grind state (as of 2026-05-26)
+## Current grind state (as of 2026-05-28)
 
-- **Active band: 1550-1600 ownership grind** (Phase 1 in progress — dealing blind, 15 topics). Previous active (1600-1650 second-attempt backfill) is paused until 1550-1600 ownership is complete.
+- **Active band: 1500-1550 ownership grind** (the BASE band of the acquisition ladder — made active 2026-05-28). Phase 1 acquisition is built (`1500-1550/Phase-1-Acquisition.md`, 9 Group A problems, all ☐ under the Phase system); Phase 2 sealed queue **not yet generated**. 9 problems were logged here under the old protocol (1 failure — #4 Count Covered Buildings). Dominant failure mode in this band = **IMPLEMENTATION bugs** (overflow ×3, float-cast trap, Set-vs-Map, loop bound, lambda syntax), not derivation. Blind-spot trio (monotonic stack, tree DP) FIRST appears here and is acquired here; union-find is scarce (~1) so it installs at 1550-1600.
+- **1550-1600 paused state (was active until 2026-05-28):** Phase 1 acquisition COMPLETE (24 problems logged in `1550-1600/First-Attempt/`; monotonic stack got its first clean at #22). Phase 2 sealed queue rebuilt 2026-05-28 to 18 genuine unsolved problems, **0 solved under the rebuilt queue**. Ownership tracker in `1550-1600/00-Band-Topic-Map.md` is stale (reflects only the original 10). Resume after 1500-1550 graduates.
 - **1600-1650 paused state:** Per-problem files live in `1600-1650/First-Attempt/` and `1600-1650/Second-Attempt/` (one file per problem: description + verbatim thinking + solution code). **7/10 logged: 2 clean (#3 Split Array, #7 Sum of Digit Differences), 3 soft fail (#1 HRV, #2 Caesar, #4 Min Discards), 2 hinted (#5 Min Cost Path, #6 Outlier).** Word Squares II dropped (low-value brute force). **Graduation is now ownership-based (rule 6, updated 2026-05-26)** — not "3 more to reach 10" but "every core bucket in `00-Band-Topic-Map.md` *owned* = 3 cold first-submission cleans, reps 2-3 disguised/combined." Realistic floor ~25-30 problems/band; the blind-spot trio (stack, tree DP, union-find) must be owned (3 cold cleans each, cross-band). Dominant failure mode = **read-error / comprehension** (3 of 5 misses), not algorithm.
 - **1600-1650 problem-selection system (built 2026-05-26, read every statement in the band):**
   - `1600-1650/00-Band-Topic-Map.md` — SPOILER: all 90 problems classified by pattern, plus the two training sets. Planning/debrief only.
@@ -230,24 +231,44 @@ When starting a new band (or when the user asks to set up a band), follow this *
 - Source: `zerotrac-data/content-tsv/all_<band>_with_content.tsv` (cached HTML → clean to text).
 - Read ALL problems in the rating range, not a sample. Title-only classification produced 4 mislabels — always read the actual statement.
 
-### Step 2 — Fetch acceptance rate for every problem
+### Step 2 — Fetch acceptance rate AND official tags for every problem
 - Source: LeetCode GraphQL API. `POST https://leetcode.com/graphql` with `User-Agent` header (required — bare requests get 403).
-- Query: `{"query":"query q($t:String!){question(titleSlug:$t){stats}}","variables":{"t":"<slug>"}}`
-- Parse `acRate` from the `stats` JSON string.
+- Query: `{"query":"query q($t:String!){question(titleSlug:$t){difficulty stats topicTags{name}}}","variables":{"t":"<slug>"}}`
+- Parse `acRate` from the `stats` JSON string, `difficulty`, and the `topicTags` list.
+- **`topicTags` is LC's canonical classification — fetch it here so Step 3 can verify against it, not guess.**
 - Join with Q-position from `zerotrac-data/ratings.tsv` (columns: Rating, ID, Title, Title ZH, **Title Slug**, **Contest Slug**, **Problem Index** Q1-Q4).
-- Save to `zerotrac-data/band_<lo>_<hi>_with_ar.tsv` with columns: `Rating | ID | Title | MathTag | Slug | Contest | QPos | AR`.
+- Save to `zerotrac-data/band_<lo>_<hi>_with_ar.tsv` with columns: `Rating | ID | Title | Slug | Contest | QPos | Difficulty | AR | LCtags`.
 - Rate-limit: 0.5s sleep between requests, browser User-Agent header.
 
-### Step 3 — Classify every problem by topic
+### Step 3 — Classify every problem by topic (verify against LC tags)
 - Assign each problem to one (or more) of the band's ~15 core topic buckets.
 - Core = everything EXCEPT trivial direct-simulation. **Math/number-theory and Bit/XOR are both CORE** (math-reflex trains recall only, not problem-solving).
 - Use the statement + AR + Q-position, never just the title.
+- **MANDATORY tag verification (added 2026-05-28 after the 1550-1600 mislabel audit).** Before locking any problem's bucket, cross-check it against the LC `topicTags` fetched in Step 2. A statement-based guess that contradicts the official algorithmic tag is a mislabel — trust the LC tag. *Root cause this prevents:* Closest Nodes Queries in a BST was hand-classified "Tree DP" and dealt blind under that label, but its LC tags are `Binary Search, BST` — there is no DP tag at all. The reader hit a binary-search problem with no prior binary-search acquisition rep. Ignore pure data-structure scaffolding tags (Array, Hash Table, String) — bucket by the *algorithmic* tag (Binary Search, Stack/Monotonic Stack, Union-Find, DP, Sliding Window, Greedy, etc.).
+- **Plain binary search ≠ binary-search-on-answer.** Keep them as separate buckets — conflating them is what hid the plain-BS gap at 1550-1600.
+- **Design is EXCLUDED at every band (added 2026-05-28).** Never make Design (data-structure-design problems) a target bucket — not in Group A acquisition, not in Group B, not in the ownership tracker. It is not a derivation-muscle target. Skip design-tagged problems entirely when building any band's Phase 1/Phase 2.
+
+### Step 3b — Exclude already-solved problems (MANDATORY, added 2026-05-28)
+- Before any selection, list every problem already solved in this band by reading `<band>/First-Attempt/` and `<band>/Second-Attempt/` (the `NN-<slug>.md` filenames are the slugs).
+- **Never queue a duplicate.** An already-solved problem in a blind queue is a wasted rep — the reader recognizes it instantly. *Root cause this prevents:* the 1550-1600 Phase 2 queue contained 4 already-solved problems (band #1/#3/#8/#10) dealt as "blind."
+- This exclusion applies to BOTH Phase 1 and Phase 2 selection.
 
 ### Step 4 — Build Phase 1 (acquisition, dealt BLIND)
-- **One problem per topic** = the **easiest** available (highest AR, lowest Q-position).
-- Save to `<band>/Phase-1-Acquisition.md` with a tracker table (topic column is SPOILER — for logging only).
-- **Deal Phase 1 blind too** — same protocol as Phase 2. The user says "next" or "give me a problem", Claude hands ONE bare LC link with NO topic label, NO AR, NO hint. Topic is revealed ONLY after the user finishes (AC or stuck), for the debrief. Phase 1 problems are shuffled before serving so order doesn't leak topic.
-- The user works through Phase 1 before entering Phase 2. The only difference from Phase 2 is that Phase 1 picks the *easiest* problem per topic.
+
+**Phase 1 installs a pattern's MECHANIC, and a mechanic is installed once — at the lowest band where the topic appears.** A topic already acquired in a lower band does NOT get a fresh acquisition problem here; the harder band re-creates the need for *derivation + pattern-recognition* (that's Phase 2), not re-installation. So split the band's buckets into two groups (added 2026-05-28 — the "one problem per *every* topic" rule was wrong; it re-taught known mechanics):
+
+- **Group A — acquire in this band.** Topics that are NEW this band, or were never *acquired* in any lower band (deferred / dropped / absent). Each gets a real acquisition problem = the **easiest** available (highest AR, lowest Q-position). These are the only Phase 1 problems to solve.
+  - **Bucket a problem by its UNINSTALLED topic, not its installed one (added 2026-05-28).** A problem usually carries several tags. If ALL its topics are already installed → it's Group B / Phase-2 material (skippable for acquisition). But if it contains *any* uninstalled topic — even alongside installed ones — it is an **acquisition target for that uninstalled topic.** *Substitutability is NOT grounds to skip:* a "k-th smallest" problem whose best solution is quickselect (uninstalled) but which *also* admits a heap solution (installed) still counts as the **quickselect** acquisition — because the intended solution uses the uninstalled tool and this is the only window to install it. Always defaulting to the owned substitute would leave the new pattern permanently uninstalled — that is exactly the blind-spot mechanism to avoid.
+  - **Foundational vs Advanced classification (added 2026-05-28).** Every candidate Group A topic is one of two classes:
+    - **Foundational** — core CS patterns the user MUST own for 1700-rating contests: monotonic stack, tree DP, backtracking, trie, plain BS, greedy, linear/grid DP, graph BFS/DFS, two-pointer, sliding window, hashing, heap/top-k, math/NT/bit, BS-on-answer, prefix/sort-scan, game theory, interval DP, union-find, difference array. **Install at the FIRST band where the pattern appears, regardless of supply.** The ≥3 rule below does NOT apply. Rationale: deferring foundational patterns on thin supply leaves permanent blind spots — exactly the failure mode 1500-1700 already suffered with monotonic stack / tree DP / union-find.
+    - **Advanced** — patterns that are real CS topics but appear sparsely and where install-band choice matters: Topological Sort, Dijkstra / Shortest Path (weighted), Bitmask DP, Segment Tree, BIT, MST, monotonic deque/queue, Quickselect, Rolling Hash, Digit DP, KMP, etc. **Apply the ≥3-in-band-reps rule.** Install ONLY at the first band with ≥3 viable (non-Design) in-band reps (1 acquisition + 2 disguised derivation reps). Below 3, **defer** to the next band — log it in `LC/topic-install-ledger.md`. If no band 1500-1899 ever has ≥3, classify as **outlier / skip-class** (excluded as a target bucket, like Design). Examples confirmed outlier 2026-05-28: Segment Tree / BIT (0 viable in 8 bands), Monotonic deque (1-2/band always), Quickselect (2 in 1650-99 only), Rolling Hash (1-2/band always), MST (1-2/band, adjacent to Union-Find anyway), Geometry (niche LC topic, thin across 1700-2049).
+  - **Update the central ledger.** Every Phase 1 generation reads and updates `LC/topic-install-ledger.md` — single source of truth for which pattern is installed at which band, what's deferred, and what's outlier-class. Group B citations in each band's Phase-1-Acquisition.md should reference this ledger.
+- **Group B — already acquired in a lower band → Phase 2 only.** Listed in the Phase 1 file for completeness, tagged with the lower-band acquisition problem (and its outcome as provenance), but **no acquisition problem to solve.** Their disguised/derivation reps and this band's 3-cold-clean ownership come entirely from Phase 2.
+  - A soft-fail/hinted acquisition in the lower band is still Group B — do NOT re-acquire. Rule 8 guarantees the lower band has *graduated* (3 cold cleans per bucket via its Phase 2) before this band opens, so Group B topics are **owned, not shaky** on arrival. The lower-band Phase-1 outcome is historical provenance only.
+
+- Save to `<band>/Phase-1-Acquisition.md` with both groups and a tracker table for Group A only (topic column is SPOILER — for logging only).
+- **Deal Phase 1 (Group A) blind** — same protocol as Phase 2. The user says "next" or "give me a problem", Claude hands ONE bare LC link with NO topic label, NO AR, NO hint. Topic is revealed ONLY after the user finishes (AC or stuck), for the debrief. Phase 1 problems are shuffled before serving so order doesn't leak topic.
+- The user works through Phase 1 (Group A) before entering Phase 2. The only difference from Phase 2 is that Phase 1 picks the *easiest* problem per topic.
 
 ### Step 5 — Build Phase 2 (derivation, blind shuffled)
 - **Two problems per topic** = derivation-hard, disguised/combined instances.

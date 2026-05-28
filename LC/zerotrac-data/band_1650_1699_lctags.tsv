@@ -1,0 +1,96 @@
+Rating	ID	Title	Slug	Contest	QPos	Difficulty	AR	LCtags
+1652	2343	Query Kth Smallest Trimmed Number	query-kth-smallest-trimmed-number	weekly-contest-302	Q3	Medium	47.6%	Array,String,Divide and Conquer,Sorting,Heap (Priority Queue),Radix Sort,Quickselect
+1652	3927	Minimize Array Sum Using Divisible Replacements	minimize-array-sum-using-divisible-replacements	weekly-contest-501	Q3	Medium	31.9%	Array,Hash Table,Math,Greedy,Number Theory
+1652	750	Number Of Corner Rectangles	number-of-corner-rectangles	weekly-contest-63	Q3	Medium	67.9%	Array,Math,Dynamic Programming,Matrix
+1653	1311	Get Watched Videos by Your Friends	get-watched-videos-by-your-friends	weekly-contest-170	Q3	Medium	53.1%	Array,Hash Table,Breadth-First Search,Graph Theory,Sorting
+1653	1509	Minimum Difference Between Largest and Smallest Value in Three Moves	minimum-difference-between-largest-and-smallest-value-in-three-moves	biweekly-contest-30	Q3	Medium	59.2%	Array,Greedy,Sorting
+1654	1155	Number of Dice Rolls With Target Sum	number-of-dice-rolls-with-target-sum	weekly-contest-149	Q2	Medium	62.4%	Dynamic Programming
+1654	1257	Smallest Common Region	smallest-common-region	biweekly-contest-13	Q2	Medium	68.3%	Array,Hash Table,String,Tree,Depth-First Search,Breadth-First Search
+1654	3218	Minimum Cost for Cutting Cake I	minimum-cost-for-cutting-cake-i	weekly-contest-406	Q3	Medium	58.6%	Array,Two Pointers,Dynamic Programming,Greedy,Sorting
+1655	3598	Longest Common Prefix Between Adjacent Strings After Removals	longest-common-prefix-between-adjacent-strings-after-removals	weekly-contest-456	Q2	Medium	32.6%	Array,String
+1656	1004	Max Consecutive Ones III	max-consecutive-ones-iii	weekly-contest-126	Q3	Medium	67.7%	Array,Binary Search,Sliding Window,Prefix Sum
+1657	1249	Minimum Remove to Make Valid Parentheses	minimum-remove-to-make-valid-parentheses	weekly-contest-161	Q3	Medium	71.5%	String,Stack
+1657	2222	Number of Ways to Select Buildings	number-of-ways-to-select-buildings	biweekly-contest-75	Q3	Medium	50.9%	String,Dynamic Programming,Prefix Sum
+1657	3766	Minimum Operations to Make Binary Palindrome	minimum-operations-to-make-binary-palindrome	biweekly-contest-171	Q2	Medium	52.0%	Array,Two Pointers,Binary Search,Bit Manipulation
+1658	1091	Shortest Path in Binary Matrix	shortest-path-in-binary-matrix	weekly-contest-141	Q3	Medium	51.5%	Array,Breadth-First Search,Matrix
+1658	1583	Count Unhappy Friends	count-unhappy-friends	weekly-contest-206	Q2	Medium	62.5%	Array,Simulation
+1658	2304	Minimum Path Cost in a Grid	minimum-path-cost-in-a-grid	weekly-contest-297	Q2	Medium	68.1%	Array,Dynamic Programming,Matrix
+1658	3015	Count the Number of Houses at a Certain Distance I	count-the-number-of-houses-at-a-certain-distance-i	weekly-contest-381	Q2	Medium	57.7%	Breadth-First Search,Graph Theory,Prefix Sum
+1659	1169	Invalid Transactions	invalid-transactions	weekly-contest-151	Q1	Medium	32.3%	Array,Hash Table,String,Sorting
+1659	1254	Number of Closed Islands	number-of-closed-islands	weekly-contest-162	Q3	Medium	67.1%	Array,Depth-First Search,Breadth-First Search,Union-Find,Matrix
+1659	1958	Check if Move is Legal	check-if-move-is-legal	biweekly-contest-58	Q2	Medium	50.1%	Array,Matrix,Enumeration
+1659	2195	Append K Integers With Minimal Sum	append-k-integers-with-minimal-sum	weekly-contest-283	Q2	Medium	27.0%	Array,Math,Greedy,Sorting
+1659	2915	Length of the Longest Subsequence That Sums to Target	length-of-the-longest-subsequence-that-sums-to-target	biweekly-contest-116	Q3	Medium	39.8%	Array,Dynamic Programming
+1659	3532	Path Existence Queries in a Graph I	path-existence-queries-in-a-graph-i	weekly-contest-447	Q2	Medium	55.5%	Array,Hash Table,Binary Search,Union-Find,Graph Theory
+1660	3029	Minimum Time to Revert Word to Initial State I	minimum-time-to-revert-word-to-initial-state-i	weekly-contest-383	Q2	Medium	42.5%	String,Rolling Hash,String Matching,Hash Function
+1661	3265	Count Almost Equal Pairs I	count-almost-equal-pairs-i	weekly-contest-412	Q2	Medium	38.4%	Array,Hash Table,Sorting,Counting,Enumeration
+1662	3914	Minimum Operations to Make Array Non Decreasing	minimum-operations-to-make-array-non-decreasing	weekly-contest-499	Q3	Medium	55.1%	Array,Greedy
+1663	1219	Path with Maximum Gold	path-with-maximum-gold	weekly-contest-157	Q3	Medium	68.4%	Array,Backtracking,Matrix
+1663	2063	Vowels of All Substrings	vowels-of-all-substrings	weekly-contest-266	Q2	Medium	55.4%	Math,String,Dynamic Programming,Combinatorics
+1663	2170	Minimum Operations to Make the Array Alternating	minimum-operations-to-make-the-array-alternating	weekly-contest-280	Q2	Medium	35.7%	Array,Hash Table,Greedy,Counting
+1663	2550	Count Collisions of Monkeys on a Polygon	count-collisions-of-monkeys-on-a-polygon	weekly-contest-330	Q2	Medium	30.1%	Math,Recursion
+1663	2611	Mice and Cheese	mice-and-cheese	weekly-contest-339	Q3	Medium	48.8%	Array,Greedy,Sorting,Heap (Priority Queue)
+1663	3513	Number of Unique XOR Triplets I	number-of-unique-xor-triplets-i	biweekly-contest-154	Q2	Medium	26.7%	Array,Math,Bit Manipulation
+1663	3755	Find Maximum Balanced XOR Subarray Length	find-maximum-balanced-xor-subarray-length	weekly-contest-477	Q2	Medium	51.0%	Array,Hash Table,Bit Manipulation,Prefix Sum
+1663	863	All Nodes Distance K in Binary Tree	all-nodes-distance-k-in-binary-tree	weekly-contest-91	Q2	Medium	67.7%	Hash Table,Tree,Depth-First Search,Breadth-First Search,Binary Tree
+1664	3201	Find the Maximum Length of Valid Subsequence I	find-the-maximum-length-of-valid-subsequence-i	weekly-contest-404	Q2	Medium	54.9%	Array,Dynamic Programming
+1665	1121	Divide Array Into Increasing Sequences	divide-array-into-increasing-sequences	biweekly-contest-4	Q4	Hard	65.4%	Array,Counting
+1665	1620	Coordinate With Maximum Network Quality	coordinate-with-maximum-network-quality	biweekly-contest-37	Q2	Medium	39.6%	Array,Enumeration
+1665	2593	Find Score of an Array After Marking All Elements	find-score-of-an-array-after-marking-all-elements	biweekly-contest-100	Q3	Medium	64.5%	Array,Hash Table,Sorting,Heap (Priority Queue),Simulation
+1666	1162	As Far from Land as Possible	as-far-from-land-as-possible	weekly-contest-150	Q3	Medium	52.3%	Array,Dynamic Programming,Breadth-First Search,Matrix
+1669	3761	Minimum Absolute Distance Between Mirror Pairs	minimum-absolute-distance-between-mirror-pairs	weekly-contest-478	Q3	Medium	59.2%	Array,Hash Table,Math
+1671	1738	Find Kth Largest XOR Coordinate Value	find-kth-largest-xor-coordinate-value	weekly-contest-225	Q3	Medium	64.3%	Array,Divide and Conquer,Bit Manipulation,Sorting,Heap (Priority Queue),Matrix,Prefix Sum,Quickselect
+1671	3905	Multi Source Flood Fill	multi-source-flood-fill	weekly-contest-498	Q3	Medium	56.1%	Array,Breadth-First Search,Matrix
+1672	1438	Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit	longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit	weekly-contest-187	Q3	Medium	57.7%	Array,Queue,Sliding Window,Heap (Priority Queue),Ordered Set,Monotonic Queue
+1672	2033	Minimum Operations to Make a Uni-Value Grid	minimum-operations-to-make-a-uni-value-grid	weekly-contest-262	Q2	Medium	70.7%	Array,Math,Sorting,Matrix
+1673	3212	Count Submatrices With Equal Frequency of X and Y	count-submatrices-with-equal-frequency-of-x-and-y	weekly-contest-405	Q3	Medium	69.6%	Array,Matrix,Prefix Sum
+1675	1215	Stepping Numbers	stepping-numbers	biweekly-contest-10	Q3	Medium	48.5%	Math,Backtracking,Breadth-First Search
+1675	1339	Maximum Product of Splitted Binary Tree	maximum-product-of-splitted-binary-tree	weekly-contest-174	Q3	Medium	55.7%	Tree,Depth-First Search,Binary Tree
+1675	1922	Count Good Numbers	count-good-numbers	weekly-contest-248	Q3	Medium	57.7%	Math,Recursion
+1676	1870	Minimum Speed to Arrive on Time	minimum-speed-to-arrive-on-time	weekly-contest-242	Q2	Medium	47.9%	Array,Binary Search
+1676	974	Subarray Sums Divisible by K	subarray-sums-divisible-by-k	weekly-contest-119	Q3	Medium	56.3%	Array,Hash Table,Prefix Sum
+1676	987	Vertical Order Traversal of a Binary Tree	vertical-order-traversal-of-a-binary-tree	weekly-contest-122	Q4	Hard	53.8%	Hash Table,Tree,Depth-First Search,Breadth-First Search,Sorting,Binary Tree
+1677	2641	Cousins in Binary Tree II	cousins-in-binary-tree-ii	biweekly-contest-102	Q3	Medium	75.9%	Hash Table,Tree,Depth-First Search,Breadth-First Search,Binary Tree
+1677	2943	Maximize Area of Square Hole in Grid	maximize-area-of-square-hole-in-grid	biweekly-contest-118	Q2	Medium	61.9%	Array,Sorting
+1678	853	Car Fleet	car-fleet	weekly-contest-89	Q2	Medium	55.1%	Array,Stack,Sorting,Monotonic Stack
+1678	885	Spiral Matrix III	spiral-matrix-iii	weekly-contest-97	Q2	Medium	84.6%	Array,Matrix,Simulation
+1679	1402	Reducing Dishes	reducing-dishes	biweekly-contest-23	Q4	Hard	76.7%	Array,Dynamic Programming,Greedy,Sorting
+1679	1905	Count Sub Islands	count-sub-islands	weekly-contest-246	Q3	Medium	73.0%	Array,Depth-First Search,Breadth-First Search,Union-Find,Matrix
+1679	2115	Find All Possible Recipes from Given Supplies	find-all-possible-recipes-from-given-supplies	biweekly-contest-68	Q2	Medium	56.9%	Array,Hash Table,String,Graph Theory,Topological Sort
+1679	2317	Maximum XOR After Operations 	maximum-xor-after-operations	biweekly-contest-81	Q3	Medium	79.9%	Array,Math,Bit Manipulation
+1679	2698	Find the Punishment Number of an Integer	find-the-punishment-number-of-an-integer	weekly-contest-346	Q3	Medium	81.7%	Math,Backtracking
+1680	1031	Maximum Sum of Two Non-Overlapping Subarrays	maximum-sum-of-two-non-overlapping-subarrays	weekly-contest-133	Q3	Medium	60.9%	Array,Dynamic Programming,Sliding Window
+1680	2182	Construct String With Repeat Limit	construct-string-with-repeat-limit	weekly-contest-281	Q3	Medium	70.8%	Hash Table,String,Greedy,Heap (Priority Queue),Counting
+1680	2457	Minimum Addition to Make Integer Beautiful	minimum-addition-to-make-integer-beautiful	weekly-contest-317	Q3	Medium	38.7%	Math,Greedy
+1680	2492	Minimum Score of a Path Between Two Cities	minimum-score-of-a-path-between-two-cities	weekly-contest-322	Q3	Medium	58.8%	Depth-First Search,Breadth-First Search,Union-Find,Graph Theory
+1681	1865	Finding Pairs With a Certain Sum	finding-pairs-with-a-certain-sum	weekly-contest-241	Q3	Medium	61.6%	Array,Hash Table,Design
+1681	2280	Minimum Lines to Represent a Line Chart	minimum-lines-to-represent-a-line-chart	weekly-contest-294	Q3	Medium	27.0%	Array,Math,Geometry,Sorting,Number Theory
+1681	767	Reorganize String	reorganize-string	weekly-contest-68	Q2	Medium	57.1%	Hash Table,String,Greedy,Sorting,Heap (Priority Queue),Counting
+1682	2497	Maximum Star Sum of a Graph	maximum-star-sum-of-a-graph	biweekly-contest-93	Q2	Medium	42.4%	Array,Greedy,Graph Theory,Sorting,Heap (Priority Queue)
+1683	1443	Minimum Time to Collect All Apples in a Tree	minimum-time-to-collect-all-apples-in-a-tree	weekly-contest-188	Q3	Medium	63.7%	Hash Table,Tree,Depth-First Search,Breadth-First Search
+1685	2074	Reverse Nodes in Even Length Groups	reverse-nodes-in-even-length-groups	weekly-contest-267	Q2	Medium	64.1%	Linked List
+1686	2233	Maximum Product After K Increments	maximum-product-after-k-increments	weekly-contest-288	Q3	Medium	44.0%	Array,Greedy,Heap (Priority Queue)
+1686	950	Reveal Cards In Increasing Order	reveal-cards-in-increasing-order	weekly-contest-113	Q3	Medium	83.6%	Array,Queue,Sorting,Simulation
+1687	3397	Maximum Number of Distinct Elements After Operations	maximum-number-of-distinct-elements-after-operations	weekly-contest-429	Q2	Medium	52.2%	Array,Greedy,Sorting
+1689	1963	Minimum Number of Swaps to Make the String Balanced	minimum-number-of-swaps-to-make-the-string-balanced	weekly-contest-253	Q3	Medium	78.1%	Two Pointers,String,Stack,Greedy
+1689	3043	Find the Length of the Longest Common Prefix	find-the-length-of-the-longest-common-prefix	weekly-contest-385	Q2	Medium	62.2%	Array,Hash Table,String,Trie
+1690	1419	Minimum Number of Frogs Croaking	minimum-number-of-frogs-croaking	weekly-contest-185	Q3	Medium	51.2%	String,Counting
+1690	3071	Minimum Operations to Write the Letter Y on a Grid	minimum-operations-to-write-the-letter-y-on-a-grid	weekly-contest-387	Q3	Medium	64.6%	Array,Hash Table,Matrix,Counting
+1690	935	Knight Dialer	knight-dialer	weekly-contest-109	Q2	Medium	61.9%	Dynamic Programming
+1691	919	Complete Binary Tree Inserter	complete-binary-tree-inserter	weekly-contest-105	Q3	Medium	65.1%	Tree,Breadth-First Search,Design,Binary Tree
+1692	3290	Maximum Multiplication Score	maximum-multiplication-score	weekly-contest-415	Q2	Medium	41.4%	Array,Dynamic Programming
+1693	1462	Course Schedule IV	course-schedule-iv	biweekly-contest-27	Q3	Medium	59.9%	Depth-First Search,Breadth-First Search,Graph Theory,Topological Sort
+1693	2337	Move Pieces to Obtain a String	move-pieces-to-obtain-a-string	weekly-contest-301	Q3	Medium	56.6%	Two Pointers,String
+1694	2466	Count Ways To Build Good Strings	count-ways-to-build-good-strings	biweekly-contest-91	Q2	Medium	58.9%	Dynamic Programming
+1694	829	Consecutive Numbers Sum	consecutive-numbers-sum	weekly-contest-83	Q3	Hard	42.7%	Math,Enumeration
+1695	1942	The Number of the Smallest Unoccupied Chair	the-number-of-the-smallest-unoccupied-chair	biweekly-contest-57	Q2	Medium	60.3%	Array,Hash Table,Heap (Priority Queue)
+1695	2420	Find All Good Indices	find-all-good-indices	weekly-contest-312	Q3	Medium	41.0%	Array,Dynamic Programming,Prefix Sum
+1695	3296	Minimum Number of Seconds to Make Mountain Height Zero	minimum-number-of-seconds-to-make-mountain-height-zero	weekly-contest-416	Q2	Medium	58.3%	Array,Math,Binary Search,Greedy,Heap (Priority Queue)
+1695	792	Number of Matching Subsequences	number-of-matching-subsequences	weekly-contest-74	Q2	Medium	50.6%	Array,Hash Table,String,Binary Search,Dynamic Programming,Trie,Sorting
+1697	1289	Minimum Falling Path Sum II	minimum-falling-path-sum-ii	biweekly-contest-15	Q4	Hard	63.1%	Array,Dynamic Programming,Matrix
+1697	1487	Making File Names Unique	making-file-names-unique	weekly-contest-194	Q2	Medium	38.7%	Array,Hash Table,String
+1697	2588	Count the Number of Beautiful Subarrays	count-the-number-of-beautiful-subarrays	weekly-contest-336	Q3	Medium	54.2%	Array,Hash Table,Bit Manipulation,Prefix Sum
+1697	3143	Maximum Points Inside the Square	maximum-points-inside-the-square	biweekly-contest-130	Q2	Medium	39.7%	Array,Hash Table,String,Binary Search,Sorting
+1697	3862	Find the Smallest Balanced Index	find-the-smallest-balanced-index	weekly-contest-492	Q2	Medium	19.3%	Array,Prefix Sum
+1697	825	Friends Of Appropriate Ages	friends-of-appropriate-ages	weekly-contest-82	Q2	Medium	49.9%	Array,Two Pointers,Binary Search,Sorting
+1698	1017	Convert to Base -2	convert-to-base-2	weekly-contest-130	Q2	Medium	61.9%	Math

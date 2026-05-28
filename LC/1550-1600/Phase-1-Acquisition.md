@@ -1,44 +1,51 @@
-# Phase 1 — Acquisition (14 problems, topic-visible)
+# Phase 1 — Acquisition (1550-1600) — RE-BASED 2026-05-28
 
-**Protocol:** topic is labeled — study-OK for blind spots. Must be clean first-submission AC to count as 1/3. Work through these before entering Phase 2.
+**The acquisition floor is 1500-1550, not this band.** After generating the 1500-1550 base Phase 1, almost every pattern turned out to first appear one band down — so 1550-1600 acquires only the patterns genuinely *new* at 1550. Everything else was installed at 1500-1550, which makes the 1550-1600 problems for those topics **derivation reps (Phase 2 material), not acquisitions.**
 
-| # | Topic | Problem | AR | QPos | Link |
-|---|-------|---------|-----|------|------|
-| 1 | Greedy / observation | Pancake Sorting | 71.8% | Q2 | https://leetcode.com/problems/pancake-sorting/ |
-| 2 | Game theory | Alice and Bob Playing Flower Game | 60.0% | Q3 | https://leetcode.com/problems/alice-and-bob-playing-flower-game/ |
-| 3 | Sliding window | Binary Subarrays With Sum | 68.8% | Q2 | https://leetcode.com/problems/binary-subarrays-with-sum/ |
-| 4 | Graph / tree traversal | Restore the Array From Adjacent Pairs | 75.0% | Q2 | https://leetcode.com/problems/restore-the-array-from-adjacent-pairs/ |
-| 5 | Bit operations / XOR | Count Number of Maximum Bitwise-OR Subsets | 89.5% | Q3 | https://leetcode.com/problems/count-number-of-maximum-bitwise-or-subsets/ |
-| 6 | Difference array / prefix-range | Increment Submatrices by One | 73.8% | Q2 | https://leetcode.com/problems/increment-submatrices-by-one/ |
-| 7 | Math / number theory | The k-th Lexicographical String of All Happy Strings of Length n | 87.1% | Q3 | https://leetcode.com/problems/the-k-th-lexicographical-string-of-all-happy-strings-of-length-n/ |
-| 8 | Hashing / counting | Groups of Special-Equivalent Strings | 73.6% | Q2 | https://leetcode.com/problems/groups-of-special-equivalent-strings/ |
-| 9 | Linear / grid / counting DP | Ways to Make a Fair Array | 66.9% | Q3 | https://leetcode.com/problems/ways-to-make-a-fair-array/ |
-| 10 | Heap-greedy | Minimum Operations to Halve Array Sum | 50.2% | Q3 | https://leetcode.com/problems/minimum-operations-to-halve-array-sum/ |
-| 11 | Monotonic stack (blind) | Next Greater Node In Linked List | 64.3% | Q3 | https://leetcode.com/problems/next-greater-node-in-linked-list/ |
-| 12 | Tree DP (blind) | Construct Binary Search Tree from Preorder Traversal | 84.3% | Q4 | https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/ |
-| 13 | Interval DP (blind) | Stone Game | 73.3% | Q2 | https://leetcode.com/problems/stone-game/ |
-| 14 | Binary search (added 2026-05-28) | Closest Nodes Queries in a Binary Search Tree | 44.5% | Q2 | https://leetcode.com/problems/closest-nodes-queries-in-a-binary-search-tree/ |
-
-> [!note] Why #14 was added (2026-05-28)
-> The original taxonomy only bucketed "binary-search-on-answer" (marked absent in-band) and never created a slot for **plain binary search** (floor/ceil / lower_bound on a sorted array). That hole meant Closest Nodes was dealt blind in Phase 2 under a wrong "Tree DP" tag with no prior acquisition rep — so it hit cold and soft-failed on the `mid ± 1` mechanic. Closest Nodes is now the BS acquisition problem here (LC tags: Binary Search, BST). Its Phase-2 derivation rep is Time Based Key-Value Store [981].
+> [!warning] Setup/structure file. This band's 10 original solves happened before the Phase system; this file reclassifies them under the re-based ladder.
 
 ---
 
-## Tracker
+## Group A — Acquire here (genuinely new at 1550-1600)
+
+Only two patterns have no 1500-1550 predecessor. Both were already solved clean in-band.
+
+| # | Topic | Why new here | Problem | AR | QPos | Outcome | Link |
+|---|-------|--------------|---------|-----|------|---------|------|
+| 1 | **Game theory** | absent at 1500-1550 | Alice and Bob Playing Flower Game | 60.0% | Q3 | clean ✓ (47 min, parity reduction) | https://leetcode.com/problems/alice-and-bob-playing-flower-game/ |
+| 2 | **Interval DP** | absent at 1500-1550 (first interval/minimax DP ≤1700) | Stone Game | 73.3% | Q2 | clean ✓ (self-derived) | https://leetcode.com/problems/stone-game/ |
+
+---
+
+## Group B — Acquired @ 1500-1550 → 1550-1600 problems are Phase 2 DERIVATION reps
+
+These patterns were installed at the 1500-1550 floor. The problems below were originally mislabeled here as "Phase 1 acquisition," but at this harder band they are **derivation reps** — so the (already-completed) solves count toward **1550-1600 Phase 2 ownership**, not acquisition.
+
+| Topic | Acquired @ 1500-1550 | 1550-1600 derivation rep (former "Phase 1") | Solve outcome |
+|-------|----------------------|---------------------------------------------|---------------|
+| Greedy / observation | #5 Construct K Palindrome Strings | Pancake Sorting | clean |
+| Sliding window | in-band #1 Min Subarray Distinct Sum | Binary Subarrays With Sum | clean |
+| Graph BFS/DFS / traversal | #7 Find All Groups of Farmland | Restore the Array From Adjacent Pairs | clean |
+| Bit / XOR | in-band (bit solves) | Count Number of Maximum Bitwise-OR Subsets | clean |
+| Difference array / prefix-range | in-band #2/#9 (prefix) | Increment Submatrices by One | clean |
+| Backtracking | #3 Maximum Split of Positive Even Integers | The k-th Lexicographical Happy Strings (was mislabeled "Math") | soft fail |
+| Hashing / counting | in-band #2/#3 | Groups of Special-Equivalent Strings | hinted |
+| Linear / grid / counting DP | #6 Count Sorted Vowel Strings | Ways to Make a Fair Array | clean |
+| Heap-greedy | in-band #5 Max Product of Three | Minimum Operations to Halve Array Sum | soft fail |
+| Monotonic stack | #1 Sum of Subarray Ranges | Next Greater Node In Linked List | clean |
+| Tree DP / DFS | #2 Smallest Subtree with Deepest Nodes | Construct BST from Preorder | hinted |
+| Plain binary search (lower_bound) | #10 Maximum Distance Between a Pair of Values | Closest Nodes Queries in a BST | soft fail (the `mid±1` rust) |
+| Trie | #4 Remove Sub-Folders from Filesystem | Search Suggestions System (unsolved — available as a Phase 2 deriv rep) | — |
+| Math / number theory | in-band #7/#9 (sieve, enumeration) | Number of Subarrays With LCM Equal to K (unsolved — Phase 2 deriv rep) | — |
+
+> [!important] What this means for ownership
+> Group B topics need their **3 cold cleans at 1550-1600 via Phase 2**, exactly as before — but their *first* 1550-1600 problem (the "clean"/"soft"/"hinted" solves above) is now counted as a **derivation rep**, not an acquisition warm-up. The soft/hinted ones (backtracking, hashing, tree DP, plain BS, heap) did NOT clean — those reps reset and need redoing in Phase 2.
+
+---
+
+## Tracker (Group A only — Group B work lives in Phase 2)
 
 | # | Topic | Phase 1 | Status |
 |---|-------|---------|--------|
-| 1 | Greedy | ☑ | pass — 58 min, first-submission AC, fix largest→smallest via double flip |
-| 2 | Game theory | ☑ | pass — 47 min, first-submission AC, parity reduction + clamped odd-sum count |
-| 3 | Sliding window | ☑ | pass — 26 min, first-submission AC, atMost(K)-atMost(K-1) trick |
-| 4 | Graph / tree traversal | ☑ | pass — 38 min, first-submission AC, path graph + BFS from endpoint |
-| 5 | Bit / XOR | ☑ | pass — 20 min, first-submission AC, subset enum (n≤16) + precompute maxOR |
-| 6 | Difference array | ☑ | pass — 40 min, first-submission AC, 2D difference array (4 corners + two prefix sweeps) |
-| 7 | Math / number theory | ☑ | soft fail (WA-then-AC) — impl bug in char selection |
-| 8 | Hashing / counting | ☑ | hinted — read-error (wrong return value) + off-by-one in merge |
-| 9 | DP | ☑ | pass — 30 min, first-submission AC, suffix odd/even prefix sums + parity flip |
-| 10 | Heap-greedy | ☑ | soft fail (WA-then-AC) — used Float instead of Double, precision loss on large values |
-| 11 | Monotonic stack | ☑ | pass — 37 min, first-submission AC, reverse LL + decreasing mono stack |
-| 12 | Tree DP | ☑ | hinted — mixed preorder/inorder index in right subtree call |
-| 13 | Interval DP | ☑ | pass — self-derived, correct logic, intentional TLE→AC (memo trivial) |
-| 14 | Binary search | ☑ | soft fail — 40 min, TLE→AC; degraded BS to linear scan (`bound±1` instead of `mid±1`), 10¹⁰ ops. Approach derivation was instant; pure mechanic rust (first BS in ~1yr). See First-Attempt/24. |
+| 1 | Game theory | ☑ | clean — 47 min, parity reduction + clamped odd-sum count |
+| 2 | Interval DP | ☑ | clean — self-derived, intentional TLE→AC (memo trivial) |

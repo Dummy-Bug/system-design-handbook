@@ -29,7 +29,6 @@ Two earlier claims were **wrong**, corrected by reading this band:
 | Sliding window | ~10 | ✅ (#1) | med |
 | Linear / grid / counting DP | ~10 | — | med-HIGH |
 | Sort + scan / prefix | ~8 | ✅ (#4 failed, #6, #9) | med |
-| Design (data structure) | ~7 | — | med |
 | Graph BFS/DFS / flood-fill | ~6 | — | med |
 | Two-pointer / interval merge | ~5 | — | med |
 | Heap / top-k | ~4 | ✅ (#5) | low-med |
@@ -54,7 +53,6 @@ Owned = **3 cold first-submission cleans**, reps 2-3 disguised/combined (rule 6)
 | Greedy / observation | 0 | ◯ | 3 |
 | Linear / grid / counting DP | 0 | ◯ | 3 |
 | Sort + scan / prefix | 0 (#4 failed) | ◯ | 3 |
-| Design | 0 | ◯ | 3 |
 | Graph BFS/DFS | 0 | ◯ | 3 |
 | Two-pointer / interval merge | 0 | ◯ | 3 |
 | Math / number theory / bit | 1 (#7,#9 vanilla) | ◐ | 2 disguised — math-reflex ≠ solving |
@@ -96,6 +94,10 @@ Depth from the compact remarks (times, bugs, AC/fail).
 
 ## Problem sets
 
-Problem sets not yet generated for this band. When ready, follow the **band setup protocol** in `LC/CLAUDE.md` (read all statements → fetch AR → classify → Phase 1 + Phase 2).
+- **Phase 1 — GENERATED 2026-05-28** (this is the BASE band of the acquisition ladder): `Phase-1-Acquisition.md`. Group A (acquire here) = 9 buckets including the **first appearances of monotonic stack, tree DP, backtracking, trie**. The rest were acquired in-band via the 9 logged solves. AR + LC tags for all 112 at `zerotrac-data/band_1500_1549_lctags.tsv`.
+- **Phase 2 — not yet generated.**
+
+> [!important] Re-base: this band is the acquisition floor
+> Monotonic stack, tree DP, backtracking, trie, math/NT, greedy, DP, graph, heap, sliding window, hashing, and **BS-on-answer** all first appear here — so they're acquired at 1500-1550, NOT at the higher bands where they were originally scheduled. 1550-1600's Group A must shrink accordingly (see the re-base table in `Phase-1-Acquisition.md`).
 
 **Graduation (rule 6, ownership-based):** every core bucket must reach `●` (3 cold first-submission cleans, reps 2-3 disguised). Union-Find is scarce here (~1 problem) — shortfall completes in adjacent band.

@@ -22,7 +22,6 @@ Built 2026-05-26 by reading every problem statement (rating ≤ 1650) from `zero
 | **Tree DP / DFS** | **6** | ❌ none | **HIGH — gap** |
 | **Union-Find (DSU)** | **4** | ❌ none | **HIGH — gap (newly found)** |
 | **Graph BFS/DFS / flood-fill** | **7** | ❌ none | **MED-HIGH — gap** |
-| Design (data structure) | 4 | ❌ none | med |
 | Trie | 1 | ❌ none | low |
 | Interval DP | **0** | — | n/a — absent at this band (1700+ topic) |
 
@@ -32,7 +31,11 @@ The four ❌ HIGH rows are where contest Q3 lives. You've done 7 problems and **
 
 ## Problem sets
 
-Problem sets not yet generated for this band. When ready, follow the **band setup protocol** in `LC/CLAUDE.md` (read all statements → fetch AR → classify → Phase 1 + Phase 2). The full classification of all 90 problems by pattern is above in the Coverage summary; the ownership tracker is below.
+- **Phase 1 — GENERATED 2026-05-28, RE-BASED to the 1500-1550 floor:** `Phase-1-Acquisition.md`. **Group A (acquire here) = 2:** **Union-Find** (scarce at 1500-1550, real supply here) and **Shortest path / Dijkstra** (absent below). Binary-search-on-answer (→1500-1550 #8) and Trie (→1500-1550 #4) demoted to Group B — acquired at the floor, so their 1600-1650 problems are Phase 2 derivation reps. **Design is removed entirely (not a target at any band).** Every bucket verified against LC official `topicTags`; all 8 already-solved excluded. AR + tags for all 90 at `zerotrac-data/band_1600_1649_with_ar.tsv`.
+- **Phase 2 — not yet generated** (derivation, disguised/combined, blind shuffled). The old `_Sealed-Queue.md` (two-set A/B system) is superseded but left in place.
+
+> [!note] Binary search taxonomy fix (from 1550-1600 audit, 2026-05-28)
+> The coverage summary below lists "Binary search on answer ×4" — that's correct for this band's *new* mechanic. **Plain binary search** (floor/ceil/lower_bound on sorted data) is a *separate* pattern, acquired at 1550-1600 (Closest Nodes, Time Based KV), so it is NOT a Phase 1 topic here. Do not conflate the two — that conflation is what caused the Closest Nodes mislabel.
 
 **Graduation (rule 6, ownership-based):** every core bucket must reach `●` (3 cold first-submission cleans, reps 2-3 disguised). Interval DP is absent at this band — shortfall completes at 1550-1600 (Stone Game).
 
@@ -49,7 +52,6 @@ Owned = **3 cold first-submission cleans**, reps 2-3 disguised/combined (rule 6)
 | Linear / grid DP | 0 (#1 soft, #5 hinted) | ◯ | 3 |
 | Sliding window | 0 (#4 soft) | ◯ | 3 |
 | Graph BFS/DFS | 0 | ◯ | 3 |
-| Design | 0 | ◯ | 3 |
 | Math / number theory / bit | 0 | ◯ | 3 — math-reflex ≠ solving |
 | **Monotonic stack** (blind) | 0 | ◯ | acquisition + 3 |
 | **Binary search on answer** | 0 in band | ◯ | 3 (cross-band rep exists @1500-1550) |

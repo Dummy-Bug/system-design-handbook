@@ -1,0 +1,67 @@
+Rating	ID	Title	Slug	Contest	QPos	Difficulty	AR	LCtags
+1951	1259	Handshakes That Don't Cross	handshakes-that-dont-cross	biweekly-contest-13	Q4	Hard	59.9%	Math,Dynamic Programming
+1951	1690	Stone Game VII	stone-game-vii	weekly-contest-219	Q3	Medium	58.8%	Array,Math,Dynamic Programming,Game Theory
+1952	2435	Paths in Matrix Whose Sum Is Divisible by K	paths-in-matrix-whose-sum-is-divisible-by-k	weekly-contest-314	Q4	Hard	58.8%	Array,Dynamic Programming,Matrix
+1953	1737	Change Minimum Characters to Satisfy One of Three Conditions	change-minimum-characters-to-satisfy-one-of-three-conditions	weekly-contest-225	Q2	Medium	37.9%	Hash Table,String,Counting,Prefix Sum
+1953	2434	Using a Robot to Print the Lexicographically Smallest String	using-a-robot-to-print-the-lexicographically-smallest-string	weekly-contest-314	Q3	Medium	62.3%	Hash Table,String,Stack,Greedy
+1953	3891	Minimum Increase to Maximize Special Indices	minimum-increase-to-maximize-special-indices	weekly-contest-496	Q3	Medium	19.6%	Array,Dynamic Programming,Greedy,Prefix Sum
+1954	1696	Jump Game VI	jump-game-vi	weekly-contest-220	Q3	Medium	46.4%	Array,Dynamic Programming,Queue,Heap (Priority Queue),Monotonic Queue
+1955	3599	Partition Array to Minimize XOR	partition-array-to-minimize-xor	weekly-contest-456	Q3	Medium	41.4%	Array,Dynamic Programming,Bit Manipulation,Prefix Sum
+1957	1463	Cherry Pickup II	cherry-pickup-ii	biweekly-contest-27	Q4	Hard	72.4%	Array,Dynamic Programming,Matrix
+1958	3720	Lexicographically Smallest Permutation Greater Than Target	lexicographically-smallest-permutation-greater-than-target	weekly-contest-472	Q3	Medium	26.8%	Hash Table,String,Greedy,Counting,Enumeration
+1959	2564	Substring XOR Queries	substring-xor-queries	weekly-contest-332	Q3	Medium	35.7%	Array,Hash Table,String,Bit Manipulation
+1959	3593	Minimum Increments to Equalize Leaf Paths	minimum-increments-to-equalize-leaf-paths	weekly-contest-455	Q3	Medium	41.3%	Array,Dynamic Programming,Tree,Depth-First Search
+1961	1537	Get the Maximum Score	get-the-maximum-score	weekly-contest-200	Q4	Hard	41.1%	Array,Two Pointers,Dynamic Programming,Greedy
+1961	2350	Shortest Impossible Sequence of Rolls	shortest-impossible-sequence-of-rolls	biweekly-contest-83	Q4	Hard	69.2%	Array,Hash Table,Greedy
+1961	2392	Build a Matrix With Conditions	build-a-matrix-with-conditions	weekly-contest-308	Q4	Hard	79.3%	Array,Graph Theory,Topological Sort,Matrix
+1962	1642	Furthest Building You Can Reach	furthest-building-you-can-reach	weekly-contest-213	Q3	Medium	50.9%	Array,Greedy,Heap (Priority Queue)
+1962	802	Find Eventual Safe States	find-eventual-safe-states	weekly-contest-76	Q3	Medium	70.8%	Depth-First Search,Breadth-First Search,Graph Theory,Topological Sort
+1964	815	Bus Routes	bus-routes	weekly-contest-79	Q4	Hard	47.3%	Array,Hash Table,Breadth-First Search
+1965	2439	Minimize Maximum of Array	minimize-maximum-of-array	biweekly-contest-89	Q3	Medium	46.5%	Array,Binary Search,Dynamic Programming,Greedy,Prefix Sum
+1965	3850	Count Sequences to K	count-sequences-to-k	weekly-contest-490	Q4	Hard	36.1%	Array,Math,Dynamic Programming,Memoization,Number Theory
+1967	1293	Shortest Path in a Grid with Obstacles Elimination	shortest-path-in-a-grid-with-obstacles-elimination	weekly-contest-167	Q4	Hard	46.3%	Array,Breadth-First Search,Matrix
+1967	1969	Minimum Non-Zero Product of the Array Elements	minimum-non-zero-product-of-the-array-elements	weekly-contest-254	Q3	Medium	37.6%	Math,Greedy,Recursion
+1968	2872	Maximum Number of K-Divisible Components	maximum-number-of-k-divisible-components	biweekly-contest-114	Q4	Hard	74.0%	Tree,Depth-First Search
+1968	3756	Concatenate Non-Zero Digits and Multiply by Sum II	concatenate-non-zero-digits-and-multiply-by-sum-ii	weekly-contest-477	Q3	Medium	24.5%	Math,String,Prefix Sum
+1969	1943	Describe the Painting	describe-the-painting	biweekly-contest-57	Q3	Medium	52.3%	Array,Hash Table,Sorting,Prefix Sum
+1969	3686	Number of Stable Subsequences	number-of-stable-subsequences	weekly-contest-467	Q4	Hard	60.2%	Array,Dynamic Programming
+1970	1032	Stream of Characters	stream-of-characters	weekly-contest-133	Q4	Hard	52.3%	Array,String,Design,Trie,Data Stream
+1970	835	Image Overlap	image-overlap	weekly-contest-84	Q3	Medium	64.0%	Array,Matrix
+1973	3733	Minimum Time to Complete All Deliveries	minimum-time-to-complete-all-deliveries	weekly-contest-474	Q3	Medium	35.3%	Math,Binary Search
+1974	1488	Avoid Flood in The City	avoid-flood-in-the-city	weekly-contest-194	Q3	Medium	39.0%	Array,Hash Table,Binary Search,Greedy,Heap (Priority Queue)
+1974	3202	Find the Maximum Length of Valid Subsequence II	find-the-maximum-length-of-valid-subsequence-ii	weekly-contest-404	Q3	Medium	57.1%	Array,Dynamic Programming
+1976	2831	Find the Longest Equal Subarray	find-the-longest-equal-subarray	weekly-contest-359	Q4	Medium	38.1%	Array,Hash Table,Binary Search,Sliding Window
+1976	907	Sum of Subarray Minimums	sum-of-subarray-minimums	weekly-contest-102	Q3	Medium	38.6%	Array,Dynamic Programming,Stack,Monotonic Stack
+1977	1092	Shortest Common Supersequence 	shortest-common-supersequence	weekly-contest-141	Q4	Hard	61.9%	String,Dynamic Programming
+1979	1278	Palindrome Partitioning III	palindrome-partitioning-iii	weekly-contest-165	Q4	Hard	62.3%	String,Dynamic Programming
+1979	1882	Process Tasks Using Servers	process-tasks-using-servers	weekly-contest-243	Q3	Medium	42.0%	Array,Heap (Priority Queue)
+1979	3138	Minimum Length of Anagram Concatenation	minimum-length-of-anagram-concatenation	weekly-contest-396	Q3	Medium	39.8%	Hash Table,String,Counting
+1980	2151	Maximum Good People Based on Statements	maximum-good-people-based-on-statements	weekly-contest-277	Q4	Hard	52.5%	Array,Backtracking,Bit Manipulation,Enumeration
+1981	2861	Maximum Number of Alloys	maximum-number-of-alloys	weekly-contest-363	Q3	Medium	41.1%	Array,Binary Search
+1981	3771	Total Score of Dungeon Runs	total-score-of-dungeon-runs	weekly-contest-479	Q3	Medium	30.9%	Array,Binary Search,Prefix Sum
+1982	3690	Split and Merge Array Transformation	split-and-merge-array-transformation	weekly-contest-468	Q3	Medium	58.8%	Array,Hash Table,Breadth-First Search
+1982	3725	Count Ways to Choose Coprime Integers from Rows	count-ways-to-choose-coprime-integers-from-rows	biweekly-contest-168	Q4	Hard	48.5%	Array,Math,Dynamic Programming,Matrix,Combinatorics,Number Theory
+1983	1250	Check If It Is a Good Array	check-if-it-is-a-good-array	weekly-contest-161	Q4	Hard	65.0%	Array,Math,Number Theory
+1983	805	Split Array With Same Average	split-array-with-same-average	weekly-contest-77	Q4	Hard	27.0%	Array,Hash Table,Math,Dynamic Programming,Bit Manipulation,Bitmask
+1984	1733	Minimum Number of People to Teach	minimum-number-of-people-to-teach	biweekly-contest-44	Q2	Medium	67.4%	Array,Hash Table,Greedy
+1984	3695	Maximize Alternating Sum Using Swaps	maximize-alternating-sum-using-swaps	biweekly-contest-166	Q4	Hard	64.6%	Array,Greedy,Union-Find,Sorting
+1985	2963	Count the Number of Good Partitions	count-the-number-of-good-partitions	weekly-contest-375	Q4	Hard	49.5%	Array,Hash Table,Math,Combinatorics
+1985	928	Minimize Malware Spread II	minimize-malware-spread-ii	weekly-contest-107	Q4	Hard	45.6%	Array,Hash Table,Depth-First Search,Breadth-First Search,Union-Find,Graph Theory
+1985	940	Distinct Subsequences II	distinct-subsequences-ii	weekly-contest-110	Q4	Hard	44.1%	String,Dynamic Programming
+1988	3836	Maximum Score Using Exactly K Pairs	maximum-score-using-exactly-k-pairs	weekly-contest-488	Q4	Hard	41.6%	Array,Dynamic Programming
+1990	3844	Longest Almost-Palindromic Substring	longest-almost-palindromic-substring	weekly-contest-489	Q3	Medium	22.6%	Two Pointers,String,Dynamic Programming
+1990	756	Pyramid Transition Matrix	pyramid-transition-matrix	weekly-contest-65	Q3	Medium	60.6%	Hash Table,String,Backtracking,Bit Manipulation
+1990	902	Numbers At Most N Given Digit Set	numbers-at-most-n-given-digit-set	weekly-contest-101	Q3	Hard	45.1%	Array,Math,String,Binary Search,Dynamic Programming
+1991	963	Minimum Area Rectangle II	minimum-area-rectangle-ii	weekly-contest-116	Q3	Medium	55.9%	Array,Hash Table,Math,Geometry
+1992	1625	Lexicographically Smallest String After Applying Operations	lexicographically-smallest-string-after-applying-operations	weekly-contest-211	Q2	Medium	79.3%	String,Depth-First Search,Breadth-First Search,Enumeration
+1994	927	Three Equal Parts	three-equal-parts	weekly-contest-107	Q3	Hard	41.4%	Array,Math
+1995	1986	Minimum Number of Work Sessions to Finish the Tasks	minimum-number-of-work-sessions-to-finish-the-tasks	weekly-contest-256	Q3	Medium	34.8%	Array,Dynamic Programming,Backtracking,Bit Manipulation,Bitmask
+1996	3224	Minimum Array Changes to Make Differences Equal	minimum-array-changes-to-make-differences-equal	biweekly-contest-135	Q3	Medium	24.6%	Array,Hash Table,Prefix Sum
+1997	1274	Number of Ships in a Rectangle	number-of-ships-in-a-rectangle	biweekly-contest-14	Q4	Hard	68.9%	Array,Divide and Conquer,Interactive
+1998	2250	Count Number of Rectangles Containing Each Point	count-number-of-rectangles-containing-each-point	weekly-contest-290	Q3	Medium	37.6%	Array,Hash Table,Binary Search,Binary Indexed Tree,Sorting
+1998	3440	Reschedule Meetings for Maximum Free Time II	reschedule-meetings-for-maximum-free-time-ii	biweekly-contest-149	Q3	Medium	60.4%	Array,Greedy,Enumeration
+1998	3620	Network Recovery Pathways	network-recovery-pathways	biweekly-contest-161	Q3	Hard	29.9%	Array,Binary Search,Dynamic Programming,Graph Theory,Topological Sort,Heap (Priority Queue),Shortest Path
+1998	3897	Maximum Value of Concatenated Binary Segments	maximum-value-of-concatenated-binary-segments	biweekly-contest-180	Q4	Hard	26.8%	Array,Greedy,Sorting
+1999	2488	Count Subarrays With Median K	count-subarrays-with-median-k	weekly-contest-321	Q4	Hard	48.8%	Array,Hash Table,Prefix Sum
+1999	3886	Sum of Sortable Integers	sum-of-sortable-integers	weekly-contest-495	Q3	Hard	31.4%	Array,Math,Sorting,Enumeration
+1999	765	Couples Holding Hands	couples-holding-hands	weekly-contest-67	Q4	Hard	59.4%	Greedy,Depth-First Search,Breadth-First Search,Union-Find,Graph Theory

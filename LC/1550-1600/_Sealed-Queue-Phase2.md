@@ -24,7 +24,7 @@
 | Q15 | ☐      | https://leetcode.com/problems/best-time-to-buy-and-sell-stock-using-strategy/                | Sliding window + prefix sum [LC tags: Sliding Window, Prefix Sum] |
 | Q16 | ☐      | https://leetcode.com/problems/k-th-symbol-in-grammar/                                         | Bit operations / XOR — backfill for removed dup [LC tags: Math, Bit Manipulation, Recursion] |
 | Q17 | ☐      | https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/                       | Sliding window — backfill for removed dup [LC tags: Sliding Window, Prefix Sum] |
-| Q18 | ☐      | https://leetcode.com/problems/time-based-key-value-store/                                     | Binary search — derivation rep for new BS bucket [LC tags: Binary Search, Design] |
+| Q18 | ☐      | https://leetcode.com/problems/time-based-key-value-store/                                     | Binary search — derivation rep for new BS bucket [LC tags: Binary Search] |
 
 ## Tag-verification audit (2026-05-28)
 

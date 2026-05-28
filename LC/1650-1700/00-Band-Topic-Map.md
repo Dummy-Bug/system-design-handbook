@@ -30,7 +30,6 @@ These are **systematic blind spots, not band-specific gaps.** 1700+ will punish 
 | Prefix/suffix precompute | ~4 | ✅✅ (#4,#8) | low |
 | Math / bit / number theory | ~12 | ◐ (#7 vanilla) | **CORE — needs ownership** (math-reflex = recall only) |
 | Heap / PQ greedy | ~7 | ❌ none | MED-HIGH gap |
-| Design (data structure) | ~5 | ❌ none | med |
 | **Monotonic stack** | 2-3 | ❌ none (both bands) | **TOP** |
 | **Binary search on answer** | 2 | ❌ none (both bands) | **TOP** |
 | **Tree DP** | ~6 | ❌ none (both bands) | **TOP** |
@@ -88,6 +87,10 @@ Depth scored from how the solve actually went (verdicts, hints, WAs).
 
 ## Problem sets
 
-Problem sets not yet generated for this band. When ready, follow the **band setup protocol** in `LC/CLAUDE.md` (read all statements → fetch AR → classify → Phase 1 + Phase 2).
+- **Phase 1 — GENERATED 2026-05-28:** `Phase-1-Acquisition.md`, built with the Group A/B split. **Group A (acquire here)** = every uninstalled pattern: **topological sort, monotonic deque, quickselect/D&C-kth, rolling hash**. (Backtracking was removed by the 2026-05-28 buried-topic audit — it first appears at 1550-1600, so it's acquired there and is Group B here.) A problem is bucketed by its *uninstalled* topic even when an owned pattern could substitute — substitutability is not grounds to skip. Everything else is **Group B** (acquired at 1550-1600 / 1600-1650 → Phase 2 only). Every bucket verified against LC official `topicTags`; all 10 already-solved excluded. AR + tags for all 97 at `zerotrac-data/band_1650_1699_with_ar.tsv`.
+- **Phase 2 — not yet generated.**
+
+> [!note] Most buckets are Group B here
+> Unlike lower bands, 1650-1700 introduces few new mechanics — by rule 8 both lower bands are graduated before this opens, so hashing/greedy/graph/DP/math/bit/heap/BS/tree-DP/union-find/trie/mono-stack/sliding-window are all already acquired. The new installs are just topological sort, monotonic deque, quickselect, and rolling hash. (Design is excluded everywhere — not a target.)
 
 **Graduation (rule 6, ownership-based):** every core bucket must reach `●` (3 cold first-submission cleans, reps 2-3 disguised). Interval DP is absent at this band — shortfall completes at 1550-1600 (Stone Game).
