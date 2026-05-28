@@ -75,6 +75,19 @@ More precisely: in any collection of integers, the sum is even if and only if th
 
 `{2, 4, 3, 6, 7, 9}` — three odd elements, count is odd → sum is odd. `22+9 = 31`. Confirmed.
 
+**e.2 — counting pairs with odd sum.** A sum `x + y` is odd exactly when one of the two is odd and the other even. So to count pairs `(x, y)` drawn from two ranges where `x ∈ [1, n]` and `y ∈ [1, m]`, you don't iterate — you multiply parity-class counts and add both directions:
+
+```
+oddCount(n)  × evenCount(m)   ← x odd, y even
++ evenCount(n) × oddCount(m)   ← x even, y odd
+```
+
+where `oddCount(k) = ceil(k/2) = (k+1)/2` and `evenCount(k) = floor(k/2) = k/2`.
+
+The reflex is: **"count pairs with odd sum" → parity buckets, not a loop over sums.** The trap is reaching for an O(n+m) loop over every possible odd sum (clamping pair counts per sum) — that works but is 40 minutes of fiddly derivation for a one-liner.
+
+Anchor: *Alice and Bob Playing Flower Game* — Alice wins iff `x + y` is odd, so the answer is exactly this pair count. For `n=9, m=5`: `5×2 + 4×3 = 22`. (It further collapses to `floor(nm/2)` algebraically, but that simplification is problem-specific and not worth memorizing — the parity-bucket product is the reusable move.)
+
 ---
 
 ## f. XOR as per-bit parity

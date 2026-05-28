@@ -63,8 +63,11 @@ Each subtopic decomposes into one or more atomic cards (numbered `x.N`). Card *c
 
 ## e. Parity of a sum or count [1400]
 
-**Cards (1):**
+**Cards (2):**
 - e.1 — Sum parity equals count of odd elements mod 2
+- e.2 — Count pairs (x,y) from two ranges with odd sum = oddCount × evenCount, both directions
+
+**LC anchor:** *Alice and Bob Playing Flower Game* (LC — your 1550-1600 #23)
 
 ---
 
@@ -111,16 +114,16 @@ Each subtopic decomposes into one or more atomic cards (numbered `x.N`). Card *c
 
 ## Card count
 
-13 atomic cards total across 10 subtopics.
+14 atomic cards total across 10 subtopics.
 
 | Target rating | Required cards (cumulative) |
 |---------------|------------------------------|
 | 1100-1299     | a (3) + b (1) = **4 cards** |
 | 1300-1399     | + c (2) = **6 cards** |
-| 1400-1499     | + d (2) + e (1) = **9 cards** |
-| 1500-1599     | + f (1) + g (1) = **11 cards** |
-| 1700-1799     | + h (1) + i (1) = **13 cards** |
-| 1800+         | + j (1) = **13 cards (full)** |
+| 1400-1499     | + d (2) + e (2) = **10 cards** |
+| 1500-1599     | + f (1) + g (1) = **12 cards** |
+| 1700-1799     | + h (1) + i (1) = **14 cards** |
+| 1800+         | + j (1) = **14 cards (full)** |
 
 ## How this file gets used
 

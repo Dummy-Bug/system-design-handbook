@@ -25,7 +25,7 @@
 | # | Topic | Phase 1 | Status |
 |---|-------|---------|--------|
 | 1 | Greedy | ☑ | pass — 58 min, first-submission AC, fix largest→smallest via double flip |
-| 2 | Game theory | ☐ | — |
+| 2 | Game theory | ☑ | pass — 47 min, first-submission AC, parity reduction + clamped odd-sum count |
 | 3 | Sliding window | ☑ | pass — 26 min, first-submission AC, atMost(K)-atMost(K-1) trick |
 | 4 | Graph / tree traversal | ☑ | pass — 38 min, first-submission AC, path graph + BFS from endpoint |
 | 5 | Bit / XOR | ☑ | pass — 20 min, first-submission AC, subset enum (n≤16) + precompute maxOR |
@@ -34,6 +34,6 @@
 | 8 | Hashing / counting | ☑ | hinted — read-error (wrong return value) + off-by-one in merge |
 | 9 | DP | ☑ | pass — 30 min, first-submission AC, suffix odd/even prefix sums + parity flip |
 | 10 | Heap-greedy | ☑ | soft fail (WA-then-AC) — used Float instead of Double, precision loss on large values |
-| 11 | Monotonic stack | ☐ | — |
+| 11 | Monotonic stack | ☑ | pass — 37 min, first-submission AC, reverse LL + decreasing mono stack |
 | 12 | Tree DP | ☑ | hinted — mixed preorder/inorder index in right subtree call |
 | 13 | Interval DP | ☑ | pass — self-derived, correct logic, intentional TLE→AC (memo trivial) |
