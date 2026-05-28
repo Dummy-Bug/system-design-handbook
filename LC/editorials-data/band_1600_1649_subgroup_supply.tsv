@@ -1,0 +1,28 @@
+MainTopic	Subgroup	Count	Easiest_Title	Easiest_AR	Easiest_QPos	Easiest_Slug
+Hashing	Implementary Problems	22	Create Binary Tree From Descriptions	81.7%	Q3	create-binary-tree-from-descriptions
+Greedy	Part I	16	Construct Smallest Number From DI String	85.6%	Q3	construct-smallest-number-from-di-string
+Sorting	Implementary	16	K-th Largest Perfect Subtree Size in Binary Tree	62.3%	Q2	k-th-largest-perfect-subtree-size-in-binary-tree
+Binary Search	Upper Bound and Lower Bound	10	Maximize the Confusion of an Exam	70.0%	Q3	maximize-the-confusion-of-an-exam
+Dynamic Programming Level 1	Linear DP	10	Count Square Submatrices with All Ones	80.7%	Q3	count-square-submatrices-with-all-ones
+Prefix Sum	Implementary	8	Count Number of Nice Subarrays	75.1%	Q2	count-number-of-nice-subarrays
+Graphs	Disjoint Set Union	7	Number of Enclaves	71.8%	Q4	number-of-enclaves
+Graphs	Graph Representation	7	Number of Operations to Make Network Connected	66.6%	Q3	number-of-operations-to-make-network-connected
+Bit Manipulation	Basic Bit Concepts	7	Largest Combination With Bitwise AND Greater Than Zero	80.8%	Q3	largest-combination-with-bitwise-and-greater-than-zero
+2 Pointers	Two Pointer on Arrays	6	Remove Palindromic Subsequences	77.1%	Q1	remove-palindromic-subsequences
+Matrix	Implementary	6	Count Square Submatrices with All Ones	80.7%	Q3	count-square-submatrices-with-all-ones
+Heap (Priority Queue)	Implementary Questions	5	Minimum Deletions to Make Array Divisible	61.4%	Q4	minimum-deletions-to-make-array-divisible
+Dynamic Programming Level 1	DP on String	4	Push Dominoes	63.0%	Q2	push-dominoes
+Binary Tree	Implementary	4	Create Binary Tree From Descriptions	81.7%	Q3	create-binary-tree-from-descriptions
+Sliding Window	Dynamic Size Sliding-Window	4	Count Number of Nice Subarrays	75.1%	Q2	count-number-of-nice-subarrays
+2 Pointers	Two Pointer on Strings	3	Remove Palindromic Subsequences	77.1%	Q1	remove-palindromic-subsequences
+Combinatorics & Geometry	Line	2	Find the Largest Area of Square Inside Two Rectangles	66.9%	Q2	find-the-largest-area-of-square-inside-two-rectangles
+Stack	Implementary Stack	2	Construct Smallest Number From DI String	85.6%	Q3	construct-smallest-number-from-di-string
+Dynamic Programming Level 1	DP On Grid	2	Count Square Submatrices with All Ones	80.7%	Q3	count-square-submatrices-with-all-ones
+Tries	Trie involving String	2	Short Encoding of Words	60.9%	Q3	short-encoding-of-words
+Advance algorithm	Segment Tree / BIT	1	Longest Uploaded Prefix	55.1%	Q2	longest-uploaded-prefix
+Graphs	Dijsktra Algorithm	1	Find a Safe Walk Through a Grid	33.3%	Q2	find-a-safe-walk-through-a-grid
+Stack	Monotonic Stack	1	Maximum Width Ramp	55.9%	Q2	maximum-width-ramp
+Linked List	Implementary	1	Design Front Middle Back Queue	57.9%	Q3	design-front-middle-back-queue
+Graphs	Multi Source BFS	1	Push Dominoes	63.0%	Q2	push-dominoes
+Stack	Stack with String	1	Construct Smallest Number From DI String	85.6%	Q3	construct-smallest-number-from-di-string
+Recursion & Backtracking	Recursion Problems	1	Construct Smallest Number From DI String	85.6%	Q3	construct-smallest-number-from-di-string

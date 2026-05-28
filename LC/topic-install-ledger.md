@@ -35,9 +35,13 @@ See `LC/CLAUDE.md` Step 4 for the canonical rule.
 | Binary search on answer | 1500-1549 in-band | Minimum K to Reduce Array Within Limit (#8) | ✓ clean |
 | Prefix / sort-scan | 1500-1549 in-band | Count Special Triplets (#2), Special Array II (#6) | ✓ clean |
 | Game theory | 1550-1599 | Alice and Bob Playing Flower Game | ✓ clean (47 min) |
-| Interval DP | 1550-1599 | Stone Game | ✓ clean (self-derived) |
+| Interval DP (Matrix Chain) | 1550-1599 | Stone Game | ✓ clean (self-derived) |
+| DP On Grid | 1550-1599 | Minimum Falling Path Sum | ☐ planned (subtopic re-audit 2026-05-28) |
+| DP on String | 1550-1599 | Longest String Chain | ☐ planned (subtopic re-audit 2026-05-28) |
 | Difference array / prefix-range | 1550-1599 derivation | Zero Array Transformation I (#8), Increment Submatrices 2D (#18) | ✓ via Phase 2 |
-| Union-Find / DSU (blind-spot) | 1600-1649 | Number of Operations to Make Network Connected | ☐ planned |
+| Union-Find / DSU (blind-spot) | 1600-1649 | Number of Operations to Make Network Connected | ☐ planned · 7 in-band reps (subtopic re-audit 2026-05-28) |
+| Multi Source BFS | 1600-1649 | Push Dominoes | ☐ planned (new foundational graph subtopic) |
+| Recursion & Backtracking | 1600-1649 (LearnYard-sourced) | Subsets (LC 78) | ☐ planned · contest pool lacks pure backtracking → sourced from LearnYard |
 
 ## Advanced installs (only when ≥3 supply hits)
 
@@ -68,8 +72,8 @@ When a problem with an outlier-class tag appears in Phase 2, it flows under its 
 | Band | Group A count | Topics |
 |------|--------------:|--------|
 | 1500-1549 | 9 + 6 in-band | mono stack, tree DP, backtracking, trie, greedy, linear/grid DP, graph BFS/DFS, two-pointer, plain BS + sliding window, hashing, heap, math/bit, BS-on-answer, prefix/sort-scan |
-| 1550-1599 | 2 | game theory ✓, interval DP ✓ |
-| 1600-1649 | 1 | Union-Find |
+| 1550-1599 | 4 | game theory ✓, interval DP ✓ (both installed-via-solve) + DP-on-Grid, DP-on-String (new subtopics, subtopic re-audit) |
+| 1600-1649 | 3 | Union-Find (7 reps, blind-spot) + Multi-Source BFS (new) + Backtracking (LearnYard-sourced — resolves 3-band phantom) |
 | 1650-1699 | 0 | (4 prior picks dropped by 2026-05-28 audit: Topo Sort moved to 1750-99; Mono Queue / Quickselect / Rolling Hash → outliers) |
 | 1700-1749 | 0 | (Segment Tree / Dijkstra / Bitmask DP / MST all thin; Geometry skipped) |
 | 1750-1799 | 1 | Topological Sort |
@@ -126,7 +130,9 @@ The broad-tag ledger had two errors, found when re-auditing 1500-1549 at LearnYa
 - **2026-05-28** — Foundational-vs-advanced split formalized: 1500-1549 and 1550-1599 picks confirmed all foundational (no audit changes); ≥3 rule applies only to advanced topics.
 - **2026-05-28** — 1900-1949 generated: no new installs; advanced topics confirmed still thin.
 - **2026-05-28** — 1950-1999 generated: same shape; no new installs; outlier classifications hold. Segment Tree confirmed 0 viable across 9 bands.
-- **2026-05-28** — LearnYard data fully extracted (1431 problems, 119 subgroups → `learnyard-data/`). doocs editorials fetched for 1500-1549 (112/112 → `editorials-data/`). Fetch scripts persisted to `scripts/`. 1500-1549 re-audited at subgroup granularity: relabeled Tree DP→Binary Tree traversal, added Bit/XOR bucket, dropped Sorting/Matrix/String-Matching as scaffolding. Phase 1 + band topic map + this ledger updated. **1550-1999 still need the same subgroup re-audit when active.**
+- **2026-05-28** — LearnYard data fully extracted (1431 problems, 119 subgroups → `learnyard-data/`). doocs editorials fetched for 1500-1549 (112/112 → `editorials-data/`). Fetch scripts persisted to `scripts/`. 1500-1549 re-audited at subgroup granularity: relabeled Tree DP→Binary Tree traversal, added Bit/XOR bucket, dropped Sorting/Matrix/String-Matching as scaffolding. Phase 1 + band topic map + this ledger updated.
+- **2026-05-28** — 1550-1599 re-audited at subgroup granularity. Editorials fetched (83/83). Game Theory + Interval DP confirmed installed-via-solve. **New subtopic acquisitions found: DP-on-Grid (Minimum Falling Path Sum) + DP-on-String (Longest String Chain)** — both genuinely new vs the 1500 floor, editorial-verified. Rejected: Score of Parentheses (editorial = counting, not stack), Iterator for Combination (Design), DP-on-Trees (absent again). **Exclusion bug found + fixed:** First-Attempt filenames don't always match LC slugs; classifier now needs filename↔slug aliases per band.
+- **2026-05-28** — 1600-1649 re-audited at subgroup granularity. Editorials fetched (87/87), 8 solved excluded (no aliases needed). **Union-Find installed** (Network Connected, 7 in-band reps — the deferred blind-spot). **Multi-Source BFS** new foundational graph subtopic (Push Dominoes). **Backtracking resolved as a 3-band contest-pool phantom → sourced from LearnYard** (Subsets): rated contests systematically lack pure backtracking; LearnYard's curated R&B list (Subsets/Permutations/Combination Sum/N-Queens, mostly unrated) is the correct source. DP-on-Trees absent for the 3rd band — still homeless. Dijkstra (1 rep, editorial=BFS) deferred to 1850. **1650-1999 still need the same subgroup re-audit when active.**
 
 ---
 

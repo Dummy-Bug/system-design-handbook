@@ -1,0 +1,25 @@
+MainTopic	Subgroup	Count	Easiest_Title	Easiest_AR	Easiest_QPos	Easiest_Slug
+Hashing	Implementary Problems	16	Design Ride Sharing System	63.3%	Q3	design-ride-sharing-system
+Greedy	Part I	14	Maximum Number of Operations to Move Ones to the End	67.1%	Q3	maximum-number-of-operations-to-move-ones-to-the-end
+Sorting	Implementary	10	Minimum Absolute Difference in Sliding Submatrix	78.8%	Q2	minimum-absolute-difference-in-sliding-submatrix
+Dynamic Programming Level 1	Linear DP	8	Minimum Deletion Cost to Avoid Repeating Letters	65.2%	Q3	minimum-time-to-make-rope-colorful
+2 Pointers	Two Pointer on Arrays	8	Minimum Deletion Cost to Avoid Repeating Letters	65.2%	Q3	minimum-time-to-make-rope-colorful
+2 Pointers	Two Pointer on Strings	5	Minimum Deletion Cost to Avoid Repeating Letters	65.2%	Q3	minimum-time-to-make-rope-colorful
+Matrix	Implementary	5	Minimum Absolute Difference in Sliding Submatrix	78.8%	Q2	minimum-absolute-difference-in-sliding-submatrix
+Sliding Window	Dynamic Size Sliding-Window	5	Best Time to Buy and Sell Stock using Strategy	59.8%	Q1	best-time-to-buy-and-sell-stock-using-strategy
+Prefix Sum	Implementary	5	Corporate Flight Bookings	67.3%	Q2	corporate-flight-bookings
+Stack	Implementary Stack	4	Max Chunks To Make Sorted	64.2%	Q3	max-chunks-to-make-sorted
+Stack	Stack with String	3	Score of Parentheses	63.6%	Q2	score-of-parentheses
+Binary Search	Upper Bound and Lower Bound	3	Search Suggestions System	65.2%	Q3	search-suggestions-system
+Bit Manipulation	Basic Bit Concepts	3	Encode Number	70.3%	Q1	encode-number
+Dynamic Programming Level 1	DP on String	2	Minimum Deletion Cost to Avoid Repeating Letters	65.2%	Q3	minimum-time-to-make-rope-colorful
+Combinatorics & Geometry	Line	2	Matrix Cells in Distance Order	74.2%	Q2	matrix-cells-in-distance-order
+Dynamic Programming Level 1	DP On Grid	2	Minimum Falling Path Sum	60.8%	Q3	minimum-falling-path-sum
+Graphs	Graph Representation	2	Shortest Distance After Road Addition Queries I	61.9%	Q2	shortest-distance-after-road-addition-queries-i
+Graphs	Disjoint Set Union	2	The Earliest Moment When Everyone Become Friends	66.1%	Q3	the-earliest-moment-when-everyone-become-friends
+Recursion & Backtracking	Recursion Problems	1	Iterator for Combination	72.7%	Q3	iterator-for-combination
+String Matching Algos	Pattern Matching	1	Form Array by Concatenating Subarrays of Another Array	54.8%	Q2	form-array-by-concatenating-subarrays-of-another-array
+Heap (Priority Queue)	Implementary Questions	1	Search Suggestions System	65.2%	Q3	search-suggestions-system
+Tries	Trie involving String	1	Search Suggestions System	65.2%	Q3	search-suggestions-system
+Advance algorithm	Segment Tree / BIT	1	Corporate Flight Bookings	67.3%	Q2	corporate-flight-bookings
+Stack	Monotonic Stack	1	Max Chunks To Make Sorted	64.2%	Q3	max-chunks-to-make-sorted

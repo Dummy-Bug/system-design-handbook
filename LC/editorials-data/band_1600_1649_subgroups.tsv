@@ -1,0 +1,80 @@
+Slug	ID	Title	QPos	AR	Subgroups
+adjacent-increasing-subarrays-detection-ii	3350	Adjacent Increasing Subarrays Detection II	Q2	58.9%	Binary Search/Upper Bound and Lower Bound
+minimum-number-of-swaps-to-make-the-binary-string-alternating	1864	Minimum Number of Swaps to Make the Binary String Alternating	Q2	43.9%	Greedy/Part I
+find-the-largest-area-of-square-inside-two-rectangles	3047	Find the Largest Area of Square Inside Two Rectangles	Q2	66.9%	Combinatorics & Geometry/Line
+flip-string-to-monotone-increasing	926	Flip String to Monotone Increasing	Q2	61.9%	Dynamic Programming Level 1/DP on String; Dynamic Programming Level 1/Linear DP; Prefix Sum/Implementary
+count-lattice-points-inside-a-circle	2249	Count Lattice Points Inside a Circle	Q2	56.7%	Hashing/Implementary Problems; Combinatorics & Geometry/Line
+number-of-subarrays-with-gcd-equal-to-k	2447	Number of Subarrays With GCD Equal to K	Q2	52.6%	(unclassified)
+k-th-largest-perfect-subtree-size-in-binary-tree	3319	K-th Largest Perfect Subtree Size in Binary Tree	Q2	62.3%	Binary Tree/Implementary; Sorting/Implementary
+count-unreachable-pairs-of-nodes-in-an-undirected-graph	2316	Count Unreachable Pairs of Nodes in an Undirected Graph	Q2	50.0%	Graphs/Disjoint Set Union; Graphs/Graph Representation
+longest-uploaded-prefix	2424	Longest Uploaded Prefix	Q2	55.1%	Heap (Priority Queue)/Implementary Questions; Graphs/Disjoint Set Union; Binary Search/Upper Bound and Lower Bound; Hashing/Implementary Problems; Advance algorithm/Segment Tree / BIT
+partition-string-into-substrings-with-values-at-most-k	2522	Partition String Into Substrings With Values at Most K	Q3	47.7%	Dynamic Programming Level 1/DP on String; Dynamic Programming Level 1/Linear DP; Greedy/Part I
+apply-bitwise-operations-to-make-strings-equal	2546	Apply Bitwise Operations to Make Strings Equal	Q3	42.7%	Bit Manipulation/Basic Bit Concepts
+minimum-operations-to-make-median-of-array-equal-to-k	3107	Minimum Operations to Make Median of Array Equal to K	Q3	47.9%	Greedy/Part I; Sorting/Implementary
+expressive-words	809	Expressive Words	Q2	46.8%	2 Pointers/Two Pointer on Strings; 2 Pointers/Two Pointer on Arrays
+alert-using-same-key-card-three-or-more-times-in-a-one-hour-period	1604	Alert Using Same Key-Card Three or More Times in a One Hour Period	Q2	46.3%	Hashing/Implementary Problems; Sorting/Implementary
+lowest-common-ancestor-of-deepest-leaves	1123	Lowest Common Ancestor of Deepest Leaves	Q2	79.5%	Hashing/Implementary Problems; Binary Tree/Implementary
+sum-of-mutated-array-closest-to-target	1300	Sum of Mutated Array Closest to Target	Q2	46.3%	Binary Search/Upper Bound and Lower Bound; Sorting/Implementary; Prefix Sum/Implementary
+construct-the-longest-new-string	2745	Construct the Longest New String	Q2	54.8%	Dynamic Programming Level 1/Linear DP; Greedy/Part I
+count-number-of-ways-to-place-houses	2320	Count Number of Ways to Place Houses	Q2	44.0%	Dynamic Programming Level 1/Linear DP
+mark-elements-on-array-by-performing-queries	3080	Mark Elements on Array by Performing Queries	Q2	49.4%	Heap (Priority Queue)/Implementary Questions; Hashing/Implementary Problems; Sorting/Implementary
+find-a-safe-walk-through-a-grid	3286	Find a Safe Walk Through a Grid	Q2	33.3%	Heap (Priority Queue)/Implementary Questions; Graphs/Dijsktra Algorithm; Graphs/Graph Representation; Matrix/Implementary
+count-valid-word-occurrences	3926	Count Valid Word Occurrences	Q2	47.3%	Hashing/Implementary Problems
+maximum-width-ramp	962	Maximum Width Ramp	Q2	55.9%	Stack/Monotonic Stack; Stack/Implementary Stack; 2 Pointers/Two Pointer on Arrays
+minimum-score-by-changing-two-elements	2567	Minimum Score by Changing Two Elements	Q2	50.0%	Greedy/Part I; Sorting/Implementary
+design-front-middle-back-queue	1670	Design Front Middle Back Queue	Q3	57.9%	Linked List/Implementary
+range-product-queries-of-powers	2438	Range Product Queries of Powers	Q2	61.3%	Bit Manipulation/Basic Bit Concepts; Prefix Sum/Implementary
+number-of-sub-arrays-with-odd-sum	1524	Number of Sub-arrays With Odd Sum	Q2	55.7%	Dynamic Programming Level 1/Linear DP; Prefix Sum/Implementary
+minimize-result-by-adding-parentheses-to-expression	2232	Minimize Result by Adding Parentheses to Expression	Q2	68.1%	(unclassified)
+escape-the-ghosts	789	Escape The Ghosts	Q2	63.7%	(unclassified)
+count-square-submatrices-with-all-ones	1277	Count Square Submatrices with All Ones	Q3	80.7%	Dynamic Programming Level 1/DP On Grid; Dynamic Programming Level 1/Linear DP; Matrix/Implementary
+relocate-marbles	2766	Relocate Marbles	Q2	51.6%	Hashing/Implementary Problems; Sorting/Implementary
+count-the-hidden-sequences	2145	Count the Hidden Sequences	Q2	56.8%	Prefix Sum/Implementary
+number-of-enclaves	1020	Number of Enclaves	Q4	71.8%	Graphs/Disjoint Set Union; Matrix/Implementary
+design-an-atm-machine	2241	Design an ATM Machine	Q3	45.2%	Greedy/Part I
+last-moment-before-all-ants-fall-out-of-a-plank	1503	Last Moment Before All Ants Fall Out of a Plank	Q2	68.2%	(unclassified)
+minimum-operations-to-make-array-equal-ii	2541	Minimum Operations to Make Array Equal II	Q2	33.2%	Greedy/Part I
+find-the-integer-added-to-array-ii	3132	Find the Integer Added to Array II	Q2	33.0%	2 Pointers/Two Pointer on Arrays; Sorting/Implementary
+count-number-of-bad-pairs	2364	Count Number of Bad Pairs	Q2	54.2%	Hashing/Implementary Problems
+bitwise-xor-of-all-pairings	2425	Bitwise XOR of All Pairings	Q3	66.9%	Bit Manipulation/Basic Bit Concepts
+minimum-number-of-food-buckets-to-feed-the-hamsters	2086	Minimum Number of Buckets Required to Collect Rainwater from Houses	Q2	48.4%	Dynamic Programming Level 1/DP on String; Dynamic Programming Level 1/Linear DP; Greedy/Part I
+task-scheduler-ii	2365	Task Scheduler II	Q3	54.8%	Hashing/Implementary Problems
+count-number-of-nice-subarrays	1248	Count Number of Nice Subarrays	Q2	75.1%	Hashing/Implementary Problems; Sliding Window/Dynamic Size Sliding-Window; Prefix Sum/Implementary
+word-subsets	916	Word Subsets	Q3	55.9%	Hashing/Implementary Problems
+is-graph-bipartite	785	Is Graph Bipartite?	Q2	59.3%	Graphs/Disjoint Set Union; Graphs/Graph Representation
+rank-teams-by-votes	1366	Rank Teams by Votes	Q2	60.1%	Hashing/Implementary Problems; Sorting/Implementary
+maximum-number-of-moves-in-a-grid	2684	Maximum Number of Moves in a Grid	Q3	58.8%	Dynamic Programming Level 1/DP On Grid; Dynamic Programming Level 1/Linear DP; Matrix/Implementary
+happy-students	2860	Happy Students	Q2	51.0%	Sorting/Implementary
+shortest-distance-to-target-color	1182	Shortest Distance to Target Color	Q3	56.5%	Dynamic Programming Level 1/Linear DP; Binary Search/Upper Bound and Lower Bound
+remove-palindromic-subsequences	1332	Remove Palindromic Subsequences	Q1	77.1%	2 Pointers/Two Pointer on Strings; 2 Pointers/Two Pointer on Arrays
+concatenation-of-consecutive-binary-numbers	1680	Concatenation of Consecutive Binary Numbers	Q3	66.6%	Bit Manipulation/Basic Bit Concepts
+can-convert-string-in-k-moves	1540	Can Convert String in K Moves	Q2	37.7%	Hashing/Implementary Problems
+count-ways-to-group-overlapping-ranges	2580	Count Ways to Group Overlapping Ranges	Q3	39.1%	Sorting/Implementary
+short-encoding-of-words	820	Short Encoding of Words	Q3	60.9%	Tries/Trie involving String; Hashing/Implementary Problems
+previous-permutation-with-one-swap	1053	Previous Permutation With One Swap	Q3	49.2%	Greedy/Part I
+number-of-operations-to-make-network-connected	1319	Number of Operations to Make Network Connected	Q3	66.6%	Graphs/Disjoint Set Union; Graphs/Graph Representation
+reorder-routes-to-make-all-paths-lead-to-the-city-zero	1466	Reorder Routes to Make All Paths Lead to the City Zero	Q3	65.8%	Graphs/Graph Representation
+minimum-number-of-operations-to-sort-a-binary-tree-by-level	2471	Minimum Number of Operations to Sort a Binary Tree by Level	Q3	74.2%	Binary Tree/Implementary
+shortest-uncommon-substring-in-an-array	3076	Shortest Uncommon Substring in an Array	Q3	50.7%	Tries/Trie involving String; Hashing/Implementary Problems
+merge-triplets-to-form-target-triplet	1899	Merge Triplets to Form Target Triplet	Q3	69.1%	Greedy/Part I
+largest-palindromic-number	2384	Largest Palindromic Number	Q2	37.2%	Greedy/Part I; Hashing/Implementary Problems
+cinema-seat-allocation	1386	Cinema Seat Allocation	Q2	44.6%	Greedy/Part I; Hashing/Implementary Problems; Bit Manipulation/Basic Bit Concepts
+minimum-numbers-of-function-calls-to-make-target-array	1558	Minimum Numbers of Function Calls to Make Target Array	Q3	62.8%	Greedy/Part I; Bit Manipulation/Basic Bit Concepts
+reward-top-k-students	2512	Reward Top K Students	Q2	47.1%	Heap (Priority Queue)/Implementary Questions; Hashing/Implementary Problems; Sorting/Implementary
+nearest-exit-from-entrance-in-maze	1926	Nearest Exit from Entrance in Maze	Q2	48.6%	Matrix/Implementary
+maximum-beauty-of-an-array-after-applying-operation	2779	Maximum Beauty of an Array After Applying Operation	Q2	58.4%	Binary Search/Upper Bound and Lower Bound; Sliding Window/Dynamic Size Sliding-Window; Sorting/Implementary
+push-dominoes	838	Push Dominoes	Q2	63.0%	Dynamic Programming Level 1/DP on String; Dynamic Programming Level 1/Linear DP; Graphs/Multi Source BFS; 2 Pointers/Two Pointer on Strings; 2 Pointers/Two Pointer on Arrays
+satisfiability-of-equality-equations	990	Satisfiability of Equality Equations	Q2	51.9%	Graphs/Disjoint Set Union; Graphs/Graph Representation
+minimum-time-to-complete-trips	2187	Minimum Time to Complete Trips	Q3	39.8%	Binary Search/Upper Bound and Lower Bound
+minimum-deletions-to-make-array-divisible	2344	Minimum Deletions to Make Array Divisible	Q4	61.4%	Heap (Priority Queue)/Implementary Questions; Sorting/Implementary
+largest-combination-with-bitwise-and-greater-than-zero	2275	Largest Combination With Bitwise AND Greater Than Zero	Q3	80.8%	Hashing/Implementary Problems; Bit Manipulation/Basic Bit Concepts
+construct-smallest-number-from-di-string	2375	Construct Smallest Number From DI String	Q3	85.6%	Stack/Stack with String; Stack/Implementary Stack; Greedy/Part I; Recursion & Backtracking/Recursion Problems
+minimize-maximum-component-cost	3613	Minimize Maximum Component Cost	Q2	43.6%	Graphs/Disjoint Set Union; Graphs/Graph Representation; Binary Search/Upper Bound and Lower Bound; Sorting/Implementary
+maximize-the-confusion-of-an-exam	2024	Maximize the Confusion of an Exam	Q3	70.0%	Binary Search/Upper Bound and Lower Bound; Sliding Window/Dynamic Size Sliding-Window; Prefix Sum/Implementary
+create-binary-tree-from-descriptions	2196	Create Binary Tree From Descriptions	Q3	81.7%	Hashing/Implementary Problems; Binary Tree/Implementary
+number-of-substrings-containing-all-three-characters	1358	Number of Substrings Containing All Three Characters	Q3	73.7%	Hashing/Implementary Problems; Sliding Window/Dynamic Size Sliding-Window
+maximum-candies-allocated-to-k-children	2226	Maximum Candies Allocated to K Children	Q3	49.9%	Binary Search/Upper Bound and Lower Bound
+maximum-matrix-sum	1975	Maximum Matrix Sum	Q2	67.5%	Greedy/Part I; Matrix/Implementary
+remove-letter-to-equalize-frequency	2423	Remove Letter To Equalize Frequency	Q1	19.4%	Hashing/Implementary Problems
+design-exam-scores-tracker	3709	Design Exam Scores Tracker	Q3	44.2%	Binary Search/Upper Bound and Lower Bound; Prefix Sum/Implementary
+advantage-shuffle	870	Advantage Shuffle	Q3	54.6%	Greedy/Part I; 2 Pointers/Two Pointer on Arrays; Sorting/Implementary

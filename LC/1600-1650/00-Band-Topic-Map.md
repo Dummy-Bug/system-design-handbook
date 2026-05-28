@@ -41,22 +41,30 @@ The four ❌ HIGH rows are where contest Q3 lives. You've done 7 problems and **
 
 ---
 
-## Ownership tracker
+## Ownership tracker (LearnYard subtopic granularity — re-audited 2026-05-28)
 
-Owned = **3 cold first-submission cleans**, reps 2-3 disguised/combined (rule 6). Marks: `◯` 0/3 · `◐` 1-2/3 · `●` owned. Only clean first-submission counts; soft-fail (#1,#2,#4) and hinted (#5,#6) = 0.
+Owned = **3 cold first-submission cleans**, reps 2-3 disguised/combined (rule 6). Marks: `◯` 0/3 · `◐` 1-2/3 · `●` owned. Soft-fail/hinted = 0. The 7 solved (1 dropped) re-classified via doocs editorials; only 2 are clean (#3 Split Array, #7 Sum of Digit Differences) — band barely started.
 
-| Core bucket | Cold cleans | Status | Need |
-|-------------|-------------|--------|------|
-| Greedy / prefix-suffix scan | 1 (#3) | ◐ | 2 disguised |
-| Hashing / counting | 1 (#7) | ◐ | 2 disguised (#2,#6 didn't count) |
-| Linear / grid DP | 0 (#1 soft, #5 hinted) | ◯ | 3 |
-| Sliding window | 0 (#4 soft) | ◯ | 3 |
-| Graph BFS/DFS | 0 | ◯ | 3 |
-| Math / number theory / bit | 0 | ◯ | 3 — math-reflex ≠ solving |
-| **Monotonic stack** (blind) | 0 | ◯ | acquisition + 3 |
-| **Binary search on answer** | 0 in band | ◯ | 3 (cross-band rep exists @1500-1550) |
-| **Tree DP** (blind) | 0 | ◯ | acquisition + 3 |
-| **Union-Find** (blind) | 0 | ◯ | acquisition + 3 |
+| LearnYard subgroup | Cold cleans | Status | Clean reps (✓) / non-counting (✗) | Need |
+|--------------------|-------------|--------|-----------------------------------|------|
+| Prefix Sum / Implementary | 1 | ◐ | ✓#3 Split Array Min Difference | 2 disguised |
+| Hashing / Implementary | 1 | ◐ | ✓#7 Sum of Digit Differences · ✗#2 Caesar soft · ✗#6 Outlier hinted | 2 disguised |
+| DP Level 1 / Linear DP | 0 | ◯ | ✗#1 House Robber V soft (4 WAs recurrence) | 3 |
+| DP Level 1 / DP On Grid | 0 | ◯ | ✗#5 Min Cost Path hinted | 3 (installed @1550; reps here) |
+| Sliding Window / Dynamic | 0 | ◯ | ✗#4 Min Discards soft (read-error) | 3 |
+| **Graphs / Disjoint Set Union** (blind-spot — installing here) | 0 | ◯ | acquisition pending (Network Connected) | acq + 3 |
+| **Graphs / Multi Source BFS** (new acq) | 0 | ◯ | acquisition pending (Push Dominoes) | acq + 3 |
+| **Recursion & Backtracking** (LearnYard-sourced acq) | 0 | ◯ | acquisition pending (Subsets) | acq + 3 |
+| (Math / Number Theory — no LY subgroup) | 0 | ◯ | — | 3 — math-reflex ≠ solving |
+| **Stack / Monotonic Stack** (blind-spot) | 0 | ◯ | (installed @1500; 1 in-band rep here) | cross-band 3 |
+| **DP on Trees** (blind-spot) | 0 | ◯ | **absent here (3rd band)** | acq + 3 — STILL homeless |
+
+> [!danger] Carried phantom corrections
+> - **DP-on-Trees** absent at 1600-1649 too (zero reps across 1500/1550/1600). Still no install band.
+> - **Backtracking** was a 3-band contest-pool phantom → now installs from **LearnYard** (Subsets), not the band. See `Phase-1-Acquisition.md`.
+> - **Binary search on answer** installed @1500-1549 (#8 Minimum K); cross-band reps here.
+
+> [!note] Scaffolding excluded: Sorting (16), Matrix (6), Stack/Implementary, Two-Pointer-Strings — not ownership targets.
 
 ---
 

@@ -42,30 +42,39 @@ Across **1550-1600 + 1600-1650 + 1650-1700 = 27 solved problems**, these stay un
 
 ---
 
-## Ownership tracker
+## Ownership tracker (LearnYard subtopic granularity — re-audited 2026-05-28)
 
-Owned = **3 cold first-submission cleans**, reps 2-3 disguised/combined (rule 6). Marks: `◯` 0/3 · `◐` 1-2/3 · `●` owned. Prior vanilla cleans cap a bucket at 1/3. Soft-fail/hinted = 0.
+Owned = **3 cold first-submission cleans**, reps 2-3 disguised/combined (rule 6). Marks: `◯` 0/3 · `◐` 1-2/3 · `●` owned. Soft-fail/hinted = 0.
 
-**Re-based 2026-05-28.** Under the acquisition-floor re-base, ALL prior 1550-1600 solves (#1–#24) are Phase 2 derivation reps for this band — acquisition happened at 1500-1550. The tracker below counts every clean across all 24 logged problems. Phase 1 (Group A: Game theory + Interval DP) is both clean ✓ — see `Phase-1-Acquisition.md`.
+**Subtopic re-audit (2026-05-28):** all 24 solved problems re-classified into LearnYard subgroups via their doocs editorials (`editorials-data/band_1550_1599/`), combined with the logged clean/soft outcomes. Buckets are now LearnYard subgroups, not broad LC tags. **Clean = first-submission AC** from the 24 solved; soft-fail/hinted listed but credit 0.
 
-| Core bucket | Cold cleans | Status | Reps | Need |
-|-------------|-------------|--------|------|------|
-| Greedy / observation | 3 | ● | #1 Max Bitwise XOR · #5 Min Cost Acquire · #20 Pancake Sorting | OWNED |
-| Bit operations / XOR | 3 | ● | #1 Max Bitwise XOR · #7 XOR Range Mult · #19 Count Max-OR Subsets | OWNED |
-| Sliding window | 2 | ◐ | #10 Power K-Size Subarrays · #14 Binary Subarrays With Sum | 1 disguised |
-| Graph / tree traversal | 2 | ◐ | #9 Unit Conversion · #16 Restore Array From Adjacent Pairs | 1 disguised |
-| Game theory | 2 | ◐ | #3 Final Element · #23 Flower Game (Phase-1 ☑) | 1 (shortfall — in-band supply exhausted) |
-| Linear / grid / counting DP | 1 | ◐ | #17 Ways to Make a Fair Array | 2 disguised |
-| Difference array / prefix-range | 1 | ◐ | #18 Increment Submatrices (2D) — #8 had off-by-one (soft) | 2 disguised |
-| **Monotonic stack** (blind-spot) | 1 | ◐ | #22 Next Greater Node (FIRST CLEAN of blind-spot trio ✓) | 2 disguised |
-| **Interval DP** (Stone Game — only rep ≤1700) | 1 | ◐ | #13 Stone Game (Phase-1 ☑) | 2 (shortfall — no more in-band) |
-| Math / number theory | 0 | ◯ | #4 hinted · #6 hinted | 3 — math-reflex ≠ solving |
-| Hashing / counting | 0 | ◯ | #2 overflow-bug · #12 hinted | 3 |
-| Backtracking | 0 | ◯ | #11 Happy Strings soft-fail | 3 |
-| Heap-greedy | 0 | ◯ | #21 Min Ops Halve soft-fail (float trap); no other in-band supply | re-solve + cross-band |
-| **Tree DP** (blind-spot) | 0 | ◯ | #15 Construct BST hinted | 3 — biggest remaining blind-spot gap |
-| **Binary search (plain)** | 0 | ◯ | #24 Closest Nodes soft-fail (TLE→AC) | 3 — Phase-2 rep = Time Based KV Store |
-| ~~Union-Find~~ (blind-spot) | — | — | deferred → install in 1600-1650 | — |
+| LearnYard subgroup | Cold cleans | Status | Clean reps (✓) / non-counting (✗) | Need |
+|--------------------|-------------|--------|-----------------------------------|------|
+| Greedy / Part I | 3 | ● | ✓#1 Max Bitwise XOR · ✓#5 Min Cost Acquire · ✓#20 Pancake · ✗#2 soft · ✗#6 hinted | OWNED |
+| Game Theory / Level I | 3 | ● | ✓#3 Final Element · ✓#13 Stone Game · ✓#23 Flower Game | OWNED |
+| Prefix Sum / Implementary | 3 | ● | ✓#14 Binary Subarrays · ✓#17 Fair Array · ✓#18 Increment Submatrices 2D · ✗#8 off-by-one soft | OWNED |
+| Bit Manipulation / Basic Bit (XOR) | 2 | ◐ | ✓#1 Max Bitwise XOR · ✓#19 Count Max-OR Subsets · (#7 trivial sim, not counted) | 1 disguised |
+| Sliding Window / Dynamic Size | 2 | ◐ | ✓#10 Power K-Size · ✓#14 Binary Subarrays | 1 disguised |
+| Graphs / Graph Representation (traversal) | 2 | ◐ | ✓#9 Unit Conversion · ✓#16 Restore Array | 1 disguised |
+| Matrix Chain / **Interval DP** | 1 | ◐ | ✓#13 Stone Game | 2 (shortfall — no more in-band) |
+| **Stack / Monotonic Stack** (blind-spot) | 1 | ◐ | ✓#22 Next Greater Node (FIRST blind-spot clean ✓) | 2 disguised |
+| DP Level 1 / Linear DP | 1 | ◐ | ✓#17 Fair Array (linear/prefix) | 2 disguised |
+| Hashing / Implementary | 2 | ◐ | ✓#14 Binary Subarrays · ✓#16 Restore Array · ✗#2 soft · ✗#4 hinted · ✗#12 hinted | 1 disguised |
+| **DP Level 1 / DP On Grid** (new acq) | 0 | ◯ | acquisition pending (Minimum Falling Path Sum) | acq + 3 |
+| **DP Level 1 / DP on String** (new acq) | 0 | ◯ | acquisition pending (Longest String Chain) | acq + 3 |
+| (Math / Number Theory — no LY subgroup) | 0 | ◯ | ✗#4 hinted · ✗#6 hinted | 3 — math-reflex ≠ solving |
+| Heap (PQ) / Heap-Greedy | 0 | ◯ | ✗#21 Min Ops Halve soft (float trap) | re-solve + cross-band |
+| Recursion & Backtracking | 0 | ◯ | ✗#11 Happy Strings soft · (#19 is bit-enum, not backtracking) | NOT installable — defer (see Phase-1) |
+| Binary Search / Upper & Lower Bound | 0 | ◯ | ✗#24 Closest Nodes soft (TLE→AC) | 3 |
+| **DP on Trees** (blind-spot) | 0 | ◯ | ✗#15 Construct BST hinted (and it's tree *construction*, not DP-on-Trees) | acq + 3 — STILL homeless, absent here |
+| ~~Union-Find~~ (blind-spot) | — | — | deferred → 1600-1649 (7 reps) | — |
+
+> [!danger] Two phantom corrections carried from the 1500-1549 / subtopic re-audit
+> - **"Tree DP"** in the old tracker was conflated: #15 Construct BST is tree *construction* (editorial: DFS + Binary Search), not DP-on-Trees. **DP-on-Trees is absent at 1550-1599** and still has no install band.
+> - **Backtracking** is not installed: #11 Happy Strings soft-failed, #19 is bit-subset enumeration (not backtracking). No clean genuine backtracking here → deferred.
+
+> [!note] Scaffolding subgroups excluded (not ownership targets)
+> Sorting (#12, #20 partial), Matrix (#18), Two-Pointer-on-Strings, Stack/Implementary, Stack-with-String — present in solves but excluded as derivation targets (like Design).
 
 ---
 

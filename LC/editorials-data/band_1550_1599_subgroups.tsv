@@ -1,0 +1,60 @@
+Slug	ID	Title	QPos	AR	Subgroups
+longest-string-chain	1048	Longest String Chain	Q3	63.0%	Dynamic Programming Level 1/DP on String; Dynamic Programming Level 1/Linear DP; Hashing/Implementary Problems; 2 Pointers/Two Pointer on Strings; 2 Pointers/Two Pointer on Arrays; Sorting/Implementary
+ways-to-split-array-into-good-subarrays	2750	Ways to Split Array Into Good Subarrays	Q3	35.1%	Dynamic Programming Level 1/Linear DP
+longest-arithmetic-subsequence-of-given-difference	1218	Longest Arithmetic Subsequence of Given Difference	Q2	54.3%	Dynamic Programming Level 1/Linear DP; Hashing/Implementary Problems
+minimum-swaps-to-make-strings-equal	1247	Minimum Swaps to Make Strings Equal	Q1	65.4%	Greedy/Part I
+card-flipping-game	822	Card Flipping Game	Q2	50.4%	Hashing/Implementary Problems
+design-ride-sharing-system	3829	Design Ride Sharing System	Q3	63.3%	Hashing/Implementary Problems
+number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers	1577	Number of Ways Where Square of Number Is Equal to Product of Two Numbers	Q2	43.5%	Hashing/Implementary Problems; 2 Pointers/Two Pointer on Arrays
+maximum-number-of-operations-to-move-ones-to-the-end	3228	Maximum Number of Operations to Move Ones to the End	Q3	67.1%	Greedy/Part I
+iterator-for-combination	1286	Iterator for Combination	Q3	72.7%	Recursion & Backtracking/Recursion Problems
+maximum-points-after-enemy-battles	3207	Maximum Points After Enemy Battles	Q2	33.4%	Greedy/Part I
+number-of-ways-to-split-a-string	1573	Number of Ways to Split a String	Q2	34.6%	(unclassified)
+sentence-similarity-iii	1813	Sentence Similarity III	Q2	48.4%	2 Pointers/Two Pointer on Strings; 2 Pointers/Two Pointer on Arrays
+minimum-operations-to-make-a-special-number	2844	Minimum Operations to Make a Special Number	Q2	38.6%	Greedy/Part I
+form-array-by-concatenating-subarrays-of-another-array	1764	Form Array by Concatenating Subarrays of Another Array	Q2	54.8%	Greedy/Part I; 2 Pointers/Two Pointer on Strings; 2 Pointers/Two Pointer on Arrays; String Matching Algos/Pattern Matching
+matrix-cells-in-distance-order	1030	Matrix Cells in Distance Order	Q2	74.2%	Combinatorics & Geometry/Line; Matrix/Implementary; Sorting/Implementary
+maximum-value-of-an-ordered-triplet-ii	2874	Maximum Value of an Ordered Triplet II	Q2	56.4%	(unclassified)
+count-collisions-on-a-road	2211	Count Collisions on a Road	Q2	58.1%	Stack/Stack with String; Stack/Implementary Stack
+longest-alternating-subarray	2765	Longest Alternating Subarray	Q1	35.3%	(unclassified)
+longest-substring-of-all-vowels-in-order	1839	Longest Substring Of All Vowels in Order	Q3	51.9%	Sliding Window/Dynamic Size Sliding-Window; 2 Pointers/Two Pointer on Strings; 2 Pointers/Two Pointer on Arrays
+count-number-of-trapezoids-i	3623	Count Number of Trapezoids I	Q2	48.1%	Hashing/Implementary Problems; Combinatorics & Geometry/Line
+coloring-a-border	1034	Coloring A Border	Q2	51.3%	Matrix/Implementary
+find-mirror-score-of-a-string	3412	Find Mirror Score of a String	Q2	35.8%	Stack/Stack with String; Stack/Implementary Stack; Hashing/Implementary Problems
+apply-discount-to-prices	2288	Apply Discount to Prices	Q2	34.3%	(unclassified)
+time-based-key-value-store	981	Time Based Key-Value Store	Q2	49.9%	Binary Search/Upper Bound and Lower Bound; Hashing/Implementary Problems
+minimum-time-to-make-rope-colorful	1578	Minimum Deletion Cost to Avoid Repeating Letters	Q3	65.2%	Dynamic Programming Level 1/DP on String; Dynamic Programming Level 1/Linear DP; Greedy/Part I; 2 Pointers/Two Pointer on Strings; 2 Pointers/Two Pointer on Arrays
+maximum-points-you-can-obtain-from-cards	1423	Maximum Points You Can Obtain from Cards	Q2	57.7%	Sliding Window/Dynamic Size Sliding-Window; Prefix Sum/Implementary
+search-suggestions-system	1268	Search Suggestions System	Q3	65.2%	Heap (Priority Queue)/Implementary Questions; Tries/Trie involving String; Binary Search/Upper Bound and Lower Bound; Sorting/Implementary
+minimum-falling-path-sum	931	Minimum Falling Path Sum	Q3	60.8%	Dynamic Programming Level 1/DP On Grid; Dynamic Programming Level 1/Linear DP; Matrix/Implementary
+count-paths-with-the-given-xor-value	3393	Count Paths With the Given XOR Value	Q2	40.7%	Dynamic Programming Level 1/DP On Grid; Dynamic Programming Level 1/Linear DP; Bit Manipulation/Basic Bit Concepts; Matrix/Implementary
+k-th-symbol-in-grammar	779	K-th Symbol in Grammar	Q1	48.3%	Bit Manipulation/Basic Bit Concepts
+corporate-flight-bookings	1109	Corporate Flight Bookings	Q2	67.3%	Advance algorithm/Segment Tree / BIT; Prefix Sum/Implementary
+maximize-greatness-of-an-array	2592	Maximize Greatness of an Array	Q2	61.7%	Greedy/Part I; 2 Pointers/Two Pointer on Arrays; Sorting/Implementary
+minimum-absolute-difference-in-sliding-submatrix	3567	Minimum Absolute Difference in Sliding Submatrix	Q2	78.8%	Matrix/Implementary; Sorting/Implementary
+shortest-distance-after-road-addition-queries-i	3243	Shortest Distance After Road Addition Queries I	Q2	61.9%	Graphs/Graph Representation
+max-chunks-to-make-sorted	769	Max Chunks To Make Sorted	Q3	64.2%	Stack/Monotonic Stack; Stack/Implementary Stack; Greedy/Part I; Sorting/Implementary
+count-the-number-of-good-nodes	3249	Count the Number of Good Nodes	Q2	55.4%	(unclassified)
+hand-of-straights	846	Hand of Straights	Q3	58.0%	Greedy/Part I; Hashing/Implementary Problems; Sorting/Implementary
+properties-graph	3493	Properties Graph	Q2	48.8%	Graphs/Disjoint Set Union; Graphs/Graph Representation; Hashing/Implementary Problems
+similar-rgb-color	800	Similar RGB Color	Q1	68.0%	(unclassified)
+count-of-substrings-containing-every-vowel-and-k-consonants-i	3305	Count of Substrings Containing Every Vowel and K Consonants I	Q2	41.9%	Hashing/Implementary Problems; Sliding Window/Dynamic Size Sliding-Window
+count-the-number-of-incremovable-subarrays-i	2970	Count the Number of Incremovable Subarrays I	Q1	56.6%	Binary Search/Upper Bound and Lower Bound; 2 Pointers/Two Pointer on Arrays
+people-whose-list-of-favorite-companies-is-not-a-subset-of-another-list	1452	People Whose List of Favorite Companies Is Not a Subset of Another List	Q3	60.7%	Hashing/Implementary Problems
+score-of-parentheses	856	Score of Parentheses	Q2	63.6%	Stack/Stack with String; Stack/Implementary Stack
+count-days-spent-together	2409	Count Days Spent Together	Q1	48.0%	(unclassified)
+encode-number	1256	Encode Number	Q1	70.3%	Bit Manipulation/Basic Bit Concepts
+time-needed-to-inform-all-employees	1376	Time Needed to Inform All Employees	Q3	60.5%	(unclassified)
+climbing-stairs-ii	3693	Climbing Stairs II	Q2	64.1%	Dynamic Programming Level 1/Linear DP
+number-of-subarrays-with-lcm-equal-to-k	2470	Number of Subarrays With LCM Equal to K	Q2	45.5%	(unclassified)
+sum-of-numbers-with-units-digit-k	2310	Sum of Numbers With Units Digit K	Q2	28.3%	Dynamic Programming Level 1/Linear DP; Greedy/Part I
+decrease-elements-to-make-array-zigzag	1144	Decrease Elements To Make Array Zigzag	Q1	49.2%	Greedy/Part I
+before-and-after-puzzle	1181	Before and After Puzzle	Q2	51.9%	Hashing/Implementary Problems; Sorting/Implementary
+the-earliest-moment-when-everyone-become-friends	1101	The Earliest Moment When Everyone Become Friends	Q3	66.1%	Graphs/Disjoint Set Union; Sorting/Implementary
+array-transformation	1243	Array Transformation	Q2	53.7%	(unclassified)
+find-original-array-from-doubled-array	2007	Find Original Array From Doubled Array	Q2	40.8%	Greedy/Part I; Hashing/Implementary Problems; Sorting/Implementary
+longest-palindrome-by-concatenating-two-letter-words	2131	Longest Palindrome by Concatenating Two Letter Words	Q3	53.5%	Greedy/Part I; Hashing/Implementary Problems
+best-time-to-buy-and-sell-stock-using-strategy	3652	Best Time to Buy and Sell Stock using Strategy	Q1	59.8%	Sliding Window/Dynamic Size Sliding-Window; Prefix Sum/Implementary
+shift-distance-between-two-strings	3361	Shift Distance Between Two Strings	Q2	53.6%	Prefix Sum/Implementary
+maximum-sum-of-distinct-subarrays-with-length-k	2461	Maximum Sum of Distinct Subarrays With Length K	Q2	43.0%	Hashing/Implementary Problems; Sliding Window/Dynamic Size Sliding-Window
+maximize-number-of-subsequences-in-a-string	2207	Maximize Number of Subsequences in a String	Q2	36.1%	Greedy/Part I; Prefix Sum/Implementary

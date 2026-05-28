@@ -1,65 +1,74 @@
 # Phase 1 — Acquisition (1600-1650)
 
-**Principle:** acquisition installs a pattern's *mechanic* once. A topic already acquired at a lower band does **not** need re-acquisition here — the mechanic is learned. The harder band re-creates the need for **derivation + pattern-recognition**, not installation, so already-acquired topics carry their reps into **Phase 2 (disguised problems)**, not Phase 1.
+**RE-AUDITED 2026-05-28 at LearnYard subtopic granularity** (doocs editorials + LearnYard subgroups + editorial-correctness check). Supersedes the earlier broad-tag version.
 
-So Phase 1 here = a real acquisition problem **only** for topics that are new this band or were never cleanly installed. Everything else is listed-and-tagged for completeness, with its work deferred to Phase 2.
+**Install floor: 1500-1549 + 1550-1599.** A topic is Group A here only if it's a genuinely-new subtopic (new-subtopic rule) AND its doocs editorial solution actually uses the pattern.
 
-> [!warning] Setup only — do NOT start solving until 1550-1600 ownership completes (rule 8). Currently 0-clean into 1550-1600 Phase 2.
-
-**Build provenance (2026-05-28):** every bucket verified against LC official `topicTags` (`zerotrac-data/band_1600_1649_with_ar.tsv`); all 8 already-solved band problems excluded; acquisition picks are easiest available per bucket (highest AR, lowest Q-pos).
+Provenance: 87 band problems, **8 excluded as solved** (`First-Attempt/` + `Second-Attempt/`), 79 unsolved classified. Editorials: `editorials-data/band_1600_1649/` (87/87). Supply: `editorials-data/band_1600_1649_subgroup_supply.tsv`.
 
 ---
 
-## Group A — Acquire in this band (new / never cleanly installed)
+## Group A — Acquire here (editorial-verified)
 
-These get a real, easiest-per-bucket acquisition problem. Topic-visible, study-OK. Must be clean first-submission AC to count.
+Deal blind. Must be clean first-submission AC to count.
 
-| # | Topic | Why acquire here | Problem | AR | QPos | Link |
-|---|-------|------------------|---------|-----|------|------|
-| 1 | **Union-Find / DSU** | scarce at 1500-1550 (~1, deferred); 7 in-band here — first real acquisition | Number of Operations to Make Network Connected | 66.6% | Q3 | https://leetcode.com/problems/number-of-operations-to-make-network-connected/ |
+| # | LearnYard subgroup | Why new here | Genuine supply | Problem | AR | QPos | Link |
+|---|--------------------|--------------|---------------:|---------|-----|------|------|
+| 1 | **Graphs / Disjoint Set Union** (blind-spot, deferred from 1500/1550) | scarce below (~1-2); **7 reps here** — the real Union-Find install | 7 (≥4 genuine: Network Connected, Satisfiability, Minimize Max Component, Is Graph Bipartite) | Number of Operations to Make Network Connected | 66.6% | Q3 | https://leetcode.com/problems/number-of-operations-to-make-network-connected/ |
+| 2 | **Graphs / Multi Source BFS** (new foundational graph subtopic) | distinct from Flood Fill (installed @1500); first appearance | 1 (foundational → install regardless) | Push Dominoes | 63.0% | Q2 | https://leetcode.com/problems/push-dominoes/ |
+| 3 | **Recursion & Backtracking** (3-band phantom — install from LearnYard) | **contest pool lacks pure backtracking** (3 bands: every tagged problem solves greedy/DP). Source from LearnYard curated list. | n/a (out-of-band) | Subsets | 79.6% | — | https://leetcode.com/problems/subsets/ |
 
-> [!warning] Shortest Path / Dijkstra REMOVED 2026-05-28 (≥3 rule audit)
-> Previously listed as Group A #2 (Find a Safe Walk Through a Grid). Live LC tag re-fetch confirmed the band has **only 1 Shortest Path-tagged problem** — fails the ≥3-in-band-reps rule adopted 2026-05-28. Deferred to **1850-1899** where supply reaches 4 reps. See `LC/topic-install-ledger.md` (to be written).
+> [!important] Why Backtracking is sourced from LearnYard, not the band
+> Backtracking has been a **phantom across 1500, 1550, AND 1600** — zero editorials in any band use backtracking as the actual solution. Rated weekly/biweekly contest problems systematically favor greedy/DP optimizations over brute-force backtracking, so the zerotrac pool simply doesn't contain pure-backtracking problems. LearnYard's curated **Recursion & Backtracking** list is all classics (Subsets, Permutations, Combination Sum, N-Queens, Letter Combinations, Sudoku) — mostly *unrated*. **Subsets (LC 78)** is the canonical mechanic-installer; follow-up reps from the same list: Combination Sum, Permutations, Letter Combinations of a Phone Number. This resolves the longest-standing blind spot.
 
-> [!note] Demoted out of Group A by the 2026-05-28 re-base
-> Three topics once listed as 1600-1650 acquisitions actually first appear lower, so they're now **Group B** (acquired at the floor) and their 1600-1650 problems are Phase 2 derivation reps:
-> - **Binary search on answer** → acquired at **1500-1550 #8** (Minimum K to Reduce Array). Max Candies becomes a Phase 2 deriv rep here.
-> - **Trie** → acquired at **1500-1550 #4** (Remove Sub-Folders). Short Encoding of Words becomes a Phase 2 deriv rep.
->
-> **Design is removed entirely** (2026-05-28) — it is not a derivation/ownership target at any band. Design problems are simply ignored.
-
----
-
-## Group B — Already acquired @ 1550-1600 → Phase 2 only (no re-acquisition)
-
-Listed for completeness and tagged with the lower-band acquisition. **No acquisition problem to solve here** — the disguised/derivation reps come from **Phase 2**, which is mandatory for every one of these.
-
-> [!important] These are OWNED, not shaky, by the time this band opens.
-> Rule 8 forbids entering 1600-1650 until 1550-1600 has graduated — and graduation (rule 6A) requires **3 cold cleans per bucket** at 1550-1600. So even the topics whose *Phase 1 acquisition* was soft/hinted (math/NT, hashing, tree DP, plain BS) get cleanly owned via 1550-1600 **Phase 2** before we arrive. The Phase-1 outcome below is just historical provenance; it does not mean the install is weak when this band starts.
-
-> [!note] Re-base 2026-05-28 — acquisition floor is 1500-1550
-> The "#1550-1600" pointers below are *not* the true acquisition band for most of these. The ladder floor is **1500-1550**: monotonic stack, tree DP, backtracking, trie, plain BS, math/NT, greedy, sliding window, graph, bit, DP, hashing, and heap are all **acquired at 1500-1550**, then *re-derived* (Phase 2) at 1550-1600. The references below mark where each was re-derived, not first installed. Only game theory and interval DP are 1550-1600-native.
-
-| Topic | Acquired @ 1550-1600 | Phase-1 outcome (historical) |
-|-------|----------------------|------------------------------|
-| Greedy / observation | #1 Pancake Sorting | clean |
-| Sliding window | #3 Binary Subarrays With Sum | clean |
-| Graph BFS/DFS / flood-fill | #4 Restore the Array From Adjacent Pairs | clean |
-| Bit manipulation | #5 Count Max Bitwise-OR Subsets | clean |
-| Linear / grid DP | #9 Ways to Make a Fair Array | clean |
-| Monotonic stack | #11 Next Greater Node In Linked List | clean (thin in-band — cross-band reps too) |
-| Math / number theory | #7 Happy Strings | soft fail → owned via 1550-1600 Phase 2 |
-| Hashing / counting | #8 Groups of Special-Equivalent Strings | hinted → owned via 1550-1600 Phase 2 |
-| Tree DP / DFS | #12 Construct BST from Preorder | hinted → owned via 1550-1600 Phase 2 |
-| Plain binary search (lower_bound) | #14 Closest Nodes Queries in BST | soft fail → owned via 1550-1600 Phase 2 |
-| Backtracking | 1500-1550 #3 Max Split Even Integers | present here (construct-smallest-number-from-di-string [1641]) → Phase 2 only |
-| Trie | 1500-1550 #4 Remove Sub-Folders | present here (short-encoding, shortest-uncommon-substring) → Phase 2 only |
-| Binary search on answer | 1500-1550 #8 Minimum K to Reduce Array | present here (max-candies, min-time-trips) → Phase 2 only |
+> [!note] Editorial verification
+> - Union-Find: Number of Operations to Make Network Connected → editorial **Union-Find** ✅ (plus Satisfiability of Equality Equations, Minimize Maximum Component Cost as genuine reps 2-3 in-band)
+> - Multi Source BFS: Push Dominoes → editorial **Multi-Source BFS** ✅
+> - Backtracking: Subsets → THE canonical subset-generation backtracking template ✅
 
 ---
 
-## Tracker (Group A only — Group B has no acquisition step)
+## Candidates checked and REJECTED / DEFERRED
 
-| # | Topic | Phase 1 | Status |
-|---|-------|---------|--------|
-| 1 | Union-Find / DSU | ☐ | — |
+| Subgroup | Status | Reason |
+|----------|--------|--------|
+| **DP on Trees** (blind-spot) | DEFER (3rd band) | **absent at 1600-1649** — still zero reps across 1500/1550/1600. Homeless. |
+| Graphs / Dijkstra | DEFER → 1850-1899 | only 1 rep (Find a Safe Walk), and its editorial is **BFS** not Dijkstra. Real install at 1850 (4 reps). |
+| Advance algorithm / Segment Tree | outlier | 1 rep — confirmed outlier across all bands. |
+| Stack / Implementary, Two-Pointer-Strings, Sorting, Matrix | scaffolding | not derivation targets. |
+
+---
+
+## Group B — installed at 1500-1549 / 1550-1599 → Phase 2 derivation reps here
+
+Hashing (22) · Greedy/Part I (16) · Binary Search Upper/Lower (10) · Linear DP (10) · Prefix Sum (8) · Bit/XOR (7) · Two-Pointer Arrays (6) · Heap (5) · **DP-on-String (4, installed @1550)** · Binary Tree (4) · Sliding Window (4) · **DP-on-Grid (2, installed @1550)** · Trie (2) · Monotonic Stack (1) · Math/NT. Their 3 cold cleans come from Phase 2.
+
+---
+
+## Tracker (Group A)
+
+| # | LearnYard subgroup | Phase 1 | Status |
+|---|--------------------|---------|--------|
+| 1 | Graphs / Disjoint Set Union (Union-Find) | ☐ | — |
+| 2 | Graphs / Multi Source BFS | ☐ | — |
+| 3 | Recursion & Backtracking (LearnYard-sourced) | ☐ | — |
+
+---
+
+## Deferred FROM this band
+
+| Subtopic | Status | Defer to |
+|----------|--------|----------|
+| DP on Trees | absent 3rd band | first band with genuine DP-on-tree editorials |
+| Dijkstra / Shortest Path | 1 rep, editorial is BFS | 1850-1899 (4 reps) |
+
+---
+
+## Data provenance
+
+- Supply: `editorials-data/band_1600_1649_subgroup_supply.tsv`
+- Per-problem: `editorials-data/band_1600_1649_subgroups.tsv`
+- Editorials: `editorials-data/band_1600_1649/*.md` (87/87)
+- LC tags + AR: `zerotrac-data/band_1600_1649_lctags.tsv`
+- LearnYard backtracking source: `learnyard-data/recursion-backtracking.tsv`
+- Classifier: `scripts/classify_band_to_learnyard.py`
