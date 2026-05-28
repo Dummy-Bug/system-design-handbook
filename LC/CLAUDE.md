@@ -78,7 +78,7 @@ Log by contest. Include Q1/Q2/Q3/Q4 result (Y/N/S), what you were stuck on for e
   - `1550-1600/Phase-1-Acquisition.md` — 15 intro problems (one per topic, topic-visible, easiest per topic by AR).
   - `1550-1600/_Sealed-Queue-Phase2.md` — 24 derivation problems, shuffled blind. Serve one bare link at a time.
   - AR data saved at `zerotrac-data/band_1550_1599_with_ar.tsv`.
-  - **Shortfalls** (topics with <3 in-band reps): game theory, heap, mono stack, union-find (1 deriv each), interval DP (0 deriv). These stay uncapped — cross-band reps come when working adjacent bands, NOT pulled from here.
+  - **Shortfalls** (topics with <3 in-band reps): game theory, heap, mono stack (1 deriv each), interval DP (0 deriv). These stay uncapped — cross-band reps come when working adjacent bands, NOT pulled from here. **Union-Find is dropped from this band (only ~2 in-band) and deferred to 1600-1650; Design is dropped (not a derivation target).**
 - **After 1600-1650 graduates:** resume the backfill ladder — finish 1700-1750 (need 3 more), full pass at 1750-1800, then 1800-1850 (5 logged, paused in `1800-1850.md`).
 - **Revision due:** 1650-1700 batch — due 2026-05-30.
 - **Contest rating:** ~1530 (frozen, returning after gap)

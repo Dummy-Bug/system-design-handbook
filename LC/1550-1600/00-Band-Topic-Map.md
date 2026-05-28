@@ -31,14 +31,15 @@ Across **1550-1600 + 1600-1650 + 1650-1700 = 27 solved problems**, these stay un
 | Linear / grid / counting DP | ~8 | — | med-HIGH |
 | Graph BFS/DFS / flood-fill | ~6 | ✅ (#9 tree BFS) | med |
 | Difference array / prefix-range | ~3 | ✅ (#8) | low |
-| Design (data structure) | ~5 | — | med |
+| Design (data structure) | ~5 | — | dropped — not a derivation target |
 | Game theory | ~3 | ✅ (#3) | low |
 | **Monotonic stack** | ~3 | ❌ none | **TOP** |
 | **Tree DP** | ~2 | ❌ none | **TOP** |
-| **Union-Find / DSU** | ~2 | ❌ none | **TOP** |
+| **Union-Find / DSU** | ~2 | ❌ none | deferred → 1600-1650 (too few here) |
 | **Heap / PQ greedy** | ~3 | ❌ none | HIGH |
 | **Interval DP** | 1 (Stone Game) | ❌ none | MED — rare, grab it here |
 | Binary search on answer | ~0 | n/a | absent (1600+ topic) |
+| **Binary search (plain — floor/ceil/lower_bound)** | ~3 (Closest Nodes, Time Based KV, Search Suggestions) | ◐ acquisition done | **CORE — added 2026-05-28** (taxonomy originally conflated this with BS-on-answer and missed it) |
 
 ---
 
@@ -57,12 +58,13 @@ Owned = **3 cold first-submission cleans**, reps 2-3 disguised/combined (rule 6)
 | Bit operations / XOR | 1 (#1,#7 vanilla) | ◐ | 2 disguised |
 | Hashing / counting | 0 | ◯ | 3 |
 | Linear / grid / counting DP | 0 | ◯ | 3 |
-| Design | 0 | ◯ | 3 |
-| **Heap-greedy** (gap) | 0 | ◯ | 3 |
+| **Binary search (plain)** (added 2026-05-28) | 0 (Closest Nodes = acquisition, soft-fail) | ◯ | 3 — acquisition done, Phase-2 rep = Time Based KV Store |
+| **Heap-greedy** (gap — no in-band supply) | 0 (Min Ops to Halve soft-failed) | ◯ | acquisition re-solve + 3 cross-band |
 | **Monotonic stack** (blind) | 0 | ◯ | acquisition + 3 |
 | **Tree DP** (blind) | 0 | ◯ | acquisition + 3 |
-| **Union-Find** (blind) | 0 | ◯ | acquisition + 3 |
 | **Interval DP** (Stone Game — only rep ≤1700) | 0 | ◯ | acquisition + 3 |
+| ~~Design~~ | — | — | dropped (not a derivation target) |
+| ~~Union-Find~~ (blind) | — | — | deferred → install in 1600-1650 |
 
 ---
 
@@ -96,4 +98,4 @@ Problem sets are generated per the **band setup protocol** in `LC/CLAUDE.md`. Se
 - `_Sealed-Queue-Phase2.md` — 24 derivation problems (shuffled blind, topic hidden until after solve).
 - AR data at `zerotrac-data/band_1550_1599_with_ar.tsv`.
 
-**Graduation (rule 6, ownership-based):** every core bucket above must reach `●` (3 cold first-submission cleans, reps 2-3 disguised). For topics with <3 in-band problems (game theory, heap, mono stack, union-find, interval DP), the band contributes what it has — shortfalls complete in adjacent bands naturally, not by cross-band peeking.
+**Graduation (rule 6, ownership-based):** every core bucket above must reach `●` (3 cold first-submission cleans, reps 2-3 disguised). For topics with <3 in-band problems (game theory, heap, mono stack, interval DP), the band contributes what it has — shortfalls complete in adjacent bands naturally, not by cross-band peeking. **Union-Find is deferred to 1600-1650** (only ~2 here); **Design is dropped** as it's not a derivation-muscle target.

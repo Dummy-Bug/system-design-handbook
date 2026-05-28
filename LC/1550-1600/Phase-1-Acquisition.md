@@ -1,4 +1,4 @@
-# Phase 1 — Acquisition (15 problems, topic-visible)
+# Phase 1 — Acquisition (14 problems, topic-visible)
 
 **Protocol:** topic is labeled — study-OK for blind spots. Must be clean first-submission AC to count as 1/3. Work through these before entering Phase 2.
 
@@ -17,6 +17,10 @@
 | 11 | Monotonic stack (blind) | Next Greater Node In Linked List | 64.3% | Q3 | https://leetcode.com/problems/next-greater-node-in-linked-list/ |
 | 12 | Tree DP (blind) | Construct Binary Search Tree from Preorder Traversal | 84.3% | Q4 | https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/ |
 | 13 | Interval DP (blind) | Stone Game | 73.3% | Q2 | https://leetcode.com/problems/stone-game/ |
+| 14 | Binary search (added 2026-05-28) | Closest Nodes Queries in a Binary Search Tree | 44.5% | Q2 | https://leetcode.com/problems/closest-nodes-queries-in-a-binary-search-tree/ |
+
+> [!note] Why #14 was added (2026-05-28)
+> The original taxonomy only bucketed "binary-search-on-answer" (marked absent in-band) and never created a slot for **plain binary search** (floor/ceil / lower_bound on a sorted array). That hole meant Closest Nodes was dealt blind in Phase 2 under a wrong "Tree DP" tag with no prior acquisition rep — so it hit cold and soft-failed on the `mid ± 1` mechanic. Closest Nodes is now the BS acquisition problem here (LC tags: Binary Search, BST). Its Phase-2 derivation rep is Time Based Key-Value Store [981].
 
 ---
 
@@ -37,3 +41,4 @@
 | 11 | Monotonic stack | ☑ | pass — 37 min, first-submission AC, reverse LL + decreasing mono stack |
 | 12 | Tree DP | ☑ | hinted — mixed preorder/inorder index in right subtree call |
 | 13 | Interval DP | ☑ | pass — self-derived, correct logic, intentional TLE→AC (memo trivial) |
+| 14 | Binary search | ☑ | soft fail — 40 min, TLE→AC; degraded BS to linear scan (`bound±1` instead of `mid±1`), 10¹⁰ ops. Approach derivation was instant; pure mechanic rust (first BS in ~1yr). See First-Attempt/24. |
