@@ -1,0 +1,29 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Basic Operations	Easy	Search in a Binary Search Tree	search-in-a-binary-search-tree	leetcode	https://leetcode.com/problems/search-in-a-binary-search-tree/
+Basic Operations	Medium	Insert into a Binary Search Tree	insert-into-a-binary-search-tree	leetcode	https://leetcode.com/problems/insert-into-a-binary-search-tree/
+Basic Operations	Medium	Delete Node in a BST	delete-node-in-a-bst	leetcode	https://leetcode.com/problems/delete-node-in-a-bst/
+Construction of BST	Easy	Convert Sorted Array to Binary Search Tree	convert-sorted-array-to-binary-search-tree	leetcode	https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/
+Construction of BST	Medium	Convert Sorted List to Binary Search Tree	convert-sorted-list-to-binary-search-tree	leetcode	https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/
+Construction of BST	Medium	Convert BST to Greater Tree	convert-bst-to-greater-tree	leetcode	https://leetcode.com/problems/convert-bst-to-greater-tree
+Construction of BST	Medium	Trim a Binary Search Tree	trim-a-binary-search-tree	leetcode	https://leetcode.com/problems/trim-a-binary-search-tree
+Construction of BST	Medium	Serialize and Deserialize BST	serialize-and-deserialize-bst	leetcode	https://leetcode.com/problems/serialize-and-deserialize-bst
+Construction of BST	Medium	Construct Binary Search Tree from Preorder Traversal	construct-binary-search-tree-from-preorder-traversal	leetcode	https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/
+Construction of BST	Medium	Construct BST from Postorder		gfg	https://www.geeksforgeeks.org/problems/construct-bst-from-post-order/1
+Construction of BST	Medium	Balance a Binary Search Tree	balance-a-binary-search-tree	leetcode	https://leetcode.com/problems/balance-a-binary-search-tree
+Construction of BST	Medium	Binary Search Tree to Greater Sum Tree	binary-search-tree-to-greater-sum-tree	leetcode	https://leetcode.com/problems/binary-search-tree-to-greater-sum-tree
+Validation and Property	Easy	Find Mode in Binary Search Tree	find-mode-in-binary-search-tree	leetcode	https://leetcode.com/problems/find-mode-in-binary-search-tree
+Validation and Property	Easy	Range Sum of BST	range-sum-of-bst	leetcode	https://leetcode.com/problems/range-sum-of-bst/
+Validation and Property	Medium	Validate Binary Search Tree	validate-binary-search-tree	leetcode	https://leetcode.com/problems/validate-binary-search-tree/
+Validation and Property	Easy	Minimum Distance Between BST Nodes	minimum-distance-between-bst-nodes	leetcode	https://leetcode.com/problems/minimum-distance-between-bst-nodes
+Validation and Property	Medium	Kth Smallest Element in a BST	kth-smallest-element-in-a-bst	leetcode	https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+Validation and Property	Easy	Increasing Order Search Tree	increasing-order-search-tree	leetcode	https://leetcode.com/problems/increasing-order-search-tree
+Validation and Property	Easy	Two Sum IV - Input is a BST	two-sum-iv-input-is-a-bst	leetcode	https://leetcode.com/problems/two-sum-iv-input-is-a-bst
+Validation and Property	Hard	Maximum Sum BST in Binary Tree	maximum-sum-bst-in-binary-tree	leetcode	https://leetcode.com/problems/maximum-sum-bst-in-binary-tree
+Validation and Property	Medium	Find Common Nodes in two BSTs		gfg	https://www.geeksforgeeks.org/problems/print-common-nodes-in-bst/1
+Validation and Property	Medium	All Elements in Two Binary Search Trees	all-elements-in-two-binary-search-trees	leetcode	https://leetcode.com/problems/all-elements-in-two-binary-search-trees/description/
+Validation and Property	Medium	Unique Binary Search Trees	unique-binary-search-trees	leetcode	https://leetcode.com/problems/unique-binary-search-trees/description/
+Validation and Property	Medium	Recover Binary Search Tree	recover-binary-search-tree	leetcode	https://leetcode.com/problems/recover-binary-search-tree/description/
+Validation and Property	Hard	Number of Ways to Reorder Array to Get Same BST	number-of-ways-to-reorder-array-to-get-same-bst	leetcode	https://leetcode.com/problems/number-of-ways-to-reorder-array-to-get-same-bst
+Validation and Property	Medium	Binary Search Tree Iterator	binary-search-tree-iterator	leetcode	https://leetcode.com/problems/binary-search-tree-iterator/
+Validation and Property	Medium	Lowest Common Ancestor of a Binary Search Tree	lowest-common-ancestor-of-a-binary-search-tree	leetcode	https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree
+Validation and Property	Medium	Closest Nodes Queries in a Binary Search Tree	closest-nodes-queries-in-a-binary-search-tree	leetcode	https://leetcode.com/problems/closest-nodes-queries-in-a-binary-search-tree

@@ -1,0 +1,41 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Recursion Problems	Easy	Power of Two	power-of-two	leetcode	https://leetcode.com/problems/power-of-two
+Recursion Problems	Easy	Power of Three	power-of-three	leetcode	https://leetcode.com/problems/power-of-three
+Recursion Problems	Easy	Power of Four	power-of-four	leetcode	https://leetcode.com/problems/power-of-four
+Recursion Problems	Easy	Fibonacci Number	fibonacci-number	leetcode	https://leetcode.com/problems/fibonacci-number
+Recursion Problems	Medium	Pow(x, n)	powx-n	leetcode	https://leetcode.com/problems/powx-n
+Recursion Problems	Easy	Count Good Numbers	count-good-numbers	leetcode	https://leetcode.com/problems/count-good-numbers
+Recursion Problems	Medium	Minimum Non-Zero Product of the Array Elements	minimum-non-zero-product-of-the-array-elements	leetcode	https://leetcode.com/problems/minimum-non-zero-product-of-the-array-elements/
+Recursion Problems	Easy	Delete Middle Element of a Stack		gfg	https://www.geeksforgeeks.org/problems/delete-middle-element-of-a-stack/1
+Recursion Problems	Medium	Sort a Stack		gfg	https://www.geeksforgeeks.org/problems/sort-a-stack/1
+Recursion Problems	Easy	Josephus Problem		gfg	https://www.geeksforgeeks.org/problems/josephus-problem/1
+Recursion Problems	Medium	Find the Winner of the Circular Game	find-the-winner-of-the-circular-game	leetcode	https://leetcode.com/problems/find-the-winner-of-the-circular-game
+Recursion Problems	Medium	Predict the Winner	predict-the-winner	leetcode	https://leetcode.com/problems/predict-the-winner
+Recursion Problems	Medium	Tower of Hanoi		gfg	https://www.geeksforgeeks.org/problems/tower-of-hanoi-1587115621/1
+Recursion Problems	Medium	Different Ways to Add Parentheses	different-ways-to-add-parentheses	leetcode	https://leetcode.com/problems/different-ways-to-add-parentheses
+Recursion Problems	Hard	Basic Calculator	basic-calculator	leetcode	https://leetcode.com/problems/basic-calculator
+Recursion Problems	Hard	Permutation Sequence	permutation-sequence	leetcode	https://leetcode.com/problems/permutation-sequence
+Recursion Problems	Hard	Regular Expression Matching	regular-expression-matching	leetcode	https://leetcode.com/problems/regular-expression-matching
+Recursion Problems	Hard	Wildcard Matching	wildcard-matching	leetcode	https://leetcode.com/problems/wildcard-matching
+Recursion Problems	Hard	Integer to English Words	integer-to-english-words	leetcode	https://leetcode.com/problems/integer-to-english-words/description/
+Recursion Problems	Hard	Special Binary String	special-binary-string	leetcode	https://leetcode.com/problems/special-binary-string/description/
+Permutation Problems	Medium	Permutations	permutations	leetcode	https://leetcode.com/problems/permutations/
+Permutation Problems	Medium	Construct Smallest Number from DI String	construct-smallest-number-from-di-string	leetcode	https://leetcode.com/problems/construct-smallest-number-from-di-string/
+Permutation Problems	Medium	Beautiful Arrangement	beautiful-arrangement	leetcode	https://leetcode.com/problems/beautiful-arrangement/
+Combination Problems	Medium	Target Sum	target-sum	leetcode	https://leetcode.com/problems/target-sum/
+Combination Problems	Medium	Combinations	combinations	leetcode	https://leetcode.com/problems/combinations/
+Combination Problems	Medium	Letter Combinations of a Phone Number	letter-combinations-of-a-phone-number	leetcode	https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+Combination Problems	Medium	Letter Case Permutation	letter-case-permutation	leetcode	https://leetcode.com/problems/letter-case-permutation/
+Combination Problems	Medium	K-th Lexicographical String of All Happy Strings of Length n	the-k-th-lexicographical-string-of-all-happy-strings-of-length-n	leetcode	https://leetcode.com/problems/the-k-th-lexicographical-string-of-all-happy-strings-of-length-n/
+Combination Problems	Medium	Combination Sum	combination-sum	leetcode	https://leetcode.com/problems/combination-sum/
+Combination Problems	Medium	Combination Sum II	combination-sum-ii	leetcode	https://leetcode.com/problems/combination-sum-ii/
+Combination Problems	Medium	Combination Sum III	combination-sum-iii	leetcode	https://leetcode.com/problems/combination-sum-iii/
+Combination Problems	Medium	Maximum Compatibility Score Sum	maximum-compatibility-score-sum	leetcode	https://leetcode.com/problems/maximum-compatibility-score-sum/
+Combination Problems	Medium	Numbers with Same Consecutive Differences	numbers-with-same-consecutive-differences	leetcode	https://leetcode.com/problems/numbers-with-same-consecutive-differences/
+Combination Problems	Hard	N-Queens	n-queens	leetcode	https://leetcode.com/problems/n-queens/
+Subsets Problems	Medium	Subsets	subsets	leetcode	https://leetcode.com/problems/subsets/
+Subsets Problems	Medium	Subsets II	subsets-ii	leetcode	https://leetcode.com/problems/subsets-ii/
+Subsets Problems	Medium	Non-Decreasing Subsequences	non-decreasing-subsequences	leetcode	https://leetcode.com/problems/non-decreasing-subsequences/
+Subsets Problems	Medium	Number of Beautiful Subsets	the-number-of-beautiful-subsets	leetcode	https://leetcode.com/problems/the-number-of-beautiful-subsets/
+Path on Grid Problems	Medium	Rat in a Maze Problem		gfg	https://www.geeksforgeeks.org/problems/rat-in-a-maze-problem/1
+Path on Grid Problems	Hard	Sudoku Solver	sudoku-solver	leetcode	https://leetcode.com/problems/sudoku-solver/

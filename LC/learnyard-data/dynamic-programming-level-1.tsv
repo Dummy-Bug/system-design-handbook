@@ -1,0 +1,167 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Linear DP	Easy	Climbing Stairs	climbing-stairs	leetcode	https://leetcode.com/problems/climbing-stairs/
+Linear DP	Easy	Min Cost Climbing Stairs	min-cost-climbing-stairs	leetcode	https://leetcode.com/problems/min-cost-climbing-stairs/
+Linear DP	Medium	Perfect Squares	perfect-squares	leetcode	https://leetcode.com/problems/perfect-squares/
+Linear DP	Medium	Decode Ways	decode-ways	leetcode	https://leetcode.com/problems/decode-ways/
+Linear DP	Medium	Unique Binary Search Trees	unique-binary-search-trees	leetcode	https://leetcode.com/problems/unique-binary-search-trees/
+Linear DP	Medium	House Robber	house-robber	leetcode	https://leetcode.com/problems/house-robber/
+Linear DP	Medium	Coin Change	coin-change	leetcode	https://leetcode.com/problems/coin-change/
+Linear DP	Easy	Best Time to Buy and Sell Stock	best-time-to-buy-and-sell-stock	leetcode	https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+Linear DP	Medium	Minimum Cost For Tickets	minimum-cost-for-tickets	leetcode	https://leetcode.com/problems/minimum-cost-for-tickets/
+Linear DP	Medium	Delete and Earn	delete-and-earn	leetcode	https://leetcode.com/problems/delete-and-earn/
+Linear DP	Medium	Maximum Total Damage With Spell Casting	maximum-total-damage-with-spell-casting	leetcode	https://leetcode.com/problems/maximum-total-damage-with-spell-casting/description/
+Linear DP	Medium	Arithmetic Slices	arithmetic-slices	leetcode	https://leetcode.com/problems/arithmetic-slices/
+Linear DP	Medium	Longest Arithmetic Subsequence of Given Difference	longest-arithmetic-subsequence-of-given-difference	leetcode	https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/description/
+Linear DP	Medium	Partition Array for Maximum Sum	partition-array-for-maximum-sum	leetcode	https://leetcode.com/problems/partition-array-for-maximum-sum/description/
+Linear DP	Hard	Maximize Consecutive Elements in an Array After Modification		unknown	Maximize Consecutive Elements in an Array After Modification
+2 Dimensional DP	Medium	Coin Change II	coin-change-ii	leetcode	https://leetcode.com/problems/coin-change-ii/description/
+2 Dimensional DP	Medium	Knight Dialer	knight-dialer	leetcode	https://leetcode.com/problems/knight-dialer/
+2 Dimensional DP	Medium	Partition Equal Subset Sum	partition-equal-subset-sum	leetcode	https://leetcode.com/problems/partition-equal-subset-sum/description/
+2 Dimensional DP	Medium	Triangle	triangle	leetcode	https://leetcode.com/problems/triangle/
+2 Dimensional DP	Hard	Student Attendance Record Leetcode	student-attendance-record-ii	leetcode	https://leetcode.com/problems/student-attendance-record-ii/description/
+2 Dimensional DP	Hard	Find the Maximum Length of a Good Subsequence II	find-the-maximum-length-of-a-good-subsequence-ii	leetcode	https://leetcode.com/problems/find-the-maximum-length-of-a-good-subsequence-ii/description/
+2 Dimensional DP	Hard	K Inverse Pairs Array	k-inverse-pairs-array	leetcode	https://leetcode.com/problems/k-inverse-pairs-array/
+2 Dimensional DP	Medium	Combination Sum IV	combination-sum-iv	leetcode	https://leetcode.com/problems/combination-sum-iv/
+2 Dimensional DP	Medium	Largest Sum of Averages	largest-sum-of-averages	leetcode	https://leetcode.com/problems/largest-sum-of-averages/
+2 Dimensional DP	Medium	Longest Arithmetic Subsequence	longest-arithmetic-subsequence	leetcode	https://leetcode.com/problems/longest-arithmetic-subsequence/
+2 Dimensional DP	Medium	Number of Dice Rolls With Target Sum	number-of-dice-rolls-with-target-sum	leetcode	https://leetcode.com/problems/number-of-dice-rolls-with-target-sum/
+2 Dimensional DP	Medium	Dice Roll Simulation	dice-roll-simulation	leetcode	https://leetcode.com/problems/dice-roll-simulation/
+2 Dimensional DP	Hard	Number of Strings Which Can Be Rearranged to Contain Substring	number-of-strings-which-can-be-rearranged-to-contain-substring	leetcode	https://leetcode.com/problems/number-of-strings-which-can-be-rearranged-to-contain-substring/description/
+2 Dimensional DP	Hard	Frog Jump	frog-jump	leetcode	https://leetcode.com/problems/frog-jump/
+2 Dimensional DP	Hard	Best Time to Buy and Sell Stock II	best-time-to-buy-and-sell-stock-ii	leetcode	https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/description/
+2 Dimensional DP	Hard	Best Time to Buy and Sell Stock III	best-time-to-buy-and-sell-stock-iii	leetcode	https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/description/
+2 Dimensional DP	Hard	Best Time to Buy and Sell Stock IV	best-time-to-buy-and-sell-stock-iv	leetcode	https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/
+2 Dimensional DP	Hard	Freedom Trail	freedom-trail	leetcode	https://leetcode.com/problems/freedom-trail/
+2 Dimensional DP	Hard	Number of Music Playlists	number-of-music-playlists	leetcode	https://leetcode.com/problems/number-of-music-playlists/
+2 Dimensional DP	Hard	Count Vowels Permutation	count-vowels-permutation	leetcode	https://leetcode.com/problems/count-vowels-permutation/
+2 Dimensional DP	Medium	Best Time to Buy and Sell Stock with Transaction Fee	best-time-to-buy-and-sell-stock-with-transaction-fee	leetcode	https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/
+2 Dimensional DP	Hard	Minimum Distance to Type a Word Using Two Fingers	minimum-distance-to-type-a-word-using-two-fingers	leetcode	https://leetcode.com/problems/minimum-distance-to-type-a-word-using-two-fingers/
+2 Dimensional DP	Hard	Minimum Difficulty of a Job Schedule	minimum-difficulty-of-a-job-schedule	leetcode	https://leetcode.com/problems/minimum-difficulty-of-a-job-schedule/
+2 Dimensional DP	Medium	Best Time to Buy and Sell Stock with Cooldown	best-time-to-buy-and-sell-stock-with-cooldown	leetcode	https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+2 Dimensional DP	Hard	Number of Ways to Paint N \xd7 3 Grid	number-of-ways-to-paint-n-3-grid	leetcode	https://leetcode.com/problems/number-of-ways-to-paint-n-3-grid/
+2 Dimensional DP	Hard	Build Array Where You Can Find The Maximum Exactly K Comparisons	build-array-where-you-can-find-the-maximum-exactly-k-comparisons	leetcode	https://leetcode.com/problems/build-array-where-you-can-find-the-maximum-exactly-k-comparisons/
+2 Dimensional DP	Hard	Number of Ways of Cutting a Pizza	number-of-ways-of-cutting-a-pizza	leetcode	https://leetcode.com/problems/number-of-ways-of-cutting-a-pizza/
+2 Dimensional DP	Hard	Paint House III	paint-house-iii	leetcode	https://leetcode.com/problems/paint-house-iii/
+2 Dimensional DP	Hard	Count All Possible Routes	count-all-possible-routes	leetcode	https://leetcode.com/problems/count-all-possible-routes/
+DP On Grid	Medium	Geek's Training		gfg	https://www.geeksforgeeks.org/problems/geeks-training/1
+DP On Grid	Medium	Unique Paths	unique-paths	leetcode	https://leetcode.com/problems/unique-paths/
+DP On Grid	Medium	Unique Paths II	unique-paths-ii	leetcode	https://leetcode.com/problems/unique-paths-ii/
+DP On Grid	Medium	Minimum Path Sum	minimum-path-sum	leetcode	https://leetcode.com/problems/minimum-path-sum/
+DP On Grid	Medium	Maximum Non Negative Product in a Matrix	maximum-non-negative-product-in-a-matrix	leetcode	https://leetcode.com/problems/maximum-non-negative-product-in-a-matrix/
+DP On Grid	Medium	Maximum Difference Score in a Grid	maximum-difference-score-in-a-grid	leetcode	https://leetcode.com/problems/maximum-difference-score-in-a-grid/description/
+DP On Grid	Medium	Minimum Number of Operations to Satisfy Conditions	minimum-number-of-operations-to-satisfy-conditions	leetcode	https://leetcode.com/problems/minimum-number-of-operations-to-satisfy-conditions/description/
+DP On Grid	Medium	Maximum Number of Moves in a Grid	maximum-number-of-moves-in-a-grid	leetcode	https://leetcode.com/problems/maximum-number-of-moves-in-a-grid/description/
+DP On Grid	Medium	Where Will the Ball Fall	where-will-the-ball-fall	leetcode	https://leetcode.com/problems/where-will-the-ball-fall/
+DP On Grid	Hard	Dungeon Game	dungeon-game	leetcode	https://leetcode.com/problems/dungeon-game/
+DP On Grid	Hard	Cherry Pickup	cherry-pickup	leetcode	https://leetcode.com/problems/cherry-pickup/
+DP On Grid	Hard	Number of Paths with Max Score	number-of-paths-with-max-score	leetcode	https://leetcode.com/problems/number-of-paths-with-max-score/
+DP On Grid	Hard	Cherry Pickup II	cherry-pickup-ii	leetcode	https://leetcode.com/problems/cherry-pickup-ii/
+DP On Grid	Hard	Minimum Falling Path Sum II	minimum-falling-path-sum-ii	leetcode	https://leetcode.com/problems/minimum-falling-path-sum-ii/
+DP On Grid	Medium	Out of Boundary Paths	out-of-boundary-paths	leetcode	https://leetcode.com/problems/out-of-boundary-paths/
+DP On Grid	Medium	Minimum Falling Path Sum	minimum-falling-path-sum	leetcode	https://leetcode.com/problems/minimum-falling-path-sum/
+Knapsack DP	Medium	Knapsack - 1		atcoder	https://atcoder.jp/contests/dp/tasks/dp_d
+Knapsack DP	Medium	Knapsack - 2		atcoder	https://atcoder.jp/contests/dp/tasks/dp_e
+Knapsack DP	Medium	Ones and Zeroes	ones-and-zeroes	leetcode	https://leetcode.com/problems/ones-and-zeroes/
+Knapsack DP	Medium	Target Sum	target-sum	leetcode	https://leetcode.com/problems/target-sum/
+Knapsack DP	Medium	2 Keys Keyboard	2-keys-keyboard	leetcode	https://leetcode.com/problems/2-keys-keyboard/
+Knapsack DP	Medium	Best Team With No Conflicts	best-team-with-no-conflicts	leetcode	https://leetcode.com/problems/best-team-with-no-conflicts/
+Knapsack DP	Medium	Shopping Offers	shopping-offers	leetcode	https://leetcode.com/problems/shopping-offers/
+Knapsack DP	Medium	Minimum Number of Coins for Fruits	minimum-number-of-coins-for-fruits	leetcode	https://leetcode.com/problems/minimum-number-of-coins-for-fruits/description/
+Knapsack DP	Medium	Last Stone Weight II	last-stone-weight-ii	leetcode	https://leetcode.com/problems/last-stone-weight-ii/
+Knapsack DP	Medium	Rod Cutting		gfg	https://www.geeksforgeeks.org/problems/rod-cutting0840/1
+Knapsack DP	Medium	Filling Bookcase Shelves	filling-bookcase-shelves	leetcode	https://leetcode.com/problems/filling-bookcase-shelves/description/
+Knapsack DP	Medium	Video Stitching	video-stitching	leetcode	https://leetcode.com/problems/video-stitching/
+Knapsack DP	Hard	Maximize Total Cost of Alternating Subarrays	maximize-total-cost-of-alternating-subarrays	leetcode	https://leetcode.com/problems/maximize-total-cost-of-alternating-subarrays/description/
+Knapsack DP	Hard	Pizza With 3n Slices	pizza-with-3n-slices	leetcode	https://leetcode.com/problems/pizza-with-3n-slices/
+Knapsack DP	Hard	Minimum Swaps To Make Sequences Increasing	minimum-swaps-to-make-sequences-increasing	leetcode	https://leetcode.com/problems/minimum-swaps-to-make-sequences-increasing/
+Knapsack DP	Hard	Profitable Schemes	profitable-schemes	leetcode	https://leetcode.com/problems/profitable-schemes/
+Knapsack DP	Hard	Reducing Dishes	reducing-dishes	leetcode	https://leetcode.com/problems/reducing-dishes/
+Knapsack DP	Hard	Find Number of Ways to Reach the K-th Stair	find-number-of-ways-to-reach-the-k-th-stair	leetcode	https://leetcode.com/problems/find-number-of-ways-to-reach-the-k-th-stair/
+Knapsack DP	Hard	Find the Sum of Subsequence Powers	find-the-sum-of-subsequence-powers	leetcode	https://leetcode.com/problems/find-the-sum-of-subsequence-powers/description/
+Knapsack DP	Hard	Count of Sub-Multisets With Bounded Sum	count-of-sub-multisets-with-bounded-sum	leetcode	https://leetcode.com/problems/count-of-sub-multisets-with-bounded-sum/description/
+Longest Increasing Subsequence	Medium	Longest Increasing Subsequence	longest-increasing-subsequence	leetcode	https://leetcode.com/problems/longest-increasing-subsequence/
+Longest Increasing Subsequence	Medium	Printing Longest Increasing Subsequence		gfg	https://www.geeksforgeeks.org/problems/printing-longest-increasing-subsequence/0
+Longest Increasing Subsequence	Medium	Number of Longest Increasing Subsequence	number-of-longest-increasing-subsequence	leetcode	https://leetcode.com/problems/number-of-longest-increasing-subsequence/
+Longest Increasing Subsequence	Medium	Largest Divisible Subset	largest-divisible-subset	leetcode	https://leetcode.com/problems/largest-divisible-subset/
+Longest Increasing Subsequence	Medium	Longest Unequal Adjacent Groups Subsequence II	longest-unequal-adjacent-groups-subsequence-ii	leetcode	https://leetcode.com/problems/longest-unequal-adjacent-groups-subsequence-ii/description/
+Longest Increasing Subsequence	Medium	Max Sum Increasing Subsequence		gfg	https://www.geeksforgeeks.org/problems/maximum-sum-increasing-subsequence4749/1
+Longest Increasing Subsequence	Medium	Find the Maximum Length of Valid Subsequence II	find-the-maximum-length-of-valid-subsequence-ii	leetcode	https://leetcode.com/problems/find-the-maximum-length-of-valid-subsequence-ii/description/
+Longest Increasing Subsequence	Medium	Wiggle Subsequence	wiggle-subsequence	leetcode	https://leetcode.com/problems/wiggle-subsequence/
+Longest Increasing Subsequence	Hard	Find the Count of Monotonic Pairs I	find-the-count-of-monotonic-pairs-i	leetcode	https://leetcode.com/problems/find-the-count-of-monotonic-pairs-i/description/
+Longest Increasing Subsequence	Hard	Russian Doll Envelopes	russian-doll-envelopes	leetcode	https://leetcode.com/problems/russian-doll-envelopes/
+Longest Increasing Subsequence	Hard	Delete Columns to Make Sorted III	delete-columns-to-make-sorted-iii	leetcode	https://leetcode.com/problems/delete-columns-to-make-sorted-iii/
+Longest Increasing Subsequence	Hard	Minimum Number of Removals to Make Mountain Array	minimum-number-of-removals-to-make-mountain-array	leetcode	https://leetcode.com/problems/minimum-number-of-removals-to-make-mountain-array/
+Longest Increasing Subsequence	Hard	Maximum Height by Stacking Cuboids	maximum-height-by-stacking-cuboids	leetcode	https://leetcode.com/problems/maximum-height-by-stacking-cuboids/
+Longest Increasing Subsequence	Hard	Maximum Length of Pair Chain	maximum-length-of-pair-chain	leetcode	https://leetcode.com/problems/maximum-length-of-pair-chain/
+Longest Increasing Subsequence	Hard	Make Array Strictly Increasing	make-array-strictly-increasing	leetcode	https://leetcode.com/problems/make-array-strictly-increasing/
+Longest Common Subsequence	Medium	Longest Common Subsequence	longest-common-subsequence	leetcode	https://leetcode.com/problems/longest-common-subsequence/
+Longest Common Subsequence	Hard	Print all LCS sequences		gfg	https://www.geeksforgeeks.org/problems/print-all-lcs-sequences3413/1
+Longest Common Subsequence	Theory	Count Common Subsequence in Two Strings		gfg	https://www.geeksforgeeks.org/count-common-subsequence-in-two-strings/
+Longest Common Subsequence	Medium	Delete operation for two strings	delete-operation-for-two-strings	leetcode	https://leetcode.com/problems/delete-operation-for-two-strings/description/
+Longest Common Subsequence	Medium	Longest Palindromic Substring	longest-palindromic-substring	leetcode	https://leetcode.com/problems/longest-palindromic-substring/
+Longest Common Subsequence	Medium	Longest Palindromic Subsequence	longest-palindromic-subsequence	leetcode	https://leetcode.com/problems/longest-palindromic-subsequence/
+Longest Common Subsequence	Medium	Maximum Length of Repeated Subarray	maximum-length-of-repeated-subarray	leetcode	https://leetcode.com/problems/maximum-length-of-repeated-subarray/
+Longest Common Subsequence	Medium	Edit Distance	edit-distance	leetcode	https://leetcode.com/problems/edit-distance/
+Longest Common Subsequence	Medium	Interleaving String	interleaving-string	leetcode	https://leetcode.com/problems/interleaving-string/
+Longest Common Subsequence	Hard	Regular Expression Matching	regular-expression-matching	leetcode	https://leetcode.com/problems/regular-expression-matching/
+Longest Common Subsequence	Hard	Wildcard Matching	wildcard-matching	leetcode	https://leetcode.com/problems/wildcard-matching/
+Longest Common Subsequence	Hard	Shortest Common Supersequence	shortest-common-supersequence	leetcode	https://leetcode.com/problems/shortest-common-supersequence/
+Longest Common Subsequence	Hard	Minimum Insertion Steps to Make a String Palindrome	minimum-insertion-steps-to-make-a-string-palindrome	leetcode	https://leetcode.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/
+Longest Common Subsequence	Hard	Max Dot Product of Two Subsequences	max-dot-product-of-two-subsequences	leetcode	https://leetcode.com/problems/max-dot-product-of-two-subsequences/
+DP on String	Medium	Minimum Substring Partition of Equal Character Frequency	minimum-substring-partition-of-equal-character-frequency	leetcode	https://leetcode.com/problems/minimum-substring-partition-of-equal-character-frequency/description/
+DP on String	Medium	Apply Operations to Make Two Strings Equal	apply-operations-to-make-two-strings-equal	leetcode	https://leetcode.com/problems/apply-operations-to-make-two-strings-equal/description/
+DP on String	Medium	Minimum ASCII Delete Sum for Two Strings	minimum-ascii-delete-sum-for-two-strings	leetcode	https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/
+DP on String	Medium	Word Break	word-break	leetcode	https://leetcode.com/problems/word-break/
+DP on String	Medium	Longest String Chain	longest-string-chain	leetcode	https://leetcode.com/problems/longest-string-chain/
+DP on String	Medium	Unique Substrings in Wraparound String	unique-substrings-in-wraparound-string	leetcode	https://leetcode.com/problems/unique-substrings-in-wraparound-string/
+DP on String	Hard	Longest Valid Parentheses	longest-valid-parentheses	leetcode	https://leetcode.com/problems/longest-valid-parentheses/
+DP on String	Hard	Distinct Subsequences	distinct-subsequences	leetcode	https://leetcode.com/problems/distinct-subsequences/
+DP on String	Hard	Word Break II	word-break-ii	leetcode	https://leetcode.com/problems/word-break-ii/
+DP on String	Hard	Sort an Array	count-the-repetitions	leetcode	https://leetcode.com/problems/count-the-repetitions/
+DP on String	Hard	Concatenated Words	concatenated-words	leetcode	https://leetcode.com/problems/concatenated-words/
+DP on String	Hard	Count Different Palindromic Subsequences	count-different-palindromic-subsequences	leetcode	https://leetcode.com/problems/count-different-palindromic-subsequences/
+DP on String	Hard	Distinct Subsequences II	distinct-subsequences-ii	leetcode	https://leetcode.com/problems/distinct-subsequences-ii/
+DP on String	Hard	Longest Chunked Palindrome Decomposition	longest-chunked-palindrome-decomposition	leetcode	https://leetcode.com/problems/longest-chunked-palindrome-decomposition/
+DP on String	Hard	String Compression II	string-compression-ii	leetcode	https://leetcode.com/problems/string-compression-ii/
+DP on String	Hard	Number of Ways to Form a Target String Given a Dictionary	number-of-ways-to-form-a-target-string-given-a-dictionary	leetcode	https://leetcode.com/problems/number-of-ways-to-form-a-target-string-given-a-dictionary/
+DP on String	Hard	Minimum Changes to Make K Semi-palindromes	minimum-changes-to-make-k-semi-palindromes	leetcode	https://leetcode.com/problems/minimum-changes-to-make-k-semi-palindromes/description/
+Cummulative Sum	Medium	Maximal Square	maximal-square	leetcode	https://leetcode.com/problems/maximal-square/
+Cummulative Sum	Medium	Range Sum Query 2D - Immutable	range-sum-query-2d-immutable	leetcode	https://leetcode.com/problems/range-sum-query-2d-immutable/
+Cummulative Sum	Medium	Largest Plus Sign	largest-plus-sign	leetcode	https://leetcode.com/problems/largest-plus-sign/
+Cummulative Sum	Medium	Largest 1-Bordered Square	largest-1-bordered-square	leetcode	https://leetcode.com/problems/largest-1-bordered-square/
+Cummulative Sum	Medium	Count Square Submatrices with All Ones	count-square-submatrices-with-all-ones	leetcode	https://leetcode.com/problems/count-square-submatrices-with-all-ones/
+Cummulative Sum	Medium	Matrix Block Sum	matrix-block-sum	leetcode	https://leetcode.com/problems/matrix-block-sum/
+Cummulative Sum	Medium	Count Submatrices With All Ones	count-submatrices-with-all-ones	leetcode	https://leetcode.com/problems/count-submatrices-with-all-ones/
+Cummulative Sum	Medium	Ways to Make a Fair Array	ways-to-make-a-fair-array	leetcode	https://leetcode.com/problems/ways-to-make-a-fair-array/
+Cummulative Sum	Hard	Maximal Rectangle	maximal-rectangle	leetcode	https://leetcode.com/problems/maximal-rectangle/
+Cummulative Sum	Hard	Max Sum of Rectangle No Larger Than K	max-sum-of-rectangle-no-larger-than-k	leetcode	https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/
+Cummulative Sum	Hard	Super Washing Machines	super-washing-machines	leetcode	https://leetcode.com/problems/super-washing-machines/
+Cummulative Sum	Hard	Maximum Sum of 3 Non-Overlapping Subarrays	maximum-sum-of-3-non-overlapping-subarrays	leetcode	https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays/
+Cummulative Sum	Hard	Number of Submatrices That Sum to Target	number-of-submatrices-that-sum-to-target	leetcode	https://leetcode.com/problems/number-of-submatrices-that-sum-to-target/
+Cummulative Sum	Hard	Find the Count of Monotonic Pairs II	find-the-count-of-monotonic-pairs-ii	leetcode	https://leetcode.com/problems/find-the-count-of-monotonic-pairs-ii/description/
+Cummulative Sum	Hard	Get the Maximum Score	get-the-maximum-score	leetcode	https://leetcode.com/problems/get-the-maximum-score/
+Matrix Chain Multiplication	Hard	Matrix Chain Multiplication		gfg	https://www.geeksforgeeks.org/problems/matrix-chain-multiplication0303/1
+Matrix Chain Multiplication	Medium	Guess Number Higher or Lower II	guess-number-higher-or-lower-ii	leetcode	https://leetcode.com/problems/guess-number-higher-or-lower-ii/
+Matrix Chain Multiplication	Medium	Predict the Winner	predict-the-winner	leetcode	https://leetcode.com/problems/predict-the-winner/
+Matrix Chain Multiplication	Medium	Stone Game	stone-game	leetcode	https://leetcode.com/problems/stone-game/
+Matrix Chain Multiplication	Hard	Burst Balloons	burst-balloons	leetcode	https://leetcode.com/problems/burst-balloons/
+Matrix Chain Multiplication	Medium	Minimum Score Triangulation of Polygon	minimum-score-triangulation-of-polygon	leetcode	https://leetcode.com/problems/minimum-score-triangulation-of-polygon/
+Matrix Chain Multiplication	Medium	Minimum Cost Tree From Leaf Values	minimum-cost-tree-from-leaf-values	leetcode	https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/
+Matrix Chain Multiplication	Medium	Partition Array for Maximum Sum	partition-array-for-maximum-sum	leetcode	https://leetcode.com/problems/partition-array-for-maximum-sum/description/
+Matrix Chain Multiplication	Hard	Palindrome Partitioning II	palindrome-partitioning-iii	leetcode	https://leetcode.com/problems/palindrome-partitioning-iii/description/
+Matrix Chain Multiplication	Medium	Stone Game VII	stone-game-vii	leetcode	https://leetcode.com/problems/stone-game-vii/
+Matrix Chain Multiplication	Hard	Remove Boxes	remove-boxes	leetcode	https://leetcode.com/problems/remove-boxes/
+Matrix Chain Multiplication	Hard	Strange Printer	strange-printer	leetcode	https://leetcode.com/problems/strange-printer/
+Matrix Chain Multiplication	Hard	Valid Permutations for DI Sequence	valid-permutations-for-di-sequence	leetcode	https://leetcode.com/problems/valid-permutations-for-di-sequence/
+Matrix Chain Multiplication	Hard	Minimum Cost to Merge Stones	minimum-cost-to-merge-stones	leetcode	https://leetcode.com/problems/minimum-cost-to-merge-stones/
+Matrix Chain Multiplication	Hard	Allocate Mailboxes	allocate-mailboxes	leetcode	https://leetcode.com/problems/allocate-mailboxes/
+Matrix Chain Multiplication	Hard	Minimum Cost to Cut a Stick	minimum-cost-to-cut-a-stick	leetcode	https://leetcode.com/problems/minimum-cost-to-cut-a-stick/
+Matrix Chain Multiplication	Hard	Stone Game V	stone-game-v	leetcode	https://leetcode.com/problems/stone-game-v/
+Matrix Chain Multiplication	Hard	Palindrome Partitioning III	palindrome-partitioning-iii	leetcode	https://leetcode.com/problems/palindrome-partitioning-iii/
+Kadane Algo	Medium	Maximum Subarray	maximum-subarray	leetcode	https://leetcode.com/problems/maximum-subarray/
+Kadane Algo	Medium	Maximum Product Subarray	maximum-product-subarray	leetcode	https://leetcode.com/problems/maximum-product-subarray/
+Kadane Algo	Medium	Bitwise ORs of Subarrays	bitwise-ors-of-subarrays	leetcode	https://leetcode.com/problems/bitwise-ors-of-subarrays/
+Kadane Algo	Medium	Longest Turbulent Subarray	longest-turbulent-subarray	leetcode	https://leetcode.com/problems/longest-turbulent-subarray/
+Kadane Algo	Medium	Maximum Subarray Sum with One Deletion	maximum-subarray-sum-with-one-deletion	leetcode	https://leetcode.com/problems/maximum-subarray-sum-with-one-deletion/
+Kadane Algo	Medium	K-Concatenation Maximum Sum	k-concatenation-maximum-sum	leetcode	https://leetcode.com/problems/k-concatenation-maximum-sum/
+Kadane Algo	Medium	Length of Longest Fibonacci Subsequence	length-of-longest-fibonacci-subsequence	leetcode	https://leetcode.com/problems/length-of-longest-fibonacci-subsequence/

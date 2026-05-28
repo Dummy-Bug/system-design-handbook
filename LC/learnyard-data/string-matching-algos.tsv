@@ -1,0 +1,20 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Introduction	Theory	KMP Algorithm for Pattern Searching		gfg	https://www.geeksforgeeks.org/kmp-algorithm-for-pattern-searching/
+Introduction	Theory	Rabin-Karp Algorithm for Pattern Searching		gfg	https://www.geeksforgeeks.org/rabin-karp-algorithm-for-pattern-searching/
+Introduction	Theory	Z Algorithm (Linear-Time Pattern Searching Algorithm)		gfg	https://www.geeksforgeeks.org/z-algorithm-linear-time-pattern-searching-algorithm/
+Implementary Problems	Hard	Count Prefix and Suffix Pairs II	count-prefix-and-suffix-pairs-ii	leetcode	https://leetcode.com/problems/count-prefix-and-suffix-pairs-ii/description/
+Implementary Problems	Hard	Number of Subarrays That Match a Pattern II	number-of-subarrays-that-match-a-pattern-ii	leetcode	https://leetcode.com/problems/number-of-subarrays-that-match-a-pattern-ii/description/
+Implementary Problems	Hard	Minimum Time to Revert Word to Initial State II	minimum-time-to-revert-word-to-initial-state-ii	leetcode	https://leetcode.com/problems/minimum-time-to-revert-word-to-initial-state-ii/description/
+Implementary Problems	Hard	Find Beautiful Indices in the Given Array II	find-beautiful-indices-in-the-given-array-ii	leetcode	https://leetcode.com/problems/find-beautiful-indices-in-the-given-array-ii/description/
+Implementary Problems	Hard	String Transformation	string-transformation	leetcode	https://leetcode.com/problems/string-transformation/description/
+Implementary Problems	Hard	Find Substring with Given Hash Value	find-substring-with-given-hash-value	leetcode	https://leetcode.com/problems/find-substring-with-given-hash-value
+Implementary Problems	Hard	Maximum Deletions on a String	maximum-deletions-on-a-string	leetcode	https://leetcode.com/problems/maximum-deletions-on-a-string/description/
+Implementary Problems	Hard	Match Substring After Replacement	match-substring-after-replacement	leetcode	https://leetcode.com/problems/match-substring-after-replacement/description/
+Implementary Problems	Hard	Sum of Scores of Built Strings	sum-of-scores-of-built-strings	leetcode	https://leetcode.com/problems/sum-of-scores-of-built-strings/description/
+Implementary Problems	Hard	Find All Good Strings	find-all-good-strings	leetcode	https://leetcode.com/problems/find-all-good-strings/description/
+Implementary Problems	Hard	Longest Happy Prefix	longest-happy-prefix	leetcode	https://leetcode.com/problems/longest-happy-prefix/description/
+Implementary Problems	Hard	Shortest Palindrome	shortest-palindrome	leetcode	https://leetcode.com/problems/shortest-palindrome/description/
+Implementary Problems	Hard	Distinct Echo Substrings	distinct-echo-substrings	leetcode	https://leetcode.com/problems/distinct-echo-substrings/description/
+Implementary Problems	Hard	Longest Chunked Palindrome Decomposition	longest-chunked-palindrome-decomposition	leetcode	https://leetcode.com/problems/longest-chunked-palindrome-decomposition/description/
+Implementary Problems	Hard	Maximum Product of the Length of Two Palindromic Substrings	maximum-product-of-the-length-of-two-palindromic-substrings	leetcode	https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-substrings/description/
+Implementary Problems	Hard	Longest Duplicate Substring	longest-duplicate-substring	leetcode	https://leetcode.com/problems/longest-duplicate-substring/description/

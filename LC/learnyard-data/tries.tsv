@@ -1,0 +1,33 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Introductory Questions	Medium	Implement Trie (Prefix Tree)	implement-trie-prefix-tree	leetcode	https://leetcode.com/problems/implement-trie-prefix-tree/
+Introductory Questions	Hard	Trie Delete		gfg	https://www.geeksforgeeks.org/problems/trie-delete/1
+Introductory Questions	Medium	Design Add and Search Words Data Structure	design-add-and-search-words-data-structure	leetcode	https://leetcode.com/problems/design-add-and-search-words-data-structure/
+Introductory Questions	Medium	Map Sum Pairs	map-sum-pairs	leetcode	https://leetcode.com/problems/map-sum-pairs/
+Trie with Bit Manipulation	Hard	Maximum XOR of Two Numbers in an Array	maximum-xor-of-two-numbers-in-an-array	leetcode	https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/
+Trie with Bit Manipulation	Hard	Minimum XOR Value Pair		gfg	https://www.geeksforgeeks.org/problems/minimum-xor-value-pair/1
+Trie with Bit Manipulation	Hard	Maximum XOR With an Element From Array	maximum-xor-with-an-element-from-array	leetcode	https://leetcode.com/problems/maximum-xor-with-an-element-from-array/
+Trie with Bit Manipulation	Hard	Count Pairs With XOR in a Range	count-pairs-with-xor-in-a-range	leetcode	https://leetcode.com/problems/count-pairs-with-xor-in-a-range/
+Trie with Bit Manipulation	Hard	Maximum Strong Pair XOR II	maximum-strong-pair-xor-ii	leetcode	https://leetcode.com/problems/maximum-strong-pair-xor-ii/
+Trie involving String	Medium	Longest Common Prefix	longest-common-prefix	leetcode	https://leetcode.com/problems/longest-common-prefix/
+Trie involving String	Medium	Find the Length of the Longest Common Prefix	find-the-length-of-the-longest-common-prefix	leetcode	https://leetcode.com/problems/find-the-length-of-the-longest-common-prefix/
+Trie involving String	Medium	Search Suggestions System	search-suggestions-system	leetcode	https://leetcode.com/problems/search-suggestions-system/
+Trie involving String	Hard	Sum of Prefix Scores of Strings	sum-of-prefix-scores-of-strings	leetcode	https://leetcode.com/problems/sum-of-prefix-scores-of-strings/
+Trie involving String	Hard	Prefix and Suffix Search	prefix-and-suffix-search	leetcode	https://leetcode.com/problems/prefix-and-suffix-search/
+Trie involving String	Hard	Longest Common Suffix Queries	longest-common-suffix-queries	leetcode	https://leetcode.com/problems/longest-common-suffix-queries/
+Trie involving String	Hard	Count Prefix and Suffix Pairs II	count-prefix-and-suffix-pairs-ii	leetcode	https://leetcode.com/problems/count-prefix-and-suffix-pairs-ii/
+Trie involving String	Hard	Stream of Characters	stream-of-characters	leetcode	https://leetcode.com/problems/stream-of-characters/
+Trie involving String	Medium	Extra Characters in a String	extra-characters-in-a-string	leetcode	https://leetcode.com/problems/extra-characters-in-a-string/
+Trie involving String	Medium	Implement Magic Dictionary	implement-magic-dictionary	leetcode	https://leetcode.com/problems/implement-magic-dictionary/
+Trie involving String	Medium	Number of Matching Subsequences	number-of-matching-subsequences	leetcode	https://leetcode.com/problems/number-of-matching-subsequences/
+Trie involving String	Medium	Camelcase Matching	camelcase-matching	leetcode	https://leetcode.com/problems/camelcase-matching/
+Trie involving String	Medium	Short Encoding of Words	short-encoding-of-words	leetcode	https://leetcode.com/problems/short-encoding-of-words/
+Trie involving String	Hard	Encrypt and Decrypt Strings	encrypt-and-decrypt-strings	leetcode	https://leetcode.com/problems/encrypt-and-decrypt-strings/
+Trie involving String	Medium	Longest Word in Dictionary	longest-word-in-dictionary	leetcode	https://leetcode.com/problems/longest-word-in-dictionary/description/
+Trie involving String	Hard	Construct String With Minimum Cost	construct-string-with-minimum-cost	leetcode	https://leetcode.com/problems/construct-string-with-minimum-cost/description/
+Trie involving Recursion	Medium	Shortest Uncommon Substring in an Array	shortest-uncommon-substring-in-an-array	leetcode	https://leetcode.com/problems/shortest-uncommon-substring-in-an-array/
+Trie involving Recursion	Medium	Word Break	word-break	leetcode	https://leetcode.com/problems/word-break/
+Trie involving Recursion	Hard	Word Break II	word-break-ii	leetcode	https://leetcode.com/problems/word-break-ii/
+Trie involving Recursion	Hard	Word Search II	word-search-ii	leetcode	https://leetcode.com/problems/word-search-ii/
+Trie involving Recursion	Hard	Palindrome Pairs	palindrome-pairs	leetcode	https://leetcode.com/problems/palindrome-pairs/
+Trie involving File System	Hard	Remove Sub-Folders from the Filesystem	remove-sub-folders-from-the-filesystem	leetcode	https://leetcode.com/problems/remove-sub-folders-from-the-filesystem/
+Trie involving File System	Medium	Delete Duplicate Folders in System	delete-duplicate-folders-in-system	leetcode	https://leetcode.com/problems/delete-duplicate-folders-in-system/

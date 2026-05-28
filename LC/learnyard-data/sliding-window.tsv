@@ -1,0 +1,38 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Fixed Size Sliding-Window	Easy	Substrings of Size Three with Distinct Characters	substrings-of-size-three-with-distinct-characters	leetcode	https://leetcode.com/problems/substrings-of-size-three-with-distinct-characters/description/
+Fixed Size Sliding-Window	Medium	Find All Anagrams in a String	find-all-anagrams-in-a-string	leetcode	https://leetcode.com/problems/find-all-anagrams-in-a-string/description/
+Fixed Size Sliding-Window	Medium	Permutation in String	permutation-in-string	leetcode	https://leetcode.com/problems/permutation-in-string/description/
+Fixed Size Sliding-Window	Medium	Check If a String Contains All Binary Codes of Size K	check-if-a-string-contains-all-binary-codes-of-size-k	leetcode	https://leetcode.com/problems/check-if-a-string-contains-all-binary-codes-of-size-k/description/
+Fixed Size Sliding-Window	Medium	Maximum Number of Vowels in a Substring of Given Length	maximum-number-of-vowels-in-a-substring-of-given-length	leetcode	https://leetcode.com/problems/maximum-number-of-vowels-in-a-substring-of-given-length/description/
+Fixed Size Sliding-Window	Easy	Maximum Average Subarray I	maximum-average-subarray-i	leetcode	https://leetcode.com/problems/maximum-average-subarray-i/description/
+Fixed Size Sliding-Window	Medium	Number of Sub-arrays of Size K and Average Greater than or Equal to Threshold	number-of-sub-arrays-of-size-k-and-average-greater-than-or-equal-to-threshold	leetcode	https://leetcode.com/problems/number-of-sub-arrays-of-size-k-and-average-greater-than-or-equal-to-threshold/description/
+Fixed Size Sliding-Window	Medium	K Radius Subarray Averages	k-radius-subarray-averages	leetcode	https://leetcode.com/problems/k-radius-subarray-averages/description/
+Fixed Size Sliding-Window	Medium	Maximum Sum of Distinct Subarrays With Length K	maximum-sum-of-distinct-subarrays-with-length-k	leetcode	https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/description/
+Fixed Size Sliding-Window	Medium	Sliding Subarray Beauty	sliding-subarray-beauty	leetcode	https://leetcode.com/problems/sliding-subarray-beauty/description/
+Fixed Size Sliding-Window	Medium	Maximum Points You Can Obtain from Cards	maximum-points-you-can-obtain-from-cards	leetcode	https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
+Fixed Size Sliding-Window	Hard	Sliding Window Median	sliding-window-median	leetcode	https://leetcode.com/problems/sliding-window-median/description/
+Fixed Size Sliding-Window	Hard	Sliding Window Maximum	sliding-window-maximum	leetcode	https://leetcode.com/problems/sliding-window-maximum/
+Fixed Size Sliding-Window	Hard	Max Value of Equation	max-value-of-equation	leetcode	https://leetcode.com/problems/max-value-of-equation/description/
+Fixed Size Sliding-Window	Hard	Maximum Sum of 3 Non-Overlapping Subarrays	maximum-sum-of-3-non-overlapping-subarrays	leetcode	https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays/description/
+Dynamic Size Sliding-Window	Medium	Longest Substring Without Repeating Characters	longest-substring-without-repeating-characters	leetcode	https://leetcode.com/problems/longest-substring-without-repeating-characters/
+Dynamic Size Sliding-Window	Medium	Longest Repeating Character Replacement	longest-repeating-character-replacement	leetcode	https://leetcode.com/problems/longest-repeating-character-replacement/
+Dynamic Size Sliding-Window	Medium	Maximum Number of Occurrences of a Substring	maximum-number-of-occurrences-of-a-substring	leetcode	https://leetcode.com/problems/maximum-number-of-occurrences-of-a-substring/description/
+Dynamic Size Sliding-Window	Medium	Max Consecutive Ones III	max-consecutive-ones-iii	leetcode	https://leetcode.com/problems/max-consecutive-ones-iii/
+Dynamic Size Sliding-Window	Medium	Count the Number of Substrings With Dominant Ones	count-the-number-of-substrings-with-dominant-ones	leetcode	https://leetcode.com/problems/count-the-number-of-substrings-with-dominant-ones/
+Dynamic Size Sliding-Window	Hard	Minimum Window Substring	minimum-window-substring	leetcode	https://leetcode.com/problems/minimum-window-substring/
+Dynamic Size Sliding-Window	Hard	Substring with Concatenation of All Words	substring-with-concatenation-of-all-words	leetcode	https://leetcode.com/problems/substring-with-concatenation-of-all-words/
+Dynamic Size Sliding-Window	Medium	Minimum Size Subarray Sum	minimum-size-subarray-sum	leetcode	https://leetcode.com/problems/minimum-size-subarray-sum/
+Dynamic Size Sliding-Window	Medium	Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit	longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit	leetcode	https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/description/
+Dynamic Size Sliding-Window	Medium	Fruit Into Baskets	fruit-into-baskets	leetcode	https://leetcode.com/problems/fruit-into-baskets/
+Dynamic Size Sliding-Window	Medium	Subarray Product Less Than K	subarray-product-less-than-k	leetcode	https://leetcode.com/problems/subarray-product-less-than-k/
+Dynamic Size Sliding-Window	Medium	Grumpy Bookstore Owner	grumpy-bookstore-owner	leetcode	https://leetcode.com/problems/grumpy-bookstore-owner/
+Dynamic Size Sliding-Window	Medium	Moving Stones Until Consecutive II	moving-stones-until-consecutive-ii	leetcode	https://leetcode.com/problems/moving-stones-until-consecutive-ii/description/
+Dynamic Size Sliding-Window	Medium	Count Number of Nice Subarrays	count-number-of-nice-subarrays	leetcode	https://leetcode.com/problems/count-number-of-nice-subarrays/
+Dynamic Size Sliding-Window	Medium	Number of Subarrays with Bounded Maximum	number-of-subarrays-with-bounded-maximum	leetcode	https://leetcode.com/problems/number-of-subarrays-with-bounded-maximum/
+Dynamic Size Sliding-Window	Medium	Maximum Erasure Value	maximum-erasure-value	leetcode	https://leetcode.com/problems/maximum-erasure-value/
+Dynamic Size Sliding-Window	Medium	Longest Subarray of 1's After Deleting One Element	longest-subarray-of-1s-after-deleting-one-element	leetcode	https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/
+Dynamic Size Sliding-Window	Medium	Count the Number of Good Subarrays	count-the-number-of-good-subarrays	leetcode	https://leetcode.com/problems/count-the-number-of-good-subarrays/description/
+Dynamic Size Sliding-Window	Medium	Minimum Consecutive Cards to Pick Up	minimum-consecutive-cards-to-pick-up	leetcode	https://leetcode.com/problems/minimum-consecutive-cards-to-pick-up/description/
+Dynamic Size Sliding-Window	Medium	Minimum Operations to Reduce X to Zero	minimum-operations-to-reduce-x-to-zero	leetcode	https://leetcode.com/problems/minimum-operations-to-reduce-x-to-zero/description/
+Dynamic Size Sliding-Window	Medium	Frequency of the Most Frequent Element	frequency-of-the-most-frequent-element	leetcode	https://leetcode.com/problems/frequency-of-the-most-frequent-element/description/
+Dynamic Size Sliding-Window	Hard	Subarrays with K Different Integers	subarrays-with-k-different-integers	leetcode	https://leetcode.com/problems/subarrays-with-k-different-integers/description/

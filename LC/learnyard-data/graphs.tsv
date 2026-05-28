@@ -1,0 +1,123 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Graph Representation	Easy	DFS Traversal		naukri	https://www.naukri.com/code360/problems/dfs-traversal_630462
+Graph Representation	Easy	Find if Path Exists in Graph	find-if-path-exists-in-graph	leetcode	https://leetcode.com/problems/find-if-path-exists-in-graph/description/
+Graph Representation	Medium	Keys and Rooms	keys-and-rooms	leetcode	https://leetcode.com/problems/keys-and-rooms/description/
+Graph Representation	Medium	Number of Provinces	number-of-provinces	leetcode	https://leetcode.com/problems/number-of-provinces/description/
+Graph Representation	Medium	Count the Number of Complete Components	count-the-number-of-complete-components	leetcode	https://leetcode.com/problems/count-the-number-of-complete-components/description/
+Graph Representation	Medium	Reorder Routes to Make All Paths Lead to the City Zero	reorder-routes-to-make-all-paths-lead-to-the-city-zero	leetcode	https://leetcode.com/problems/reorder-routes-to-make-all-paths-lead-to-the-city-zero/description/
+Graph Representation	Hard	Longest Cycle in a Graph	longest-cycle-in-a-graph	leetcode	https://leetcode.com/problems/longest-cycle-in-a-graph/description/
+Graph Representation	Easy	BFS in Graph		naukri	https://www.naukri.com/code360/problems/bfs-in-graph_973002
+Graph Representation	Medium	Snakes and Ladders	snakes-and-ladders	leetcode	https://leetcode.com/problems/snakes-and-ladders/description/
+Graph Representation	Medium	Open the Lock	open-the-lock	leetcode	https://leetcode.com/problems/open-the-lock/description/
+Graph Representation	Medium	Round Trip 		cses	https://cses.fi/problemset/task/1667
+Graph Representation	Hard	Word Ladder	word-ladder	leetcode	https://leetcode.com/problems/word-ladder/description/
+Graph Representation	Hard	Valid BFS?		codeforces	https://codeforces.com/problemset/problem/1037/D
+Graph Representation	Medium	Count the Number of Houses at a Certain Distance I	count-the-number-of-houses-at-a-certain-distance-i	leetcode	https://leetcode.com/problems/count-the-number-of-houses-at-a-certain-distance-i/description/
+Graph Representation	Medium	As Far from Land as Possible	as-far-from-land-as-possible	leetcode	https://leetcode.com/problems/as-far-from-land-as-possible/description/
+Graph Representation	Medium	Minimum Operations to Convert Number	minimum-operations-to-convert-number	leetcode	https://leetcode.com/problems/minimum-operations-to-convert-number/description/
+Graph Representation	Medium	Minimum Score of a Path Between Two Cities	minimum-score-of-a-path-between-two-cities	leetcode	https://leetcode.com/problems/minimum-score-of-a-path-between-two-cities/description/
+Graph Representation	Medium	Shortest Path with Alternating Colors	shortest-path-with-alternating-colors	leetcode	https://leetcode.com/problems/shortest-path-with-alternating-colors/description/
+Graph Representation	Medium	Minimum Number of Operations to Make X and Y Equal	minimum-number-of-operations-to-make-x-and-y-equal	leetcode	https://leetcode.com/problems/minimum-number-of-operations-to-make-x-and-y-equal/description/
+Graph Representation	Hard	Shortest Path Visiting All Nodes	shortest-path-visiting-all-nodes	leetcode	https://leetcode.com/problems/shortest-path-visiting-all-nodes/description/
+Graph Representation	Medium	Jump Game III	jump-game-iii	leetcode	https://leetcode.com/problems/jump-game-iii/description/
+Graph Representation	Medium	Clone Graph	clone-graph	leetcode	https://leetcode.com/problems/clone-graph/description/
+Graph Representation	Hard	Last Day Where You Can Still Cross	last-day-where-you-can-still-cross	leetcode	https://leetcode.com/problems/last-day-where-you-can-still-cross/description/
+Graph Representation	Hard	Sliding Puzzle	sliding-puzzle	leetcode	https://leetcode.com/problems/sliding-puzzle/description/
+Graph Representation	Hard	Maximum Candies You Can Get from Boxes	maximum-candies-you-can-get-from-boxes	leetcode	https://leetcode.com/problems/maximum-candies-you-can-get-from-boxes/description/ 
+Graph Representation	Hard	Shortest Path to Get All Keys	shortest-path-to-get-all-keys	leetcode	https://leetcode.com/problems/shortest-path-to-get-all-keys/description/
+Graph Representation	Hard	Jump Game IV	jump-game-iv	leetcode	https://leetcode.com/problems/jump-game-iv/description/
+Graph Representation	Hard	Word Ladder II	word-ladder-ii	leetcode	https://leetcode.com/problems/word-ladder-ii/description/
+Graph Representation	Hard	Escape the Spreading Fire	escape-the-spreading-fire	leetcode	https://leetcode.com/problems/escape-the-spreading-fire/
+Cycle Detection 	Medium	Detect Cycle in an Undirected Graph (GeeksforGeeks)		gfg	https://www.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/0
+Cycle Detection 	Medium	Detect Cycle in a Directed Graph (GeeksforGeeks)		gfg	https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1
+Cycle Detection 	Medium	Check if a Graph Has a Cycle of Odd Length		naukri	https://www.naukri.com/code360/library/check-if-a-graph-has-a-cycle-of-odd-length
+Cycle Detection 	Medium	Detect Cycles in 2D Grid	detect-cycles-in-2d-grid	leetcode	https://leetcode.com/problems/detect-cycles-in-2d-grid/
+Cycle Detection 	Hard	Shortest Cycle in a Graph	shortest-cycle-in-a-graph	leetcode	https://leetcode.com/problems/shortest-cycle-in-a-graph/description/
+Cycle Detection 	Medium	Is Graph Bipartite?	is-graph-bipartite	leetcode	https://leetcode.com/problems/is-graph-bipartite/
+Cycle Detection 	Medium	Possible Bipartition	possible-bipartition	leetcode	https://leetcode.com/problems/possible-bipartition/description/
+Cycle Detection 	Medium	Flower Planting With No Adjacent	flower-planting-with-no-adjacent	leetcode	https://leetcode.com/problems/flower-planting-with-no-adjacent/description/
+Cycle Detection 	Hard	Divide Nodes into the Maximum Number of Groups	divide-nodes-into-the-maximum-number-of-groups	leetcode	https://leetcode.com/problems/divide-nodes-into-the-maximum-number-of-groups/description/
+Topological Sort	Medium	Course Schedule	course-schedule	leetcode	https://leetcode.com/problems/course-schedule
+Topological Sort	Medium	Course Schedule II	course-schedule-ii	leetcode	https://leetcode.com/problems/course-schedule-ii
+Topological Sort	Medium	Find Eventual Safe States	find-eventual-safe-states	leetcode	https://leetcode.com/problems/find-eventual-safe-states/description/
+Topological Sort	Medium	Minimum Height Trees	minimum-height-trees	leetcode	https://leetcode.com/problems/minimum-height-trees
+Topological Sort	Medium	Loud and Rich	loud-and-rich	leetcode	https://leetcode.com/problems/loud-and-rich
+Topological Sort	Medium	All Ancestors of a Node in a Directed Acyclic Graph	all-ancestors-of-a-node-in-a-directed-acyclic-graph	leetcode	https://leetcode.com/problems/all-ancestors-of-a-node-in-a-directed-acyclic-graph/description/
+Topological Sort	Hard	Find All Possible Recipes from Given Supplies	find-all-possible-recipes-from-given-supplies	leetcode	https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies
+Topological Sort	Hard	Alien Dictionary 		gfg	https://www.geeksforgeeks.org/problems/alien-dictionary/1
+Topological Sort	Hard	Longest Increasing Path in a Matrix	longest-increasing-path-in-a-matrix	leetcode	https://leetcode.com/problems/longest-increasing-path-in-a-matrix
+Topological Sort	Hard	Cat and Mouse	cat-and-mouse	leetcode	https://leetcode.com/problems/cat-and-mouse/description/
+Topological Sort	Hard	Sort Items by Groups Respecting Dependencies	sort-items-by-groups-respecting-dependencies	leetcode	https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies/description/
+Topological Sort	Hard	Sort Items by Groups Respecting Dependencies	sort-items-by-groups-respecting-dependencies	leetcode	https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies/description/
+Topological Sort	Hard	Largest Color Value in a Directed Graph	largest-color-value-in-a-directed-graph	leetcode	https://leetcode.com/problems/largest-color-value-in-a-directed-graph/description/
+Topological Sort	Hard	Parallel Courses III	parallel-courses-iii	leetcode	https://leetcode.com/problems/parallel-courses-iii
+Topological Sort	Hard	Parallel Courses II	parallel-courses-ii	leetcode	https://leetcode.com/problems/parallel-courses-ii/
+Topological Sort	Hard	Number of Increasing Paths in a Grid	number-of-increasing-paths-in-a-grid	leetcode	https://leetcode.com/problems/number-of-increasing-paths-in-a-grid
+Topological Sort	Hard	Build a Matrix With Conditions	build-a-matrix-with-conditions	leetcode	https://leetcode.com/problems/build-a-matrix-with-conditions
+Flood Fill	Easy	Flood Fill	flood-fill	leetcode	https://leetcode.com/problems/flood-fill/description/
+Flood Fill	Easy	Island Perimeter	island-perimeter	leetcode	https://leetcode.com/problems/island-perimeter/description/
+Flood Fill	Medium	Battleships in a Board	battleships-in-a-board	leetcode	https://leetcode.com/problems/battleships-in-a-board/description/
+Flood Fill	Medium	Number of Islands	number-of-islands	leetcode	https://leetcode.com/problems/number-of-islands/description/
+Flood Fill	Medium	Max Area of Island	max-area-of-island	leetcode	https://leetcode.com/problems/max-area-of-island/description/
+Flood Fill	Medium	Count Sub Islands	count-sub-islands	leetcode	https://leetcode.com/problems/count-sub-islands/description/
+Flood Fill	Medium	Find All Groups of Farmland	find-all-groups-of-farmland	leetcode	https://leetcode.com/problems/find-all-groups-of-farmland/description/
+Multi Source BFS	Medium	Rotting Oranges	rotting-oranges	leetcode	https://leetcode.com/problems/rotting-oranges/description/
+Multi Source BFS	Medium	Number of Enclaves	number-of-enclaves	leetcode	https://leetcode.com/problems/number-of-enclaves/description/
+Multi Source BFS	Medium	Map of Highest Peak	map-of-highest-peak	leetcode	https://leetcode.com/problems/map-of-highest-peak/description/
+Multi Source BFS	Medium	Surrounded Regions	surrounded-regions	leetcode	https://leetcode.com/problems/surrounded-regions/description/
+Multi Source BFS	Medium	Number of Closed Islands	number-of-closed-islands	leetcode	https://leetcode.com/problems/number-of-closed-islands/description/
+Multi Source BFS	Medium	01 Matrix	01-matrix	leetcode	https://leetcode.com/problems/01-matrix/description/
+Multi Source BFS	Medium	Shortest Bridge	shortest-bridge	leetcode	https://leetcode.com/problems/shortest-bridge/description/
+Dijsktra Algorithm	Medium	Shortest Route I		cses	https://cses.fi/problemset/task/1671/
+Dijsktra Algorithm	Medium	Dijkstra? 		codeforces	https://codeforces.com/contest/20/problem/C
+Dijsktra Algorithm	Medium	Investigation		cses	https://cses.fi/problemset/task/1202/
+Dijsktra Algorithm	Medium	Flight Discount		cses	https://cses.fi/problemset/task/1195
+Dijsktra Algorithm	Medium	Network Delay Time	network-delay-time	leetcode	https://leetcode.com/problems/network-delay-time/description/
+Dijsktra Algorithm	Medium	Cheapest Flights Within K Stops	cheapest-flights-within-k-stops	leetcode	https://leetcode.com/problems/cheapest-flights-within-k-stops
+Dijsktra Algorithm	Medium	Number of Ways to Arrive at Destination	number-of-ways-to-arrive-at-destination	leetcode	https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/description/
+Dijsktra Algorithm	Medium	Path with Maximum Probability	path-with-maximum-probability	leetcode	https://leetcode.com/problems/path-with-maximum-probability/description/
+Dijsktra Algorithm	Medium	Path with Minimum Effort	path-with-minimum-effort	leetcode	https://leetcode.com/problems/path-with-minimum-effort/description/
+Dijsktra Algorithm	Medium	Number of Restricted Paths from First to Last Node	number-of-restricted-paths-from-first-to-last-node	leetcode	https://leetcode.com/problems/number-of-restricted-paths-from-first-to-last-node/description/
+Dijsktra Algorithm	Hard	Reachable Nodes in Subdivided Graph	reachable-nodes-in-subdivided-graph	leetcode	https://leetcode.com/problems/reachable-nodes-in-subdivided-graph/description/
+Dijsktra Algorithm	Hard	Minimum Cost to Make at Least One Valid Path in a Grid		unknown	Minimum Cost to Make at Least One Valid Path in a Grid
+Dijsktra Algorithm	Hard	Minimum Obstacle Removal to Reach Corner		unknown	Minimum Obstacle Removal to Reach Corner
+Dijsktra Algorithm	Medium	Shortest Path in Binary Matrix	shortest-path-in-binary-matrix	leetcode	https://leetcode.com/problems/shortest-path-in-binary-matrix/description/ 
+Dijsktra Algorithm	Medium	Nearest Exit from Entrance in Maze	nearest-exit-from-entrance-in-maze	leetcode	https://leetcode.com/problems/nearest-exit-from-entrance-in-maze/description/ 
+Dijsktra Algorithm	Medium	Minimum Cost to Make at Least One Valid Path in a Grid	minimum-cost-to-make-at-least-one-valid-path-in-a-grid	leetcode	https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/description/
+Dijsktra Algorithm	Hard	Second Minimum Time to Reach Destination	second-minimum-time-to-reach-destination	leetcode	https://leetcode.com/problems/second-minimum-time-to-reach-destination/description/
+Bellman Ford	Medium	High Score 		cses	https://cses.fi/problemset/task/1673
+Bellman Ford	Medium	Cycle Finding		cses	https://cses.fi/problemset/task/1197
+Bellman Ford	Hard	Bus Routes	bus-routes	leetcode	https://leetcode.com/problems/bus-routes/description/
+Floyd Warshall	Medium	Road Construction		cses	https://cses.fi/problemset/task/1672/
+Floyd Warshall	Medium	Course Schedule IV	course-schedule-iv	leetcode	https://leetcode.com/problems/course-schedule-iv
+Floyd Warshall	Medium	Find the City With the Smallest Number of Neighbors at a Threshold Distance	find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance	leetcode	https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/description/
+Floyd Warshall	Medium	Count the Number of Houses at a Certain Distance I	count-the-number-of-houses-at-a-certain-distance-i	leetcode	https://leetcode.com/problems/count-the-number-of-houses-at-a-certain-distance-i/description/
+Floyd Warshall	Medium	Minimum Cost to Convert String I	minimum-cost-to-convert-string-i	leetcode	https://leetcode.com/problems/minimum-cost-to-convert-string-i/
+Floyd Warshall	Medium	Greg and Array		codeforces	https://codeforces.com/problemset/problem/295/B
+Floyd Warshall	Hard	Design Graph With Shortest Path Calculator	design-graph-with-shortest-path-calculator	leetcode	https://leetcode.com/problems/design-graph-with-shortest-path-calculator
+Floyd Warshall	Hard	Number of Possible Sets of Closing Branches	number-of-possible-sets-of-closing-branches	leetcode	https://leetcode.com/problems/number-of-possible-sets-of-closing-branches/description/
+Travelling Salesman Problem	Hard	Find the Shortest Superstring	find-the-shortest-superstring	leetcode	https://leetcode.com/problems/find-the-shortest-superstring/description/
+Disjoint Set Union	Medium	Redundant Connection	redundant-connection	leetcode	https://leetcode.com/problems/redundant-connection/
+Disjoint Set Union	Medium	Satisfiability of Equality Equations	satisfiability-of-equality-equations	leetcode	https://leetcode.com/problems/satisfiability-of-equality-equations/
+Disjoint Set Union	Medium	Smallest String With Swaps	smallest-string-with-swaps	leetcode	https://leetcode.com/problems/smallest-string-with-swaps/
+Disjoint Set Union	Medium	Accounts Merge	accounts-merge	leetcode	https://leetcode.com/problems/accounts-merge/
+Disjoint Set Union	Medium	Most Stones Removed with Same Row or Column	most-stones-removed-with-same-row-or-column	leetcode	https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
+Disjoint Set Union	Medium	Find Latest Group of Size M	find-latest-group-of-size-m	leetcode	https://leetcode.com/problems/find-latest-group-of-size-m/
+Disjoint Set Union	Hard	Redundant Connection II	redundant-connection-ii	leetcode	https://leetcode.com/problems/redundant-connection-ii/
+Disjoint Set Union	Hard	Making a Large Island	making-a-large-island	leetcode	https://leetcode.com/problems/making-a-large-island/
+Disjoint Set Union	Hard	GCD Sort of an Array	gcd-sort-of-an-array	leetcode	https://leetcode.com/problems/gcd-sort-of-an-array/description/
+Disjoint Set Union	Hard	Bricks Falling When Hit	bricks-falling-when-hit	leetcode	https://leetcode.com/problems/bricks-falling-when-hit/
+Disjoint Set Union	Hard	Checking Existence of Edge Length Limited Paths	checking-existence-of-edge-length-limited-paths	leetcode	https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/
+Disjoint Set Union	Hard	Remove Max Number of Edges to Keep Graph Fully Traversable	remove-max-number-of-edges-to-keep-graph-fully-traversable	leetcode	https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/
+Disjoint Set Union	Hard	Rank Transform of a Matrix	rank-transform-of-a-matrix	leetcode	https://leetcode.com/problems/rank-transform-of-a-matrix
+Minimum Spanning Tree	Theory	Prim’s Minimum Spanning Tree (MST) – Greedy Algorithm 		gfg	https://www.geeksforgeeks.org/prims-minimum-spanning-tree-mst-greedy-algo-5/
+Minimum Spanning Tree	Theory	Kruskal’s Minimum Spanning Tree Algorithm – Greedy Algorithm 		gfg	https://www.geeksforgeeks.org/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/
+Minimum Spanning Tree	Medium	Minimum Spanning Tree 		gfg	https://www.geeksforgeeks.org/problems/minimum-spanning-tree/1
+Minimum Spanning Tree	Hard	Min Cost to Connect All Points	min-cost-to-connect-all-points	leetcode	https://leetcode.com/problems/min-cost-to-connect-all-points/
+Minimum Spanning Tree	Hard	Water Connection Problem 		gfg	https://www.geeksforgeeks.org/problems/water-connection-problem5822/1
+Minimum Spanning Tree	Medium	Connecting Cities with Minimum Cost		naukri	https://www.naukri.com/code360/problems/connecting-cities-with-minimum-cost_1386586
+Minimum Spanning Tree	Hard	Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree	find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree	leetcode	https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/
+Minimum Spanning Tree	Hard	Remove Max Number of Edges to Keep Graph Fully Traversable	remove-max-number-of-edges-to-keep-graph-fully-traversable	leetcode	https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/description/
+Additional Graph Algorithm	Theory	Articulation Points (or Cut Vertices) in a Graph 		gfg	https://www.geeksforgeeks.org/articulation-points-or-cut-vertices-in-a-graph/
+Additional Graph Algorithm	Theory	Strongly Connected Components		gfg	https://www.geeksforgeeks.org/strongly-connected-components/
+Additional Graph Algorithm	Medium	Critical Connections in a Network	critical-connections-in-a-network	leetcode	https://leetcode.com/problems/critical-connections-in-a-network/

@@ -1,0 +1,30 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Linked List (Part 1)	Easy	Convert Binary Number in a Linked List to Integer	convert-binary-number-in-a-linked-list-to-integer	leetcode	https://leetcode.com/problems/convert-binary-number-in-a-linked-list-to-integer/description/
+Linked List (Part 1)	Easy	Intersection of Two Linked Lists	intersection-of-two-linked-lists	leetcode	https://leetcode.com/problems/intersection-of-two-linked-lists/description/
+Linked List (Part 1)	Easy	Middle of the Linked List	middle-of-the-linked-list	leetcode	https://leetcode.com/problems/middle-of-the-linked-list
+Linked List (Part 1)	Easy	Linked List Cycle	linked-list-cycle	leetcode	https://leetcode.com/problems/linked-list-cycle/
+Linked List (Part 1)	Medium	Linked List Cycle II	linked-list-cycle-ii	leetcode	https://leetcode.com/problems/linked-list-cycle-ii/
+Linked List (Part 1)	Easy	Find Length of Loop		gfg	https://www.geeksforgeeks.org/problems/find-length-of-loop/0
+Linked List (Part 1)	Easy	Reverse Linked List	reverse-linked-list	leetcode	https://leetcode.com/problems/reverse-linked-list
+Linked List (Part 1)	Easy	Palindrome Linked List	palindrome-linked-list	leetcode	https://leetcode.com/problems/palindrome-linked-list
+Linked List (Part 1)	Hard	Reverse Nodes in k-Group	reverse-nodes-in-k-group	leetcode	https://leetcode.com/problems/reverse-nodes-in-k-group
+Linked List (Part 1)	Easy	Odd Even Linked List	odd-even-linked-list	leetcode	https://leetcode.com/problems/odd-even-linked-list/
+Linked List (Part 1)	Easy	Remove Duplicates from Sorted List	remove-duplicates-from-sorted-list	leetcode	https://leetcode.com/problems/remove-duplicates-from-sorted-list/description/
+Linked List (Part 1)	Medium	Remove Nth Node From End of List	remove-nth-node-from-end-of-list	leetcode	https://leetcode.com/problems/remove-nth-node-from-end-of-list/description/
+Linked List (Part 1)	Medium	Delete the Middle Node of a Linked List	delete-the-middle-node-of-a-linked-list	leetcode	https://leetcode.com/problems/delete-the-middle-node-of-a-linked-list/description/
+Linked List (Part 1)	Medium	Add 1 to a Linked List Number		gfg	https://www.geeksforgeeks.org/problems/add-1-to-a-number-represented-as-linked-list/0
+Linked List (Part 1)	Medium	Add Two Numbers	add-two-numbers	leetcode	https://leetcode.com/problems/add-two-numbers/description/
+Linked List (Part 1)	Medium	Sort a Linked List of 0s, 1s, and 2s		gfg	https://www.geeksforgeeks.org/problems/given-a-linked-list-of-0s-1s-and-2s-sort-it/0
+Linked List (Part 1)	Medium	Sort List	sort-list	leetcode	https://leetcode.com/problems/sort-list/
+Linked List (Part 1)	Medium	Linked List Random Node	linked-list-random-node	leetcode	https://leetcode.com/problems/linked-list-random-node/description/
+Linked List (Part 1)	Medium	Copy List with Random Pointer	copy-list-with-random-pointer	leetcode	https://leetcode.com/problems/copy-list-with-random-pointer/description/
+Linked List (Part 1)	Medium	Flattening a Linked List		gfg	https://www.geeksforgeeks.org/problems/flattening-a-linked-list/1
+Linked List (Part 1)	Easy	Merge Two Sorted Lists	merge-two-sorted-lists	leetcode	https://leetcode.com/problems/merge-two-sorted-lists/description/
+Linked List (Part 1)	Hard	Merge k Sorted Lists	merge-k-sorted-lists	leetcode	https://leetcode.com/problems/merge-k-sorted-lists/description/
+Linked List (Part 2) : Design Pattern	Easy	Design HashSet	design-hashset	leetcode	https://leetcode.com/problems/design-hashset/description/
+Linked List (Part 2) : Design Pattern	Easy	Design HashMap	design-hashmap	leetcode	https://leetcode.com/problems/design-hashmap/description/
+Linked List (Part 2) : Design Pattern	Medium	Design Browser History	design-browser-history	leetcode	https://leetcode.com/problems/design-browser-history/description/
+Linked List (Part 2) : Design Pattern	Hard	Design a Text Editor	design-a-text-editor	leetcode	https://leetcode.com/problems/design-a-text-editor/description/
+Linked List (Part 2) : Design Pattern	Hard	All O'one Data Structure	all-oone-data-structure	leetcode	https://leetcode.com/problems/all-oone-data-structure/
+Linked List (Part 2) : Design Pattern	Medium	LRU Cache	lru-cache	leetcode	https://leetcode.com/problems/lru-cache/
+Linked List (Part 2) : Design Pattern	Hard	LFU Cache	lfu-cache	leetcode	https://leetcode.com/problems/lfu-cache

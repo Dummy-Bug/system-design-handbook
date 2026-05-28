@@ -1,0 +1,120 @@
+MainTopic	Subgroup	ProblemCount
+Time and Space Complexity / Online Judge	Online Judge	3
+Time and Space Complexity / Online Judge	Time and Space Complexity	6
+Dsa Fundamentals	Control Flow	15
+Dsa Fundamentals	Array Basics	17
+Dsa Fundamentals	String Basics	14
+Dsa Fundamentals	Matrix Basics	15
+Dsa Fundamentals	Math Basics	15
+Dsa Fundamentals	Recursion Basics	24
+Programming Fundamentals	C++ Fundamentals	41
+Programming Fundamentals	Java Fundamentals	35
+Sorting	Bubble Sort	1
+Sorting	Insertion Sort	2
+Sorting	Selection Sort	1
+Sorting	Merge Sort	8
+Sorting	Quick Sort	2
+Sorting	Counting Sort	4
+Sorting	Radix Sort	1
+Sorting	Bucket Sort	6
+Sorting	Cyclic Sort	3
+Sorting	Custom Sort	5
+2 Pointers	Two Pointer on Arrays	20
+2 Pointers	Two Pointer on Strings	19
+Prefix Sum	Prefix Sum	15
+Prefix Sum	Line Sweep	9
+Matrix	Matrix Transformation and Modification	13
+Matrix	Matrix Patterns and Validity Checks	16
+Matrix	Matrix Traversal and Summation	15
+Hashing	Implementary Problems	78
+Hashing	Hashing With Prefix Sum	14
+Sliding Window	Fixed Size Sliding-Window	15
+Sliding Window	Dynamic Size Sliding-Window	22
+Linked List	Linked List (Part 1)	22
+Linked List	Linked List (Part 2) : Design Pattern	7
+Stack	Parentheses Problem	12
+Stack	Design Problems	4
+Stack	Advance Stack Problems	12
+Stack	Monotonic Stack	29
+Queue	Implementation Problems	9
+Queue	Singly-Ended Queue	8
+Queue	Doubly-Ended Queue	8
+Binary Search	Introductory Problems	3
+Binary Search	Upper Bound and Lower Bound	23
+Binary Search	Search on Matrix	4
+Binary Search	Missing and Repeating Number	5
+Binary Search	Binary Search on Semi-Sorted Space	9
+Binary Search	Binary Search On Answer	26
+Binary Search	Minmax Problems	6
+Binary Search	Finding the K-th Element	7
+Bit Manipulation	Basic Bit Concepts	18
+Bit Manipulation	Bitwise XOR operator	17
+Bit Manipulation	Bitwise OR operator	5
+Bit Manipulation	Bitwise AND operator	7
+Recursion & Backtracking	Recursion Problems	20
+Recursion & Backtracking	Permutation Problems	3
+Recursion & Backtracking	Combination Problems	11
+Recursion & Backtracking	Subsets Problems	4
+Recursion & Backtracking	Path on Grid Problems	2
+Heap (Priority Queue)	Introductory Questions	6
+Heap (Priority Queue)	Implementary Questions	32
+Heap (Priority Queue)	Kth Pattern Problems	18
+Heap (Priority Queue)	Minimize Operations	10
+Heap (Priority Queue)	Merge K Sorted Patterns	3
+Heap (Priority Queue)	Two Heap Pattern	6
+Tries	Introductory Questions	4
+Tries	Trie with Bit Manipulation	5
+Tries	Trie involving String	16
+Tries	Trie involving Recursion	5
+Tries	Trie involving File System	2
+Greedy	Part I	40
+Greedy	Part II	18
+Dynamic Programming Level 1	Linear DP	15
+Dynamic Programming Level 1	2 Dimensional DP	29
+Dynamic Programming Level 1	DP On Grid	16
+Dynamic Programming Level 1	Knapsack DP	20
+Dynamic Programming Level 1	Longest Increasing Subsequence	15
+Dynamic Programming Level 1	Longest Common Subsequence	14
+Dynamic Programming Level 1	DP on String	17
+Dynamic Programming Level 1	Cummulative Sum	15
+Dynamic Programming Level 1	Matrix Chain Multiplication	18
+Dynamic Programming Level 1	Kadane Algo	7
+Dynamic Programming Level 2	DP with Bitmask	16
+Dynamic Programming Level 2	Digit DP	8
+Dynamic Programming Level 2	DP on Trees	18
+Dynamic Programming Level 2	DP with Math	13
+Dynamic Programming Level 2	Dp with Probability	8
+Binary Search Tree	Basic Operations	3
+Binary Search Tree	Construction of BST	9
+Binary Search Tree	Validation and Property	16
+Binary Tree	Traversals	4
+Binary Tree	Properties of trees	7
+Binary Tree	Construction of Tree	6
+Binary Tree	Two tree Validation	8
+Binary Tree	Level Order Traversal	13
+Binary Tree	Binary Tree Path	8
+Binary Tree	N-ary Tree	4
+Graphs	Graph Representation	29
+Graphs	Cycle Detection 	9
+Graphs	Topological Sort	17
+Graphs	Flood Fill	7
+Graphs	Multi Source BFS	7
+Graphs	Dijsktra Algorithm	17
+Graphs	Bellman Ford	3
+Graphs	Floyd Warshall	8
+Graphs	Travelling Salesman Problem	1
+Graphs	Disjoint Set Union	13
+Graphs	Minimum Spanning Tree	8
+Graphs	Additional Graph Algorithm	3
+String Matching Algos	Introduction	3
+String Matching Algos	Implementary Problems	16
+Combinatorics & Geometry	Line	7
+Combinatorics & Geometry	Rectangle	8
+Combinatorics & Geometry	Circle	6
+Combinatorics & Geometry	Combinatorics	15
+Game Theory	Level I	9
+Game Theory	Level II	13
+Game Theory	Level III	3
+Advance algorithm	Fenwick Tree	4
+Advance algorithm	Segment Tree	11
+Advance algorithm	Sparse Table	7

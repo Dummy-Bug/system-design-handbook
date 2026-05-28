@@ -1,0 +1,37 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Line	Easy	Check if it is a Straight Line	check-if-it-is-a-straight-line	leetcode	https://leetcode.com/problems/check-if-it-is-a-straight-line/
+Line	Medium	Minimum Lines to Represent a Line Chart	minimum-lines-to-represent-a-line-chart	leetcode	https://leetcode.com/problems/minimum-lines-to-represent-a-line-chart/description/
+Line	Medium	K Closest Points to Origin	k-closest-points-to-origin	leetcode	https://leetcode.com/problems/k-closest-points-to-origin/description/
+Line	Medium	Check If Two Line Segments Intersect		gfg	https://www.geeksforgeeks.org/problems/check-if-two-line-segments-intersect0017/1
+Line	Hard	Max Points on a Line	max-points-on-a-line	leetcode	https://leetcode.com/problems/max-points-on-a-line/description/
+Line	Hard	Minimize Manhattan Distances	minimize-manhattan-distances	leetcode	https://leetcode.com/problems/minimize-manhattan-distances/description/
+Line	Hard	Self Crossing	self-crossing	leetcode	https://leetcode.com/problems/self-crossing/description/
+Rectangle	Easy	Rectangle Overlap	rectangle-overlap	leetcode	https://leetcode.com/problems/rectangle-overlap/
+Rectangle	Easy	Largest Triangle Area	largest-triangle-area	leetcode	https://leetcode.com/problems/largest-triangle-area/description/
+Rectangle	Medium	Minimum Rectangles to Cover Points	minimum-rectangles-to-cover-points	leetcode	https://leetcode.com/problems/minimum-rectangles-to-cover-points/description/
+Rectangle	Medium	Rectangle Area	rectangle-area	leetcode	https://leetcode.com/problems/rectangle-area/description/
+Rectangle	Medium	Minimum Area Rectangle	minimum-area-rectangle	leetcode	https://leetcode.com/problems/minimum-area-rectangle/description/
+Rectangle	Medium	Minimum Area Rectangle II	minimum-area-rectangle-ii	leetcode	https://leetcode.com/problems/minimum-area-rectangle-ii/description/
+Rectangle	Medium	Mirror Reflection	mirror-reflection	leetcode	https://leetcode.com/problems/mirror-reflection/description/
+Rectangle	Medium	Find the Largest Area of Square Inside Two Rectangles	find-the-largest-area-of-square-inside-two-rectangles	leetcode	https://leetcode.com/problems/find-the-largest-area-of-square-inside-two-rectangles/description/
+Circle	Medium	Minimum Cuts to Divide a Circle	minimum-cuts-to-divide-a-circle	leetcode	https://leetcode.com/problems/minimum-cuts-to-divide-a-circle/description/
+Circle	Medium	Generate Random Point in a Circle	generate-random-point-in-a-circle	leetcode	https://leetcode.com/problems/generate-random-point-in-a-circle/description/
+Circle	Medium	Circle and Rectangle Overlapping	circle-and-rectangle-overlapping	leetcode	https://leetcode.com/problems/circle-and-rectangle-overlapping/description/
+Circle	Medium	Count Lattice Points Inside a Circle	count-lattice-points-inside-a-circle	leetcode	https://leetcode.com/problems/count-lattice-points-inside-a-circle/
+Circle	Medium	Queries on Number of Points Inside a Circle	queries-on-number-of-points-inside-a-circle	leetcode	https://leetcode.com/problems/queries-on-number-of-points-inside-a-circle/
+Circle	Hard	Maximum Number of Darts Inside of a Circular Dartboard	maximum-number-of-darts-inside-of-a-circular-dartboard	leetcode	https://leetcode.com/problems/maximum-number-of-darts-inside-of-a-circular-dartboard/
+Combinatorics	Medium	Factorial of Large Numbers		gfg	https://www.geeksforgeeks.org/problems/ncr-mod-m-part-20611/1
+Combinatorics	Medium	nCr Mod m		gfg	https://www.geeksforgeeks.org/problems/ncr-mod-m-part-20611/1
+Combinatorics	Medium	Tiles		codeforces	https://codeforces.com/contest/1178/problem/C
+Combinatorics	Medium	Distribute Candies Among Children II 	distribute-candies-among-children-ii	leetcode	https://leetcode.com/problems/distribute-candies-among-children-ii/
+Combinatorics	Medium	Unique Paths	unique-paths	leetcode	https://leetcode.com/problems/unique-paths/
+Combinatorics	Medium	 Right Triangles		codeforces	https://codeforces.com/contest/52/problem/B
+Combinatorics	Hard	Permutation Sequence 	permutation-sequence	leetcode	https://leetcode.com/problems/permutation-sequence/
+Combinatorics	Hard	Count Anagrams 	count-anagrams	leetcode	https://leetcode.com/problems/count-anagrams/
+Combinatorics	Hard	Number of Ways to Reorder Array to Get Same BST	number-of-ways-to-reorder-array-to-get-same-bst	leetcode	https://leetcode.com/problems/number-of-ways-to-reorder-array-to-get-same-bst/
+Combinatorics	Hard	Count the Number of Ideal Arrays 	count-the-number-of-ideal-arrays	leetcode	https://leetcode.com/problems/count-the-number-of-ideal-arrays/
+Combinatorics	Hard	Count All Valid Pickup and Delivery Options	count-all-valid-pickup-and-delivery-options	leetcode	https://leetcode.com/problems/count-all-valid-pickup-and-delivery-options/
+Combinatorics	Hard	Bitwise OR of All Subsequence Sums	count-the-number-of-infection-sequences	leetcode	https://leetcode.com/problems/count-the-number-of-infection-sequences/description/
+Combinatorics	Hard	Count the Arrays		codeforces	https://codeforces.com/problemset/problem/1312/D
+Combinatorics	Hard	Beautiful Numbers		codeforces	https://codeforces.com/contest/300/problem/C
+Combinatorics	Hard	String Mark		codeforces	https://codeforces.com/contest/895/problem/D

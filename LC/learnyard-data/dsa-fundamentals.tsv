@@ -1,0 +1,101 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Control Flow	Basic	if-else and else-if ladder Practice		read.learnyard.com	https://read.learnyard.com/dsa/if-else-practice/
+Control Flow	Basic	Loops Practice 1		read.learnyard.com	https://read.learnyard.com/dsa/loops-practice-1/
+Control Flow	Basic	Loops Practice 2		read.learnyard.com	https://read.learnyard.com/dsa/loops-practice-2/
+Control Flow	Basic	Loops Practice 3		read.learnyard.com	https://read.learnyard.com/dsa/loops-practice-3/
+Control Flow	Basic	Loops Practice 4		read.learnyard.com	https://read.learnyard.com/dsa/loops-practice-4/
+Control Flow	Basic	Square Star and Rhombus Star Patterns		read.learnyard.com	https://read.learnyard.com/dsa/square-star-and-rhombus-star-patterns/
+Control Flow	Basic	Triangle Star Patterns		read.learnyard.com	https://read.learnyard.com/dsa/triangle-star-patterns/
+Control Flow	Basic	Pyramid Star Patterns		read.learnyard.com	https://read.learnyard.com/dsa/pyramid-star-patterns/
+Control Flow	Basic	Miscellaneous Star Patterns		read.learnyard.com	https://read.learnyard.com/dsa/miscellaneous-star-patterns/
+Control Flow	Basic	Number Patterns 1		read.learnyard.com	https://read.learnyard.com/dsa/number-patterns-1/
+Control Flow	Basic	Number Patterns 2		read.learnyard.com	https://read.learnyard.com/dsa/number-patterns-2/
+Control Flow	Basic	Triangular Number Patterns 1		read.learnyard.com	https://read.learnyard.com/dsa/triangular-number-patterns-1/
+Control Flow	Basic	Triangular Number Patterns 2		read.learnyard.com	https://read.learnyard.com/dsa/triangular-number-patterns-2/
+Control Flow	Basic	Triangular Number Patterns 3		read.learnyard.com	https://read.learnyard.com/dsa/triangular-number-patterns-3/
+Control Flow	Basic	Switch Statement Practice		read.learnyard.com	https://read.learnyard.com/dsa/switch-statement-practice/
+Array Basics	Basic	Print Each Element and Its Index in an Array		unknown	NA
+Array Basics	Basic	Print Elements of an Array in Reverse Order		unknown	NA
+Array Basics	Basic	Print Alternate Elements of an Array		unknown	NA
+Array Basics	Basic	Create a Duplicate of an Array		unknown	NA
+Array Basics	Basic	Create Two Arrays one for Odd Elements and one for Even Elements		unknown	NA
+Array Basics	Basic	Calculate Sum and Product of Array Elements		unknown	NA
+Array Basics	Basic	Count Occurrences of a Target Number in an Array		unknown	NA
+Array Basics	Basic	Check if an Array is Sorted Forward, Backward or Not at All		unknown	NA
+Array Basics	Basic	Count Unique and Duplicate Elements in an Array		unknown	NA
+Array Basics	Basic	Check if Two Elements Exist with a Sum Equal to a Target Value		unknown	NA
+Array Basics	Basic	Check if Three Elements Exist with a Sum Equal to a Target Value		unknown	NA
+Array Basics	Basic	Find the Maximum Element in an Array		unknown	NA
+Array Basics	Basic	Find the Minimum Element in an Array		unknown	NA
+Array Basics	Basic	Find the Second Maximum Element; if None, Print -1		unknown	NA
+Array Basics	Basic	Find the Second Minimum Element; if None, Print -1		unknown	NA
+Array Basics	Basic	Insert an Element at the Xth Position, Shifting Right		unknown	NA
+Array Basics	Basic	Delete an Element at the Xth Position, Shifting Left		unknown	NA
+String Basics	Basic	Print ASCII Value of Each Character in a String		unknown	NA
+String Basics	Basic	Count Letters, Numbers, and Special Characters in a String		unknown	NA
+String Basics	Basic	Find the Difference between the Number of Consonants and Vowels		unknown	NA
+String Basics	Basic	Convert Uppercase to Lowercase and Vice Versa in a String		unknown	NA
+String Basics	Basic	Remove Leading, Trailing, and Extra Spaces in a String		unknown	NA
+String Basics	Basic	Count the Number of Words in a String		unknown	NA
+String Basics	Basic	Find the Maximum and Minimum Occurring Characters in a String		unknown	NA
+String Basics	Basic	Check if There are Two or Three Consecutive Identical Characters in a String		unknown	NA
+String Basics	Basic	Find the First and Last Index of Occurrence for Each Character in a String		unknown	NA
+String Basics	Basic	Check if a String Contains All Letters from 'a' to 'z'		unknown	NA
+String Basics	Basic	Insert a Character at the First, Last, and Kth Position in a String		unknown	NA
+String Basics	Basic	Remove the First, Last, and Kth Character from a String		unknown	NA
+String Basics	Basic	Find a Specific Substring within a String		unknown	NA
+String Basics	Basic	Generate All Possible Substrings of a String		unknown	NA
+Matrix Basics	Basic	Print a Matrix Row-Wise and Column-Wise		unknown	NA
+Matrix Basics	Basic	Calculate the Total Sum of Elements in a Matrix		unknown	NA
+Matrix Basics	Basic	Calculate the Sum of Each Row and Each Column in a Matrix		unknown	NA
+Matrix Basics	Basic	Find the Maximum and Minimum Values in Each Row of a Matrix		unknown	NA
+Matrix Basics	Basic	Find the Maximum and Minimum Values in Each Column of a Matrix		unknown	NA
+Matrix Basics	Basic	Add and Subtract Two Matrices		unknown	NA
+Matrix Basics	Basic	Print the Upper Triangle and Lower Triangle of a Matrix		unknown	NA
+Matrix Basics	Basic	Print the Left and Right Diagonals of a Matrix		unknown	NA
+Matrix Basics	Basic	Print the Boundary Elements of a Matrix		unknown	NA
+Matrix Basics	Basic	Sort the Matrix Row-Wise and Column-Wise		unknown	NA
+Matrix Basics	Basic	Print the Matrix in a Zig-Zag Pattern		unknown	NA
+Matrix Basics	Basic	Check if a Matrix is Symmetric		unknown	NA
+Matrix Basics	Basic	Check if a Matrix is an Identity Matrix		unknown	NA
+Matrix Basics	Basic	Check if a Matrix is Sparse (Mostly Zeroes)		unknown	NA
+Matrix Basics	Basic	Find the Inverse of a Matrix		unknown	NA
+Math Basics	Basic	Perform Basic Operations (Addition, Subtraction, Multiplication, Division) using Two Numbers		unknown	NA
+Math Basics	Basic	Find the Sum of Digits of a Number		unknown	NA
+Math Basics	Basic	Reverse a Given Number		unknown	NA
+Math Basics	Basic	Check if a Number is a Palindrome		unknown	NA
+Math Basics	Basic	Check if a Number is an Armstrong Number		unknown	NA
+Math Basics	Basic	Count the Total Occurrences of the Digit '1' in All Positive Integers Less than or Equal to a Given Integer n		unknown	NA
+Math Basics	Basic	Generate Fibonacci Numbers up to a Given Limit		unknown	NA
+Math Basics	Basic	Calculate the Factorial of a Number		unknown	NA
+Math Basics	Basic	Find the Number of Trailing Zeroes in the Factorial of a Given Number n		unknown	NA
+Math Basics	Basic	Calculate the LCM and GCD of Two Numbers		unknown	NA
+Math Basics	Basic	Check if a Number is Prime without using the Sieve of Eratosthenes		unknown	NA
+Math Basics	Basic	Check if Two Numbers are Co-Prime		unknown	NA
+Math Basics	Basic	Find All Divisors of a Given Number		unknown	NA
+Math Basics	Basic	Perform Modulo Operations		unknown	NA
+Math Basics	Basic	Check Divisibility Rules for Numbers from 1 to 20		unknown	NA
+Recursion Basics	Theory	Introduction to Recursion		read.learnyard.com	https://read.learnyard.com/dsa/introduction-to-recursion/
+Recursion Basics	Theory	Getting a hang of Recursion		read.learnyard.com	https://read.learnyard.com/dsa/getting-a-hang-of-recursion/
+Recursion Basics	Theory	Some simple problems using Recursion		read.learnyard.com	https://read.learnyard.com/dsa/some-simple-problems-using-recursion/
+Recursion Basics	Theory	Fast Exponentiation		read.learnyard.com	https://read.learnyard.com/dsa/fast-exponentiation/
+Recursion Basics	Theory	Power of Three		read.learnyard.com	https://read.learnyard.com/dsa/power-of-three/
+Recursion Basics	Theory	Recursion: Time & Space Complexity Analysis - 1		read.learnyard.com	https://read.learnyard.com/dsa/recursion-time-and-space-complexity-analysis-1/
+Recursion Basics	Theory	Recursion: Time & Space Complexity Analysis - 2		read.learnyard.com	https://read.learnyard.com/dsa/recursion-time-and-space-complexity-analysis-2/
+Recursion Basics	Theory	Time Complexity Analysis using Recurrence Relations		read.learnyard.com	https://read.learnyard.com/dsa/time-complexity-analysis-using-recurrence-relations/
+Recursion Basics	Basic	Calculate the Sum of Numbers from 1 to N using Recursion		unknown	NA
+Recursion Basics	Basic	Print the Fibonacci Series up to N Terms using Recursion		unknown	NA
+Recursion Basics	Basic	Print the Elements of an Array using Recursion		unknown	NA
+Recursion Basics	Basic	Count the Digits of a Given Number using Recursion		unknown	NA
+Recursion Basics	Basic	Find the Sum of Digits of a Number using Recursion		unknown	NA
+Recursion Basics	Basic	Find the GCD of Two Numbers using Recursion		unknown	NA
+Recursion Basics	Basic	Find the Largest Element of an Array using Recursion		unknown	NA
+Recursion Basics	Basic	Reverse a String using Recursion		unknown	NA
+Recursion Basics	Basic	Find the Factorial of a Number using Recursion		unknown	NA
+Recursion Basics	Basic	Convert a Decimal Number to Binary using Recursion		unknown	NA
+Recursion Basics	Basic	Check if a Number is a Prime Number using Recursion		unknown	NA
+Recursion Basics	Basic	Print Even or Odd Numbers in a Given Range using Recursion		unknown	NA
+Recursion Basics	Basic	Multiply Two Matrices using Recursion		unknown	NA
+Recursion Basics	Basic	Check if a Given String is a Palindrome using Recursion		unknown	NA
+Recursion Basics	Basic	Copy One String to Another using Recursion		unknown	NA
+Recursion Basics	Basic	Check if an Array is Sorted using Recursion		unknown	NA

@@ -1,0 +1,40 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Two Pointer on Arrays	Easy	Merge Two 2D Arrays by Summing Values	merge-two-2d-arrays-by-summing-values	leetcode	https://leetcode.com/problems/merge-two-2d-arrays-by-summing-values
+Two Pointer on Arrays	Easy	Merge Sorted Array	merge-sorted-array	leetcode	https://leetcode.com/problems/merge-sorted-array/description/
+Two Pointer on Arrays	Easy	Sort Array by Parity	sort-array-by-parity	leetcode	https://leetcode.com/problems/sort-array-by-parity/description/
+Two Pointer on Arrays	Easy	Sort Array by Parity II	sort-array-by-parity-ii	leetcode	https://leetcode.com/problems/sort-array-by-parity-ii/description/
+Two Pointer on Arrays	Medium	Rearrange Array Elements by Sign	rearrange-array-elements-by-sign	leetcode	https://leetcode.com/problems/rearrange-array-elements-by-sign
+Two Pointer on Arrays	Easy	Remove Duplicates from Sorted Array	remove-duplicates-from-sorted-array	leetcode	https://leetcode.com/problems/remove-duplicates-from-sorted-array
+Two Pointer on Arrays	Easy	Remove Element	remove-element	leetcode	https://leetcode.com/problems/remove-element
+Two Pointer on Arrays	Medium	Partition Array According to Given Pivot	partition-array-according-to-given-pivot	leetcode	https://leetcode.com/problems/partition-array-according-to-given-pivot
+Two Pointer on Arrays	Medium	Rotate Array	rotate-array	leetcode	https://leetcode.com/problems/rotate-array
+Two Pointer on Arrays	Easy	Apply Operations to an Array	apply-operations-to-an-array	leetcode	https://leetcode.com/problems/apply-operations-to-an-array
+Two Pointer on Arrays	Easy	Find All K-Distant Indices in an Array	find-all-k-distant-indices-in-an-array	leetcode	https://leetcode.com/problems/find-all-k-distant-indices-in-an-array
+Two Pointer on Arrays	Easy	Two Sum	two-sum	leetcode	https://leetcode.com/problems/two-sum/
+Two Pointer on Arrays	Medium	3Sum	3sum	leetcode	https://leetcode.com/problems/3sum
+Two Pointer on Arrays	Medium	3Sum Closest	3sum-closest	leetcode	https://leetcode.com/problems/3sum-closest
+Two Pointer on Arrays	Medium	4Sum	4sum	leetcode	https://leetcode.com/problems/4sum
+Two Pointer on Arrays	Medium	Sort Colors	sort-colors	leetcode	https://leetcode.com/problems/sort-colors
+Two Pointer on Arrays	Medium	Container With Most Water	container-with-most-water 	leetcode	https://leetcode.com/problems/container-with-most-water 
+Two Pointer on Arrays	Medium	Watering Plants II	watering-plants-ii	leetcode	https://leetcode.com/problems/watering-plants-ii
+Two Pointer on Arrays	Medium	Next Permutation	next-permutation	leetcode	https://leetcode.com/problems/next-permutation
+Two Pointer on Arrays	Medium	Next Greater Element III	next-greater-element-iii	leetcode	https://leetcode.com/problems/next-greater-element-iii
+Two Pointer on Strings	Easy	Reverse String	reverse-string	leetcode	https://leetcode.com/problems/reverse-string
+Two Pointer on Strings	Easy	Reverse Prefix of Word	reverse-prefix-of-word	leetcode	https://leetcode.com/problems/reverse-prefix-of-word
+Two Pointer on Strings	Easy	Reverse Vowels of a String	reverse-vowels-of-a-string	leetcode	https://leetcode.com/problems/reverse-vowels-of-a-string
+Two Pointer on Strings	Medium	Reverse Words in a String	reverse-words-in-a-string	leetcode	https://leetcode.com/problems/reverse-words-in-a-string
+Two Pointer on Strings	Easy	Reverse Words in a String III	reverse-words-in-a-string-iii	leetcode	https://leetcode.com/problems/reverse-words-in-a-string-iii
+Two Pointer on Strings	Easy	Valid Palindrome	valid-palindrome	leetcode	https://leetcode.com/problems/valid-palindrome
+Two Pointer on Strings	Easy	Valid Palindrome II	valid-palindrome-ii	leetcode	https://leetcode.com/problems/valid-palindrome-ii
+Two Pointer on Strings	Easy	Lexicographically Smallest Palindrome	lexicographically-smallest-palindrome	leetcode	https://leetcode.com/problems/lexicographically-smallest-palindrome
+Two Pointer on Strings	Easy	Merge Strings Alternately	merge-strings-alternately	leetcode	https://leetcode.com/problems/merge-strings-alternately
+Two Pointer on Strings	Medium	Largest Merge of Two Strings	largest-merge-of-two-strings	leetcode	https://leetcode.com/problems/largest-merge-of-two-strings
+Two Pointer on Strings	Easy	Shortest Distance to a Character	shortest-distance-to-a-character 	leetcode	https://leetcode.com/problems/shortest-distance-to-a-character 
+Two Pointer on Strings	Easy	DI String Match	di-string-match	leetcode	https://leetcode.com/problems/di-string-match
+Two Pointer on Strings	Medium	Make String a Subsequence Using Cyclic Increments	make-string-a-subsequence-using-cyclic-increments	leetcode	https://leetcode.com/problems/make-string-a-subsequence-using-cyclic-increments
+Two Pointer on Strings	Easy	Count Binary Substrings	count-binary-substrings	leetcode	https://leetcode.com/problems/count-binary-substrings
+Two Pointer on Strings	Medium	Minimum Length of String After Deleting Similar Ends	minimum-length-of-string-after-deleting-similar-ends	leetcode	https://leetcode.com/problems/minimum-length-of-string-after-deleting-similar-ends
+Two Pointer on Strings	Medium	String Compression	string-compression	leetcode	https://leetcode.com/problems/string-compression
+Two Pointer on Strings	Medium	Separate Black and White Balls	separate-black-and-white-balls	leetcode	https://leetcode.com/problems/separate-black-and-white-balls
+Two Pointer on Strings	Medium	Move Pieces to Obtain a String	move-pieces-to-obtain-a-string	leetcode	https://leetcode.com/problems/move-pieces-to-obtain-a-string
+Two Pointer on Strings	Medium	Sentence Similarity III	sentence-similarity-iii	leetcode	https://leetcode.com/problems/sentence-similarity-iii

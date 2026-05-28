@@ -1,0 +1,93 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Implementary Problems	Easy	Find Common Elements Between Two Arrays	find-common-elements-between-two-arrays	leetcode	https://leetcode.com/problems/find-common-elements-between-two-arrays
+Implementary Problems	Easy	Contains Duplicate	contains-duplicate	leetcode	https://leetcode.com/problems/contains-duplicate
+Implementary Problems	Easy	Sum of Unique Elements	sum-of-unique-elements	leetcode	https://leetcode.com/problems/sum-of-unique-elements
+Implementary Problems	Medium	Find All Duplicates in an Array	find-all-duplicates-in-an-array	leetcode	https://leetcode.com/problems/find-all-duplicates-in-an-array
+Implementary Problems	Easy	Check if All Characters Have Equal Number of Occurrences	check-if-all-characters-have-equal-number-of-occurrences	leetcode	https://leetcode.com/problems/check-if-all-characters-have-equal-number-of-occurrences
+Implementary Problems	Easy	Unique Number of Occurrences	unique-number-of-occurrences	leetcode	https://leetcode.com/problems/unique-number-of-occurrences
+Implementary Problems	Easy	Find Common Characters	find-common-characters	leetcode	https://leetcode.com/problems/find-common-characters
+Implementary Problems	Easy	Number of Good Pairs	number-of-good-pairs	leetcode	https://leetcode.com/problems/number-of-good-pairs
+Implementary Problems	Easy	Permutation Difference Between Two Strings	permutation-difference-between-two-strings	leetcode	https://leetcode.com/problems/permutation-difference-between-two-strings
+Implementary Problems	Easy	Check if the Sentence is Pangram	check-if-the-sentence-is-pangram	leetcode	https://leetcode.com/problems/check-if-the-sentence-is-pangram
+Implementary Problems	Easy	Decode the Message	decode-the-message	leetcode	https://leetcode.com/problems/decode-the-message
+Implementary Problems	Medium	Replace Elements in an Array	replace-elements-in-an-array	leetcode	https://leetcode.com/problems/replace-elements-in-an-array
+Implementary Problems	Medium	Count the Number of Special Characters II	count-the-number-of-special-characters-ii	leetcode	https://leetcode.com/problems/count-the-number-of-special-characters-ii
+Implementary Problems	Medium	Reconstruct Original Digits from English	reconstruct-original-digits-from-english	leetcode	https://leetcode.com/problems/reconstruct-original-digits-from-english
+Implementary Problems	Medium	Integer to Roman	integer-to-roman	leetcode	https://leetcode.com/problems/integer-to-roman
+Implementary Problems	Easy	Find Words That Can Be Formed by Characters	find-words-that-can-be-formed-by-characters	leetcode	https://leetcode.com/problems/find-words-that-can-be-formed-by-characters
+Implementary Problems	Easy	Find the XOR of Numbers Which Appear Twice	find-the-xor-of-numbers-which-appear-twice	leetcode	https://leetcode.com/problems/find-the-xor-of-numbers-which-appear-twice
+Implementary Problems	Easy	Sort the People	sort-the-people	leetcode	https://leetcode.com/problems/sort-the-people
+Implementary Problems	Easy	Form Smallest Number from Two-Digit Arrays	form-smallest-number-from-two-digit-arrays	leetcode	https://leetcode.com/problems/form-smallest-number-from-two-digit-arrays
+Implementary Problems	Easy	Increasing Decreasing String	increasing-decreasing-string	leetcode	https://leetcode.com/problems/increasing-decreasing-string
+Implementary Problems	Easy	Sort Array by Increasing Frequency	sort-array-by-increasing-frequency	leetcode	https://leetcode.com/problems/sort-array-by-increasing-frequency
+Implementary Problems	Medium	Sort Characters by Frequency	sort-characters-by-frequency	leetcode	https://leetcode.com/problems/sort-characters-by-frequency
+Implementary Problems	Easy	Merge Similar Items	merge-similar-items	leetcode	https://leetcode.com/problems/merge-similar-items
+Implementary Problems	Easy	Substrings of Size Three with Distinct Characters	substrings-of-size-three-with-distinct-characters	leetcode	https://leetcode.com/problems/substrings-of-size-three-with-distinct-characters
+Implementary Problems	Easy	Clear Digits	clear-digits	leetcode	https://leetcode.com/problems/clear-digits
+Implementary Problems	Medium	HTML Entity Parser	html-entity-parser	leetcode	https://leetcode.com/problems/html-entity-parser
+Implementary Problems	Easy	Largest Substring Between Two Equal Characters	largest-substring-between-two-equal-characters	leetcode	https://leetcode.com/problems/largest-substring-between-two-equal-characters
+Implementary Problems	Easy	Remove Letter to Equalize Frequency	remove-letter-to-equalize-frequency	leetcode	https://leetcode.com/problems/remove-letter-to-equalize-frequency
+Implementary Problems	Easy	Distribute Candies	distribute-candies	leetcode	https://leetcode.com/problems/distribute-candies
+Implementary Problems	Easy	Path Crossing	path-crossing	leetcode	https://leetcode.com/problems/path-crossing
+Implementary Problems	Easy	Buddy Strings	buddy-strings	leetcode	https://leetcode.com/problems/buddy-strings
+Implementary Problems	Easy	Word Pattern	word-pattern	leetcode	https://leetcode.com/problems/word-pattern
+Implementary Problems	Easy	Valid Anagram	valid-anagram	leetcode	https://leetcode.com/problems/valid-anagram
+Implementary Problems	Easy	Find Resultant Array After Removing Anagrams	find-resultant-array-after-removing-anagrams	leetcode	https://leetcode.com/problems/find-resultant-array-after-removing-anagrams
+Implementary Problems	Medium	Group Anagrams	group-anagrams	leetcode	https://leetcode.com/problems/group-anagrams
+Implementary Problems	Easy	Majority Element	majority-element	leetcode	https://leetcode.com/problems/majority-element/
+Implementary Problems	Medium	Majority Element II	majority-element-ii	leetcode	https://leetcode.com/problems/majority-element-ii
+Implementary Problems	Medium	Find All Lonely Numbers in the Array	find-all-lonely-numbers-in-the-array	leetcode	https://leetcode.com/problems/find-all-lonely-numbers-in-the-array
+Implementary Problems	Easy	Smallest Missing Integer Greater Than Sequential Prefix Sum	smallest-missing-integer-greater-than-sequential-prefix-sum	leetcode	https://leetcode.com/problems/smallest-missing-integer-greater-than-sequential-prefix-sum
+Implementary Problems	Hard	First Missing Positive	first-missing-positive	leetcode	https://leetcode.com/problems/first-missing-positive
+Implementary Problems	Hard	Shortest Impossible Sequence of Rolls	shortest-impossible-sequence-of-rolls	leetcode	https://leetcode.com/problems/shortest-impossible-sequence-of-rolls
+Implementary Problems	Medium	Find Occurrences of an Element in an Array	find-occurrences-of-an-element-in-an-array	leetcode	https://leetcode.com/problems/find-occurrences-of-an-element-in-an-array
+Implementary Problems	Easy	Redistribute Characters to Make All Strings Equal	redistribute-characters-to-make-all-strings-equal	leetcode	https://leetcode.com/problems/redistribute-characters-to-make-all-strings-equal
+Implementary Problems	Easy	Isomorphic Strings	isomorphic-strings	leetcode	https://leetcode.com/problems/isomorphic-strings
+Implementary Problems	Medium	Groups of Special Equivalent Strings	groups-of-special-equivalent-strings	leetcode	https://leetcode.com/problems/groups-of-special-equivalent-strings
+Implementary Problems	Medium	Word Subsets	word-subsets	leetcode	https://leetcode.com/problems/word-subsets
+Implementary Problems	Medium	Find the Maximum Number of Elements in Subset	find-the-maximum-number-of-elements-in-subset	leetcode	https://leetcode.com/problems/find-the-maximum-number-of-elements-in-subset
+Implementary Problems	Medium	People Whose List of Favorite Companies is Not a Subset of Another List	people-whose-list-of-favorite-companies-is-not-a-subset-of-another-list	leetcode	https://leetcode.com/problems/people-whose-list-of-favorite-companies-is-not-a-subset-of-another-list
+Implementary Problems	Hard	Count the Number of Good Partitions	count-the-number-of-good-partitions	leetcode	https://leetcode.com/problems/count-the-number-of-good-partitions
+Implementary Problems	Medium	Optimal Partition of String	optimal-partition-of-string	leetcode	https://leetcode.com/problems/optimal-partition-of-string
+Implementary Problems	Medium	Custom Sort String	custom-sort-string	leetcode	https://leetcode.com/problems/custom-sort-string
+Implementary Problems	Medium	Finding the Users Active Minutes	finding-the-users-active-minutes	leetcode	https://leetcode.com/problems/finding-the-users-active-minutes
+Implementary Problems	Medium	Convert an Array into a 2D Array with Conditions	convert-an-array-into-a-2d-array-with-conditions	leetcode	https://leetcode.com/problems/convert-an-array-into-a-2d-array-with-conditions
+Implementary Problems	Medium	Group the People Given the Group Size They Belong To	group-the-people-given-the-group-size-they-belong-to	leetcode	https://leetcode.com/problems/group-the-people-given-the-group-size-they-belong-to
+Implementary Problems	Medium	Evaluate the Bracket Pairs of a String	evaluate-the-bracket-pairs-of-a-string	leetcode	https://leetcode.com/problems/evaluate-the-bracket-pairs-of-a-string
+Implementary Problems	Medium	Minimum Number of Operations to Make Word K-Periodic	minimum-number-of-operations-to-make-word-k-periodic	leetcode	https://leetcode.com/problems/minimum-number-of-operations-to-make-word-k-periodic
+Implementary Problems	Medium	Can Convert String in K Moves	can-convert-string-in-k-moves	leetcode	https://leetcode.com/problems/can-convert-string-in-k-moves
+Implementary Problems	Medium	Restore the Array from Adjacent Pairs	restore-the-array-from-adjacent-pairs	leetcode	https://leetcode.com/problems/restore-the-array-from-adjacent-pairs
+Implementary Problems	Medium	Tuple with Same Product	tuple-with-same-product	leetcode	https://leetcode.com/problems/tuple-with-same-product
+Implementary Problems	Hard	Split the Array to Make Coprime Products	split-the-array-to-make-coprime-products	leetcode	https://leetcode.com/problems/split-the-array-to-make-coprime-products
+Implementary Problems	Medium	4Sum II	4sum-ii	leetcode	https://leetcode.com/problems/4sum-ii
+Implementary Problems	Medium	Count Artifacts That Can Be Extracted	count-artifacts-that-can-be-extracted	leetcode	https://leetcode.com/problems/count-artifacts-that-can-be-extracted
+Implementary Problems	Medium	Brick Wall	brick-wall	leetcode	https://leetcode.com/problems/brick-wall
+Implementary Problems	Medium	Pairs of Songs with Total Durations Divisible by 60	pairs-of-songs-with-total-durations-divisible-by-60	leetcode	https://leetcode.com/problems/pairs-of-songs-with-total-durations-divisible-by-60
+Implementary Problems	Medium	Alphabet Board Path	alphabet-board-path	leetcode	https://leetcode.com/problems/alphabet-board-path
+Implementary Problems	Medium	Vowel Spellchecker	vowel-spellchecker	leetcode	https://leetcode.com/problems/vowel-spellchecker
+Implementary Problems	Medium	Bulls and Cows	bulls-and-cows	leetcode	https://leetcode.com/problems/bulls-and-cows
+Implementary Problems	Medium	Card Flipping Game	card-flipping-game	leetcode	https://leetcode.com/problems/card-flipping-game
+Implementary Problems	Medium	Maximum Size of a Set After Removals	maximum-size-of-a-set-after-removals	leetcode	https://leetcode.com/problems/maximum-size-of-a-set-after-removals
+Implementary Problems	Medium	Minimum Absolute Difference Queries	minimum-absolute-difference-queries	leetcode	https://leetcode.com/problems/minimum-absolute-difference-queries
+Implementary Problems	Medium	Check if Array Pairs are Divisible by K	check-if-array-pairs-are-divisible-by-k	leetcode	https://leetcode.com/problems/check-if-array-pairs-are-divisible-by-k
+Implementary Problems	Medium	Count Pairs That Form a Complete Day II	count-pairs-that-form-a-complete-day-ii	leetcode	https://leetcode.com/problems/count-pairs-that-form-a-complete-day-ii
+Implementary Problems	Medium	Count Number of Bad Pairs	count-number-of-bad-pairs	leetcode	https://leetcode.com/problems/count-number-of-bad-pairs
+Implementary Problems	Medium	Minimum Seconds to Equalize a Circular Array	minimum-seconds-to-equalize-a-circular-array	leetcode	https://leetcode.com/problems/minimum-seconds-to-equalize-a-circular-array
+Implementary Problems	Hard	Sum of Imbalance Numbers of All Subarrays	sum-of-imbalance-numbers-of-all-subarrays	leetcode	https://leetcode.com/problems/sum-of-imbalance-numbers-of-all-subarrays
+Implementary Problems	Hard	Grid Illumination	grid-illumination	leetcode	https://leetcode.com/problems/grid-illumination
+Implementary Problems	Hard	Maximum Equal Frequency	maximum-equal-frequency	leetcode	https://leetcode.com/problems/maximum-equal-frequency
+Implementary Problems	Hard	Rearranging Fruits	rearranging-fruits	leetcode	https://leetcode.com/problems/rearranging-fruits
+Hashing With Prefix Sum	Medium	Subarray Sum Equals K	subarray-sum-equals-k	leetcode	https://leetcode.com/problems/subarray-sum-equals-k/description/
+Hashing With Prefix Sum	Medium	Subarray Sums Divisible by K	subarray-sums-divisible-by-k	leetcode	https://leetcode.com/problems/subarray-sums-divisible-by-k/description/
+Hashing With Prefix Sum	Medium	Make Sum Divisible by P	make-sum-divisible-by-p	leetcode	https://leetcode.com/problems/make-sum-divisible-by-p/description/
+Hashing With Prefix Sum	Medium	Count Number of Bad Pairs	count-number-of-bad-pairs	leetcode	https://leetcode.com/problems/count-number-of-bad-pairs/description/
+Hashing With Prefix Sum	Medium	Continuous Subarray Sum	continuous-subarray-sum	leetcode	https://leetcode.com/problems/continuous-subarray-sum
+Hashing With Prefix Sum	Medium	Count of Interesting Subarrays	count-of-interesting-subarrays	leetcode	https://leetcode.com/problems/count-of-interesting-subarrays/description/
+Hashing With Prefix Sum	Medium	Count Number of Nice Subarrays	count-number-of-nice-subarrays	leetcode	https://leetcode.com/problems/count-number-of-nice-subarrays/description/
+Hashing With Prefix Sum	Hard	Count Beautiful Substrings II	count-beautiful-substrings-ii	leetcode	https://leetcode.com/problems/count-beautiful-substrings-ii/description/
+Hashing With Prefix Sum	Medium	Sum of Digit Differences of All Pairs	sum-of-digit-differences-of-all-pairs	leetcode	https://leetcode.com/problems/sum-of-digit-differences-of-all-pairs/description/
+Hashing With Prefix Sum	Medium	Binary Subarrays with Sum	binary-subarrays-with-sum	leetcode	https://leetcode.com/problems/binary-subarrays-with-sum/description/
+Hashing With Prefix Sum	Medium	Number of Wonderful Substrings	number-of-wonderful-substrings	leetcode	https://leetcode.com/problems/number-of-wonderful-substrings/description/
+Hashing With Prefix Sum	Medium	Count the Number of Beautiful Subarrays	count-the-number-of-beautiful-subarrays	leetcode	https://leetcode.com/problems/count-the-number-of-beautiful-subarrays/description/
+Hashing With Prefix Sum	Hard	Number of Submatrices That Sum to Target	number-of-submatrices-that-sum-to-target	leetcode	https://leetcode.com/problems/number-of-submatrices-that-sum-to-target/description/
+Hashing With Prefix Sum	Hard	Count Subarrays with Median K	count-subarrays-with-median-k	leetcode	https://leetcode.com/problems/count-subarrays-with-median-k/description/

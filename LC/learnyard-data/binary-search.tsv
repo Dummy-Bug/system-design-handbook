@@ -1,0 +1,84 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Introductory Problems	Easy	Binary Search	binary-search	leetcode	https://leetcode.com/problems/binary-search/description/
+Introductory Problems	Easy	Guess Number Higher or Lower	guess-number-higher-or-lower	leetcode	https://leetcode.com/problems/guess-number-higher-or-lower/
+Introductory Problems	Medium	H-Index II	h-index-ii	leetcode	https://leetcode.com/problems/h-index-ii/
+Upper Bound and Lower Bound	Medium	Find First and Last Position of Element in Sorted Array	find-first-and-last-position-of-element-in-sorted-array	leetcode	https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
+Upper Bound and Lower Bound	Easy	Special Array With X Elements Greater Than or Equal X	special-array-with-x-elements-greater-than-or-equal-x	leetcode	https://leetcode.com/problems/special-array-with-x-elements-greater-than-or-equal-x/
+Upper Bound and Lower Bound	Easy	Find Smallest Letter Greater Than Target	find-smallest-letter-greater-than-target	leetcode	https://leetcode.com/problems/find-smallest-letter-greater-than-target/
+Upper Bound and Lower Bound	Easy	Longest Subsequence With Limited Sum	longest-subsequence-with-limited-sum	leetcode	https://leetcode.com/problems/longest-subsequence-with-limited-sum/description/
+Upper Bound and Lower Bound	Easy	First Bad Version	first-bad-version	leetcode	https://leetcode.com/problems/first-bad-version/
+Upper Bound and Lower Bound	Easy	Arranging Coins	arranging-coins	leetcode	https://leetcode.com/problems/arranging-coins/description/
+Upper Bound and Lower Bound	Easy	Find the Distance Value Between Two Arrays	find-the-distance-value-between-two-arrays	leetcode	https://leetcode.com/problems/find-the-distance-value-between-two-arrays/description/
+Upper Bound and Lower Bound	Easy	Search Insert Position	search-insert-position	leetcode	https://leetcode.com/problems/search-insert-position/
+Upper Bound and Lower Bound	Easy	Find Target Indices After Sorting Array	find-target-indices-after-sorting-array	leetcode	https://leetcode.com/problems/find-target-indices-after-sorting-array/description/
+Upper Bound and Lower Bound	Medium	Find Right Interval	find-right-interval	leetcode	https://leetcode.com/problems/find-right-interval/description/
+Upper Bound and Lower Bound	Medium	Online Election	online-election	leetcode	https://leetcode.com/problems/online-election/
+Upper Bound and Lower Bound	Medium	Most Beautiful Item for Each Query	most-beautiful-item-for-each-query	leetcode	https://leetcode.com/problems/most-beautiful-item-for-each-query/description/
+Upper Bound and Lower Bound	Medium	Time Based Key-Value Store	time-based-key-value-store	leetcode	https://leetcode.com/problems/time-based-key-value-store/
+Upper Bound and Lower Bound	Medium	Random Pick with Weight	random-pick-with-weight	leetcode	https://leetcode.com/problems/random-pick-with-weight/
+Upper Bound and Lower Bound	Medium	Plates Between Candles	plates-between-candles	leetcode	https://leetcode.com/problems/plates-between-candles/
+Upper Bound and Lower Bound	Medium	Successful Pairs of Spells and Potions	successful-pairs-of-spells-and-potions	leetcode	https://leetcode.com/problems/successful-pairs-of-spells-and-potions/
+Upper Bound and Lower Bound	Medium	Range Frequency Queries	range-frequency-queries	leetcode	https://leetcode.com/problems/range-frequency-queries/
+Upper Bound and Lower Bound	Medium	Minimum Operations to Make All Array Elements Equal	minimum-operations-to-make-all-array-elements-equal	leetcode	https://leetcode.com/problems/minimum-operations-to-make-all-array-elements-equal/
+Upper Bound and Lower Bound	Medium	Count Number of Rectangles Containing Each Point	count-number-of-rectangles-containing-each-point	leetcode	https://leetcode.com/problems/count-number-of-rectangles-containing-each-point/
+Upper Bound and Lower Bound	Medium	Count the Number of Fair Pairs	count-the-number-of-fair-pairs	leetcode	https://leetcode.com/problems/count-the-number-of-fair-pairs/
+Upper Bound and Lower Bound	Medium	Minimum Absolute Sum Difference	minimum-absolute-sum-difference	leetcode	https://leetcode.com/problems/minimum-absolute-sum-difference/
+Upper Bound and Lower Bound	Hard	Find the Longest Valid Obstacle Course at Each Position	find-the-longest-valid-obstacle-course-at-each-position	leetcode	https://leetcode.com/problems/find-the-longest-valid-obstacle-course-at-each-position/
+Upper Bound and Lower Bound	Hard	Find the Number of Subarrays Where Boundary Elements Are Maximum	find-the-number-of-subarrays-where-boundary-elements-are-maximum	leetcode	https://leetcode.com/problems/find-the-number-of-subarrays-where-boundary-elements-are-maximum/
+Search on Matrix	Easy	Count Negative Numbers in a Sorted Matrix	count-negative-numbers-in-a-sorted-matrix	leetcode	https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/
+Search on Matrix	Medium	Search a 2D Matrix	search-a-2d-matrix	leetcode	https://leetcode.com/problems/search-a-2d-matrix/
+Search on Matrix	Medium	Search a 2D Matrix II	search-a-2d-matrix-ii	leetcode	https://leetcode.com/problems/search-a-2d-matrix-ii/
+Search on Matrix	Hard	Median in a Row-wise Sorted Matrix		gfg	https://www.geeksforgeeks.org/problems/median-in-a-row-wise-sorted-matrix1527/1
+Missing and Repeating Number	Easy	Missing Number	missing-number	leetcode	https://leetcode.com/problems/missing-number/description/
+Missing and Repeating Number	Easy	Kth Missing Positive Number	kth-missing-positive-number	leetcode	https://leetcode.com/problems/kth-missing-positive-number/
+Missing and Repeating Number	Medium	Single Element in a Sorted Array	single-element-in-a-sorted-array	leetcode	https://leetcode.com/problems/single-element-in-a-sorted-array/
+Missing and Repeating Number	Easy	Minimum Common Value	minimum-common-value	leetcode	https://leetcode.com/problems/minimum-common-value/description/
+Missing and Repeating Number	Medium	Find the Duplicate Number	find-the-duplicate-number	leetcode	https://leetcode.com/problems/find-the-duplicate-number/
+Binary Search on Semi-Sorted Space	Medium	Find Peak Element	find-peak-element	leetcode	https://leetcode.com/problems/find-peak-element/description/
+Binary Search on Semi-Sorted Space	Medium	Find a Peak Element II	find-a-peak-element-ii	leetcode	https://leetcode.com/problems/find-a-peak-element-ii/description/
+Binary Search on Semi-Sorted Space	Medium	Find Minimum in Rotated Sorted Array	find-minimum-in-rotated-sorted-array	leetcode	https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/
+Binary Search on Semi-Sorted Space	Medium	Peak Index in a Mountain Array	peak-index-in-a-mountain-array	leetcode	https://leetcode.com/problems/peak-index-in-a-mountain-array/description/
+Binary Search on Semi-Sorted Space	Medium	Search in Rotated Sorted Array	search-in-rotated-sorted-array	leetcode	https://leetcode.com/problems/search-in-rotated-sorted-array/description/
+Binary Search on Semi-Sorted Space	Medium	Search in Rotated Sorted Array II	search-in-rotated-sorted-array-ii	leetcode	https://leetcode.com/problems/search-in-rotated-sorted-array-ii/description/
+Binary Search on Semi-Sorted Space	Medium	Rotation		gfg	https://www.geeksforgeeks.org/problems/rotation4723/1
+Binary Search on Semi-Sorted Space	Hard	Find Minimum in Rotated Sorted Array II	find-minimum-in-rotated-sorted-array-ii	leetcode	https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/description/
+Binary Search on Semi-Sorted Space	Hard	Find in Mountain Array	find-in-mountain-array	leetcode	https://leetcode.com/problems/find-in-mountain-array/description/
+Binary Search On Answer	Easy	Sqrt(x)	sqrtx	leetcode	https://leetcode.com/problems/sqrtx/
+Binary Search On Answer	Medium	Capacity to Ship Packages Within D Days	capacity-to-ship-packages-within-d-days	leetcode	https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/description/
+Binary Search On Answer	Medium	Koko Eating Bananas	koko-eating-bananas	leetcode	https://leetcode.com/problems/koko-eating-bananas/description/ 
+Binary Search On Answer	Medium	Find the Smallest Divisor Given a Threshold	find-the-smallest-divisor-given-a-threshold	leetcode	https://leetcode.com/problems/find-the-smallest-divisor-given-a-threshold/
+Binary Search On Answer	Medium	Minimum Number of Days to Make M Bouquets	minimum-number-of-days-to-make-m-bouquets	leetcode	https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/description/
+Binary Search On Answer	Medium	Aggressive Cows		gfg	https://www.geeksforgeeks.org/problems/aggressive-cows/1
+Binary Search On Answer	Medium	Maximum Candies Allocated to K Children	maximum-candies-allocated-to-k-children	leetcode	https://leetcode.com/problems/maximum-candies-allocated-to-k-children/
+Binary Search On Answer	Medium	Most Profit Assigning Work	most-profit-assigning-work	leetcode	https://leetcode.com/problems/most-profit-assigning-work/
+Binary Search On Answer	Medium	Maximum Value at a Given Index in a Bounded Array	maximum-value-at-a-given-index-in-a-bounded-array	leetcode	https://leetcode.com/problems/maximum-value-at-a-given-index-in-a-bounded-array/
+Binary Search On Answer	Medium	Maximum Side Length of a Square With Sum Less Than or Equal to Threshold	maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold	leetcode	https://leetcode.com/problems/maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold/description/ 
+Binary Search On Answer	Medium	Minimum Speed to Arrive on Time	minimum-speed-to-arrive-on-time	leetcode	https://leetcode.com/problems/minimum-speed-to-arrive-on-time/
+Binary Search On Answer	Medium	Minimum Time to Repair Cars	minimum-time-to-repair-cars	leetcode	https://leetcode.com/problems/minimum-time-to-repair-cars/
+Binary Search On Answer	Medium	Maximum Number of Removable Characters	maximum-number-of-removable-characters	leetcode	https://leetcode.com/problems/maximum-number-of-removable-characters/
+Binary Search On Answer	Medium	Heaters	heaters	leetcode	https://leetcode.com/problems/heaters/
+Binary Search On Answer	Medium	Earliest Second to Mark Indices I	earliest-second-to-mark-indices-i	leetcode	https://leetcode.com/problems/earliest-second-to-mark-indices-i/
+Binary Search On Answer	Medium	Maximum White Tiles Covered by a Carpet	maximum-white-tiles-covered-by-a-carpet	leetcode	https://leetcode.com/problems/maximum-white-tiles-covered-by-a-carpet/
+Binary Search On Answer	Medium	Minimum Absolute Difference Between Elements with Constraint	minimum-absolute-difference-between-elements-with-constraint	leetcode	https://leetcode.com/problems/minimum-absolute-difference-between-elements-with-constraint/
+Binary Search On Answer	Medium	Sell Diminishing-Valued Colored Balls	sell-diminishing-valued-colored-balls	leetcode	https://leetcode.com/problems/sell-diminishing-valued-colored-balls/
+Binary Search On Answer	Medium	Ugly Number III	ugly-number-iii	leetcode	https://leetcode.com/problems/ugly-number-iii/
+Binary Search On Answer	Medium	Minimize the Maximum of Two Arrays	minimize-the-maximum-of-two-arrays	leetcode	https://leetcode.com/problems/minimize-the-maximum-of-two-arrays/description/
+Binary Search On Answer	Medium	Split Array Largest Sum	split-array-largest-sum	leetcode	https://leetcode.com/problems/split-array-largest-sum/
+Binary Search On Answer	Medium	Maximum Running Time of N Computers	maximum-running-time-of-n-computers	leetcode	https://leetcode.com/problems/maximum-running-time-of-n-computers/
+Binary Search On Answer	Hard	Maximum Number of Robots Within Budget	maximum-number-of-robots-within-budget	leetcode	https://leetcode.com/problems/maximum-number-of-robots-within-budget/
+Binary Search On Answer	Hard	Maximum Number of Groups With Increasing Length	maximum-number-of-groups-with-increasing-length	leetcode	https://leetcode.com/problems/maximum-number-of-groups-with-increasing-length/
+Binary Search On Answer	Hard	Maximum Number of Tasks You Can Assign	maximum-number-of-tasks-you-can-assign	leetcode	https://leetcode.com/problems/maximum-number-of-tasks-you-can-assign/
+Binary Search On Answer	Hard	Median of Two Sorted Arrays	median-of-two-sorted-arrays	leetcode	https://leetcode.com/problems/median-of-two-sorted-arrays/description/
+Minmax Problems	Medium	Magnetic Force Between Two Balls	magnetic-force-between-two-balls	leetcode	https://leetcode.com/problems/magnetic-force-between-two-balls/
+Minmax Problems	Medium	Maximum Tastiness of Candy Basket	maximum-tastiness-of-candy-basket	leetcode	https://leetcode.com/problems/maximum-tastiness-of-candy-basket/
+Minmax Problems	Medium	Minimum Limit of Balls in a Bag	minimum-limit-of-balls-in-a-bag	leetcode	https://leetcode.com/problems/minimum-limit-of-balls-in-a-bag/
+Minmax Problems	Medium	Minimized Maximum of Products Distributed to Any Store	minimized-maximum-of-products-distributed-to-any-store	leetcode	https://leetcode.com/problems/minimized-maximum-of-products-distributed-to-any-store/
+Minmax Problems	Medium	Minimize the Maximum Difference of Pairs	minimize-the-maximum-difference-of-pairs	leetcode	https://leetcode.com/problems/minimize-the-maximum-difference-of-pairs/
+Minmax Problems	Hard	Maximize the Minimum Powered City	maximize-the-minimum-powered-city	leetcode	https://leetcode.com/problems/maximize-the-minimum-powered-city/
+Finding the K-th Element	Hard	Kth Smallest Number in Multiplication Table	kth-smallest-number-in-multiplication-table	leetcode	https://leetcode.com/problems/kth-smallest-number-in-multiplication-table/description/
+Finding the K-th Element	Hard	Find K-th Smallest Pair Distance	find-k-th-smallest-pair-distance	leetcode	https://leetcode.com/problems/find-k-th-smallest-pair-distance/
+Finding the K-th Element	Hard	Kth Smallest Element in a Sorted Matrix	kth-smallest-element-in-a-sorted-matrix	leetcode	https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
+Finding the K-th Element	Hard	Find the Median of the Uniqueness Array	find-the-median-of-the-uniqueness-array	leetcode	https://leetcode.com/problems/find-the-median-of-the-uniqueness-array/description/
+Finding the K-th Element	Hard	Kth Smallest Product of Two Sorted Arrays	kth-smallest-product-of-two-sorted-arrays	leetcode	https://leetcode.com/problems/kth-smallest-product-of-two-sorted-arrays/
+Finding the K-th Element	Hard	Kth Smallest Amount With Single Denomination Combination	kth-smallest-amount-with-single-denomination-combination	leetcode	https://leetcode.com/problems/kth-smallest-amount-with-single-denomination-combination/
+Finding the K-th Element	Hard	Find the Kth Smallest Sum of a Matrix With Sorted Rows	find-the-kth-smallest-sum-of-a-matrix-with-sorted-rows	leetcode	https://leetcode.com/problems/find-the-kth-smallest-sum-of-a-matrix-with-sorted-rows/description/

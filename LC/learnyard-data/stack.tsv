@@ -1,0 +1,58 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Parentheses Problem	Easy	Valid Parentheses	valid-parentheses	leetcode	https://leetcode.com/problems/valid-parentheses/
+Parentheses Problem	Easy	Maximum Nesting Depth of the Parentheses	maximum-nesting-depth-of-the-parentheses	leetcode	https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses
+Parentheses Problem	Easy	Remove Outermost Parentheses	remove-outermost-parentheses	leetcode	https://leetcode.com/problems/remove-outermost-parentheses
+Parentheses Problem	Medium	Minimum Add to Make Parentheses Valid	minimum-add-to-make-parentheses-valid	leetcode	https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/
+Parentheses Problem	Medium	Minimum Remove to Make Valid Parentheses	minimum-remove-to-make-valid-parentheses	leetcode	https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses
+Parentheses Problem	Medium	Maximum Nesting Depth of Two Valid Parentheses Strings	maximum-nesting-depth-of-two-valid-parentheses-strings	leetcode	https://leetcode.com/problems/maximum-nesting-depth-of-two-valid-parentheses-strings
+Parentheses Problem	Medium	Check if a Parentheses String Can Be Valid	check-if-a-parentheses-string-can-be-valid	leetcode	https://leetcode.com/problems/check-if-a-parentheses-string-can-be-valid
+Parentheses Problem	Medium	Reverse Substrings Between Each Pair of Parentheses	reverse-substrings-between-each-pair-of-parentheses	leetcode	https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses
+Parentheses Problem	Medium	Score of Parentheses	score-of-parentheses	leetcode	https://leetcode.com/problems/score-of-parentheses
+Parentheses Problem	Medium	Minimum Insertions to Balance a Parentheses String	minimum-insertions-to-balance-a-parentheses-string	leetcode	https://leetcode.com/problems/minimum-insertions-to-balance-a-parentheses-string
+Parentheses Problem	Hard	Longest Valid Parentheses	longest-valid-parentheses	leetcode	https://leetcode.com/problems/longest-valid-parentheses/
+Parentheses Problem	Hard	Redundant Parenthesis		gfg	https://www.geeksforgeeks.org/problems/redundant-parenthesis--170647/1
+Design Problems	Medium	Min Stack	min-stack	leetcode	https://leetcode.com/problems/min-stack/
+Design Problems	Hard	Maximum Frequency Stack	maximum-frequency-stack	leetcode	https://leetcode.com/problems/maximum-frequency-stack/
+Design Problems	Medium	Design a Stack With Increment Operation	design-a-stack-with-increment-operation	leetcode	https://leetcode.com/problems/design-a-stack-with-increment-operation/description/
+Design Problems	Hard	Dinner Plate Stacks	dinner-plate-stacks	leetcode	https://leetcode.com/problems/dinner-plate-stacks/description/
+Advance Stack Problems	Medium	Merge Intervals	merge-intervals	leetcode	https://leetcode.com/problems/merge-intervals/
+Advance Stack Problems	Medium	Insert Intervals	insert-interval	leetcode	https://leetcode.com/problems/insert-interval/
+Advance Stack Problems	Medium	Asteroid Collision	asteroid-collision	leetcode	https://leetcode.com/problems/asteroid-collision/
+Advance Stack Problems	Medium	Construct Smallest Number From DI String	construct-smallest-number-from-di-string	leetcode	https://leetcode.com/problems/construct-smallest-number-from-di-string/
+Advance Stack Problems	Medium	Evaluate Reverse Polish Notation	evaluate-reverse-polish-notation	leetcode	https://leetcode.com/problems/evaluate-reverse-polish-notation/
+Advance Stack Problems	Medium	Simplify Path	simplify-path	leetcode	https://leetcode.com/problems/simplify-path/
+Advance Stack Problems	Hard	Basic Calculator	basic-calculator	leetcode	https://leetcode.com/problems/basic-calculator/
+Advance Stack Problems	Medium	Basic Calculator II	basic-calculator-ii	leetcode	https://leetcode.com/problems/basic-calculator-ii/
+Advance Stack Problems	Hard	Basic Calculator IV	basic-calculator-iv	leetcode	https://leetcode.com/problems/basic-calculator-iv/
+Advance Stack Problems	Hard	Replace Non-Coprime Numbers in Array	replace-non-coprime-numbers-in-array	leetcode	https://leetcode.com/problems/replace-non-coprime-numbers-in-array/
+Advance Stack Problems	Hard	Robot Collisons	robot-collisions	leetcode	https://leetcode.com/problems/robot-collisions/
+Advance Stack Problems	Hard	Number of atoms	number-of-atoms	leetcode	https://leetcode.com/problems/number-of-atoms/description/
+Monotonic Stack	Easy	Final Prices With a Special Discount in a Shop	final-prices-with-a-special-discount-in-a-shop	leetcode	https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop
+Monotonic Stack	Easy	Next Greater Element I	next-greater-element-i	leetcode	https://leetcode.com/problems/next-greater-element-i
+Monotonic Stack	Medium	Next Greater Element II	next-greater-element-ii	leetcode	https://leetcode.com/problems/next-greater-element-ii
+Monotonic Stack	Hard	Next Greater Element IV	next-greater-element-iv	leetcode	https://leetcode.com/problems/next-greater-element-iv
+Monotonic Stack	Medium	Daily Temperatures	daily-temperatures	leetcode	https://leetcode.com/problems/daily-temperatures
+Monotonic Stack	Medium	Car Fleet	car-fleet	leetcode	https://leetcode.com/problems/car-fleet/
+Monotonic Stack	Hard	Car Fleet II	car-fleet-ii	leetcode	https://leetcode.com/problems/car-fleet-ii/
+Monotonic Stack	Medium	132 Pattern	132-pattern	leetcode	https://leetcode.com/problems/132-pattern
+Monotonic Stack	Medium	Smallest Subsequence of Distinct Characters	smallest-subsequence-of-distinct-characters	leetcode	https://leetcode.com/problems/smallest-subsequence-of-distinct-characters
+Monotonic Stack	Medium	Count Submatrices With All Ones	count-submatrices-with-all-ones	leetcode	https://leetcode.com/problems/count-submatrices-with-all-ones
+Monotonic Stack	Medium	Remove Duplicate Letters	remove-duplicate-letters	leetcode	https://leetcode.com/problems/remove-duplicate-letters
+Monotonic Stack	Medium	The Number of Weak Characters in the Game	the-number-of-weak-characters-in-the-game	leetcode	https://leetcode.com/problems/the-number-of-weak-characters-in-the-game
+Monotonic Stack	Medium	Maximum Subarray Min-Product	maximum-subarray-min-product	leetcode	https://leetcode.com/problems/maximum-subarray-min-product
+Monotonic Stack	Medium	Sum of Subarray Minimums	sum-of-subarray-minimums	leetcode	https://leetcode.com/problems/sum-of-subarray-minimums
+Monotonic Stack	Medium	Shortest Unsorted Continuous Subarray	shortest-unsorted-continuous-subarray	leetcode	https://leetcode.com/problems/shortest-unsorted-continuous-subarray
+Monotonic Stack	Medium	Remove K Digits	remove-k-digits	leetcode	https://leetcode.com/problems/remove-k-digits
+Monotonic Stack	Medium	Beautiful Towers I	beautiful-towers-i	leetcode	https://leetcode.com/problems/beautiful-towers-i/description/ 
+Monotonic Stack	Medium	Beautiful Towers II	beautiful-towers-ii	leetcode	https://leetcode.com/problems/beautiful-towers-ii
+Monotonic Stack	Medium	Online Stock Span	online-stock-span	leetcode	https://leetcode.com/problems/online-stock-span
+Monotonic Stack	Hard	Minimum Number of Increments on Subarrays to Form a Target Array	minimum-number-of-increments-on-subarrays-to-form-a-target-array	leetcode	https://leetcode.com/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array
+Monotonic Stack	Hard	Maximum Score of a Good Subarray	maximum-score-of-a-good-subarray	leetcode	https://leetcode.com/problems/maximum-score-of-a-good-subarray
+Monotonic Stack	Hard	Number of Visible People in a Queue	number-of-visible-people-in-a-queue	leetcode	https://leetcode.com/problems/number-of-visible-people-in-a-queue
+Monotonic Stack	Hard	Trapping Rain Water	trapping-rain-water	leetcode	https://leetcode.com/problems/trapping-rain-water
+Monotonic Stack	Hard	Maximal Rectangle	maximal-rectangle	leetcode	https://leetcode.com/problems/maximal-rectangle
+Monotonic Stack	Hard	Largest Rectangle in Histogram	largest-rectangle-in-histogram	leetcode	https://leetcode.com/problems/largest-rectangle-in-histogram
+Monotonic Stack	Hard	Create Maximum Number	create-maximum-number	leetcode	https://leetcode.com/problems/create-maximum-number
+Monotonic Stack	Hard	Find Building Where Alice And Bob Can Meet	find-building-where-alice-and-bob-can-meet	leetcode	https://leetcode.com/problems/find-building-where-alice-and-bob-can-meet/
+Monotonic Stack	Hard	Sum Of Total Strength Of Wizards	sum-of-total-strength-of-wizards	leetcode	https://leetcode.com/problems/sum-of-total-strength-of-wizards/
+Monotonic Stack	Hard	Find the Number of Subarrays Where Boundary Elements Are Maximum	find-the-number-of-subarrays-where-boundary-elements-are-maximum	leetcode	https://leetcode.com/problems/find-the-number-of-subarrays-where-boundary-elements-are-maximum/

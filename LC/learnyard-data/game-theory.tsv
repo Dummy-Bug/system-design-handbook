@@ -1,0 +1,26 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Level I	Easy	Divisor Game	divisor-game	leetcode	https://leetcode.com/problems/divisor-game
+Level I	Easy	Nim Game	nim-game	leetcode	https://leetcode.com/problems/nim-game
+Level I	Easy	Find the Winning Player in Coin Game	find-the-winning-player-in-coin-game	leetcode	https://leetcode.com/problems/find-the-winning-player-in-coin-game
+Level I	Easy	Yet Another String Game		codeforces	https://codeforces.com/problemset/problem/1480/A
+Level I	Easy	Substring Removal Game		codeforces	https://codeforces.com/problemset/problem/1398/B
+Level I	Easy	Sasha and Sticks		codeforces	https://codeforces.com/problemset/problem/832/A
+Level I	Easy	Card Game		codeforces	https://codeforces.com/problemset/problem/1270/A
+Level I	Easy	01 Game		codeforces	https://codeforces.com/problemset/problem/1373/B
+Level I	Easy	Digit Game		codeforces	https://codeforces.com/problemset/problem/1419/A
+Level II	Medium	Can I Win	can-i-win	leetcode	https://leetcode.com/problems/can-i-win
+Level II	Medium	Guess Number Higher or Lower II	guess-number-higher-or-lower-ii	leetcode	https://leetcode.com/problems/guess-number-higher-or-lower-ii
+Level II	Medium	Maximum Number of Coins You Can Get	maximum-number-of-coins-you-can-get	leetcode	https://leetcode.com/problems/maximum-number-of-coins-you-can-get
+Level II	Medium	Remove Colored Pieces if Both Neighbors are the Same Color	remove-colored-pieces-if-both-neighbors-are-the-same-color	leetcode	https://leetcode.com/problems/remove-colored-pieces-if-both-neighbors-are-the-same-color
+Level II	Medium	Digit Game		codeforces	https://codeforces.com/problemset/problem/1419/A
+Level II	Medium	Dinner With Emma		codeforces	https://codeforces.com/problemset/problem/616/B
+Level II	Medium	Matrix Game		codeforces	https://codeforces.com/problemset/problem/1365/A
+Level II	Medium	Sequential Game		codeforces	https://codeforces.com/contest/1382/problem/B
+Level II	Medium	Ping-pong		codeforces	https://codeforces.com/problemset/problem/1455/C
+Level II	Medium	Godsend		codeforces	https://codeforces.com/problemset/problem/841/B
+Level II	Medium	PolandBall and Game		codeforces	https://codeforces.com/problemset/problem/755/B
+Level II	Medium	Even-Odd Game		codeforces	https://codeforces.com/problemset/problem/1472/D
+Level II	Medium	Palindrome Game		codeforces	https://codeforces.com/contest/1527/problem/B1
+Level III	Hard	Cat and Mouse	cat-and-mouse	leetcode	https://leetcode.com/problems/cat-and-mouse
+Level III	Hard	Cat and Mouse II	cat-and-mouse-ii	leetcode	https://leetcode.com/problems/cat-and-mouse-ii
+Level III	Hard	Guess the Word	guess-the-word	leetcode	https://leetcode.com/problems/guess-the-word

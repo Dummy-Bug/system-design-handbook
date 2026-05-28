@@ -1,0 +1,76 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Introductory Questions	Easy	Implementation of Priority Queue using Binary Heap		gfg	https://www.geeksforgeeks.org/problems/implementation-of-priority-queue-using-binary-heap/1
+Introductory Questions	Medium	Heap Sort		gfg	https://www.geeksforgeeks.org/problems/heap-sort/1
+Introductory Questions	Easy	Does Array Represent Heap?		gfg	https://www.geeksforgeeks.org/problems/does-array-represent-heap4345/1
+Introductory Questions	Medium	Is Binary Tree Heap?		gfg	https://www.geeksforgeeks.org/problems/is-binary-tree-heap/1
+Introductory Questions	Medium	Operations on Binary Min Heap		gfg	https://www.geeksforgeeks.org/problems/operations-on-binary-min-heap/1
+Introductory Questions	Medium	Convert Min Heap to Max Heap		gfg	https://www.geeksforgeeks.org/problems/convert-min-heap-to-max-heap-1666385109/1
+Implementary Questions	Easy	Relative Ranks	relative-ranks	leetcode	https://leetcode.com/problems/relative-ranks/
+Implementary Questions	Easy	Take Gifts From the Richest Pile	take-gifts-from-the-richest-pile	leetcode	https://leetcode.com/problems/take-gifts-from-the-richest-pile/
+Implementary Questions	Easy	Last Stone Weight	last-stone-weight	leetcode	https://leetcode.com/problems/last-stone-weight/
+Implementary Questions	Easy	Largest Number After Digit Swaps by Parity	largest-number-after-digit-swaps-by-parity	leetcode	https://leetcode.com/problems/largest-number-after-digit-swaps-by-parity/
+Implementary Questions	Easy	Minimum Amount of Time to Fill Cups	minimum-amount-of-time-to-fill-cups	leetcode	https://leetcode.com/problems/minimum-amount-of-time-to-fill-cups/
+Implementary Questions	Medium	Seat Reservation Manager	seat-reservation-manager	leetcode	https://leetcode.com/problems/seat-reservation-manager/
+Implementary Questions	Medium	Sort Characters By Frequency	sort-characters-by-frequency	leetcode	https://leetcode.com/problems/sort-characters-by-frequency/
+Implementary Questions	Medium	Reduce Array Size to The Half	reduce-array-size-to-the-half	leetcode	https://leetcode.com/problems/reduce-array-size-to-the-half/
+Implementary Questions	Medium	Longest Happy String	longest-happy-string	leetcode	https://leetcode.com/problems/longest-happy-string/
+Implementary Questions	Medium	Reorganize String	reorganize-string	leetcode	https://leetcode.com/problems/reorganize-string/
+Implementary Questions	Medium	Maximum Average Pass Ratio	maximum-average-pass-ratio	leetcode	https://leetcode.com/problems/maximum-average-pass-ratio/
+Implementary Questions	Medium	Find Score of an Array After Marking All Elements	find-score-of-an-array-after-marking-all-elements	leetcode	https://leetcode.com/problems/find-score-of-an-array-after-marking-all-elements/
+Implementary Questions	Medium	Furthest Building You Can Reach	furthest-building-you-can-reach	leetcode	https://leetcode.com/problems/furthest-building-you-can-reach/
+Implementary Questions	Medium	Distant Barcodes	distant-barcodes	leetcode	https://leetcode.com/problems/distant-barcodes/
+Implementary Questions	Medium	Task Scheduler	task-scheduler	leetcode	https://leetcode.com/problems/task-scheduler/
+Implementary Questions	Medium	Maximal Score After Applying K Operations	maximal-score-after-applying-k-operations	leetcode	https://leetcode.com/problems/maximal-score-after-applying-k-operations/
+Implementary Questions	Medium	Single Threaded CPU	single-threaded-cpu	leetcode	https://leetcode.com/problems/single-threaded-cpu/
+Implementary Questions	Medium	Most Popular Video Creator	most-popular-video-creator	leetcode	https://leetcode.com/problems/most-popular-video-creator/
+Implementary Questions	Medium	Total Cost to Hire K Workers	total-cost-to-hire-k-workers	leetcode	https://leetcode.com/problems/total-cost-to-hire-k-workers/description/
+Implementary Questions	Medium	Most Frequent IDs	most-frequent-ids	leetcode	https://leetcode.com/problems/most-frequent-ids/description/
+Implementary Questions	Medium	Process Tasks Using Servers	process-tasks-using-servers	leetcode	https://leetcode.com/problems/process-tasks-using-servers/
+Implementary Questions	Medium	Maximum Number of Eaten Apples	maximum-number-of-eaten-apples	leetcode	https://leetcode.com/problems/maximum-number-of-eaten-apples/
+Implementary Questions	Medium	Maximum Number of Events That Can Be Attended	maximum-number-of-events-that-can-be-attended	leetcode	https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/description/
+Implementary Questions	Medium	Minimum Operations to Exceed Threshold Value II	minimum-operations-to-exceed-threshold-value-ii	leetcode	https://leetcode.com/problems/minimum-operations-to-exceed-threshold-value-ii/
+Implementary Questions	Hard	Put Marbles in Bags	put-marbles-in-bags	leetcode	https://leetcode.com/problems/put-marbles-in-bags/
+Implementary Questions	Hard	Maximum Spending After Buying Items	maximum-spending-after-buying-items	leetcode	https://leetcode.com/problems/maximum-spending-after-buying-items/
+Implementary Questions	Hard	Trapping Rain Water II	trapping-rain-water-ii	leetcode	https://leetcode.com/problems/trapping-rain-water-ii/
+Implementary Questions	Medium	Maximum Subsequence Score	maximum-subsequence-score	leetcode	https://leetcode.com/problems/maximum-subsequence-score/
+Implementary Questions	Hard	Maximum Performance of a Team	maximum-performance-of-a-team	leetcode	https://leetcode.com/problems/maximum-performance-of-a-team/description/
+Implementary Questions	Hard	Max Value of Equation	max-value-of-equation	leetcode	https://leetcode.com/problems/max-value-of-equation/description/
+Implementary Questions	Hard	The Skyline Problem	the-skyline-problem	leetcode	https://leetcode.com/problems/the-skyline-problem/
+Implementary Questions	Hard	Maximum Elegance of a K-Length Subsequence	maximum-elegance-of-a-k-length-subsequence	leetcode	https://leetcode.com/problems/maximum-elegance-of-a-k-length-subsequence/description/
+Kth Pattern Problems	Easy	The K Weakest Rows in a Matrix	the-k-weakest-rows-in-a-matrix	leetcode	https://leetcode.com/problems/the-k-weakest-rows-in-a-matrix/
+Kth Pattern Problems	Medium	Kth Largest Element in an Array	kth-largest-element-in-an-array	leetcode	https://leetcode.com/problems/kth-largest-element-in-an-array/description/
+Kth Pattern Problems	Easy	Kth Largest Element in a Stream	kth-largest-element-in-a-stream	leetcode	https://leetcode.com/problems/kth-largest-element-in-a-stream/
+Kth Pattern Problems	Easy	Find Subsequence of Length K With the Largest Sum	find-subsequence-of-length-k-with-the-largest-sum	leetcode	https://leetcode.com/problems/find-subsequence-of-length-k-with-the-largest-sum/description/
+Kth Pattern Problems	Medium	K-th Smallest Prime Fraction	k-th-smallest-prime-fraction	leetcode	https://leetcode.com/problems/k-th-smallest-prime-fraction/description/
+Kth Pattern Problems	Medium	K Closest Points to Origin	k-closest-points-to-origin	leetcode	https://leetcode.com/problems/k-closest-points-to-origin/description/
+Kth Pattern Problems	Medium	Top K Frequent Elements	top-k-frequent-elements	leetcode	https://leetcode.com/problems/top-k-frequent-elements/description/
+Kth Pattern Problems	Medium	Kth Smallest Element in a Sorted Matrix	kth-smallest-element-in-a-sorted-matrix	leetcode	https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/
+Kth Pattern Problems	Medium	Find Kth Largest XOR Coordinate Value	find-kth-largest-xor-coordinate-value	leetcode	https://leetcode.com/problems/find-kth-largest-xor-coordinate-value/description/
+Kth Pattern Problems	Medium	Top K Frequent Words	top-k-frequent-words	leetcode	https://leetcode.com/problems/top-k-frequent-words/
+Kth Pattern Problems	Medium	Find K Closest Elements	find-k-closest-elements	leetcode	https://leetcode.com/problems/find-k-closest-elements/description/
+Kth Pattern Problems	Medium	Ugly Number II	ugly-number-ii	leetcode	https://leetcode.com/problems/ugly-number-ii/
+Kth Pattern Problems	Medium	Find the Kth Largest Integer in the Array	find-the-kth-largest-integer-in-the-array	leetcode	https://leetcode.com/problems/find-the-kth-largest-integer-in-the-array/description/
+Kth Pattern Problems	Medium	Reward Top K Students	reward-top-k-students	leetcode	https://leetcode.com/problems/reward-top-k-students/description/
+Kth Pattern Problems	Medium	Query Kth Smallest Trimmed Number	query-kth-smallest-trimmed-number	leetcode	https://leetcode.com/problems/query-kth-smallest-trimmed-number/
+Kth Pattern Problems	Medium	K Highest Ranked Items Within a Price Range	k-highest-ranked-items-within-a-price-range	leetcode	https://leetcode.com/problems/k-highest-ranked-items-within-a-price-range/description/
+Kth Pattern Problems	Hard	Find the Kth Smallest Sum of a Matrix With Sorted Rows	find-the-kth-smallest-sum-of-a-matrix-with-sorted-rows	leetcode	https://leetcode.com/problems/find-the-kth-smallest-sum-of-a-matrix-with-sorted-rows/description/
+Kth Pattern Problems	Hard	Find the K-Sum of an Array	find-the-k-sum-of-an-array	leetcode	https://leetcode.com/problems/find-the-k-sum-of-an-array/description/
+Minimize Operations	Medium	Remove Stones to Minimize the Total	remove-stones-to-minimize-the-total	leetcode	https://leetcode.com/problems/remove-stones-to-minimize-the-total/
+Minimize Operations	Medium	Minimum Operations to Halve Array Sum	minimum-operations-to-halve-array-sum	leetcode	https://leetcode.com/problems/minimum-operations-to-halve-array-sum/
+Minimize Operations	Medium	The Number of the Smallest Unoccupied Chair	the-number-of-the-smallest-unoccupied-chair	leetcode	https://leetcode.com/problems/the-number-of-the-smallest-unoccupied-chair/
+Minimize Operations	Medium	Lexicographically Minimum String After Removing Stars	lexicographically-minimum-string-after-removing-stars	leetcode	https://leetcode.com/problems/lexicographically-minimum-string-after-removing-stars/description/
+Minimize Operations	Medium	Replace Question Marks in String to Minimize Its Value	replace-question-marks-in-string-to-minimize-its-value	leetcode	https://leetcode.com/problems/replace-question-marks-in-string-to-minimize-its-value/description/
+Minimize Operations	Medium	Minimum Sum of Squared Difference	minimum-sum-of-squared-difference	leetcode	https://leetcode.com/problems/minimum-sum-of-squared-difference/description/
+Minimize Operations	Hard	Minimum Cost to Hire K Workers	minimum-cost-to-hire-k-workers	leetcode	https://leetcode.com/problems/minimum-cost-to-hire-k-workers/
+Minimize Operations	Hard	Minimize Deviation in Array	minimize-deviation-in-array	leetcode	https://leetcode.com/problems/minimize-deviation-in-array/description/
+Minimize Operations	Hard	Minimum Moves to Move a Box to Their Target Location	minimum-moves-to-move-a-box-to-their-target-location	leetcode	https://leetcode.com/problems/minimum-moves-to-move-a-box-to-their-target-location/description/
+Minimize Operations	Hard	Minimum Interval to Include Each Query	minimum-interval-to-include-each-query	leetcode	https://leetcode.com/problems/minimum-interval-to-include-each-query/description/
+Merge K Sorted Patterns	Hard	Merge K Sorted Lists	merge-k-sorted-lists	leetcode	https://leetcode.com/problems/merge-k-sorted-lists/description/
+Merge K Sorted Patterns	Hard	Find K Pairs with Smallest Sums	find-k-pairs-with-smallest-sums	leetcode	https://leetcode.com/problems/find-k-pairs-with-smallest-sums/  
+Merge K Sorted Patterns	Medium	Merge K Sorted Arrays		gfg	https://www.geeksforgeeks.org/problems/merge-k-sorted-arrays/1
+Two Heap Pattern	Medium	Number of Orders in the Backlog	number-of-orders-in-the-backlog	leetcode	https://leetcode.com/problems/number-of-orders-in-the-backlog/
+Two Heap Pattern	Hard	Sliding Window Median	sliding-window-median	leetcode	https://leetcode.com/problems/sliding-window-median/description/
+Two Heap Pattern	Hard	IPO	ipo	leetcode	https://leetcode.com/problems/ipo/description/
+Two Heap Pattern	Hard	Find Median from Data Stream	find-median-from-data-stream	leetcode	https://leetcode.com/problems/find-median-from-data-stream/
+Two Heap Pattern	Hard	Meeting Rooms III	meeting-rooms-iii	leetcode	https://leetcode.com/problems/meeting-rooms-iii/
+Two Heap Pattern	Hard	Time to Cross a Bridge	time-to-cross-a-bridge	leetcode	https://leetcode.com/problems/time-to-cross-a-bridge/

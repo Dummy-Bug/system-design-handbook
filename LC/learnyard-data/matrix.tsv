@@ -1,0 +1,45 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Matrix Transformation and Modification	Easy	Convert 1D Array Into 2D Array	convert-1d-array-into-2d-array	leetcode	https://leetcode.com/problems/convert-1d-array-into-2d-array/description/
+Matrix Transformation and Modification	Easy	Modify the Matrix	modify-the-matrix	leetcode	https://leetcode.com/problems/modify-the-matrix/description/ 
+Matrix Transformation and Modification	Medium	Set Matrix Zeroes	set-matrix-zeroes 	leetcode	https://leetcode.com/problems/set-matrix-zeroes 
+Matrix Transformation and Modification	Medium	Sort the Matrix Diagonally	sort-the-matrix-diagonally 	leetcode	https://leetcode.com/problems/sort-the-matrix-diagonally 
+Matrix Transformation and Modification	Medium	Minimum Operations to Write the Letter Y on a Grid	minimum-operations-to-write-the-letter-y-on-a-grid	leetcode	https://leetcode.com/problems/minimum-operations-to-write-the-letter-y-on-a-grid/description/ 
+Matrix Transformation and Modification	Easy	Shift 2D Grid	shift-2d-grid 	leetcode	https://leetcode.com/problems/shift-2d-grid 
+Matrix Transformation and Modification	Easy	Matrix Similarity After Cyclic Shifts	matrix-similarity-after-cyclic-shifts	leetcode	https://leetcode.com/problems/matrix-similarity-after-cyclic-shifts/description/ 
+Matrix Transformation and Modification	Easy	Transpose Matrix	transpose-matrix 	leetcode	https://leetcode.com/problems/transpose-matrix 
+Matrix Transformation and Modification	Medium	Rotate Image	rotate-image	leetcode	https://leetcode.com/problems/rotate-image/ 
+Matrix Transformation and Modification	Medium	Rotating the Box	rotating-the-box 	leetcode	https://leetcode.com/problems/rotating-the-box 
+Matrix Transformation and Modification	Medium	Cyclically Rotating a Grid	cyclically-rotating-a-grid 	leetcode	https://leetcode.com/problems/cyclically-rotating-a-grid 
+Matrix Transformation and Modification	Medium	Game of Life	game-of-life 	leetcode	https://leetcode.com/problems/game-of-life 
+Matrix Transformation and Modification	Easy	Matrix Cells in Distance Order	matrix-cells-in-distance-order	leetcode	https://leetcode.com/problems/matrix-cells-in-distance-order
+Matrix Patterns and Validity Checks	Medium	Find Valid Matrix Given Row and Column Sums	find-valid-matrix-given-row-and-column-sums 	leetcode	https://leetcode.com/problems/find-valid-matrix-given-row-and-column-sums 
+Matrix Patterns and Validity Checks	Easy	Check if Matrix is X-Matrix	check-if-matrix-is-x-matrix	leetcode	https://leetcode.com/problems/check-if-matrix-is-x-matrix/description/ 
+Matrix Patterns and Validity Checks	Medium	Queens That Can Attack the King	queens-that-can-attack-the-king	leetcode	https://leetcode.com/problems/queens-that-can-attack-the-king/description/ 
+Matrix Patterns and Validity Checks	Medium	Max Increase to Keep City Skyline	max-increase-to-keep-city-skyline 	leetcode	https://leetcode.com/problems/max-increase-to-keep-city-skyline 
+Matrix Patterns and Validity Checks	Easy	Make a Square with the Same Color	make-a-square-with-the-same-color	leetcode	https://leetcode.com/problems/make-a-square-with-the-same-color/description/ 
+Matrix Patterns and Validity Checks	Easy	Subrectangle Queries	subrectangle-queries	leetcode	https://leetcode.com/problems/subrectangle-queries/ 
+Matrix Patterns and Validity Checks	Medium	Count Submatrices with Top-Left Element and Sum Less Than k	count-submatrices-with-top-left-element-and-sum-less-than-k 	leetcode	https://leetcode.com/problems/count-submatrices-with-top-left-element-and-sum-less-than-k 
+Matrix Patterns and Validity Checks	Medium	Find the Minimum Area to Cover All Ones I	find-the-minimum-area-to-cover-all-ones-i	leetcode	https://leetcode.com/problems/find-the-minimum-area-to-cover-all-ones-i
+Matrix Patterns and Validity Checks	Hard	Find the Minimum Area to Cover All Ones II	find-the-minimum-area-to-cover-all-ones-ii 	leetcode	https://leetcode.com/problems/find-the-minimum-area-to-cover-all-ones-ii 
+Matrix Patterns and Validity Checks	Medium	Valid Sudoku	valid-sudoku 	leetcode	https://leetcode.com/problems/valid-sudoku 
+Matrix Patterns and Validity Checks	Medium	Check if Move is Legal	check-if-move-is-legal 	leetcode	https://leetcode.com/problems/check-if-move-is-legal 
+Matrix Patterns and Validity Checks	Medium	Valid Tic-Tac-Toe State	valid-tic-tac-toe-state 	leetcode	https://leetcode.com/problems/valid-tic-tac-toe-state 
+Matrix Patterns and Validity Checks	Medium	Number of Laser Beams in a Bank	number-of-laser-beams-in-a-bank 	leetcode	https://leetcode.com/problems/number-of-laser-beams-in-a-bank 
+Matrix Patterns and Validity Checks	Medium	Where Will the Ball Fall	where-will-the-ball-fall 	leetcode	https://leetcode.com/problems/where-will-the-ball-fall 
+Matrix Patterns and Validity Checks	Medium	Image Overlap	image-overlap 	leetcode	https://leetcode.com/problems/image-overlap 
+Matrix Patterns and Validity Checks	Medium	Minimum Operations to Make a Uni-Value Grid	minimum-operations-to-make-a-uni-value-grid 	leetcode	https://leetcode.com/problems/minimum-operations-to-make-a-uni-value-grid 
+Matrix Traversal and Summation	Easy	Row With Maximum Ones	row-with-maximum-ones 	leetcode	https://leetcode.com/problems/row-with-maximum-ones 
+Matrix Traversal and Summation	Easy	Richest Customer Wealth	richest-customer-wealth	leetcode	https://leetcode.com/problems/richest-customer-wealth/description/  
+Matrix Traversal and Summation	Easy	Lucky Numbers in a Matrix	lucky-numbers-in-a-matrix	leetcode	https://leetcode.com/problems/lucky-numbers-in-a-matrix/description/  
+Matrix Traversal and Summation	Medium	Equal Row and Column Pairs	equal-row-and-column-pairs	leetcode	https://leetcode.com/problems/equal-row-and-column-pairs/description/ 
+Matrix Traversal and Summation	Medium	Difference Between Ones and Zeros in Row and Column	difference-between-ones-and-zeros-in-row-and-column	leetcode	https://leetcode.com/problems/difference-between-ones-and-zeros-in-row-and-column
+Matrix Traversal and Summation	Easy	Matrix Diagonal Sum	matrix-diagonal-sum	leetcode	https://leetcode.com/problems/matrix-diagonal-sum/description/ 
+Matrix Traversal and Summation	Easy	Prime in Diagonal	prime-in-diagonal	leetcode	https://leetcode.com/problems/prime-in-diagonal/description/ 
+Matrix Traversal and Summation	Medium	Diagonal Traverse	diagonal-traverse 	leetcode	https://leetcode.com/problems/diagonal-traverse 
+Matrix Traversal and Summation	Medium	Matrix Block Sum	matrix-block-sum	leetcode	https://leetcode.com/problems/matrix-block-sum/ 
+Matrix Traversal and Summation	Easy	Largest Local Values in a Matrix	largest-local-values-in-a-matrix 	leetcode	https://leetcode.com/problems/largest-local-values-in-a-matrix 
+Matrix Traversal and Summation	Medium	Maximum Sum of an Hourglass	maximum-sum-of-an-hourglass 	leetcode	https://leetcode.com/problems/maximum-sum-of-an-hourglass 
+Matrix Traversal and Summation	Medium	Maximum Matrix Sum	maximum-matrix-sum	leetcode	https://leetcode.com/problems/maximum-matrix-sum/description/ 
+Matrix Traversal and Summation	Medium	Find the Grid of Region Average	find-the-grid-of-region-average 	leetcode	https://leetcode.com/problems/find-the-grid-of-region-average 
+Matrix Traversal and Summation	Medium	Spiral Matrix	spiral-matrix 	leetcode	https://leetcode.com/problems/spiral-matrix 
+Matrix Traversal and Summation	Medium	Spiral Matrix II	spiral-matrix-ii 	leetcode	https://leetcode.com/problems/spiral-matrix-ii 

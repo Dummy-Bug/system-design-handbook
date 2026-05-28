@@ -1,0 +1,26 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Implementation Problems	Easy	C++ STL (queue)		gfg	https://www.geeksforgeeks.org/problems/c-stl-set-5-queue/1
+Implementation Problems	Easy	Implement Queue using Array		gfg	https://www.geeksforgeeks.org/problems/implement-queue-using-array/1
+Implementation Problems	Easy	Implement Stack using Queues	implement-stack-using-queues	leetcode	https://leetcode.com/problems/implement-stack-using-queues/
+Implementation Problems	Easy	Implement Queue using Stacks	implement-queue-using-stacks	leetcode	https://leetcode.com/problems/implement-queue-using-stacks/
+Implementation Problems	Easy	Queue using Two Stacks		gfg	https://www.geeksforgeeks.org/problems/queue-using-two-stacks/1
+Implementation Problems	Easy	Implement Queue using Linked List		gfg	https://www.geeksforgeeks.org/problems/implement-queue-using-linked-list/1
+Implementation Problems	Medium	Design Circular Queue	design-circular-queue	leetcode	https://leetcode.com/problems/design-circular-queue/
+Implementation Problems	Medium	Design Front Middle Back Queue	design-front-middle-back-queue	leetcode	https://leetcode.com/problems/design-front-middle-back-queue/
+Implementation Problems	Hard	N-Queue using Array		naukri	https://www.naukri.com/code360/problems/n-queue-using-array_1170053
+Singly-Ended Queue	Easy	Reverse First K Elements of Queue		gfg	https://www.geeksforgeeks.org/problems/reverse-first-k-elements-of-queue/1
+Singly-Ended Queue	Easy	First Non-Repeating Character in a Stream		gfg	https://www.geeksforgeeks.org/problems/first-non-repeating-character-in-a-stream1216/1
+Singly-Ended Queue	Medium	First Negative Integer in Every Window of Size K		gfg	https://www.geeksforgeeks.org/problems/first-negative-integer-in-every-window-of-size-k3345/1
+Singly-Ended Queue	Medium	Dota2 Senate	dota2-senate	leetcode	https://leetcode.com/problems/dota2-senate/
+Singly-Ended Queue	Medium	Find the Winner of the Circular Game	find-the-winner-of-the-circular-game	leetcode	https://leetcode.com/problems/find-the-winner-of-the-circular-game/
+Singly-Ended Queue	Medium	Reveal Cards in Increasing Order	reveal-cards-in-increasing-order	leetcode	https://leetcode.com/problems/reveal-cards-in-increasing-order/
+Singly-Ended Queue	Hard	Minimum Number of K Consecutive Bit Flips	minimum-number-of-k-consecutive-bit-flips	leetcode	https://leetcode.com/problems/minimum-number-of-k-consecutive-bit-flips/
+Singly-Ended Queue	Hard	Stamping the Sequence	stamping-the-sequence	leetcode	https://leetcode.com/problems/stamping-the-sequence
+Doubly-Ended Queue	Easy	Deque Implementations		gfg	https://www.geeksforgeeks.org/problems/deque-implementations/1
+Doubly-Ended Queue	Medium	Design Circular Deque	design-circular-deque	leetcode	https://leetcode.com/problems/design-circular-deque/
+Doubly-Ended Queue	Medium	Jump Game VI	jump-game-vi	leetcode	https://leetcode.com/problems/jump-game-vi/
+Doubly-Ended Queue	Medium	Continuous Subarrays	continuous-subarrays	leetcode	https://leetcode.com/problems/continuous-subarrays/
+Doubly-Ended Queue	Hard	Max Value of Equation	max-value-of-equation	leetcode	https://leetcode.com/problems/max-value-of-equation/
+Doubly-Ended Queue	Hard	Sliding Window Maximum	sliding-window-maximum	leetcode	https://leetcode.com/problems/sliding-window-maximum/
+Doubly-Ended Queue	Hard	Shortest Subarray with Sum at Least K	shortest-subarray-with-sum-at-least-k	leetcode	https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/
+Doubly-Ended Queue	Hard	Constrained Subsequence Sum	constrained-subsequence-sum	leetcode	https://leetcode.com/problems/constrained-subsequence-sum/

@@ -1,0 +1,48 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Basic Bit Concepts	Easy	Decimal to Binary		gfg	https://www.geeksforgeeks.org/problems/decimal-to-binary-1587115620/1
+Basic Bit Concepts	Easy	Get, Set, Clear ith Bit		gfg	https://www.geeksforgeeks.org/problems/bit-manipulation-1666686020/0
+Basic Bit Concepts	Easy	Kth Bit is Set or Not		gfg	https://www.geeksforgeeks.org/problems/check-whether-k-th-bit-is-set-or-not-1587115620/1
+Basic Bit Concepts	Easy	Check Odd or Even		gfg	https://www.geeksforgeeks.org/problems/odd-or-even3618/1
+Basic Bit Concepts	Easy	Set the Rightmost Unset Bit		gfg	https://www.geeksforgeeks.org/problems/set-the-rightmost-unset-bit4436/1
+Basic Bit Concepts	Easy	Number Complement	number-complement	leetcode	https://leetcode.com/problems/number-complement/description/
+Basic Bit Concepts	Easy	Number of 1 Bits	number-of-1-bits	leetcode	https://leetcode.com/problems/number-of-1-bits/
+Basic Bit Concepts	Easy	Counting Bits	counting-bits	leetcode	https://leetcode.com/problems/counting-bits/
+Basic Bit Concepts	Medium	Count Total Set Bits		gfg	https://www.geeksforgeeks.org/problems/count-total-set-bits-1587115620/1
+Basic Bit Concepts	Easy	Reverse Bits	reverse-bits	leetcode	https://leetcode.com/problems/reverse-bits/
+Basic Bit Concepts	Easy	Power of Two	power-of-two	leetcode	https://leetcode.com/problems/power-of-two/
+Basic Bit Concepts	Easy	Power of Four	power-of-four	leetcode	https://leetcode.com/problems/power-of-four
+Basic Bit Concepts	Easy	Hamming Distance	hamming-distance	leetcode	https://leetcode.com/problems/hamming-distance/
+Basic Bit Concepts	Easy	Add Binary	add-binary	leetcode	https://leetcode.com/problems/add-binary/
+Basic Bit Concepts	Medium	Total Hamming Distance	total-hamming-distance	leetcode	https://leetcode.com/problems/total-hamming-distance/
+Basic Bit Concepts	Easy	UTF-8 Validation	utf-8-validation 	leetcode	https://leetcode.com/problems/utf-8-validation 
+Basic Bit Concepts	Medium	Single Number II	single-number-ii	leetcode	https://leetcode.com/problems/single-number-ii/
+Basic Bit Concepts	Medium	Divide Two Integers	divide-two-integers	leetcode	https://leetcode.com/problems/divide-two-integers/
+Bitwise XOR operator	Easy	Decode Xored Array	decode-xored-array 	leetcode	https://leetcode.com/problems/decode-xored-array 
+Bitwise XOR operator	Easy	Single Number	single-number	leetcode	https://leetcode.com/problems/single-number/
+Bitwise XOR operator	Medium	Single Number III	single-number-iii	leetcode	https://leetcode.com/problems/single-number-iii/
+Bitwise XOR operator	Medium	Sum of Two Integers	sum-of-two-integers	leetcode	https://leetcode.com/problems/sum-of-two-integers/description/
+Bitwise XOR operator	Easy	Swap Two Numbers (with Temp Variable)		gfg	https://www.geeksforgeeks.org/problems/swap-two-numbers3844/1
+Bitwise XOR operator	Easy	Missing Number	missing-number	leetcode	https://leetcode.com/problems/missing-number/
+Bitwise XOR operator	Easy	Decode Xored Permutation	decode-xored-permutation	leetcode	https://leetcode.com/problems/decode-xored-permutation
+Bitwise XOR operator	Medium	Find the Original Array of Prefix XOR	find-the-original-array-of-prefix-xor	leetcode	https://leetcode.com/problems/find-the-original-array-of-prefix-xor
+Bitwise XOR operator	Medium	Gray Code	gray-code	leetcode	https://leetcode.com/problems/gray-code/
+Bitwise XOR operator	Medium	XOR Queries of a Subarray	xor-queries-of-a-subarray	leetcode	https://leetcode.com/problems/xor-queries-of-a-subarray/
+Bitwise XOR operator	Medium	XOR Sequences		codeforces	https://codeforces.com/problemset/problem/1979/B
+Bitwise XOR operator	Medium	Minimum Number of Operations to Make Array XOR Equal to K	minimum-number-of-operations-to-make-array-xor-equal-to-k	leetcode	https://leetcode.com/problems/minimum-number-of-operations-to-make-array-xor-equal-to-k
+Bitwise XOR operator	Medium	Maximum XOR Product	maximum-xor-product	leetcode	https://leetcode.com/problems/maximum-xor-product
+Bitwise XOR operator	Medium	Neighboring Bitwise XOR	neighboring-bitwise-xor	leetcode	https://leetcode.com/problems/neighboring-bitwise-xor
+Bitwise XOR operator	Hard	Minimum XOR Sum of Two Arrays	minimum-xor-sum-of-two-arrays	leetcode	https://leetcode.com/problems/minimum-xor-sum-of-two-arrays/
+Bitwise XOR operator	Hard	Find XOR Sum of All Pairs Bitwise AND	find-xor-sum-of-all-pairs-bitwise-and	leetcode	https://leetcode.com/problems/find-xor-sum-of-all-pairs-bitwise-and
+Bitwise XOR operator	Hard	Find Longest Awesome Substring	find-longest-awesome-substring	leetcode	https://leetcode.com/problems/find-longest-awesome-substring
+Bitwise OR operator	Medium	Shortest Subarray with OR at Least K	shortest-subarray-with-or-at-least-k-ii	leetcode	https://leetcode.com/problems/shortest-subarray-with-or-at-least-k-ii/
+Bitwise OR operator	Medium	Minimum Array End	minimum-array-end	leetcode	https://leetcode.com/problems/minimum-array-end
+Bitwise OR operator	Medium	Maximum OR	maximum-or	leetcode	https://leetcode.com/problems/maximum-or/
+Bitwise OR operator	Hard	Find Subarray with Bitwise OR Closest to K	find-subarray-with-bitwise-or-closest-to-k	leetcode	https://leetcode.com/problems/find-subarray-with-bitwise-or-closest-to-k/
+Bitwise OR operator	Hard	Minimize OR of Remaining Elements Using Operations	minimize-or-of-remaining-elements-using-operations	leetcode	https://leetcode.com/problems/minimize-or-of-remaining-elements-using-operations
+Bitwise AND operator	Medium	Minimum Flips to Make A or B Equal to C	minimum-flips-to-make-a-or-b-equal-to-c	leetcode	https://leetcode.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/
+Bitwise AND operator	Medium	Longest Nice Subarray	longest-nice-subarray	leetcode	https://leetcode.com/problems/longest-nice-subarray/
+Bitwise AND operator	Medium	Bitwise AND of Numbers Range	bitwise-and-of-numbers-range	leetcode	https://leetcode.com/problems/bitwise-and-of-numbers-range/
+Bitwise AND operator	Medium	Longest Subarray with Maximum Bitwise AND	longest-subarray-with-maximum-bitwise-and	leetcode	https://leetcode.com/problems/longest-subarray-with-maximum-bitwise-and/
+Bitwise AND operator	Hard	Number of Subarrays with AND Value of K	number-of-subarrays-with-and-value-of-k	leetcode	https://leetcode.com/problems/number-of-subarrays-with-and-value-of-k/
+Bitwise AND operator	Hard	Triples with Bitwise AND Equal to Zero	triples-with-bitwise-and-equal-to-zero	leetcode	https://leetcode.com/problems/triples-with-bitwise-and-equal-to-zero
+Bitwise AND operator	Hard	Minimum Operations to Form Subsequence with Target Sum	minimum-operations-to-form-subsequence-with-target-sum	leetcode	https://leetcode.com/problems/minimum-operations-to-form-subsequence-with-target-sum

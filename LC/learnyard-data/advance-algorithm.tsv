@@ -1,0 +1,23 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Fenwick Tree	Medium	Alternating Groups III	alternating-groups-iii	leetcode	https://leetcode.com/problems/alternating-groups-iii/description/ 
+Fenwick Tree	Hard	Number of Pairs Satisfying Inequality	number-of-pairs-satisfying-inequality	leetcode	https://leetcode.com/problems/number-of-pairs-satisfying-inequality/description/ 
+Fenwick Tree	Hard	Count Good Triplets in an Array	count-good-triplets-in-an-array	leetcode	https://leetcode.com/problems/count-good-triplets-in-an-array/description/ 
+Fenwick Tree	Hard	Booking Concert Tickets in Groups	booking-concert-tickets-in-groups	leetcode	https://leetcode.com/problems/booking-concert-tickets-in-groups/description/ 
+Segment Tree	Medium	Longest Uploaded Prefix	longest-uploaded-prefix	leetcode	https://leetcode.com/problems/longest-uploaded-prefix/description/ 
+Segment Tree	Medium	Range Sum Query - Mutable	range-sum-query-mutable	leetcode	https://leetcode.com/problems/range-sum-query-mutable/description/  
+Segment Tree	Hard	Falling Squares	falling-squares	leetcode	https://leetcode.com/problems/falling-squares/description/ 
+Segment Tree	Hard	Range Module	range-module	leetcode	https://leetcode.com/problems/range-module/description/ 
+Segment Tree	Hard	Count of Range Sum	count-of-range-sum	leetcode	https://leetcode.com/problems/count-of-range-sum/description/ 
+Segment Tree	Hard	Longest Substring of One Repeating Character	longest-substring-of-one-repeating-character	leetcode	https://leetcode.com/problems/longest-substring-of-one-repeating-character/description/ 
+Segment Tree	Hard	Maximum Sum Queries	maximum-sum-queries	leetcode	https://leetcode.com/problems/maximum-sum-queries/description/ 
+Segment Tree	Hard	Handling Sum Queries After Update	handling-sum-queries-after-update	leetcode	https://leetcode.com/problems/handling-sum-queries-after-update/description/ 
+Segment Tree	Hard	Peaks in Array	peaks-in-array	leetcode	https://leetcode.com/problems/peaks-in-array/description/ 
+Segment Tree	Hard	Maximum Sum of Subsequence With Non-Adjacent Elements	maximum-sum-of-subsequence-with-non-adjacent-elements	leetcode	https://leetcode.com/problems/maximum-sum-of-subsequence-with-non-adjacent-elements/description/
+Segment Tree	Hard	Block Placement Queries	block-placement-queries	leetcode	https://leetcode.com/problems/block-placement-queries/description/ 
+Sparse Table	Hard	Range Minimum Query		spoj	https://www.spoj.com/problems/RMQSQ/
+Sparse Table	Hard	Catapult that ball		spoj	http://www.spoj.com/problems/THRBL/
+Sparse Table	Hard	Miraculous		spoj	http://www.spoj.com/problems/TNVFC1M/
+Sparse Table	Hard	Negative Score		spoj	http://www.spoj.com/problems/RPLN/
+Sparse Table	Hard	DIFERENCIJA		spoj	https://www.spoj.com/problems/DIFERENC/
+Sparse Table	Hard	Find a Value of a Mysterious Function Closest to Target	find-a-value-of-a-mysterious-function-closest-to-target	leetcode	https://leetcode.com/problems/find-a-value-of-a-mysterious-function-closest-to-target/ 
+Sparse Table	Hard	Maximum Binary Tree	maximum-binary-tree	leetcode	https://leetcode.com/problems/maximum-binary-tree/description/ 

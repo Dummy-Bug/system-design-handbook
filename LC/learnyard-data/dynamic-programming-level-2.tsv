@@ -1,0 +1,64 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+DP with Bitmask	Medium	Can I Win	can-i-win	leetcode	https://leetcode.com/problems/can-i-win/
+DP with Bitmask	Medium	Partition to K Equal Sum Subsets	partition-to-k-equal-sum-subsets	leetcode	https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
+DP with Bitmask	Hard	Stickers to Spell Word	stickers-to-spell-word	leetcode	https://leetcode.com/problems/stickers-to-spell-word/
+DP with Bitmask	Hard	Smallest Sufficient Team	smallest-sufficient-team	leetcode	https://leetcode.com/problems/smallest-sufficient-team/
+DP with Bitmask	Hard	Maximum Students Taking Exam	maximum-students-taking-exam	leetcode	https://leetcode.com/problems/maximum-students-taking-exam/
+DP with Bitmask	Hard	Number of Ways to Wear Different Hats to Each Other	number-of-ways-to-wear-different-hats-to-each-other	leetcode	https://leetcode.com/problems/number-of-ways-to-wear-different-hats-to-each-other/
+DP with Bitmask	Hard	Minimum Cost to Connect Two Groups of Points	minimum-cost-to-connect-two-groups-of-points	leetcode	https://leetcode.com/problems/minimum-cost-to-connect-two-groups-of-points/
+DP with Bitmask	Hard	Maximum Number of Achievable Transfer Requests	maximum-number-of-achievable-transfer-requests	leetcode	https://leetcode.com/problems/maximum-number-of-achievable-transfer-requests/
+DP with Bitmask	Hard	Little Elephant and T-Shirts		codechef	https://www.codechef.com/problems/TSHIRTS
+DP with Bitmask	Hard	Distribute Repeating Integers	distribute-repeating-integers	leetcode	https://leetcode.com/problems/distribute-repeating-integers/
+DP with Bitmask	Hard	Maximize Grid Happiness	maximize-grid-happiness	leetcode	https://leetcode.com/problems/maximize-grid-happiness/
+DP with Bitmask	Hard	Find Minimum Time to Finish All Jobs	find-minimum-time-to-finish-all-jobs	leetcode	https://leetcode.com/problems/find-minimum-time-to-finish-all-jobs/
+DP with Bitmask	Hard	Minimum Sum of Values by Dividing Array	minimum-sum-of-values-by-dividing-array	leetcode	https://leetcode.com/problems/minimum-sum-of-values-by-dividing-array/description/
+DP with Bitmask	Hard	Shortest Path Visiting All Nodes	shortest-path-visiting-all-nodes	leetcode	https://leetcode.com/problems/shortest-path-visiting-all-nodes/
+DP with Bitmask	Hard	Grouping		atcoder	https://atcoder.jp/contests/dp/tasks/dp_u
+DP with Bitmask	Hard	Matching		atcoder	https://atcoder.jp/contests/dp/tasks/dp_o
+Digit DP	Hard	Counting Numbers		cses	https://cses.fi/problemset/task/2220
+Digit DP	Hard	Non-negative Integers without Consecutive Ones	non-negative-integers-without-consecutive-ones	leetcode	https://leetcode.com/problems/non-negative-integers-without-consecutive-ones/
+Digit DP	Hard	Numbers At Most N Given Digit Set	numbers-at-most-n-given-digit-set	leetcode	https://leetcode.com/problems/numbers-at-most-n-given-digit-set/
+Digit DP	Hard	Numbers With Repeated Digits	numbers-with-repeated-digits	leetcode	https://leetcode.com/problems/numbers-with-repeated-digits/
+Digit DP	Hard	Number of Digit One	number-of-digit-one	leetcode	https://leetcode.com/problems/number-of-digit-one/
+Digit DP	Hard	Number of Beautiful Integers in the Range	number-of-beautiful-integers-in-the-range	leetcode	https://leetcode.com/problems/number-of-beautiful-integers-in-the-range/
+Digit DP	Hard	Count the Number of Powerful Integers	count-the-number-of-powerful-integers	leetcode	https://leetcode.com/problems/count-the-number-of-powerful-integers/description/
+Digit DP	Hard	Find All Good Strings	find-all-good-strings	leetcode	https://leetcode.com/problems/find-all-good-strings/description/
+DP on Trees	Medium	House Robber III	house-robber-iii	leetcode	https://leetcode.com/problems/house-robber-iii/
+DP on Trees	Medium	Longest ZigZag Path in a Binary Tree	longest-zigzag-path-in-a-binary-tree	leetcode	https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/
+DP on Trees	Medium	Maximum Score After Applying Operations on a Tree	maximum-score-after-applying-operations-on-a-tree	leetcode	https://leetcode.com/problems/maximum-score-after-applying-operations-on-a-tree/description/
+DP on Trees	Medium	Subordinates		cses	https://cses.fi/problemset/task/1674
+DP on Trees	Hard	Tree Matching		cses	https://cses.fi/problemset/task/1130
+DP on Trees	Hard	Maximum Sum BST in Binary Tree	maximum-sum-bst-in-binary-tree	leetcode	https://leetcode.com/problems/maximum-sum-bst-in-binary-tree/
+DP on Trees	Hard	Number of Ways to Reorder Array to Get Same BST	number-of-ways-to-reorder-array-to-get-same-bst	leetcode	https://leetcode.com/problems/number-of-ways-to-reorder-array-to-get-same-bst/
+DP on Trees	Hard	Maximum Points After Collecting Coins From All Nodes	maximum-points-after-collecting-coins-from-all-nodes	leetcode	https://leetcode.com/problems/maximum-points-after-collecting-coins-from-all-nodes/description/
+DP on Trees	Hard	Sum of Distances in Tree	sum-of-distances-in-tree	leetcode	https://leetcode.com/problems/sum-of-distances-in-tree/description/
+DP on Trees	Hard	Maximum Points After Collecting Coins From All Nodes	maximum-points-after-collecting-coins-from-all-nodes	leetcode	https://leetcode.com/problems/maximum-points-after-collecting-coins-from-all-nodes/description/
+DP on Trees	Hard	Count Paths That Can Form a Palindrome in a Tree	count-paths-that-can-form-a-palindrome-in-a-tree	leetcode	https://leetcode.com/problems/count-paths-that-can-form-a-palindrome-in-a-tree/description/
+DP on Trees	Hard	Find Number of Coins to Place in Tree Nodes	find-number-of-coins-to-place-in-tree-nodes	leetcode	https://leetcode.com/problems/find-number-of-coins-to-place-in-tree-nodes/description/
+DP on Trees	Hard	Minimize the Total Price of the Trips	minimize-the-total-price-of-the-trips	leetcode	https://leetcode.com/problems/minimize-the-total-price-of-the-trips/description/
+DP on Trees	Hard	Tree Distances 1		cses	https://cses.fi/problemset/task/1132
+DP on Trees	Hard	Tree Distances II		cses	https://cses.fi/problemset/task/1133
+DP on Trees	Hard	Company Queries I		cses	https://cses.fi/problemset/task/1687
+DP on Trees	Hard	Company Queries II		cses	https://cses.fi/problemset/task/1688
+DP on Trees	Hard	Distance Queries		cses	https://cses.fi/problemset/task/1135
+DP with Math	Medium	Ugly Number II	ugly-number-ii	leetcode	https://leetcode.com/problems/ugly-number-ii/
+DP with Math	Medium	Count Sorted Vowel Strings	count-sorted-vowel-strings	leetcode	https://leetcode.com/problems/count-sorted-vowel-strings/
+DP with Math	Hard	Race Car	race-car	leetcode	https://leetcode.com/problems/race-car/
+DP with Math	Hard	Super Egg Drop	super-egg-drop	leetcode	https://leetcode.com/problems/super-egg-drop/
+DP with Math	Hard	Least Operators to Express Number	least-operators-to-express-number	leetcode	https://leetcode.com/problems/least-operators-to-express-number/
+DP with Math	Hard	Largest Multiple of Three	largest-multiple-of-three	leetcode	https://leetcode.com/problems/largest-multiple-of-three/
+DP with Math	Hard	Kth Smallest Instructions	kth-smallest-instructions	leetcode	https://leetcode.com/problems/kth-smallest-instructions/
+DP with Math	Medium	Number of Sets of K Non-Overlapping Line Segments	number-of-sets-of-k-non-overlapping-line-segments	leetcode	https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
+DP with Math	Medium	Domino and Tromino Tiling	domino-and-tromino-tiling	leetcode	https://leetcode.com/problems/domino-and-tromino-tiling/
+DP with Math	Medium	Count Numbers with Unique Digits	count-numbers-with-unique-digits	leetcode	https://leetcode.com/problems/count-numbers-with-unique-digits/
+DP with Math	Hard	Minimum One Bit Operations to Make Integers Zero	minimum-one-bit-operations-to-make-integers-zero	leetcode	https://leetcode.com/problems/minimum-one-bit-operations-to-make-integers-zero/
+DP with Math	Hard	Find All Possible Stable Binary Arrays II	find-all-possible-stable-binary-arrays-ii	leetcode	https://leetcode.com/problems/find-all-possible-stable-binary-arrays-ii/description/
+DP with Math	Hard	Counting Tilings		cses	https://cses.fi/problemset/task/2181
+Dp with Probability	Medium	Soup Servings	soup-servings	leetcode	https://leetcode.com/problems/soup-servings/
+Dp with Probability	Medium	New 21 Game	new-21-game	leetcode	https://leetcode.com/problems/new-21-game/
+Dp with Probability	Medium	Airplane Seat Assignment Probability	airplane-seat-assignment-probability	leetcode	https://leetcode.com/problems/airplane-seat-assignment-probability/
+Dp with Probability	Medium	Knight Probability in Chessboard	knight-probability-in-chessboard	leetcode	https://leetcode.com/problems/knight-probability-in-chessboard/
+Dp with Probability	Medium	Champagne Tower	champagne-tower	leetcode	https://leetcode.com/problems/champagne-tower/
+Dp with Probability	Hard	Sushi		atcoder	https://atcoder.jp/contests/dp/tasks/dp_j
+Dp with Probability	Hard	Coins		atcoder	https://atcoder.jp/contests/dp/tasks/dp_i
+Dp with Probability	Hard	Probability of a Two Boxes Having the Same Number of Distinct Balls	probability-of-a-two-boxes-having-the-same-number-of-distinct-balls	leetcode	https://leetcode.com/problems/probability-of-a-two-boxes-having-the-same-number-of-distinct-balls/description/

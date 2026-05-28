@@ -1,0 +1,34 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Bubble Sort	Theory	Bubble Sort		unknown	NA
+Insertion Sort	Theory	Insertion Sort Algorithm		unknown	NA
+Insertion Sort	Medium	Insertion Sort List 	insertion-sort-list	leetcode	https://leetcode.com/problems/insertion-sort-list/description/
+Selection Sort	Theory	Selection Sort Algorithm		unknown	NA
+Merge Sort	Theory	Merge Sort		unknown	NA
+Merge Sort	Medium	Count Inversions		gfg	https://www.geeksforgeeks.org/problems/inversion-of-array-1587115620/1
+Merge Sort	Hard	Count of Smaller Numbers After Self	count-of-smaller-numbers-after-self	leetcode	https://leetcode.com/problems/count-of-smaller-numbers-after-self/description/
+Merge Sort	Hard	Count of Range Sum	count-of-range-sum	leetcode	https://leetcode.com/problems/count-of-range-sum
+Merge Sort	Hard	Reverse Pairs	reverse-pairs	leetcode	https://leetcode.com/problems/reverse-pairs
+Merge Sort	Hard	Create Sorted Array through Instructions	create-sorted-array-through-instructions	leetcode	https://leetcode.com/problems/create-sorted-array-through-instructions/description/
+Merge Sort	Hard	Count Good Triplets in an Array	count-good-triplets-in-an-array	leetcode	https://leetcode.com/problems/count-good-triplets-in-an-array/description/
+Merge Sort	Hard	Number of Pairs Satisfying Inequality	number-of-pairs-satisfying-inequality	leetcode	https://leetcode.com/problems/number-of-pairs-satisfying-inequality/description/
+Quick Sort	Theory	Quick Sort		unknown	NA
+Quick Sort	Medium	Sort an Array	sort-an-array	leetcode	https://leetcode.com/problems/sort-an-array/description/
+Counting Sort	Theory	Counting Sort		unknown	NA
+Counting Sort	Medium	Relative Sort Array	relative-sort-array	leetcode	https://leetcode.com/problems/relative-sort-array/description/
+Counting Sort	Medium	Reduce Array Size to The Half	reduce-array-size-to-the-half	leetcode	https://leetcode.com/problems/reduce-array-size-to-the-half/description/
+Counting Sort	Medium	Maximum Ice Cream Bars	maximum-ice-cream-bars	leetcode	https://leetcode.com/problems/maximum-ice-cream-bars/
+Radix Sort	Theory	Radix Sort		unknown	NA
+Bucket Sort	Theory	Bucket Sort		unknown	NA
+Bucket Sort	Medium	Top K Frequent Elements	top-k-frequent-elements	leetcode	https://leetcode.com/problems/top-k-frequent-elements/description/
+Bucket Sort	Medium	Sort Characters By Frequency	sort-characters-by-frequency	leetcode	https://leetcode.com/problems/sort-characters-by-frequency/description/
+Bucket Sort	Medium	Maximum Gap	maximum-gap	leetcode	https://leetcode.com/problems/maximum-gap/
+Bucket Sort	Medium	Top K Frequent Words	top-k-frequent-words	leetcode	https://leetcode.com/problems/top-k-frequent-words/description/
+Bucket Sort	Hard	Contains Duplicate III	contains-duplicate-iii	leetcode	https://leetcode.com/problems/contains-duplicate-iii/description/
+Cyclic Sort	Easy	Missing Number	missing-number	leetcode	https://leetcode.com/problems/missing-number/description/
+Cyclic Sort	Medium	Find the Duplicate Number	find-the-duplicate-number	leetcode	https://leetcode.com/problems/find-the-duplicate-number/
+Cyclic Sort	Hard	First Missing Positive	first-missing-positive	leetcode	https://leetcode.com/problems/first-missing-positive
+Custom Sort	Theory	Comparator Sort		unknown	NA
+Custom Sort	Medium	Custom Sort String	custom-sort-string	leetcode	https://leetcode.com/problems/custom-sort-string/
+Custom Sort	Medium	Largest Number	largest-number	leetcode	https://leetcode.com/problems/largest-number/
+Custom Sort	Medium	Sort the Jumbled Numbers	sort-the-jumbled-numbers	leetcode	https://leetcode.com/problems/sort-the-jumbled-numbers/
+Custom Sort	Medium	Rank Teams by Votes	rank-teams-by-votes	leetcode	https://leetcode.com/problems/rank-teams-by-votes/description/

@@ -1,0 +1,25 @@
+Subgroup	Difficulty	Title	Slug	Source	Link
+Prefix Sum	Easy	Range Sum Query - Immutable	range-sum-query-immutable	leetcode	https://leetcode.com/problems/range-sum-query-immutable
+Prefix Sum	Easy	Left and Right Sum Differences 	left-and-right-sum-differences	leetcode	https://leetcode.com/problems/left-and-right-sum-differences/description/
+Prefix Sum	Medium	Count Vowel Strings in Ranges	count-vowel-strings-in-ranges	leetcode	https://leetcode.com/problems/count-vowel-strings-in-ranges/description/
+Prefix Sum	Medium	Minimum Penalty for a Shop	minimum-penalty-for-a-shop	leetcode	https://leetcode.com/problems/minimum-penalty-for-a-shop/description/
+Prefix Sum	Medium	Find Good Days to Rob the Bank	find-good-days-to-rob-the-bank	leetcode	https://leetcode.com/problems/find-good-days-to-rob-the-bank/
+Prefix Sum	Medium	Sum of Absolute Differences in a Sorted Array	sum-of-absolute-differences-in-a-sorted-array	leetcode	https://leetcode.com/problems/sum-of-absolute-differences-in-a-sorted-array/description/
+Prefix Sum	Medium	Product of Array Except Self	product-of-array-except-self	leetcode	https://leetcode.com/problems/product-of-array-except-self
+Prefix Sum	Medium	Product of the Last K Numbers	product-of-the-last-k-numbers	leetcode	https://leetcode.com/problems/product-of-the-last-k-numbers/description/
+Prefix Sum	Medium	Removing Minimum Number of Magic Beans	removing-minimum-number-of-magic-beans	leetcode	https://leetcode.com/problems/removing-minimum-number-of-magic-beans/description/
+Prefix Sum	Medium	Find All Good Indices	find-all-good-indices	leetcode	https://leetcode.com/problems/find-all-good-indices/description/
+Prefix Sum	Medium	Movement of Robots	movement-of-robots	leetcode	https://leetcode.com/problems/movement-of-robots/description/
+Prefix Sum	Medium	Range Sum Query 2D - Immutable	range-sum-query-2d-immutable	leetcode	https://leetcode.com/problems/range-sum-query-2d-immutable
+Prefix Sum	Medium	Increment Submatrices by One	increment-submatrices-by-one	leetcode	https://leetcode.com/problems/increment-submatrices-by-one/
+Prefix Sum	Hard	Power of Heroes	power-of-heroes	leetcode	https://leetcode.com/problems/power-of-heroes/description/
+Prefix Sum	Hard	Minimum Cost to Make Array Equal	minimum-cost-to-make-array-equal	leetcode	https://leetcode.com/problems/minimum-cost-to-make-array-equal/description/
+Line Sweep	Easy	Maximum Population Year	maximum-population-year	leetcode	https://leetcode.com/problems/maximum-population-year/
+Line Sweep	Easy	Points That Intersect With Cars	points-that-intersect-with-cars	leetcode	https://leetcode.com/problems/points-that-intersect-with-cars/
+Line Sweep	Medium	Pongal Bunk		codechef	https://www.codechef.com/problems/COWA19B
+Line Sweep	Medium	Car Pooling	car-pooling	leetcode	https://leetcode.com/problems/car-pooling/
+Line Sweep	Medium	My Calendar II	my-calendar-ii	leetcode	https://leetcode.com/problems/my-calendar-ii/
+Line Sweep	Medium	Shifting Letters II	shifting-letters-ii	leetcode	https://leetcode.com/problems/shifting-letters-ii/description/
+Line Sweep	Hard	Perfect Rectangle	perfect-rectangle	leetcode	https://leetcode.com/problems/perfect-rectangle/description/
+Line Sweep	Hard	Rectangle Area II	rectangle-area-ii	leetcode	https://leetcode.com/problems/rectangle-area-ii/
+Line Sweep	Hard	Number of Flowers in Full Bloom	number-of-flowers-in-full-bloom	leetcode	https://leetcode.com/problems/number-of-flowers-in-full-bloom/description/
