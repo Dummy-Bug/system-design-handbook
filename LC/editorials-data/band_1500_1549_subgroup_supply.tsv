@@ -1,0 +1,27 @@
+MainTopic	Subgroup	Count	Easiest_Title	Easiest_AR	Easiest_QPos	Easiest_Slug
+Hashing	Implementary Problems	40	Count Triplets That Can Form Two Arrays of Equal XOR	84.8%	Q2	count-triplets-that-can-form-two-arrays-of-equal-xor
+Greedy	Part I	25	Balance a Binary Search Tree	86.3%	Q3	balance-a-binary-search-tree
+Sorting	Implementary	24	Sort the Matrix Diagonally	83.2%	Q3	sort-the-matrix-diagonally
+2 Pointers	Two Pointer on Arrays	13	Rotating the Box	82.5%	Q3	rotating-the-box
+Bit Manipulation	Basic Bit Concepts	10	Minimum Number of Operations to Make Array XOR Equal to K	85.5%	Q2	minimum-number-of-operations-to-make-array-xor-equal-to-k
+Binary Search	Upper Bound and Lower Bound	10	Balance a Binary Search Tree	86.3%	Q3	balance-a-binary-search-tree
+Sliding Window	Dynamic Size Sliding-Window	10	Longest Nice Substring	64.4%	Q1	longest-nice-substring
+Matrix	Implementary	9	Sort the Matrix Diagonally	83.2%	Q3	sort-the-matrix-diagonally
+Dynamic Programming Level 1	Linear DP	8	Count Sorted Vowel Strings	79.3%	Q2	count-sorted-vowel-strings
+Prefix Sum	Implementary	7	Count Triplets That Can Form Two Arrays of Equal XOR	84.8%	Q2	count-triplets-that-can-form-two-arrays-of-equal-xor
+2 Pointers	Two Pointer on Strings	4	Camelcase Matching	65.4%	Q3	camelcase-matching
+Binary Tree	Implementary	4	Balance a Binary Search Tree	86.3%	Q3	balance-a-binary-search-tree
+Stack	Implementary Stack	4	Remove All Adjacent Duplicates in String II	61.3%	Q3	remove-all-adjacent-duplicates-in-string-ii
+Heap (Priority Queue)	Implementary Questions	3	Design a Number Container System	57.1%	Q3	design-a-number-container-system
+Tries	Trie involving String	3	Remove Sub-Folders from the Filesystem	78.6%	Q2	remove-sub-folders-from-the-filesystem
+String Matching Algos	Pattern Matching	3	Camelcase Matching	65.4%	Q3	camelcase-matching
+Combinatorics & Geometry	Line	2	Largest Triangle Area	71.6%	Q1	largest-triangle-area
+Combinatorics & Geometry	Combinatorics	2	Count Sorted Vowel Strings	79.3%	Q2	count-sorted-vowel-strings
+Binary Search	Binary Search On Answer	2	Balance a Binary Search Tree	86.3%	Q3	balance-a-binary-search-tree
+Recursion & Backtracking	Recursion Problems	2	Maximum Split of Positive Even Integers	59.7%	Q3	maximum-split-of-positive-even-integers
+Graphs	Graph Representation	2	Minimum Number of Vertices to Reach All Nodes	81.6%	Q2	minimum-number-of-vertices-to-reach-all-nodes
+Stack	Monotonic Stack	2	Sum of Subarray Ranges	61.2%	Q2	sum-of-subarray-ranges
+Dynamic Programming Level 1	DP on String	1	Longest Palindrome After Substring Concatenation I	43.9%	Q2	longest-palindrome-after-substring-concatenation-i
+Stack	Stack with String	1	Remove All Adjacent Duplicates in String II	61.3%	Q3	remove-all-adjacent-duplicates-in-string-ii
+Binary Search Tree	Implementary	1	Balance a Binary Search Tree	86.3%	Q3	balance-a-binary-search-tree
+Linked List	Implementary	1	Design Authentication Manager	58.6%	Q2	design-authentication-manager

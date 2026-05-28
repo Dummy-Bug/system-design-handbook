@@ -4,6 +4,9 @@ Single source of truth for **which pattern is installed at which band** across t
 
 Last updated: 2026-05-28 (after retroactive ≥3 audit + foundational-vs-advanced split + 1900-1949 generation).
 
+> [!important] Granularity upgrade (2026-05-28)
+> Install decisions are now made at **LearnYard subgroup granularity** (119 subgroups across 27 main topics), not broad LC-tag granularity. The canonical taxonomy is `learnyard-data/subgroups.tsv`. Per-band supply is computed by `scripts/classify_band_to_learnyard.py` using three stacked signals: doocs editorial algorithmic tags + doocs approach names + LC official tags. This caught two coarse-granularity errors at 1500-1549 (see "Subtopic corrections" below).
+
 **Two pattern classes (rule formalized 2026-05-28):**
 - **Foundational** — install at the FIRST band where the pattern appears, regardless of supply. The ≥3 rule does NOT apply. Examples: monotonic stack, tree DP, backtracking, plain binary search. Rationale: these are core CS patterns the user must own for 1700-rating contests; deferring them indefinitely on thin supply would leave permanent blind spots.
 - **Advanced** — install ONLY at the first band with ≥3 viable (non-Design) in-band reps. If no band 1500-1899 has ≥3, the pattern is classified **outlier** and treated like Design (excluded as a target bucket). Examples: Segment Tree, Dijkstra, Bitmask DP.
@@ -77,6 +80,44 @@ When a problem with an outlier-class tag appears in Phase 2, it flows under its 
 
 ---
 
+## Subtopic corrections (2026-05-28 LearnYard re-audit, 1500-1549)
+
+The broad-tag ledger had two errors, found when re-auditing 1500-1549 at LearnYard subgroup granularity with doocs editorial data:
+
+1. **"Tree DP" was a phantom install.** The 1500-1549 pick (Smallest Subtree with all the Deepest Nodes) is **Binary Tree / Implementary** (traversal), not **DP on Trees** (LearnYard DP L2). doocs editorial confirms no DP. **DP on Trees has 0 reps at 1500-1549** — the blind-spot "tree DP" was never actually going to install here. It must install at the first band with ≥3 DP-on-Trees reps. The foundational "Binary Tree traversal" mechanic IS installed at 1500-1549.
+
+2. **Bit Manipulation / Bitwise XOR is a distinct bucket from Math/NT.** 10 in-band XOR reps were being folded into "math/bit". LearnYard treats Bit Manipulation as its own top-level topic (4 subgroups). Now a separate Group A acquisition at 1500-1549.
+
+3. **Backtracking is a phantom at 1500-1549 (found by editorial-correctness verification).** Both backtracking-tagged problems (Maximum Split of Positive Even Integers, Maximum Strength of a Group) have **Greedy / Binary-Enumeration** editorial solutions — confirmed across doocs tags, LC tags, AND editorial body. Zero genuine backtracking in the band. Removed from Group A; defers to the first band whose editorial solution is actually backtracking (permutations/combinations/subsets with pruning). **Same phantom class as DP-on-Trees: an LC "Backtracking" tag does not mean the intended solution is backtracking.**
+
+> [!warning] Verification rule learned (2026-05-28)
+> A topic only counts as installable at a band if the **editorial's actual solution** uses that pattern — not merely if the LC/doocs *tag* lists it. Tags are necessary, not sufficient. Both phantom installs (Tree DP, Backtracking) passed the tag check but failed the editorial check. **Always verify Group A picks against the doocs editorial approach before locking them.**
+
+**Excluded as scaffolding (not derivation targets, like Design):** Sorting/Implementary, Matrix/Implementary, String Matching (the 1500-1549 "matches" were all incidental — actually Trie/two-pointer).
+
+**Open item for future bands:** when processing 1550-1999, re-audit each at LearnYard subgroup granularity (not broad LC tags). Specifically hunt for the real **DP on Trees** install band. The coarse-tag Phase 1 files for 1550-1999 still need this same subtopic re-audit when each becomes active.
+
+## LearnYard canonical taxonomy reference
+
+27 main topics / 119 subgroups. Full list: `learnyard-data/subgroups.tsv`. Derivation-target main topics (excludes pure scaffolding like Sorting, Matrix, DSA Fundamentals, Programming Fundamentals):
+
+- **Tries** (5): Introductory · Trie w/ Bit · Trie w/ String · Trie w/ Recursion · Trie w/ File System
+- **DP Level 1** (10): Linear · 2D · Grid · Knapsack · LIS · LCS · DP-on-String · Cumulative Sum · Matrix Chain (Interval) · Kadane
+- **DP Level 2** (5): Bitmask · Digit DP · **DP on Trees** · DP w/ Math · DP w/ Probability
+- **Recursion & Backtracking** (5): Recursion · Permutation · Combination · Subsets · Path-on-Grid
+- **Game Theory** (3): Level I / II / III
+- **Graphs** (12): Representation · Cycle Detection · Topo Sort · Flood Fill · Multi-Source BFS · Dijkstra · Bellman Ford · Floyd Warshall · TSP · DSU · MST · Additional
+- **Binary Search** (8): Introductory · Upper/Lower Bound · Search-on-Matrix · Missing/Repeating · Semi-Sorted · BS-on-Answer · Minmax · Kth Element
+- **Greedy** (2): Part I / II
+- **Bit Manipulation** (4): Basic · XOR · OR · AND
+- **Heap (PQ)** (6 subgroups)
+- **Stack** (4): incl Monotonic Stack
+- **Queue** (3): incl Monotonic Queue
+- **Binary Tree** (7), **Binary Search Tree** (3)
+- **Sliding Window** (2): Fixed / Dynamic
+- **2 Pointers** (2): Arrays / Strings
+- **String Matching Algos** (2), **Combinatorics & Geometry** (4), **Advance algorithm** (3: Segment Tree / Fenwick)
+
 ## Audit history
 
 - **2026-05-28** — Built initial ledger after generating Phase 1 for 1700-1949.
@@ -85,6 +126,7 @@ When a problem with an outlier-class tag appears in Phase 2, it flows under its 
 - **2026-05-28** — Foundational-vs-advanced split formalized: 1500-1549 and 1550-1599 picks confirmed all foundational (no audit changes); ≥3 rule applies only to advanced topics.
 - **2026-05-28** — 1900-1949 generated: no new installs; advanced topics confirmed still thin.
 - **2026-05-28** — 1950-1999 generated: same shape; no new installs; outlier classifications hold. Segment Tree confirmed 0 viable across 9 bands.
+- **2026-05-28** — LearnYard data fully extracted (1431 problems, 119 subgroups → `learnyard-data/`). doocs editorials fetched for 1500-1549 (112/112 → `editorials-data/`). Fetch scripts persisted to `scripts/`. 1500-1549 re-audited at subgroup granularity: relabeled Tree DP→Binary Tree traversal, added Bit/XOR bucket, dropped Sorting/Matrix/String-Matching as scaffolding. Phase 1 + band topic map + this ledger updated. **1550-1999 still need the same subgroup re-audit when active.**
 
 ---
 

@@ -40,26 +40,35 @@ Two earlier claims were **wrong**, corrected by reading this band:
 
 ---
 
-## Ownership tracker
+## Ownership tracker (LearnYard subtopic granularity — re-audited 2026-05-28)
 
-Owned = **3 cold first-submission cleans**, reps 2-3 disguised/combined (rule 6). Marks: `◯` 0/3 · `◐` 1-2/3 · `●` owned. Prior vanilla cleans cap a bucket at 1/3 (reps 2-3 must be disguised, none done yet). Soft-fail/hinted/failed = 0.
+Owned = **3 cold first-submission cleans**, reps 2-3 disguised/combined (rule 6). Marks: `◯` 0/3 · `◐` 1-2/3 · `●` owned. Prior vanilla cleans cap a bucket at 1/3. Soft-fail/hinted/failed = 0.
 
-| Core bucket | Cold cleans | Status | Need |
-|-------------|-------------|--------|------|
-| Sliding window | 1 (#1) | ◐ | 2 disguised |
-| Hashing / counting | 1 (#2,#3 vanilla) | ◐ | 2 disguised |
-| Heap / top-k | 1 (#5) | ◐ | 2 disguised |
-| Binary search on answer | 1 (#8) | ◐ | 2 disguised |
-| Greedy / observation | 0 | ◯ | 3 |
-| Linear / grid / counting DP | 0 | ◯ | 3 |
-| Sort + scan / prefix | 0 (#4 failed) | ◯ | 3 |
-| Graph BFS/DFS | 0 | ◯ | 3 |
-| Two-pointer / interval merge | 0 | ◯ | 3 |
-| Math / number theory / bit | 1 (#7,#9 vanilla) | ◐ | 2 disguised — math-reflex ≠ solving |
-| **Monotonic stack** (blind) | 0 | ◯ | acquisition + 3 |
-| **Tree DP** (blind) | 0 | ◯ | acquisition + 3 |
+Buckets are now LearnYard subgroups (was broad LC tags). Supply column = in-band reps available (`editorials-data/band_1500_1549_subgroup_supply.tsv`).
 
-(Union-find scarce here → own it at 1550-1600. Interval DP absent → Stone Game @1550-1600.)
+| LearnYard subgroup | Supply | Cold cleans | Status | Need |
+|--------------------|-------:|-------------|--------|------|
+| Sliding Window / Dynamic Size | 10 | 1 (#1) | ◐ | 2 disguised |
+| Hashing / Implementary Problems | 40 | 1 (#2,#3 vanilla) | ◐ | 2 disguised |
+| Heap (PQ) / Implementary | 3 | 1 (#5) | ◐ | 2 disguised |
+| Binary Search / Binary Search On Answer | 2 | 1 (#8) | ◐ | 2 (shortfall — supply 2) |
+| Greedy / Part I | 25 | 0 | ◯ | 3 |
+| DP Level 1 / Linear DP | 8 | 0 | ◯ | 3 |
+| Prefix Sum / Implementary | 7 | 0 (#4 failed) | ◯ | 3 |
+| Graphs / Flood Fill | 2 | 0 | ◯ | acquisition + 3 (foundational, cross-band) |
+| 2 Pointers / Two Pointer on Arrays | 13 | 0 | ◯ | 3 |
+| Binary Search / Upper & Lower Bound | 10 | 0 | ◯ | 3 |
+| Bit Manipulation / Bitwise XOR | 10 | 1 (#7 vanilla) | ◐ | 2 disguised — distinct from Math/NT |
+| (Math / Number Theory — no LY subgroup) | 20 | 1 (#9 vanilla) | ◐ | 2 disguised — math-reflex ≠ solving |
+| **Stack / Monotonic Stack** (blind-spot) | 2 | 0 | ◯ | acquisition + 3 (cross-band) |
+| **Binary Tree / Implementary** | 4 | 0 | ◯ | acquisition + 3 |
+| Tries / Trie involving String | 3 | 0 | ◯ | acquisition + 3 |
+| ~~Recursion & Backtracking~~ | 0 genuine | — | — | NOT installable here (2 tagged, both greedy-solved) → defer to first genuine-backtracking band |
+
+> [!danger] "Tree DP" correction (2026-05-28 re-audit)
+> The old tracker listed "Tree DP (blind)". That was a **mislabel** — the band's tree problems are Binary Tree *traversal* (Smallest Subtree with Deepest Nodes etc.), not DP-on-Trees. **DP on Trees (LearnYard DP L2) has 0 reps at 1500-1549** and must install at a band that actually has it. The blind-spot "tree DP" is NOT installed here — only basic Binary Tree traversal is.
+
+(Union-find ~1 here → own at 1600-1649 (7 reps). Interval DP / Matrix Chain absent → Stone Game @1550-1599. Game theory absent → @1550-1599.)
 
 ---
 
