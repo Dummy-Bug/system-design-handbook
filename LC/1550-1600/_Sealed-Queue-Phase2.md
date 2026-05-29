@@ -1,63 +1,104 @@
-# SEALED — 1550-1600 Phase 2 Blind Queue + Answer Key
+# 1550–1600 — Phase 2 Sealed Queue (Derivation / Ownership)
 
-> [!danger] DO NOT OPEN before solving. This file reveals the topic of every queued problem.
-> Ask Claude to **deal the next problem**; Claude serves a bare link only and reveals the topic *after* you finish.
+> Rebuilt 2026-05-29. 28 unsolved band problems, biased to **hard (low AR) + multi-bucket**.
+> Policy: **no vanilla reps — all disguised** ([[lc-no-vanilla-reps]]). Each solve aims to close 2–3 open buckets at once.
+>
+> **BLIND-DEAL RULE** ([[lc-blind-deal-protocol]]): on "next", take the next bare link from the DEAL LIST only.
+> Do NOT scroll to the ANSWER KEY before solving — it is a SPOILER. Reveal buckets only in the debrief.
+> Protocol: 30-min cap (derivation clause: self-derived over-cap AC still counts; first submission must be AC), then cold re-solve.
 
-> [!info] Queue rebuilt 2026-05-28 (18 problems). Removed: old Q01 Closest Nodes (→ moved to Phase 1 as the binary-search acquisition rep) and 4 duplicates of already-solved band problems (old Q02=band#1 · Q10=band#10 · Q16=band#8 · Q19=band#3). Added 3 LC-tag-verified backfills (Q16–Q18). All 18 are genuine, unsolved derivation problems.
+---
 
-| Q   | status | link                                                                                         | TOPIC (SPOILER)                 |
-| --- | ------ | -------------------------------------------------------------------------------------------- | ------------------------------- |
-| Q01 | ☐      | https://leetcode.com/problems/coloring-a-border/                                             | Graph / tree traversal          |
-| Q02 | ☐      | https://leetcode.com/problems/count-paths-with-the-given-xor-value/                          | Linear / grid / counting DP (+ bit) |
-| Q03 | ☐      | https://leetcode.com/problems/find-original-array-from-doubled-array/                        | Hashing / counting (+ greedy)   |
-| Q04 | ☐      | https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-i/ | Sliding window                  |
-| Q05 | ☐      | https://leetcode.com/problems/ways-to-split-array-into-good-subarrays/                       | Math / counting (DP) [LC tags: Math, DP] |
-| Q06 | ☐      | https://leetcode.com/problems/count-the-number-of-good-nodes/                                | Tree DP [LC tags: Tree, DFS] — the real tree-DP rep |
-| Q07 | ☐      | https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/            | Linear / hashing DP             |
-| Q08 | ☐      | https://leetcode.com/problems/maximum-points-after-enemy-battles/                            | Greedy / observation            |
-| Q09 | ☐      | https://leetcode.com/problems/find-mirror-score-of-a-string/                                 | Stack (per-letter, mirror pairs) [LC tags: Stack, Hash Table] |
-| Q10 | ☐      | https://leetcode.com/problems/shortest-distance-after-road-addition-queries-i/               | Graph BFS                       |
-| Q11 | ☐      | https://leetcode.com/problems/corporate-flight-bookings/                                     | Difference array / prefix-range |
-| Q12 | ☐      | https://leetcode.com/problems/sum-of-numbers-with-units-digit-k/                             | Math / number theory            |
-| Q13 | ☐      | https://leetcode.com/problems/maximize-number-of-subsequences-in-a-string/                   | Greedy / prefix                 |
-| Q14 | ☐      | https://leetcode.com/problems/score-of-parentheses/                                          | Stack (depth-based — NOT monotonic) [LC tags: Stack] |
-| Q15 | ☐      | https://leetcode.com/problems/best-time-to-buy-and-sell-stock-using-strategy/                | Sliding window + prefix sum [LC tags: Sliding Window, Prefix Sum] |
-| Q16 | ☐      | https://leetcode.com/problems/k-th-symbol-in-grammar/                                         | Bit operations / XOR — backfill for removed dup [LC tags: Math, Bit Manipulation, Recursion] |
-| Q17 | ☐      | https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/                       | Sliding window — backfill for removed dup [LC tags: Sliding Window, Prefix Sum] |
-| Q18 | ☐      | https://leetcode.com/problems/time-based-key-value-store/                                     | Binary search — derivation rep for new BS bucket [LC tags: Binary Search] |
+## DEAL LIST (blind — links only)
 
-## Tag-verification audit (2026-05-28)
+1. https://leetcode.com/problems/ways-to-split-array-into-good-subarrays/
+2. https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
+3. https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-i/
+4. https://leetcode.com/problems/encode-number/
+5. https://leetcode.com/problems/count-the-number-of-incremovable-subarrays-i/
+6. https://leetcode.com/problems/search-suggestions-system/
+7. https://leetcode.com/problems/max-chunks-to-make-sorted/
+8. https://leetcode.com/problems/sentence-similarity-iii/
+9. https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
+10. https://leetcode.com/problems/time-based-key-value-store/
+11. https://leetcode.com/problems/count-collisions-on-a-road/
+12. https://leetcode.com/problems/longest-substring-of-all-vowels-in-order/
+13. https://leetcode.com/problems/properties-graph/
+14. https://leetcode.com/problems/score-of-parentheses/
+15. https://leetcode.com/problems/count-paths-with-the-given-xor-value/
+16. https://leetcode.com/problems/corporate-flight-bookings/
+17. https://leetcode.com/problems/k-th-symbol-in-grammar/
+18. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
+19. https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/
+20. https://leetcode.com/problems/before-and-after-puzzle/
+21. https://leetcode.com/problems/maximize-greatness-of-an-array/
+22. https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
+23. https://leetcode.com/problems/find-original-array-from-doubled-array/
+24. https://leetcode.com/problems/find-mirror-score-of-a-string/
+25. https://leetcode.com/problems/iterator-for-combination/
+26. https://leetcode.com/problems/count-number-of-trapezoids-i/
+27. https://leetcode.com/problems/number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers/
+28. https://leetcode.com/problems/minimum-falling-path-sum/
 
-Triggered by Q01 being dealt as "Tree DP" when it's a binary-search problem — and binary search was never a Phase 1 acquisition topic, so it hit cold. Re-checked all 20 against LC's official `topicTags` (public GraphQL, the canonical classification). Re-tags applied above:
+Mark progress: deal order is fixed (seed 1550); log each in `First-Attempt/` and tick it here after the cold re-solve.
 
-| Q | Old label | LC tags | New label |
-|---|-----------|---------|-----------|
-| Q01 | Tree DP | Array, **Binary Search**, Tree, DFS, BST | Binary search |
-| Q20 | Heap-greedy | Array, **Sliding Window, Prefix Sum** | Sliding window + prefix sum |
-| Q18 | Monotonic stack | String, **Stack** | Stack (not monotonic) |
-| Q12 | Hashing/counting | Hash Table, String, **Stack** | Stack (per-letter) |
-| Q07 | Math/number theory | Array, **Math, DP** | Math/counting (DP) — refined, not a mislabel |
+---
 
-All four real mislabels are rated Medium (Q01 1596 · Q20 1556 · Q18 1562 · Q12 1578) — none secretly hard.
+<details>
+<summary>⚠️ SPOILER — ANSWER KEY (do not open before solving)</summary>
 
-### Resolution (2026-05-28)
+### Per-problem buckets (sorted hardest → easiest by AR)
 
-1. **Phase 1 taxonomy hole — plain binary search → FIXED.** Binary search added as Phase 1 topic #14, with Closest Nodes [1596] as the acquisition rep (the soft-fail solve). Phase 2 BS derivation rep added: Time Based Key-Value Store [981] (now Q18).
-2. **4 duplicates → REMOVED from queue.** Old Q02/Q10/Q16/Q19 dropped (already solved). Backfilled the two buckets with in-band supply: Bit/XOR → K-th Symbol in Grammar [779] (Q16); Sliding window → Maximum Points From Cards [1423] (Q17). Diff-array (old Q16) and Game theory (old Q19) have **no clean in-band backfill** — diff-array bucket is already covered by Q11 Corporate Flight + prior band #8; game-theory in-band supply is exhausted (all 3 used: Flower Game P1, Stone Game P1, Final Element band#3).
-3. **Heap-greedy → cross-band shortfall (no in-band supply).** Verified via LC tags: the only candidate (Hand of Straights [846]) is Greedy/Sorting, not heap. The Phase-1 heap rep (Min Ops to Halve) soft-failed on Float precision. **Plan:** re-solve Min Ops to Halve cleanly to install the pattern; the 3 derivation cleans complete cross-band (1600-1650+ have real heap problems). Not forced in here.
+| AR | Q | Problem | Buckets (mechanic to credit by OUR code) |
+|---|---|---|---|
+| 35.1% | Q3 | ways-to-split-array-into-good-subarrays | DP (Linear) |
+| 35.8% | Q2 | find-mirror-score-of-a-string | Stack (with-string) · Hashing |
+| 40.7% | Q2 | count-paths-with-the-given-xor-value | DP (Grid) · Bit · Matrix |
+| 40.8% | Q2 | find-original-array-from-doubled-array | Hashing (canonical) · Greedy · Sorting |
+| 41.9% | Q2 | count-of-substrings-...-k-consonants-i | Sliding Window · Hashing |
+| 43.0% | Q2 | maximum-sum-of-distinct-subarrays-with-length-k | Sliding Window · Hashing |
+| 43.5% | Q2 | number-of-ways-where-square-...-product | Two Pointers · Hashing · Math |
+| 48.1% | Q2 | count-number-of-trapezoids-i | Combinatorics · Hashing |
+| 48.3% | Q1 | k-th-symbol-in-grammar | Bit |
+| 48.4% | Q2 | sentence-similarity-iii | Two Pointers (string) |
+| 48.8% | Q2 | properties-graph | Union-Find ★ · Graph · Hashing |
+| 49.9% | Q2 | time-based-key-value-store | Binary Search · Hashing |
+| 51.9% | Q3 | longest-substring-of-all-vowels-in-order | Sliding Window · Two Pointers |
+| 51.9% | Q2 | before-and-after-puzzle | Hashing · Sorting |
+| 53.5% | Q3 | longest-palindrome-by-concatenating-two-letter-words | Greedy · Hashing |
+| 54.3% | Q2 | longest-arithmetic-subsequence-of-given-difference | DP (Linear) · Hashing |
+| 56.6% | Q1 | count-the-number-of-incremovable-subarrays-i | Binary Search · Two Pointers |
+| 57.7% | Q2 | maximum-points-you-can-obtain-from-cards | Sliding Window · Prefix Sum |
+| 58.1% | Q2 | count-collisions-on-a-road | Stack |
+| 60.8% | Q3 | minimum-falling-path-sum | DP (Grid) · Matrix |
+| 61.7% | Q2 | maximize-greatness-of-an-array | Two Pointers · Greedy · Sorting |
+| 63.6% | Q2 | score-of-parentheses | Stack (with-string) |
+| 64.2% | Q3 | max-chunks-to-make-sorted | Monotonic Stack ★ · Greedy |
+| 65.2% | Q3 | search-suggestions-system | Trie ★ · Heap · Binary Search |
+| 66.1% | Q3 | the-earliest-moment-when-everyone-become-friends | Union-Find ★ · Sorting |
+| 67.3% | Q2 | corporate-flight-bookings | Segment Tree/BIT · Prefix Sum |
+| 70.3% | Q1 | encode-number | Bit |
+| 72.7% | Q3 | iterator-for-combination | Backtracking |
 
-## Dropped from this band
+### Bucket coverage this queue provides
 
-- **Union-Find** — only ~2 in-band (not enough to own here). It's a mandatory blind-spot pattern (CLAUDE.md rule 6B), so it's installed cross-band in **1600-1650** (4+ problems there), not forced in.
-- **Design** — pulled from the derivation queue; not a derivation-muscle target.
+**Closable in-band (≥3 reps available here):**
+- Two Pointers — 5 (#8,12,21,27,5)
+- Sliding Window — 4 (#3,9,12,19)
+- Stack (plain/string) — 4 (#7,11,14,24)
+- Binary Search — 3 (#5,6,10)
+- Bit — 3 (#4,15,17)
+- DP (Linear/Grid) — 4 (#1,2,15,28) — *note: interval-DP specifically is NOT in this queue; that rep rolls cross-band*
+- Hashing (canonical/counting) — many (#3,19,20,22,23,24,26,…)
 
-## Shortfalls (topics exhausted in-band — cross-band later)
+**Acquire-only here (1–2 reps; ownership completes cross-band):**
+- Monotonic Stack ★ — 1 (#7)
+- Heap — 1 (#6)
+- Trie ★ — 1 (#6)
+- Union-Find ★ — 2 (#13,18)
+- Backtracking — 1 (#25)
+- Combinatorics — 2 (#26,27)
+- Segment Tree/BIT — 1 (#16, likely above-level)
+- Graph traversal — partial (#13 graph-rep)
 
-| Topic | In-band deriv reps | Need | Deficit |
-|-------|-------------------|------|---------|
-| Game theory | 1 (Final Element, band#3) | 2 | 1 — in-band supply exhausted |
-| Heap-greedy | 0 (Min Ops to Halve soft-failed; no other in-band heap problem) | 2 | 2 — no in-band supply |
-| Monotonic stack | 1 | 2 | 1 |
-| Interval DP | 0 | 2 | 2 |
-
-These missing reps come from adjacent bands after this band's in-band supply is exhausted. Do NOT pull from other bands until Phase 2 here is complete.
+</details>

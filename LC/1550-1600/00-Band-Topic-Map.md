@@ -1,113 +1,124 @@
-# 1550-1600 Band — Full Topic Map (all 83 problems)
+# 1550–1600 Band — Topic Map & Ownership Tracker
 
-> [!danger] SPOILER — labels every problem with its solution pattern and set. Do not read before solving. Planning + post-solve debrief only.
-
-Built 2026-05-26 by reading every statement (rating 1550-1599) from `zerotrac-data/content-tsv/all_1500_with_content.tsv`.
-
-> [!warning] Graduation status superseded by ownership rule (rule 6). The old "10/10 solved → graduated 2026-05-07" mark is **void** — it counted raw solves, not per-bucket ownership. Under the re-audit (2026-05-28, all 24 solved problems reclassified into LearnYard subgroups), the band has **NOT graduated**: only Greedy / Game Theory / Prefix Sum are owned (3/3 cold cleans); Bit-XOR, Sliding Window, Graph traversal sit at 2/3, Monotonic Stack at 1/3, Interval DP at 1/3 (shortfall). See the ownership tracker below for live status. **1500-1550 wrapped 2026-05-29 → this band is now ACTIVE.** Work the Phase-2 sealed queue to convert ◐ → ●. Also carried in from 1500-1550: **plain Binary Search (floor/ceil/lower-bound)** still needs a genuine rep here (its 1500-1550 pick was solved via two-pointer).
-
----
-
-## Cross-band finding (now 3 bands, 27 solved)
-
-Across **1550-1600 + 1600-1650 + 1650-1700 = 27 solved problems**, these stay untouched:
-- **Monotonic stack** — present in all 3 bands, never solved.
-- **Tree DP** — never solved (1550-1600 #9 Unit Conversion is tree *traversal*, not tree DP).
-- **Union-Find / DSU** — never solved canonically.
-
-**Binary-search-on-answer** is the exception to the "always available" claim: it's **nearly absent at 1550-1600** (≈0), appears at 1600-1650 (4), thins at 1650-1700 (2). So it's a *1600+* pattern — can't install it here, must install it in the 1600-1650 band.
-
-**New this band: Interval DP is available** — **Stone Game [1590]** is the first true interval/minimax DP across all three bands (1600-1700 had none). If you want an interval-DP rep, it lives here, not higher.
+> Built 2026-05-29. SPOILER FILE — do not read pattern/set columns before a blind solve.
+> Purpose: (1) the canonical topic list for this band, (2) every solved problem classified
+> by the mechanic *actually used in our own solution* (not the editorial, not the LC tag),
+> (3) per-bucket ownership counts against rule 6 (3 cold first-submission cleans on distinct problems).
 
 ---
 
-## Coverage summary
+## How the topic list was generated
 
-| Pattern | # in band | Done in band? | Priority |
-|---------|-----------|---------------|----------|
-| Greedy / observation | ~22 | ✅✅✅✅ (#1,#2,#5,#6) | low — strong |
-| Math / number theory | ~9 | ⚠️ #4,#6 both hinted → 0 clean | **CORE — needs ownership** (math-reflex = recall only) |
-| Bit operations / XOR | ~5 | ◐ #1,#7 vanilla | **CORE — distinct from math** (bitmask, XOR prefix, bit-width) |
-| Sliding window / prefix | ~10 | ✅ (#10) | med |
-| Hashing / counting | ~8 | — | med |
-| Linear / grid / counting DP | ~8 | — | med-HIGH |
-| Graph BFS/DFS / flood-fill | ~6 | ✅ (#9 tree BFS) | med |
-| Difference array / prefix-range | ~3 | ✅ (#8) | low |
-| Game theory | ~3 | ✅ (#3) | low |
-| **Monotonic stack** | ~3 | ❌ none | **TOP** |
-| **Tree DP** | ~2 | ❌ none | **TOP** |
-| **Union-Find / DSU** | ~2 | ❌ none | deferred → 1600-1650 (too few here) |
-| **Heap / PQ greedy** | ~3 | ❌ none | HIGH |
-| **Interval DP** | 1 (Stone Game) | ❌ none | MED — rare, grab it here |
-| Binary search on answer | ~0 | n/a | absent (1600+ topic) |
-| **Binary search (plain — floor/ceil/lower_bound)** | ~3 (Closest Nodes, Time Based KV, Search Suggestions) | ◐ acquisition done | **CORE — added 2026-05-28** (taxonomy originally conflated this with BS-on-answer and missed it) |
+No single source is complete, so the list is a synthesis of three:
+
+1. **LearnYard subgroups** (`editorials-data/band_1550_1599_subgroups.tsv`) — clean curriculum buckets, but only classifies **59 of the 83** band problems. Critically, **all 23 solved problems fall in the unclassified 24** (they are recent contest problems LearnYard hasn't cataloged). So LearnYard is the spine for *unsolved* problems but is blind to everything we've actually done.
+2. **AlgoMaster patterns** — [15 LeetCode patterns](https://blog.algomaster.io/p/15-leetcode-patterns) + [20 DP patterns](https://blog.algomaster.io/p/20-patterns-to-master-dynamic-programming). Used to *refine* LearnYard (esp. DP) and to name patterns LearnYard lumps together.
+3. **Our own solutions** (`First-Attempt/`) — the authority for classifying solved problems. Priority rule: **classify by the mechanic in our code, not the editorial's approach or the original loose label.**
+
+Editorials for all 83 are downloaded at `editorials-data/band_1550_1599/`.
 
 ---
 
-## Ownership tracker (LearnYard subtopic granularity — re-audited 2026-05-28)
+## Band topic supply (LearnYard, across the 59 classified of 83)
 
-Owned = **3 cold first-submission cleans**, reps 2-3 disguised/combined (rule 6). Marks: `◯` 0/3 · `◐` 1-2/3 · `●` owned. Soft-fail/hinted = 0.
+| Main topic | Subgroup | # problems |
+|---|---|---|
+| Hashing | Implementary Problems | 16 |
+| Greedy | Part I | 14 |
+| Sorting | Implementary | 10 |
+| DP Level 1 | Linear DP | 8 |
+| 2 Pointers | Two Pointer on Arrays | 8 |
+| 2 Pointers | Two Pointer on Strings | 5 |
+| Matrix | Implementary | 5 |
+| Sliding Window | Dynamic Size | 5 |
+| Prefix Sum | Implementary | 5 |
+| Stack | Implementary Stack | 4 |
+| Stack | Stack with String | 3 |
+| Binary Search | Upper/Lower Bound | 3 |
+| Bit Manipulation | Basic Bit Concepts | 3 |
+| DP Level 1 | DP on String | 2 |
+| DP Level 1 | DP on Grid | 2 |
+| Combinatorics & Geometry | Line | 2 |
+| Graphs | Graph Representation | 2 |
+| Graphs | Disjoint Set Union (DSU) | 2 |
+| Recursion & Backtracking | Recursion | 1 |
+| String Matching | Pattern Matching | 1 |
+| Heap (PQ) | Implementary | 1 |
+| Tries | Trie involving String | 1 |
+| Advanced | Segment Tree / BIT | 1 |
+| Stack | Monotonic Stack | 1 |
 
-**Subtopic re-audit (2026-05-28):** all 24 solved problems re-classified into LearnYard subgroups via their doocs editorials (`editorials-data/band_1550_1599/`), combined with the logged clean/soft outcomes. Buckets are now LearnYard subgroups, not broad LC tags. **Clean = first-submission AC** from the 24 solved; soft-fail/hinted listed but credit 0.
+**Scarcity warning (matters for getting 3 cold cleans in-band):** Monotonic Stack (1), Trie (1), Segment Tree/BIT (1), DSU (2). Blind-spot patterns are thin here — some ownership reps will have to come cross-band.
 
-| LearnYard subgroup | Cold cleans | Status | Clean reps (✓) / non-counting (✗) | Need |
-|--------------------|-------------|--------|-----------------------------------|------|
-| Greedy / Part I | 3 | ● | ✓#1 Max Bitwise XOR · ✓#5 Min Cost Acquire · ✓#20 Pancake · ✗#2 soft · ✗#6 hinted | OWNED |
-| Game Theory / Level I | 3 | ● | ✓#3 Final Element · ✓#13 Stone Game · ✓#23 Flower Game | OWNED |
-| Prefix Sum / Implementary | 3 | ● | ✓#14 Binary Subarrays · ✓#17 Fair Array · ✓#18 Increment Submatrices 2D · ✗#8 off-by-one soft | OWNED |
-| Bit Manipulation / Basic Bit (XOR) | 2 | ◐ | ✓#1 Max Bitwise XOR · ✓#19 Count Max-OR Subsets · (#7 trivial sim, not counted) | 1 disguised |
-| Sliding Window / Dynamic Size | 2 | ◐ | ✓#10 Power K-Size · ✓#14 Binary Subarrays | 1 disguised |
-| Graphs / Graph Representation (traversal) | 2 | ◐ | ✓#9 Unit Conversion · ✓#16 Restore Array | 1 disguised |
-| Matrix Chain / **Interval DP** | 1 | ◐ | ✓#13 Stone Game | 2 (shortfall — no more in-band) |
-| **Stack / Monotonic Stack** (blind-spot) | 1 | ◐ | ✓#22 Next Greater Node (FIRST blind-spot clean ✓) | 2 disguised |
-| DP Level 1 / Linear DP | 1 | ◐ | ✓#17 Fair Array (linear/prefix) | 2 disguised |
-| Hashing / Implementary | 2 | ◐ | ✓#14 Binary Subarrays · ✓#16 Restore Array · ✗#2 soft · ✗#4 hinted · ✗#12 hinted | 1 disguised |
-| **DP Level 1 / DP On Grid** (new acq) | 0 | ◯ | acquisition pending (Minimum Falling Path Sum) | acq + 3 |
-| **DP Level 1 / DP on String** (new acq) | 0 | ◯ | acquisition pending (Longest String Chain) | acq + 3 |
-| (Math / Number Theory — no LY subgroup) | 0 | ◯ | ✗#4 hinted · ✗#6 hinted | 3 — math-reflex ≠ solving |
-| Heap (PQ) / Heap-Greedy | 0 | ◯ | ✗#21 Min Ops Halve soft (float trap) | re-solve + cross-band |
-| Recursion & Backtracking | 0 | ◯ | ✗#11 Happy Strings soft · (#19 is bit-enum, not backtracking) | NOT installable — defer (see Phase-1) |
-| Binary Search / Upper & Lower Bound | 0 | ◯ | ✗#24 Closest Nodes soft (TLE→AC) | 3 |
-| **DP on Trees** (blind-spot) | 0 | ◯ | ✗#15 Construct BST hinted (and it's tree *construction*, not DP-on-Trees) | acq + 3 — STILL homeless, absent here |
-| ~~Union-Find~~ (blind-spot) | — | — | deferred → 1600-1649 (7 reps) | — |
-
-> [!danger] Two phantom corrections carried from the 1500-1549 / subtopic re-audit
-> - **"Tree DP"** in the old tracker was conflated: #15 Construct BST is tree *construction* (editorial: DFS + Binary Search), not DP-on-Trees. **DP-on-Trees is absent at 1550-1599** and still has no install band.
-> - **Backtracking** is not installed: #11 Happy Strings soft-failed, #19 is bit-subset enumeration (not backtracking). No clean genuine backtracking here → deferred.
-
-> [!note] Scaffolding subgroups excluded (not ownership targets)
-> Sorting (#12, #20 partial), Matrix (#18), Two-Pointer-on-Strings, Stack/Implementary, Stack-with-String — present in solves but excluded as derivation targets (like Design).
-
----
-
-## What's already trained (the 10 solved, both axes)
-
-Depth scored from how the solve actually went (times, hints, bugs). This band's log is compact (no full verbatim/code), so depth is inferred from the remark.
-
-| # | Problem | rating | Breadth (pattern) | D×C | Note |
-|---|---------|--------|-------------------|-----|------|
-| 1 | Maximum Bitwise XOR After Rearrangement | 1556 | greedy + char count | 2 | 10min; "XOR misleads into bit-DP" comprehension trap |
-| 2 | Min Cost to Equalize Arrays Using Swaps | 1579 | freq-map + excess pairing | 6 | 100min; operator-precedence bug `(freq&1)` |
-| 3 | Final Element After Subarray Deletions | 1591 | game theory / 1-move reduction | 6 | 46min; turn-1 reduction insight (misdirection) |
-| 4 | Smallest Repunit Multiple of K | 1593 | pigeonhole + mod recurrence | 6 | hinted (pigeonhole bound taught); overflow |
-| 5 | Min Cost to Acquire Required Items | 1580 | greedy + case analysis | 4 | mirror-case copy-paste bug (self-caught) |
-| 6 | Max Sum of Three Numbers Divisible by Three | 1585 | mod bucketing + greedy | 4 | hinted ("mod 3 → drill"); TreeSet-dedup + max-tracking bugs |
-| 7 | XOR After Range Multiplication Queries I | 1556 | direct simulation | 1 | <15min trivial |
-| 8 | Zero Array Transformation I | 1580 | difference array | 4 | diff-array off-by-one (`diff[j+1]-=1`) |
-| 9 | Unit Conversion I | 1591 | tree BFS + running product | 4 | tree *traversal*, not tree DP |
-| 10 | Find the Power of K-Size Subarrays II | 1595 | sliding window / run tracking | 2 | clean O(n) |
-
-**Breadth covered:** greedy (×4), game theory, number theory, simulation, diff array, tree BFS, sliding window. **Heavily greedy/math** — consistent with a low band.
-**Depth:** moderate — three 6s, no 9s. Less stretch than 1650-1700 (expected; easier band). Two hints (#4, #6).
-**Untouched (TOP gaps):** monotonic stack, tree DP, DSU — same blind spots. Plus heap-greedy and the lone interval-DP (Stone Game).
+### AlgoMaster patterns absent from this band
+Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — not present at 1550–1600. The band's biggest buckets (Greedy, Hashing, Sorting) aren't in AlgoMaster's 15 at all, which is why LearnYard is the spine.
 
 ---
 
-## Problem sets
+## Solved problems — classified by the mechanic in OUR code
 
-Problem sets are generated per the **band setup protocol** in `LC/CLAUDE.md`. See:
-- `Phase-1-Acquisition.md` — **RE-BASED 2026-05-28.** The acquisition floor is **1500-1550**, so this band's Group A acquires only the two genuinely-new patterns: **game theory + interval DP**. All other patterns were acquired at 1500-1550, and their 1550-1600 problems (Pancake Sorting, Binary Subarrays, etc.) are now **Phase 2 derivation reps** for this band, not acquisitions.
-- `_Sealed-Queue-Phase2.md` — derivation problems (shuffled blind, topic hidden until after solve).
-- AR data at `zerotrac-data/band_1550_1599_with_ar.tsv`.
+24 logged in `First-Attempt/`. `Clean` = first-submission AC, no hint (counts toward ownership). `★` = blind-spot pattern.
 
-**Graduation (rule 6, ownership-based):** every core bucket above must reach `●` (3 cold first-submission cleans, reps 2-3 disguised). For topics with <3 in-band problems (game theory, heap, mono stack, interval DP), the band contributes what it has — shortfalls complete in adjacent bands naturally, not by cross-band peeking. **Union-Find is deferred to 1600-1650** (only ~2 here). (Design is excluded at every band — not a derivation/ownership target.)
+| # | Problem | Mechanic in our code | Canonical bucket | Tags | Clean? |
+|---|---|---|---|---|---|
+| 01 | Max Bitwise XOR After Rearrangement | MSB-first greedy pairing on 0/1 counts | Greedy | `Greedy` `Counting` `Bit-framing` | ✅ |
+| 02 | Min Cost to Equalize Arrays | frequency map + excess pairing | Greedy | `Greedy` `Hashing/Counting` | ✅ |
+| 05 | Min Cost to Acquire Items | case analysis on costs | Greedy | `Greedy` `Case-analysis` | ✅ |
+| 06 | Max Sum 3 Nums Div by 3 | greedy over mod-buckets | Greedy | `Greedy` `Modular-arith` | ❌ hinted |
+| 20 | Pancake Sorting | place max→front→tail, repeat | Greedy (constructive) | `Greedy` `Constructive` | ✅ |
+| 21 | Min Ops to Halve Array Sum | max-heap, halve largest | Heap | `Heap` `Greedy` | ❌ WA-then-AC |
+| 08 | Zero Array Transformation I | 1D difference array | Prefix Sum / Diff-Array | `Prefix-Sum` `Difference-Array` | ✅ |
+| 18 | Increment Submatrices by One | 2D diff-array + 2 sweeps | Prefix Sum / Diff-Array | `Prefix-Sum` `Diff-Array-2D` `Matrix` | ✅ |
+| 17 | Ways to Make a Fair Array | suffix odd/even sums + prefix | Prefix Sum | `Prefix-Sum` `Suffix-Sum` `Parity` | ✅ |
+| 10 | Power of K-Size Subarrays II | consecutive-run tracking | Sliding Window | `Sliding-Window` `Run-length` | ✅ |
+| 14 | Binary Subarrays With Sum | atMost(K) − atMost(K−1) | Sliding Window | `Sliding-Window` `atMost-trick` | ✅ |
+| 09 | Unit Conversion I | DFS on graph, running product | Graph traversal | `Graph` `DFS` | ✅ |
+| 16 | Restore Array from Adjacent Pairs | adjacency map → BFS path | Graph traversal | `Graph` `BFS` `Path-graph` | ✅ |
+| 24 | Closest Nodes in BST | inorder → sorted → BS floor/ceil | Binary Search | `Binary-Search` `BST-inorder` `floor/ceil` | ❌ WA-then-AC |
+| 15 | Construct BST from Preorder | inorder=sort(pre) → D&C build | Tree construction (D&C) | `Tree` `BST` `Divide-Conquer` | ❌ hinted |
+| 22 | Next Greater Node in Linked List | reverse + decreasing stack | Monotonic Stack ★ | `Monotonic-Stack` `Linked-List` | ✅ |
+| 19 | Count Max Bitwise-OR Subsets | recursive include/exclude | Backtracking / Subset-Enum | `Backtracking` `Subset-Enum` `Bit-OR` | ✅ |
+| 04 | Smallest All-Ones Multiple | BFS/recurrence on remainders | Math / Number Theory | `Number-Theory` `Modular` `Pigeonhole` | ✅ |
+| 11 | Kth Happy String | constructive recursion via counting | Math (combinatorics) | `Math` `Combinatorics` `Constructive-recursion` | ❌ WA-then-AC |
+| 23 | Alice & Bob Flower Game | count odd-sum pairs (clamped) | Math (combinatorics) | `Math` `Combinatorics` `GT-reduction` | ✅ |
+| 03 | Final Element After Deletions | parity / one-move reduction | Game Theory (parity) | `Game-Theory` `Parity` `Brainteaser` | ✅ |
+| 13 | Stone Game | memoized f(i,j) over interval | DP (Interval / Minimax) | `DP` `Interval-DP` `Minimax` | ✅ (over-cap, derivation clause) |
+| 12 | Groups of Special-Equiv Strings | canonical key (sorted halves) in Set | Hashing (canonical-form) | `Hashing` `Sorting` `Canonical-key` | ❌ hinted |
+| 07 | XOR After Range Mult Queries I | direct simulation | Simulation (substrate) | `Simulation` | ✅ |
+
+---
+
+## Ownership tracker (rule 6: owned = 3 cold first-submission cleans, distinct problems, reps 2–3 disguised)
+
+| Bucket | Clean reps | Reps logged | Status |
+|---|---|---|---|
+| Greedy | **4** (01,02,05,20) | 5 | ◐ near-owned — count met, verify reps 2–3 were disguised/cold, then ●. 06 was hinted (doesn't count). |
+| Prefix Sum / Diff-Array | **3** (08,17,18) | 3 | ◐ count met — confirm spacing + disguise on rep 3 to call it ●. |
+| Math / NT / Combinatorics | 2 (04,23) | 3 | ◐ 11 was WA. One more clean. |
+| Sliding Window | 2 (10,14) | 2 | ◐ one more clean. |
+| Graph traversal (DFS/BFS) | 2 (09,16) | 2 | ◐ one more clean. |
+| DP (Interval) | 1 (13) | 1 | ○ only genuine DP rep in band. Need 2 more (disguised). |
+| Monotonic Stack ★ | 1 (22) | 1 | ○ blind-spot first clean. Band supplies only 1 more — rest cross-band. |
+| Backtracking / Subset-Enum | 1 (19) | 1 | ○ |
+| Game Theory (parity) | 1 (03) | 1 | ○ |
+| Heap | 0 | 1 | ○ 21 was WA-then-AC (soft fail). Owe a clean rep. |
+| Binary Search | 0 | 1 | ○ 24 was WA-then-AC. Plain-BS rep still owed (also carried from 1500-1550). |
+| Tree | 0 | 1 | ○ 15 hinted + it's D&C construction, **not tree-DP**. |
+| Hashing (canonical) | 0 | 1 | ○ 12 was hinted. |
+| Simulation | (substrate — not an ownership target) | 1 | — |
+
+### Blind-spot trio status (rule 6B, cross-band, each needs 3 cold cleans)
+- **Monotonic Stack** — 1 clean (#22). 2 to go.
+- **Tree DP** — **0 clean.** #15 looked like a candidate but is divide-and-conquer *construction*, not tree-DP. Still completely open.
+- **Union-Find / DSU** — **0 clean.** Band supplies 2 DSU problems, neither attempted yet.
+
+---
+
+## Corrections this audit made (trust-our-solution vs original loose labels)
+
+1. **#17 Ways to Make Fair Array** — logged "DP", but our code builds suffix odd/even sum arrays. No state/choice → **Prefix Sum**, not DP. (A suffix-sum recurrence `arr[i]=f(arr[i+1])` looks like DP but is just accumulation.)
+2. **#15 Construct BST from Preorder** — logged "tree DP", but our code does D&C construction from preorder+inorder. **Tree-DP blind spot stays at 0.**
+3. **#23 Alice & Bob Flower Game** — logged "game theory", but our code is pure combinatorial counting of odd-sum pairs. Game theory only in the parity reduction; no game-tree → **Math**.
+4. **#19 Count Max-OR Subsets** — logged "bit ops", but the mechanic is recursive subset enumeration → **Backtracking**. Bit-OR is just the domain.
+
+**Net effect on ownership:** genuine DP reps = 1 (not 2), tree-DP = 0, and Greedy/Prefix-Sum are the only buckets with the count for ownership (pending disguise/cold verification on reps 2–3).
