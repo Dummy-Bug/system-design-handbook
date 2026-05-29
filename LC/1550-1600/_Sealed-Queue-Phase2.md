@@ -1,6 +1,6 @@
 # 1550–1600 — Phase 2 Sealed Queue (Derivation / Ownership)
 
-> Rebuilt 2026-05-29. 28 unsolved band problems, biased to **hard (low AR) + multi-bucket**.
+> Rebuilt 2026-05-29. 27 unsolved band problems, biased to **hard (low AR) + multi-bucket**.
 > Policy: **no vanilla reps — all disguised** ([[lc-no-vanilla-reps]]). Each solve aims to close 2–3 open buckets at once.
 >
 > **BLIND-DEAL RULE** ([[lc-blind-deal-protocol]]): on "next", take the next bare link from the DEAL LIST only.
@@ -11,36 +11,35 @@
 
 ## DEAL LIST (blind — links only)
 
-1. https://leetcode.com/problems/ways-to-split-array-into-good-subarrays/
-2. https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
-3. https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-i/
-4. https://leetcode.com/problems/encode-number/
-5. https://leetcode.com/problems/count-the-number-of-incremovable-subarrays-i/
-6. https://leetcode.com/problems/search-suggestions-system/
-7. https://leetcode.com/problems/max-chunks-to-make-sorted/
-8. https://leetcode.com/problems/sentence-similarity-iii/
-9. https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
-10. https://leetcode.com/problems/time-based-key-value-store/
-11. https://leetcode.com/problems/count-collisions-on-a-road/
-12. https://leetcode.com/problems/longest-substring-of-all-vowels-in-order/
-13. https://leetcode.com/problems/properties-graph/
-14. https://leetcode.com/problems/score-of-parentheses/
-15. https://leetcode.com/problems/count-paths-with-the-given-xor-value/
-16. https://leetcode.com/problems/corporate-flight-bookings/
-17. https://leetcode.com/problems/k-th-symbol-in-grammar/
-18. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
-19. https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/
-20. https://leetcode.com/problems/before-and-after-puzzle/
-21. https://leetcode.com/problems/maximize-greatness-of-an-array/
-22. https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
-23. https://leetcode.com/problems/find-original-array-from-doubled-array/
-24. https://leetcode.com/problems/find-mirror-score-of-a-string/
-25. https://leetcode.com/problems/iterator-for-combination/
-26. https://leetcode.com/problems/count-number-of-trapezoids-i/
-27. https://leetcode.com/problems/number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers/
-28. https://leetcode.com/problems/minimum-falling-path-sum/
+1. https://leetcode.com/problems/properties-graph/
+2. https://leetcode.com/problems/find-mirror-score-of-a-string/
+3. https://leetcode.com/problems/longest-substring-of-all-vowels-in-order/
+4. https://leetcode.com/problems/count-the-number-of-incremovable-subarrays-i/
+5. https://leetcode.com/problems/time-based-key-value-store/
+6. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
+7. https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
+8. https://leetcode.com/problems/corporate-flight-bookings/
+9. https://leetcode.com/problems/ways-to-split-array-into-good-subarrays/
+10. https://leetcode.com/problems/search-suggestions-system/
+11. https://leetcode.com/problems/max-chunks-to-make-sorted/
+12. https://leetcode.com/problems/k-th-symbol-in-grammar/
+13. https://leetcode.com/problems/find-original-array-from-doubled-array/
+14. https://leetcode.com/problems/count-paths-with-the-given-xor-value/
+15. https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
+16. https://leetcode.com/problems/before-and-after-puzzle/
+17. https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
+18. https://leetcode.com/problems/maximize-greatness-of-an-array/
+19. https://leetcode.com/problems/count-number-of-trapezoids-i/
+20. https://leetcode.com/problems/count-collisions-on-a-road/
+21. https://leetcode.com/problems/iterator-for-combination/
+22. https://leetcode.com/problems/encode-number/
+23. https://leetcode.com/problems/sentence-similarity-iii/
+24. https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/
+25. https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-i/
+26. https://leetcode.com/problems/number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers/
+27. https://leetcode.com/problems/score-of-parentheses/
 
-Mark progress: deal order is fixed (seed 1550); log each in `First-Attempt/` and tick it here after the cold re-solve.
+Mark progress: deal order reshuffled 2026-05-29 (fresh random seed); log each in `First-Attempt/` and tick it here after the cold re-solve.
 
 ---
 
@@ -51,9 +50,9 @@ Mark progress: deal order is fixed (seed 1550); log each in `First-Attempt/` and
 
 | AR | Q | Problem | Buckets (mechanic to credit by OUR code) |
 |---|---|---|---|
-| 35.1% | Q3 | ways-to-split-array-into-good-subarrays | DP (Linear) |
+| 35.1% | Q3 | ways-to-split-array-into-good-subarrays | DP » Count-ways (Linear) |
 | 35.8% | Q2 | find-mirror-score-of-a-string | Stack (with-string) · Hashing |
-| 40.7% | Q2 | count-paths-with-the-given-xor-value | DP (Grid) · Bit · Matrix |
+| 40.7% | Q2 | count-paths-with-the-given-xor-value | DP » Grid (XOR-state) · Bit · Matrix |
 | 40.8% | Q2 | find-original-array-from-doubled-array | Hashing (canonical) · Greedy · Sorting |
 | 41.9% | Q2 | count-of-substrings-...-k-consonants-i | Sliding Window · Hashing |
 | 43.0% | Q2 | maximum-sum-of-distinct-subarrays-with-length-k | Sliding Window · Hashing |
@@ -66,11 +65,10 @@ Mark progress: deal order is fixed (seed 1550); log each in `First-Attempt/` and
 | 51.9% | Q3 | longest-substring-of-all-vowels-in-order | Sliding Window · Two Pointers |
 | 51.9% | Q2 | before-and-after-puzzle | Hashing · Sorting |
 | 53.5% | Q3 | longest-palindrome-by-concatenating-two-letter-words | Greedy · Hashing |
-| 54.3% | Q2 | longest-arithmetic-subsequence-of-given-difference | DP (Linear) · Hashing |
+| 54.3% | Q2 | longest-arithmetic-subsequence-of-given-difference | DP » LIS-variant · Hashing |
 | 56.6% | Q1 | count-the-number-of-incremovable-subarrays-i | Binary Search · Two Pointers |
 | 57.7% | Q2 | maximum-points-you-can-obtain-from-cards | Sliding Window · Prefix Sum |
 | 58.1% | Q2 | count-collisions-on-a-road | Stack |
-| 60.8% | Q3 | minimum-falling-path-sum | DP (Grid) · Matrix |
 | 61.7% | Q2 | maximize-greatness-of-an-array | Two Pointers · Greedy · Sorting |
 | 63.6% | Q2 | score-of-parentheses | Stack (with-string) |
 | 64.2% | Q3 | max-chunks-to-make-sorted | Monotonic Stack ★ · Greedy |
@@ -88,7 +86,12 @@ Mark progress: deal order is fixed (seed 1550); log each in `First-Attempt/` and
 - Stack (plain/string) — 4 (#7,11,14,24)
 - Binary Search — 3 (#5,6,10)
 - Bit — 3 (#4,15,17)
-- DP (Linear/Grid) — 4 (#1,2,15,28) — *note: interval-DP specifically is NOT in this queue; that rep rolls cross-band*
+- DP — **tracked by sub-pattern, not as one bucket** (20 sub-patterns; each owns separately):
+  - DP » Count-ways (Linear) — 1 (#1 ways-to-split)
+  - DP » LIS-variant — 1 (#2 longest-arith-subseq)
+  - DP » Grid — 1 (#15 count-paths-xor, disguised) · minimum-falling-path dropped (vanilla); 2 more reps roll cross-band
+  - DP » Interval/Minimax — **0 in queue** (only solved Stone Game); rolls cross-band
+  - DP » String, Knapsack, LCS, Edit-Distance, Bitmask, Digit, Tree-DP ★, Probability — absent at this band
 - Hashing (canonical/counting) — many (#3,19,20,22,23,24,26,…)
 
 **Acquire-only here (1–2 reps; ownership completes cross-band):**
@@ -100,5 +103,14 @@ Mark progress: deal order is fixed (seed 1550); log each in `First-Attempt/` and
 - Combinatorics — 2 (#26,27)
 - Segment Tree/BIT — 1 (#16, likely above-level)
 - Graph traversal — partial (#13 graph-rep)
+
+### Trickiness tiers (editorial cross-check — AR alone misleads)
+
+True difficulty = insight the optimal approach needs, not AR. From editorial approach-count + depth:
+
+- **Insight-gated (the trick IS the problem) — train derivation here:** k-th-symbol-in-grammar (recursive-symmetry brain-teaser), count-collisions-on-a-road (brain-teaser), max-chunks-to-make-sorted (prefix-max/chunk insight), the-earliest-moment-...-friends (Union-Find modeling), search-suggestions-system (Trie), corporate-flight-bookings (diff-array/BIT), count-of-substrings-...-k-consonants (exactly-K = atMost(K)−atMost(K−1)), ways-to-split-array-into-good-subarrays (multiplication principle), number-of-ways-where-square-... (product-pair counting + overflow).
+- **AR overstates difficulty (low AR = implementation/edge-case pain, not insight):** ways-to-split-array-into-good-subarrays (35%, off-by-one), find-original-array-from-doubled-array (41%, zero/pairing edge cases), find-mirror-score-of-a-string (36%, stack bookkeeping).
+- **AR understates difficulty (high AR only because solvers self-select on knowing the pattern):** the-earliest-moment (66%, DSU), corporate-flight-bookings (67%, BIT), search-suggestions (65%, Trie), max-chunks (64%, mono-stack).
+- **Stub editorials — verified by reading the problem directly (2026-05-29):** count-paths-with-the-given-xor-value = **moderate, well-disguised Grid-DP** (gate: realize XOR is a bounded 16-value DP dimension; `dp[i][j][x]`, O(m·n·16)) — keep; minimum-falling-path-sum = **LOW / vanilla** textbook grid-DP (`dp[c]=m[r][c]+min(prev[c-1..c+1])`) — **dropped from queue**; iterator-for-combination = **moderate-low** design wrapper over backtracking pre-generation (chars ≤15 → pre-generate all C(n,k)) — keep as only in-band Backtracking seed.
 
 </details>

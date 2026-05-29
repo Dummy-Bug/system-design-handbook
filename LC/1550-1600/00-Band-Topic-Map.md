@@ -97,7 +97,11 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 | Math / NT / Combinatorics | 2 (04,23) | 3 | ◐ 11 was WA. One more clean. |
 | Sliding Window | 2 (10,14) | 2 | ◐ one more clean. |
 | Graph traversal (DFS/BFS) | 2 (09,16) | 2 | ◐ one more clean. |
-| DP (Interval) | 1 (13) | 1 | ○ only genuine DP rep in band. Need 2 more (disguised). |
+| **DP » Interval/Minimax** | 1 (13) | 1 | ○ Stone Game. Interval scarce in band → 2 more cross-band. |
+| **DP » Linear / Count-ways** | 0 | 0 | ○ in queue: ways-to-split-good-subarrays (disguised). |
+| **DP » LIS-variant** | 0 | 0 | ○ in queue: longest-arith-subseq-of-given-difference. |
+| **DP » Grid** | 0 | 0 | ○ in queue: count-paths-with-xor (disguised). minimum-falling-path dropped (vanilla); 2 more reps cross-band. |
+| **DP » String** | 0 | 0 | ○ band-present (longest-string-chain, rope-colorful) but unqueued. |
 | Monotonic Stack ★ | 1 (22) | 1 | ○ blind-spot first clean. Band supplies only 1 more — rest cross-band. |
 | Backtracking / Subset-Enum | 1 (19) | 1 | ○ |
 | Game Theory (parity) | 1 (03) | 1 | ○ |
@@ -106,6 +110,12 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 | Tree | 0 | 1 | ○ 15 hinted + it's D&C construction, **not tree-DP**. |
 | Hashing (canonical) | 0 | 1 | ○ 12 was hinted. |
 | Simulation | (substrate — not an ownership target) | 1 | — |
+
+> **DP is tracked by sub-pattern, never as one bucket** (master taxonomy = 20 DP sub-patterns; see `patterns/master-taxonomy.md`).
+> A Linear-DP rep does NOT cover Grid-DP, LIS, Interval, etc. — each owns separately, 3 cold cleans each.
+> At 1550–1600 only ~5 DP sub-patterns appear (Interval, Linear/Count-ways, LIS-variant, Grid, String).
+> The deep ones — **Knapsack, LCS, Edit Distance, Bitmask, Digit, Tree-DP ★, Probability, State-Machine** — are
+> absent at this level and roll to higher bands. So "owning DP here" only means owning those ~5 shallow sub-patterns.
 
 ### Blind-spot trio status (rule 6B, cross-band, each needs 3 cold cleans)
 - **Monotonic Stack** — 1 clean (#22). 2 to go.
