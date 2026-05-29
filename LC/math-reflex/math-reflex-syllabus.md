@@ -295,12 +295,29 @@ while n > 0:
 - *Smallest Integer Divisible by K* (LC 1015) — pigeonhole on mod k states
 - *Continuous Subarray Sum* (LC 523)
 
-## 4.9 — Stars and bars
-**Fact:** Distribute n identical items into k bins (bins can be empty) = `C(n+k-1, k-1)`.
-**Why:** "Count ways to split n into k parts" problems.
-**LC problems:**
-- *Count Vowels Permutation* (LC 1220, indirect)
-- Some DP-counting problems
+## 4.9 — Stars and bars (combinations with repetition)
+**Fact:** Distribute `n` identical items into `k` bins (bins may be empty) = `C(n+k-1, k-1)`.
+**Dual framing (same identity):** choosing a multiset of size `n` from `k` types = `C(n+k-1, n)`. And `C(n+k-1, k-1) = C(n+k-1, n)` — the "items into bins" view and the "sorted/non-decreasing selection from k types" view are the **same count**. Recognising this duality is the whole skill: a "count sorted strings / non-decreasing sequences" problem *is* a bins problem in disguise.
+**Why:** "Count ways to split n into k parts", "count non-decreasing sequences", "count multisets" — all collapse to one binomial coefficient instead of a DP.
+
+**Learning ladder (naive → bounded — to be drilled Socratically, fill in session):**
+
+```
+Pure / unbounded form           Count Sorted Vowel Strings (LC 1641)   → C(n+k-1, k-1) straight, k=5 → C(n+4,4)
+   ↓ what breaks if bins are capped?
+Bounded form (+ inclusion-excl) Distribute Candies Among Children II   → subtract the over-limit cases via I-E
+```
+
+**(a) Lead worked example — UNBOUNDED (the clean intro):** *Count Sorted Vowel Strings* (LC 1641)
+- Sorted length-`n` string over 5 vowels = multiset of size `n` from `k=5` types = `C(n+4, 4)`.
+- Sanity reflex: n=1 → C(5,4)=5 ✓; n=2 → C(6,4)=15 ✓.
+- _TODO (Socratic drill): derive why "non-decreasing" ⇒ "order doesn't matter" ⇒ multiset; then derive the stars-and-bars bijection (n stars + k-1 bars)._
+
+**(b) Next step — BOUNDED (what breaks + the fix):** *Distribute Candies Among Children II* (LC 2929), *Closest Dessert Cost* (LC 1774)
+- Same setup, but each bin has an upper limit → raw `C(n+k-1,k-1)` overcounts.
+- _TODO (Socratic drill): derive the inclusion-exclusion correction (subtract distributions where a bin exceeds its cap)._  Pairs with §3.3 (inclusion-exclusion).
+
+**Reflex to install:** see "non-decreasing / sorted selection of size n from k types" (or "split n into k parts") → reach for `C(n+k-1, k-1)` **before** writing a DP. The DP (memoized `(prev,length)` or BUP suffix-sum) is the fallback when bounds/constraints break the closed form.
 
 ## 4.10 — Game theory primer
 **Facts:**

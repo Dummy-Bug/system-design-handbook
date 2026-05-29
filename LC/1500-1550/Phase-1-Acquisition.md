@@ -6,6 +6,16 @@
 
 > [!warning] Setup retrofit. This band was worked under the old zerotrac protocol (9 problems logged, 1 failure). This file retrofits the Phase-1 structure + subtopic taxonomy onto it. Acquisition picks = easiest single-pattern problem per subgroup (highest AR, lowest Q-pos), excluding the 9 already-logged.
 
+> [!important] 1500-1550 is ACQUISITION-ONLY (decided 2026-05-29)
+> This is the **floor band** — its sole job is to *install* each mechanic, i.e. get **one clean first-submission AC** per Group A bucket. There is **no Phase 2 / ownership grind in this band.** The 3-cold-clean **ownership** reps (rule 6 gate) begin at **1550-1600** and run **cross-band**. So here: a single clean AC = bucket acquired. A soft-fail bucket is acquired as soon as *any* later clean AC lands (it does not need 3 cleans here). Graduation of 1500-1550 = every Group A bucket acquired (one clean AC), phantoms deferred. Owning them comes later.
+
+> [!success] BAND WRAPPED — 2026-05-29 (acquisition-only graduation)
+> Every Group A bucket is acquired, deferred, or explicitly carried forward. **Session clean first-submission ACs (5):** Greedy (Construct K Palindrome, 57m) · Flood Fill (Find All Groups of Farmland, 25m) · Binary Tree (Smallest Subtree Deepest, 56m) · Two-Pointer (Maximum Distance, 14m) · Bitwise XOR (Min Ops XOR=K, 4m). **+ Monotonic Stack** acquired cross-band (1550-1600 #22). **+ Linear DP** acquired syntax-assisted (Count Sorted Vowel Strings — logic self-derived, Gemini syntax help; ☑*, would not count as ownership rep).
+> **Carry-forwards (2):**
+> - **Binary Search / Upper & Lower Bound — OPEN.** Its pick was solved via two-pointer (credited to #7), so the BS mechanic was never installed. Carries to **1550-1600**, where plain BS (floor/ceil/lower-bound) is a CORE bucket and gets genuine reps.
+> - **Trie — DEFERRED.** No genuine trie-requiring problem in-band (all 3 are sort/prefix-solvable). Defers to the first higher band with a problem that *requires* a trie.
+> Next active band: **1550-1600** (resume from its Phase-2 sealed queue to convert ◐ buckets → ●).
+
 ---
 
 ## What the subtopic re-audit changed
@@ -41,6 +51,9 @@ Topic-visible, study-OK. Must be clean first-submission AC to count. Deal blind 
 > [!note] Foundational picks with <3 supply still install (CLAUDE.md Step 4 rule)
 > #1 Monotonic Stack (2) and #6 Flood Fill (2) are below the ≥3 advanced-topic threshold, but they are **foundational** patterns with genuine editorial solutions — install at first appearance regardless of supply. The 2nd/3rd ownership cleans come cross-band.
 
+> [!danger] Trie pick is a phantom — bucket NOT covered despite clean AC (2026-05-29)
+> #3 (Remove Sub-Folders) was solved first-attempt clean in 31min, but via **sort + prefix-set**, not a trie. The trie mechanic was never built, so the **Tries / Trie involving String bucket is NOT acquired** — the ☑* in the tracker means "problem AC'd, mechanic absent." Do **not** count Trie toward coverage. A problem that *genuinely requires* a trie (insert paths node-by-node, prune at a folder/word boundary, or prefix-search where sorting doesn't substitute) must be the rep that installs and later owns this bucket. Same phantom class as the removed Backtracking pick (greedy-solvable) and DP-on-Trees (traversal-solvable).
+
 ---
 
 ## Already acquired in-band via the 9 logged zerotrac solves → Group B (Phase 2 only)
@@ -74,6 +87,7 @@ No acquisition problem needed; disguised reps come from this band's Phase 2.
 
 | LearnYard subgroup | In-band supply | Defer to |
 |--------------------|---------------:|----------|
+| **Tries / Trie involving String** | 3 tagged, 0 genuine | first band with a problem that *requires* a trie. All 3 in-band are sort/prefix-set-solvable (pick #3 Remove Sub-Folders AC'd 2026-05-29 without a trie). Phantom — defers like Backtracking. |
 | **DP on Trees** (DP L2) | 0 | first band with ≥3 — the real "tree DP" blind-spot install (NOT the #2 traversal pick) |
 | **Recursion & Backtracking** | 0 genuine (2 tagged, both greedy-solved) | first band whose editorial solution is genuinely backtracking |
 | Union-Find / DSU | ~1 | 1600-1649 (7 reps there) |
@@ -86,15 +100,15 @@ No acquisition problem needed; disguised reps come from this band's Phase 2.
 
 | # | LearnYard subgroup | Phase 1 | Status |
 |---|--------------------|---------|--------|
-| 1 | Stack / Monotonic Stack | ☐ | — |
-| 2 | Binary Tree / Implementary | ☐ | — |
-| 3 | Tries / Trie involving String | ☐ | — |
-| 4 | Greedy / Part I | ☐ | — |
-| 5 | DP Level 1 / Linear DP | ☐ | — |
-| 6 | Graphs / Flood Fill | ☐ | — |
-| 7 | 2 Pointers / Two Pointer on Arrays | ☐ | — |
-| 8 | Binary Search / Upper & Lower Bound | ☐ | — |
-| 9 | Bit Manipulation / Bitwise XOR | ☐ | — |
+| 1 | Stack / Monotonic Stack (blind-spot) | ☑ | **ACQUIRED cross-band.** First clean first-submission AC was 1550-1600 #22 Next Greater Node In Linked List (37min, 2026-05-28) — genuine monotonic stack (reverse list, strictly-decreasing stack, pop `<=`). Acquisition closed. The band's pick (Sum of Subarray Ranges) is now **optional** here — useful only as a cross-band **ownership** rep (rep 2/3 toward owning the blind-spot), not required for acquisition. |
+| 2 | Binary Tree / Implementary | ☑ | **CLEAN** (first-attempt AC, 56min, 2026-05-29). Mechanic installed (LCA of deepest leaves = deepest path node where leftDepth==rightDepth). Solve was over-built (path store + reverse deque + shared maxDepth counter, O(n²)); clean idiom is one post-order pass returning (node, depth) tuple, O(n). Logged in `First-Attempt/12-smallest-subtree-with-all-the-deepest-nodes.md`. |
+| 3 | ~~Tries / Trie involving String~~ → **DEFERRED** | ☑* AC only | Pick #3 (Remove Sub-Folders) AC'd clean first-attempt 31min 2026-05-29, but via sort + prefix-set — **trie never exercised**. All 3 Trie-tagged problems in-band are sort/prefix-solvable → **no genuine trie rep exists in this band**. Bucket **deferred to first higher band with a problem that requires a trie** (see Deferred table). Not counted toward 1500-1550 coverage. Logged in `First-Attempt/13-remove-subfolders-from-the-filesystem.md`. |
+| 4 | Greedy / Part I | ☑ | **CLEAN** (first-attempt AC, 57min, 2026-05-29). Mechanic installed (odd-freq parity → `oddCount <= k <= n`). 27min was comprehension, not algorithm. Logged in `1450-1500.md` #12. |
+| 5 | DP Level 1 / Linear DP | ☑* | **ACQUIRED (syntax-assisted, NOT clean cold).** Count Sorted Vowel Strings, 2026-05-29, over cap. State `(prev, length)` + `Σ_{i>=prev}` recurrence **self-derived** (the muscle this band trains) — but Java syntax help taken from Gemini, so it would NOT count as an ownership rep. Mechanic installed for acquisition. Reps to drill: BUP suffix-sum form + stars-and-bars closed form C(n+4,4). Logged in `First-Attempt/16-count-sorted-vowel-strings.md`. |
+| 6 | Graphs / Flood Fill | ☑ | **CLEAN** (first-attempt AC, 25min, 2026-05-29). Mechanic installed (BFS connected-component + bounding corners). Nit: used `Set<String>` "r-c" instead of `boolean[][]`. Logged in `First-Attempt/11-find-all-groups-of-farmland.md`. |
+| 7 | 2 Pointers / Two Pointer on Arrays | ☑ | **ACQUIRED** (clean). Original solve (Boats to Save People, 2026-05-28) soft-failed (2 WA → AC), but acquisition is satisfied by the clean AC on **Maximum Distance Between a Pair of Values** — cold first-submission, 14min, 2026-05-29 (dealt blind, monotonic two-pointer). Per acquisition-only band rule, that closes the bucket here. Ownership (3 cold cleans) is tracked from 1550-1600 cross-band. Logged in `First-Attempt/14-maximum-distance-between-a-pair-of-values.md`. |
+| 8 | Binary Search / Upper & Lower Bound | ☐ | **NOT acquired.** The pick (Maximum Distance) was AC'd clean but via **monotonic two-pointer** — that solve is credited to bucket #7 (Two-Pointer), NOT here. The upper/lower-bound BS mechanic was never exercised, so this bucket stays open. BS *is* genuinely applicable to this problem (per-`i` binary-search the furthest `j`, O(m log n)) — a genuine BS rep is still needed: either re-solve this via `lowerBound`/`upperBound`, or a Phase-2 problem that forces it. BS-on-answer is already installed separately (Group B). |
+| 9 | Bit Manipulation / Bitwise XOR | ☑ | **CLEAN** (first-attempt AC, 4min, 2026-05-29). Mechanic installed: `Integer.bitCount(arrayXor ^ k)` = Hamming distance = answer. Logged in `First-Attempt/15-minimum-operations-to-make-array-xor-equal-to-k.md`. |
 
 ---
 

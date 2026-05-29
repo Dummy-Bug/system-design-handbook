@@ -56,7 +56,7 @@ Buckets are now LearnYard subgroups (was broad LC tags). Supply column = in-band
 | DP Level 1 / Linear DP | 8 | 0 | ◯ | 3 |
 | Prefix Sum / Implementary | 7 | 0 (#4 failed) | ◯ | 3 |
 | Graphs / Flood Fill | 2 | 0 | ◯ | acquisition + 3 (foundational, cross-band) |
-| 2 Pointers / Two Pointer on Arrays | 13 | 0 | ◯ | 3 |
+| 2 Pointers / Two Pointer on Arrays | 13 | 0 | ◯ | 3 (acq done 2026-05-28 Boats — SOFT FAIL 2 WA, mechanic installed, 0 clean) |
 | Binary Search / Upper & Lower Bound | 10 | 0 | ◯ | 3 |
 | Bit Manipulation / Bitwise XOR | 10 | 1 (#7 vanilla) | ◐ | 2 disguised — distinct from Math/NT |
 | (Math / Number Theory — no LY subgroup) | 20 | 1 (#9 vanilla) | ◐ | 2 disguised — math-reflex ≠ solving |

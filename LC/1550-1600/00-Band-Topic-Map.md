@@ -2,7 +2,9 @@
 
 > [!danger] SPOILER — labels every problem with its solution pattern and set. Do not read before solving. Planning + post-solve debrief only.
 
-Built 2026-05-26 by reading every statement (rating 1550-1599) from `zerotrac-data/content-tsv/all_1500_with_content.tsv`. Band is 10/10 solved (graduated 2026-05-07; audit notes 9/10 first-submission, 1 hint).
+Built 2026-05-26 by reading every statement (rating 1550-1599) from `zerotrac-data/content-tsv/all_1500_with_content.tsv`.
+
+> [!warning] Graduation status superseded by ownership rule (rule 6). The old "10/10 solved → graduated 2026-05-07" mark is **void** — it counted raw solves, not per-bucket ownership. Under the re-audit (2026-05-28, all 24 solved problems reclassified into LearnYard subgroups), the band has **NOT graduated**: only Greedy / Game Theory / Prefix Sum are owned (3/3 cold cleans); Bit-XOR, Sliding Window, Graph traversal sit at 2/3, Monotonic Stack at 1/3, Interval DP at 1/3 (shortfall). See the ownership tracker below for live status. **1500-1550 wrapped 2026-05-29 → this band is now ACTIVE.** Work the Phase-2 sealed queue to convert ◐ → ●. Also carried in from 1500-1550: **plain Binary Search (floor/ceil/lower-bound)** still needs a genuine rep here (its 1500-1550 pick was solved via two-pointer).
 
 ---
 
