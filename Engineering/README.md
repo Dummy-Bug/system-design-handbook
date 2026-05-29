@@ -2,7 +2,7 @@
 
 Concept-driven engineering notes. No daily framing, no calendar guilt — notes appear when a real concept demanded one.
 
-See [[CLAUDE]] for the writing rules (Socratic method, school theme, mandatory wikilinks, MOCs at 4+ notes).
+See [[System Design/CLAUDE]] for the writing rules (Socratic method, school theme, mandatory wikilinks, MOCs at 4+ notes).
 
 ---
 
