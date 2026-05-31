@@ -13,7 +13,7 @@
 
 1. https://leetcode.com/problems/properties-graph/
 2. https://leetcode.com/problems/find-mirror-score-of-a-string/
-3. https://leetcode.com/problems/longest-substring-of-all-vowels-in-order/
+3. https://leetcode.com/problems/longest-substring-of-all-vowels-in-order/ ✅ 2026-05-30 10:34 IST (22m, first-AC) → `First-Attempt/26`
 4. https://leetcode.com/problems/count-the-number-of-incremovable-subarrays-i/
 5. https://leetcode.com/problems/time-based-key-value-store/
 6. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
@@ -25,7 +25,7 @@
 12. https://leetcode.com/problems/k-th-symbol-in-grammar/
 13. https://leetcode.com/problems/find-original-array-from-doubled-array/
 14. https://leetcode.com/problems/count-paths-with-the-given-xor-value/
-15. https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
+15. https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/ ✅ 2026-05-30 07:30 IST (24m, first-AC) → `First-Attempt/25`
 16. https://leetcode.com/problems/before-and-after-puzzle/
 17. https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
 18. https://leetcode.com/problems/maximize-greatness-of-an-array/
