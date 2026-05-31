@@ -1,9 +1,9 @@
 # 1550–1600 — Phase 2 Sealed Queue (Derivation / Ownership)
 
-> Rebuilt 2026-05-29. 27 unsolved band problems, biased to **hard (low AR) + multi-bucket**.
+> Reshuffled 2026-05-31 (fresh random order; 3 dealt problems retired from the pool → 24 remain).
 > Policy: **no vanilla reps — all disguised** ([[lc-no-vanilla-reps]]). Each solve aims to close 2–3 open buckets at once.
 >
-> **BLIND-DEAL RULE** ([[lc-blind-deal-protocol]]): on "next", take the next bare link from the DEAL LIST only.
+> **BLIND-DEAL RULE** ([[lc-blind-deal-protocol]]): on "next", take the next un-ticked link from the DEAL LIST only.
 > Do NOT scroll to the ANSWER KEY before solving — it is a SPOILER. Reveal buckets only in the debrief.
 > Protocol: 30-min cap (derivation clause: self-derived over-cap AC still counts; first submission must be AC), then cold re-solve.
 
@@ -12,34 +12,41 @@
 ## DEAL LIST (blind — links only)
 
 1. https://leetcode.com/problems/properties-graph/
-2. https://leetcode.com/problems/find-mirror-score-of-a-string/
-3. https://leetcode.com/problems/longest-substring-of-all-vowels-in-order/ ✅ 2026-05-30 10:34 IST (22m, first-AC) → `First-Attempt/26`
-4. https://leetcode.com/problems/count-the-number-of-incremovable-subarrays-i/
-5. https://leetcode.com/problems/time-based-key-value-store/
-6. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
-7. https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
-8. https://leetcode.com/problems/corporate-flight-bookings/
+2. https://leetcode.com/problems/k-th-symbol-in-grammar/
+3. https://leetcode.com/problems/iterator-for-combination/
+4. https://leetcode.com/problems/max-chunks-to-make-sorted/
+5. https://leetcode.com/problems/count-number-of-trapezoids-i/
+6. https://leetcode.com/problems/before-and-after-puzzle/
+7. https://leetcode.com/problems/maximize-greatness-of-an-array/
+8. https://leetcode.com/problems/count-the-number-of-incremovable-subarrays-i/
 9. https://leetcode.com/problems/ways-to-split-array-into-good-subarrays/
-10. https://leetcode.com/problems/search-suggestions-system/
-11. https://leetcode.com/problems/max-chunks-to-make-sorted/
-12. https://leetcode.com/problems/k-th-symbol-in-grammar/
-13. https://leetcode.com/problems/find-original-array-from-doubled-array/
-14. https://leetcode.com/problems/count-paths-with-the-given-xor-value/
-15. https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/ ✅ 2026-05-30 07:30 IST (24m, first-AC) → `First-Attempt/25`
-16. https://leetcode.com/problems/before-and-after-puzzle/
-17. https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
-18. https://leetcode.com/problems/maximize-greatness-of-an-array/
-19. https://leetcode.com/problems/count-number-of-trapezoids-i/
-20. https://leetcode.com/problems/count-collisions-on-a-road/
-21. https://leetcode.com/problems/iterator-for-combination/
-22. https://leetcode.com/problems/encode-number/
-23. https://leetcode.com/problems/sentence-similarity-iii/
-24. https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/
-25. https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-i/
-26. https://leetcode.com/problems/number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers/
-27. https://leetcode.com/problems/score-of-parentheses/
+10. https://leetcode.com/problems/encode-number/
+11. https://leetcode.com/problems/count-collisions-on-a-road/
+12. https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-i/
+13. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
+14. https://leetcode.com/problems/sentence-similarity-iii/
+15. https://leetcode.com/problems/count-paths-with-the-given-xor-value/
+16. https://leetcode.com/problems/find-original-array-from-doubled-array/
+17. https://leetcode.com/problems/score-of-parentheses/
+18. https://leetcode.com/problems/number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers/
+19. https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/
+20. https://leetcode.com/problems/time-based-key-value-store/
+21. https://leetcode.com/problems/corporate-flight-bookings/
+22. https://leetcode.com/problems/search-suggestions-system/
+23. https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
+24. https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
 
-Mark progress: deal order reshuffled 2026-05-29 (fresh random seed); log each in `First-Attempt/` and tick it here after the cold re-solve.
+Mark progress: deal top-down; log each in `First-Attempt/` and tick it here after the cold re-solve.
+
+---
+
+## RETIRED (already dealt — do NOT re-deal)
+
+| Dealt | Problem | Result | File |
+|---|---|---|---|
+| 2026-05-30 07:30 IST | maximum-points-you-can-obtain-from-cards | ✅ clean, first-AC (24m) | `First-Attempt/25` |
+| 2026-05-30 10:34 IST | longest-substring-of-all-vowels-in-order | ✅ clean, first-AC (22m) | `First-Attempt/26` |
+| 2026-05-30 | find-mirror-score-of-a-string | ❌→✓ WA-then-AC **soft fail** (44m, over cap; does NOT count toward ownership) | `First-Attempt/27` |
 
 ---
 
