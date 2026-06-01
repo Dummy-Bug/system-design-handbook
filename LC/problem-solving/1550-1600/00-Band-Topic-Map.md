@@ -85,6 +85,8 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 | 13 | Stone Game | memoized f(i,j) over interval | DP (Interval / Minimax) | `DP` `Interval-DP` `Minimax` | ✅ (over-cap, derivation clause) |
 | 12 | Groups of Special-Equiv Strings | canonical key (sorted halves) in Set | Hashing (canonical-form) | `Hashing` `Sorting` `Canonical-key` | ❌ hinted |
 | 07 | XOR After Range Mult Queries I | direct simulation | Simulation (substrate) | `Simulation` | ✅ |
+| 30 | Count Collisions on a Road | count cars that stop (n − leadL − trailR) | Stack + **Invariant/Reframe** ✦ | `Stack` `Invariant/Reframe` `Brainteaser` | ❌ editorial (2 WA) |
+| 31 | Count Paths With Given XOR Value | top-down memo `dp[i][j][x]`, XOR as bounded dim | DP » Grid (XOR-state) | `DP` `Grid-DP` `Bit` `Matrix` | ✅ (over-cap, derivation clause) |
 
 ---
 
@@ -100,7 +102,7 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 | **DP » Interval/Minimax** | 1 (13) | 1 | ○ Stone Game. Interval scarce in band → 2 more cross-band. |
 | **DP » Linear / Count-ways** | 0 | 0 | ○ in queue: ways-to-split-good-subarrays (disguised). |
 | **DP » LIS-variant** | 0 | 0 | ○ in queue: longest-arith-subseq-of-given-difference. |
-| **DP » Grid** | 0 | 0 | ○ in queue: count-paths-with-xor (disguised). minimum-falling-path dropped (vanilla); 2 more reps cross-band. |
+| **DP » Grid** | 1 (31) | 1 | ◐ first clean rep — 31 count-paths-with-xor (disguised XOR-state, over-cap derivation clause). 2 more to own. |
 | **DP » String** | 0 | 0 | ○ band-present (longest-string-chain, rope-colorful) but unqueued. |
 | Monotonic Stack ★ | 1 (22) | 1 | ○ blind-spot first clean. Band supplies only 1 more — rest cross-band. |
 | Backtracking / Subset-Enum | 1 (19) | 1 | ○ |
@@ -110,6 +112,7 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 | Tree | 0 | 1 | ○ 15 hinted + it's D&C construction, **not tree-DP**. |
 | Hashing (canonical) | 0 | 1 | ○ 12 was hinted. |
 | Simulation | (substrate — not an ownership target) | 1 | — |
+| ✦ **Invariant / Reframe** (NON-STANDARD) | n/a — no 3-clean gate | deck: 8 solved | ✦ **Grow & review deck, not an ownership target — NEVER blocks graduation.** Cross-cutting axis (tagged alongside the real bucket). Solved deck members (83-editorial audit 2026-06-01): STRONG = 03 (final-element=max-of-ends), 23 (flower-game parity), 28 (ways-to-split gap-product), 30 (count-collisions); LIGHTER = 02, 04, 17, 25. 6 more STRONG live in the blind queue (full list in `_Sealed-Queue-Phase2.md` answer key). Surfaced here so revision auto-sweeps it. See `patterns/master-taxonomy.md` → Invariant/Reframe. |
 
 > **DP is tracked by sub-pattern, never as one bucket** (master taxonomy = 20 DP sub-patterns; see `patterns/master-taxonomy.md`).
 > A Linear-DP rep does NOT cover Grid-DP, LIS, Interval, etc. — each owns separately, 3 cold cleans each.

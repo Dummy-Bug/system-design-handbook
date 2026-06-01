@@ -13,28 +13,33 @@
 
 1. ~~https://leetcode.com/problems/ways-to-split-array-into-good-subarrays/~~ ✅ dealt 2026-06-01 (soft fail) → `First-Attempt/28`
 2. ~~https://leetcode.com/problems/find-original-array-from-doubled-array/~~ ✅ dealt 2026-06-01 (clean first-AC, over-cap → derivation clause) → `First-Attempt/29`
-3. https://leetcode.com/problems/count-collisions-on-a-road/
-4. https://leetcode.com/problems/encode-number/
-5. https://leetcode.com/problems/search-suggestions-system/
-6. https://leetcode.com/problems/iterator-for-combination/
-7. https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
-8. https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
-9. https://leetcode.com/problems/corporate-flight-bookings/
-10. https://leetcode.com/problems/score-of-parentheses/
+3. ~~https://leetcode.com/problems/count-collisions-on-a-road/~~ ❌ dealt 2026-06-01 (3 WA → editorial, **hard fail**) → `First-Attempt/30`
+4. ~~https://leetcode.com/problems/count-paths-with-the-given-xor-value/~~ ✅ dealt 2026-06-01 (clean first-AC, 46m over-cap → derivation clause) → `First-Attempt/31`
+5. https://leetcode.com/problems/sentence-similarity-iii/
+6. https://leetcode.com/problems/number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers/
+7. https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
+8. https://leetcode.com/problems/count-the-number-of-incremovable-subarrays-i/
+9. https://leetcode.com/problems/max-chunks-to-make-sorted/
+10. https://leetcode.com/problems/before-and-after-puzzle/
 11. https://leetcode.com/problems/count-number-of-trapezoids-i/
-12. https://leetcode.com/problems/count-the-number-of-incremovable-subarrays-i/
-13. https://leetcode.com/problems/before-and-after-puzzle/
-14. https://leetcode.com/problems/time-based-key-value-store/
-15. https://leetcode.com/problems/k-th-symbol-in-grammar/
-16. https://leetcode.com/problems/maximize-greatness-of-an-array/
-17. https://leetcode.com/problems/count-paths-with-the-given-xor-value/
-18. https://leetcode.com/problems/sentence-similarity-iii/
-19. https://leetcode.com/problems/properties-graph/
-20. https://leetcode.com/problems/number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers/
-21. https://leetcode.com/problems/max-chunks-to-make-sorted/
-22. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
-23. https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-i/
-24. https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/
+12. https://leetcode.com/problems/iterator-for-combination/
+13. https://leetcode.com/problems/encode-number/
+14. https://leetcode.com/problems/score-of-parentheses/
+15. https://leetcode.com/problems/maximize-number-of-subsequences-in-a-string/
+16. https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-i/
+17. https://leetcode.com/problems/k-th-symbol-in-grammar/
+18. https://leetcode.com/problems/time-based-key-value-store/
+19. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
+20. https://leetcode.com/problems/properties-graph/
+21. https://leetcode.com/problems/maximize-greatness-of-an-array/
+22. https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
+23. https://leetcode.com/problems/search-suggestions-system/
+24. https://leetcode.com/problems/corporate-flight-bookings/
+25. https://leetcode.com/problems/number-of-ways-to-split-a-string/
+26. https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/
+27. https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/
+
+> Reshuffled 2026-06-01 (undealt set + 3 new `Invariant/Reframe` members folded in, genuine perl shuffle — position is NOT a tell).
 
 Mark progress: deal top-down; log each in `First-Attempt/` and tick it here after the cold re-solve.
 
@@ -49,6 +54,8 @@ Mark progress: deal top-down; log each in `First-Attempt/` and tick it here afte
 | 2026-05-30 | find-mirror-score-of-a-string | ❌→✓ WA-then-AC **soft fail** (44m, over cap; does NOT count toward ownership) | `First-Attempt/27` |
 | 2026-06-01 | ways-to-split-array-into-good-subarrays | ❌→✓ WA-then-AC **soft fail** (70m, over cap; does NOT count toward ownership) | `First-Attempt/28` |
 | 2026-06-01 | find-original-array-from-doubled-array | ✅ **clean first-AC** (49m, over cap → derivation clause; counts toward ownership) | `First-Attempt/29` |
+| 2026-06-01 | count-collisions-on-a-road | ❌ **3 WA → editorial, HARD FAIL** (insight-gated; simulation trap). Seeds new ✦ `Invariant/Reframe` bucket. | `First-Attempt/30` |
+| 2026-06-01 | count-paths-with-the-given-xor-value | ✅ **clean first-AC** (46m, over cap → derivation clause; counts). **First clean DP » Grid rep.** | `First-Attempt/31` |
 
 ---
 
@@ -112,6 +119,46 @@ Mark progress: deal top-down; log each in `First-Attempt/` and tick it here afte
 - Combinatorics — 2 (#26,27)
 - Segment Tree/BIT — 1 (#16, likely above-level)
 - Graph traversal — partial (#13 graph-rep)
+
+### ✦ Invariant / Reframe membership (non-standard bucket — all 83 band editorials adjudicated 2026-06-01)
+
+> Method: read every editorial's approach prose; keep a problem only if the **optimal solution is a
+> reframe to a counted/closed-form invariant** AND a **simulation/brute trap exists**. Tool problems
+> (Trie/DSU/BIT/heap/mono-stack/DP-table) were excluded even when hard. Tagged **alongside** each
+> problem's real mechanism bucket, never instead. SPOILER — reveal only in debrief.
+
+**STRONG (the reframe IS the solution; sim/brute is the trap):**
+| Problem | In queue / status | The invariant/reframe |
+|---|---|---|
+| max-chunks-to-make-sorted | deal #9 | prefix-max == index ⇒ a cut |
+| score-of-parentheses | deal #14 | only `()` scores `2^depth`; depth-count, no stack |
+| maximize-number-of-subsequences-in-a-string | deal #15 | running count of `pattern[0]`; insert-one ⇒ max(x,y) |
+| k-th-symbol-in-grammar | deal #17 | inversion-parity == popcount(k) |
+| number-of-ways-to-split-a-string | deal #25 (added) | multiplication principle over the two gap-ranges |
+| maximum-value-of-an-ordered-triplet-ii | deal #26 (added) | maintain prefix-max & prefix-max-diff (kills O(n³)) |
+| ways-to-split-array-into-good-subarrays | ✅ solved #28 | product of inter-`1` gaps |
+| alice-and-bob-playing-flower-game | ✅ solved #23 | `x+y` odd ⇒ win; count parity pairs |
+| final-element-after-subarray-deletions | ✅ solved #03 | answer = max(first, last) |
+| count-collisions-on-a-road | ❌ solved #30 (seed) | every car that stops = +1 |
+
+**LIGHTER (reframe-flavored / observation-led but shares a mechanism bucket — count as deck reps, low weight):**
+| Problem | In queue / status | Observation |
+|---|---|---|
+| number-of-ways-where-square-...-product | deal #6 | count value-pairs, not index-pairs (+overflow) |
+| count-number-of-trapezoids-i | deal #11 | running prefix-sum of per-`y` pair-counts |
+| encode-number | deal #13 | `num+1`, drop leading `1` (bijection) |
+| ways-to-make-a-fair-array | ✅ solved #17 | deleting `i` swaps odd/even suffix sums |
+| maximum-points-you-can-obtain-from-cards | ✅ solved #25-file | k-from-ends == min middle window of `n−k` |
+| smallest-all-ones-multiple | ✅ solved #04 | remainder pigeonhole cycle |
+| min-cost-to-equalize-arrays | ✅ solved #02 | cancel common, parity check |
+| minimum-swaps-to-make-strings-equal | band (unqueued reserve) | count `xy`/`yx` mismatches, parity gate |
+| sum-of-numbers-with-units-digit-k | band (unqueued reserve) | `num − n·k ≡ 0 (mod 10)`, enumerate `n` |
+| maximum-number-of-operations-to-move-ones | band (unqueued reserve) | running count of `1`s contributes on each `0` |
+
+**Reps this gives the bucket:** 6 STRONG members are live in the blind queue (4 already there + 2 newly
+folded in) → they'll surface as genuine `Invariant/Reframe` reps when dealt cold. 4 STRONG already solved
+(#03, #23, #28, #30) are retroactive deck members. 3 lighter band problems held in reserve (unqueued) if
+more reps wanted later. Remember: **no 3-clean gate — grow & review, never blocks graduation.**
 
 ### Trickiness tiers (editorial cross-check — AR alone misleads)
 

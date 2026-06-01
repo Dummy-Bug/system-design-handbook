@@ -186,6 +186,39 @@
 
 ---
 
+## ✦ Invariant / Reframe (NON-STANDARD bucket)
+
+> **Tag:** `Invariant/Reframe`. Added 2026-06-01. This is **not a mechanism bucket** like all the
+> others above — it is a **cross-cutting skill axis** that sits *across* the pattern list, the way
+> difficulty does. A problem here is usually *also* filed under a real bucket (Stack, Math, Greedy,
+> Game Theory…); this tag is added **alongside** that bucket, never instead of it.
+
+| Pattern | Sources | Notes |
+|---|---|---|
+| Invariant / Reframe (insight-gated brain-teasers) | — (own axis) | the trick IS the problem; simulation is the trap |
+
+**What it is:** problems where the win is *refusing to simulate the process* and instead finding a
+quantity that is invariant / additive / conserved, then counting it directly. The move —
+**"don't simulate, find the invariant"** — is the transferable skill; the specific observation in
+any one problem is disposable.
+
+**Why NON-STANDARD (read before treating it like a normal bucket):**
+- **No shared mechanism.** Owning 3 invariant problems does NOT make the 4th easier the way 3
+  monotonic-stack problems do — each reframe is a fresh insight. So the "3 cold cleans = owned" gate
+  does **not** apply and this bucket **never blocks band graduation** (rule 6).
+- **It's a deck, not a count.** Grow & review: every insight-gated problem gets logged with *the trap*
+  and *the reframe* in ≤2 lines. Reviewed for the move, not graduated.
+- **Cross-cutting.** Always tagged in addition to the problem's real mechanism bucket.
+- **Why it earns a bucket anyway (not a side-folder):** so band revision auto-sweeps it. A separate
+  deck file would get orphaned; a bucket row in each `00-Band-Topic-Map.md` surfaces every revision pass.
+- This is the **derivation muscle** the whole 1700 plan targets (the diagnosed gap is derivation, not
+  pattern recognition) — so it is deliberately the one bucket we track *because it's hard*, not because
+  it's a reusable tool.
+
+Seed members: count-collisions-on-a-road (1550–1600 #30).
+
+---
+
 ## Dynamic Programming (merged LearnYard L1/L2 + AlgoMaster 20)
 
 LearnYard splits DP into Level 1 / Level 2; AlgoMaster names 20 recurrence shapes. Merged:
@@ -226,3 +259,4 @@ LearnYard splits DP into Level 1 / Level 2; AlgoMaster names 20 recurrence shape
 - **LearnYard-only (union, not an AlgoMaster pattern):** Greedy, Hashing, Sorting, Bit Manipulation, Game Theory, Combinatorics & Geometry, String Matching, Tries, Segment Tree/BIT, and most of the Graph/Binary-Search sub-algorithms (Dijkstra, Bellman-Ford, MST, TSP, etc.).
 - **Blind-spot patterns (rule 6B — each needs 3 cold cleans):** Monotonic Stack, DP on Trees, Disjoint Set Union. Also watch: Binary Search On Answer, Tries.
 - **Substrate (not derivation buckets):** Hashing/Implementary, Sorting/Implementary, Simulation, plain Array iteration — appear as LearnYard buckets but don't count as ownership targets.
+- **Non-standard cross-cutting axis:** `Invariant/Reframe` — tracked as a bucket (so revision sweeps it) but with no 3-clean gate and never blocks graduation. Tagged alongside a problem's real mechanism bucket.
