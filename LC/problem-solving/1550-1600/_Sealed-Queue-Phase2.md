@@ -11,30 +11,30 @@
 
 ## DEAL LIST (blind — links only)
 
-1. https://leetcode.com/problems/properties-graph/
-2. https://leetcode.com/problems/k-th-symbol-in-grammar/
-3. https://leetcode.com/problems/iterator-for-combination/
-4. https://leetcode.com/problems/max-chunks-to-make-sorted/
-5. https://leetcode.com/problems/count-number-of-trapezoids-i/
-6. https://leetcode.com/problems/before-and-after-puzzle/
-7. https://leetcode.com/problems/maximize-greatness-of-an-array/
-8. https://leetcode.com/problems/count-the-number-of-incremovable-subarrays-i/
-9. https://leetcode.com/problems/ways-to-split-array-into-good-subarrays/
-10. https://leetcode.com/problems/encode-number/
-11. https://leetcode.com/problems/count-collisions-on-a-road/
-12. https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-i/
-13. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
-14. https://leetcode.com/problems/sentence-similarity-iii/
-15. https://leetcode.com/problems/count-paths-with-the-given-xor-value/
-16. https://leetcode.com/problems/find-original-array-from-doubled-array/
-17. https://leetcode.com/problems/score-of-parentheses/
-18. https://leetcode.com/problems/number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers/
-19. https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/
-20. https://leetcode.com/problems/time-based-key-value-store/
-21. https://leetcode.com/problems/corporate-flight-bookings/
-22. https://leetcode.com/problems/search-suggestions-system/
-23. https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
-24. https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
+1. ~~https://leetcode.com/problems/ways-to-split-array-into-good-subarrays/~~ ✅ dealt 2026-06-01 (soft fail) → `First-Attempt/28`
+2. ~~https://leetcode.com/problems/find-original-array-from-doubled-array/~~ ✅ dealt 2026-06-01 (clean first-AC, over-cap → derivation clause) → `First-Attempt/29`
+3. https://leetcode.com/problems/count-collisions-on-a-road/
+4. https://leetcode.com/problems/encode-number/
+5. https://leetcode.com/problems/search-suggestions-system/
+6. https://leetcode.com/problems/iterator-for-combination/
+7. https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
+8. https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
+9. https://leetcode.com/problems/corporate-flight-bookings/
+10. https://leetcode.com/problems/score-of-parentheses/
+11. https://leetcode.com/problems/count-number-of-trapezoids-i/
+12. https://leetcode.com/problems/count-the-number-of-incremovable-subarrays-i/
+13. https://leetcode.com/problems/before-and-after-puzzle/
+14. https://leetcode.com/problems/time-based-key-value-store/
+15. https://leetcode.com/problems/k-th-symbol-in-grammar/
+16. https://leetcode.com/problems/maximize-greatness-of-an-array/
+17. https://leetcode.com/problems/count-paths-with-the-given-xor-value/
+18. https://leetcode.com/problems/sentence-similarity-iii/
+19. https://leetcode.com/problems/properties-graph/
+20. https://leetcode.com/problems/number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers/
+21. https://leetcode.com/problems/max-chunks-to-make-sorted/
+22. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
+23. https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-i/
+24. https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/
 
 Mark progress: deal top-down; log each in `First-Attempt/` and tick it here after the cold re-solve.
 
@@ -47,6 +47,8 @@ Mark progress: deal top-down; log each in `First-Attempt/` and tick it here afte
 | 2026-05-30 07:30 IST | maximum-points-you-can-obtain-from-cards | ✅ clean, first-AC (24m) | `First-Attempt/25` |
 | 2026-05-30 10:34 IST | longest-substring-of-all-vowels-in-order | ✅ clean, first-AC (22m) | `First-Attempt/26` |
 | 2026-05-30 | find-mirror-score-of-a-string | ❌→✓ WA-then-AC **soft fail** (44m, over cap; does NOT count toward ownership) | `First-Attempt/27` |
+| 2026-06-01 | ways-to-split-array-into-good-subarrays | ❌→✓ WA-then-AC **soft fail** (70m, over cap; does NOT count toward ownership) | `First-Attempt/28` |
+| 2026-06-01 | find-original-array-from-doubled-array | ✅ **clean first-AC** (49m, over cap → derivation clause; counts toward ownership) | `First-Attempt/29` |
 
 ---
 

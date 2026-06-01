@@ -92,7 +92,7 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 
 | Bucket | Clean reps | Reps logged | Status |
 |---|---|---|---|
-| Greedy | **4** (01,02,05,20) | 5 | ◐ near-owned — count met, verify reps 2–3 were disguised/cold, then ●. 06 was hinted (doesn't count). |
+| Greedy | **5** (01,02,05,20,29) | 6 | ◐ near-owned — count met; 29 (doubled-array) = disguised Set-B clean (over-cap, derivation clause). Verify reps 2–3 spacing, then ●. 06 was hinted (doesn't count). |
 | Prefix Sum / Diff-Array | **3** (08,17,18) | 3 | ◐ count met — confirm spacing + disguise on rep 3 to call it ●. |
 | Math / NT / Combinatorics | 2 (04,23) | 3 | ◐ 11 was WA. One more clean. |
 | Sliding Window | 2 (10,14) | 2 | ◐ one more clean. |
