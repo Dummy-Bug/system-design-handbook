@@ -65,6 +65,91 @@ class Solution {
 
 ---
 
+**Bottom-up (tabulation) variant — written directly, self-derived (AC):**
+
+```java
+class Solution {
+    public int countPathsWithXorValue(int[][] grid, int k) {
+        int MOD = 1000000007;
+        int m = grid.length, n = grid[0].length;
+        int[][][] dp = new int[m][n][16];
+
+        for (int x = 0; x < 16; x++)              // base: only path to (0,0) is the cell itself
+            if (grid[0][0] == x) dp[0][0][x] = 1;
+
+        for (int i = 0; i < m; i++) {             // row-major = dependency order for a grid
+            for (int j = 0; j < n; j++) {
+                for (int x = 0; x < 16; x++) {     // 3rd loop: fill the whole 16-wide vector per cell
+                    if (i == 0 && j == 0) continue;
+                    int xor = grid[i][j] ^ x;       // requirement to demand from predecessors
+                    if (i == 0)       dp[0][j][x] = dp[0][j-1][xor];                       // only from left
+                    else if (j == 0)  dp[i][0][x] = dp[i-1][0][xor];                       // only from up
+                    else              dp[i][j][x] = (dp[i-1][j][xor] + dp[i][j-1][xor]) % MOD;
+                }
+            }
+        }
+        return dp[m-1][n-1][k];
+    }
+}
+```
+
+**The BUP-specific skill here = iteration order, not translation.** The recurrence/state is identical to
+the memo; the only new thing tabulation forces is *sweeping cells in an order where both predecessors are
+already filled.* For a **grid** that's just **row-major** (top→bottom, left→right) — reflexive, which is why
+"memo → BUP" felt trivial. The muscle to actually build is naming that order for the shapes where it's NOT
+reflexive: **interval DP** (by increasing length), **bitmask** (by mask value), **tree** (post-order),
+**digit** (position-by-position). Drill BUP directly on *those*, not on grids.
+
+**Why bother with BUP at all (concrete payoff):** only tabulation can be **space-optimized**. This `[m][n][16]`
+collapses to a rolling **two rows** `[2][n][16]` (each row needs only the row above + the cell to its left),
+i.e. `O(n·16)` memory instead of `O(m·n·16)` — exactly the fix that rescues the `≤1000`-value case from
+Axis 3's MLE. The memo cannot do this. So direct-BUP fluency = the ability to clear memory-tight problems.
+
+---
+
+**Space-optimized rolling two-row variant — THE CANONICAL FORM (target for revision):**
+
+> ⚠️ This version was reached **with help** (tapped out on the rolling mechanic) — so it does NOT add an
+> ownership rep; #31's clean rep stands on the original top-down memo first-AC. The point of recording it
+> is that revision must reproduce *this* form directly, solo.
+
+```java
+class Solution {
+    public int countPathsWithXorValue(int[][] grid, int k) {
+        int MOD = 1000000007;
+        int m = grid.length, n = grid[0].length;
+
+        int[][] prev = null;
+        for (int i = 0; i < m; i++) {
+            int[][] cur = new int[n][16];            // fresh row each iteration
+            for (int j = 0; j < n; j++) {
+                for (int x = 0; x < 16; x++) {
+                    if (i == 0 && j == 0) {           // base
+                        cur[0][x] = (grid[0][0] == x) ? 1 : 0;
+                        continue;
+                    }
+                    int xor = grid[i][j] ^ x;
+                    int fromUp   = (i > 0) ? prev[j][xor]  : 0;   // row above
+                    int fromLeft = (j > 0) ? cur[j-1][xor] : 0;   // same row, already filled
+                    cur[j][x] = (fromUp + fromLeft) % MOD;
+                }
+            }
+            prev = cur;                              // roll
+        }
+        return prev[n-1][k];
+    }
+}
+```
+
+Rolling mechanic = two lines: `cur = new int[n][16]` at the top of each row, `prev = cur` at the bottom.
+`O(n·16)` memory. **Gotchas that bit on the first try (don't repeat):** (1) dropped the outer `for i` loop
+— no `i` loop = no rolling; (2) `curr.clone()` is a *shallow* copy (inner `[16]` shared) and the wrong
+model anyway — allocate fresh, don't snapshot; (3) leftover 3D names `dp[i][j][x]` → `cur[j][x]`.
+Single-row in-place is unsafe here (per-cell you read index `x^g` and write index `x` → aliasing); two
+rows (or a `[16]` temp per cell) is the fix.
+
+---
+
 ## Perturbation Debrief ([[lc-perturbation-debrief]])
 
 Worked Socratically post-AC. The AC was by *instinct* (pattern-match: grid DP → carry a dimension →
@@ -130,5 +215,13 @@ exclusive query (`k ^ grid[last]`) would silently disagree = the bug. This code 
 3. `< 16` is a **memory** calibration for the full-array build; memory breaks before time; rolling array
    rescues a looser bound. Small value-bound ⇒ "make the value a state."
 
-> **⏳ REVISION TARGET:** re-derive cold the *why* — (a) why the XOR axis is bounded to 16, (b) why the
-> transition uses `x ^ grid[i][j]` (self-inverse), (c) the `(0,0)` base. Reproduce the memo form.
+> **⏳ REVISION TARGET (set 2026-06-01):** solve `#31` **directly as the space-optimized rolling two-row
+> BUP** — no memo crutch, no full 3D array. Must produce, cold and solo:
+> 1. **Perfect state definition** — `f(i,j,x)` = #paths from `(0,0)` to `(i,j)` whose *inclusive* XOR == `x`
+>    (not "running xor == k"; `k` is only the final slice read).
+> 2. **Recurrence** `cur[j][x] = prev[j][x^g] + cur[j-1][x^g]` with the `(0,0)` base and row-major order.
+> 3. **Rolling mechanic** clean (fresh `cur` per row, `prev = cur`), `O(n·16)` memory — without the 3
+>    gotchas above (missing `i` loop / shallow clone / 3D-name leftovers).
+> 4. **Re-answer the 3 perturbation axes from memory** ([[lc-perturbation-debrief]]): invertibility
+>    (XOR→AND breaks), the `<16 = 2⁴` memory calibration (memory-before-time), and "small value-bound ⇒
+>    make the value a state." Survive all three cold ⇒ genuinely owned.
