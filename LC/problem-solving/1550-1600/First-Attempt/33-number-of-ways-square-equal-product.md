@@ -71,6 +71,21 @@ Clean, fast, correct because the constraints were read **before** coding (Step-a
 structure was chosen by role ("count" not "positions"). Model rep for the over-model fix. Counts toward
 **Hashing (counting)** first clean rep ONLY — no Math/NT mechanic was used.
 
+## Secondary approach — NT divisor-enumeration (the n≤1e5 method, coded on the n≤1000 judge)
+- **AC:** 2026-06-02 14:31:57 IST (submitted on LC 1577; passes since the method is correct, though n≤1000 doesn't require it).
+- **Classification — HARD FAIL for Math/NT.** Heavily guided: the sieve overflow, prime-factorization-with-
+  exponents (+leftover prime), the *factor-n-double-exponents* trick, and the divisor-enumeration grid loop
+  (with the `sz` freeze) were all taught essentially line-by-line. **Does NOT count toward ownership** — it's a
+  hard-fail *acquisition* of the divisor-enumeration / factorization primitives, not a derived solve.
+- **Same problem as the clean rep**, just a second approach → adds **no distinct-problem rep** (clean or fail).
+- **Hashing rep is unaffected:** the original first-AC (frequency-map of products, 22m sub-cap) remains the
+  **clean Hashing rep**. This NT detour does not touch it.
+- **Primitives acquired (hard-fail, drill to reflex):** Sieve of Eratosthenes (§3.7), prime factorization w/
+  exponents (§3.8), divisor enumeration + n²-doubling (§4.12). See [[lc-derivation-budget-chunking]] — the
+  problem felt ~1800 because all five had to be derived at once; each is individually a ~1400 brick.
+- Final code (sieve + factorize + double-exponents + grid enumerate + pair-count) lives in this file's history /
+  the session; canonical reference for the technique = syllabus §4.12.
+
 ## REVISION TARGET (Day+14)
 Re-derive directly: the type-1+type-2 split, the frequency-map-of-products, the long cast. Re-answer the 3
 probes from memory (esp. *why long is forced* and *why n=1e3 permits all-pairs*).

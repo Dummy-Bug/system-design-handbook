@@ -98,7 +98,7 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 |---|---|---|---|
 | Greedy | **5** (01,02,05,20,29) | 6 | ◐ near-owned — count met; 29 (doubled-array) = disguised Set-B clean (over-cap, derivation clause). Verify reps 2–3 spacing, then ●. 06 was hinted (doesn't count). |
 | Prefix Sum / Diff-Array | **3** (08,17,18) | 3 | ◐ count met — confirm spacing + disguise on rep 3 to call it ●. |
-| Math / NT / Combinatorics | 2 (04,23) | 3 | ◐ 11 was WA. One more clean. (#33 does NOT count here — no NT technique, just hashing+overflow-hygiene.) |
+| Math / NT / Combinatorics | 2 (04,23) | 3 | ◐ 11 was WA. One more clean. (#33 hash-AC does NOT count — no NT. #33 NT-divisor variant = **hard fail**, fully guided acquisition of sieve/factorization/divisor-enumeration; does NOT count, same problem so no distinct rep.) |
 | Sliding Window | 2 (10,14) | 2 | ◐ one more clean. |
 | Two Pointers (string/array) | 0 | 1 | ○ 32 sentence-similarity-iii = WA-then-AC **soft fail** (over-modeled the prefix+suffix two-pointer). Owe 3 clean. |
 | Graph traversal (DFS/BFS) | 2 (09,16) | 2 | ◐ one more clean. |
