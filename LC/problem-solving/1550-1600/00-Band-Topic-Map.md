@@ -87,6 +87,8 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 | 07 | XOR After Range Mult Queries I | direct simulation | Simulation (substrate) | `Simulation` | ✅ |
 | 30 | Count Collisions on a Road | count cars that stop (n − leadL − trailR) | Stack + **Invariant/Reframe** ✦ | `Stack` `Invariant/Reframe` `Brainteaser` | ❌ editorial (2 WA) |
 | 31 | Count Paths With Given XOR Value | top-down memo `dp[i][j][x]`, XOR as bounded dim | DP » Grid (XOR-state) | `DP` `Grid-DP` `Bit` `Matrix` | ✅ (over-cap, derivation clause) |
+| 32 | Sentence Similarity III | prefix+suffix two-pointer (shorter = prefix∪suffix of longer) — but OUR code over-modeled w/ map+deque | Two Pointers (string) | `Two-Pointers` `String` | ❌→✓ soft fail (multi-WA, over-modeled) |
+| 33 | Number of Ways Square = Product | frequency map of pairwise products, look up squares (count not positions) | Hashing (counting) | `Hashing` `Counting` `Invariant/Reframe` | ✅ clean first-AC (22m SUB-CAP) |
 
 ---
 
@@ -96,8 +98,9 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 |---|---|---|---|
 | Greedy | **5** (01,02,05,20,29) | 6 | ◐ near-owned — count met; 29 (doubled-array) = disguised Set-B clean (over-cap, derivation clause). Verify reps 2–3 spacing, then ●. 06 was hinted (doesn't count). |
 | Prefix Sum / Diff-Array | **3** (08,17,18) | 3 | ◐ count met — confirm spacing + disguise on rep 3 to call it ●. |
-| Math / NT / Combinatorics | 2 (04,23) | 3 | ◐ 11 was WA. One more clean. |
+| Math / NT / Combinatorics | 2 (04,23) | 3 | ◐ 11 was WA. One more clean. (#33 does NOT count here — no NT technique, just hashing+overflow-hygiene.) |
 | Sliding Window | 2 (10,14) | 2 | ◐ one more clean. |
+| Two Pointers (string/array) | 0 | 1 | ○ 32 sentence-similarity-iii = WA-then-AC **soft fail** (over-modeled the prefix+suffix two-pointer). Owe 3 clean. |
 | Graph traversal (DFS/BFS) | 2 (09,16) | 2 | ◐ one more clean. |
 | **DP » Interval/Minimax** | 1 (13) | 1 | ○ Stone Game. Interval scarce in band → 2 more cross-band. |
 | **DP » Linear / Count-ways** | 0 | 0 | ○ in queue: ways-to-split-good-subarrays (disguised). |
@@ -110,7 +113,7 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 | Heap | 0 | 1 | ○ 21 was WA-then-AC (soft fail). Owe a clean rep. |
 | Binary Search | 0 | 1 | ○ 24 was WA-then-AC. Plain-BS rep still owed (also carried from 1500-1550). |
 | Tree | 0 | 1 | ○ 15 hinted + it's D&C construction, **not tree-DP**. |
-| Hashing (canonical) | 0 | 1 | ○ 12 was hinted. |
+| Hashing (canonical/counting) | 1 (33) | 2 | ◐ 33 (product frequency-map) = first clean rep, sub-cap. 12 was hinted (doesn't count). 2 more. |
 | Simulation | (substrate — not an ownership target) | 1 | — |
 | ✦ **Invariant / Reframe** (NON-STANDARD) | n/a — no 3-clean gate | deck: 8 solved | ✦ **Grow & review deck, not an ownership target — NEVER blocks graduation.** Cross-cutting axis (tagged alongside the real bucket). Solved deck members (83-editorial audit 2026-06-01): STRONG = 03 (final-element=max-of-ends), 23 (flower-game parity), 28 (ways-to-split gap-product), 30 (count-collisions); LIGHTER = 02, 04, 17, 25. 6 more STRONG live in the blind queue (full list in `_Sealed-Queue-Phase2.md` answer key). Surfaced here so revision auto-sweeps it. See `patterns/master-taxonomy.md` → Invariant/Reframe. |
 

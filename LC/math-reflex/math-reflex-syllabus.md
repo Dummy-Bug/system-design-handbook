@@ -212,6 +212,7 @@ while n > 0:
 ## 3.8 — Prime factorization
 **Fact:** Trial-divide by primes up to √n. Each prime p divides n at most log_p(n) times.
 **Why:** Used in divisor count, GCD/LCM via prime factorizations.
+**See also §4.12** — enumerating *all* divisors from the factorization, and the *factor n then double exponents* trick to factor `n²` without paying √(n²).
 **LC problems:**
 - *Minimum Number of Operations to Make Array XOR Equal to K* (LC 2997)
 - *Replace Non-Coprime Numbers in Array* (LC 2197)
@@ -336,6 +337,30 @@ Bounded form (+ inclusion-excl) Distribute Candies Among Children II   → subtr
 **LC problems:**
 - *Closest Divisors* (LC 1362)
 - *Smallest Value After Replacing With Sum of Prime Factors* (LC 2507)
+
+## 4.12 — Divisor enumeration + the n² square-factoring shortcut
+**Fact (two atoms):**
+1. **Enumerate all divisors** of `n = p₁^e₁ · … · pₖ^eₖ` by sweeping the exponent grid: every divisor is
+   `p₁^a₁ · … · pₖ^aₖ` with each `aᵢ ∈ [0, eᵢ]`. (e.g. `36 = 2²·3²` → grid `2^{0,1,2} × 3^{0,1,2}` → `1,2,3,4,6,9,12,18,36`.) This lists the *full* divisor set — not just the square ones.
+2. **Square-factoring shortcut:** to factor `n²` cheaply, **factor `n` (√n) then double every exponent** — `n²`'s factorization is `n`'s with each `eᵢ → 2eᵢ`. Never trial-divide `n²` directly: √(n²)=n turns an O(n) factor into O(n²) over the array.
+**Why:** "Count pairs `(b,c)` with `b·c = S`" at `n ≤ 1e5` can't all-pairs (1e10). Per target `S`, enumerate `S`'s
+divisor pairs `(d, S/d)` and look them up in a freq map — O(#divisors) not O(n). The constraint alone (1e3 vs
+1e5) flips the *same* problem from a 5-line hash-count to a factorization exercise. Sibling of §4.11 (count vs
+list); builds on §3.7 (sieve for SPF) + §3.8 (prime factorization).
+**Gotcha:** the `f1²·f2²` shortcut (squaring `n`'s divisor pairs) yields only the *square* divisors of `n²` and
+**misses non-square pairs** like `(2,18),(3,12)` of 36 — you must sweep the full grid.
+**LC problems:**
+- *Number of Ways Where Square = Product* (LC 1577) — the `n ≤ 1e5` variant; **worked example in `problem-solving/1550-1600/First-Attempt/33-number-of-ways-square-equal-product.md`** (Scale-axis section).
+- *Four Divisors* (LC 1390) — sum a number's divisors via enumeration.
+- *Closest Divisors* (LC 1362) — pairs with §4.11.
+
+**Socratic drill skeleton (fill in session):**
+```
+   _TODO: pose "list all divisors of 100" cold → user sweeps 2^{0,1,2}×5^{0,1,2} grid._
+   _TODO: pose "factor 36 quickly" → user factors 6, doubles exponents (don't trial-divide 36)._
+   _TODO: counterexample drill — why does squaring 6's divisors {1,4,9,36} miss (2,18)? → full grid._
+   Mark ✓ after 2-3 problems (LC 1577 hard-variant, LC 1390) confirm the reflex.
+```
 
 ---
 
@@ -562,6 +587,7 @@ You're at contest 1500. **Start at Band 1400, finish it, then 1500, then 1600.**
 - [ ] 4.9 Stars and bars
 - [ ] 4.10 Game theory primer
 - [ ] 4.11 Divisor count from factorization
+- [ ] 4.12 Divisor enumeration + n² square-factoring shortcut
 
 ## Band 1800
 - [ ] 5.1 Modular inverse via Fermat

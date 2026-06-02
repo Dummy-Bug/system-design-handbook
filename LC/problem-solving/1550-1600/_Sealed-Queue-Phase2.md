@@ -15,8 +15,8 @@
 2. ~~https://leetcode.com/problems/find-original-array-from-doubled-array/~~ ✅ dealt 2026-06-01 (clean first-AC, over-cap → derivation clause) → `First-Attempt/29`
 3. ~~https://leetcode.com/problems/count-collisions-on-a-road/~~ ❌ dealt 2026-06-01 (3 WA → editorial, **hard fail**) → `First-Attempt/30`
 4. ~~https://leetcode.com/problems/count-paths-with-the-given-xor-value/~~ ✅ dealt 2026-06-01 (clean first-AC, 46m over-cap → derivation clause) → `First-Attempt/31`
-5. https://leetcode.com/problems/sentence-similarity-iii/
-6. https://leetcode.com/problems/number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers/
+5. ~~https://leetcode.com/problems/sentence-similarity-iii/~~ ❌→✓ dealt 2026-06-01, AC 2026-06-02 (multi-WA → **soft fail**, over-modeled) → `First-Attempt/32`
+6. ~~https://leetcode.com/problems/number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers/~~ ✅ dealt+AC 2026-06-02 (clean first-AC, **22m SUB-CAP**; counts) → `First-Attempt/33`
 7. https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
 8. https://leetcode.com/problems/count-the-number-of-incremovable-subarrays-i/
 9. https://leetcode.com/problems/max-chunks-to-make-sorted/
@@ -56,6 +56,8 @@ Mark progress: deal top-down; log each in `First-Attempt/` and tick it here afte
 | 2026-06-01 | find-original-array-from-doubled-array | ✅ **clean first-AC** (49m, over cap → derivation clause; counts toward ownership) | `First-Attempt/29` |
 | 2026-06-01 | count-collisions-on-a-road | ❌ **3 WA → editorial, HARD FAIL** (insight-gated; simulation trap). Seeds new ✦ `Invariant/Reframe` bucket. | `First-Attempt/30` |
 | 2026-06-01 | count-paths-with-the-given-xor-value | ✅ **clean first-AC** (46m, over cap → derivation clause; counts). **First clean DP » Grid rep.** | `First-Attempt/31` |
+| 2026-06-02 | sentence-similarity-iii | ❌→✓ multi-WA → **soft fail** (~2h/2 days; over-modeled with map+deque vs prefix/suffix two-pointer; does NOT count) | `First-Attempt/32` |
+| 2026-06-02 | number-of-ways-square-equal-product | ✅ **clean first-AC, 22m SUB-CAP** (count-map not index-map → over-model reflex self-corrected; counts) | `First-Attempt/33` |
 
 ---
 
