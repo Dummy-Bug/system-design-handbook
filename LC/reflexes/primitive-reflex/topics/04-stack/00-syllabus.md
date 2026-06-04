@@ -1,39 +1,54 @@
 # Stack — Family Syllabus
 
-Status: ✅ AUDITED-COMPLETE (2026-06-03), 7 atoms. Learning from scratch — no prior install assumed.
-
 Discriminator: **what the stack holds + what a pop means**.
-
-Robustness goal: with these 7 installed, the only failure on a stack problem is **mapping the problem to the right primitive** — never a missing tool. (★ = blind-spot per CLAUDE.md rule 6B.)
+Goal: with all 7 installed, a stack problem can only fail on **mapping**, never a missing tool. (★ = blind-spot, rule 6B.)
 
 ---
 
-## The 7 stack primitives — learning order (foundation → hard), with LC problems
+## The 7 primitives (learning order: foundation → hard)
 
 | # | Primitive | Stack holds | Pop means | Canonical problems |
 |---|---|---|---|---|
 | 1 | Matching / balancing | open delimiters (or indices) | close → must pair; validity | Valid Parentheses (20), Min Add to Make Valid (921), Longest Valid Parentheses (32) |
-| 2 | Adjacent-collapse / resolve-against-top | processed elements so far | top interacts with incoming → annihilate/merge/cancel | Remove All Adjacent Duplicates (1047/1209), Asteroid Collision (735), Simplify Path (71), Make String Great (1544) |
-| 3 | Expression evaluation | operands (+ operators) | operator → pop operands, apply | Evaluate Reverse Polish Notation (150), Basic Calculator II (227) |
-| 4 | Nested-structure fold-up | per-level partial result | close-bracket → fold child into parent | Score of Parentheses (856), Decode String (394), Basic Calculator (224, parens), Flatten Nested List Iterator (341) |
-| 5 | Monotonic stack ★ | values/indices in sorted order | incoming breaks monotonicity → next/prev greater-smaller | Next Greater Element (496/503), Daily Temperatures (739), Largest Rectangle in Histogram (84), Sum of Subarray Minimums (907), Remove K Digits (402), 132 Pattern (456) |
-| 6 | Min/max auxiliary stack | (value, running min/max) | lockstep with main | Min Stack (155), Max Stack (716) |
-| 7 | Two-stack amortized | two stacks, transfer between | move when one empties | Implement Queue using Stacks (232), Implement Stack using Queues (225) |
-
-**Cross-ref (not a core stack atom — lives in Trees/Graph):** explicit-stack recursion simulation (iterative inorder/preorder/postorder, iterative DFS).
+| 2 | Adjacent-collapse / resolve-against-top | processed elements so far | top interacts with incoming → annihilate/merge/cancel | Remove All Adjacent Duplicates (1047), Asteroid Collision (735), Simplify Path (71) |
+| 3 | Expression evaluation | operands (+ operators) | operator → pop operands, apply | Evaluate RPN (150), Basic Calculator I/II (224/227) |
+| 4 | Nested-structure fold-up | per-level partial result | close-bracket → fold child into parent | Score of Parentheses (856), Decode String (394), Number of Atoms (726) |
+| 5 | Monotonic stack ★ | values/indices in sorted order | incoming breaks monotonicity → next/prev greater-smaller | Daily Temperatures (739), Sum of Subarray Minimums (907), Largest Rectangle in Histogram (84), Next Greater Element (496/503), Remove K Digits (402) |
+| 6 | Min/max auxiliary stack | (value, running min/max) | lockstep with main | Min Stack (155), Maximum Frequency Stack (895) |
+| 7 | Two-stack amortized | two stacks, transfer between | move when one empties | Queue using Stacks (232), Stack using Queues (225) |
 
 ---
 
-## Atoms (all fresh — derive Socratically in order)
+## Atoms
 
 | # | Atom | Folder | Status |
 |---|---|---|---|
-| 1 | Matching / balancing | `01-matching/` | ✓ derived (Valid Parentheses) — why-a-stack/LIFO |
-| 2 | Adjacent-collapse / resolve-against-top | `02-adjacent-collapse/` | ✓ derived (Remove Adjacent Duplicates) — cascade = the tell |
-| 3 | Expression evaluation | `03-expression-eval/` | not derived |
-| 4 | Nested-structure fold-up | `04-fold-up-nested/` | not derived |
-| 5 | Monotonic stack ★ | `05-monotonic/` | not derived (blind-spot — priority) |
-| 6 | Min/max auxiliary stack | `06-minmax-stack/` | not derived |
-| 7 | Two-stack amortized | `07-two-stack/` | not derived |
+| 1 | Matching / balancing | `01-matching/` | not started |
+| 2 | Adjacent-collapse / resolve-against-top | `02-adjacent-collapse/` | not started |
+| 3 | Expression evaluation | `03-expression-eval/` | not started |
+| 4 | Nested-structure fold-up | `04-fold-up-nested/` | not started |
+| 5 | Monotonic stack ★ | `05-monotonic/` | not started |
+| 6 | Min/max auxiliary stack | `06-minmax-stack/` | not started |
+| 7 | Two-stack amortized | `07-two-stack/` | not started |
 
-Learning order = foundation → hard. #1 matching teaches *why a stack*; each later atom adds one idea (collapse → operands → value-fold → ordering invariant → design variants).
+Per atom: derive Socratically → solve announced (produce code cold) → solve disguised (install recognition) → perturbation debrief → tick.
+
+---
+
+## Completeness
+
+Cross-checked vs `learnyard-data/stack.tsv` (57) + `algomaster-data/stacks.tsv` (37) — every problem maps to these 7. No 8th atom. (Validate Stack Sequences / Baseball Game = literal stack simulation = substrate, not a primitive.)
+
+---
+
+## Practice plan — 2 per atom (announced + disguised)
+
+| Atom | Announced | Disguised / applied |
+|---|---|---|
+| 1 matching | [ ] Valid Parentheses (20) | [ ] Minimum Remove to Make Valid Parentheses (1249) |
+| 2 collapse | [ ] Remove All Adjacent Duplicates (1047) | [ ] Asteroid Collision (735) |
+| 3 expr-eval | [ ] Evaluate RPN (150) | [ ] Basic Calculator II (227) |
+| 4 fold-up | [ ] Decode String (394) | [ ] Basic Calculator (224, parens) |
+| 5 monotonic ★ | [ ] Daily Temperatures (739) | [ ] Sum of Subarray Minimums (907) · [ ] Largest Rectangle in Histogram (84) |
+| 6 min/max | [ ] Min Stack (155) | [ ] Maximum Frequency Stack (895) |
+| 7 two-stack | [ ] Queue using Stacks (232) | [ ] Stack using Queues (225) |
