@@ -23,7 +23,7 @@ Goal: with all 7 installed, a stack problem can only fail on **mapping**, never 
 
 | # | Atom | Folder | Status |
 |---|---|---|---|
-| 1 | Matching / balancing | `01-matching/` | not started |
+| 1 | Matching / balancing | `01-matching/` | ✓ covered (validity + count facets) |
 | 2 | Adjacent-collapse / resolve-against-top | `02-adjacent-collapse/` | not started |
 | 3 | Expression evaluation | `03-expression-eval/` | not started |
 | 4 | Nested-structure fold-up | `04-fold-up-nested/` | not started |
@@ -45,7 +45,7 @@ Cross-checked vs `learnyard-data/stack.tsv` (57) + `algomaster-data/stacks.tsv` 
 
 | Atom | Announced | Disguised / applied |
 |---|---|---|
-| 1 matching | [ ] Valid Parentheses (20) | [ ] Minimum Remove to Make Valid Parentheses (1249) |
+| 1 matching | [x] Valid Parentheses (20) | [x] Minimum Remove to Make Valid Parentheses (1249) |
 | 2 collapse | [ ] Remove All Adjacent Duplicates (1047) | [ ] Asteroid Collision (735) |
 | 3 expr-eval | [ ] Evaluate RPN (150) | [ ] Basic Calculator II (227) |
 | 4 fold-up | [ ] Decode String (394) | [ ] Basic Calculator (224, parens) |
