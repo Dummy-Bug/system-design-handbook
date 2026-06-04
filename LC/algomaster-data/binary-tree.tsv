@@ -1,0 +1,48 @@
+Difficulty	Title	Slug	Source	Link
+	Introduction	binary-tree-introduction	algomaster	https://algomaster.io/learn/dsa/binary-tree-introduction
+Easy	Maximum Depth of Binary Tree	maximum-depth-of-binary-tree	algomaster	https://algomaster.io/learn/dsa/maximum-depth-of-binary-tree
+Easy	Average of Levels in Binary Tree	average-of-levels-in-binary-tree	algomaster	https://algomaster.io/learn/dsa/average-of-levels-in-binary-tree
+Medium	Binary Tree Level Order Traversal	binary-tree-level-order-traversal	algomaster	https://algomaster.io/learn/dsa/binary-tree-level-order-traversal
+Medium	Binary Tree Right Side View	binary-tree-right-side-view	algomaster	https://algomaster.io/learn/dsa/binary-tree-right-side-view
+Medium	Binary Tree Zigzag Level Order Traversal	binary-tree-zigzag-level-order-traversal	algomaster	https://algomaster.io/learn/dsa/binary-tree-zigzag-level-order-traversal
+Medium	Populating Next Right Pointers in Each Node II	populating-next-right-pointers-in-each-node-ii	algomaster	https://algomaster.io/learn/dsa/populating-next-right-pointers-in-each-node-ii
+Medium	Maximum Width of Binary Tree	maximum-width-of-binary-tree	algomaster	https://algomaster.io/learn/dsa/maximum-width-of-binary-tree
+Medium	Binary Tree Vertical Order Traversal	binary-tree-vertical-order-traversal	algomaster	https://algomaster.io/learn/dsa/binary-tree-vertical-order-traversal
+Medium	Populating Next Right Pointers in Each Node	populating-next-right-pointers-in-each-node	algomaster	https://algomaster.io/learn/dsa/populating-next-right-pointers-in-each-node
+Medium	Check Completeness of a Binary Tree	check-completeness-of-a-binary-tree	algomaster	https://algomaster.io/learn/dsa/check-completeness-of-a-binary-tree
+Easy	Binary Tree Preorder Traversal	binary-tree-preorder-traversal	algomaster	https://algomaster.io/learn/dsa/binary-tree-preorder-traversal
+Easy	Same Tree	same-tree	algomaster	https://algomaster.io/learn/dsa/same-tree
+Easy	Symmetric Tree	symmetric-tree	algomaster	https://algomaster.io/learn/dsa/symmetric-tree
+Easy	Binary Tree Paths	binary-tree-paths	algomaster	https://algomaster.io/learn/dsa/binary-tree-paths
+Easy	Convert Sorted Array to Binary Search Tree	convert-sorted-array-to-binary-search-tree	algomaster	https://algomaster.io/learn/dsa/convert-sorted-array-to-binary-search-tree
+Easy	Count Complete Tree Nodes	count-complete-tree-nodes	algomaster	https://algomaster.io/learn/dsa/count-complete-tree-nodes
+Easy	Sum of Left Leaves	sum-of-left-leaves	algomaster	https://algomaster.io/learn/dsa/sum-of-left-leaves
+Easy	Subtree of Another Tree	subtree-of-another-tree	algomaster	https://algomaster.io/learn/dsa/subtree-of-another-tree
+Medium	Path Sum II	path-sum-ii	algomaster	https://algomaster.io/learn/dsa/path-sum-ii
+Medium	Path Sum III	path-sum-iii	algomaster	https://algomaster.io/learn/dsa/path-sum-iii
+Medium	Longest Univalue Path	longest-univalue-path	algomaster	https://algomaster.io/learn/dsa/longest-univalue-path
+Medium	Maximum Difference Between Node and Ancestor	maximum-difference-between-node-and-ancestor	algomaster	https://algomaster.io/learn/dsa/maximum-difference-between-node-and-ancestor
+Medium	Construct Binary Tree from Preorder and Inorder Traversal	construct-binary-tree-from-preorder-and-inorder-traversal	algomaster	https://algomaster.io/learn/dsa/construct-binary-tree-from-preorder-and-inorder-traversal
+Medium	Construct Binary Tree from Inorder and Postorder Traversal	construct-binary-tree-from-inorder-and-postorder-traversal	algomaster	https://algomaster.io/learn/dsa/construct-binary-tree-from-inorder-and-postorder-traversal
+Hard	Serialize and Deserialize Binary Tree	serialize-and-deserialize-binary-tree	algomaster	https://algomaster.io/learn/dsa/serialize-and-deserialize-binary-tree
+Easy	Binary Tree Inorder Traversal	binary-tree-inorder-traversal	algomaster	https://algomaster.io/learn/dsa/binary-tree-inorder-traversal
+Easy	Minimum Distance Between BST Nodes	minimum-distance-between-bst-nodes	algomaster	https://algomaster.io/learn/dsa/minimum-distance-between-bst-nodes
+Easy	Minimum Absolute Difference in BST	minimum-absolute-difference-in-bst	algomaster	https://algomaster.io/learn/dsa/minimum-absolute-difference-in-bst
+Medium	Validate Binary Search Tree	validate-binary-search-tree	algomaster	https://algomaster.io/learn/dsa/validate-binary-search-tree
+Medium	Kth Smallest Element in a BST	kth-smallest-element-in-a-bst	algomaster	https://algomaster.io/learn/dsa/kth-smallest-element-in-a-bst
+Medium	Binary Search Tree Iterator	binary-search-tree-iterator	algomaster	https://algomaster.io/learn/dsa/binary-search-tree-iterator
+Medium	Balance a Binary Search Tree	balance-a-binary-search-tree	algomaster	https://algomaster.io/learn/dsa/balance-a-binary-search-tree
+Easy	Binary Tree Postorder Traversal	binary-tree-postorder-traversal	algomaster	https://algomaster.io/learn/dsa/binary-tree-postorder-traversal
+Easy	Invert Binary Tree	invert-binary-tree	algomaster	https://algomaster.io/learn/dsa/invert-binary-tree
+Easy	Diameter of Binary Tree	diameter-of-binary-tree	algomaster	https://algomaster.io/learn/dsa/diameter-of-binary-tree
+Easy	Balanced Binary Tree	balanced-binary-tree	algomaster	https://algomaster.io/learn/dsa/balanced-binary-tree
+Medium	Delete Nodes And Return Forest	delete-nodes-and-return-forest	algomaster	https://algomaster.io/learn/dsa/delete-nodes-and-return-forest
+Medium	Lowest Common Ancestor of a Binary Tree	lowest-common-ancestor-of-a-binary-tree	algomaster	https://algomaster.io/learn/dsa/lowest-common-ancestor-of-a-binary-tree
+Medium	Find Duplicate Subtrees	find-duplicate-subtrees	algomaster	https://algomaster.io/learn/dsa/find-duplicate-subtrees
+Medium	Flatten Binary Tree to Linked List	flatten-binary-tree-to-linked-list	algomaster	https://algomaster.io/learn/dsa/flatten-binary-tree-to-linked-list
+Medium	Distribute Coins in Binary Tree	distribute-coins-in-binary-tree	algomaster	https://algomaster.io/learn/dsa/distribute-coins-in-binary-tree
+Medium	Count Good Nodes in Binary Tree	count-good-nodes-in-binary-tree	algomaster	https://algomaster.io/learn/dsa/count-good-nodes-in-binary-tree
+Medium	Sum Root to Leaf Numbers	sum-root-to-leaf-numbers	algomaster	https://algomaster.io/learn/dsa/sum-root-to-leaf-numbers
+Medium	Boundary of Binary Tree	boundary-of-binary-tree	algomaster	https://algomaster.io/learn/dsa/boundary-of-binary-tree
+Medium	Step-By-Step Directions From a Binary Tree Node to Another	step-by-step-directions-from-a-binary-tree-node-to-another	algomaster	https://algomaster.io/learn/dsa/step-by-step-directions-from-a-binary-tree-node-to-another
+Hard	Binary Tree Maximum Path Sum	binary-tree-maximum-path-sum	algomaster	https://algomaster.io/learn/dsa/binary-tree-maximum-path-sum

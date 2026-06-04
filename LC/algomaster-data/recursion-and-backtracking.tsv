@@ -1,0 +1,24 @@
+Difficulty	Title	Slug	Source	Link
+	Recursion Fundamentals	recursion-fundamentals	algomaster	https://algomaster.io/learn/dsa/recursion-fundamentals
+	Introduction to Backtracking	backtracking-introduction	algomaster	https://algomaster.io/learn/dsa/backtracking-introduction
+Easy	Merge Two Sorted Lists	merge-two-sorted-lists	algomaster	https://algomaster.io/learn/dsa/merge-two-sorted-lists
+Medium	Pow(x, n)	powx-n	algomaster	https://algomaster.io/learn/dsa/powx-n
+Medium	Decode String	decode-string	algomaster	https://algomaster.io/learn/dsa/decode-string
+Medium	Subsets	subsets	algomaster	https://algomaster.io/learn/dsa/subsets
+Medium	Combination Sum	combination-sum	algomaster	https://algomaster.io/learn/dsa/combination-sum
+Medium	Combination Sum II	combination-sum-ii	algomaster	https://algomaster.io/learn/dsa/combination-sum-ii
+Medium	Subsets II	subsets-ii	algomaster	https://algomaster.io/learn/dsa/subsets-ii
+Medium	Combination Sum III	combination-sum-iii	algomaster	https://algomaster.io/learn/dsa/combination-sum-iii
+Medium	Combinations	combinations	algomaster	https://algomaster.io/learn/dsa/combinations
+Medium	Permutations	permutations	algomaster	https://algomaster.io/learn/dsa/permutations
+Medium	Letter Combinations of a Phone Number	letter-combinations-of-a-phone-number	algomaster	https://algomaster.io/learn/dsa/letter-combinations-of-a-phone-number
+Medium	Permutations II	permutations-ii	algomaster	https://algomaster.io/learn/dsa/permutations-ii
+Medium	Generate Parentheses	generate-parentheses	algomaster	https://algomaster.io/learn/dsa/generate-parentheses
+Medium	Palindrome Partitioning	palindrome-partitioning	algomaster	https://algomaster.io/learn/dsa/palindrome-partitioning
+Medium	Restore IP Addresses	restore-ip-addresses	algomaster	https://algomaster.io/learn/dsa/restore-ip-addresses
+Hard	N-Queens	n-queens	algomaster	https://algomaster.io/learn/dsa/n-queens
+Hard	Special Binary String	special-binary-string	algomaster	https://algomaster.io/learn/dsa/special-binary-string
+Hard	Integer to English Words	integer-to-english-words	algomaster	https://algomaster.io/learn/dsa/integer-to-english-words
+Hard	Unique Paths III	unique-paths-iii	algomaster	https://algomaster.io/learn/dsa/unique-paths-iii
+Hard	Remove Invalid Parentheses	remove-invalid-parentheses	algomaster	https://algomaster.io/learn/dsa/remove-invalid-parentheses
+Hard	Sudoku Solver	sudoku-solver	algomaster	https://algomaster.io/learn/dsa/sudoku-solver

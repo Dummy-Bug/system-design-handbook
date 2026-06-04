@@ -1,0 +1,27 @@
+Difficulty	Title	Slug	Source	Link
+	Introduction to Pattern Matching	introduction-to-pattern-matching	algomaster	https://algomaster.io/learn/dsa/introduction-to-pattern-matching
+	Brute Force Pattern Matching	brute-force-pattern-matching	algomaster	https://algomaster.io/learn/dsa/brute-force-pattern-matching
+	KMP Algorithm	kmp-algorithm	algomaster	https://algomaster.io/learn/dsa/kmp-algorithm
+	Rabin-Karp Algorithm	rabin-karp-algorithm	algomaster	https://algomaster.io/learn/dsa/rabin-karp-algorithm
+	Z-Algorithm	z-algorithm	algomaster	https://algomaster.io/learn/dsa/z-algorithm
+	Suffix Arrays	suffix-array	algomaster	https://algomaster.io/learn/dsa/suffix-array
+Easy	Repeated Substring Pattern	repeated-substring-pattern	algomaster	https://algomaster.io/learn/dsa/repeated-substring-pattern
+Medium	Repeated String Match	repeated-string-match	algomaster	https://algomaster.io/learn/dsa/repeated-string-match
+Medium	Number of Distinct Substrings in a String	number-of-distinct-substrings-in-a-string	algomaster	https://algomaster.io/learn/dsa/number-of-distinct-substrings-in-a-string
+Hard	Shortest Palindrome	shortest-palindrome	algomaster	https://algomaster.io/learn/dsa/shortest-palindrome
+Hard	Longest Happy Prefix	longest-happy-prefix	algomaster	https://algomaster.io/learn/dsa/longest-happy-prefix
+Hard	Longest Duplicate Substring	longest-duplicate-substring	algomaster	https://algomaster.io/learn/dsa/longest-duplicate-substring
+	Fenwick Tree (Binary Indexed Tree)	fenwick-tree	algomaster	https://algomaster.io/learn/dsa/fenwick-tree
+	Segment Tree	segment-tree	algomaster	https://algomaster.io/learn/dsa/segment-tree
+	Segment Tree with Lazy Propagation	segment-tree-with-lazy-propagation	algomaster	https://algomaster.io/learn/dsa/segment-tree-with-lazy-propagation
+Medium	Range Sum Query - Mutable	range-sum-query-mutable	algomaster	https://algomaster.io/learn/dsa/range-sum-query-mutable
+Medium	Range Sum Query 2D - Mutable	range-sum-query-2d-mutable	algomaster	https://algomaster.io/learn/dsa/range-sum-query-2d-mutable
+Hard	Count of Smaller Numbers After Self	count-of-smaller-numbers-after-self	algomaster	https://algomaster.io/learn/dsa/count-of-smaller-numbers-after-self
+Hard	Falling Squares	falling-squares	algomaster	https://algomaster.io/learn/dsa/falling-squares
+Hard	Block Placement Queries	block-placement-queries	algomaster	https://algomaster.io/learn/dsa/block-placement-queries
+Hard	Longest Balanced Subarray II	longest-balanced-subarray-ii	algomaster	https://algomaster.io/learn/dsa/longest-balanced-subarray-ii
+Hard	Number of Pairs Satisfying Inequality	number-of-pairs-satisfying-inequality	algomaster	https://algomaster.io/learn/dsa/number-of-pairs-satisfying-inequality
+Hard	Minimum Interval to Include Each Query	minimum-interval-to-include-each-query	algomaster	https://algomaster.io/learn/dsa/minimum-interval-to-include-each-query
+Hard	The Skyline Problem	the-skyline-problem	algomaster	https://algomaster.io/learn/dsa/the-skyline-problem
+Hard	Rectangle Area II	rectangle-area-ii	algomaster	https://algomaster.io/learn/dsa/rectangle-area-ii
+Hard	Perfect Rectangle	perfect-rectangle	algomaster	https://algomaster.io/learn/dsa/perfect-rectangle

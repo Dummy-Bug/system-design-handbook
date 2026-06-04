@@ -1,0 +1,83 @@
+Difficulty	Title	Slug	Source	Link
+	Introduction to Graphs	graphs-introduction	algomaster	https://algomaster.io/learn/dsa/graphs-introduction
+	Depth-First Search	dfs-introduction	algomaster	https://algomaster.io/learn/dsa/dfs-introduction
+	Breadth-First Search	bfs-introduction	algomaster	https://algomaster.io/learn/dsa/bfs-introduction
+	Matrix Traversal	matrix-traversal-introduction	algomaster	https://algomaster.io/learn/dsa/matrix-traversal-introduction
+	Multi-Source BFS	multi-source-bfs	algomaster	https://algomaster.io/learn/dsa/multi-source-bfs
+	Cycle Detection in Undirected Graphs	cycle-detection-in-undirected-graphs	algomaster	https://algomaster.io/learn/dsa/cycle-detection-in-undirected-graphs
+	Cycle Detection in Directed Graphs	cycle-detection-in-directed-graphs	algomaster	https://algomaster.io/learn/dsa/cycle-detection-in-directed-graphs
+	Bipartite Graph Detection	bipartite-graph-detection	algomaster	https://algomaster.io/learn/dsa/bipartite-graph-detection
+	A* Search Algorithm	a-star-search-algorithm	algomaster	https://algomaster.io/learn/dsa/a-star-search-algorithm
+	Kosaraju's Algorithm	kosarajus-algorithm	algomaster	https://algomaster.io/learn/dsa/kosarajus-algorithm
+	Tarjan's Algorithm	tarjans-algorithm	algomaster	https://algomaster.io/learn/dsa/tarjans-algorithm
+Easy	Flood Fill	flood-fill	algomaster	https://algomaster.io/learn/dsa/flood-fill
+Medium	Number of Islands	number-of-islands	algomaster	https://algomaster.io/learn/dsa/number-of-islands
+Medium	Number of Distinct Islands	number-of-distinct-islands	algomaster	https://algomaster.io/learn/dsa/number-of-distinct-islands
+Medium	Time Needed to Inform All Employees	time-needed-to-inform-all-employees	algomaster	https://algomaster.io/learn/dsa/time-needed-to-inform-all-employees
+Medium	All Paths From Source to Target	all-paths-from-source-to-target	algomaster	https://algomaster.io/learn/dsa/all-paths-from-source-to-target
+Medium	Clone Graph	clone-graph	algomaster	https://algomaster.io/learn/dsa/clone-graph
+Medium	Is Graph Bipartite?	is-graph-bipartite	algomaster	https://algomaster.io/learn/dsa/is-graph-bipartite
+Medium	All Nodes Distance K in Binary Tree	all-nodes-distance-k-in-binary-tree	algomaster	https://algomaster.io/learn/dsa/all-nodes-distance-k-in-binary-tree
+Medium	Employee Importance	employee-importance	algomaster	https://algomaster.io/learn/dsa/employee-importance
+Medium	Surrounded Regions	surrounded-regions	algomaster	https://algomaster.io/learn/dsa/surrounded-regions
+Medium	Pacific Atlantic Water Flow	pacific-atlantic-water-flow	algomaster	https://algomaster.io/learn/dsa/pacific-atlantic-water-flow
+Medium	Word Search	word-search	algomaster	https://algomaster.io/learn/dsa/word-search
+Medium	Number of Enclaves	number-of-enclaves	algomaster	https://algomaster.io/learn/dsa/number-of-enclaves
+Hard	Making A Large Island	making-a-large-island	algomaster	https://algomaster.io/learn/dsa/making-a-large-island
+Hard	Critical Connections in a Network	critical-connections-in-a-network	algomaster	https://algomaster.io/learn/dsa/critical-connections-in-a-network
+Hard	Longest Path With Different Adjacent Characters	longest-path-with-different-adjacent-characters	algomaster	https://algomaster.io/learn/dsa/longest-path-with-different-adjacent-characters
+Medium	Rotting Oranges	rotting-oranges	algomaster	https://algomaster.io/learn/dsa/rotting-oranges
+Medium	01 Matrix	01-matrix	algomaster	https://algomaster.io/learn/dsa/01-matrix
+Medium	Open the Lock	open-the-lock	algomaster	https://algomaster.io/learn/dsa/open-the-lock
+Medium	Snakes and Ladders	snakes-and-ladders	algomaster	https://algomaster.io/learn/dsa/snakes-and-ladders
+Medium	Minimum Genetic Mutation	minimum-genetic-mutation	algomaster	https://algomaster.io/learn/dsa/minimum-genetic-mutation
+Medium	Walls and Gates	walls-and-gates	algomaster	https://algomaster.io/learn/dsa/walls-and-gates
+Medium	Minimum Knight Moves	minimum-knight-moves	algomaster	https://algomaster.io/learn/dsa/minimum-knight-moves
+Medium	Shortest Path in Binary Matrix	shortest-path-in-binary-matrix	algomaster	https://algomaster.io/learn/dsa/shortest-path-in-binary-matrix
+Medium	Path With Maximum Minimum Value	path-with-maximum-minimum-value	algomaster	https://algomaster.io/learn/dsa/path-with-maximum-minimum-value
+Hard	Word Ladder	word-ladder	algomaster	https://algomaster.io/learn/dsa/word-ladder
+Hard	Bus Routes	bus-routes	algomaster	https://algomaster.io/learn/dsa/bus-routes
+Hard	Minimum Obstacle Removal to Reach Corner	minimum-obstacle-removal-to-reach-corner	algomaster	https://algomaster.io/learn/dsa/minimum-obstacle-removal-to-reach-corner
+Hard	Shortest Path in a Grid with Obstacles Elimination	shortest-path-in-a-grid-with-obstacles-elimination	algomaster	https://algomaster.io/learn/dsa/shortest-path-in-a-grid-with-obstacles-elimination
+	Introduction	topological-sort-introduction	algomaster	https://algomaster.io/learn/dsa/topological-sort-introduction
+Medium	Course Schedule II	course-schedule-ii	algomaster	https://algomaster.io/learn/dsa/course-schedule-ii
+Medium	Find Eventual Safe States	find-eventual-safe-states	algomaster	https://algomaster.io/learn/dsa/find-eventual-safe-states
+Medium	Minimum Height Trees	minimum-height-trees	algomaster	https://algomaster.io/learn/dsa/minimum-height-trees
+Medium	Course Schedule IV	course-schedule-iv	algomaster	https://algomaster.io/learn/dsa/course-schedule-iv
+Medium	Parallel Courses	parallel-courses	algomaster	https://algomaster.io/learn/dsa/parallel-courses
+Medium	Find All Possible Recipes from Given Supplies	find-all-possible-recipes-from-given-supplies	algomaster	https://algomaster.io/learn/dsa/find-all-possible-recipes-from-given-supplies
+Hard	Alien Dictionary	alien-dictionary	algomaster	https://algomaster.io/learn/dsa/alien-dictionary
+Hard	Sort Items by Groups Respecting Dependencies	sort-items-by-groups-respecting-dependencies	algomaster	https://algomaster.io/learn/dsa/sort-items-by-groups-respecting-dependencies
+	Introduction	union-find-introduction	algomaster	https://algomaster.io/learn/dsa/union-find-introduction
+Medium	Number of Provinces	number-of-provinces	algomaster	https://algomaster.io/learn/dsa/number-of-provinces
+Medium	Redundant Connection	redundant-connection	algomaster	https://algomaster.io/learn/dsa/redundant-connection
+Medium	Accounts Merge	accounts-merge	algomaster	https://algomaster.io/learn/dsa/accounts-merge
+Medium	Number of Connected Components in an Undirected Graph	number-of-connected-components-in-an-undirected-graph	algomaster	https://algomaster.io/learn/dsa/number-of-connected-components-in-an-undirected-graph
+Medium	Graph Valid Tree	graph-valid-tree	algomaster	https://algomaster.io/learn/dsa/graph-valid-tree
+Medium	Evaluate Division	evaluate-division	algomaster	https://algomaster.io/learn/dsa/evaluate-division
+Medium	Most Stones Removed with Same Row or Column	most-stones-removed-with-same-row-or-column	algomaster	https://algomaster.io/learn/dsa/most-stones-removed-with-same-row-or-column
+Hard	Number of Islands II	number-of-islands-ii	algomaster	https://algomaster.io/learn/dsa/number-of-islands-ii
+Hard	Minimize Malware Spread	minimize-malware-spread	algomaster	https://algomaster.io/learn/dsa/minimize-malware-spread
+Medium	Min Cost to Connect All Points	min-cost-to-connect-all-points	algomaster	https://algomaster.io/learn/dsa/min-cost-to-connect-all-points
+Medium	Connecting Cities With Minimum Cost	connecting-cities-with-minimum-cost	algomaster	https://algomaster.io/learn/dsa/connecting-cities-with-minimum-cost
+Hard	Optimize Water Distribution in a Village	optimize-water-distribution-in-a-village	algomaster	https://algomaster.io/learn/dsa/optimize-water-distribution-in-a-village
+Hard	Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree	find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree	algomaster	https://algomaster.io/learn/dsa/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree
+Hard	Maximize Spanning Tree Stability with Upgrades	maximize-spanning-tree-stability-with-upgrades	algomaster	https://algomaster.io/learn/dsa/maximize-spanning-tree-stability-with-upgrades
+	Introduction	shortest-path-introduction	algomaster	https://algomaster.io/learn/dsa/shortest-path-introduction
+	Dijkstra's Algorithm	dijkstras-algorithm	algomaster	https://algomaster.io/learn/dsa/dijkstras-algorithm
+	Bellman-Ford Algorithm	bellman-ford-algorithm	algomaster	https://algomaster.io/learn/dsa/bellman-ford-algorithm
+	Floyd-Warshall Algorithm	floyd-warshall-algorithm	algomaster	https://algomaster.io/learn/dsa/floyd-warshall-algorithm
+Medium	Network Delay Time	network-delay-time	algomaster	https://algomaster.io/learn/dsa/network-delay-time
+Medium	Cheapest Flights Within K Stops	cheapest-flights-within-k-stops	algomaster	https://algomaster.io/learn/dsa/cheapest-flights-within-k-stops
+Medium	Path with Maximum Probability	path-with-maximum-probability	algomaster	https://algomaster.io/learn/dsa/path-with-maximum-probability
+Medium	Path With Minimum Effort	path-with-minimum-effort	algomaster	https://algomaster.io/learn/dsa/path-with-minimum-effort
+Medium	The Maze II	the-maze-ii	algomaster	https://algomaster.io/learn/dsa/the-maze-ii
+Medium	Minimum Cost to Convert String I	minimum-cost-to-convert-string-i	algomaster	https://algomaster.io/learn/dsa/minimum-cost-to-convert-string-i
+Medium	Minimum Cost Path with Edge Reversals	minimum-cost-path-with-edge-reversals	algomaster	https://algomaster.io/learn/dsa/minimum-cost-path-with-edge-reversals
+Medium	Find Minimum Time to Reach Last Room I	find-minimum-time-to-reach-last-room-i	algomaster	https://algomaster.io/learn/dsa/find-minimum-time-to-reach-last-room-i
+Hard	Swim in Rising Water	swim-in-rising-water	algomaster	https://algomaster.io/learn/dsa/swim-in-rising-water
+Hard	Minimum Cost to Make at Least One Valid Path in a Grid	minimum-cost-to-make-at-least-one-valid-path-in-a-grid	algomaster	https://algomaster.io/learn/dsa/minimum-cost-to-make-at-least-one-valid-path-in-a-grid
+Hard	Minimum Weighted Subgraph With the Required Paths	minimum-weighted-subgraph-with-the-required-paths	algomaster	https://algomaster.io/learn/dsa/minimum-weighted-subgraph-with-the-required-paths
+Hard	Reconstruct Itinerary	reconstruct-itinerary	algomaster	https://algomaster.io/learn/dsa/reconstruct-itinerary
+Hard	Cracking the Safe	cracking-the-safe	algomaster	https://algomaster.io/learn/dsa/cracking-the-safe
+Hard	Valid Arrangement of Pairs	valid-arrangement-of-pairs	algomaster	https://algomaster.io/learn/dsa/valid-arrangement-of-pairs

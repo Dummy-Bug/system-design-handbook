@@ -1,0 +1,93 @@
+Difficulty	Title	Slug	Source	Link
+	Introduction to Dynamic Programming	dp-introduction	algomaster	https://algomaster.io/learn/dsa/dp-introduction
+	Introduction	1d-dp-introduction	algomaster	https://algomaster.io/learn/dsa/1d-dp-introduction
+Easy	Fibonacci Number	fibonacci-number	algomaster	https://algomaster.io/learn/dsa/fibonacci-number
+Easy	Climbing Stairs	climbing-stairs	algomaster	https://algomaster.io/learn/dsa/climbing-stairs
+Easy	Min Cost Climbing Stairs	min-cost-climbing-stairs	algomaster	https://algomaster.io/learn/dsa/min-cost-climbing-stairs
+Medium	House Robber	house-robber	algomaster	https://algomaster.io/learn/dsa/house-robber
+Medium	House Robber II	house-robber-ii	algomaster	https://algomaster.io/learn/dsa/house-robber-ii
+Medium	Maximum Length of Pair Chain	maximum-length-of-pair-chain	algomaster	https://algomaster.io/learn/dsa/maximum-length-of-pair-chain
+Medium	Delete and Earn	delete-and-earn	algomaster	https://algomaster.io/learn/dsa/delete-and-earn
+Medium	Integer Break	integer-break	algomaster	https://algomaster.io/learn/dsa/integer-break
+Medium	Greatest Sum Divisible by Three	greatest-sum-divisible-by-three	algomaster	https://algomaster.io/learn/dsa/greatest-sum-divisible-by-three
+Hard	Number of Ways to Paint N × 3 Grid	number-of-ways-to-paint-n-3-grid	algomaster	https://algomaster.io/learn/dsa/number-of-ways-to-paint-n-3-grid
+	Introduction	01-knapsack-dp-introduction	algomaster	https://algomaster.io/learn/dsa/01-knapsack-dp-introduction
+Medium	Partition Equal Subset Sum	partition-equal-subset-sum	algomaster	https://algomaster.io/learn/dsa/partition-equal-subset-sum
+Medium	Target Sum	target-sum	algomaster	https://algomaster.io/learn/dsa/target-sum
+Medium	Last Stone Weight II	last-stone-weight-ii	algomaster	https://algomaster.io/learn/dsa/last-stone-weight-ii
+Medium	Ones and Zeroes	ones-and-zeroes	algomaster	https://algomaster.io/learn/dsa/ones-and-zeroes
+Hard	Profitable Schemes	profitable-schemes	algomaster	https://algomaster.io/learn/dsa/profitable-schemes
+	Introduction	unbounded-knapsack-dp-introduction	algomaster	https://algomaster.io/learn/dsa/unbounded-knapsack-dp-introduction
+Medium	Coin Change	coin-change	algomaster	https://algomaster.io/learn/dsa/coin-change
+Medium	Coin Change II	coin-change-ii	algomaster	https://algomaster.io/learn/dsa/coin-change-ii
+Medium	Perfect Squares	perfect-squares	algomaster	https://algomaster.io/learn/dsa/perfect-squares
+Medium	Minimum Cost For Tickets	minimum-cost-for-tickets	algomaster	https://algomaster.io/learn/dsa/minimum-cost-for-tickets
+Medium	Longest Increasing Subsequence	longest-increasing-subsequence	algomaster	https://algomaster.io/learn/dsa/longest-increasing-subsequence
+Medium	Number of Longest Increasing Subsequence	number-of-longest-increasing-subsequence	algomaster	https://algomaster.io/learn/dsa/number-of-longest-increasing-subsequence
+Medium	Longest String Chain	longest-string-chain	algomaster	https://algomaster.io/learn/dsa/longest-string-chain
+Medium	Longest Arithmetic Subsequence	longest-arithmetic-subsequence	algomaster	https://algomaster.io/learn/dsa/longest-arithmetic-subsequence
+Hard	Russian Doll Envelopes	russian-doll-envelopes	algomaster	https://algomaster.io/learn/dsa/russian-doll-envelopes
+	Introduction	2d-grid-dp-introduction	algomaster	https://algomaster.io/learn/dsa/2d-grid-dp-introduction
+Easy	Pascal's Triangle	pascals-triangle	algomaster	https://algomaster.io/learn/dsa/pascals-triangle
+Medium	Unique Paths II	unique-paths-ii	algomaster	https://algomaster.io/learn/dsa/unique-paths-ii
+Medium	Minimum Path Sum	minimum-path-sum	algomaster	https://algomaster.io/learn/dsa/minimum-path-sum
+Medium	Triangle	triangle	algomaster	https://algomaster.io/learn/dsa/triangle
+Medium	Count Square Submatrices with All Ones	count-square-submatrices-with-all-ones	algomaster	https://algomaster.io/learn/dsa/count-square-submatrices-with-all-ones
+Medium	Maximum Number of Points with Cost	maximum-number-of-points-with-cost	algomaster	https://algomaster.io/learn/dsa/maximum-number-of-points-with-cost
+Medium	Unique Paths	unique-paths	algomaster	https://algomaster.io/learn/dsa/unique-paths
+Medium	Maximal Square	maximal-square	algomaster	https://algomaster.io/learn/dsa/maximal-square
+Medium	Paint House	paint-house	algomaster	https://algomaster.io/learn/dsa/paint-house
+Medium	Minimum Falling Path Sum	minimum-falling-path-sum	algomaster	https://algomaster.io/learn/dsa/minimum-falling-path-sum
+Hard	Burst Balloons	burst-balloons	algomaster	https://algomaster.io/learn/dsa/burst-balloons
+Hard	Maximum Profit in Job Scheduling	maximum-profit-in-job-scheduling	algomaster	https://algomaster.io/learn/dsa/maximum-profit-in-job-scheduling
+Hard	Cherry Pickup	cherry-pickup	algomaster	https://algomaster.io/learn/dsa/cherry-pickup
+Hard	Longest Increasing Path in a Matrix	longest-increasing-path-in-a-matrix	algomaster	https://algomaster.io/learn/dsa/longest-increasing-path-in-a-matrix
+Hard	Remove Boxes	remove-boxes	algomaster	https://algomaster.io/learn/dsa/remove-boxes
+Hard	Maximal Rectangle	maximal-rectangle	algomaster	https://algomaster.io/learn/dsa/maximal-rectangle
+Hard	Dungeon Game	dungeon-game	algomaster	https://algomaster.io/learn/dsa/dungeon-game
+Hard	Painting a Grid With Three Different Colors	painting-a-grid-with-three-different-colors	algomaster	https://algomaster.io/learn/dsa/painting-a-grid-with-three-different-colors
+Hard	Minimum Cost Path with Teleportations	minimum-cost-path-with-teleportations	algomaster	https://algomaster.io/learn/dsa/minimum-cost-path-with-teleportations
+Hard	Frog Jump	frog-jump	algomaster	https://algomaster.io/learn/dsa/frog-jump
+Hard	Optimal Account Balancing	optimal-account-balancing	algomaster	https://algomaster.io/learn/dsa/optimal-account-balancing
+Hard	Minimum Difficulty of a Job Schedule	minimum-difficulty-of-a-job-schedule	algomaster	https://algomaster.io/learn/dsa/minimum-difficulty-of-a-job-schedule
+Hard	Minimum Cost to Cut a Stick	minimum-cost-to-cut-a-stick	algomaster	https://algomaster.io/learn/dsa/minimum-cost-to-cut-a-stick
+	Introduction	string-dp-introduction	algomaster	https://algomaster.io/learn/dsa/string-dp-introduction
+Medium	Longest Common Subsequence	longest-common-subsequence	algomaster	https://algomaster.io/learn/dsa/longest-common-subsequence
+Medium	Edit Distance	edit-distance	algomaster	https://algomaster.io/learn/dsa/edit-distance
+Medium	Longest Palindromic Subsequence	longest-palindromic-subsequence	algomaster	https://algomaster.io/learn/dsa/longest-palindromic-subsequence
+Medium	Decode Ways	decode-ways	algomaster	https://algomaster.io/learn/dsa/decode-ways
+Medium	Word Break	word-break	algomaster	https://algomaster.io/learn/dsa/word-break
+Medium	Interleaving String	interleaving-string	algomaster	https://algomaster.io/learn/dsa/interleaving-string
+Medium	Minimum Deletions to Make String Balanced	minimum-deletions-to-make-string-balanced	algomaster	https://algomaster.io/learn/dsa/minimum-deletions-to-make-string-balanced
+Hard	Wildcard Matching	wildcard-matching	algomaster	https://algomaster.io/learn/dsa/wildcard-matching
+Hard	Distinct Subsequences	distinct-subsequences	algomaster	https://algomaster.io/learn/dsa/distinct-subsequences
+Hard	Palindrome Partitioning II	palindrome-partitioning-ii	algomaster	https://algomaster.io/learn/dsa/palindrome-partitioning-ii
+Hard	Word Break II	word-break-ii	algomaster	https://algomaster.io/learn/dsa/word-break-ii
+Hard	Regular Expression Matching	regular-expression-matching	algomaster	https://algomaster.io/learn/dsa/regular-expression-matching
+Hard	Strange Printer	strange-printer	algomaster	https://algomaster.io/learn/dsa/strange-printer
+Hard	Shortest Common Supersequence	shortest-common-supersequence	algomaster	https://algomaster.io/learn/dsa/shortest-common-supersequence
+	Tree/Graph DP	tree-graph-dp-introduction	algomaster	https://algomaster.io/learn/dsa/tree-graph-dp-introduction
+Medium	House Robber III	house-robber-iii	algomaster	https://algomaster.io/learn/dsa/house-robber-iii
+Medium	Unique Binary Search Trees II	unique-binary-search-trees-ii	algomaster	https://algomaster.io/learn/dsa/unique-binary-search-trees-ii
+Medium	Number of Ways to Arrive at Destination	number-of-ways-to-arrive-at-destination	algomaster	https://algomaster.io/learn/dsa/number-of-ways-to-arrive-at-destination
+Hard	Binary Tree Cameras	binary-tree-cameras	algomaster	https://algomaster.io/learn/dsa/binary-tree-cameras
+Hard	Sum of Distances in Tree	sum-of-distances-in-tree	algomaster	https://algomaster.io/learn/dsa/sum-of-distances-in-tree
+	Bitmask DP	bitmask-dp-introduction	algomaster	https://algomaster.io/learn/dsa/bitmask-dp-introduction
+Medium	Minimum Number of Work Sessions to Finish the Tasks	minimum-number-of-work-sessions-to-finish-the-tasks	algomaster	https://algomaster.io/learn/dsa/minimum-number-of-work-sessions-to-finish-the-tasks
+Medium	Fair Distribution of Cookies	fair-distribution-of-cookies	algomaster	https://algomaster.io/learn/dsa/fair-distribution-of-cookies
+Medium	Campus Bikes II	campus-bikes-ii	algomaster	https://algomaster.io/learn/dsa/campus-bikes-ii
+Medium	Partition to K Equal Sum Subsets	partition-to-k-equal-sum-subsets	algomaster	https://algomaster.io/learn/dsa/partition-to-k-equal-sum-subsets
+Hard	Shortest Path Visiting All Nodes	shortest-path-visiting-all-nodes	algomaster	https://algomaster.io/learn/dsa/shortest-path-visiting-all-nodes
+	Digit DP	digit-dp-introduction	algomaster	https://algomaster.io/learn/dsa/digit-dp-introduction
+Medium	Count Numbers with Unique Digits	count-numbers-with-unique-digits	algomaster	https://algomaster.io/learn/dsa/count-numbers-with-unique-digits
+Hard	Number of Digit One	number-of-digit-one	algomaster	https://algomaster.io/learn/dsa/number-of-digit-one
+Hard	Numbers At Most N Given Digit Set	numbers-at-most-n-given-digit-set	algomaster	https://algomaster.io/learn/dsa/numbers-at-most-n-given-digit-set
+	Probability DP	probability-dp-introduction	algomaster	https://algomaster.io/learn/dsa/probability-dp-introduction
+Medium	Knight Probability in Chessboard	knight-probability-in-chessboard	algomaster	https://algomaster.io/learn/dsa/knight-probability-in-chessboard
+Medium	Soup Servings	soup-servings	algomaster	https://algomaster.io/learn/dsa/soup-servings
+Medium	New 21 Game	new-21-game	algomaster	https://algomaster.io/learn/dsa/new-21-game
+	State Machine DP	state-machine-dp-introduction	algomaster	https://algomaster.io/learn/dsa/state-machine-dp-introduction
+Medium	Best Time to Buy and Sell Stock with Cooldown	best-time-to-buy-and-sell-stock-with-cooldown	algomaster	https://algomaster.io/learn/dsa/best-time-to-buy-and-sell-stock-with-cooldown
+Medium	Best Time to Buy and Sell Stock with Transaction Fee	best-time-to-buy-and-sell-stock-with-transaction-fee	algomaster	https://algomaster.io/learn/dsa/best-time-to-buy-and-sell-stock-with-transaction-fee
+Hard	Best Time to Buy and Sell Stock III	best-time-to-buy-and-sell-stock-iii	algomaster	https://algomaster.io/learn/dsa/best-time-to-buy-and-sell-stock-iii
+Hard	Best Time to Buy and Sell Stock IV	best-time-to-buy-and-sell-stock-iv	algomaster	https://algomaster.io/learn/dsa/best-time-to-buy-and-sell-stock-iv

@@ -1,0 +1,23 @@
+Difficulty	Title	Slug	Source	Link
+Easy	Implement Queue using Stacks	implement-queue-using-stacks	algomaster	https://algomaster.io/learn/dsa/implement-queue-using-stacks
+Easy	Implement Stack using Queues	implement-stack-using-queues	algomaster	https://algomaster.io/learn/dsa/implement-stack-using-queues
+Medium	Design Circular Queue	design-circular-queue	algomaster	https://algomaster.io/learn/dsa/design-circular-queue
+Medium	Design Circular Deque	design-circular-deque	algomaster	https://algomaster.io/learn/dsa/design-circular-deque
+Easy	Logger Rate Limiter	logger-rate-limiter	algomaster	https://algomaster.io/learn/dsa/logger-rate-limiter
+Medium	Design Hit Counter	design-hit-counter	algomaster	https://algomaster.io/learn/dsa/design-hit-counter
+Medium	Time Based Key-Value Store	time-based-key-value-store	algomaster	https://algomaster.io/learn/dsa/time-based-key-value-store
+Medium	Snapshot Array	snapshot-array	algomaster	https://algomaster.io/learn/dsa/snapshot-array
+Medium	Encode and Decode Strings	encode-and-decode-strings	algomaster	https://algomaster.io/learn/dsa/encode-and-decode-strings
+Medium	Insert Delete GetRandom O(1)	insert-delete-getrandom-o1	algomaster	https://algomaster.io/learn/dsa/insert-delete-getrandom-o1
+Medium	Design Browser History	design-browser-history	algomaster	https://algomaster.io/learn/dsa/design-browser-history
+Medium	LRU Cache	lru-cache	algomaster	https://algomaster.io/learn/dsa/lru-cache
+Hard	LFU Cache	lfu-cache	algomaster	https://algomaster.io/learn/dsa/lfu-cache
+Medium	Design Twitter	design-twitter	algomaster	https://algomaster.io/learn/dsa/design-twitter
+Medium	Design a Food Rating System	design-a-food-rating-system	algomaster	https://algomaster.io/learn/dsa/design-a-food-rating-system
+Hard	Maximum Frequency Stack	maximum-frequency-stack	algomaster	https://algomaster.io/learn/dsa/maximum-frequency-stack
+Hard	Max Stack	max-stack	algomaster	https://algomaster.io/learn/dsa/max-stack
+Hard	All O`one Data Structure	all-oone-data-structure	algomaster	https://algomaster.io/learn/dsa/all-oone-data-structure
+Hard	Range Module	range-module	algomaster	https://algomaster.io/learn/dsa/range-module
+Hard	Design Search Autocomplete System	design-search-autocomplete-system	algomaster	https://algomaster.io/learn/dsa/design-search-autocomplete-system
+Hard	Design In-Memory File System	design-in-memory-file-system	algomaster	https://algomaster.io/learn/dsa/design-in-memory-file-system
+Hard	Design a Text Editor	design-a-text-editor	algomaster	https://algomaster.io/learn/dsa/design-a-text-editor

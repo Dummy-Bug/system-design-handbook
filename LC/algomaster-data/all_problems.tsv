@@ -1,0 +1,695 @@
+Section	Difficulty	Title	Slug	Source	Link
+Welcome		Course Roadmap	course-roadmap	algomaster	https://algomaster.io/learn/dsa/course-roadmap
+Welcome		Join the Community	join-community	algomaster	https://algomaster.io/learn/dsa/join-community
+Coding Interview Strategy		How Coding Interviews Work	how-coding-interviews-work	algomaster	https://algomaster.io/learn/dsa/how-coding-interviews-work
+Coding Interview Strategy		How to Communicate During Interviews	how-to-communicate-during-interviews	algomaster	https://algomaster.io/learn/dsa/how-to-communicate-during-interviews
+Coding Interview Strategy		Time Management in Coding Interviews	time-management-in-coding-interviews	algomaster	https://algomaster.io/learn/dsa/time-management-in-coding-interviews
+Coding Interview Strategy		How to Identify Which Pattern to Use	how-to-identify-which-pattern-to-use	algomaster	https://algomaster.io/learn/dsa/how-to-identify-which-pattern-to-use
+Coding Interview Strategy		How to Handle Unseen Problems	how-to-handle-unseen-problems	algomaster	https://algomaster.io/learn/dsa/how-to-handle-unseen-problems
+Big O Notation		Introduction	big-o-introduction	algomaster	https://algomaster.io/learn/dsa/big-o-introduction
+Big O Notation		Best, Worst, and Average Complexity	best-worst-average-complexity	algomaster	https://algomaster.io/learn/dsa/best-worst-average-complexity
+Big O Notation		Amortized Analysis	amortized-analysis	algomaster	https://algomaster.io/learn/dsa/amortized-analysis
+Big O Notation		Recurrence Relations	recurrence-relations	algomaster	https://algomaster.io/learn/dsa/recurrence-relations
+Big O Notation		Master Theorem	master-theorem	algomaster	https://algomaster.io/learn/dsa/master-theorem
+Programming Fundamentals		Java for DSA	java-crash-course	algomaster	https://algomaster.io/learn/dsa/java-crash-course
+Programming Fundamentals		Python for DSA	python-crash-course	algomaster	https://algomaster.io/learn/dsa/python-crash-course
+Programming Fundamentals		C++ for DSA	cpp-crash-course	algomaster	https://algomaster.io/learn/dsa/cpp-crash-course
+Programming Fundamentals		C# for DSA	csharp-crash-course	algomaster	https://algomaster.io/learn/dsa/csharp-crash-course
+Programming Fundamentals		Go for DSA	go-crash-course	algomaster	https://algomaster.io/learn/dsa/go-crash-course
+Programming Fundamentals		JavaScript for DSA	javascript-crash-course	algomaster	https://algomaster.io/learn/dsa/javascript-crash-course
+Programming Fundamentals		TypeScript for DSA	typescript-crash-course	algomaster	https://algomaster.io/learn/dsa/typescript-crash-course
+Sorting Algorithms		Bubble Sort	bubble-sort	algomaster	https://algomaster.io/learn/dsa/bubble-sort
+Sorting Algorithms		Selection Sort	selection-sort	algomaster	https://algomaster.io/learn/dsa/selection-sort
+Sorting Algorithms		Insertion Sort	insertion-sort	algomaster	https://algomaster.io/learn/dsa/insertion-sort
+Sorting Algorithms		Shell Sort	shell-sort	algomaster	https://algomaster.io/learn/dsa/shell-sort
+Sorting Algorithms		Merge Sort	merge-sort	algomaster	https://algomaster.io/learn/dsa/merge-sort
+Sorting Algorithms		Quick Sort	quick-sort	algomaster	https://algomaster.io/learn/dsa/quick-sort
+Sorting Algorithms		Heap Sort	heap-sort	algomaster	https://algomaster.io/learn/dsa/heap-sort
+Sorting Algorithms		Counting Sort	counting-sort	algomaster	https://algomaster.io/learn/dsa/counting-sort
+Sorting Algorithms		Bucket Sort	bucket-sort	algomaster	https://algomaster.io/learn/dsa/bucket-sort
+Sorting Algorithms		Radix Sort	radix-sort	algomaster	https://algomaster.io/learn/dsa/radix-sort
+Sorting Algorithms		Cyclic Sort	cyclic-sort	algomaster	https://algomaster.io/learn/dsa/cyclic-sort
+Sorting Algorithms		Tim Sort	tim-sort	algomaster	https://algomaster.io/learn/dsa/tim-sort
+Sorting Algorithms		External Sort	external-sort	algomaster	https://algomaster.io/learn/dsa/external-sort
+Arrays		Introduction	arrays-introduction	algomaster	https://algomaster.io/learn/dsa/arrays-introduction
+Arrays	Easy	Move Zeroes	move-zeroes	algomaster	https://algomaster.io/learn/dsa/move-zeroes
+Arrays	Easy	Remove Element	remove-element	algomaster	https://algomaster.io/learn/dsa/remove-element
+Arrays	Easy	Shuffle the Array	shuffle-the-array	algomaster	https://algomaster.io/learn/dsa/shuffle-the-array
+Arrays	Easy	Remove Duplicates from Sorted Array	remove-duplicates-from-sorted-array	algomaster	https://algomaster.io/learn/dsa/remove-duplicates-from-sorted-array
+Arrays	Medium	Remove Duplicates from Sorted Array II	remove-duplicates-from-sorted-array-ii	algomaster	https://algomaster.io/learn/dsa/remove-duplicates-from-sorted-array-ii
+Arrays	Medium	Rotate Array	rotate-array	algomaster	https://algomaster.io/learn/dsa/rotate-array
+Arrays	Easy	Max Consecutive Ones	max-consecutive-ones	algomaster	https://algomaster.io/learn/dsa/max-consecutive-ones
+Arrays	Easy	Third Maximum Number	third-maximum-number	algomaster	https://algomaster.io/learn/dsa/third-maximum-number
+Arrays	Easy	Missing Ranges	missing-ranges	algomaster	https://algomaster.io/learn/dsa/missing-ranges
+Arrays	Easy	Majority Element	majority-element	algomaster	https://algomaster.io/learn/dsa/majority-element
+Arrays	Medium	Majority Element II	majority-element-ii	algomaster	https://algomaster.io/learn/dsa/majority-element-ii
+Arrays	Easy	Best Time to Buy and Sell Stock	best-time-to-buy-and-sell-stock	algomaster	https://algomaster.io/learn/dsa/best-time-to-buy-and-sell-stock
+Arrays	Medium	Best Time to Buy and Sell Stock II	best-time-to-buy-and-sell-stock-ii	algomaster	https://algomaster.io/learn/dsa/best-time-to-buy-and-sell-stock-ii
+Arrays	Medium	Number of Zero-Filled Subarrays	number-of-zero-filled-subarrays	algomaster	https://algomaster.io/learn/dsa/number-of-zero-filled-subarrays
+Arrays	Medium	Increasing Triplet Subsequence	increasing-triplet-subsequence	algomaster	https://algomaster.io/learn/dsa/increasing-triplet-subsequence
+Arrays	Medium	Product of Array Except Self	product-of-array-except-self	algomaster	https://algomaster.io/learn/dsa/product-of-array-except-self
+Arrays	Medium	Next Permutation	next-permutation	algomaster	https://algomaster.io/learn/dsa/next-permutation
+Arrays	Hard	First Missing Positive	first-missing-positive	algomaster	https://algomaster.io/learn/dsa/first-missing-positive
+Strings	Easy	Reverse String	reverse-string	algomaster	https://algomaster.io/learn/dsa/reverse-string
+Strings	Easy	Length of Last Word	length-of-last-word	algomaster	https://algomaster.io/learn/dsa/length-of-last-word
+Strings	Easy	Find the Index of the First Occurrence in a String	find-the-index-of-the-first-occurrence-in-a-string	algomaster	https://algomaster.io/learn/dsa/find-the-index-of-the-first-occurrence-in-a-string
+Strings	Easy	Valid Palindrome	valid-palindrome	algomaster	https://algomaster.io/learn/dsa/valid-palindrome
+Strings	Easy	Valid Palindrome II	valid-palindrome-ii	algomaster	https://algomaster.io/learn/dsa/valid-palindrome-ii
+Strings	Easy	Longest Palindrome	longest-palindrome	algomaster	https://algomaster.io/learn/dsa/longest-palindrome
+Strings	Easy	Valid Anagram	valid-anagram	algomaster	https://algomaster.io/learn/dsa/valid-anagram
+Strings	Easy	Rotate String	rotate-string	algomaster	https://algomaster.io/learn/dsa/rotate-string
+Strings	Easy	Is Subsequence	is-subsequence	algomaster	https://algomaster.io/learn/dsa/is-subsequence
+Strings	Easy	Longest Common Prefix	longest-common-prefix	algomaster	https://algomaster.io/learn/dsa/longest-common-prefix
+Strings	Medium	Zigzag Conversion	zigzag-conversion	algomaster	https://algomaster.io/learn/dsa/zigzag-conversion
+Strings	Medium	Reverse Words in a String	reverse-words-in-a-string	algomaster	https://algomaster.io/learn/dsa/reverse-words-in-a-string
+Strings	Medium	One Edit Distance	one-edit-distance	algomaster	https://algomaster.io/learn/dsa/one-edit-distance
+Strings	Medium	Count and Say	count-and-say	algomaster	https://algomaster.io/learn/dsa/count-and-say
+Strings	Medium	Determine if Two Strings Are Close	determine-if-two-strings-are-close	algomaster	https://algomaster.io/learn/dsa/determine-if-two-strings-are-close
+Strings	Medium	Add Bold Tag in String	add-bold-tag-in-string	algomaster	https://algomaster.io/learn/dsa/add-bold-tag-in-string
+Strings	Hard	Guess the Word	guess-the-word	algomaster	https://algomaster.io/learn/dsa/guess-the-word
+Strings	Hard	Text Justification	text-justification	algomaster	https://algomaster.io/learn/dsa/text-justification
+Bit Manipulation		Introduction	bit-manipulation-introduction	algomaster	https://algomaster.io/learn/dsa/bit-manipulation-introduction
+Bit Manipulation	Easy	Single Number	single-number	algomaster	https://algomaster.io/learn/dsa/single-number
+Bit Manipulation	Easy	Missing Number	missing-number	algomaster	https://algomaster.io/learn/dsa/missing-number
+Bit Manipulation	Easy	Set Mismatch	set-mismatch	algomaster	https://algomaster.io/learn/dsa/set-mismatch
+Bit Manipulation	Medium	Single Number II	single-number-ii	algomaster	https://algomaster.io/learn/dsa/single-number-ii
+Bit Manipulation	Medium	Single Number III	single-number-iii	algomaster	https://algomaster.io/learn/dsa/single-number-iii
+Bit Manipulation	Easy	Number of 1 Bits	number-of-1-bits	algomaster	https://algomaster.io/learn/dsa/number-of-1-bits
+Bit Manipulation	Easy	Counting Bits	counting-bits	algomaster	https://algomaster.io/learn/dsa/counting-bits
+Bit Manipulation	Easy	Hamming Distance	hamming-distance	algomaster	https://algomaster.io/learn/dsa/hamming-distance
+Bit Manipulation	Easy	Power of Two	power-of-two	algomaster	https://algomaster.io/learn/dsa/power-of-two
+Bit Manipulation	Easy	Reverse Bits	reverse-bits	algomaster	https://algomaster.io/learn/dsa/reverse-bits
+Bit Manipulation	Medium	Bitwise AND of Numbers Range	bitwise-and-of-numbers-range	algomaster	https://algomaster.io/learn/dsa/bitwise-and-of-numbers-range
+Bit Manipulation	Medium	Sum of Two Integers	sum-of-two-integers	algomaster	https://algomaster.io/learn/dsa/sum-of-two-integers
+Hash Tables		Introduction to Hash Tables	hash-tables-introduction	algomaster	https://algomaster.io/learn/dsa/hash-tables-introduction
+Hash Tables		Frequency Counting	frequency-counting-introduction	algomaster	https://algomaster.io/learn/dsa/frequency-counting-introduction
+Hash Tables	Easy	Design HashMap	design-hashmap	algomaster	https://algomaster.io/learn/dsa/design-hashmap
+Hash Tables	Easy	Maximum Number of Balloons	maximum-number-of-balloons	algomaster	https://algomaster.io/learn/dsa/maximum-number-of-balloons
+Hash Tables	Easy	Number of Good Pairs	number-of-good-pairs	algomaster	https://algomaster.io/learn/dsa/number-of-good-pairs
+Hash Tables	Easy	Ransom Note	ransom-note	algomaster	https://algomaster.io/learn/dsa/ransom-note
+Hash Tables	Easy	First Unique Character in a String	first-unique-character-in-a-string	algomaster	https://algomaster.io/learn/dsa/first-unique-character-in-a-string
+Hash Tables	Easy	Find All Numbers Disappeared in an Array	find-all-numbers-disappeared-in-an-array	algomaster	https://algomaster.io/learn/dsa/find-all-numbers-disappeared-in-an-array
+Hash Tables	Easy	Contains Duplicate	contains-duplicate	algomaster	https://algomaster.io/learn/dsa/contains-duplicate
+Hash Tables	Easy	Contains Duplicate II	contains-duplicate-ii	algomaster	https://algomaster.io/learn/dsa/contains-duplicate-ii
+Hash Tables	Easy	Intersection of Two Arrays II	intersection-of-two-arrays-ii	algomaster	https://algomaster.io/learn/dsa/intersection-of-two-arrays-ii
+Hash Tables	Easy	Isomorphic Strings	isomorphic-strings	algomaster	https://algomaster.io/learn/dsa/isomorphic-strings
+Hash Tables	Easy	Word Pattern	word-pattern	algomaster	https://algomaster.io/learn/dsa/word-pattern
+Hash Tables	Medium	Group Anagrams	group-anagrams	algomaster	https://algomaster.io/learn/dsa/group-anagrams
+Hash Tables	Medium	Group Shifted Strings	group-shifted-strings	algomaster	https://algomaster.io/learn/dsa/group-shifted-strings
+Hash Tables	Medium	Encode and Decode TinyURL	encode-and-decode-tinyurl	algomaster	https://algomaster.io/learn/dsa/encode-and-decode-tinyurl
+Hash Tables	Medium	Reorganize String	reorganize-string	algomaster	https://algomaster.io/learn/dsa/reorganize-string
+Hash Tables	Medium	Longest Consecutive Sequence	longest-consecutive-sequence	algomaster	https://algomaster.io/learn/dsa/longest-consecutive-sequence
+Hash Tables	Medium	Number of Matching Subsequences	number-of-matching-subsequences	algomaster	https://algomaster.io/learn/dsa/number-of-matching-subsequences
+Hash Tables	Medium	Number of Good Ways to Split a String	number-of-good-ways-to-split-a-string	algomaster	https://algomaster.io/learn/dsa/number-of-good-ways-to-split-a-string
+Hash Tables	Medium	Split Array into Consecutive Subsequences	split-array-into-consecutive-subsequences	algomaster	https://algomaster.io/learn/dsa/split-array-into-consecutive-subsequences
+Hash Tables	Medium	Minimum Deletions to Make Character Frequencies Unique	minimum-deletions-to-make-character-frequencies-unique	algomaster	https://algomaster.io/learn/dsa/minimum-deletions-to-make-character-frequencies-unique
+Two Pointers		Introduction	two-pointers-introduction	algomaster	https://algomaster.io/learn/dsa/two-pointers-introduction
+Two Pointers	Easy	Squares of a Sorted Array	squares-of-a-sorted-array	algomaster	https://algomaster.io/learn/dsa/squares-of-a-sorted-array
+Two Pointers	Easy	Merge Strings Alternately	merge-strings-alternately	algomaster	https://algomaster.io/learn/dsa/merge-strings-alternately
+Two Pointers	Easy	Valid Word Abbreviation	valid-word-abbreviation	algomaster	https://algomaster.io/learn/dsa/valid-word-abbreviation
+Two Pointers	Easy	Two Sum	two-sum	algomaster	https://algomaster.io/learn/dsa/two-sum
+Two Pointers	Medium	Two Sum II - Input Array Is Sorted	two-sum-ii-input-array-is-sorted	algomaster	https://algomaster.io/learn/dsa/two-sum-ii-input-array-is-sorted
+Two Pointers	Medium	Container With Most Water	container-with-most-water	algomaster	https://algomaster.io/learn/dsa/container-with-most-water
+Two Pointers	Hard	Trapping Rain Water	trapping-rain-water	algomaster	https://algomaster.io/learn/dsa/trapping-rain-water
+Two Pointers	Hard	Count Subarrays With Fixed Bounds	count-subarrays-with-fixed-bounds	algomaster	https://algomaster.io/learn/dsa/count-subarrays-with-fixed-bounds
+Two Pointers	Easy	Merge Sorted Array	merge-sorted-array	algomaster	https://algomaster.io/learn/dsa/merge-sorted-array
+Two Pointers	Easy	Backspace String Compare	backspace-string-compare	algomaster	https://algomaster.io/learn/dsa/backspace-string-compare
+Two Pointers	Easy	Count Binary Substrings	count-binary-substrings	algomaster	https://algomaster.io/learn/dsa/count-binary-substrings
+Two Pointers	Medium	String Compression	string-compression	algomaster	https://algomaster.io/learn/dsa/string-compression
+Two Pointers	Medium	Boats to Save People	boats-to-save-people	algomaster	https://algomaster.io/learn/dsa/boats-to-save-people
+Two Pointers	Medium	Longest Palindromic Substring	longest-palindromic-substring	algomaster	https://algomaster.io/learn/dsa/longest-palindromic-substring
+Prefix Sum		Introduction	prefix-sum-introduction	algomaster	https://algomaster.io/learn/dsa/prefix-sum-introduction
+Prefix Sum	Easy	Range Sum Query - Immutable	range-sum-query-immutable	algomaster	https://algomaster.io/learn/dsa/range-sum-query-immutable
+Prefix Sum	Easy	Running Sum of 1d Array	running-sum-of-1d-array	algomaster	https://algomaster.io/learn/dsa/running-sum-of-1d-array
+Prefix Sum	Easy	Find Pivot Index	find-pivot-index	algomaster	https://algomaster.io/learn/dsa/find-pivot-index
+Prefix Sum	Easy	Maximum Population Year	maximum-population-year	algomaster	https://algomaster.io/learn/dsa/maximum-population-year
+Prefix Sum	Medium	Subarray Sum Equals K	subarray-sum-equals-k	algomaster	https://algomaster.io/learn/dsa/subarray-sum-equals-k
+Prefix Sum	Medium	Subarray Sums Divisible by K	subarray-sums-divisible-by-k	algomaster	https://algomaster.io/learn/dsa/subarray-sums-divisible-by-k
+Prefix Sum	Medium	Continuous Subarray Sum	continuous-subarray-sum	algomaster	https://algomaster.io/learn/dsa/continuous-subarray-sum
+Prefix Sum	Medium	Contiguous Array	contiguous-array	algomaster	https://algomaster.io/learn/dsa/contiguous-array
+Prefix Sum	Medium	Range Addition	range-addition	algomaster	https://algomaster.io/learn/dsa/range-addition
+Prefix Sum	Medium	Range Sum Query 2D - Immutable	range-sum-query-2d-immutable	algomaster	https://algomaster.io/learn/dsa/range-sum-query-2d-immutable
+Prefix Sum	Medium	Increment Submatrices by One	increment-submatrices-by-one	algomaster	https://algomaster.io/learn/dsa/increment-submatrices-by-one
+Prefix Sum	Medium	Matrix Block Sum	matrix-block-sum	algomaster	https://algomaster.io/learn/dsa/matrix-block-sum
+Sliding Window		Introduction	sliding-window-introduction	algomaster	https://algomaster.io/learn/dsa/sliding-window-introduction
+Sliding Window	Easy	Maximum Average Subarray I	maximum-average-subarray-i	algomaster	https://algomaster.io/learn/dsa/maximum-average-subarray-i
+Sliding Window	Medium	Find All Anagrams in a String	find-all-anagrams-in-a-string	algomaster	https://algomaster.io/learn/dsa/find-all-anagrams-in-a-string
+Sliding Window	Medium	Permutation in String	permutation-in-string	algomaster	https://algomaster.io/learn/dsa/permutation-in-string
+Sliding Window	Medium	Maximum Sum of Distinct Subarrays With Length K	maximum-sum-of-distinct-subarrays-with-length-k	algomaster	https://algomaster.io/learn/dsa/maximum-sum-of-distinct-subarrays-with-length-k
+Sliding Window	Medium	Maximum Number of Vowels in a Substring of Given Length	maximum-number-of-vowels-in-a-substring-of-given-length	algomaster	https://algomaster.io/learn/dsa/maximum-number-of-vowels-in-a-substring-of-given-length
+Sliding Window	Hard	Substring with Concatenation of All Words	substring-with-concatenation-of-all-words	algomaster	https://algomaster.io/learn/dsa/substring-with-concatenation-of-all-words
+Sliding Window	Medium	Longest Substring Without Repeating Characters	longest-substring-without-repeating-characters	algomaster	https://algomaster.io/learn/dsa/longest-substring-without-repeating-characters
+Sliding Window	Medium	Longest Repeating Character Replacement	longest-repeating-character-replacement	algomaster	https://algomaster.io/learn/dsa/longest-repeating-character-replacement
+Sliding Window	Medium	Minimum Size Subarray Sum	minimum-size-subarray-sum	algomaster	https://algomaster.io/learn/dsa/minimum-size-subarray-sum
+Sliding Window	Medium	Max Consecutive Ones III	max-consecutive-ones-iii	algomaster	https://algomaster.io/learn/dsa/max-consecutive-ones-iii
+Sliding Window	Medium	Count Number of Nice Subarrays	count-number-of-nice-subarrays	algomaster	https://algomaster.io/learn/dsa/count-number-of-nice-subarrays
+Sliding Window	Medium	Fruit Into Baskets	fruit-into-baskets	algomaster	https://algomaster.io/learn/dsa/fruit-into-baskets
+Sliding Window	Medium	Maximum Points You Can Obtain from Cards	maximum-points-you-can-obtain-from-cards	algomaster	https://algomaster.io/learn/dsa/maximum-points-you-can-obtain-from-cards
+Sliding Window	Medium	Subarray Product Less Than K	subarray-product-less-than-k	algomaster	https://algomaster.io/learn/dsa/subarray-product-less-than-k
+Sliding Window	Medium	Frequency of the Most Frequent Element	frequency-of-the-most-frequent-element	algomaster	https://algomaster.io/learn/dsa/frequency-of-the-most-frequent-element
+Sliding Window	Medium	Longest Substring with At Most Two Distinct Characters	longest-substring-with-at-most-two-distinct-characters	algomaster	https://algomaster.io/learn/dsa/longest-substring-with-at-most-two-distinct-characters
+Sliding Window	Medium	Longest Substring with At Most K Distinct Characters	longest-substring-with-at-most-k-distinct-characters	algomaster	https://algomaster.io/learn/dsa/longest-substring-with-at-most-k-distinct-characters
+Sliding Window	Medium	Longest Substring with At Least K Repeating Characters	longest-substring-with-at-least-k-repeating-characters	algomaster	https://algomaster.io/learn/dsa/longest-substring-with-at-least-k-repeating-characters
+Sliding Window	Hard	Minimum Window Substring	minimum-window-substring	algomaster	https://algomaster.io/learn/dsa/minimum-window-substring
+Sliding Window	Hard	Minimum Window Subsequence	minimum-window-subsequence	algomaster	https://algomaster.io/learn/dsa/minimum-window-subsequence
+Sliding Window	Hard	Subarrays with K Different Integers	subarrays-with-k-different-integers	algomaster	https://algomaster.io/learn/dsa/subarrays-with-k-different-integers
+Kadane's Algorithm		Introduction	kadane-s-algorithm-introduction	algomaster	https://algomaster.io/learn/dsa/kadane-s-algorithm-introduction
+Kadane's Algorithm	Medium	Maximum Subarray	maximum-subarray	algomaster	https://algomaster.io/learn/dsa/maximum-subarray
+Kadane's Algorithm	Medium	Best Sightseeing Pair	best-sightseeing-pair	algomaster	https://algomaster.io/learn/dsa/best-sightseeing-pair
+Kadane's Algorithm	Medium	Maximum Sum Circular Subarray	maximum-sum-circular-subarray	algomaster	https://algomaster.io/learn/dsa/maximum-sum-circular-subarray
+Kadane's Algorithm	Medium	Maximum Product Subarray	maximum-product-subarray	algomaster	https://algomaster.io/learn/dsa/maximum-product-subarray
+Kadane's Algorithm	Medium	Longest Turbulent Subarray	longest-turbulent-subarray	algomaster	https://algomaster.io/learn/dsa/longest-turbulent-subarray
+Kadane's Algorithm	Medium	Maximum Subarray Sum with One Deletion	maximum-subarray-sum-with-one-deletion	algomaster	https://algomaster.io/learn/dsa/maximum-subarray-sum-with-one-deletion
+Kadane's Algorithm	Medium	Maximum Absolute Sum of Any Subarray	maximum-absolute-sum-of-any-subarray	algomaster	https://algomaster.io/learn/dsa/maximum-absolute-sum-of-any-subarray
+Matrix	Medium	Spiral Matrix	spiral-matrix	algomaster	https://algomaster.io/learn/dsa/spiral-matrix
+Matrix	Medium	Spiral Matrix II	spiral-matrix-ii	algomaster	https://algomaster.io/learn/dsa/spiral-matrix-ii
+Matrix	Medium	Diagonal Traverse	diagonal-traverse	algomaster	https://algomaster.io/learn/dsa/diagonal-traverse
+Matrix	Medium	Valid Sudoku	valid-sudoku	algomaster	https://algomaster.io/learn/dsa/valid-sudoku
+Matrix	Easy	Transpose Matrix	transpose-matrix	algomaster	https://algomaster.io/learn/dsa/transpose-matrix
+Matrix	Medium	Rotate Image	rotate-image	algomaster	https://algomaster.io/learn/dsa/rotate-image
+Matrix	Medium	Set Matrix Zeroes	set-matrix-zeroes	algomaster	https://algomaster.io/learn/dsa/set-matrix-zeroes
+Matrix	Medium	Candy Crush	candy-crush	algomaster	https://algomaster.io/learn/dsa/candy-crush
+Matrix	Medium	Game of Life	game-of-life	algomaster	https://algomaster.io/learn/dsa/game-of-life
+Linked List		Introduction	linked-list-introduction	algomaster	https://algomaster.io/learn/dsa/linked-list-introduction
+Linked List	Easy	Intersection of Two Linked Lists	intersection-of-two-linked-lists	algomaster	https://algomaster.io/learn/dsa/intersection-of-two-linked-lists
+Linked List	Easy	Remove Duplicates from Sorted List	remove-duplicates-from-sorted-list	algomaster	https://algomaster.io/learn/dsa/remove-duplicates-from-sorted-list
+Linked List	Medium	Design Linked List	design-linked-list	algomaster	https://algomaster.io/learn/dsa/design-linked-list
+Linked List	Medium	Remove Nth Node From End of List	remove-nth-node-from-end-of-list	algomaster	https://algomaster.io/learn/dsa/remove-nth-node-from-end-of-list
+Linked List	Medium	Remove Duplicates from Sorted List II	remove-duplicates-from-sorted-list-ii	algomaster	https://algomaster.io/learn/dsa/remove-duplicates-from-sorted-list-ii
+Linked List	Medium	Swap Nodes in Pairs	swap-nodes-in-pairs	algomaster	https://algomaster.io/learn/dsa/swap-nodes-in-pairs
+Linked List	Medium	Copy List with Random Pointer	copy-list-with-random-pointer	algomaster	https://algomaster.io/learn/dsa/copy-list-with-random-pointer
+Linked List	Medium	Partition List	partition-list	algomaster	https://algomaster.io/learn/dsa/partition-list
+Linked List	Medium	Rotate List	rotate-list	algomaster	https://algomaster.io/learn/dsa/rotate-list
+Linked List	Medium	Add Two Numbers	add-two-numbers	algomaster	https://algomaster.io/learn/dsa/add-two-numbers
+Linked List	Medium	Flatten a Multilevel Doubly Linked List	flatten-a-multilevel-doubly-linked-list	algomaster	https://algomaster.io/learn/dsa/flatten-a-multilevel-doubly-linked-list
+Linked List	Medium	Delete the Middle Node of a Linked List	delete-the-middle-node-of-a-linked-list	algomaster	https://algomaster.io/learn/dsa/delete-the-middle-node-of-a-linked-list
+Linked List	Medium	Odd Even Linked List	odd-even-linked-list	algomaster	https://algomaster.io/learn/dsa/odd-even-linked-list
+Linked List	Medium	Reorder List	reorder-list	algomaster	https://algomaster.io/learn/dsa/reorder-list
+Linked List	Medium	Add Two Numbers II	add-two-numbers-ii	algomaster	https://algomaster.io/learn/dsa/add-two-numbers-ii
+Linked List	Medium	Delete Node in a Linked List	delete-node-in-a-linked-list	algomaster	https://algomaster.io/learn/dsa/delete-node-in-a-linked-list
+Linked List	Medium	Insert into a Sorted Circular Linked List	insert-into-a-sorted-circular-linked-list	algomaster	https://algomaster.io/learn/dsa/insert-into-a-sorted-circular-linked-list
+Linked List	Medium	Merge In Between Linked Lists	merge-in-between-linked-lists	algomaster	https://algomaster.io/learn/dsa/merge-in-between-linked-lists
+Linked List		Introduction	linked-list-in-place-reversal-introduction	algomaster	https://algomaster.io/learn/dsa/linked-list-in-place-reversal-introduction
+Linked List	Easy	Palindrome Linked List	palindrome-linked-list	algomaster	https://algomaster.io/learn/dsa/palindrome-linked-list
+Linked List	Easy	Reverse Linked List	reverse-linked-list	algomaster	https://algomaster.io/learn/dsa/reverse-linked-list
+Linked List	Medium	Reverse Linked List II	reverse-linked-list-ii	algomaster	https://algomaster.io/learn/dsa/reverse-linked-list-ii
+Linked List	Hard	Reverse Nodes in k-Group	reverse-nodes-in-k-group	algomaster	https://algomaster.io/learn/dsa/reverse-nodes-in-k-group
+Linked List		Introduction	fast-slow-pointers-introduction	algomaster	https://algomaster.io/learn/dsa/fast-slow-pointers-introduction
+Linked List	Easy	Middle of the Linked List	middle-of-the-linked-list	algomaster	https://algomaster.io/learn/dsa/middle-of-the-linked-list
+Linked List	Easy	Happy Number	happy-number	algomaster	https://algomaster.io/learn/dsa/happy-number
+Linked List	Medium	Linked List Cycle II	linked-list-cycle-ii	algomaster	https://algomaster.io/learn/dsa/linked-list-cycle-ii
+Stacks		Introduction	stack-introduction	algomaster	https://algomaster.io/learn/dsa/stack-introduction
+Stacks	Easy	Valid Parentheses	valid-parentheses	algomaster	https://algomaster.io/learn/dsa/valid-parentheses
+Stacks	Easy	Remove All Adjacent Duplicates In String	remove-all-adjacent-duplicates-in-string	algomaster	https://algomaster.io/learn/dsa/remove-all-adjacent-duplicates-in-string
+Stacks	Easy	Baseball Game	baseball-game	algomaster	https://algomaster.io/learn/dsa/baseball-game
+Stacks	Easy	Maximum Nesting Depth of the Parentheses	maximum-nesting-depth-of-the-parentheses	algomaster	https://algomaster.io/learn/dsa/maximum-nesting-depth-of-the-parentheses
+Stacks	Medium	Min Stack	min-stack	algomaster	https://algomaster.io/learn/dsa/min-stack
+Stacks	Medium	Remove Duplicate Letters	remove-duplicate-letters	algomaster	https://algomaster.io/learn/dsa/remove-duplicate-letters
+Stacks	Medium	Removing Stars From a String	removing-stars-from-a-string	algomaster	https://algomaster.io/learn/dsa/removing-stars-from-a-string
+Stacks	Medium	Evaluate Reverse Polish Notation	evaluate-reverse-polish-notation	algomaster	https://algomaster.io/learn/dsa/evaluate-reverse-polish-notation
+Stacks	Medium	Basic Calculator II	basic-calculator-ii	algomaster	https://algomaster.io/learn/dsa/basic-calculator-ii
+Stacks	Medium	Asteroid Collision	asteroid-collision	algomaster	https://algomaster.io/learn/dsa/asteroid-collision
+Stacks	Medium	Car Fleet	car-fleet	algomaster	https://algomaster.io/learn/dsa/car-fleet
+Stacks	Medium	Valid Parenthesis String	valid-parenthesis-string	algomaster	https://algomaster.io/learn/dsa/valid-parenthesis-string
+Stacks	Medium	Validate Stack Sequences	validate-stack-sequences	algomaster	https://algomaster.io/learn/dsa/validate-stack-sequences
+Stacks	Medium	Minimum Remove to Make Valid Parentheses	minimum-remove-to-make-valid-parentheses	algomaster	https://algomaster.io/learn/dsa/minimum-remove-to-make-valid-parentheses
+Stacks	Medium	Simplify Path	simplify-path	algomaster	https://algomaster.io/learn/dsa/simplify-path
+Stacks	Medium	Exclusive Time of Functions	exclusive-time-of-functions	algomaster	https://algomaster.io/learn/dsa/exclusive-time-of-functions
+Stacks	Medium	Basic Calculator	basic-calculator	algomaster	https://algomaster.io/learn/dsa/basic-calculator
+Stacks	Hard	Longest Valid Parentheses	longest-valid-parentheses	algomaster	https://algomaster.io/learn/dsa/longest-valid-parentheses
+Stacks		Introduction	monotonic-stack-introduction	algomaster	https://algomaster.io/learn/dsa/monotonic-stack-introduction
+Stacks	Easy	Next Greater Element I	next-greater-element-i	algomaster	https://algomaster.io/learn/dsa/next-greater-element-i
+Stacks	Easy	Final Prices With a Special Discount in a Shop	final-prices-with-a-special-discount-in-a-shop	algomaster	https://algomaster.io/learn/dsa/final-prices-with-a-special-discount-in-a-shop
+Stacks	Medium	Daily Temperatures	daily-temperatures	algomaster	https://algomaster.io/learn/dsa/daily-temperatures
+Stacks	Medium	Online Stock Span	online-stock-span	algomaster	https://algomaster.io/learn/dsa/online-stock-span
+Stacks	Medium	132 Pattern	132-pattern	algomaster	https://algomaster.io/learn/dsa/132-pattern
+Stacks	Medium	Next Greater Element II	next-greater-element-ii	algomaster	https://algomaster.io/learn/dsa/next-greater-element-ii
+Stacks	Medium	Buildings With an Ocean View	buildings-with-an-ocean-view	algomaster	https://algomaster.io/learn/dsa/buildings-with-an-ocean-view
+Stacks	Medium	Remove K Digits	remove-k-digits	algomaster	https://algomaster.io/learn/dsa/remove-k-digits
+Stacks	Medium	Maximum Width Ramp	maximum-width-ramp	algomaster	https://algomaster.io/learn/dsa/maximum-width-ramp
+Stacks	Medium	Max Chunks To Make Sorted	max-chunks-to-make-sorted	algomaster	https://algomaster.io/learn/dsa/max-chunks-to-make-sorted
+Stacks	Medium	Sum of Subarray Minimums	sum-of-subarray-minimums	algomaster	https://algomaster.io/learn/dsa/sum-of-subarray-minimums
+Stacks	Medium	Sum of Subarray Ranges	sum-of-subarray-ranges	algomaster	https://algomaster.io/learn/dsa/sum-of-subarray-ranges
+Stacks	Medium	Shortest Unsorted Continuous Subarray	shortest-unsorted-continuous-subarray	algomaster	https://algomaster.io/learn/dsa/shortest-unsorted-continuous-subarray
+Stacks	Medium	Next Greater Node In Linked List	next-greater-node-in-linked-list	algomaster	https://algomaster.io/learn/dsa/next-greater-node-in-linked-list
+Stacks	Hard	Create Maximum Number	create-maximum-number	algomaster	https://algomaster.io/learn/dsa/create-maximum-number
+Stacks	Hard	Number of Visible People in a Queue	number-of-visible-people-in-a-queue	algomaster	https://algomaster.io/learn/dsa/number-of-visible-people-in-a-queue
+Stacks	Hard	Largest Rectangle in Histogram	largest-rectangle-in-histogram	algomaster	https://algomaster.io/learn/dsa/largest-rectangle-in-histogram
+Queues		Introduction	queue-introduction	algomaster	https://algomaster.io/learn/dsa/queue-introduction
+Queues	Easy	Number of Recent Calls	number-of-recent-calls	algomaster	https://algomaster.io/learn/dsa/number-of-recent-calls
+Queues	Easy	Time Needed to Buy Tickets	time-needed-to-buy-tickets	algomaster	https://algomaster.io/learn/dsa/time-needed-to-buy-tickets
+Queues	Easy	Moving Average from Data Stream	moving-average-from-data-stream	algomaster	https://algomaster.io/learn/dsa/moving-average-from-data-stream
+Queues	Medium	Reveal Cards In Increasing Order	reveal-cards-in-increasing-order	algomaster	https://algomaster.io/learn/dsa/reveal-cards-in-increasing-order
+Queues	Medium	First Unique Number	first-unique-number	algomaster	https://algomaster.io/learn/dsa/first-unique-number
+Queues	Medium	Number of People Aware of a Secret	number-of-people-aware-of-a-secret	algomaster	https://algomaster.io/learn/dsa/number-of-people-aware-of-a-secret
+Queues	Medium	Find the Winner of the Circular Game	find-the-winner-of-the-circular-game	algomaster	https://algomaster.io/learn/dsa/find-the-winner-of-the-circular-game
+Queues	Medium	Continuous Subarrays	continuous-subarrays	algomaster	https://algomaster.io/learn/dsa/continuous-subarrays
+Queues	Medium	Jump Game VI	jump-game-vi	algomaster	https://algomaster.io/learn/dsa/jump-game-vi
+Queues	Medium	Find the Most Competitive Subsequence	find-the-most-competitive-subsequence	algomaster	https://algomaster.io/learn/dsa/find-the-most-competitive-subsequence
+Queues	Medium	Count Partitions With Max-Min Difference at Most K	count-partitions-with-max-min-difference-at-most-k	algomaster	https://algomaster.io/learn/dsa/count-partitions-with-max-min-difference-at-most-k
+Queues	Medium	Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit	longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit	algomaster	https://algomaster.io/learn/dsa/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit
+Queues	Hard	Sliding Window Maximum	sliding-window-maximum	algomaster	https://algomaster.io/learn/dsa/sliding-window-maximum
+Queues	Hard	Max Value of Equation	max-value-of-equation	algomaster	https://algomaster.io/learn/dsa/max-value-of-equation
+Queues	Hard	Constrained Subsequence Sum	constrained-subsequence-sum	algomaster	https://algomaster.io/learn/dsa/constrained-subsequence-sum
+Queues	Hard	Shortest Subarray with Sum at Least K	shortest-subarray-with-sum-at-least-k	algomaster	https://algomaster.io/learn/dsa/shortest-subarray-with-sum-at-least-k
+Sorting	Medium	Sort Characters By Frequency	sort-characters-by-frequency	algomaster	https://algomaster.io/learn/dsa/sort-characters-by-frequency
+Sorting	Medium	Top K Frequent Words	top-k-frequent-words	algomaster	https://algomaster.io/learn/dsa/top-k-frequent-words
+Sorting	Medium	Maximum Gap	maximum-gap	algomaster	https://algomaster.io/learn/dsa/maximum-gap
+Sorting	Hard	Contains Duplicate III	contains-duplicate-iii	algomaster	https://algomaster.io/learn/dsa/contains-duplicate-iii
+Sorting	Medium	Sort an Array	sort-an-array	algomaster	https://algomaster.io/learn/dsa/sort-an-array
+Sorting	Medium	Sort List	sort-list	algomaster	https://algomaster.io/learn/dsa/sort-list
+Sorting	Hard	Reverse Pairs	reverse-pairs	algomaster	https://algomaster.io/learn/dsa/reverse-pairs
+Sorting	Hard	Count of Range Sum	count-of-range-sum	algomaster	https://algomaster.io/learn/dsa/count-of-range-sum
+Sorting	Medium	Sort Colors	sort-colors	algomaster	https://algomaster.io/learn/dsa/sort-colors
+Sorting	Medium	Kth Largest Element in an Array	kth-largest-element-in-an-array	algomaster	https://algomaster.io/learn/dsa/kth-largest-element-in-an-array
+Sorting	Medium	Find the Kth Largest Integer in the Array	find-the-kth-largest-integer-in-the-array	algomaster	https://algomaster.io/learn/dsa/find-the-kth-largest-integer-in-the-array
+Recursion & Backtracking		Recursion Fundamentals	recursion-fundamentals	algomaster	https://algomaster.io/learn/dsa/recursion-fundamentals
+Recursion & Backtracking		Introduction to Backtracking	backtracking-introduction	algomaster	https://algomaster.io/learn/dsa/backtracking-introduction
+Recursion & Backtracking	Easy	Merge Two Sorted Lists	merge-two-sorted-lists	algomaster	https://algomaster.io/learn/dsa/merge-two-sorted-lists
+Recursion & Backtracking	Medium	Pow(x, n)	powx-n	algomaster	https://algomaster.io/learn/dsa/powx-n
+Recursion & Backtracking	Medium	Decode String	decode-string	algomaster	https://algomaster.io/learn/dsa/decode-string
+Recursion & Backtracking	Medium	Subsets	subsets	algomaster	https://algomaster.io/learn/dsa/subsets
+Recursion & Backtracking	Medium	Combination Sum	combination-sum	algomaster	https://algomaster.io/learn/dsa/combination-sum
+Recursion & Backtracking	Medium	Combination Sum II	combination-sum-ii	algomaster	https://algomaster.io/learn/dsa/combination-sum-ii
+Recursion & Backtracking	Medium	Subsets II	subsets-ii	algomaster	https://algomaster.io/learn/dsa/subsets-ii
+Recursion & Backtracking	Medium	Combination Sum III	combination-sum-iii	algomaster	https://algomaster.io/learn/dsa/combination-sum-iii
+Recursion & Backtracking	Medium	Combinations	combinations	algomaster	https://algomaster.io/learn/dsa/combinations
+Recursion & Backtracking	Medium	Permutations	permutations	algomaster	https://algomaster.io/learn/dsa/permutations
+Recursion & Backtracking	Medium	Letter Combinations of a Phone Number	letter-combinations-of-a-phone-number	algomaster	https://algomaster.io/learn/dsa/letter-combinations-of-a-phone-number
+Recursion & Backtracking	Medium	Permutations II	permutations-ii	algomaster	https://algomaster.io/learn/dsa/permutations-ii
+Recursion & Backtracking	Medium	Generate Parentheses	generate-parentheses	algomaster	https://algomaster.io/learn/dsa/generate-parentheses
+Recursion & Backtracking	Medium	Palindrome Partitioning	palindrome-partitioning	algomaster	https://algomaster.io/learn/dsa/palindrome-partitioning
+Recursion & Backtracking	Medium	Restore IP Addresses	restore-ip-addresses	algomaster	https://algomaster.io/learn/dsa/restore-ip-addresses
+Recursion & Backtracking	Hard	N-Queens	n-queens	algomaster	https://algomaster.io/learn/dsa/n-queens
+Recursion & Backtracking	Hard	Special Binary String	special-binary-string	algomaster	https://algomaster.io/learn/dsa/special-binary-string
+Recursion & Backtracking	Hard	Integer to English Words	integer-to-english-words	algomaster	https://algomaster.io/learn/dsa/integer-to-english-words
+Recursion & Backtracking	Hard	Unique Paths III	unique-paths-iii	algomaster	https://algomaster.io/learn/dsa/unique-paths-iii
+Recursion & Backtracking	Hard	Remove Invalid Parentheses	remove-invalid-parentheses	algomaster	https://algomaster.io/learn/dsa/remove-invalid-parentheses
+Recursion & Backtracking	Hard	Sudoku Solver	sudoku-solver	algomaster	https://algomaster.io/learn/dsa/sudoku-solver
+Divide and Conquer		Introduction	divide-and-conquer-introduction	algomaster	https://algomaster.io/learn/dsa/divide-and-conquer-introduction
+Divide and Conquer	Easy	Longest Nice Substring	longest-nice-substring	algomaster	https://algomaster.io/learn/dsa/longest-nice-substring
+Divide and Conquer	Medium	Convert Sorted List to Binary Search Tree	convert-sorted-list-to-binary-search-tree	algomaster	https://algomaster.io/learn/dsa/convert-sorted-list-to-binary-search-tree
+Divide and Conquer	Medium	Construct Quad Tree	construct-quad-tree	algomaster	https://algomaster.io/learn/dsa/construct-quad-tree
+Divide and Conquer	Medium	Maximum Binary Tree	maximum-binary-tree	algomaster	https://algomaster.io/learn/dsa/maximum-binary-tree
+Binary Search		Introduction	binary-search-introduction	algomaster	https://algomaster.io/learn/dsa/binary-search-introduction
+Binary Search	Easy	Binary Search	binary-search	algomaster	https://algomaster.io/learn/dsa/binary-search
+Binary Search	Easy	First Bad Version	first-bad-version	algomaster	https://algomaster.io/learn/dsa/first-bad-version
+Binary Search	Easy	Valid Perfect Square	valid-perfect-square	algomaster	https://algomaster.io/learn/dsa/valid-perfect-square
+Binary Search	Easy	Search Insert Position	search-insert-position	algomaster	https://algomaster.io/learn/dsa/search-insert-position
+Binary Search	Easy	Guess Number Higher or Lower	guess-number-higher-or-lower	algomaster	https://algomaster.io/learn/dsa/guess-number-higher-or-lower
+Binary Search	Easy	Find Smallest Letter Greater Than Target	find-smallest-letter-greater-than-target	algomaster	https://algomaster.io/learn/dsa/find-smallest-letter-greater-than-target
+Binary Search	Medium	Find First and Last Position of Element in Sorted Array	find-first-and-last-position-of-element-in-sorted-array	algomaster	https://algomaster.io/learn/dsa/find-first-and-last-position-of-element-in-sorted-array
+Binary Search	Medium	Search in Rotated Sorted Array	search-in-rotated-sorted-array	algomaster	https://algomaster.io/learn/dsa/search-in-rotated-sorted-array
+Binary Search	Medium	Search in Rotated Sorted Array II	search-in-rotated-sorted-array-ii	algomaster	https://algomaster.io/learn/dsa/search-in-rotated-sorted-array-ii
+Binary Search	Medium	Find Minimum in Rotated Sorted Array	find-minimum-in-rotated-sorted-array	algomaster	https://algomaster.io/learn/dsa/find-minimum-in-rotated-sorted-array
+Binary Search	Medium	Find Peak Element	find-peak-element	algomaster	https://algomaster.io/learn/dsa/find-peak-element
+Binary Search	Hard	Find in Mountain Array	find-in-mountain-array	algomaster	https://algomaster.io/learn/dsa/find-in-mountain-array
+Binary Search	Medium	Koko Eating Bananas	koko-eating-bananas	algomaster	https://algomaster.io/learn/dsa/koko-eating-bananas
+Binary Search	Medium	Capacity To Ship Packages Within D Days	capacity-to-ship-packages-within-d-days	algomaster	https://algomaster.io/learn/dsa/capacity-to-ship-packages-within-d-days
+Binary Search	Medium	Minimum Number of Days to Make m Bouquets	minimum-number-of-days-to-make-m-bouquets	algomaster	https://algomaster.io/learn/dsa/minimum-number-of-days-to-make-m-bouquets
+Binary Search	Medium	Magnetic Force Between Two Balls	magnetic-force-between-two-balls	algomaster	https://algomaster.io/learn/dsa/magnetic-force-between-two-balls
+Binary Search	Hard	Split Array Largest Sum	split-array-largest-sum	algomaster	https://algomaster.io/learn/dsa/split-array-largest-sum
+Binary Search	Medium	Search a 2D Matrix	search-a-2d-matrix	algomaster	https://algomaster.io/learn/dsa/search-a-2d-matrix
+Binary Search	Medium	Search a 2D Matrix II	search-a-2d-matrix-ii	algomaster	https://algomaster.io/learn/dsa/search-a-2d-matrix-ii
+Binary Search	Medium	Random Pick with Weight	random-pick-with-weight	algomaster	https://algomaster.io/learn/dsa/random-pick-with-weight
+Binary Search	Medium	Find K Closest Elements	find-k-closest-elements	algomaster	https://algomaster.io/learn/dsa/find-k-closest-elements
+Binary Search	Medium	Heaters	heaters	algomaster	https://algomaster.io/learn/dsa/heaters
+Binary Search	Hard	Median of Two Sorted Arrays	median-of-two-sorted-arrays	algomaster	https://algomaster.io/learn/dsa/median-of-two-sorted-arrays
+Binary Search	Hard	Find K-th Smallest Pair Distance	find-k-th-smallest-pair-distance	algomaster	https://algomaster.io/learn/dsa/find-k-th-smallest-pair-distance
+Binary Tree		Introduction	binary-tree-introduction	algomaster	https://algomaster.io/learn/dsa/binary-tree-introduction
+Binary Tree	Easy	Maximum Depth of Binary Tree	maximum-depth-of-binary-tree	algomaster	https://algomaster.io/learn/dsa/maximum-depth-of-binary-tree
+Binary Tree	Easy	Average of Levels in Binary Tree	average-of-levels-in-binary-tree	algomaster	https://algomaster.io/learn/dsa/average-of-levels-in-binary-tree
+Binary Tree	Medium	Binary Tree Level Order Traversal	binary-tree-level-order-traversal	algomaster	https://algomaster.io/learn/dsa/binary-tree-level-order-traversal
+Binary Tree	Medium	Binary Tree Right Side View	binary-tree-right-side-view	algomaster	https://algomaster.io/learn/dsa/binary-tree-right-side-view
+Binary Tree	Medium	Binary Tree Zigzag Level Order Traversal	binary-tree-zigzag-level-order-traversal	algomaster	https://algomaster.io/learn/dsa/binary-tree-zigzag-level-order-traversal
+Binary Tree	Medium	Populating Next Right Pointers in Each Node II	populating-next-right-pointers-in-each-node-ii	algomaster	https://algomaster.io/learn/dsa/populating-next-right-pointers-in-each-node-ii
+Binary Tree	Medium	Maximum Width of Binary Tree	maximum-width-of-binary-tree	algomaster	https://algomaster.io/learn/dsa/maximum-width-of-binary-tree
+Binary Tree	Medium	Binary Tree Vertical Order Traversal	binary-tree-vertical-order-traversal	algomaster	https://algomaster.io/learn/dsa/binary-tree-vertical-order-traversal
+Binary Tree	Medium	Populating Next Right Pointers in Each Node	populating-next-right-pointers-in-each-node	algomaster	https://algomaster.io/learn/dsa/populating-next-right-pointers-in-each-node
+Binary Tree	Medium	Check Completeness of a Binary Tree	check-completeness-of-a-binary-tree	algomaster	https://algomaster.io/learn/dsa/check-completeness-of-a-binary-tree
+Binary Tree	Easy	Binary Tree Preorder Traversal	binary-tree-preorder-traversal	algomaster	https://algomaster.io/learn/dsa/binary-tree-preorder-traversal
+Binary Tree	Easy	Same Tree	same-tree	algomaster	https://algomaster.io/learn/dsa/same-tree
+Binary Tree	Easy	Symmetric Tree	symmetric-tree	algomaster	https://algomaster.io/learn/dsa/symmetric-tree
+Binary Tree	Easy	Binary Tree Paths	binary-tree-paths	algomaster	https://algomaster.io/learn/dsa/binary-tree-paths
+Binary Tree	Easy	Convert Sorted Array to Binary Search Tree	convert-sorted-array-to-binary-search-tree	algomaster	https://algomaster.io/learn/dsa/convert-sorted-array-to-binary-search-tree
+Binary Tree	Easy	Count Complete Tree Nodes	count-complete-tree-nodes	algomaster	https://algomaster.io/learn/dsa/count-complete-tree-nodes
+Binary Tree	Easy	Sum of Left Leaves	sum-of-left-leaves	algomaster	https://algomaster.io/learn/dsa/sum-of-left-leaves
+Binary Tree	Easy	Subtree of Another Tree	subtree-of-another-tree	algomaster	https://algomaster.io/learn/dsa/subtree-of-another-tree
+Binary Tree	Medium	Path Sum II	path-sum-ii	algomaster	https://algomaster.io/learn/dsa/path-sum-ii
+Binary Tree	Medium	Path Sum III	path-sum-iii	algomaster	https://algomaster.io/learn/dsa/path-sum-iii
+Binary Tree	Medium	Longest Univalue Path	longest-univalue-path	algomaster	https://algomaster.io/learn/dsa/longest-univalue-path
+Binary Tree	Medium	Maximum Difference Between Node and Ancestor	maximum-difference-between-node-and-ancestor	algomaster	https://algomaster.io/learn/dsa/maximum-difference-between-node-and-ancestor
+Binary Tree	Medium	Construct Binary Tree from Preorder and Inorder Traversal	construct-binary-tree-from-preorder-and-inorder-traversal	algomaster	https://algomaster.io/learn/dsa/construct-binary-tree-from-preorder-and-inorder-traversal
+Binary Tree	Medium	Construct Binary Tree from Inorder and Postorder Traversal	construct-binary-tree-from-inorder-and-postorder-traversal	algomaster	https://algomaster.io/learn/dsa/construct-binary-tree-from-inorder-and-postorder-traversal
+Binary Tree	Hard	Serialize and Deserialize Binary Tree	serialize-and-deserialize-binary-tree	algomaster	https://algomaster.io/learn/dsa/serialize-and-deserialize-binary-tree
+Binary Tree	Easy	Binary Tree Inorder Traversal	binary-tree-inorder-traversal	algomaster	https://algomaster.io/learn/dsa/binary-tree-inorder-traversal
+Binary Tree	Easy	Minimum Distance Between BST Nodes	minimum-distance-between-bst-nodes	algomaster	https://algomaster.io/learn/dsa/minimum-distance-between-bst-nodes
+Binary Tree	Easy	Minimum Absolute Difference in BST	minimum-absolute-difference-in-bst	algomaster	https://algomaster.io/learn/dsa/minimum-absolute-difference-in-bst
+Binary Tree	Medium	Validate Binary Search Tree	validate-binary-search-tree	algomaster	https://algomaster.io/learn/dsa/validate-binary-search-tree
+Binary Tree	Medium	Kth Smallest Element in a BST	kth-smallest-element-in-a-bst	algomaster	https://algomaster.io/learn/dsa/kth-smallest-element-in-a-bst
+Binary Tree	Medium	Binary Search Tree Iterator	binary-search-tree-iterator	algomaster	https://algomaster.io/learn/dsa/binary-search-tree-iterator
+Binary Tree	Medium	Balance a Binary Search Tree	balance-a-binary-search-tree	algomaster	https://algomaster.io/learn/dsa/balance-a-binary-search-tree
+Binary Tree	Easy	Binary Tree Postorder Traversal	binary-tree-postorder-traversal	algomaster	https://algomaster.io/learn/dsa/binary-tree-postorder-traversal
+Binary Tree	Easy	Invert Binary Tree	invert-binary-tree	algomaster	https://algomaster.io/learn/dsa/invert-binary-tree
+Binary Tree	Easy	Diameter of Binary Tree	diameter-of-binary-tree	algomaster	https://algomaster.io/learn/dsa/diameter-of-binary-tree
+Binary Tree	Easy	Balanced Binary Tree	balanced-binary-tree	algomaster	https://algomaster.io/learn/dsa/balanced-binary-tree
+Binary Tree	Medium	Delete Nodes And Return Forest	delete-nodes-and-return-forest	algomaster	https://algomaster.io/learn/dsa/delete-nodes-and-return-forest
+Binary Tree	Medium	Lowest Common Ancestor of a Binary Tree	lowest-common-ancestor-of-a-binary-tree	algomaster	https://algomaster.io/learn/dsa/lowest-common-ancestor-of-a-binary-tree
+Binary Tree	Medium	Find Duplicate Subtrees	find-duplicate-subtrees	algomaster	https://algomaster.io/learn/dsa/find-duplicate-subtrees
+Binary Tree	Medium	Flatten Binary Tree to Linked List	flatten-binary-tree-to-linked-list	algomaster	https://algomaster.io/learn/dsa/flatten-binary-tree-to-linked-list
+Binary Tree	Medium	Distribute Coins in Binary Tree	distribute-coins-in-binary-tree	algomaster	https://algomaster.io/learn/dsa/distribute-coins-in-binary-tree
+Binary Tree	Medium	Count Good Nodes in Binary Tree	count-good-nodes-in-binary-tree	algomaster	https://algomaster.io/learn/dsa/count-good-nodes-in-binary-tree
+Binary Tree	Medium	Sum Root to Leaf Numbers	sum-root-to-leaf-numbers	algomaster	https://algomaster.io/learn/dsa/sum-root-to-leaf-numbers
+Binary Tree	Medium	Boundary of Binary Tree	boundary-of-binary-tree	algomaster	https://algomaster.io/learn/dsa/boundary-of-binary-tree
+Binary Tree	Medium	Step-By-Step Directions From a Binary Tree Node to Another	step-by-step-directions-from-a-binary-tree-node-to-another	algomaster	https://algomaster.io/learn/dsa/step-by-step-directions-from-a-binary-tree-node-to-another
+Binary Tree	Hard	Binary Tree Maximum Path Sum	binary-tree-maximum-path-sum	algomaster	https://algomaster.io/learn/dsa/binary-tree-maximum-path-sum
+BST / Ordered Set		Introduction	bst-introduction	algomaster	https://algomaster.io/learn/dsa/bst-introduction
+BST / Ordered Set		AVL Tree	avl-tree	algomaster	https://algomaster.io/learn/dsa/avl-tree
+BST / Ordered Set		Red Black Tree	red-black-tree	algomaster	https://algomaster.io/learn/dsa/red-black-tree
+BST / Ordered Set	Easy	Search in a Binary Search Tree	search-in-a-binary-search-tree	algomaster	https://algomaster.io/learn/dsa/search-in-a-binary-search-tree
+BST / Ordered Set	Easy	Closest Binary Search Tree Value	closest-binary-search-tree-value	algomaster	https://algomaster.io/learn/dsa/closest-binary-search-tree-value
+BST / Ordered Set	Easy	Two Sum IV - Input is a BST	two-sum-iv-input-is-a-bst	algomaster	https://algomaster.io/learn/dsa/two-sum-iv-input-is-a-bst
+BST / Ordered Set	Easy	Range Sum of BST	range-sum-of-bst	algomaster	https://algomaster.io/learn/dsa/range-sum-of-bst
+BST / Ordered Set	Medium	Trim a Binary Search Tree	trim-a-binary-search-tree	algomaster	https://algomaster.io/learn/dsa/trim-a-binary-search-tree
+BST / Ordered Set	Medium	Insert into a Binary Search Tree	insert-into-a-binary-search-tree	algomaster	https://algomaster.io/learn/dsa/insert-into-a-binary-search-tree
+BST / Ordered Set	Medium	Delete Node in a BST	delete-node-in-a-bst	algomaster	https://algomaster.io/learn/dsa/delete-node-in-a-bst
+BST / Ordered Set	Medium	Recover Binary Search Tree	recover-binary-search-tree	algomaster	https://algomaster.io/learn/dsa/recover-binary-search-tree
+BST / Ordered Set	Medium	Inorder Successor in BST	inorder-successor-in-bst	algomaster	https://algomaster.io/learn/dsa/inorder-successor-in-bst
+BST / Ordered Set	Medium	Inorder Successor in BST II	inorder-successor-in-bst-ii	algomaster	https://algomaster.io/learn/dsa/inorder-successor-in-bst-ii
+BST / Ordered Set	Medium	Lowest Common Ancestor of a Binary Search Tree	lowest-common-ancestor-of-a-binary-search-tree	algomaster	https://algomaster.io/learn/dsa/lowest-common-ancestor-of-a-binary-search-tree
+BST / Ordered Set	Medium	Construct Binary Search Tree from Preorder Traversal	construct-binary-search-tree-from-preorder-traversal	algomaster	https://algomaster.io/learn/dsa/construct-binary-search-tree-from-preorder-traversal
+BST / Ordered Set	Medium	Convert Binary Search Tree to Sorted Doubly Linked List	convert-binary-search-tree-to-sorted-doubly-linked-list	algomaster	https://algomaster.io/learn/dsa/convert-binary-search-tree-to-sorted-doubly-linked-list
+BST / Ordered Set	Medium	Largest BST Subtree	largest-bst-subtree	algomaster	https://algomaster.io/learn/dsa/largest-bst-subtree
+BST / Ordered Set	Medium	My Calendar I	my-calendar-i	algomaster	https://algomaster.io/learn/dsa/my-calendar-i
+BST / Ordered Set	Medium	My Calendar II	my-calendar-ii	algomaster	https://algomaster.io/learn/dsa/my-calendar-ii
+BST / Ordered Set	Medium	Stock Price Fluctuation	stock-price-fluctuation	algomaster	https://algomaster.io/learn/dsa/stock-price-fluctuation
+Tries		Introduction	tries-introduction	algomaster	https://algomaster.io/learn/dsa/tries-introduction
+Tries	Medium	Implement Trie (Prefix Tree)	implement-trie-prefix-tree	algomaster	https://algomaster.io/learn/dsa/implement-trie-prefix-tree
+Tries	Medium	Design Add and Search Words Data Structure	design-add-and-search-words-data-structure	algomaster	https://algomaster.io/learn/dsa/design-add-and-search-words-data-structure
+Tries	Medium	Search Suggestions System	search-suggestions-system	algomaster	https://algomaster.io/learn/dsa/search-suggestions-system
+Tries	Medium	Longest Word in Dictionary	longest-word-in-dictionary	algomaster	https://algomaster.io/learn/dsa/longest-word-in-dictionary
+Tries	Medium	Replace Words	replace-words	algomaster	https://algomaster.io/learn/dsa/replace-words
+Tries	Medium	Remove Sub-Folders from the Filesystem	remove-sub-folders-from-the-filesystem	algomaster	https://algomaster.io/learn/dsa/remove-sub-folders-from-the-filesystem
+Tries	Medium	Find the Length of the Longest Common Prefix	find-the-length-of-the-longest-common-prefix	algomaster	https://algomaster.io/learn/dsa/find-the-length-of-the-longest-common-prefix
+Tries	Medium	Words Within Two Edits of Dictionary	words-within-two-edits-of-dictionary	algomaster	https://algomaster.io/learn/dsa/words-within-two-edits-of-dictionary
+Tries	Medium	Maximum XOR of Two Numbers in an Array	maximum-xor-of-two-numbers-in-an-array	algomaster	https://algomaster.io/learn/dsa/maximum-xor-of-two-numbers-in-an-array
+Tries	Hard	Word Search II	word-search-ii	algomaster	https://algomaster.io/learn/dsa/word-search-ii
+Tries	Hard	Stream of Characters	stream-of-characters	algomaster	https://algomaster.io/learn/dsa/stream-of-characters
+Tries	Hard	Concatenated Words	concatenated-words	algomaster	https://algomaster.io/learn/dsa/concatenated-words
+Tries	Hard	Word Squares	word-squares	algomaster	https://algomaster.io/learn/dsa/word-squares
+Tries	Hard	Palindrome Pairs	palindrome-pairs	algomaster	https://algomaster.io/learn/dsa/palindrome-pairs
+Heaps		Introduction	heaps-introduction	algomaster	https://algomaster.io/learn/dsa/heaps-introduction
+Heaps	Easy	Last Stone Weight	last-stone-weight	algomaster	https://algomaster.io/learn/dsa/last-stone-weight
+Heaps	Medium	Furthest Building You Can Reach	furthest-building-you-can-reach	algomaster	https://algomaster.io/learn/dsa/furthest-building-you-can-reach
+Heaps	Medium	Single-Threaded CPU	single-threaded-cpu	algomaster	https://algomaster.io/learn/dsa/single-threaded-cpu
+Heaps	Medium	Process Tasks Using Servers	process-tasks-using-servers	algomaster	https://algomaster.io/learn/dsa/process-tasks-using-servers
+Heaps	Medium	Minimum Cost to Connect Sticks	minimum-cost-to-connect-sticks	algomaster	https://algomaster.io/learn/dsa/minimum-cost-to-connect-sticks
+Heaps	Medium	Longest Happy String	longest-happy-string	algomaster	https://algomaster.io/learn/dsa/longest-happy-string
+Heaps	Hard	Maximum Performance of a Team	maximum-performance-of-a-team	algomaster	https://algomaster.io/learn/dsa/maximum-performance-of-a-team
+Heaps	Hard	Find Median from Data Stream	find-median-from-data-stream	algomaster	https://algomaster.io/learn/dsa/find-median-from-data-stream
+Heaps	Hard	IPO	ipo	algomaster	https://algomaster.io/learn/dsa/ipo
+Heaps	Hard	Sliding Window Median	sliding-window-median	algomaster	https://algomaster.io/learn/dsa/sliding-window-median
+Heaps	Medium	Find K Pairs with Smallest Sums	find-k-pairs-with-smallest-sums	algomaster	https://algomaster.io/learn/dsa/find-k-pairs-with-smallest-sums
+Heaps	Medium	Kth Smallest Element in a Sorted Matrix	kth-smallest-element-in-a-sorted-matrix	algomaster	https://algomaster.io/learn/dsa/kth-smallest-element-in-a-sorted-matrix
+Heaps	Hard	Merge k Sorted Lists	merge-k-sorted-lists	algomaster	https://algomaster.io/learn/dsa/merge-k-sorted-lists
+Heaps	Hard	Smallest Range Covering Elements from K Lists	smallest-range-covering-elements-from-k-lists	algomaster	https://algomaster.io/learn/dsa/smallest-range-covering-elements-from-k-lists
+Heaps		Introduction	top-k-elements-introduction	algomaster	https://algomaster.io/learn/dsa/top-k-elements-introduction
+Heaps	Easy	Kth Largest Element in a Stream	kth-largest-element-in-a-stream	algomaster	https://algomaster.io/learn/dsa/kth-largest-element-in-a-stream
+Heaps	Medium	Top K Frequent Elements	top-k-frequent-elements	algomaster	https://algomaster.io/learn/dsa/top-k-frequent-elements
+Heaps	Medium	K Closest Points to Origin	k-closest-points-to-origin	algomaster	https://algomaster.io/learn/dsa/k-closest-points-to-origin
+Intervals		Introduction to Intervals	intervals-introduction	algomaster	https://algomaster.io/learn/dsa/intervals-introduction
+Intervals	Easy	Summary Ranges	summary-ranges	algomaster	https://algomaster.io/learn/dsa/summary-ranges
+Intervals	Easy	Meeting Rooms	meeting-rooms	algomaster	https://algomaster.io/learn/dsa/meeting-rooms
+Intervals	Medium	Merge Intervals	merge-intervals	algomaster	https://algomaster.io/learn/dsa/merge-intervals
+Intervals	Medium	Insert Interval	insert-interval	algomaster	https://algomaster.io/learn/dsa/insert-interval
+Intervals	Medium	Remove Covered Intervals	remove-covered-intervals	algomaster	https://algomaster.io/learn/dsa/remove-covered-intervals
+Intervals	Medium	Non-overlapping Intervals	non-overlapping-intervals	algomaster	https://algomaster.io/learn/dsa/non-overlapping-intervals
+Intervals	Medium	Minimum Number of Arrows to Burst Balloons	minimum-number-of-arrows-to-burst-balloons	algomaster	https://algomaster.io/learn/dsa/minimum-number-of-arrows-to-burst-balloons
+Intervals	Medium	Maximum Number of Events That Can Be Attended	maximum-number-of-events-that-can-be-attended	algomaster	https://algomaster.io/learn/dsa/maximum-number-of-events-that-can-be-attended
+Intervals	Medium	Partition Labels	partition-labels	algomaster	https://algomaster.io/learn/dsa/partition-labels
+Intervals	Medium	Meeting Rooms II	meeting-rooms-ii	algomaster	https://algomaster.io/learn/dsa/meeting-rooms-ii
+Intervals	Medium	Meeting Scheduler	meeting-scheduler	algomaster	https://algomaster.io/learn/dsa/meeting-scheduler
+Intervals	Medium	Car Pooling	car-pooling	algomaster	https://algomaster.io/learn/dsa/car-pooling
+Intervals	Medium	Interval List Intersections	interval-list-intersections	algomaster	https://algomaster.io/learn/dsa/interval-list-intersections
+Intervals	Medium	Two Best Non-Overlapping Events	two-best-non-overlapping-events	algomaster	https://algomaster.io/learn/dsa/two-best-non-overlapping-events
+Intervals	Hard	Meeting Rooms III	meeting-rooms-iii	algomaster	https://algomaster.io/learn/dsa/meeting-rooms-iii
+Intervals	Hard	Employee Free Time	employee-free-time	algomaster	https://algomaster.io/learn/dsa/employee-free-time
+Data Structure Design	Easy	Implement Queue using Stacks	implement-queue-using-stacks	algomaster	https://algomaster.io/learn/dsa/implement-queue-using-stacks
+Data Structure Design	Easy	Implement Stack using Queues	implement-stack-using-queues	algomaster	https://algomaster.io/learn/dsa/implement-stack-using-queues
+Data Structure Design	Medium	Design Circular Queue	design-circular-queue	algomaster	https://algomaster.io/learn/dsa/design-circular-queue
+Data Structure Design	Medium	Design Circular Deque	design-circular-deque	algomaster	https://algomaster.io/learn/dsa/design-circular-deque
+Data Structure Design	Easy	Logger Rate Limiter	logger-rate-limiter	algomaster	https://algomaster.io/learn/dsa/logger-rate-limiter
+Data Structure Design	Medium	Design Hit Counter	design-hit-counter	algomaster	https://algomaster.io/learn/dsa/design-hit-counter
+Data Structure Design	Medium	Time Based Key-Value Store	time-based-key-value-store	algomaster	https://algomaster.io/learn/dsa/time-based-key-value-store
+Data Structure Design	Medium	Snapshot Array	snapshot-array	algomaster	https://algomaster.io/learn/dsa/snapshot-array
+Data Structure Design	Medium	Encode and Decode Strings	encode-and-decode-strings	algomaster	https://algomaster.io/learn/dsa/encode-and-decode-strings
+Data Structure Design	Medium	Insert Delete GetRandom O(1)	insert-delete-getrandom-o1	algomaster	https://algomaster.io/learn/dsa/insert-delete-getrandom-o1
+Data Structure Design	Medium	Design Browser History	design-browser-history	algomaster	https://algomaster.io/learn/dsa/design-browser-history
+Data Structure Design	Medium	LRU Cache	lru-cache	algomaster	https://algomaster.io/learn/dsa/lru-cache
+Data Structure Design	Hard	LFU Cache	lfu-cache	algomaster	https://algomaster.io/learn/dsa/lfu-cache
+Data Structure Design	Medium	Design Twitter	design-twitter	algomaster	https://algomaster.io/learn/dsa/design-twitter
+Data Structure Design	Medium	Design a Food Rating System	design-a-food-rating-system	algomaster	https://algomaster.io/learn/dsa/design-a-food-rating-system
+Data Structure Design	Hard	Maximum Frequency Stack	maximum-frequency-stack	algomaster	https://algomaster.io/learn/dsa/maximum-frequency-stack
+Data Structure Design	Hard	Max Stack	max-stack	algomaster	https://algomaster.io/learn/dsa/max-stack
+Data Structure Design	Hard	All O`one Data Structure	all-oone-data-structure	algomaster	https://algomaster.io/learn/dsa/all-oone-data-structure
+Data Structure Design	Hard	Range Module	range-module	algomaster	https://algomaster.io/learn/dsa/range-module
+Data Structure Design	Hard	Design Search Autocomplete System	design-search-autocomplete-system	algomaster	https://algomaster.io/learn/dsa/design-search-autocomplete-system
+Data Structure Design	Hard	Design In-Memory File System	design-in-memory-file-system	algomaster	https://algomaster.io/learn/dsa/design-in-memory-file-system
+Data Structure Design	Hard	Design a Text Editor	design-a-text-editor	algomaster	https://algomaster.io/learn/dsa/design-a-text-editor
+Greedy		Introduction	greedy-introduction	algomaster	https://algomaster.io/learn/dsa/greedy-introduction
+Greedy	Easy	Assign Cookies	assign-cookies	algomaster	https://algomaster.io/learn/dsa/assign-cookies
+Greedy	Easy	Apple Redistribution into Boxes	apple-redistribution-into-boxes	algomaster	https://algomaster.io/learn/dsa/apple-redistribution-into-boxes
+Greedy	Medium	Jump Game II	jump-game-ii	algomaster	https://algomaster.io/learn/dsa/jump-game-ii
+Greedy	Medium	Jump Game	jump-game	algomaster	https://algomaster.io/learn/dsa/jump-game
+Greedy	Medium	Jump Game VII	jump-game-vii	algomaster	https://algomaster.io/learn/dsa/jump-game-vii
+Greedy	Medium	Minimum Add to Make Parentheses Valid	minimum-add-to-make-parentheses-valid	algomaster	https://algomaster.io/learn/dsa/minimum-add-to-make-parentheses-valid
+Greedy	Medium	Maximum Score From Removing Substrings	maximum-score-from-removing-substrings	algomaster	https://algomaster.io/learn/dsa/maximum-score-from-removing-substrings
+Greedy	Medium	Gas Station	gas-station	algomaster	https://algomaster.io/learn/dsa/gas-station
+Greedy	Medium	Task Scheduler	task-scheduler	algomaster	https://algomaster.io/learn/dsa/task-scheduler
+Greedy	Medium	Queue Reconstruction by Height	queue-reconstruction-by-height	algomaster	https://algomaster.io/learn/dsa/queue-reconstruction-by-height
+Greedy	Medium	Avoid Flood in The City	avoid-flood-in-the-city	algomaster	https://algomaster.io/learn/dsa/avoid-flood-in-the-city
+Greedy	Medium	Most Profit Assigning Work	most-profit-assigning-work	algomaster	https://algomaster.io/learn/dsa/most-profit-assigning-work
+Greedy	Medium	Maximum Swap	maximum-swap	algomaster	https://algomaster.io/learn/dsa/maximum-swap
+Greedy	Medium	Maximum Matrix Sum	maximum-matrix-sum	algomaster	https://algomaster.io/learn/dsa/maximum-matrix-sum
+Greedy	Hard	Candy	candy	algomaster	https://algomaster.io/learn/dsa/candy
+Greedy	Hard	Minimum Number of Refueling Stops	minimum-number-of-refueling-stops	algomaster	https://algomaster.io/learn/dsa/minimum-number-of-refueling-stops
+Greedy	Hard	Minimum Cost to Hire K Workers	minimum-cost-to-hire-k-workers	algomaster	https://algomaster.io/learn/dsa/minimum-cost-to-hire-k-workers
+Greedy	Hard	Set Intersection Size At Least Two	set-intersection-size-at-least-two	algomaster	https://algomaster.io/learn/dsa/set-intersection-size-at-least-two
+Graphs		Introduction to Graphs	graphs-introduction	algomaster	https://algomaster.io/learn/dsa/graphs-introduction
+Graphs		Depth-First Search	dfs-introduction	algomaster	https://algomaster.io/learn/dsa/dfs-introduction
+Graphs		Breadth-First Search	bfs-introduction	algomaster	https://algomaster.io/learn/dsa/bfs-introduction
+Graphs		Matrix Traversal	matrix-traversal-introduction	algomaster	https://algomaster.io/learn/dsa/matrix-traversal-introduction
+Graphs		Multi-Source BFS	multi-source-bfs	algomaster	https://algomaster.io/learn/dsa/multi-source-bfs
+Graphs		Cycle Detection in Undirected Graphs	cycle-detection-in-undirected-graphs	algomaster	https://algomaster.io/learn/dsa/cycle-detection-in-undirected-graphs
+Graphs		Cycle Detection in Directed Graphs	cycle-detection-in-directed-graphs	algomaster	https://algomaster.io/learn/dsa/cycle-detection-in-directed-graphs
+Graphs		Bipartite Graph Detection	bipartite-graph-detection	algomaster	https://algomaster.io/learn/dsa/bipartite-graph-detection
+Graphs		A* Search Algorithm	a-star-search-algorithm	algomaster	https://algomaster.io/learn/dsa/a-star-search-algorithm
+Graphs		Kosaraju's Algorithm	kosarajus-algorithm	algomaster	https://algomaster.io/learn/dsa/kosarajus-algorithm
+Graphs		Tarjan's Algorithm	tarjans-algorithm	algomaster	https://algomaster.io/learn/dsa/tarjans-algorithm
+Graphs	Easy	Flood Fill	flood-fill	algomaster	https://algomaster.io/learn/dsa/flood-fill
+Graphs	Medium	Number of Islands	number-of-islands	algomaster	https://algomaster.io/learn/dsa/number-of-islands
+Graphs	Medium	Number of Distinct Islands	number-of-distinct-islands	algomaster	https://algomaster.io/learn/dsa/number-of-distinct-islands
+Graphs	Medium	Time Needed to Inform All Employees	time-needed-to-inform-all-employees	algomaster	https://algomaster.io/learn/dsa/time-needed-to-inform-all-employees
+Graphs	Medium	All Paths From Source to Target	all-paths-from-source-to-target	algomaster	https://algomaster.io/learn/dsa/all-paths-from-source-to-target
+Graphs	Medium	Clone Graph	clone-graph	algomaster	https://algomaster.io/learn/dsa/clone-graph
+Graphs	Medium	Is Graph Bipartite?	is-graph-bipartite	algomaster	https://algomaster.io/learn/dsa/is-graph-bipartite
+Graphs	Medium	All Nodes Distance K in Binary Tree	all-nodes-distance-k-in-binary-tree	algomaster	https://algomaster.io/learn/dsa/all-nodes-distance-k-in-binary-tree
+Graphs	Medium	Employee Importance	employee-importance	algomaster	https://algomaster.io/learn/dsa/employee-importance
+Graphs	Medium	Surrounded Regions	surrounded-regions	algomaster	https://algomaster.io/learn/dsa/surrounded-regions
+Graphs	Medium	Pacific Atlantic Water Flow	pacific-atlantic-water-flow	algomaster	https://algomaster.io/learn/dsa/pacific-atlantic-water-flow
+Graphs	Medium	Word Search	word-search	algomaster	https://algomaster.io/learn/dsa/word-search
+Graphs	Medium	Number of Enclaves	number-of-enclaves	algomaster	https://algomaster.io/learn/dsa/number-of-enclaves
+Graphs	Hard	Making A Large Island	making-a-large-island	algomaster	https://algomaster.io/learn/dsa/making-a-large-island
+Graphs	Hard	Critical Connections in a Network	critical-connections-in-a-network	algomaster	https://algomaster.io/learn/dsa/critical-connections-in-a-network
+Graphs	Hard	Longest Path With Different Adjacent Characters	longest-path-with-different-adjacent-characters	algomaster	https://algomaster.io/learn/dsa/longest-path-with-different-adjacent-characters
+Graphs	Medium	Rotting Oranges	rotting-oranges	algomaster	https://algomaster.io/learn/dsa/rotting-oranges
+Graphs	Medium	01 Matrix	01-matrix	algomaster	https://algomaster.io/learn/dsa/01-matrix
+Graphs	Medium	Open the Lock	open-the-lock	algomaster	https://algomaster.io/learn/dsa/open-the-lock
+Graphs	Medium	Snakes and Ladders	snakes-and-ladders	algomaster	https://algomaster.io/learn/dsa/snakes-and-ladders
+Graphs	Medium	Minimum Genetic Mutation	minimum-genetic-mutation	algomaster	https://algomaster.io/learn/dsa/minimum-genetic-mutation
+Graphs	Medium	Walls and Gates	walls-and-gates	algomaster	https://algomaster.io/learn/dsa/walls-and-gates
+Graphs	Medium	Minimum Knight Moves	minimum-knight-moves	algomaster	https://algomaster.io/learn/dsa/minimum-knight-moves
+Graphs	Medium	Shortest Path in Binary Matrix	shortest-path-in-binary-matrix	algomaster	https://algomaster.io/learn/dsa/shortest-path-in-binary-matrix
+Graphs	Medium	Path With Maximum Minimum Value	path-with-maximum-minimum-value	algomaster	https://algomaster.io/learn/dsa/path-with-maximum-minimum-value
+Graphs	Hard	Word Ladder	word-ladder	algomaster	https://algomaster.io/learn/dsa/word-ladder
+Graphs	Hard	Bus Routes	bus-routes	algomaster	https://algomaster.io/learn/dsa/bus-routes
+Graphs	Hard	Minimum Obstacle Removal to Reach Corner	minimum-obstacle-removal-to-reach-corner	algomaster	https://algomaster.io/learn/dsa/minimum-obstacle-removal-to-reach-corner
+Graphs	Hard	Shortest Path in a Grid with Obstacles Elimination	shortest-path-in-a-grid-with-obstacles-elimination	algomaster	https://algomaster.io/learn/dsa/shortest-path-in-a-grid-with-obstacles-elimination
+Graphs		Introduction	topological-sort-introduction	algomaster	https://algomaster.io/learn/dsa/topological-sort-introduction
+Graphs	Medium	Course Schedule II	course-schedule-ii	algomaster	https://algomaster.io/learn/dsa/course-schedule-ii
+Graphs	Medium	Find Eventual Safe States	find-eventual-safe-states	algomaster	https://algomaster.io/learn/dsa/find-eventual-safe-states
+Graphs	Medium	Minimum Height Trees	minimum-height-trees	algomaster	https://algomaster.io/learn/dsa/minimum-height-trees
+Graphs	Medium	Course Schedule IV	course-schedule-iv	algomaster	https://algomaster.io/learn/dsa/course-schedule-iv
+Graphs	Medium	Parallel Courses	parallel-courses	algomaster	https://algomaster.io/learn/dsa/parallel-courses
+Graphs	Medium	Find All Possible Recipes from Given Supplies	find-all-possible-recipes-from-given-supplies	algomaster	https://algomaster.io/learn/dsa/find-all-possible-recipes-from-given-supplies
+Graphs	Hard	Alien Dictionary	alien-dictionary	algomaster	https://algomaster.io/learn/dsa/alien-dictionary
+Graphs	Hard	Sort Items by Groups Respecting Dependencies	sort-items-by-groups-respecting-dependencies	algomaster	https://algomaster.io/learn/dsa/sort-items-by-groups-respecting-dependencies
+Graphs		Introduction	union-find-introduction	algomaster	https://algomaster.io/learn/dsa/union-find-introduction
+Graphs	Medium	Number of Provinces	number-of-provinces	algomaster	https://algomaster.io/learn/dsa/number-of-provinces
+Graphs	Medium	Redundant Connection	redundant-connection	algomaster	https://algomaster.io/learn/dsa/redundant-connection
+Graphs	Medium	Accounts Merge	accounts-merge	algomaster	https://algomaster.io/learn/dsa/accounts-merge
+Graphs	Medium	Number of Connected Components in an Undirected Graph	number-of-connected-components-in-an-undirected-graph	algomaster	https://algomaster.io/learn/dsa/number-of-connected-components-in-an-undirected-graph
+Graphs	Medium	Graph Valid Tree	graph-valid-tree	algomaster	https://algomaster.io/learn/dsa/graph-valid-tree
+Graphs	Medium	Evaluate Division	evaluate-division	algomaster	https://algomaster.io/learn/dsa/evaluate-division
+Graphs	Medium	Most Stones Removed with Same Row or Column	most-stones-removed-with-same-row-or-column	algomaster	https://algomaster.io/learn/dsa/most-stones-removed-with-same-row-or-column
+Graphs	Hard	Number of Islands II	number-of-islands-ii	algomaster	https://algomaster.io/learn/dsa/number-of-islands-ii
+Graphs	Hard	Minimize Malware Spread	minimize-malware-spread	algomaster	https://algomaster.io/learn/dsa/minimize-malware-spread
+Graphs	Medium	Min Cost to Connect All Points	min-cost-to-connect-all-points	algomaster	https://algomaster.io/learn/dsa/min-cost-to-connect-all-points
+Graphs	Medium	Connecting Cities With Minimum Cost	connecting-cities-with-minimum-cost	algomaster	https://algomaster.io/learn/dsa/connecting-cities-with-minimum-cost
+Graphs	Hard	Optimize Water Distribution in a Village	optimize-water-distribution-in-a-village	algomaster	https://algomaster.io/learn/dsa/optimize-water-distribution-in-a-village
+Graphs	Hard	Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree	find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree	algomaster	https://algomaster.io/learn/dsa/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree
+Graphs	Hard	Maximize Spanning Tree Stability with Upgrades	maximize-spanning-tree-stability-with-upgrades	algomaster	https://algomaster.io/learn/dsa/maximize-spanning-tree-stability-with-upgrades
+Graphs		Introduction	shortest-path-introduction	algomaster	https://algomaster.io/learn/dsa/shortest-path-introduction
+Graphs		Dijkstra's Algorithm	dijkstras-algorithm	algomaster	https://algomaster.io/learn/dsa/dijkstras-algorithm
+Graphs		Bellman-Ford Algorithm	bellman-ford-algorithm	algomaster	https://algomaster.io/learn/dsa/bellman-ford-algorithm
+Graphs		Floyd-Warshall Algorithm	floyd-warshall-algorithm	algomaster	https://algomaster.io/learn/dsa/floyd-warshall-algorithm
+Graphs	Medium	Network Delay Time	network-delay-time	algomaster	https://algomaster.io/learn/dsa/network-delay-time
+Graphs	Medium	Cheapest Flights Within K Stops	cheapest-flights-within-k-stops	algomaster	https://algomaster.io/learn/dsa/cheapest-flights-within-k-stops
+Graphs	Medium	Path with Maximum Probability	path-with-maximum-probability	algomaster	https://algomaster.io/learn/dsa/path-with-maximum-probability
+Graphs	Medium	Path With Minimum Effort	path-with-minimum-effort	algomaster	https://algomaster.io/learn/dsa/path-with-minimum-effort
+Graphs	Medium	The Maze II	the-maze-ii	algomaster	https://algomaster.io/learn/dsa/the-maze-ii
+Graphs	Medium	Minimum Cost to Convert String I	minimum-cost-to-convert-string-i	algomaster	https://algomaster.io/learn/dsa/minimum-cost-to-convert-string-i
+Graphs	Medium	Minimum Cost Path with Edge Reversals	minimum-cost-path-with-edge-reversals	algomaster	https://algomaster.io/learn/dsa/minimum-cost-path-with-edge-reversals
+Graphs	Medium	Find Minimum Time to Reach Last Room I	find-minimum-time-to-reach-last-room-i	algomaster	https://algomaster.io/learn/dsa/find-minimum-time-to-reach-last-room-i
+Graphs	Hard	Swim in Rising Water	swim-in-rising-water	algomaster	https://algomaster.io/learn/dsa/swim-in-rising-water
+Graphs	Hard	Minimum Cost to Make at Least One Valid Path in a Grid	minimum-cost-to-make-at-least-one-valid-path-in-a-grid	algomaster	https://algomaster.io/learn/dsa/minimum-cost-to-make-at-least-one-valid-path-in-a-grid
+Graphs	Hard	Minimum Weighted Subgraph With the Required Paths	minimum-weighted-subgraph-with-the-required-paths	algomaster	https://algomaster.io/learn/dsa/minimum-weighted-subgraph-with-the-required-paths
+Graphs	Hard	Reconstruct Itinerary	reconstruct-itinerary	algomaster	https://algomaster.io/learn/dsa/reconstruct-itinerary
+Graphs	Hard	Cracking the Safe	cracking-the-safe	algomaster	https://algomaster.io/learn/dsa/cracking-the-safe
+Graphs	Hard	Valid Arrangement of Pairs	valid-arrangement-of-pairs	algomaster	https://algomaster.io/learn/dsa/valid-arrangement-of-pairs
+Dynamic Programming		Introduction to Dynamic Programming	dp-introduction	algomaster	https://algomaster.io/learn/dsa/dp-introduction
+Dynamic Programming		Introduction	1d-dp-introduction	algomaster	https://algomaster.io/learn/dsa/1d-dp-introduction
+Dynamic Programming	Easy	Fibonacci Number	fibonacci-number	algomaster	https://algomaster.io/learn/dsa/fibonacci-number
+Dynamic Programming	Easy	Climbing Stairs	climbing-stairs	algomaster	https://algomaster.io/learn/dsa/climbing-stairs
+Dynamic Programming	Easy	Min Cost Climbing Stairs	min-cost-climbing-stairs	algomaster	https://algomaster.io/learn/dsa/min-cost-climbing-stairs
+Dynamic Programming	Medium	House Robber	house-robber	algomaster	https://algomaster.io/learn/dsa/house-robber
+Dynamic Programming	Medium	House Robber II	house-robber-ii	algomaster	https://algomaster.io/learn/dsa/house-robber-ii
+Dynamic Programming	Medium	Maximum Length of Pair Chain	maximum-length-of-pair-chain	algomaster	https://algomaster.io/learn/dsa/maximum-length-of-pair-chain
+Dynamic Programming	Medium	Delete and Earn	delete-and-earn	algomaster	https://algomaster.io/learn/dsa/delete-and-earn
+Dynamic Programming	Medium	Integer Break	integer-break	algomaster	https://algomaster.io/learn/dsa/integer-break
+Dynamic Programming	Medium	Greatest Sum Divisible by Three	greatest-sum-divisible-by-three	algomaster	https://algomaster.io/learn/dsa/greatest-sum-divisible-by-three
+Dynamic Programming	Hard	Number of Ways to Paint N × 3 Grid	number-of-ways-to-paint-n-3-grid	algomaster	https://algomaster.io/learn/dsa/number-of-ways-to-paint-n-3-grid
+Dynamic Programming		Introduction	01-knapsack-dp-introduction	algomaster	https://algomaster.io/learn/dsa/01-knapsack-dp-introduction
+Dynamic Programming	Medium	Partition Equal Subset Sum	partition-equal-subset-sum	algomaster	https://algomaster.io/learn/dsa/partition-equal-subset-sum
+Dynamic Programming	Medium	Target Sum	target-sum	algomaster	https://algomaster.io/learn/dsa/target-sum
+Dynamic Programming	Medium	Last Stone Weight II	last-stone-weight-ii	algomaster	https://algomaster.io/learn/dsa/last-stone-weight-ii
+Dynamic Programming	Medium	Ones and Zeroes	ones-and-zeroes	algomaster	https://algomaster.io/learn/dsa/ones-and-zeroes
+Dynamic Programming	Hard	Profitable Schemes	profitable-schemes	algomaster	https://algomaster.io/learn/dsa/profitable-schemes
+Dynamic Programming		Introduction	unbounded-knapsack-dp-introduction	algomaster	https://algomaster.io/learn/dsa/unbounded-knapsack-dp-introduction
+Dynamic Programming	Medium	Coin Change	coin-change	algomaster	https://algomaster.io/learn/dsa/coin-change
+Dynamic Programming	Medium	Coin Change II	coin-change-ii	algomaster	https://algomaster.io/learn/dsa/coin-change-ii
+Dynamic Programming	Medium	Perfect Squares	perfect-squares	algomaster	https://algomaster.io/learn/dsa/perfect-squares
+Dynamic Programming	Medium	Minimum Cost For Tickets	minimum-cost-for-tickets	algomaster	https://algomaster.io/learn/dsa/minimum-cost-for-tickets
+Dynamic Programming	Medium	Longest Increasing Subsequence	longest-increasing-subsequence	algomaster	https://algomaster.io/learn/dsa/longest-increasing-subsequence
+Dynamic Programming	Medium	Number of Longest Increasing Subsequence	number-of-longest-increasing-subsequence	algomaster	https://algomaster.io/learn/dsa/number-of-longest-increasing-subsequence
+Dynamic Programming	Medium	Longest String Chain	longest-string-chain	algomaster	https://algomaster.io/learn/dsa/longest-string-chain
+Dynamic Programming	Medium	Longest Arithmetic Subsequence	longest-arithmetic-subsequence	algomaster	https://algomaster.io/learn/dsa/longest-arithmetic-subsequence
+Dynamic Programming	Hard	Russian Doll Envelopes	russian-doll-envelopes	algomaster	https://algomaster.io/learn/dsa/russian-doll-envelopes
+Dynamic Programming		Introduction	2d-grid-dp-introduction	algomaster	https://algomaster.io/learn/dsa/2d-grid-dp-introduction
+Dynamic Programming	Easy	Pascal's Triangle	pascals-triangle	algomaster	https://algomaster.io/learn/dsa/pascals-triangle
+Dynamic Programming	Medium	Unique Paths II	unique-paths-ii	algomaster	https://algomaster.io/learn/dsa/unique-paths-ii
+Dynamic Programming	Medium	Minimum Path Sum	minimum-path-sum	algomaster	https://algomaster.io/learn/dsa/minimum-path-sum
+Dynamic Programming	Medium	Triangle	triangle	algomaster	https://algomaster.io/learn/dsa/triangle
+Dynamic Programming	Medium	Count Square Submatrices with All Ones	count-square-submatrices-with-all-ones	algomaster	https://algomaster.io/learn/dsa/count-square-submatrices-with-all-ones
+Dynamic Programming	Medium	Maximum Number of Points with Cost	maximum-number-of-points-with-cost	algomaster	https://algomaster.io/learn/dsa/maximum-number-of-points-with-cost
+Dynamic Programming	Medium	Unique Paths	unique-paths	algomaster	https://algomaster.io/learn/dsa/unique-paths
+Dynamic Programming	Medium	Maximal Square	maximal-square	algomaster	https://algomaster.io/learn/dsa/maximal-square
+Dynamic Programming	Medium	Paint House	paint-house	algomaster	https://algomaster.io/learn/dsa/paint-house
+Dynamic Programming	Medium	Minimum Falling Path Sum	minimum-falling-path-sum	algomaster	https://algomaster.io/learn/dsa/minimum-falling-path-sum
+Dynamic Programming	Hard	Burst Balloons	burst-balloons	algomaster	https://algomaster.io/learn/dsa/burst-balloons
+Dynamic Programming	Hard	Maximum Profit in Job Scheduling	maximum-profit-in-job-scheduling	algomaster	https://algomaster.io/learn/dsa/maximum-profit-in-job-scheduling
+Dynamic Programming	Hard	Cherry Pickup	cherry-pickup	algomaster	https://algomaster.io/learn/dsa/cherry-pickup
+Dynamic Programming	Hard	Longest Increasing Path in a Matrix	longest-increasing-path-in-a-matrix	algomaster	https://algomaster.io/learn/dsa/longest-increasing-path-in-a-matrix
+Dynamic Programming	Hard	Remove Boxes	remove-boxes	algomaster	https://algomaster.io/learn/dsa/remove-boxes
+Dynamic Programming	Hard	Maximal Rectangle	maximal-rectangle	algomaster	https://algomaster.io/learn/dsa/maximal-rectangle
+Dynamic Programming	Hard	Dungeon Game	dungeon-game	algomaster	https://algomaster.io/learn/dsa/dungeon-game
+Dynamic Programming	Hard	Painting a Grid With Three Different Colors	painting-a-grid-with-three-different-colors	algomaster	https://algomaster.io/learn/dsa/painting-a-grid-with-three-different-colors
+Dynamic Programming	Hard	Minimum Cost Path with Teleportations	minimum-cost-path-with-teleportations	algomaster	https://algomaster.io/learn/dsa/minimum-cost-path-with-teleportations
+Dynamic Programming	Hard	Frog Jump	frog-jump	algomaster	https://algomaster.io/learn/dsa/frog-jump
+Dynamic Programming	Hard	Optimal Account Balancing	optimal-account-balancing	algomaster	https://algomaster.io/learn/dsa/optimal-account-balancing
+Dynamic Programming	Hard	Minimum Difficulty of a Job Schedule	minimum-difficulty-of-a-job-schedule	algomaster	https://algomaster.io/learn/dsa/minimum-difficulty-of-a-job-schedule
+Dynamic Programming	Hard	Minimum Cost to Cut a Stick	minimum-cost-to-cut-a-stick	algomaster	https://algomaster.io/learn/dsa/minimum-cost-to-cut-a-stick
+Dynamic Programming		Introduction	string-dp-introduction	algomaster	https://algomaster.io/learn/dsa/string-dp-introduction
+Dynamic Programming	Medium	Longest Common Subsequence	longest-common-subsequence	algomaster	https://algomaster.io/learn/dsa/longest-common-subsequence
+Dynamic Programming	Medium	Edit Distance	edit-distance	algomaster	https://algomaster.io/learn/dsa/edit-distance
+Dynamic Programming	Medium	Longest Palindromic Subsequence	longest-palindromic-subsequence	algomaster	https://algomaster.io/learn/dsa/longest-palindromic-subsequence
+Dynamic Programming	Medium	Decode Ways	decode-ways	algomaster	https://algomaster.io/learn/dsa/decode-ways
+Dynamic Programming	Medium	Word Break	word-break	algomaster	https://algomaster.io/learn/dsa/word-break
+Dynamic Programming	Medium	Interleaving String	interleaving-string	algomaster	https://algomaster.io/learn/dsa/interleaving-string
+Dynamic Programming	Medium	Minimum Deletions to Make String Balanced	minimum-deletions-to-make-string-balanced	algomaster	https://algomaster.io/learn/dsa/minimum-deletions-to-make-string-balanced
+Dynamic Programming	Hard	Wildcard Matching	wildcard-matching	algomaster	https://algomaster.io/learn/dsa/wildcard-matching
+Dynamic Programming	Hard	Distinct Subsequences	distinct-subsequences	algomaster	https://algomaster.io/learn/dsa/distinct-subsequences
+Dynamic Programming	Hard	Palindrome Partitioning II	palindrome-partitioning-ii	algomaster	https://algomaster.io/learn/dsa/palindrome-partitioning-ii
+Dynamic Programming	Hard	Word Break II	word-break-ii	algomaster	https://algomaster.io/learn/dsa/word-break-ii
+Dynamic Programming	Hard	Regular Expression Matching	regular-expression-matching	algomaster	https://algomaster.io/learn/dsa/regular-expression-matching
+Dynamic Programming	Hard	Strange Printer	strange-printer	algomaster	https://algomaster.io/learn/dsa/strange-printer
+Dynamic Programming	Hard	Shortest Common Supersequence	shortest-common-supersequence	algomaster	https://algomaster.io/learn/dsa/shortest-common-supersequence
+Dynamic Programming		Tree/Graph DP	tree-graph-dp-introduction	algomaster	https://algomaster.io/learn/dsa/tree-graph-dp-introduction
+Dynamic Programming	Medium	House Robber III	house-robber-iii	algomaster	https://algomaster.io/learn/dsa/house-robber-iii
+Dynamic Programming	Medium	Unique Binary Search Trees II	unique-binary-search-trees-ii	algomaster	https://algomaster.io/learn/dsa/unique-binary-search-trees-ii
+Dynamic Programming	Medium	Number of Ways to Arrive at Destination	number-of-ways-to-arrive-at-destination	algomaster	https://algomaster.io/learn/dsa/number-of-ways-to-arrive-at-destination
+Dynamic Programming	Hard	Binary Tree Cameras	binary-tree-cameras	algomaster	https://algomaster.io/learn/dsa/binary-tree-cameras
+Dynamic Programming	Hard	Sum of Distances in Tree	sum-of-distances-in-tree	algomaster	https://algomaster.io/learn/dsa/sum-of-distances-in-tree
+Dynamic Programming		Bitmask DP	bitmask-dp-introduction	algomaster	https://algomaster.io/learn/dsa/bitmask-dp-introduction
+Dynamic Programming	Medium	Minimum Number of Work Sessions to Finish the Tasks	minimum-number-of-work-sessions-to-finish-the-tasks	algomaster	https://algomaster.io/learn/dsa/minimum-number-of-work-sessions-to-finish-the-tasks
+Dynamic Programming	Medium	Fair Distribution of Cookies	fair-distribution-of-cookies	algomaster	https://algomaster.io/learn/dsa/fair-distribution-of-cookies
+Dynamic Programming	Medium	Campus Bikes II	campus-bikes-ii	algomaster	https://algomaster.io/learn/dsa/campus-bikes-ii
+Dynamic Programming	Medium	Partition to K Equal Sum Subsets	partition-to-k-equal-sum-subsets	algomaster	https://algomaster.io/learn/dsa/partition-to-k-equal-sum-subsets
+Dynamic Programming	Hard	Shortest Path Visiting All Nodes	shortest-path-visiting-all-nodes	algomaster	https://algomaster.io/learn/dsa/shortest-path-visiting-all-nodes
+Dynamic Programming		Digit DP	digit-dp-introduction	algomaster	https://algomaster.io/learn/dsa/digit-dp-introduction
+Dynamic Programming	Medium	Count Numbers with Unique Digits	count-numbers-with-unique-digits	algomaster	https://algomaster.io/learn/dsa/count-numbers-with-unique-digits
+Dynamic Programming	Hard	Number of Digit One	number-of-digit-one	algomaster	https://algomaster.io/learn/dsa/number-of-digit-one
+Dynamic Programming	Hard	Numbers At Most N Given Digit Set	numbers-at-most-n-given-digit-set	algomaster	https://algomaster.io/learn/dsa/numbers-at-most-n-given-digit-set
+Dynamic Programming		Probability DP	probability-dp-introduction	algomaster	https://algomaster.io/learn/dsa/probability-dp-introduction
+Dynamic Programming	Medium	Knight Probability in Chessboard	knight-probability-in-chessboard	algomaster	https://algomaster.io/learn/dsa/knight-probability-in-chessboard
+Dynamic Programming	Medium	Soup Servings	soup-servings	algomaster	https://algomaster.io/learn/dsa/soup-servings
+Dynamic Programming	Medium	New 21 Game	new-21-game	algomaster	https://algomaster.io/learn/dsa/new-21-game
+Dynamic Programming		State Machine DP	state-machine-dp-introduction	algomaster	https://algomaster.io/learn/dsa/state-machine-dp-introduction
+Dynamic Programming	Medium	Best Time to Buy and Sell Stock with Cooldown	best-time-to-buy-and-sell-stock-with-cooldown	algomaster	https://algomaster.io/learn/dsa/best-time-to-buy-and-sell-stock-with-cooldown
+Dynamic Programming	Medium	Best Time to Buy and Sell Stock with Transaction Fee	best-time-to-buy-and-sell-stock-with-transaction-fee	algomaster	https://algomaster.io/learn/dsa/best-time-to-buy-and-sell-stock-with-transaction-fee
+Dynamic Programming	Hard	Best Time to Buy and Sell Stock III	best-time-to-buy-and-sell-stock-iii	algomaster	https://algomaster.io/learn/dsa/best-time-to-buy-and-sell-stock-iii
+Dynamic Programming	Hard	Best Time to Buy and Sell Stock IV	best-time-to-buy-and-sell-stock-iv	algomaster	https://algomaster.io/learn/dsa/best-time-to-buy-and-sell-stock-iv
+Maths / Geometry	Easy	Palindrome Number	palindrome-number	algomaster	https://algomaster.io/learn/dsa/palindrome-number
+Maths / Geometry	Easy	Plus One	plus-one	algomaster	https://algomaster.io/learn/dsa/plus-one
+Maths / Geometry	Easy	Roman to Integer	roman-to-integer	algomaster	https://algomaster.io/learn/dsa/roman-to-integer
+Maths / Geometry	Easy	Excel Sheet Column Title	excel-sheet-column-title	algomaster	https://algomaster.io/learn/dsa/excel-sheet-column-title
+Maths / Geometry	Easy	Greatest Common Divisor of Strings	greatest-common-divisor-of-strings	algomaster	https://algomaster.io/learn/dsa/greatest-common-divisor-of-strings
+Maths / Geometry	Easy	Ugly Number	ugly-number	algomaster	https://algomaster.io/learn/dsa/ugly-number
+Maths / Geometry	Medium	Ugly Number II	ugly-number-ii	algomaster	https://algomaster.io/learn/dsa/ugly-number-ii
+Maths / Geometry	Medium	Count Primes	count-primes	algomaster	https://algomaster.io/learn/dsa/count-primes
+Maths / Geometry	Medium	Count Good Numbers	count-good-numbers	algomaster	https://algomaster.io/learn/dsa/count-good-numbers
+Maths / Geometry	Medium	Reverse Integer	reverse-integer	algomaster	https://algomaster.io/learn/dsa/reverse-integer
+Maths / Geometry	Medium	Factorial Trailing Zeroes	factorial-trailing-zeroes	algomaster	https://algomaster.io/learn/dsa/factorial-trailing-zeroes
+Maths / Geometry	Medium	Multiply Strings	multiply-strings	algomaster	https://algomaster.io/learn/dsa/multiply-strings
+Maths / Geometry	Medium	Find the Duplicate Number	find-the-duplicate-number	algomaster	https://algomaster.io/learn/dsa/find-the-duplicate-number
+Maths / Geometry	Medium	Valid Square	valid-square	algomaster	https://algomaster.io/learn/dsa/valid-square
+Maths / Geometry	Medium	Minimum Area Rectangle II	minimum-area-rectangle-ii	algomaster	https://algomaster.io/learn/dsa/minimum-area-rectangle-ii
+Maths / Geometry	Medium	Valid Triangle Number	valid-triangle-number	algomaster	https://algomaster.io/learn/dsa/valid-triangle-number
+Maths / Geometry	Medium	Minimum Area Rectangle	minimum-area-rectangle	algomaster	https://algomaster.io/learn/dsa/minimum-area-rectangle
+Maths / Geometry	Hard	Max Points on a Line	max-points-on-a-line	algomaster	https://algomaster.io/learn/dsa/max-points-on-a-line
+Advanced Topics		Introduction to Pattern Matching	introduction-to-pattern-matching	algomaster	https://algomaster.io/learn/dsa/introduction-to-pattern-matching
+Advanced Topics		Brute Force Pattern Matching	brute-force-pattern-matching	algomaster	https://algomaster.io/learn/dsa/brute-force-pattern-matching
+Advanced Topics		KMP Algorithm	kmp-algorithm	algomaster	https://algomaster.io/learn/dsa/kmp-algorithm
+Advanced Topics		Rabin-Karp Algorithm	rabin-karp-algorithm	algomaster	https://algomaster.io/learn/dsa/rabin-karp-algorithm
+Advanced Topics		Z-Algorithm	z-algorithm	algomaster	https://algomaster.io/learn/dsa/z-algorithm
+Advanced Topics		Suffix Arrays	suffix-array	algomaster	https://algomaster.io/learn/dsa/suffix-array
+Advanced Topics	Easy	Repeated Substring Pattern	repeated-substring-pattern	algomaster	https://algomaster.io/learn/dsa/repeated-substring-pattern
+Advanced Topics	Medium	Repeated String Match	repeated-string-match	algomaster	https://algomaster.io/learn/dsa/repeated-string-match
+Advanced Topics	Medium	Number of Distinct Substrings in a String	number-of-distinct-substrings-in-a-string	algomaster	https://algomaster.io/learn/dsa/number-of-distinct-substrings-in-a-string
+Advanced Topics	Hard	Shortest Palindrome	shortest-palindrome	algomaster	https://algomaster.io/learn/dsa/shortest-palindrome
+Advanced Topics	Hard	Longest Happy Prefix	longest-happy-prefix	algomaster	https://algomaster.io/learn/dsa/longest-happy-prefix
+Advanced Topics	Hard	Longest Duplicate Substring	longest-duplicate-substring	algomaster	https://algomaster.io/learn/dsa/longest-duplicate-substring
+Advanced Topics		Fenwick Tree (Binary Indexed Tree)	fenwick-tree	algomaster	https://algomaster.io/learn/dsa/fenwick-tree
+Advanced Topics		Segment Tree	segment-tree	algomaster	https://algomaster.io/learn/dsa/segment-tree
+Advanced Topics		Segment Tree with Lazy Propagation	segment-tree-with-lazy-propagation	algomaster	https://algomaster.io/learn/dsa/segment-tree-with-lazy-propagation
+Advanced Topics	Medium	Range Sum Query - Mutable	range-sum-query-mutable	algomaster	https://algomaster.io/learn/dsa/range-sum-query-mutable
+Advanced Topics	Medium	Range Sum Query 2D - Mutable	range-sum-query-2d-mutable	algomaster	https://algomaster.io/learn/dsa/range-sum-query-2d-mutable
+Advanced Topics	Hard	Count of Smaller Numbers After Self	count-of-smaller-numbers-after-self	algomaster	https://algomaster.io/learn/dsa/count-of-smaller-numbers-after-self
+Advanced Topics	Hard	Falling Squares	falling-squares	algomaster	https://algomaster.io/learn/dsa/falling-squares
+Advanced Topics	Hard	Block Placement Queries	block-placement-queries	algomaster	https://algomaster.io/learn/dsa/block-placement-queries
+Advanced Topics	Hard	Longest Balanced Subarray II	longest-balanced-subarray-ii	algomaster	https://algomaster.io/learn/dsa/longest-balanced-subarray-ii
+Advanced Topics	Hard	Number of Pairs Satisfying Inequality	number-of-pairs-satisfying-inequality	algomaster	https://algomaster.io/learn/dsa/number-of-pairs-satisfying-inequality
+Advanced Topics	Hard	Minimum Interval to Include Each Query	minimum-interval-to-include-each-query	algomaster	https://algomaster.io/learn/dsa/minimum-interval-to-include-each-query
+Advanced Topics	Hard	The Skyline Problem	the-skyline-problem	algomaster	https://algomaster.io/learn/dsa/the-skyline-problem
+Advanced Topics	Hard	Rectangle Area II	rectangle-area-ii	algomaster	https://algomaster.io/learn/dsa/rectangle-area-ii
+Advanced Topics	Hard	Perfect Rectangle	perfect-rectangle	algomaster	https://algomaster.io/learn/dsa/perfect-rectangle
