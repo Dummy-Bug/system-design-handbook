@@ -176,8 +176,14 @@ When starting a new band (or when the user asks to set up a band), follow this *
   - **Subtopic granularity via LearnYard (added 2026-05-28).** Classify at LearnYard *subgroup* level (119 subgroups, `learnyard-data/subgroups.tsv`), NOT broad LC-tag level. A subtopic new to a band is a Phase-1 acquisition even if its parent main-topic was already installed (e.g. DP-on-Trees is a fresh acquisition even though Linear DP installed earlier). Use `scripts/classify_band_to_learnyard.py` (3 signals: doocs editorial tags + approach names + LC tags).
   - **Contest-pool-absent foundational patterns source from LearnYard (added 2026-05-28).** Some foundational patterns never appear as the *intended* solution in the rated zerotrac pool because contests favor greedy/DP optimizations over brute force. **Backtracking is the proven case** — a phantom across 1500/1550/1600 (every "Backtracking"-tagged contest problem solves via greedy/DP). When a foundational pattern is a phantom for 2+ consecutive bands, install it from LearnYard's curated list instead (`learnyard-data/<topic>.tsv` — these are classic, often *unrated* problems: Subsets, Permutations, Combination Sum, N-Queens, Sudoku for backtracking). Mark the acquisition "LearnYard-sourced" in the band's Phase 1. Don't keep deferring a foundational pattern band after band waiting for a contest problem that will never come.
   - **MANDATORY editorial-correctness check before locking any Group A pick (added 2026-05-28).** A topic is installable at a band ONLY if the **doocs editorial's actual solution** uses that pattern — not merely if the LC/doocs *tag* lists it. Tags are necessary, not sufficient. Fetch editorials via `scripts/fetch_doocs_editorials.py` → `editorials-data/band_<lo>_<hi>/`. Two phantom installs were caught this way at 1500-1549: "Tree DP" (pick was tree *traversal*, editorial = Recursion not DP) and "Backtracking" (both tagged problems had Greedy editorials). A phantom = passes the tag check, fails the editorial check. Always verify the editorial approach names before locking Group A.
-- **Group B — already acquired in a lower band → Phase 2 only.** Listed in the Phase 1 file for completeness, tagged with the lower-band acquisition problem (and its outcome as provenance), but **no acquisition problem to solve.** Their disguised/derivation reps and this band's 3-cold-clean ownership come entirely from Phase 2.
-  - A soft-fail/hinted acquisition in the lower band is still Group B — do NOT re-acquire. Rule 8 guarantees the lower band has *graduated* (3 cold cleans per bucket via its Phase 2) before this band opens, so Group B topics are **owned, not shaky** on arrival. The lower-band Phase-1 outcome is historical provenance only.
+- **Group B — already acquired in a lower band → Phase 2 only.** Listed in the Phase 1 file for completeness, tagged with the lower-band acquisition problem (and its outcome as provenance), but **no acquisition problem to solve.** Their disguised/derivation reps and this band's 2-clean (self-derived) ownership come entirely from Phase 2.
+  - A soft-fail/hinted acquisition in the lower band is still Group B — do NOT re-acquire. Rule 8 guarantees the lower band has *graduated* (2 clean self-derived ACs per bucket) before this band opens, so Group B topics are **owned, not shaky** on arrival. The lower-band Phase-1 outcome is historical provenance only.
+
+> **⚠ MODEL CHANGE 2026-06-03 — acquisition is FLOOR-BAND-ONLY.** The Phase-1 acquisition concept below applies
+> only to the floor band (1500-1550). In every non-floor band there is **no acquisition phase**: every clean
+> self-derived first-AC counts toward ownership (Set-A or Set-B alike), owned = **2** such ACs (CLAUDE.md rule 6A,
+> [[lc-no-vanilla-reps]]). The Step 4-5 two-phase build below still describes the OLD per-band model and should be
+> reworked at the next non-floor band setup (single disguised pool, no separate easiest-per-topic Phase-1 set).
 
 - Save to `<band>/Phase-1-Acquisition.md` with both groups and a tracker table for Group A only (topic column is SPOILER — for logging only).
 - **Deal Phase 1 (Group A) blind** — same protocol as Phase 2. The user says "next" or "give me a problem", Claude hands ONE bare LC link with NO topic label, NO AR, NO hint. Topic is revealed ONLY after the user finishes (AC or stuck), for the debrief. Phase 1 problems are shuffled before serving so order doesn't leak topic.
@@ -195,15 +201,15 @@ When starting a new band (or when the user asks to set up a band), follow this *
 - Do NOT pull problems from adjacent bands to fill shortfalls. The band is self-sufficient; shortfalls stay uncapped and complete later when working the adjacent band naturally.
 
 ### Step 7 — Handle non-clean solves (dynamic queue growth)
-- When a Phase 2 problem is solved but not clean (WA / hinted / editorial), it does NOT count toward the topic's 3 cold cleans.
+- When a problem is solved but not clean (WA / hinted / editorial), it does NOT count toward the topic's 2 clean self-derived ACs.
 - Generate a **replacement problem** from the same topic in the same band (if supply exists), append it to the sealed queue.
 - If no more problems exist in-band for that topic, the topic stays at its current clean count — cross-band later.
 
 ### Step 8 — Ownership tracker
 - Each band's `00-Band-Topic-Map.md` has an ownership tracker table: `Topic | Cold cleans | Status (◯/◐/●) | Need`.
 - After each solve, update the tracker: bump the bucket(s) the problem hit.
-- A problem that's disguised/combined (reps 2-3) bumps **every** bucket it touches (amortization).
-- Band graduates when all core buckets hit `●` (3 cold cleans each).
+- A problem that's disguised/combined bumps **every** bucket it touches (amortization).
+- Band graduates when all core buckets hit `●` (2 clean self-derived ACs each).
 
 ### File layout per band (the standard)
 ```

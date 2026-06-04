@@ -204,7 +204,7 @@ any one problem is disposable.
 
 **Why NON-STANDARD (read before treating it like a normal bucket):**
 - **No shared mechanism.** Owning 3 invariant problems does NOT make the 4th easier the way 3
-  monotonic-stack problems do — each reframe is a fresh insight. So the "3 cold cleans = owned" gate
+  monotonic-stack problems do — each reframe is a fresh insight. So the "2 clean self-derived ACs = owned" gate
   does **not** apply and this bucket **never blocks band graduation** (rule 6).
 - **It's a deck, not a count.** Grow & review: every insight-gated problem gets logged with *the trap*
   and *the reframe* in ≤2 lines. Reviewed for the move, not graduated.
@@ -257,6 +257,6 @@ LearnYard splits DP into Level 1 / Level 2; AlgoMaster names 20 recurrence shape
 
 - **AlgoMaster-only (union, not in LearnYard):** Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals, State Machine DP, DP on Graphs, Catalan Numbers (as a named pattern).
 - **LearnYard-only (union, not an AlgoMaster pattern):** Greedy, Hashing, Sorting, Bit Manipulation, Game Theory, Combinatorics & Geometry, String Matching, Tries, Segment Tree/BIT, and most of the Graph/Binary-Search sub-algorithms (Dijkstra, Bellman-Ford, MST, TSP, etc.).
-- **Blind-spot patterns (rule 6B — each needs 3 cold cleans):** Monotonic Stack, DP on Trees, Disjoint Set Union. Also watch: Binary Search On Answer, Tries.
+- **Blind-spot patterns (rule 6B — each needs 2 clean self-derived ACs):** Monotonic Stack, DP on Trees, Disjoint Set Union. Also watch: Binary Search On Answer, Tries.
 - **Substrate (not derivation buckets):** Hashing/Implementary, Sorting/Implementary, Simulation, plain Array iteration — appear as LearnYard buckets but don't count as ownership targets.
-- **Non-standard cross-cutting axis:** `Invariant/Reframe` — tracked as a bucket (so revision sweeps it) but with no 3-clean gate and never blocks graduation. Tagged alongside a problem's real mechanism bucket.
+- **Non-standard cross-cutting axis:** `Invariant/Reframe` — tracked as a bucket (so revision sweeps it) but with no clean-rep gate and never blocks graduation. Tagged alongside a problem's real mechanism bucket.

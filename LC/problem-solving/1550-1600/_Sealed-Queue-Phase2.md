@@ -11,33 +11,59 @@
 
 ## DEAL LIST (blind — links only)
 
+> **TRIMMED 2026-06-03:** dropped problems whose mechanic is an already-OWNED bucket (Greedy, Prefix-Sum,
+> Sliding Window, Graph, Math/NT-Combinatorics) and that serve no open bucket — owned-topic reps are wasted.
+> Dropped: #11, #16, #22, #24, #27 (marked ✂ below). **Undealt remaining: 14** (#9,10,12,13,14,15,17,18,19,20,21,23,25,26).
+> **Borderline kept (your call):** #15 maximize-#-subsequences & #25 ways-to-split-string — mechanic is owned
+> (Greedy / Combinatorics) BUT both are `Invariant/Reframe` STRONG members, so they're reframe-muscle reps, not
+> bucket reps. Kept for derivation value; say the word to drop them too for a maximal trim.
+
+### ▶ ACTIVE DEAL ORDER (re-shuffled 2026-06-03 — deal top-down, blind; position is NOT a tell)
+1. https://leetcode.com/problems/score-of-parentheses/
+2. https://leetcode.com/problems/number-of-ways-to-split-a-string/
+3. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
+4. https://leetcode.com/problems/k-th-symbol-in-grammar/
+5. https://leetcode.com/problems/time-based-key-value-store/
+6. https://leetcode.com/problems/maximize-greatness-of-an-array/
+7. https://leetcode.com/problems/encode-number/
+8. https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/
+9. https://leetcode.com/problems/maximize-number-of-subsequences-in-a-string/
+10. https://leetcode.com/problems/properties-graph/
+11. https://leetcode.com/problems/iterator-for-combination/
+12. https://leetcode.com/problems/search-suggestions-system/
+13. https://leetcode.com/problems/before-and-after-puzzle/
+14. https://leetcode.com/problems/max-chunks-to-make-sorted/
+
+_(The numbered 1-27 list below is retained ONLY for the spoiler answer-key cross-reference — deal from the
+ACTIVE order above, not from it.)_
+
 1. ~~https://leetcode.com/problems/ways-to-split-array-into-good-subarrays/~~ ✅ dealt 2026-06-01 (soft fail) → `First-Attempt/28`
 2. ~~https://leetcode.com/problems/find-original-array-from-doubled-array/~~ ✅ dealt 2026-06-01 (clean first-AC, over-cap → derivation clause) → `First-Attempt/29`
 3. ~~https://leetcode.com/problems/count-collisions-on-a-road/~~ ❌ dealt 2026-06-01 (3 WA → editorial, **hard fail**) → `First-Attempt/30`
 4. ~~https://leetcode.com/problems/count-paths-with-the-given-xor-value/~~ ✅ dealt 2026-06-01 (clean first-AC, 46m over-cap → derivation clause) → `First-Attempt/31`
 5. ~~https://leetcode.com/problems/sentence-similarity-iii/~~ ❌→✓ dealt 2026-06-01, AC 2026-06-02 (multi-WA → **soft fail**, over-modeled) → `First-Attempt/32`
 6. ~~https://leetcode.com/problems/number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers/~~ ✅ dealt+AC 2026-06-02 (clean first-AC, **22m SUB-CAP**; counts) → `First-Attempt/33`
-7. https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
-8. https://leetcode.com/problems/count-the-number-of-incremovable-subarrays-i/
+7. ~~https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/~~ ✅ dealt+AC 2026-06-02 (clean first-AC, 34m over-cap → derivation clause; counts). **First clean DP » LIS-variant rep.** → `First-Attempt/34`
+8. ~~https://leetcode.com/problems/count-the-number-of-incremovable-subarrays-i/~~ ◐ dealt 2026-06-02, brute AC same day (trivial, no credit); O(n) two-pointer hard-stuck 120m → **slept → clean 26m cold AC 2026-06-03**. SOFT-HINTED (only a "frame-confirmed, one insight left" signal — user didn't read the skeleton/bug) → Two-Pointers **acquisition, not a clean rep**. Consolidation case study. → `First-Attempt/35`
 9. https://leetcode.com/problems/max-chunks-to-make-sorted/
 10. https://leetcode.com/problems/before-and-after-puzzle/
-11. https://leetcode.com/problems/count-number-of-trapezoids-i/
+11. ~~https://leetcode.com/problems/count-number-of-trapezoids-i/~~ ✂ **DROPPED 2026-06-03 — owned topic** (Combinatorics + Prefix-Sum, both ●). Hashing only incidental.
 12. https://leetcode.com/problems/iterator-for-combination/
 13. https://leetcode.com/problems/encode-number/
 14. https://leetcode.com/problems/score-of-parentheses/
 15. https://leetcode.com/problems/maximize-number-of-subsequences-in-a-string/
-16. https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-i/
+16. ~~https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-i/~~ ✂ **DROPPED 2026-06-03 — owned topic** (Sliding Window ●).
 17. https://leetcode.com/problems/k-th-symbol-in-grammar/
 18. https://leetcode.com/problems/time-based-key-value-store/
 19. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
 20. https://leetcode.com/problems/properties-graph/
 21. https://leetcode.com/problems/maximize-greatness-of-an-array/
-22. https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
+22. ~~https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/~~ ✂ **DROPPED 2026-06-03 — owned topic** (Greedy ●). Hashing only incidental.
 23. https://leetcode.com/problems/search-suggestions-system/
-24. https://leetcode.com/problems/corporate-flight-bookings/
+24. ~~https://leetcode.com/problems/corporate-flight-bookings/~~ ✂ **DROPPED 2026-06-03 — owned topic** (Prefix-Sum/Diff-Array ●; SegTree/BIT is outlier-class).
 25. https://leetcode.com/problems/number-of-ways-to-split-a-string/
 26. https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/
-27. https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/
+27. ~~https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/~~ ✂ **DROPPED 2026-06-03 — owned topic** (Sliding Window ●).
 
 > Reshuffled 2026-06-01 (undealt set + 3 new `Invariant/Reframe` members folded in, genuine perl shuffle — position is NOT a tell).
 
@@ -58,6 +84,7 @@ Mark progress: deal top-down; log each in `First-Attempt/` and tick it here afte
 | 2026-06-01 | count-paths-with-the-given-xor-value | ✅ **clean first-AC** (46m, over cap → derivation clause; counts). **First clean DP » Grid rep.** | `First-Attempt/31` |
 | 2026-06-02 | sentence-similarity-iii | ❌→✓ multi-WA → **soft fail** (~2h/2 days; over-modeled with map+deque vs prefix/suffix two-pointer; does NOT count) | `First-Attempt/32` |
 | 2026-06-02 | number-of-ways-square-equal-product | ✅ **clean first-AC, 22m SUB-CAP** (count-map not index-map → over-model reflex self-corrected; counts) | `First-Attempt/33` |
+| 2026-06-02 | longest-arith-subseq-of-given-difference | ✅ **clean first-AC, 34m over-cap** (fixed-diff ⇒ unique predecessor ⇒ O(n) hash-DP, not classic LIS; counts) | `First-Attempt/34` |
 
 ---
 
@@ -160,7 +187,7 @@ Mark progress: deal top-down; log each in `First-Attempt/` and tick it here afte
 **Reps this gives the bucket:** 6 STRONG members are live in the blind queue (4 already there + 2 newly
 folded in) → they'll surface as genuine `Invariant/Reframe` reps when dealt cold. 4 STRONG already solved
 (#03, #23, #28, #30) are retroactive deck members. 3 lighter band problems held in reserve (unqueued) if
-more reps wanted later. Remember: **no 3-clean gate — grow & review, never blocks graduation.**
+more reps wanted later. Remember: **no clean-rep gate — grow & review, never blocks graduation.**
 
 ### Trickiness tiers (editorial cross-check — AR alone misleads)
 

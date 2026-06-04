@@ -48,7 +48,7 @@ Editorials for all 83 are downloaded at `editorials-data/band_1550_1599/`.
 | Advanced | Segment Tree / BIT | 1 |
 | Stack | Monotonic Stack | 1 |
 
-**Scarcity warning (matters for getting 3 cold cleans in-band):** Monotonic Stack (1), Trie (1), Segment Tree/BIT (1), DSU (2). Blind-spot patterns are thin here — some ownership reps will have to come cross-band.
+**Scarcity warning (matters for getting 2 clean self-derived ACs in-band):** Monotonic Stack (1), Trie (1), Segment Tree/BIT (1), DSU (2). Blind-spot patterns are thin here — some ownership reps will have to come cross-band.
 
 ### AlgoMaster patterns absent from this band
 Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — not present at 1550–1600. The band's biggest buckets (Greedy, Hashing, Sorting) aren't in AlgoMaster's 15 at all, which is why LearnYard is the spine.
@@ -87,46 +87,54 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 | 07 | XOR After Range Mult Queries I | direct simulation | Simulation (substrate) | `Simulation` | ✅ |
 | 30 | Count Collisions on a Road | count cars that stop (n − leadL − trailR) | Stack + **Invariant/Reframe** ✦ | `Stack` `Invariant/Reframe` `Brainteaser` | ❌ editorial (2 WA) |
 | 31 | Count Paths With Given XOR Value | top-down memo `dp[i][j][x]`, XOR as bounded dim | DP » Grid (XOR-state) | `DP` `Grid-DP` `Bit` `Matrix` | ✅ (over-cap, derivation clause) |
+| 34 | Longest Arith Subseq of Given Difference | value-keyed `dp[v]=dp[v−d]+1`, fixed-diff ⇒ unique predecessor | DP » LIS-variant | `DP` `LIS-variant` `Hashing-as-DP-table` | ✅ (over-cap, derivation clause) |
 | 32 | Sentence Similarity III | prefix+suffix two-pointer (shorter = prefix∪suffix of longer) — but OUR code over-modeled w/ map+deque | Two Pointers (string) | `Two-Pointers` `String` | ❌→✓ soft fail (multi-WA, over-modeled) |
 | 33 | Number of Ways Square = Product | frequency map of pairwise products, look up squares (count not positions) | Hashing (counting) | `Hashing` `Counting` `Invariant/Reframe` | ✅ clean first-AC (22m SUB-CAP) |
+| 35 | Count Incremovable Subarrays I | prefix/suffix increasing decomp + two-pointer merge-count; middle descent forced into every removal | Two Pointers (array) + Invariant/Reframe ✦ | `Two-Pointers` `Prefix-Suffix` `Invariant/Reframe` | ◐ assisted acq. (skeleton+bug given) — installs, doesn't count. Consolidation win (120m→sleep→26m) |
 
 ---
 
-## Ownership tracker (rule 6: owned = 3 cold first-submission cleans, distinct problems, reps 2–3 disguised)
+## Ownership tracker (rule 6: owned = **2 clean self-derived first-submission ACs** on distinct problems — Set-A or Set-B both count, no acquisition phase in this band)
 
-| Bucket | Clean reps | Reps logged | Status |
+> **RE-AUDITED 2026-06-03 under the final 2-rule.** Owned = **2 clean self-derived first-AC** on distinct problems
+> (clean = first-sub AC no WA; self-derived = no hint/editorial). **No acquisition phase here** — every clean
+> self-derived solve counts, announced (Set-A) or disguised (Set-B). Excluded only: hinted / WA-then-AC / editorial.
+> No spacing requirement (retention = the rule-5 revision lock). **Net: 5 buckets OWNED ●; 7 at 1-of-2; rest at 0.**
+
+| Bucket | Clean self-derived ACs | Non-counting | Status |
 |---|---|---|---|
-| Greedy | **5** (01,02,05,20,29) | 6 | ◐ near-owned — count met; 29 (doubled-array) = disguised Set-B clean (over-cap, derivation clause). Verify reps 2–3 spacing, then ●. 06 was hinted (doesn't count). |
-| Prefix Sum / Diff-Array | **3** (08,17,18) | 3 | ◐ count met — confirm spacing + disguise on rep 3 to call it ●. |
-| Math / NT / Combinatorics | 2 (04,23) | 3 | ◐ 11 was WA. One more clean. (#33 hash-AC does NOT count — no NT. #33 NT-divisor variant = **hard fail**, fully guided acquisition of sieve/factorization/divisor-enumeration; does NOT count, same problem so no distinct rep.) |
-| Sliding Window | 2 (10,14) | 2 | ◐ one more clean. |
-| Two Pointers (string/array) | 0 | 1 | ○ 32 sentence-similarity-iii = WA-then-AC **soft fail** (over-modeled the prefix+suffix two-pointer). Owe 3 clean. |
-| Graph traversal (DFS/BFS) | 2 (09,16) | 2 | ◐ one more clean. |
-| **DP » Interval/Minimax** | 1 (13) | 1 | ○ Stone Game. Interval scarce in band → 2 more cross-band. |
-| **DP » Linear / Count-ways** | 0 | 0 | ○ in queue: ways-to-split-good-subarrays (disguised). |
-| **DP » LIS-variant** | 0 | 0 | ○ in queue: longest-arith-subseq-of-given-difference. |
-| **DP » Grid** | 1 (31) | 1 | ◐ first clean rep — 31 count-paths-with-xor (disguised XOR-state, over-cap derivation clause). 2 more to own. |
-| **DP » String** | 0 | 0 | ○ band-present (longest-string-chain, rope-colorful) but unqueued. |
-| Monotonic Stack ★ | 1 (22) | 1 | ○ blind-spot first clean. Band supplies only 1 more — rest cross-band. |
-| Backtracking / Subset-Enum | 1 (19) | 1 | ○ |
-| Game Theory (parity) | 1 (03) | 1 | ○ |
-| Heap | 0 | 1 | ○ 21 was WA-then-AC (soft fail). Owe a clean rep. |
-| Binary Search | 0 | 1 | ○ 24 was WA-then-AC. Plain-BS rep still owed (also carried from 1500-1550). |
-| Tree | 0 | 1 | ○ 15 hinted + it's D&C construction, **not tree-DP**. |
-| Hashing (canonical/counting) | 1 (33) | 2 | ◐ 33 (product frequency-map) = first clean rep, sub-cap. 12 was hinted (doesn't count). 2 more. |
-| Simulation | (substrate — not an ownership target) | 1 | — |
-| ✦ **Invariant / Reframe** (NON-STANDARD) | n/a — no 3-clean gate | deck: 8 solved | ✦ **Grow & review deck, not an ownership target — NEVER blocks graduation.** Cross-cutting axis (tagged alongside the real bucket). Solved deck members (83-editorial audit 2026-06-01): STRONG = 03 (final-element=max-of-ends), 23 (flower-game parity), 28 (ways-to-split gap-product), 30 (count-collisions); LIGHTER = 02, 04, 17, 25. 6 more STRONG live in the blind queue (full list in `_Sealed-Queue-Phase2.md` answer key). Surfaced here so revision auto-sweeps it. See `patterns/master-taxonomy.md` → Invariant/Reframe. |
+| Greedy | **2+** (01,02,05,20,29) | 06 hinted | ● **OWNED** |
+| Prefix Sum / Diff-Array | **3** (08,17,18) | — | ● **OWNED** |
+| Sliding Window | **4** (10,14,25,26) | — | ● **OWNED** |
+| Graph traversal (DFS/BFS) | **2** (09,16) | — | ● **OWNED** |
+| Math / NT / Combinatorics | **2** (04,23) | 11 WA; 33-NT hard-fail | ● **OWNED** _(04: AC self-derived; a deeper bound was taught post-hoc — the solve itself was clean, so it counts)_ |
+| **DP » LIS-variant** | 1 (34) | — | ◐ **1 of 2** — 34 longest-arith-subseq. Owe 1. |
+| **DP » Grid** | 1 (31) | — | ◐ **1 of 2** — 31 count-paths-with-xor. Owe 1. |
+| Hashing (canonical/counting) | 1 (33) | 12 hinted | ◐ **1 of 2** — 33 product frequency-map. Owe 1. |
+| Backtracking / Subset-Enum | 1 (19) | — | ◐ **1 of 2** — 19 count-max-OR-subsets. Owe 1. |
+| Game Theory (parity) | 1 (03) | — | ◐ **1 of 2** — 03 final-element. Owe 1 (parity scarce in band). |
+| **DP » Interval/Minimax** | 1 (13) | — | ◐ **1 of 2** — 13 stone-game. Owe 1 (interval scarce → likely cross-band). |
+| Monotonic Stack ★ | 1 (22) | 30 hard-fail | ◐ **1 of 2** — blind-spot, 22 next-greater-node. Owe 1, cross-band. |
+| **DP » Linear / Count-ways** | 0 | 28 soft fail | ○ owe 2. ways-to-split already attempted (soft fail). |
+| **DP » String** | 0 | — | ○ owe 2 (band-present but unqueued). |
+| Two Pointers (string/array) | 0 | 32 soft fail; 35 soft-hinted | ○ owe 2. 35 installed prefix/suffix merge-count but soft-hinted (doesn't count). Next cold two-pointer = the test. |
+| Heap | 0 | 21 soft fail | ○ owe 2. |
+| Binary Search | 0 | 24 soft fail | ○ owe 2 + plain-BS carried from 1500-1550. |
+| Tree | 0 | 15 hinted (D&C, not tree-DP) | ○ **blind-spot (tree-DP)** — owe 2. |
+| Union-Find / DSU | 0 | — | ○ **blind-spot** — owe 2. Band supplies #19/#20 (earliest-moment-friends, properties-graph), neither attempted. |
+| Simulation | (substrate — not an ownership target) | — | — |
+| ✦ **Invariant / Reframe** (NON-STANDARD) | n/a — no clean-rep gate | deck: 8 solved | ✦ **Grow & review deck, not an ownership target — NEVER blocks graduation.** Cross-cutting axis. Solved members (83-editorial audit 2026-06-01): STRONG = 03, 23, 28, 30; LIGHTER = 02, 04, 17, 25. 6 more STRONG in the blind queue. See `patterns/master-taxonomy.md` → Invariant/Reframe. |
 
 > **DP is tracked by sub-pattern, never as one bucket** (master taxonomy = 20 DP sub-patterns; see `patterns/master-taxonomy.md`).
-> A Linear-DP rep does NOT cover Grid-DP, LIS, Interval, etc. — each owns separately, 3 cold cleans each.
+> A Linear-DP rep does NOT cover Grid-DP, LIS, Interval, etc. — each owns separately, 2 cold disguised cleans each.
 > At 1550–1600 only ~5 DP sub-patterns appear (Interval, Linear/Count-ways, LIS-variant, Grid, String).
 > The deep ones — **Knapsack, LCS, Edit Distance, Bitmask, Digit, Tree-DP ★, Probability, State-Machine** — are
 > absent at this level and roll to higher bands. So "owning DP here" only means owning those ~5 shallow sub-patterns.
 
-### Blind-spot trio status (rule 6B, cross-band, each needs 3 cold cleans)
-- **Monotonic Stack** — 1 clean (#22). 2 to go.
+### Blind-spot trio status (rule 6B, cross-band, each needs **2** clean self-derived ACs)
+- **Monotonic Stack** — **1 clean (#22 next-greater-node).** 1 to go. (#30 was a hard-fail.)
 - **Tree DP** — **0 clean.** #15 looked like a candidate but is divide-and-conquer *construction*, not tree-DP. Still completely open.
-- **Union-Find / DSU** — **0 clean.** Band supplies 2 DSU problems, neither attempted yet.
+- **Union-Find / DSU** — **0 clean.** Band supplies 2 DSU problems (#19 earliest-moment-friends, #20 properties-graph), neither attempted yet.
 
 ---
 
@@ -137,4 +145,4 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 3. **#23 Alice & Bob Flower Game** — logged "game theory", but our code is pure combinatorial counting of odd-sum pairs. Game theory only in the parity reduction; no game-tree → **Math**.
 4. **#19 Count Max-OR Subsets** — logged "bit ops", but the mechanic is recursive subset enumeration → **Backtracking**. Bit-OR is just the domain.
 
-**Net effect on ownership:** genuine DP reps = 1 (not 2), tree-DP = 0, and Greedy/Prefix-Sum are the only buckets with the count for ownership (pending disguise/cold verification on reps 2–3).
+**Net effect on ownership (post 2026-06-03 re-audit, final 2-clean rule):** **5 buckets OWNED ●** — Greedy, Prefix-Sum, Sliding Window, Graph, Math/NT. **7 at 1-of-2** — DP-LIS(34), DP-Grid(31), Hashing(33), Backtracking(19), Game-Theory(03), DP-Interval(13), Monotonic-Stack(22). **0-of-2** — DP-Linear, DP-String, Two-Pointers, Heap, Binary-Search, Tree, Union-Find. No acquisition phase in this band: every clean self-derived solve counts (Set-A or Set-B), so the old Phase-1 solves are full reps.

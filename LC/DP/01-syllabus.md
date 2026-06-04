@@ -32,4 +32,4 @@ So 0/1 knapsack is the load-bearing lesson. Once owned, unbounded is a ~2-minute
 
 ## Blind-spot tie-in (rule 6B)
 
-- **#9 DP on Trees** is one of the three mandated blind-spot patterns (needs 3 cold cleans). Treat it as a priority once #0–#8 are solid.
+- **#9 DP on Trees** is one of the three mandated blind-spot patterns (needs 2 clean self-derived ACs). Treat it as a priority once #0–#8 are solid.
