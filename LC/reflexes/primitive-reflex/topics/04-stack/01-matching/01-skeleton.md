@@ -1,6 +1,8 @@
-# Stack Atom 01 — Matching / balancing
+*2026-06-03*
 
-The "why a stack" foundation. *Derived Socratically 2026-06-03 (Valid Parentheses).*
+## The problem (Valid Parentheses, LC 20)
+
+Given a string of brackets `()[]{}`, decide if it's valid: every closing bracket matches the most-recent unclosed opening bracket of the same type, and nothing is left open. `"([])"` valid, `"([)]"` invalid.
 
 ## ① Trigger
 
@@ -41,9 +43,8 @@ return st.isEmpty();
 
 | Confused with | Discriminator |
 |---|---|
-| plain counter | counter works for one type / balance only; stack needed when *type + order* (nesting) matters |
-| adjacent-collapse (#2) | matching only **pairs/validates**; collapse **resolves an interaction** and survivors are the answer |
-| fold-up (#4) | matching pairs with no value; fold-up **combines a computed value** up the nesting |
+| single counter | tracks balance for one bracket type; loses which type is innermost, so `([)]` slips through |
+| per-type counters (multiset) | counts each type but discards order → still passes `([)]`; only a stack records nesting order |
 
 ## ⑥ Reflex check
 

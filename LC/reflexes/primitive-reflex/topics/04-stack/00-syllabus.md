@@ -24,14 +24,16 @@ Goal: with all 7 installed, a stack problem can only fail on **mapping**, never 
 | # | Atom | Folder | Status |
 |---|---|---|---|
 | 1 | Matching / balancing | `01-matching/` | ✓ covered (validity + count facets) |
-| 2 | Adjacent-collapse / resolve-against-top | `02-adjacent-collapse/` | not started |
+| 2 | Adjacent-collapse / resolve-against-top | `02-adjacent-collapse/` | ✓ covered (announced + disguised, both perturbed) |
 | 3 | Expression evaluation | `03-expression-eval/` | not started |
 | 4 | Nested-structure fold-up | `04-fold-up-nested/` | not started |
 | 5 | Monotonic stack ★ | `05-monotonic/` | not started |
 | 6 | Min/max auxiliary stack | `06-minmax-stack/` | not started |
 | 7 | Two-stack amortized | `07-two-stack/` | not started |
 
-Per atom: derive Socratically → solve announced (produce code cold) → solve disguised (install recognition) → perturbation debrief → tick.
+Per atom: derive Socratically → solve announced (produce code cold) → solve disguised (install recognition) → perturbation debrief → write files → tick.
+
+Each atom folder: `01-skeleton.md` · `02-notes.md` · `03-log.md` · `04-blind-deal.md` (DEALER-ONLY reserved-problem bank for the Phase-2 cold exam).
 
 ---
 
@@ -46,7 +48,7 @@ Cross-checked vs `learnyard-data/stack.tsv` (57) + `algomaster-data/stacks.tsv` 
 | Atom | Announced | Disguised / applied |
 |---|---|---|
 | 1 matching | [x] Valid Parentheses (20) | [x] Minimum Remove to Make Valid Parentheses (1249) |
-| 2 collapse | [ ] Remove All Adjacent Duplicates (1047) | [ ] Asteroid Collision (735) |
+| 2 collapse | [x] Remove All Adjacent Duplicates (1047) | [x] Asteroid Collision (735) |
 | 3 expr-eval | [ ] Evaluate RPN (150) | [ ] Basic Calculator II (227) |
 | 4 fold-up | [ ] Decode String (394) | [ ] Basic Calculator (224, parens) |
 | 5 monotonic ★ | [ ] Daily Temperatures (739) | [ ] Sum of Subarray Minimums (907) · [ ] Largest Rectangle in Histogram (84) |
