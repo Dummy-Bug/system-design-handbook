@@ -29,11 +29,11 @@ Goal: with all 8 installed, a stack problem can only fail on **mapping**, never 
 | 1 | Matching / balancing | `01-matching/` | ✓ covered (validity + count facets) |
 | 2 | Adjacent-collapse / resolve-against-top | `02-adjacent-collapse/` | ✓ covered (announced + disguised, both perturbed) |
 | 3 | Expression — operand stack | `03-expression-operand/` | ✓ covered (announced + disguised, both perturbed) |
-| 4 | Expression — operator-precedence (shunting-yard) | `04-expression-operator/` | not started |
-| 5 | Nested-structure fold-up | `05-fold-up-nested/` | not started |
-| 6 | Monotonic stack ★ | `06-monotonic/` | not started |
-| 7 | Min/max auxiliary stack | `07-minmax-stack/` | not started |
-| 8 | Two-stack amortized | `08-two-stack/` | not started |
+| 4 | Expression — operator-precedence (shunting-yard) | `04-expression-operator/` | approach self-derived; both reps guided (associativity + single-pass taught) — cold rep owed |
+| 5 | Nested-structure fold-up | `05-fold-up-nested/` | ✓ both reps done (394 + 224), guided — cold rep owed |
+| 6 | Monotonic stack ★ | `06-monotonic/` | announced (739) = CLEAN self-derived AC = ownership 1 of 2 (blind-spot); 84 recalled (reframe confirmed, doesn't count); rep 2 deferred to zerotrac |
+| 7 | Min/max auxiliary stack | `07-minmax-stack/` | ✓ core installed via Min Stack (155, recalled); 895 deferred (design). Boundary harvest: lockstep cache breaks on non-top pop |
+| 8 | Two-stack amortized | `08-two-stack/` | ⏸ **DEFERRED** — design/implementation problem (Queue-from-Stacks), interview-only, ~zero contest-rating value. Pick up live if needed |
 
 Per atom: derive Socratically → solve announced (produce code cold) → solve disguised (install recognition) → perturbation debrief → write files → tick.
 
@@ -49,15 +49,15 @@ Cross-checked vs `learnyard-data/stack.tsv` (57) + `algomaster-data/stacks.tsv` 
 
 ## Practice plan — minimal non-redundant reps (announced + disguised)
 
-| Atom | Announced | Disguised / applied |
-|---|---|---|
-| 1 matching | [x] Valid Parentheses (20) | [x] Minimum Remove to Make Valid (1249) |
-| 2 collapse | [x] Remove All Adjacent Duplicates (1047) | [x] Asteroid Collision (735) |
-| 3 operand stack | [x] Evaluate RPN (150) — number payload | [x] Postfix→Infix (GfG) — string payload (same move) |
-| 4 operator-precedence | [ ] Infix→Postfix / shunting-yard (GfG) | [ ] Basic Calculator II (227) — synthesis |
-| 5 fold-up | [ ] Decode String (394) | [ ] Basic Calculator I (224, parens) |
-| 6 monotonic ★ | [ ] Daily Temperatures (739) | [ ] Largest Rectangle in Histogram (84) |
-| 7 min/max | [ ] Min Stack (155) | [ ] Maximum Frequency Stack (895) |
-| 8 two-stack | [ ] Queue using Stacks (232) | [ ] Stack using Queues (225) |
+| Atom                  | Announced                                              | Disguised / applied                                             |
+| --------------------- | ------------------------------------------------------ | --------------------------------------------------------------- |
+| 1 matching            | [x] Valid Parentheses (20)                             | [x] Minimum Remove to Make Valid (1249)                         |
+| 2 collapse            | [x] Remove All Adjacent Duplicates (1047)              | [x] Asteroid Collision (735)                                    |
+| 3 operand stack       | [x] Evaluate RPN (150) — number payload                | [x] Postfix→Infix (GfG) — string payload (same move)            |
+| 4 operator-precedence | [☑] Infix→Postfix (GfG) — code-assisted, cold rep owed | [☑] Basic Calculator II (227) — guided synthesis, cold rep owed |
+| 5 fold-up             | [☑] Decode String (394) — hint-assisted, code self-written, cold rep owed | [☑] Basic Calculator I (224) — term-stack self-derived → reduced to canonical fold, guided, cold rep owed |
+| 6 monotonic ★         | [✅] Daily Temperatures (739) — CLEAN self-derived AC (ownership 1/2) | [◐] Largest Rectangle (84) — recalled, reframe confirmed, doesn't count; rep 2 → zerotrac |
+| 7 min/max             | [◐] Min Stack (155) — recalled, both forms reproduced  | [⏸] Maximum Frequency Stack (895) — deferred (design)           |
+| 8 two-stack           | [⏸] Queue using Stacks (232) — DEFERRED (interview-only) | [⏸] Stack using Queues (225) — DEFERRED                        |
 
 > Skipped as redundant (mirror/duplicate moves, no retention gain): all Prefix-source conversions, Eval Prefix, Postfix→Prefix, Prefix→Postfix. One "prefix = reverse-scan postfix" note covers them.
