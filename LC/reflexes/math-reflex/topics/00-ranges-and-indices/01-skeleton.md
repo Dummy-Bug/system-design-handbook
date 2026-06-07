@@ -103,16 +103,43 @@ the wrap — not the choice of algorithm (that's `patterns/`).
 
 ---
 
+## f. Ceiling / block-count division [1100]
+
+**Depends on:** Integer count in a range [1100] · sibling of *Multiples of d* (b, floor-division).
+
+The Biweekly-184 leak: re-derived `ceil(brightness/3)` with a `while`-loop because no card existed to fire. A 5-second fact that cost minutes.
+
+**Cards (2):**
+- f.1 — min count of size-`k` chunks to cover `T` = `ceil(T/k) = (T + k − 1)/k` —
+  **integer-only**; never `(int)Math.ceil(T/(double)k)` (float-precision trap near 10⁹,
+  the one you sidestepped in 184 only by casting to `double`)
+- f.2 — floor companion / division identity: full size-`k` chunks in `T` = `T/k`,
+  leftover = `T % k`, and `T = (T/k)·k + T%k` ties ceil & floor together
+
+**LC anchor:** *Biweekly 184 Q2* — min-energy bulbs (`ceil(brightness/3)`); secondary
+sightings 1965 / 2012 / 2060.
+
+**Cross-ref:** Parity `oddCount(k) = (k+1)/2` is the `k=2` special case of f.1.
+
+> **Promote-if-surfaced (emergent-only):** the promotion target
+> `topics/17-integer-division/` is now **scaffolded but PARKED** — it lists the unproven
+> members (negative-division trap `Math.floorDiv`/`floorMod`; round-to-multiple;
+> distribute-evenly `T%k` bins get `ceil`). When a contest surfaces one, derive it *there*
+> and migrate f.1/f.2 across. Until then ceil/floor live **here** — the folder holds only
+> the upgrade path, no live cards.
+
+---
+
 ## Card count
 
-9 atomic cards across 5 subtopics.
+11 atomic cards across 6 subtopics.
 
 | Target rating | Required cards (cumulative) |
 |---------------|------------------------------|
-| 1100-1199     | a (2) = **2 cards** |
-| 1200-1299     | + b (1) = **3 cards** |
-| 1300-1399     | + c (2) + d (1) = **6 cards** |
-| 1400-1499     | + e (3) = **9 cards (full)** |
+| 1100-1199     | a (2) + f (2) = **4 cards** |
+| 1200-1299     | + b (1) = **5 cards** |
+| 1300-1399     | + c (2) + d (1) = **8 cards** |
+| 1400-1499     | + e (3) = **11 cards (full)** |
 
 ## Notes for Socratic drill
 
@@ -130,6 +157,11 @@ the wrap — not the choice of algorithm (that's `patterns/`).
 - The *sliding-window* framing of LC 1423 (circular window) is NOT a card here —
   that's algorithmic muscle (zerotrac / `patterns/`). This topic owns only the bare
   index arithmetic.
+- Subtopic `f` is the freshly-diagnosed ceil leak (Biweekly 184). Drill the *why*
+  of `(T+k−1)/k` Socratically — derive it from "cover T with size-k blocks, last
+  block may be partial" — and make the integer-only form reflex so the hand never
+  reaches for `Math.ceil` + a `double` cast. Sibling of `b` (both are division-in-
+  a-range); contrast the two so floor-for-multiples vs ceil-for-cover don't blur.
 - Cross-ref: prefix-sum range index (`pre[r+1] − pre[l]`) lives in Arithmetic
   Sums §1.5 — same off-by-one family, different home.
 ```

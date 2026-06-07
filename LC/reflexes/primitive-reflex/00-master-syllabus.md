@@ -54,7 +54,8 @@ Audit: ✅ audited-complete · ▢ rough draft, audit-on-entry.
 | 3 | Sliding Window | 3 | ▢ | (on entry) |
 | 4 | **Stack** | 7 | ✅ | `topics/04-stack/00-syllabus.md` |
 | 5 | Binary Search | 4 | ▢ | (on entry) |
-| 6 | Heap & Intervals | 6 | ▢ | (on entry) |
+| 6 | Heap | 4 | ▢ | (on entry) |
+| 6 | **Interval** | 6 (+2 deferred) | ✅ | `topics/06-interval/00-syllabus.md` |
 | 7 | Graph | 8 | ▢ | (on entry) |
 | 8 | Recursion / Backtracking | 2 | ▢ | (on entry) |
 | 9 | Trees | 5 | ▢ | (on entry) |
@@ -69,7 +70,8 @@ Audit: ✅ audited-complete · ▢ rough draft, audit-on-entry.
 - **Tier 2 Prefix & Suffix:** prefix-sum + hashmap · difference array · prefix/suffix decomposition
 - **Tier 3 Sliding Window:** variable window · fixed window · exactly-K (`atMost(K) − atMost(K−1)`)
 - **Tier 5 Binary Search:** lower/upper bound · BS-on-answer ★ · BS rotated · BS on 2D matrix
-- **Tier 6 Heap & Intervals:** top-K · two-heaps median · k-way merge · heap scheduling · interval merge · sweep-line
+- **Tier 6 Heap:** top-K · two-heaps median · k-way merge · heap-scheduling *(incl. interval heap-scheduling — see Interval family DEFERRED)*
+- **Tier 6 Interval:** ✅ audited — see `topics/06-interval/00-syllabus.md` (merge · intersection · scheduling · sweep-line · covered · weighted; heap-scheduling + interval-queries deferred)
 - **Tier 7 Graph:** BFS/multi-source · DFS/flood-fill · topo-sort · cycle-detection · Dijkstra · 0-1 BFS · Union-Find ★ · Bellman-Ford/Floyd
 - **Tier 8 Backtracking:** subsets/combos/perms skeleton · prune-on-constraint
 - **Tier 9 Trees:** recursive traversal · Tree-DP ★ · BST-inorder · build-from-traversals · LCA
