@@ -80,10 +80,14 @@ Each subtopic is rated `[required-from XXXX]`. Card titles only. Content unpacke
 
 ---
 
-## g. Multiset / repetition counting [1700]
+## g. Multiset / repetition counting [1700 — but g.1 surfaced at 1550, re-gate to ~1500]
 
 **Cards (1):**
-- g.1 — "Number of ways to write n as an ordered sum of k positive integers" = `C(n-1, k-1)` (compositions of n into k parts)
+- g.1 — "Number of ways to write n as an ordered sum of k positive integers" = `C(n-1, k-1)` (compositions of n into k parts).
+  - **Contest disguise (the recognition trigger):** "split a string/array of length n into **k contiguous non-empty parts**" ⇒ place **k−1 dividers** in the **n−1 gaps** ⇒ `C(n-1, k-1)`. For k=3 → `C(n-1, 2) = (n-1)(n-2)/2`.
+  - **LC anchor:** *Number of Ways to Split a String* (LC 1573, https://leetcode.com/problems/number-of-ways-to-split-a-string/) — **appeared in the 1550-1600 band** (sealed-queue #25 → `problem-solving/1550-1600/First-Attempt/36`, the all-zeros sub-case). So the `[1700]` gate is too high; this is needed at ~1500.
+  - Builds on: [[00-ranges-and-indices]] (n elements → n−1 gaps) + [[03-pair-triple-count]] (`nC2 = n(n-1)/2`).
+  - ◯ **NOT yet installed** — skeleton-only, no Socratic derivation / no `03-log`. Install later (user deferred 2026-06-08).
 
 ---
 

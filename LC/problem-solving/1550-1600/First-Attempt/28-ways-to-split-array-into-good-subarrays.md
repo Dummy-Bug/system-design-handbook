@@ -126,3 +126,14 @@ quantities — the code itself is ~15 lines.
 **Note:** also solvable via DP in O(n) (count-ways prefix-sum). Park it — revisit this
 and similar problems later, at higher bands, when DP itself becomes the thing being
 struggled with.
+
+---
+
+## Two routes — multiplication vs count-ways DP (the recognition that matters)
+A "number of ways to split" problem has **two** possible routes, and which one applies is decided by **independence of the cuts**:
+- **Independent choices → multiplication principle (closed form):** **each cut's location does NOT constrain the others, so total = (choices for cut-1) × (choices for cut-2) × …** No DP table.
+- **Interacting choices → count-ways DP:** if a later cut's validity *depends* on an earlier cut, the product breaks → `dp[i]` = ways up to `i`, summing over valid previous cut points.
+
+**Decision reflex: first ask "are the cuts independent?"** Independent → multiply. Interact → DP.
+
+Here the cuts (one between every adjacent pair of `1`s) are mutually independent → **product of ALL inter-`1` gaps**. The answer key files this under *DP » Count-ways* — that's just the general bucket; multiplication is the sharper tool *because* independence makes it available. (Cousin: #36 number-of-ways-to-split-a-string — same principle, but fixed at 3 parts ⇒ only 2 independent cuts ⇒ product of 2 gaps.)

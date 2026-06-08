@@ -30,9 +30,9 @@ Goal: with every atom installed, an interval problem can only fail on **mapping 
 
 | # | Atom | Folder | Status |
 |---|------|--------|--------|
-| 1 | Merge / union (incl. insert) | `01-merge-union/` | ⏳ not started — **priority** (surfaced by Biweekly 184 Q2; decayed reflex, needs blank-page retrieval rep) |
-| 2 | Intersection (two lists) | `02-intersection/` | ⏳ not started |
-| 3 | Greedy scheduling (incl. arrows) | `03-scheduling/` | ⏳ not started |
+| 1 | Merge / union (incl. insert) | `01-merge-union/` | ✅ installed 2026-06-07 (announced Merge Intervals 56, self-derived Socratic AC). Cold reps come from zerotrac in the normal grind — no reserved blind deal |
+| 2 | Intersection (two lists) | `02-intersection/` | ✅ installed 2026-06-07 (announced Interval List Intersections 986, approach self-derived Socratic, code provided) |
+| 3 | Greedy scheduling (incl. arrows) | `03-scheduling/` | ✅ installed 2026-06-07 (announced Non-overlapping Intervals 435, fully self-derived Socratic incl. start-sort-breaks trap; code provided). Min Arrows 452 = `>` sub-variant, not yet drilled |
 | 4 | Sweep-line / concurrency | `04-sweep-line/` | ⏳ not started |
 | 5 | Covered / containment | `05-covered/` | ⏳ not started |
 | 6 | Weighted interval scheduling | `06-weighted/` | ⏳ not started (DP-bridge — do last) |

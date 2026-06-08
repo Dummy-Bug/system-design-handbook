@@ -13,26 +13,30 @@
 
 > **TRIMMED 2026-06-03:** dropped problems whose mechanic is an already-OWNED bucket (Greedy, Prefix-Sum,
 > Sliding Window, Graph, Math/NT-Combinatorics) and that serve no open bucket — owned-topic reps are wasted.
-> Dropped: #11, #16, #22, #24, #27 (marked ✂ below). **Undealt remaining: 14** (#9,10,12,13,14,15,17,18,19,20,21,23,25,26).
+> Dropped: #11, #16, #22, #24, #27 (marked ✂ below). **Undealt remaining: 13** (#9,10,12,13,14,15,17,18,19,20,21,23,26). _(#25 dealt 2026-06-08 → soft fail; active-order #1 score-of-parentheses skipped — contaminated, worked in primitive-reflex track 2026-06-03.)_
 > **Borderline kept (your call):** #15 maximize-#-subsequences & #25 ways-to-split-string — mechanic is owned
 > (Greedy / Combinatorics) BUT both are `Invariant/Reframe` STRONG members, so they're reframe-muscle reps, not
 > bucket reps. Kept for derivation value; say the word to drop them too for a maximal trim.
 
-### ▶ ACTIVE DEAL ORDER (re-shuffled 2026-06-03 — deal top-down, blind; position is NOT a tell)
-1. https://leetcode.com/problems/score-of-parentheses/
-2. https://leetcode.com/problems/number-of-ways-to-split-a-string/
-3. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
-4. https://leetcode.com/problems/k-th-symbol-in-grammar/
+### ▶ ACTIVE DEAL ORDER (RE-SHUFFLED 2026-06-08 — genuine random shuffle after a chat-side bucket leak contaminated the prior order; position is NOT a tell)
+
+**Dealt / skipped:**
+- ~~https://leetcode.com/problems/score-of-parentheses/~~ ⊘ SKIPPED 2026-06-08 — contaminated (worked in primitive-reflex stack-atom track 2026-06-03; not a cold rep)
+- ~~https://leetcode.com/problems/number-of-ways-to-split-a-string/~~ ✅ dealt 2026-06-08 (soft fail, WA-then-AC) → `First-Attempt/36`
+
+**Undealt (deal top-down, blind):**
+1. https://leetcode.com/problems/properties-graph/
+2. https://leetcode.com/problems/maximize-greatness-of-an-array/
+3. https://leetcode.com/problems/maximize-number-of-subsequences-in-a-string/
+4. https://leetcode.com/problems/iterator-for-combination/
 5. https://leetcode.com/problems/time-based-key-value-store/
-6. https://leetcode.com/problems/maximize-greatness-of-an-array/
+6. https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/
 7. https://leetcode.com/problems/encode-number/
-8. https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/
-9. https://leetcode.com/problems/maximize-number-of-subsequences-in-a-string/
-10. https://leetcode.com/problems/properties-graph/
-11. https://leetcode.com/problems/iterator-for-combination/
+8. https://leetcode.com/problems/k-th-symbol-in-grammar/
+9. https://leetcode.com/problems/before-and-after-puzzle/
+10. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
+11. https://leetcode.com/problems/max-chunks-to-make-sorted/
 12. https://leetcode.com/problems/search-suggestions-system/
-13. https://leetcode.com/problems/before-and-after-puzzle/
-14. https://leetcode.com/problems/max-chunks-to-make-sorted/
 
 _(The numbered 1-27 list below is retained ONLY for the spoiler answer-key cross-reference — deal from the
 ACTIVE order above, not from it.)_
@@ -61,7 +65,7 @@ ACTIVE order above, not from it.)_
 22. ~~https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/~~ ✂ **DROPPED 2026-06-03 — owned topic** (Greedy ●). Hashing only incidental.
 23. https://leetcode.com/problems/search-suggestions-system/
 24. ~~https://leetcode.com/problems/corporate-flight-bookings/~~ ✂ **DROPPED 2026-06-03 — owned topic** (Prefix-Sum/Diff-Array ●; SegTree/BIT is outlier-class).
-25. https://leetcode.com/problems/number-of-ways-to-split-a-string/
+25. ~~https://leetcode.com/problems/number-of-ways-to-split-a-string/~~ ✅ dealt 2026-06-08 (soft fail, WA-then-AC; multiplication-principle over 2 boundary gaps — cousin of #28) → `First-Attempt/36`
 26. https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/
 27. ~~https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/~~ ✂ **DROPPED 2026-06-03 — owned topic** (Sliding Window ●).
 
@@ -85,6 +89,7 @@ Mark progress: deal top-down; log each in `First-Attempt/` and tick it here afte
 | 2026-06-02 | sentence-similarity-iii | ❌→✓ multi-WA → **soft fail** (~2h/2 days; over-modeled with map+deque vs prefix/suffix two-pointer; does NOT count) | `First-Attempt/32` |
 | 2026-06-02 | number-of-ways-square-equal-product | ✅ **clean first-AC, 22m SUB-CAP** (count-map not index-map → over-model reflex self-corrected; counts) | `First-Attempt/33` |
 | 2026-06-02 | longest-arith-subseq-of-given-difference | ✅ **clean first-AC, 34m over-cap** (fixed-diff ⇒ unique predecessor ⇒ O(n) hash-DP, not classic LIS; counts) | `First-Attempt/34` |
+| 2026-06-08 | number-of-ways-to-split-a-string | ❌→✓ WA-then-AC **soft fail** (wrong-counting-region: counted intra-group positions, masked at maxOnes=1; multiplication principle over 2 boundary gaps — cousin of #28; does NOT count) | `First-Attempt/36` |
 
 ---
 
