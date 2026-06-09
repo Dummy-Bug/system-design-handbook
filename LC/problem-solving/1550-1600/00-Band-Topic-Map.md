@@ -106,7 +106,7 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 | Bucket | Clean self-derived ACs | Non-counting | Status |
 |---|---|---|---|
 | Greedy | **2+** (01,02,05,20,29) | 06 hinted | ● **OWNED** |
-| Prefix Sum / Diff-Array | **3** (08,17,18) | — | ● **OWNED** |
+| Prefix Sum / Diff-Array | **4** (08,17,18,39) | — | ● **OWNED** _(39: prefix-max × suffix-max, fix-the-middle, clean sub-cap)_ |
 | Sliding Window | **4** (10,14,25,26) | — | ● **OWNED** |
 | Graph traversal (DFS/BFS) | **2** (09,16) | — | ● **OWNED** |
 | Math / NT / Combinatorics | **2** (04,23) | 11 WA; 33-NT hard-fail | ● **OWNED** _(04: AC self-derived; a deeper bound was taught post-hoc — the solve itself was clean, so it counts)_ |
@@ -119,7 +119,7 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 | Monotonic Stack ★ | 1 (22) | 30 hard-fail | ◐ **1 of 2** — blind-spot, 22 next-greater-node. Owe 1, cross-band. |
 | **DP » Linear / Count-ways** | 0 | 28 soft fail | ○ owe 2. ways-to-split already attempted (soft fail). |
 | **DP » String** | 0 | — | ○ owe 2 (band-present but unqueued). |
-| Two Pointers (string/array) | 0 | 32 soft fail; 35 soft-hinted | ○ owe 2. 35 installed prefix/suffix merge-count but soft-hinted (doesn't count). Next cold two-pointer = the test. |
+| Two Pointers (string/array) | 0 | 32 soft fail; 35 soft-hinted; 38 hard-fail | ○ owe 2. 35 installed prefix/suffix merge-count but soft-hinted; 38 maximize-greatness assisted hard-fail (both don't count). Next cold two-pointer = the test. |
 | Heap | 0 | 21 soft fail | ○ owe 2. |
 | Binary Search | 0 | 24 soft fail | ○ owe 2 + plain-BS carried from 1500-1550. |
 | Tree | 0 | 15 hinted (D&C, not tree-DP) | ○ **blind-spot (tree-DP)** — owe 2. |

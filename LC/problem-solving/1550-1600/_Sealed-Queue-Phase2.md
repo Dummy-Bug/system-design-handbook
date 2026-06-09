@@ -13,7 +13,7 @@
 
 > **TRIMMED 2026-06-03:** dropped problems whose mechanic is an already-OWNED bucket (Greedy, Prefix-Sum,
 > Sliding Window, Graph, Math/NT-Combinatorics) and that serve no open bucket — owned-topic reps are wasted.
-> Dropped: #11, #16, #22, #24, #27 (marked ✂ below). **Undealt remaining: 11** (#9,10,12,13,15,17,18,19,21,23,26). _(#25 dealt 2026-06-08 → soft fail; #20 properties-graph dealt 2026-06-09 → clean, Union-Find ★ 1/2; score-of-parentheses skipped — contaminated.)_
+> Dropped: #11, #16, #22, #24, #27 (marked ✂ below). **Undealt remaining: 6** (#9,10,13,17,19,23) — see ACTIVE DEAL ORDER undealt list below; #12 & #18 deferred (design problems), #21 dealt (hard fail). _(#25 dealt 2026-06-08 → soft fail; #20 properties-graph dealt 2026-06-09 → clean, Union-Find ★ 1/2; #26 triplet-ii dealt 2026-06-09 → clean sub-cap; #15 maximize-#-subsequences dealt 2026-06-09 → soft fail; score-of-parentheses skipped — contaminated.)_
 > **Borderline kept (your call):** #15 maximize-#-subsequences & #25 ways-to-split-string — mechanic is owned
 > (Greedy / Combinatorics) BUT both are `Invariant/Reframe` STRONG members, so they're reframe-muscle reps, not
 > bucket reps. Kept for derivation value; say the word to drop them too for a maximal trim.
@@ -24,19 +24,19 @@
 - ~~https://leetcode.com/problems/score-of-parentheses/~~ ⊘ SKIPPED 2026-06-08 — contaminated (worked in primitive-reflex stack-atom track 2026-06-03; not a cold rep)
 - ~~https://leetcode.com/problems/number-of-ways-to-split-a-string/~~ ✅ dealt 2026-06-08 (soft fail, WA-then-AC) → `First-Attempt/36`
 - ~~https://leetcode.com/problems/properties-graph/~~ ✅ dealt 2026-06-09 (**clean first-AC, no WA**, 60m → derivation clause; **Union-Find ★ blind-spot 1/2**) → `First-Attempt/37`
+- ~~https://leetcode.com/problems/maximize-greatness-of-an-array/~~ ❌ dealt 2026-06-09 07:46 IST (**WA-then-HARD-FAIL** — assisted: bug + fix Claude-supplied; Greedy/Two-Ptr, no rep) → `First-Attempt/38`
+- ~~https://leetcode.com/problems/maximize-number-of-subsequences-in-a-string/~~ ❌→✓ dealt 2026-06-09 (**WA-then-AC + hinted = SOFT FAIL**; `p0==p1` edge collapsed the pair-scan → C(k+1,2) branch; Greedy/Combinatorics ● + Invariant/Reframe, reframe rep not bucket rep) → `First-Attempt/40`
+- ~~https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/~~ ✅ dealt 2026-06-09 (**clean first-AC, no WA, 20m SUB-CAP**; prefix-max × suffix-max, fix-the-middle) → `First-Attempt/39`
+- ~~https://leetcode.com/problems/iterator-for-combination/~~ ⊘ DEFERRED 2026-06-09 — pure design/implement-interface problem ([[lc-defer-design-problems-reflex-track]]), interview-only low contest value
+- ~~https://leetcode.com/problems/time-based-key-value-store/~~ ⊘ DEFERRED 2026-06-09 — pure design/implement-interface problem ([[lc-defer-design-problems-reflex-track]]), interview-only low contest value
 
 **Undealt (deal top-down, blind):**
-1. https://leetcode.com/problems/maximize-greatness-of-an-array/
-2. https://leetcode.com/problems/maximize-number-of-subsequences-in-a-string/
-3. https://leetcode.com/problems/iterator-for-combination/
-4. https://leetcode.com/problems/time-based-key-value-store/
-5. https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/
-6. https://leetcode.com/problems/encode-number/
-7. https://leetcode.com/problems/k-th-symbol-in-grammar/
-8. https://leetcode.com/problems/before-and-after-puzzle/
-9. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
-10. https://leetcode.com/problems/max-chunks-to-make-sorted/
-11. https://leetcode.com/problems/search-suggestions-system/
+1. https://leetcode.com/problems/encode-number/
+2. https://leetcode.com/problems/k-th-symbol-in-grammar/
+3. https://leetcode.com/problems/before-and-after-puzzle/
+4. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
+5. https://leetcode.com/problems/max-chunks-to-make-sorted/
+6. https://leetcode.com/problems/search-suggestions-system/
 
 _(The numbered 1-27 list below is retained ONLY for the spoiler answer-key cross-reference — deal from the
 ACTIVE order above, not from it.)_
@@ -55,7 +55,7 @@ ACTIVE order above, not from it.)_
 12. https://leetcode.com/problems/iterator-for-combination/
 13. https://leetcode.com/problems/encode-number/
 14. https://leetcode.com/problems/score-of-parentheses/
-15. https://leetcode.com/problems/maximize-number-of-subsequences-in-a-string/
+15. ~~https://leetcode.com/problems/maximize-number-of-subsequences-in-a-string/~~ ❌→✓ dealt 2026-06-09 (WA-then-AC + hinted → **soft fail**; `p0==p1` edge) → `First-Attempt/40`
 16. ~~https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-i/~~ ✂ **DROPPED 2026-06-03 — owned topic** (Sliding Window ●).
 17. https://leetcode.com/problems/k-th-symbol-in-grammar/
 18. https://leetcode.com/problems/time-based-key-value-store/
@@ -91,6 +91,9 @@ Mark progress: deal top-down; log each in `First-Attempt/` and tick it here afte
 | 2026-06-02 | longest-arith-subseq-of-given-difference | ✅ **clean first-AC, 34m over-cap** (fixed-diff ⇒ unique predecessor ⇒ O(n) hash-DP, not classic LIS; counts) | `First-Attempt/34` |
 | 2026-06-08 | number-of-ways-to-split-a-string | ❌→✓ WA-then-AC **soft fail** (wrong-counting-region: counted intra-group positions, masked at maxOnes=1; multiplication principle over 2 boundary gaps — cousin of #28; does NOT count) | `First-Attempt/36` |
 | 2026-06-09 | properties-graph | ✅ **clean first-AC, no WA** (60m over-cap → derivation clause; DSU connected-components — **Union-Find ★ blind-spot 1/2**; user-adjudicated clean) | `First-Attempt/37` |
+| 2026-06-09 | maximize-greatness-of-an-array | ❌ **WA-then-HARD-FAIL** (assisted: bug + fix Claude-supplied; Greedy/Two-Ptr, no rep) | `First-Attempt/38` |
+| 2026-06-09 | maximum-value-of-an-ordered-triplet-ii | ✅ **clean first-AC, no WA, 20m SUB-CAP** (prefix-max × suffix-max, fix-the-middle) | `First-Attempt/39` |
+| 2026-06-09 | maximize-number-of-subsequences-in-a-string | ❌→✓ **WA-then-AC + hinted = soft fail** (`p0==p1` collapses the pair-scan's disjoint-roles assumption → C(k+1,2) closed-form branch; reframe rep, buckets Greedy/Combinatorics already ●; does NOT count) | `First-Attempt/40` |
 
 ---
 
