@@ -91,6 +91,8 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 | 32 | Sentence Similarity III | prefix+suffix two-pointer (shorter = prefix∪suffix of longer) — but OUR code over-modeled w/ map+deque | Two Pointers (string) | `Two-Pointers` `String` | ❌→✓ soft fail (multi-WA, over-modeled) |
 | 33 | Number of Ways Square = Product | frequency map of pairwise products, look up squares (count not positions) | Hashing (counting) | `Hashing` `Counting` `Invariant/Reframe` | ✅ clean first-AC (22m SUB-CAP) |
 | 35 | Count Incremovable Subarrays I | prefix/suffix increasing decomp + two-pointer merge-count; middle descent forced into every removal | Two Pointers (array) + Invariant/Reframe ✦ | `Two-Pointers` `Prefix-Suffix` `Invariant/Reframe` | ◐ assisted acq. (skeleton+bug given) — installs, doesn't count. Consolidation win (120m→sleep→26m) |
+| 36 | Number of Ways to Split a String | multiplication principle over 2 boundary gaps (count-ways disguised) | Math (combinatorics) | `Math` `Combinatorics` `Invariant/Reframe` | ❌→✓ soft fail (WA-then-AC, wrong-counting-region) |
+| 37 | Properties Graph | DSU (path-compression + union-by-size) for connected components; HashSet intersection ≥ k → union | Union-Find / DSU ★ | `Union-Find` `Graph` `Hashing` `Blind-spot` | ✅ clean first-AC (no WA, 60m over-cap → derivation clause; user-adjudicated clean) |
 
 ---
 
@@ -121,7 +123,7 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 | Heap | 0 | 21 soft fail | ○ owe 2. |
 | Binary Search | 0 | 24 soft fail | ○ owe 2 + plain-BS carried from 1500-1550. |
 | Tree | 0 | 15 hinted (D&C, not tree-DP) | ○ **blind-spot (tree-DP)** — owe 2. |
-| Union-Find / DSU | 0 | — | ○ **blind-spot** — owe 2. Band supplies #19/#20 (earliest-moment-friends, properties-graph), neither attempted. |
+| Union-Find / DSU ★ | **1** (37) | — | ◐ **1 of 2** — blind-spot, 37 properties-graph (DSU, user-adjudicated clean). Owe 1 — band still supplies the-earliest-moment-friends (untaken). |
 | Simulation | (substrate — not an ownership target) | — | — |
 | ✦ **Invariant / Reframe** (NON-STANDARD) | n/a — no clean-rep gate | deck: 8 solved | ✦ **Grow & review deck, not an ownership target — NEVER blocks graduation.** Cross-cutting axis. Solved members (83-editorial audit 2026-06-01): STRONG = 03, 23, 28, 30; LIGHTER = 02, 04, 17, 25. 6 more STRONG in the blind queue. See `patterns/master-taxonomy.md` → Invariant/Reframe. |
 
@@ -134,7 +136,7 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 ### Blind-spot trio status (rule 6B, cross-band, each needs **2** clean self-derived ACs)
 - **Monotonic Stack** — **1 clean (#22 next-greater-node).** 1 to go. (#30 was a hard-fail.)
 - **Tree DP** — **0 clean.** #15 looked like a candidate but is divide-and-conquer *construction*, not tree-DP. Still completely open.
-- **Union-Find / DSU** — **0 clean.** Band supplies 2 DSU problems (#19 earliest-moment-friends, #20 properties-graph), neither attempted yet.
+- **Union-Find / DSU** — **1 clean (#37 properties-graph, DSU, user-adjudicated clean).** 1 to go. Band still supplies the-earliest-moment-friends (untaken) for the 2nd.
 
 ---
 
@@ -145,4 +147,4 @@ Fast & Slow Pointers, LinkedList In-place Reversal, Overlapping Intervals — no
 3. **#23 Alice & Bob Flower Game** — logged "game theory", but our code is pure combinatorial counting of odd-sum pairs. Game theory only in the parity reduction; no game-tree → **Math**.
 4. **#19 Count Max-OR Subsets** — logged "bit ops", but the mechanic is recursive subset enumeration → **Backtracking**. Bit-OR is just the domain.
 
-**Net effect on ownership (post 2026-06-03 re-audit, final 2-clean rule):** **5 buckets OWNED ●** — Greedy, Prefix-Sum, Sliding Window, Graph, Math/NT. **7 at 1-of-2** — DP-LIS(34), DP-Grid(31), Hashing(33), Backtracking(19), Game-Theory(03), DP-Interval(13), Monotonic-Stack(22). **0-of-2** — DP-Linear, DP-String, Two-Pointers, Heap, Binary-Search, Tree, Union-Find. No acquisition phase in this band: every clean self-derived solve counts (Set-A or Set-B), so the old Phase-1 solves are full reps.
+**Net effect on ownership (updated 2026-06-09):** **5 buckets OWNED ●** — Greedy, Prefix-Sum, Sliding Window, Graph, Math/NT. **8 at 1-of-2** — DP-LIS(34), DP-Grid(31), Hashing(33), Backtracking(19), Game-Theory(03), DP-Interval(13), Monotonic-Stack(22), **Union-Find(37, blind-spot)**. **0-of-2** — DP-Linear, DP-String, Two-Pointers, Heap, Binary-Search, Tree. No acquisition phase in this band: every clean self-derived solve counts (Set-A or Set-B). _(2026-06-09: #37 properties-graph moved Union-Find 0→1, user-adjudicated clean — see `First-Attempt/37` assistance note. Blind-spot trio now: Mono-Stack 1/2, Union-Find 1/2, Tree-DP 0/2.)_

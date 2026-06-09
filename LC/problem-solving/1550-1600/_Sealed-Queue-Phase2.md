@@ -13,7 +13,7 @@
 
 > **TRIMMED 2026-06-03:** dropped problems whose mechanic is an already-OWNED bucket (Greedy, Prefix-Sum,
 > Sliding Window, Graph, Math/NT-Combinatorics) and that serve no open bucket — owned-topic reps are wasted.
-> Dropped: #11, #16, #22, #24, #27 (marked ✂ below). **Undealt remaining: 13** (#9,10,12,13,14,15,17,18,19,20,21,23,26). _(#25 dealt 2026-06-08 → soft fail; active-order #1 score-of-parentheses skipped — contaminated, worked in primitive-reflex track 2026-06-03.)_
+> Dropped: #11, #16, #22, #24, #27 (marked ✂ below). **Undealt remaining: 11** (#9,10,12,13,15,17,18,19,21,23,26). _(#25 dealt 2026-06-08 → soft fail; #20 properties-graph dealt 2026-06-09 → clean, Union-Find ★ 1/2; score-of-parentheses skipped — contaminated.)_
 > **Borderline kept (your call):** #15 maximize-#-subsequences & #25 ways-to-split-string — mechanic is owned
 > (Greedy / Combinatorics) BUT both are `Invariant/Reframe` STRONG members, so they're reframe-muscle reps, not
 > bucket reps. Kept for derivation value; say the word to drop them too for a maximal trim.
@@ -23,20 +23,20 @@
 **Dealt / skipped:**
 - ~~https://leetcode.com/problems/score-of-parentheses/~~ ⊘ SKIPPED 2026-06-08 — contaminated (worked in primitive-reflex stack-atom track 2026-06-03; not a cold rep)
 - ~~https://leetcode.com/problems/number-of-ways-to-split-a-string/~~ ✅ dealt 2026-06-08 (soft fail, WA-then-AC) → `First-Attempt/36`
+- ~~https://leetcode.com/problems/properties-graph/~~ ✅ dealt 2026-06-09 (**clean first-AC, no WA**, 60m → derivation clause; **Union-Find ★ blind-spot 1/2**) → `First-Attempt/37`
 
 **Undealt (deal top-down, blind):**
-1. https://leetcode.com/problems/properties-graph/
-2. https://leetcode.com/problems/maximize-greatness-of-an-array/
-3. https://leetcode.com/problems/maximize-number-of-subsequences-in-a-string/
-4. https://leetcode.com/problems/iterator-for-combination/
-5. https://leetcode.com/problems/time-based-key-value-store/
-6. https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/
-7. https://leetcode.com/problems/encode-number/
-8. https://leetcode.com/problems/k-th-symbol-in-grammar/
-9. https://leetcode.com/problems/before-and-after-puzzle/
-10. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
-11. https://leetcode.com/problems/max-chunks-to-make-sorted/
-12. https://leetcode.com/problems/search-suggestions-system/
+1. https://leetcode.com/problems/maximize-greatness-of-an-array/
+2. https://leetcode.com/problems/maximize-number-of-subsequences-in-a-string/
+3. https://leetcode.com/problems/iterator-for-combination/
+4. https://leetcode.com/problems/time-based-key-value-store/
+5. https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/
+6. https://leetcode.com/problems/encode-number/
+7. https://leetcode.com/problems/k-th-symbol-in-grammar/
+8. https://leetcode.com/problems/before-and-after-puzzle/
+9. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
+10. https://leetcode.com/problems/max-chunks-to-make-sorted/
+11. https://leetcode.com/problems/search-suggestions-system/
 
 _(The numbered 1-27 list below is retained ONLY for the spoiler answer-key cross-reference — deal from the
 ACTIVE order above, not from it.)_
@@ -60,7 +60,7 @@ ACTIVE order above, not from it.)_
 17. https://leetcode.com/problems/k-th-symbol-in-grammar/
 18. https://leetcode.com/problems/time-based-key-value-store/
 19. https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
-20. https://leetcode.com/problems/properties-graph/
+20. ~~https://leetcode.com/problems/properties-graph/~~ ✅ dealt 2026-06-09 (clean first-AC, no WA; DSU connected-components — **Union-Find ★ blind-spot 1/2**) → `First-Attempt/37`
 21. https://leetcode.com/problems/maximize-greatness-of-an-array/
 22. ~~https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/~~ ✂ **DROPPED 2026-06-03 — owned topic** (Greedy ●). Hashing only incidental.
 23. https://leetcode.com/problems/search-suggestions-system/
@@ -90,6 +90,7 @@ Mark progress: deal top-down; log each in `First-Attempt/` and tick it here afte
 | 2026-06-02 | number-of-ways-square-equal-product | ✅ **clean first-AC, 22m SUB-CAP** (count-map not index-map → over-model reflex self-corrected; counts) | `First-Attempt/33` |
 | 2026-06-02 | longest-arith-subseq-of-given-difference | ✅ **clean first-AC, 34m over-cap** (fixed-diff ⇒ unique predecessor ⇒ O(n) hash-DP, not classic LIS; counts) | `First-Attempt/34` |
 | 2026-06-08 | number-of-ways-to-split-a-string | ❌→✓ WA-then-AC **soft fail** (wrong-counting-region: counted intra-group positions, masked at maxOnes=1; multiplication principle over 2 boundary gaps — cousin of #28; does NOT count) | `First-Attempt/36` |
+| 2026-06-09 | properties-graph | ✅ **clean first-AC, no WA** (60m over-cap → derivation clause; DSU connected-components — **Union-Find ★ blind-spot 1/2**; user-adjudicated clean) | `First-Attempt/37` |
 
 ---
 
