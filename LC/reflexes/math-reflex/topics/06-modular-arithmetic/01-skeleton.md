@@ -35,14 +35,15 @@ Each subtopic is rated `[required-from XXXX]`. Card titles only. Content unpacke
 
 ## b. Divisibility rules by digit pattern [1200]
 
-**Cards (3):**
+**Cards (4):**
 - b.1 — Divisible by 3 ↔ digit sum divisible by 3
 - b.2 — Divisible by 9 ↔ digit sum divisible by 9
 - b.3 — Divisible by 11 ↔ alternating digit sum divisible by 11
+- b.4 — **Casting out nines (the general invariant b.1/b.2 are special cases of):** `N ≡ digitSum(N) ≡ sum of ANY partition of N's digits (mod 9)` — splitting digits into pieces and summing preserves the value mod 9. ⟹ **a partition of N's digits can sum to `S` only if `S ≡ N (mod 9)`** (a free pruning filter). Corollary: `a² ≡ a (mod 9)` ⟹ `a ≡ 0 or 1 (mod 9)`.
 
 **Depends on:** Digit Operations → digit sum [1100]
 
-**LC anchor:** *Smallest Even Multiple* (LC 2413)
+**LC anchor:** *Smallest Even Multiple* (LC 2413); *Find the Punishment Number of an Integer* (LC 2698) — b.4 prunes candidates to `i ≡ 0,1 (mod 9)` since a partition of `i²`'s digits can sum to `i` only if `i ≡ i² (mod 9)`.
 
 ---
 
@@ -148,18 +149,18 @@ Each subtopic is rated `[required-from XXXX]`. Card titles only. Content unpacke
 
 ## Card count
 
-28 atomic cards across 12 subtopics.
+29 atomic cards across 12 subtopics.
 
 | Target rating | Required cards (cumulative) |
 |---------------|------------------------------|
 | 1100-1199     | a (3) = **3 cards** |
-| 1200-1299     | + b (3) = **6 cards** |
-| 1300-1399     | + c (2) = **8 cards** |
-| 1400-1499     | + d (2) + e (3) + f (1) = **14 cards** |
-| 1500-1599     | — = 14 cards |
-| 1600-1699     | + g (2) + h (3) = **19 cards** |
-| 1700-1799     | + i (3) + j (2) = **24 cards** |
-| 1800+         | + k (2) + l (2) = **28 cards (full)** |
+| 1200-1299     | + b (4) = **7 cards** |
+| 1300-1399     | + c (2) = **9 cards** |
+| 1400-1499     | + d (2) + e (3) + f (1) = **15 cards** |
+| 1500-1599     | — = 15 cards |
+| 1600-1699     | + g (2) + h (3) = **20 cards** |
+| 1700-1799     | + i (3) + j (2) = **25 cards** |
+| 1800+         | + k (2) + l (2) = **29 cards (full)** |
 
 ## Notes for Socratic drill
 
@@ -168,3 +169,4 @@ Each subtopic is rated `[required-from XXXX]`. Card titles only. Content unpacke
 - Subtopic `g.1` is the universal contest constant — `1_000_000_007` should be muscle memory by 1500. Use Java's `_` separators for readability.
 - Subtopics `h` (power mod) and `i` (inverse) are the bridge to combinatorial mod counting. Install in sequence — `j` (mod nCr) is a direct consequence of `i.3`.
 - Subtopic `l` (pigeonhole on mod) is the unexpected reframe that unlocks several "find subarray with property X mod m" problems. The pattern is famous but rarely top-of-mind.
+- Subtopic `b.4` (casting out nines) is the *unifying* fact behind b.1/b.2 — drill it as "value ≡ digit-sum ≡ partition-sum (mod 9)." The non-obvious payoff is the **partition-sum filter**: whenever a problem asks "can these digits be split to sum to S?", the mod-9 check is a free necessary condition. Origin: Punishment Number debrief 2026-06-11 — it's a *bonus prune on an already-fast solution*, so install the reflex but don't reach for it unless TLE forces it.
