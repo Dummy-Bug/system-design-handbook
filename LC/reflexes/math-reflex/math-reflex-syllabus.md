@@ -362,6 +362,28 @@ list); builds on §3.7 (sieve for SPF) + §3.8 (prime factorization).
    Mark ✓ after 2-3 problems (LC 1577 hard-variant, LC 1390) confirm the reflex.
 ```
 
+## 4.13 — Fixed-sum product is maximized at the balance point (AM-GM) + the enumerable-vs-subset-sum discriminator
+**Fact:** for a **fixed** total `S`, the product `a·(S−a)` is a downward parabola in `a`, peaked at `a = S/2`. So "maximize the product of two parts whose sum is fixed" ⟺ "make the two parts **as equal as possible**." (Same identity as fixed-perimeter→square maximizes area; AM-GM.) When `a` can only take values from a discrete set, the best is the achievable value **closest to S/2**.
+**Why:** this is the load-bearing reframe for a whole "balance the two halves" family. The trick is knowing **when it earns its keep**:
+- **Short forced candidate list → don't bother.** If the achievable `a`'s are a small fixed set you can just list (e.g. the ~n subtree sums in *Maximum Product of Splitted Binary Tree*, LC 1339 — see `1600-1699/First-Attempt/09-maximum-product-of-splitted-binary-tree.md`), **enumerate and score all of them**; the parabola is trivia.
+- **Exponentially many candidates → the reframe is mandatory.** If `a` ranges over all subset sums (can't enumerate `2^n` products), you **must** flip "maximize product / minimize difference" into "**find the achievable subset sum closest to S/2**" and reach for **subset-sum DP** (boolean reachability over `[0, S/2]`).
+
+**The discriminator to bank:** *the "balance toward S/2" insight becomes load-bearing exactly when the parts are chosen from too many options to enumerate.* Forced short list ⇒ brute force; subset choice ⇒ DP-to-half.
+**LC problems:**
+- *Last Stone Weight II* (LC 1049) — minimize `|sum₁−sum₂|` ⟺ best subset sum ≤ S/2 (the canonical load-bearing case)
+- *Partition Equal Subset Sum* (LC 416) — can a subset hit **exactly** S/2?
+- *Partition Array Into Two Arrays to Minimize Sum Difference* (LC 2035) — harder closest-to-S/2 (meet-in-the-middle)
+- *Maximum Product of Splitted Binary Tree* (LC 1339) — the **trivia** side: forced list, enumerate, parabola unused.
+
+**Socratic drill skeleton (fill in session):**
+```
+   _TODO: pose "two non-neg numbers sum to 20, maximize product" cold → user finds 10·10=100; vary to sum 21 → 10·11._
+   _TODO: derive WHY peak is at S/2 (parabola / AM-GM) — one line, no calculus needed._
+   _TODO: contrast drill — LC 1339 (list the ~n subtree sums, score each) vs LC 1049 (can't list 2^n subsets → DP to S/2). User states the discriminator unprompted._
+   _TODO: perturbation tie-in (deferred from problem #09) — does "closest to S/2" survive NEGATIVE values? does brute-force survive them? (they diverge.)_
+   Mark ✓ after LC 1049 + LC 416 confirm the reflex.
+```
+
 ---
 
 # Band 1800 — Q3 fluency
@@ -588,6 +610,7 @@ You're at contest 1500. **Start at Band 1400, finish it, then 1500, then 1600.**
 - [ ] 4.10 Game theory primer
 - [ ] 4.11 Divisor count from factorization
 - [ ] 4.12 Divisor enumeration + n² square-factoring shortcut
+- [ ] 4.13 Fixed-sum product maximized at balance point (AM-GM) + enumerable-vs-subset-sum discriminator
 
 ## Band 1800
 - [ ] 5.1 Modular inverse via Fermat

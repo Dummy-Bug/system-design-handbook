@@ -41,9 +41,9 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 | Matrix | ~22 | grid-traversal substrate |
 | Binary Search | ~18 | ◐ carried 0/2 — abundant (+ plain-BS owed from 1500-1550) |
 | Prefix Sum | ~17 | ● OWNED (carryover) |
-| Heap | ~16 | ◐ carried 0/2 — abundant |
+| Heap | ~16 | ◐ 1/2 — #06 reward-top-k-students (2026-06-11, clean) — abundant |
 | Bit Manipulation | ~13 | ◐ informal reps, formalize 0/2 (core) |
-| **Tree / Binary Tree** | ~20 | ★ **blind-spot (tree-DP) — now ownable in-band** |
+| **Tree / Binary Tree** | ~20 | ⊘ **tree-DP DEFERRED 2026-06-12** — the ~20 are traversal/BFS-level/construction; **0 force a true optimization recurrence** (audited from band tags). Roll to a band with House-Robber-on-tree / tree-knapsack supply. See ledger §2. |
 | **Union-Find** | ~11 | ★ ✅ **OWNED 2/2** (#01, 2026-06-10) — blind-spot closed |
 | Two Pointers | ~11 | ◐ carried 0/2 |
 | DP » Linear | ~10 | ◐ carried 0/2 |
@@ -75,7 +75,7 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 | Sliding Window | 1550-1600 (10,14,25,26) |
 | Graph traversal (DFS/BFS) | 1550-1600 (09,16) |
 | Math / NT / Combinatorics | 1550-1600 (04,23) — incl. parity/game-theory & Invariant/Reframe flavor |
-| **Union-Find / DSU ★** | 1550-1600 #37 + **1600-1699 #01 satisfiability-of-equality-equations (2026-06-10, clean)** — blind-spot CLOSED |
+| **Union-Find / DSU ★** | 1550-1600 #37 + **1600-1699 #01 satisfiability-of-equality-equations (2026-06-10, clean)** — blind-spot CLOSED · _reinforced #08 minimize-maximum-component-cost (2026-06-12, Kruskal MST, clean)_ |
 | **Backtracking / Subset-Enum** | 1550-1600 #19 + **1600-1699 #05 find-the-punishment-number (2026-06-11, clean self-derived)** |
 
 ### ◐ / ○ TO OWN (carried debt + blind-spots) — **13 buckets** _(Union-Find closed 2026-06-10; Backtracking closed 2026-06-11)_
@@ -84,7 +84,7 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 | Hashing (canonical/counting) | 1/2 (33) | **1** | abundant supply |
 | Two Pointers | 0/2 | **2** | 32 soft-fail, 35 soft-hinted, 38 hard-fail at 1550-1600 (none counted) |
 | Binary Search | 0/2 | **2** | + plain-BS owed from 1500-1550 |
-| Heap | 0/2 | **2** | 21 soft-fail at 1550-1600 |
+| Heap | 1/2 (#06) | **1** | #06 reward-top-k-students (2026-06-11, clean, soft rep) — 21 soft-fail at 1550-1600 (not counted) |
 | Bit Manipulation | 0/2 | **2** | informal reps only (01,19 folded elsewhere) — formalize |
 | Stack (plain) | 0/2 | **2** | 30 hard-fail at 1550-1600 |
 | ~~Backtracking / Subset-Enum~~ | **2/2** ✅ | 0 | **OWNED 2026-06-11** (#05) — moved to owned table above |
@@ -95,9 +95,10 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 | DP » Interval/Minimax | 1/2 (13) | **1** | now in-band (was cross-band) |
 | **Monotonic Stack ★** | 1/2 (22) | **1** | reachable via carried #9 max-chunks or in-band |
 | ~~Union-Find / DSU ★~~ | **2/2** ✅ | 0 | **OWNED 2026-06-10** (#01) — moved to owned table above |
-| **Tree-DP ★** | 0/2 | **2** | well-supplied here (~20); completely open |
+| ~~**Tree-DP ★**~~ | 0/2 | **DEFERRED** | **DEFERRED 2026-06-12 (supply-justified).** Re-audited band tree tags: ~20 tree problems are traversal/aggregation/construction; **0 force an optimization recurrence**. The 3 queued "tree-DP" were 1 sum-fold (max-product-splitted, done → re-classed Subtree-Aggregation) + 2 tree-DP-*lite*. True tree-DP supply ≈ 0 below ~1700 → own it in a higher band (rule 6B "cross-band" satisfied by relocation, not skip). |
 
 ### ⊘ DEFERRED (tracked, NON-gating for this band → roll to next band / outlier)
+- **Tree-DP ★** — **DEFERRED 2026-06-12 (supply-justified).** Despite ~20 tree problems, **0 force a true optimization recurrence** — all traversal/aggregation/construction. A blind-spot can't be *owned* where no problem requires it. Relocate to a band with House-Robber-on-tree / tree-knapsack / tree-max-path supply. Rule 6B (blind-spots owned *cross-band*) is satisfied by relocation, not skip. _(mirror in `topic-install-ledger.md` §2)_
 - **Topological Sort** — too thin (~2). Train next band. _(mirror this in `topic-install-ledger.md`)_
 - **Dijkstra / Shortest Path** — too thin (~1). Train next band. _(ledger)_
 - **Trie ★-adjacent** — acquire cross-band.
@@ -113,7 +114,7 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 
 With the deferrals out, **1600-1699 has zero new ownership targets.** It is exactly:
 1. **Close carried debts** (all well-supplied here): Hashing, Two-Pointers, Binary-Search, Heap, Bit, Stack, Backtracking, DP-Linear/Grid/LIS/String/Interval.
-2. **Own the blind-spot trio** — ✅ **Union-Find OWNED 2/2** (#01, 2026-06-10); Tree-DP (2 to go), Mono-Stack (1 to go).
+2. **Own the blind-spot trio** — ✅ **Union-Find OWNED 2/2** (#01, 2026-06-10); **Tree-DP DEFERRED 2026-06-12** (no in-band problem forces a true optimization recurrence — own it cross-band where supply exists); **Mono-Stack (1 to go)** is the only blind-spot left to own in-band.
 
 **Headline process metric (carried in place of the prove-the-streak gate we skipped):** Step-2 (recompute worked example) + Step-3 (named edge cases) on *every* solve, and track **first-submission-clean rate** (rule 6C bar = ≥70%, ≤1 hinted/10). The 1550-1600 leak was ~65% clean / ~1.25 hinted-per-10 — carelessness, not algorithm. This band's real job is to close that.
 

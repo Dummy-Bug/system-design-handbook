@@ -16,9 +16,9 @@
 |---|---|---|---|
 | **Monotonic Stack ★** | 1 | ◐ 1/2 | 1550-1600 #22 next-greater-node. 2nd: 1600-1699 `maximum-width-ramp` (queued) or carried 1550-1600 `max-chunks`. |
 | **Union-Find / DSU ★** | 2 | ● **OWNED** | 1550-1600 #37 properties-graph + 1600-1699 #01 satisfiability-of-equality-equations (clean, 2026-06-10). **Blind-spot CLOSED.** |
-| **Tree-DP ★** | 0 | ○ 0/2 | **Completely open.** 1600-1699 queues 3: `min-time-collect-apples`, `max-product-splitted-binary-tree`, `kth-largest-perfect-subtree`. |
+| **Tree-DP ★** | 0 | ⊘ 0/2 **DEFERRED** | **DEFERRED 2026-06-12 (supply-justified) — see §2.** Re-audit of 1600-1699 tree tags: ~20 tree problems, **0 force a true optimization recurrence** (House-Robber-on-tree / tree-knapsack / tree-max-path shape). The 3 once-queued "tree-DP" picks were 1 sum-fold (`max-product-splitted`, solved 2026-06-12 → re-classed **Subtree-Aggregation**, NOT credited) + 2 tree-DP-*lite* (`kth-perfect-subtree`, `collect-apples` — composite-state/conditional-cost folds, plain post-order). Rule 6B requires owning blind-spots *cross-band*; relocation to a higher band with genuine supply satisfies it. |
 
-> All three now have in-band candidates at 1600-1699 (the 100-pt width was chosen partly to make UF & Tree-DP ownable in-band).
+> UF ✅ owned in-band. Mono-Stack ownable in-band (1 to go). **Tree-DP is NOT ownable here** — no in-band problem requires the optimization recurrence, so it relocates (the 100-pt width helped UF, not Tree-DP). Only true-optimization tree-DP on hand = House Robber V (seed inventory) but it's a re-solve → no new ownership rep.
 
 ---
 
@@ -26,6 +26,7 @@
 
 | Pattern | Deferred at | Reason | Target |
 |---|---|---|---|
+| **Tree-DP ★** | 1600-1699 | ~20 tree problems in band but **0 force a true optimization recurrence** (all traversal/aggregation/construction). A blind-spot can't be *owned* where nothing requires it. | band with House-Robber-on-tree / tree-knapsack / tree-max-path supply (likely 1700+). Still a rule-6B blind-spot — owe 2 clean self-derived ACs cross-band. |
 | **Trie** | 1500-1550, 1550-1600, 1600-1699 | thin supply each band (≤4); all sort/prefix-solvable so far | acquire cross-band; no clean-gate pressure yet |
 | **Topological Sort** | 1600-1699 | only ~2 in band — too thin to own (can't get 2 clean) | next band (1700-1799) |
 | **Dijkstra / Shortest Path** | 1600-1699 | only ~1 in band | next band (1700-1799) |

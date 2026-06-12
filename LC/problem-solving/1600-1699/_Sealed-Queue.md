@@ -21,11 +21,11 @@
 3. [x] ~~https://leetcode.com/problems/push-dominoes/~~ ✅ dealt+AC 2026-06-10 (**clean first-AC, 45m over-cap**; but **over-model [[lc-index-bookkeeping-overmodel]]** → Two-Pointers NOT credited, stays 0/2; clean-rate 2/3) → `First-Attempt/03`
 4. [x] ~~https://leetcode.com/problems/partition-string-into-substrings-with-values-at-most-k/~~ ✅ dealt+AC 2026-06-10 (**clean first-AC, 25m SUB-CAP**; Greedy ride-along — DP-String still 0/2; comprehension-assisted; clean-rate 3/4) → `First-Attempt/04`
 5. [x] ~~https://leetcode.com/problems/find-the-punishment-number-of-an-integer/~~ ✅ dealt+AC 2026-06-11 (**clean first-AC, self-derived, 30m**; **Backtracking 2/2 → OWNED ●**; clean-rate 4/5) → `First-Attempt/05`
-6. [ ] https://leetcode.com/problems/reward-top-k-students/
-7. [ ] https://leetcode.com/problems/construct-the-longest-new-string/
-8. [ ] https://leetcode.com/problems/minimize-maximum-component-cost/
-9. [ ] https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/
-10. [ ] https://leetcode.com/problems/k-th-largest-perfect-subtree-size-in-binary-tree/
+6. [x] ~~https://leetcode.com/problems/reward-top-k-students/~~ ✅ dealt+AC 2026-06-11 08:26 (**clean first-AC, self-derived, 20m SUB-CAP**; bounded size-`k` min-heap → **Heap 1/2**; soft/vanilla rep — heap not load-bearing; clean-rate 5/6) → `First-Attempt/06`
+7. [x] ~~https://leetcode.com/problems/construct-the-longest-new-string/~~ ✅ dealt+AC 2026-06-12 05:57 (**clean first-AC, self-derived, 36m OVER-CAP** → derivation clause; **closed-form Math/Greedy, NOT DP** → DP-Linear stays 0/2, no new ownership; clean-rate 6/7) → `First-Attempt/07`
+8. [x] ~~https://leetcode.com/problems/minimize-maximum-component-cost/~~ ✅ dealt+AC 2026-06-12 (**clean first-AC, self-derived, 40m OVER-CAP** → derivation clause; **Kruskal MST via Union-Find** → UF 3rd rep (already owned, reinforcement); **Heap over-tooled, NOT credited**; **Binary-Search NOT used, stays 0/2**; DSU size-bug fixed in canonical; clean-rate 7/8) → `First-Attempt/08`
+9. [x] ~~https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/~~ ✅ dealt+AC 2026-06-12 (**clean first-AC, self-derived, 15m SUB-CAP**; **re-classified Subtree-Aggregation, NOT Tree-DP** — pure post-order sum fold, no recurrence-with-choice → Tree-DP NOT credited; mod-at-end trap handled; clean-rate 8/9) → `First-Attempt/09`
+10. [—] ~~k-th-largest-perfect-subtree-size-in-binary-tree~~ — **REMOVED 2026-06-12: Tree-DP DEFERRED (band tree supply is traversal/aggregation, not optimization recurrence — see ledger §2)**
 11. [ ] https://leetcode.com/problems/minimum-number-of-swaps-to-make-the-string-balanced/
 12. [ ] https://leetcode.com/problems/minimum-number-of-seconds-to-make-mountain-height-zero/
 13. [ ] https://leetcode.com/problems/minimum-time-to-complete-trips/
@@ -35,7 +35,7 @@
 17. [ ] https://leetcode.com/problems/apply-bitwise-operations-to-make-strings-equal/
 18. [ ] https://leetcode.com/problems/maximum-width-ramp/
 19. [ ] https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/
-20. [ ] https://leetcode.com/problems/minimum-time-to-collect-all-apples-in-a-tree/
+20. [—] ~~minimum-time-to-collect-all-apples-in-a-tree~~ — **REMOVED 2026-06-12: Tree-DP DEFERRED (see ledger §2)**
 21. [ ] https://leetcode.com/problems/advantage-shuffle/
 22. [ ] https://leetcode.com/problems/maximum-product-after-k-increments/
 23. [ ] https://leetcode.com/problems/flip-string-to-monotone-increasing/
@@ -73,14 +73,14 @@
 | 54.2% | Q2 | count-number-of-bad-pairs | **Hashing** ✦ Reframe | bad = C(n,2) − good; `nums[j]−nums[i]==j−i ⟺ nums[i]−i == nums[j]−j` ⇒ key by `nums[i]−i` |
 | 54.6% | Q3 | advantage-shuffle | **Two-Pointers** (greedy) | sort both; assign smallest that beats, else dump weakest on their strongest |
 | 54.8% | Q2 | construct-the-longest-new-string | **DP » Linear** | small DP/greedy over AA/BB/AB counts + adjacency rule |
-| 55.7% | Q3 | maximum-product-of-splitted-binary-tree | **Tree-DP ★** | DFS subtree sums; per edge product = sub·(total−sub). `T` trap: keep long, **mod only at the very end** (mod before max breaks comparison) |
+| 55.7% | Q3 | maximum-product-of-splitted-binary-tree | ~~Tree-DP ★~~ → **Subtree-Aggregation** (NOT tree-DP — pure post-order sum fold, no recurrence-with-choice) | DFS subtree sums; per edge product = sub·(total−sub). `T` trap: keep long, **mod only at the very end** (mod before max breaks comparison) |
 | 55.9% | Q2 | maximum-width-ramp | **Monotonic-Stack ★** (+Two-Ptr) | decreasing-index stack from left, scan from right popping. Disguise: "ramp" ≠ stack |
 | 58.3% | Q2 | minimum-number-of-seconds-to-make-mountain-height-zero | **Binary-Search on answer** | per worker in time t: k with `wt·k(k+1)/2 ≤ t`. `T` trap: overflow + triangular-inversion |
 | 58.8% | Q3 | maximum-number-of-moves-in-a-grid | **DP » Grid** | dp over columns, move to strictly-greater right/diag |
 | 61.9% | Q2 | flip-string-to-monotone-increasing | **DP » String** | dp keep-monotone flips, or prefix ones-vs-zeros |
-| 62.3% | Q2 | k-th-largest-perfect-subtree-size-in-binary-tree | **Tree-DP ★** | DFS returns (isPerfect, size); perfect ⟺ both children perfect AND equal height |
+| 62.3% | Q2 | ~~k-th-largest-perfect-subtree-size-in-binary-tree~~ REMOVED | ~~Tree-DP ★~~ → tree-DP-*lite* (composite-state predicate fold, plain post-order) — **DEFERRED, removed from deal list** | DFS returns (isPerfect, size); perfect ⟺ both children perfect AND equal height |
 | 63.0% | Q2 | push-dominoes | **Two-Pointers** | scan forced L/R regions, fill gaps by rule. Disguise: editorial says BFS |
-| 63.7% | Q3 | minimum-time-to-collect-all-apples-in-a-tree | **Tree-DP ★** | DFS returns subtree collect-cost, +2 per useful child edge. Trap: build undirected adj + visited |
+| 63.7% | Q3 | ~~minimum-time-to-collect-all-apples-in-a-tree~~ REMOVED | ~~Tree-DP ★~~ → tree-DP-*lite* (conditional cost recurrence, strongest of the 3 but still no optimization) — **DEFERRED, removed from deal list** | DFS returns subtree collect-cost, +2 per useful child edge. Trap: build undirected adj + visited |
 | 71.5% | Q3 | minimum-remove-to-make-valid-parentheses | **Stack** | stack of `(` indices; drop unmatched. Trap: counters suffice (don't over-model with index store) |
 | 78.1% | Q3 | minimum-number-of-swaps-to-make-the-string-balanced | **Stack** ✦ Reframe | don't simulate swaps; answer = ⌈unmatched-close / 2⌉ |
 | 81.7% | Q3 | find-the-punishment-number-of-an-integer | **Backtracking** | for each i, can i·i's digits partition to sum i? backtracking partition |
@@ -90,7 +90,7 @@
 | Bucket | Owed | In queue | Picks |
 |---|---|---|---|
 | **Union-Find ★** | 1 | 2 | satisfiability-of-equality-equations, minimize-maximum-component-cost |
-| **Tree-DP ★** | 2 | 3 | min-time-collect-apples, max-product-splitted, kth-largest-perfect-subtree |
+| ~~**Tree-DP ★**~~ DEFERRED | 2 | **0 genuine** | band tree supply is traversal/aggregation; the 3 "tree-DP" tags are 1 sum-fold + 2 tree-DP-*lite* — **none force an optimization recurrence**. Removed from deal list; roll to a band with House-Robber-on-tree / tree-knapsack supply. See ledger §2. |
 | **Monotonic-Stack ★** | 1 | 1 | maximum-width-ramp (2nd also reachable via carried #9 max-chunks) |
 | Two-Pointers | 2 | 2 | advantage-shuffle, push-dominoes |
 | Binary-Search | 2 | 2 | minimum-time-to-complete-trips, min-seconds-mountain |
@@ -103,7 +103,7 @@
 | Backtracking | 1 | 1 | find-the-punishment-number |
 | Hashing | 1 | 1 (+amort) | count-number-of-bad-pairs |
 
-**Rolls cross-band (no clean in-band candidate found):** **DP » LIS-variant** (0 in band) and **DP » Interval** (none genuine — "cutting cake I" is greedy, not interval DP). Both are 1/2 already — owe 1 each, roll forward. Trie / Topo-Sort / Dijkstra / SegTree deferred per topic map.
+**Rolls cross-band (no clean in-band candidate found):** **DP » LIS-variant** (0 in band) and **DP » Interval** (none genuine — "cutting cake I" is greedy, not interval DP). Both are 1/2 already — owe 1 each, roll forward. **Tree-DP ★ (DEFERRED 2026-06-12 — supply-justified):** the band's ~20 tree problems are traversal/BFS-level/construction; the only true-optimization tree-DP on hand is House Robber V (seed inventory, re-solve only → no new ownership rep). True tree-DP that "cannot be solved without the recurrence" = **0 fresh in band.** Trie / Topo-Sort / Dijkstra / SegTree deferred per topic map.
 
 ### Trickiness tiers (true difficulty by editorial, not AR — [[lc-difficulty-by-editorial]])
 
