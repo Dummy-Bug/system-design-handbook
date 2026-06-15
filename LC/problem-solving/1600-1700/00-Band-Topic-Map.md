@@ -123,6 +123,8 @@ With the deferrals out, **1600-1699 has zero new ownership targets.** It is exac
 
 **Headline process metric (carried in place of the prove-the-streak gate we skipped):** Step-2 (recompute worked example) + Step-3 (named edge cases) on *every* solve, and track **first-submission-clean rate** (rule 6C bar = ≥70%, ≤1 hinted/10). The 1550-1600 leak was ~65% clean / ~1.25 hinted-per-10 — carelessness, not algorithm. This band's real job is to close that.
 
+> **⚠ QUALITY-GATE STATUS 2026-06-15:** clean-rate **12/17 ≈ 71%** (just over the 70% floor) but **hinted-rate FAILING: 3 hinted (#02 count-ways-place-houses, #15 count-bad-pairs, #18 apply-bitwise) in 17 ≈ 1.8/10 > the ≤1/10 bar.** Per rule 6C this blocks graduation until pulled back under 1/10. The fix is behavioral (push the 30-min cap before reaching for a hint), not more coverage. Track going forward.
+
 ---
 
 ## Seed inventory — prior 1600-1700 work (✅ RE-AUDITED 2026-06-15)
