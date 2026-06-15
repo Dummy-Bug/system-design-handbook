@@ -42,6 +42,7 @@ This syllabus is the cure. Every topic is tied to a specific LC problem so each 
 ## 1.2 — Triangular sum
 **Fact:** `1 + 2 + ... + n = n(n+1)/2`.
 **Why:** Appears in "minimum operations" problems, "build pyramid" problems, range sum questions.
+**See also §3.11** — the *inverse* (max `k` with `k(k+1)/2 ≤ S`), which is what binary-search-on-answer feasibility checks need.
 **LC problems:**
 - *Sum of Even Numbers After Queries* (LC 985)
 - *Minimum Operations to Make Array Equal* (LC 1551)
@@ -189,6 +190,7 @@ while n > 0:
 ## 3.5 — Float cast trap
 **Fact:** `(int) Math.pow(1e9, 1.0/3)` returns `999`, not `1000`. Always `+1` after casting `Math.pow` or `Math.sqrt` to int, then verify with multiplication.
 **Why:** Floating-point inexactness. Bit you at 1500-1550 #7 (Find Good Integers).
+**See §3.12** — the exact-isqrt guard (`while` correction to `k² ≤ x < (k+1)²`) that makes this rigorous for square roots, plus the `2⁵³` exactness boundary that tells you *when* the raw cast is already safe vs when the guard is mandatory.
 
 ## 3.6 — Bit operations baseline
 **Facts:**
@@ -230,6 +232,56 @@ while n > 0:
 **LC problems:**
 - *Identify the Largest Outlier in an Array* (LC 2926, 1644 — your hinted #7)
 - *Two Sum* (LC 1) — same pattern: `b = target - a`
+
+## 3.11 — Inverting the triangular sum (solve for k given the sum)
+**Fact:** §1.2 gives the *forward* direction `1+2+…+k = k(k+1)/2`. The **inverse** — "largest `k` with `k(k+1)/2 ≤ S`" — comes from solving the quadratic `k²+k−2S ≤ 0`:
+`k = floor((√(8S + 1) − 1) / 2)`.
+**Why:** any "each successive unit costs one more than the last" problem has per-item cost `wt·k(k+1)/2`. When you **binary-search the answer** (a time/budget `T`), the feasibility check "how many units can this worker do within `T`?" is exactly `max k with wt·k(k+1)/2 ≤ T` → invert the triangular sum. This is the math half of the BS-on-answer pattern (the pattern itself lives outside this file).
+**Two traps, both already in the syllabus:**
+- **Float-sqrt (§3.5):** `Math.sqrt` can land just under an exact root → compute `k` then **verify/adjust** with integer multiply (`while ((k+1)*(k+2)/2 <= S) k++;` / `while (k*(k+1)/2 > S) k--;`). Don't trust the raw cast.
+- **Overflow (§1.4):** `8S+1` and `k(k+1)/2` blow past `int` when `S ~ 1e15` (e.g. `wt ≤ 1e6`, height ≤ 1e5). Keep everything `long`. (Or sidestep the sqrt entirely with an inner binary-search for `k`.)
+**LC problems:**
+- *Arranging Coins* (LC 441) — the canonical inverse-triangular: max complete rows from `n` coins.
+- *Minimum Number of Seconds to Make Mountain Height Zero* (LC 3296 — your 1600-1699 #12) — BS-on-answer; feasibility per worker = invert `wt·k(k+1)/2 ≤ T`. See `1600-1699/First-Attempt/12-minimum-number-of-seconds-to-make-mountain-height-zero.md`.
+
+**Socratic drill skeleton (fill in session):**
+```
+   _TODO: pose "I have S=20 budget, each step costs 1,2,3,… — how many steps?" cold → user solves k(k+1)/2 ≤ 20 → k=5 (15≤20, 21>20)._
+   _TODO: derive the closed form from the quadratic; then break it — show a case where Math.sqrt rounds down and the integer-verify step rescues it (ties to §3.5)._
+   _TODO: wire to BS-on-answer — "given time T, units a worker does" IS this inversion; user states it unprompted._
+   Mark ✓ after LC 441 + LC 3296 confirm the reflex.
+```
+
+## 3.12 — Exact integer sqrt (isqrt): the guard that makes `Math.sqrt` safe
+**Fact:** `m = ⌊√x⌋` is the **unique integer** with `m² ≤ x < (m+1)²`. To compute it exactly from a possibly-wrong float estimate, take `k = (long)Math.sqrt((double)x)` then correct it toward the defining inequality:
+```java
+long k = (long) Math.sqrt((double) x);
+while ((k + 1) * (k + 1) <= x) k++;   // estimate too small -> bump up
+while (k * k > x) k--;                // estimate too big   -> bump down
+```
+The loops exit **only** when `k² ≤ x < (k+1)²` holds — so correctness no longer rests on any precision argument.
+**Why:** any BS-on-answer / closed-form whose feasibility needs `⌊√x⌋` (or `⌊√(T/r)⌋`) is one truncation away from a silent off-by-one. `(long)` *truncates* (never rounds up), so a perfect square `x=k²` whose `sqrt` returns `k−ε` casts to `k−1` → undercount → answer drifts. Generalises §3.5 (float-cast trap) and is the same guard §3.11 uses for the triangular inverse — but isolated here as a reusable primitive.
+**The two-fact safety chain (memorise the boundary `2⁵³ ≈ 9·10¹⁵`):**
+1. **Input exact:** a `double` holds every integer below `2⁵³` exactly (52-bit mantissa). If `x ≤ 2⁵³`, no rounding on the way in.
+2. **`sqrt` correctly rounded:** Java's `Math.sqrt` is IEEE-754 correctly rounded → for a perfect square it returns the nearest double = the exact integer. So **below `2⁵³` the raw cast is already exact** and the guard is belt-and-suspenders.
+**Where it breaks (when the guard is *mandatory*):**
+- **`x > 2⁵³`** (budgets up to `1e18`) → fact 1 dies, `x` is pre-rounded, perfect squares can come back low.
+- **`Math.pow(x, 0.5)`** is **not** correctly rounded (unlike `sqrt`) → loses fact 2 even below `2⁵³`. Use `sqrt`, never `pow`-to-the-half.
+**`while` vs `if`:** with correctly-rounded `sqrt` the error is `< 1` across the whole `long` range, so a single `if`-bump *would* suffice — but `while` is strictly dominant at identical cost (body runs 0–2×): correct *unconditionally*, no precision proof to get wrong, survives a sloppy `sqrt`.
+**Overflow watch (§1.4):** `(k+1)*(k+1)` overflows `long` once `k ~ 3·10⁹` (i.e. `x ~ 9·10¹⁸`) → compare as `k+1 <= x/(k+1)` instead.
+**LC problems:**
+- *Sqrt(x)* (LC 69) — the canonical isqrt, no float allowed.
+- *Minimum Time to Repair Cars* (LC 2594 — your 1600-1699 #14) — BS-on-answer, per-mechanic capacity `⌊√(budget/r)⌋`. See `1600-1699/First-Attempt/14-minimum-time-to-repair-cars.md` (full float-precision debrief).
+- *Arranging Coins* (LC 441) — pairs with §3.11 (triangular inverse uses the same guard on `√(8S+1)`).
+
+**Socratic drill skeleton (fill in session — INSTALLED 2026-06-15 via LC 2594):**
+```
+   _DONE 2026-06-15: derived (long) truncates not rounds; perfect-square k-ε -> k-1 -> answer drifts high._
+   _DONE: stated defining inequality m² ≤ x < (m+1)² (strict on the right — boundary x=64 test)._
+   _DONE: mapped both whiles to the violated half; reasoned while-vs-if (while strictly dominant)._
+   _TODO: re-derive cold at Day+14 (2026-06-29) — the 2⁵³ exactness chain + the guard, blank page._
+   Mark ✓ after LC 69 + LC 2594 confirm the reflex cold.
+```
 
 ---
 
@@ -596,6 +648,8 @@ You're at contest 1500. **Start at Band 1400, finish it, then 1500, then 1600.**
 - [ ] 3.8 Prime factorization
 - [ ] 3.9 Fix-the-middle counting
 - [ ] 3.10 Algebraic rearrangement
+- [ ] 3.11 Inverting the triangular sum (max k with k(k+1)/2 ≤ S)
+- [ ] 3.12 Exact integer sqrt (isqrt) — guard `k² ≤ x < (k+1)²`, the 2⁵³ boundary
 
 ## Band 1700
 - [ ] 4.1 XOR properties

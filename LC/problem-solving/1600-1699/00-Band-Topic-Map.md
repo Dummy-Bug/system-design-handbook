@@ -33,16 +33,16 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 
 | Bucket | ~Supply | Status for us |
 |---|---|---|
-| Hashing / Counting | ~52 | ◐ carried 1/2 — abundant |
+| Hashing / Counting | ~52 | ● **OWNED 2/2** (seed re-audit 2026-06-15: Mirror-Pairs + Sum-Digit-Diff) |
 | Sorting | ~40 | substrate (rarely the credited mechanic) |
 | Greedy | ~32 | ● OWNED (carryover) |
 | Math / NT / Combinatorics | ~32 | ● OWNED (carryover) — folds in Game-Theory/parity & most Invariant/Reframe |
 | Graph (BFS/DFS/traversal) | ~35 | ● OWNED (carryover) |
 | Matrix | ~22 | grid-traversal substrate |
-| Binary Search | ~18 | ◐ carried 0/2 — abundant (+ plain-BS owed from 1500-1550) |
+| Binary Search | ~18 | ● **OWNED 2/2** (#13, #14, 2026-06-15) — plain-BS debt from 1500-1550 **closed** |
 | Prefix Sum | ~17 | ● OWNED (carryover) |
 | Heap | ~16 | ◐ 1/2 — #06 reward-top-k-students (2026-06-11, clean) — abundant |
-| Bit Manipulation | ~13 | ◐ informal reps, formalize 0/2 (core) |
+| Bit Manipulation | ~13 | ◐ **1/2** (seed re-audit 2026-06-15: Unique-XOR-Triplets-I, bit-width cap) — owe 1 |
 | **Tree / Binary Tree** | ~20 | ⊘ **tree-DP DEFERRED 2026-06-12** — the ~20 are traversal/BFS-level/construction; **0 force a true optimization recurrence** (audited from band tags). Roll to a band with House-Robber-on-tree / tree-knapsack supply. See ledger §2. |
 | **Union-Find** | ~11 | ★ ✅ **OWNED 2/2** (#01, 2026-06-10) — blind-spot closed |
 | Two Pointers | ~11 | ◐ carried 0/2 |
@@ -52,7 +52,7 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 | Stack (plain) | ~5 | ◐ carried 0/2 |
 | DP » String | ~4 | ◐ carried 0/2 |
 | DP » Grid | ~2 | ◐ carried 1/2 |
-| DP » Interval | enters @1650+ | ◐ carried 1/2 — **now in-band** (was cross-band) |
+| DP » Interval | ~0 genuine | ⊘ **DEFERRED 2026-06-15** — tag+editorial audit: 0 interval-DP in-band (Cutting-Cake-I is greedy). Carried 1/2 (#13 Stone Game) rolls cross-band. |
 | **Monotonic Stack** | ~2 | ★ blind-spot, carried 1/2 — scarce (1 more: carried #9 max-chunks or in-band) |
 | Trie | ~4 | ⊘ deferred — acquire cross-band |
 | Topological Sort | ~2 | ⊘ **DEFERRED to next band** (too thin to own) |
@@ -77,28 +77,32 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 | Math / NT / Combinatorics | 1550-1600 (04,23) — incl. parity/game-theory & Invariant/Reframe flavor |
 | **Union-Find / DSU ★** | 1550-1600 #37 + **1600-1699 #01 satisfiability-of-equality-equations (2026-06-10, clean)** — blind-spot CLOSED · _reinforced #08 minimize-maximum-component-cost (2026-06-12, Kruskal MST, clean)_ |
 | **Backtracking / Subset-Enum** | 1550-1600 #19 + **1600-1699 #05 find-the-punishment-number (2026-06-11, clean self-derived)** |
+| **Binary Search** | 1600-1699 #13 minimum-time-to-complete-trips + #14 minimum-time-to-repair-cars (both 2026-06-15, clean self-derived) — one bucket all flavors [[lc-binary-search-one-bucket]]; closes plain-BS debt from 1500-1550 |
+| **Hashing / Counting** | 1550-1600 #33 + seed re-audit 2026-06-15: Mirror-Pairs (1650-1700 #02) + Sum-Digit-Diff (1600-1650) — both clean self-derived first-AC (Closest-Equal #10 a 3rd, surplus) |
 
-### ◐ / ○ TO OWN (carried debt + blind-spots) — **13 buckets** _(Union-Find closed 2026-06-10; Backtracking closed 2026-06-11)_
+### ◐ / ○ TO OWN (carried debt + blind-spots) — **8 gating buckets** (+3 deferred cross-band: Tree-DP, DP-LIS, DP-Interval) _(Union-Find closed 2026-06-10; Backtracking 06-11; Binary-Search + Hashing 06-15; DP-LIS + DP-Interval deferred 06-15 by editorial audit)_
 | Bucket | Carried count | Owe | Notes |
 |---|---|---|---|
-| Hashing (canonical/counting) | 1/2 (33) | **1** | abundant supply |
+| ~~Hashing (canonical/counting)~~ | **2/2** ✅ | 0 | **OWNED 2026-06-15 (seed re-audit).** #33 (1550-1600) + Mirror-Pairs (1650-1700 #02, clean) + Sum-Digit-Diff (1600-1650, clean); Closest-Equal (#10) a surplus 3rd. Moved to owned table. |
 | Two Pointers | 0/2 | **2** | 32 soft-fail, 35 soft-hinted, 38 hard-fail at 1550-1600 (none counted) |
-| Binary Search | 0/2 | **2** | + plain-BS owed from 1500-1550 |
-| Heap | 1/2 (#06) | **1** | #06 reward-top-k-students (2026-06-11, clean, soft rep) — 21 soft-fail at 1550-1600 (not counted) |
-| Bit Manipulation | 0/2 | **2** | informal reps only (01,19 folded elsewhere) — formalize |
+| ~~Binary Search~~ | **2/2** ✅ | 0 | **OWNED 2026-06-15.** #13 minimum-time-to-complete-trips (CLEAN first-sub self-derived, 18m — feasibility `Σ⌊T/t⌋`) + #14 minimum-time-to-repair-cars (CLEAN first-sub self-derived — feasibility `Σ⌊√(T/r)⌋`, isqrt). **Closes the plain-BS debt carried from 1500-1550.** (#12 mountain-height BS route 2026-06-15 was HARD FAIL/editorial — NOT counted.) |
+| Heap | 1/2 (#06) | **1** | #06 reward-top-k-students (2026-06-11, clean, soft rep). #12 mountain-height (2026-06-13, **soft fail 2×WA — NOT counted**, heap load-bearing). 21 soft-fail at 1550-1600 (not counted) |
+| Bit Manipulation | 1/2 | **1** | **seed re-audit 2026-06-15:** Unique-XOR-Triplets-I (1650-1700 #07, clean self-derived, XOR bit-width cap §4.3) → 0/2→1/2. (Prior informal reps 01,19 folded elsewhere.) Owe 1 more. |
 | Stack (plain) | 0/2 | **2** | 30 hard-fail at 1550-1600 |
 | ~~Backtracking / Subset-Enum~~ | **2/2** ✅ | 0 | **OWNED 2026-06-11** (#05) — moved to owned table above |
 | DP » Linear | 0/2 | **2** | 28,36 soft-fail at 1550-1600 |
 | DP » Grid | 1/2 (31) | **1** | |
-| DP » LIS-variant | 1/2 (34) | **1** | |
+| ~~DP » LIS-variant~~ | 1/2 (34) | **DEFERRED** | **DEFERRED 2026-06-15 (supply-justified).** Tag+editorial audit of both halves: **genuine LIS = 0 in-band** (phrase-hits 1121 = greedy-count, 2943 = sort-scan, neither LIS-DP). Carried 1/2 (#34) rolls cross-band. |
 | DP » String | 0/2 | **2** | band-present, untouched |
-| DP » Interval/Minimax | 1/2 (13) | **1** | now in-band (was cross-band) |
+| ~~DP » Interval/Minimax~~ | 1/2 (13) | **DEFERRED** | **DEFERRED 2026-06-15 (supply-justified).** Tag+editorial audit: **0 interval-DP in-band** (no `dp[i][j]`/Game-Theory tag; Cutting-Cake-I is greedy). Carried 1/2 (#13 Stone Game) rolls cross-band. Corrects the prior "now in-band" mislabel. |
 | **Monotonic Stack ★** | 1/2 (22) | **1** | reachable via carried #9 max-chunks or in-band |
 | ~~Union-Find / DSU ★~~ | **2/2** ✅ | 0 | **OWNED 2026-06-10** (#01) — moved to owned table above |
 | ~~**Tree-DP ★**~~ | 0/2 | **DEFERRED** | **DEFERRED 2026-06-12 (supply-justified).** Re-audited band tree tags: ~20 tree problems are traversal/aggregation/construction; **0 force an optimization recurrence**. The 3 queued "tree-DP" were 1 sum-fold (max-product-splitted, done → re-classed Subtree-Aggregation) + 2 tree-DP-*lite*. True tree-DP supply ≈ 0 below ~1700 → own it in a higher band (rule 6B "cross-band" satisfied by relocation, not skip). |
 
 ### ⊘ DEFERRED (tracked, NON-gating for this band → roll to next band / outlier)
 - **Tree-DP ★** — **DEFERRED 2026-06-12 (supply-justified).** Despite ~20 tree problems, **0 force a true optimization recurrence** — all traversal/aggregation/construction. A blind-spot can't be *owned* where no problem requires it. Relocate to a band with House-Robber-on-tree / tree-knapsack / tree-max-path supply. Rule 6B (blind-spots owned *cross-band*) is satisfied by relocation, not skip. _(mirror in `topic-install-ledger.md` §2)_
+- **DP-LIS-variant** — **DEFERRED 2026-06-15 (supply-justified, tag+EDITORIAL audit).** Genuine LIS-DP = 0 in-band: the only "increasing subsequence" editorial hits (1121, 2943) resolve to greedy-counting and sort+linear-scan respectively, not the `dp[i]=max(dp[j]+1)` / patience mechanic. Carried 1/2 (#34) rolls to a band that supplies a real LIS. _(ledger §5 / line 49)_
+- **DP-Interval/Minimax** — **DEFERRED 2026-06-15 (supply-justified, tag+EDITORIAL audit).** 0 interval-DP in-band — no `dp[i][j]`/`dp[l][r]` in any editorial, no Game-Theory tag, and Minimum-Cost-for-Cutting-Cake-I is greedy (not the range-DP cut problem). Carried 1/2 (#13 Stone Game) rolls cross-band; `defer.md` holds the Stone-Game family as reserve. Supersedes the earlier "now in-band" note. _(ledger §5 / line 50)_
 - **Topological Sort** — too thin (~2). Train next band. _(mirror this in `topic-install-ledger.md`)_
 - **Dijkstra / Shortest Path** — too thin (~1). Train next band. _(ledger)_
 - **Trie ★-adjacent** — acquire cross-band.
@@ -113,48 +117,51 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 ## The band's two jobs (the whole finish line)
 
 With the deferrals out, **1600-1699 has zero new ownership targets.** It is exactly:
-1. **Close carried debts** (all well-supplied here): Hashing, Two-Pointers, Binary-Search, Heap, Bit, Stack, Backtracking, DP-Linear/Grid/LIS/String/Interval.
+1. **Close carried debts.** ✅ Closed: Hashing, Binary-Search, Backtracking, Union-Find. **Still owed (8 gating buckets, 12 reps):** Two-Pointers (2), Heap (1), Bit (1), Stack (2), DP-Linear (2), DP-Grid (1), DP-String (2), Mono-Stack (1). **Deferred cross-band (supply <2, non-gating):** DP-LIS, DP-Interval, Tree-DP — editorial-confirmed 2026-06-15.
 2. **Own the blind-spot trio** — ✅ **Union-Find OWNED 2/2** (#01, 2026-06-10); **Tree-DP DEFERRED 2026-06-12** (no in-band problem forces a true optimization recurrence — own it cross-band where supply exists); **Mono-Stack (1 to go)** is the only blind-spot left to own in-band.
 
 **Headline process metric (carried in place of the prove-the-streak gate we skipped):** Step-2 (recompute worked example) + Step-3 (named edge cases) on *every* solve, and track **first-submission-clean rate** (rule 6C bar = ≥70%, ≤1 hinted/10). The 1550-1600 leak was ~65% clean / ~1.25 hinted-per-10 — carelessness, not algorithm. This band's real job is to close that.
 
 ---
 
-## Seed inventory — prior 1600-1700 work (PENDING our-code re-audit)
+## Seed inventory — prior 1600-1700 work (✅ RE-AUDITED 2026-06-15)
 
-> 17 problems already logged across the two old folders. Results below are from prior headers; **buckets are
-> NOT yet credited** — each must be re-read and classified by the mechanic in OUR code ([[lc-classify-by-own-solution]])
-> before it counts toward any bucket above. Re-audit is a follow-up pass.
+> 17 First-Attempt problems across the two old folders, re-classified by mechanic-in-insight
+> ([[lc-classify-by-own-solution]] — **First-Attempt code predates the per-attempt archive**, so classified from the
+> logged insight/remark, which the hierarchy allows when code is absent). **Only clean self-derived first-submission
+> ACs count** (rule 6A); WA-then-AC / hinted give no rep. **Credits already applied to the trackers above.**
 
-**`1600-1650/` (7 logged — per CLAUDE.md: 2 clean, 3 soft-fail, 2 hinted):**
-| # | Problem | Prior result | Bucket |
+**`1600-1650/` First-Attempt (7 files):**
+| Problem | Verdict | Bucket | Credit |
 |---|---|---|---|
-| 01 | House Robber V | soft fail | ⏳ re-audit |
-| 02 | Count Caesar Cipher Pairs | soft fail | ⏳ re-audit |
-| 03 | Split Array with Minimum Difference | **clean** | ⏳ re-audit |
-| 04 | Minimum Discards to Balance Inventory | soft fail | ⏳ re-audit |
-| 05 | Minimum Cost Path w/ Alternating Directions II | hinted | ⏳ re-audit |
-| 06 | Identify the Largest Outlier | hinted | ⏳ re-audit |
-| 07 | Sum of Digit Differences of All Pairs | **clean** | ⏳ re-audit |
+| Word Squares II | soft fail (WA on sorting) | brute-force enum | — |
+| Split Array with Minimum Difference | **soft fail** (WA edge-case debugs) — _seed table wrongly said "clean"; corrected_ | prefix-sum + validation | — |
+| House Robber V | soft fail (overflow bug) | DP-Linear | — |
+| Count Caesar Cipher Pairs | soft fail (ambiguous; no clean assertion → conservative) | Hashing | — |
+| Minimum Discards to Balance Inventory | soft fail (WA edge-case debugs) | Sliding Window | — |
+| **Sum of Digit Differences of All Pairs** | ✅ **CLEAN** ("no gotchas, self-derived") | **Hashing/Counting** | ✅ **Hashing rep** |
+| Identify the Largest Outlier | hinted | Hashing/algebra | — |
 
-_(Word Squares II was dropped.)_ Second-Attempt versions exist for all 7 in `1600-1650/Second-Attempt/`.
+> _(Min Cost Path w/ Alt Directions II exists only in `1600-1650/Second-Attempt/`, no First-Attempt file → cannot supply a clean first-AC rep.)_
 
-**`1650-1700/` (10 logged — results pending, revision was due 2026-05-30):**
-| # | Problem | Bucket |
-|---|---|---|
-| 01 | Minimum Operations to Make Array Non-Decreasing | ⏳ re-audit |
-| 02 | Minimum Absolute Distance Between Mirror Pairs | ⏳ re-audit |
-| 03 | Minimum Operations to Make Binary Palindrome | ⏳ re-audit |
-| 04 | Find the Smallest Balanced Index | ⏳ re-audit |
-| 05 | Multi-Source Flood Fill | ⏳ re-audit |
-| 06 | Find Maximum Balanced XOR Subarray Length | ⏳ re-audit |
-| 07 | Number of Unique XOR Triplets I | ⏳ re-audit |
-| 08 | Longest Common Prefix Between Adjacent Strings After Removals | ⏳ re-audit |
-| 09 | Path Existence Queries in a Graph I | ⏳ re-audit |
-| 10 | Closest Equal Element Queries | ⏳ re-audit |
+**`1650-1700/` First-Attempt (10 files):**
+| # | Problem | Verdict | Bucket | Credit |
+|---|---|---|---|---|
+| 01 | Min Operations to Make Array Non-Decreasing | hinted ("when shown 8 achievable") | Greedy *(owned)* | — |
+| 02 | **Min Absolute Distance Between Mirror Pairs** | ✅ **CLEAN** ("clean and self-derived") | **Hashing** (reverse→index map) | ✅ **Hashing rep** |
+| 03 | Min Operations to Make Binary Palindrome | soft fail (WA on 3521 + syntax help) | Bit/brute | — |
+| 04 | Find the Smallest Balanced Index | assisted (syntax help); Prefix-Sum *(owned)* | Prefix-Sum | — |
+| 05 | Multi-Source Flood Fill | ✅ clean — but Graph *(owned)* → reinforces only | Graph BFS | — |
+| 06 | Find Maximum Balanced XOR Subarray Length | hinted (hint taken @1h43) | Prefix-XOR + 2D-state hash | — |
+| 07 | **Number of Unique XOR Triplets I** | ✅ **CLEAN** ("fully self-derived, no hint", 3h — derivation-clause pass) | **Bit Manipulation** (XOR bit-width cap §4.3) | ✅ **Bit rep (0/2→1/2)** |
+| 08 | Longest Common Prefix After Removals | soft fail (first submission wrong) | prefix/suffix precompute | — |
+| 09 | Path Existence Queries in a Graph I | soft fail (1 WA) | components / UF-adjacent *(UF owned)* | — |
+| 10 | Closest Equal Element Queries | ✅ clean — Hashing (surplus, already owned) | Hashing (array-doubling+map) | (surplus) |
 
-> Physical files stay in the old folders for now; new in-band problems go in `1600-1699/First-Attempt/`.
-> Migration/renumber into this folder is optional and can follow the re-audit.
+**Re-audit yield:** Hashing **1/2 → OWNED 2/2** · Bit **0/2 → 1/2.** Net owed reps **16 → 14**; gating buckets to own **11 → 10**.
+**Side-finding:** the old bands' First-Attempt clean-rate was low (≈4 clean / 17 = ~24%, lots of WA-then-AC) — corroborates the "carelessness, not coverage" thesis this band targets.
+
+> Physical files stay in the old folders; new in-band problems go in `1600-1699/First-Attempt/`. Migration/renumber optional.
 
 ---
 

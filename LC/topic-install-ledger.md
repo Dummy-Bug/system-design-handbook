@@ -46,8 +46,8 @@
 
 | Sub-pattern | Clean | Status | Why rolling |
 |---|---|---|---|
-| **DP » LIS-variant** | 1 (1550-1600 #34) | ◐ 1/2 | **LIS = 0** in both 1550-1600 and 1600-1699 bands. Roll to first band that supplies one. |
-| **DP » Interval / Minimax** | 1 (1550-1600 #13 Stone Game) | ◐ 1/2 | No genuine interval-DP at ≤1699 ("cutting cake I" is greedy). `defer.md` holds the Stone-Game family as a reserve source. |
+| **DP » LIS-variant** | 1 (1550-1600 #34) | ◐ 1/2 — DEFERRED | **LIS = 0** in both 1550-1600 and 1600-1699 bands. **Confirmed 2026-06-15 by tag+EDITORIAL audit** (the only "increasing subsequence" hits, 1121/2943, are greedy-count + sort-scan, not LIS-DP). Roll to first band that supplies a genuine LIS. Topic-map "in-band" note corrected to match. |
+| **DP » Interval / Minimax** | 1 (1550-1600 #13 Stone Game) | ◐ 1/2 — DEFERRED | No genuine interval-DP at ≤1699 ("cutting cake I" is greedy). **Confirmed 2026-06-15 by tag+EDITORIAL audit** (0 `dp[i][j]`/`dp[l][r]` in any band editorial, no Game-Theory tag). `defer.md` holds the Stone-Game family as reserve. Topic-map "now in-band" note was an unverified tag-read, now corrected. |
 
 ---
 
@@ -55,7 +55,7 @@
 
 | Debt | Origin | Now owed in |
 |---|---|---|
-| Plain **Binary Search / upper-lower-bound** | 1500-1550 (its pick was solved via two-pointer, so BS was never installed) | folded into 1600-1699 Binary-Search debt (2 candidates queued) |
+| ~~Plain **Binary Search / upper-lower-bound**~~ | 1500-1550 (its pick was solved via two-pointer, so BS was never installed) | ✅ **CLOSED 2026-06-15** — Binary-Search is **one bucket regardless of flavor** (on-answer / upper-lower-bound / semi-sorted all share one template); owned 2/2 via #13 + #14 (both on-answer). Plain-BS subsumed, not separately owed. **Policy: never split BS into sub-buckets** (unlike DP) — else 2 reps × N flavors = overkill. |
 
 ---
 
