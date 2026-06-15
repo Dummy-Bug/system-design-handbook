@@ -14,7 +14,7 @@
 
 ## DEAL LIST (blind — links only)
 
-> Genuine random shuffle (2026-06-10). **RE-SHUFFLED 2026-06-11** — undealt #6–23 re-randomized after a chat-side bucket leak (Claude named the next deal's bucket). **Position is NOT a tell.** Deal top-down; tick after the cold re-solve.
+> Genuine random shuffle (2026-06-10). **RE-SHUFFLED 2026-06-11** — undealt #6–23 re-randomized after a chat-side bucket leak. **RE-SHUFFLED AGAIN 2026-06-15** — undealt #16–23 re-randomized after Claude again leaked the next deal's bucket (`maximum-number-of-moves-in-a-grid` named as DP-Grid). That problem is now **⚠ bucket-contaminated** — when dealt, its log notes reduced derivation credit (implementation rep only). **#17–23 RE-RANDOMIZED AGAIN 2026-06-15 on user request** (#16 minimum-remove kept as the active deal; contaminated problem now at #23). **Position is NOT a tell.** Deal top-down; tick after the cold re-solve.
 
 1. [x] ~~https://leetcode.com/problems/satisfiability-of-equality-equations/~~ ✅ dealt+AC 2026-06-10 (**clean first-AC, 46m over-cap → derivation clause; Union-Find ★ 2/2 → OWNED ●**) → `First-Attempt/01`
 2. [x] ~~https://leetcode.com/problems/count-number-of-ways-to-place-houses/~~ ❌→✓ dealt 2026-06-10 (**HINTED + WA-then-AC** — axis-switch hinted; overflow WA, mod-timing; DP-Linear does NOT count, still owes 2) → `First-Attempt/02`
@@ -30,15 +30,15 @@
 12. [x] ~~https://leetcode.com/problems/minimum-number-of-seconds-to-make-mountain-height-zero/~~ ⚠️❌ dealt 2026-06-13 (**Heap route: SOFT FAIL — 2× WA then AC, self-derived**; WA-causes: wrong heap key `t·k` + stored-cumulative desynced from count → Heap stays 1/2. **BS route (2026-06-15): HARD FAIL — could not self-derive `helper`, full code given (editorial) → Binary-Search debt stays 0/2.** Banked recurring bug: shift `>>` binds looser than `+` → `low+(hi-lo)>>1` = `hi/2`. clean-rate 8/11) → `First-Attempt/12`
 13. [x] ~~https://leetcode.com/problems/minimum-time-to-complete-trips/~~ ✅ dealt 2026-06-13 (**CLEAN — first-sub self-derived AC, 18m**; Binary-Search on answer, feasibility `Σ⌊T/t⌋ ≥ totalTrips`. **Binary-Search debt 0/2 → 1/2** — first clean rep on the plain-BS debt carried since 1500-1550. Precedence reflex held: wrote `low+((hi-lo)>>1)` correctly. clean-rate 9/12) → `First-Attempt/13`
 14. [x] ~~https://leetcode.com/problems/count-number-of-bad-pairs/~~ ⚠️ dealt 2026-06-15 (**HINTED — not clean**; stuck 20m, self-pivoted to good-pairs complement but took LC hint "count the not-bad pairs" before the 30 cap; load-bearing `nums[i]-i` key reframe was the real block. **Hashing already OWNED 2/2 → no rep at stake.** clean-rate 10/14 ~71%) → `First-Attempt/15`
-15. [ ] https://leetcode.com/problems/count-the-number-of-beautiful-subarrays/
-16. [ ] https://leetcode.com/problems/maximum-number-of-moves-in-a-grid/
-17. [ ] https://leetcode.com/problems/apply-bitwise-operations-to-make-strings-equal/
-18. [ ] https://leetcode.com/problems/maximum-width-ramp/
-19. [ ] https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/
+15. [x] ~~https://leetcode.com/problems/count-the-number-of-beautiful-subarrays/~~ ✅ dealt 2026-06-15 (**CLEAN — first-sub self-derived AC, 43m OVER-CAP** → derivation clause; XOR-cancellation reframe ⇒ subarray-XOR-0 ⇒ prefix-XOR count. **Bit 1/2 → 2/2 → OWNED ●**; Hashing ride-along. clean-rate 11/15 ~73%) → `First-Attempt/16`
+16. [x] ~~https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/~~ ♻️ dealt 2026-06-15 (**RE-SOLVE — clean but NO NEW REP**; LC 1249 already solved **2026-06-03** in stack-reflex atom `04-stack/01-matching`, same index-stack+`boolean[]` approach reproduced → rule 6A: re-solve gives no rep. **Stack stays 0/2.** Good 12-day retention. **Queue-build oversight: pre-solved problem included.** NOT counted in clean-rate; no First-Attempt file.)
+17. [x] ~~https://leetcode.com/problems/advantage-shuffle/~~ ✅ dealt 2026-06-15 (**CLEAN first-sub self-derived AC**; advantage-greedy via **TreeMap** (`higherKey`/`firstKey`-dump). **Greedy ride-along (OWNED) → no new rep; Two-Pointers NOT credited (our code wasn't two-pointer), stays 0/2** — same as #03 push-dominoes. Banked exchange lemma: smallest is never a unique beater. clean-rate 12/16 ~75%) → `First-Attempt/17`
+18. [ ] https://leetcode.com/problems/apply-bitwise-operations-to-make-strings-equal/
+19. [ ] https://leetcode.com/problems/maximum-width-ramp/
 20. [—] ~~minimum-time-to-collect-all-apples-in-a-tree~~ — **REMOVED 2026-06-12: Tree-DP DEFERRED (see ledger §2)**
-21. [ ] https://leetcode.com/problems/advantage-shuffle/
-22. [ ] https://leetcode.com/problems/maximum-product-after-k-increments/
-23. [ ] https://leetcode.com/problems/flip-string-to-monotone-increasing/
+21. [ ] https://leetcode.com/problems/maximum-product-after-k-increments/
+22. [ ] https://leetcode.com/problems/flip-string-to-monotone-increasing/
+23. [ ] ⚠ https://leetcode.com/problems/maximum-number-of-moves-in-a-grid/ — **bucket-contaminated 2026-06-15 (Claude leaked DP-Grid); implementation rep only when dealt**
 
 ---
 

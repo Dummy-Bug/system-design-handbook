@@ -59,6 +59,9 @@ class Solution {
 - **"Count pairs with a positional/value relation" → rearrange to isolate a per-index invariant, then hash-count.** `nums[i]-i` is the invariant; the complement (`bad = total − good`) is the easy half and should be reflexive. The hard half was the rearrangement — that's the rep that matters, not the complement.
 - **Hinted because a soft/redundant hint was taken at 20 min instead of pushing the cap.** The carelessness-band signal: reach for the hint before the 30 even when the rep isn't on the line.
 
+## Retention note — fluency-illusion data point (NOT a protocol re-solve)
+Solved **~1 year ago** (pre-grind; old submission used the **direct** bad-pair count — full freq map, then per-left-index `bad += (n-1-i) − freq[key]` after a running decrement, the map holding only elements to the right). Dealt blind today and could reconstruct **neither** the direct nor the complement approach → stuck 20m → hinted. A year-old solve is not a same-day/band re-solve, so today **counts as a genuine (hinted) attempt** for clean-rate. The signal: this is the **watched-not-derived plateau** ([[lc-retrieval-not-reread]], [[lc-derivation-budget-chunking]]) — pattern once "solved" but never *encoded*, exactly the gap the 1530→1700 plan targets. Today's complement version is the cleaner canonical form; the year-old direct version is a valid mental backup. **Action:** deliberate Day+14 retrieval check (re-derive cold, both directions) so it encodes this time instead of drifting another year.
+
 ## Perturbation — long vs int (worked Socratically 2026-06-15)
 The four int/long decision points, each pinned by scale:
 

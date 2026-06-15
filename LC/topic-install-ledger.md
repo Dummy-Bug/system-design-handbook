@@ -66,7 +66,7 @@
 | **1450-1500** | done (early) | see `1450-1500.md` | pre-protocol |
 | **1500-1550** | WRAPPED 2026-05-29 (floor, acquisition-only) | Greedy, Flood-Fill, Binary-Tree, Two-Ptr, Bitwise-XOR; +Mono-Stack (cross), +Linear-DP (syntax-assisted) | plain-BS OPEN, Trie DEFERRED |
 | **1550-1600** | CALLED 2026-06-10 (not fully graduated; debts rolled fwd) | ● Greedy, Prefix-Sum, Sliding-Window, Graph, Math/NT | all other debts → 1600-1699 |
-| **1600-1699** | **ACTIVE** (made active 2026-06-10; 100-pt merged band) | carries 1550-1600's 5 owned | targets: blind-spot trio + carried debts (see `1600-1699/00-Band-Topic-Map.md`) |
+| **1600-1699** | **ACTIVE** (made active 2026-06-10; 100-pt merged band) | carries 1550-1600's 5 owned | targets: blind-spot trio + carried debts (see `1600-1700/00-Band-Topic-Map.md`) |
 | **1700-1750** | paused/backfill | see `1700-1750.md` | need ≥3 more |
 | **1750-1800** | backfill | see `1750-1800.md` | full pass owed |
 | **1800-1850** | paused (5 logged) | see `1800-1850.md` | — |

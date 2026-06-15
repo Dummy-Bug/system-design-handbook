@@ -242,7 +242,7 @@ while n > 0:
 - **Overflow (§1.4):** `8S+1` and `k(k+1)/2` blow past `int` when `S ~ 1e15` (e.g. `wt ≤ 1e6`, height ≤ 1e5). Keep everything `long`. (Or sidestep the sqrt entirely with an inner binary-search for `k`.)
 **LC problems:**
 - *Arranging Coins* (LC 441) — the canonical inverse-triangular: max complete rows from `n` coins.
-- *Minimum Number of Seconds to Make Mountain Height Zero* (LC 3296 — your 1600-1699 #12) — BS-on-answer; feasibility per worker = invert `wt·k(k+1)/2 ≤ T`. See `1600-1699/First-Attempt/12-minimum-number-of-seconds-to-make-mountain-height-zero.md`.
+- *Minimum Number of Seconds to Make Mountain Height Zero* (LC 3296 — your 1600-1699 #12) — BS-on-answer; feasibility per worker = invert `wt·k(k+1)/2 ≤ T`. See `1600-1700/First-Attempt/12-minimum-number-of-seconds-to-make-mountain-height-zero.md`.
 
 **Socratic drill skeleton (fill in session):**
 ```
@@ -271,7 +271,7 @@ The loops exit **only** when `k² ≤ x < (k+1)²` holds — so correctness no l
 **Overflow watch (§1.4):** `(k+1)*(k+1)` overflows `long` once `k ~ 3·10⁹` (i.e. `x ~ 9·10¹⁸`) → compare as `k+1 <= x/(k+1)` instead.
 **LC problems:**
 - *Sqrt(x)* (LC 69) — the canonical isqrt, no float allowed.
-- *Minimum Time to Repair Cars* (LC 2594 — your 1600-1699 #14) — BS-on-answer, per-mechanic capacity `⌊√(budget/r)⌋`. See `1600-1699/First-Attempt/14-minimum-time-to-repair-cars.md` (full float-precision debrief).
+- *Minimum Time to Repair Cars* (LC 2594 — your 1600-1699 #14) — BS-on-answer, per-mechanic capacity `⌊√(budget/r)⌋`. See `1600-1700/First-Attempt/14-minimum-time-to-repair-cars.md` (full float-precision debrief).
 - *Arranging Coins* (LC 441) — pairs with §3.11 (triangular inverse uses the same guard on `√(8S+1)`).
 
 **Socratic drill skeleton (fill in session — INSTALLED 2026-06-15 via LC 2594):**
@@ -417,7 +417,7 @@ list); builds on §3.7 (sieve for SPF) + §3.8 (prime factorization).
 ## 4.13 — Fixed-sum product is maximized at the balance point (AM-GM) + the enumerable-vs-subset-sum discriminator
 **Fact:** for a **fixed** total `S`, the product `a·(S−a)` is a downward parabola in `a`, peaked at `a = S/2`. So "maximize the product of two parts whose sum is fixed" ⟺ "make the two parts **as equal as possible**." (Same identity as fixed-perimeter→square maximizes area; AM-GM.) When `a` can only take values from a discrete set, the best is the achievable value **closest to S/2**.
 **Why:** this is the load-bearing reframe for a whole "balance the two halves" family. The trick is knowing **when it earns its keep**:
-- **Short forced candidate list → don't bother.** If the achievable `a`'s are a small fixed set you can just list (e.g. the ~n subtree sums in *Maximum Product of Splitted Binary Tree*, LC 1339 — see `1600-1699/First-Attempt/09-maximum-product-of-splitted-binary-tree.md`), **enumerate and score all of them**; the parabola is trivia.
+- **Short forced candidate list → don't bother.** If the achievable `a`'s are a small fixed set you can just list (e.g. the ~n subtree sums in *Maximum Product of Splitted Binary Tree*, LC 1339 — see `1600-1700/First-Attempt/09-maximum-product-of-splitted-binary-tree.md`), **enumerate and score all of them**; the parabola is trivia.
 - **Exponentially many candidates → the reframe is mandatory.** If `a` ranges over all subset sums (can't enumerate `2^n` products), you **must** flip "maximize product / minimize difference" into "**find the achievable subset sum closest to S/2**" and reach for **subset-sum DP** (boolean reachability over `[0, S/2]`).
 
 **The discriminator to bank:** *the "balance toward S/2" insight becomes load-bearing exactly when the parts are chosen from too many options to enumerate.* Forced short list ⇒ brute force; subset choice ⇒ DP-to-half.
