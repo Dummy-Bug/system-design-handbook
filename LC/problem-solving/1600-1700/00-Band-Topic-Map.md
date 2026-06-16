@@ -94,7 +94,7 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 | DP » Linear | 0/2 | **2** | 28,36 soft-fail at 1550-1600 |
 | DP » Grid | 1/2 (31) | **1** | |
 | ~~DP » LIS-variant~~ | 1/2 (34) | **DEFERRED** | **DEFERRED 2026-06-15 (supply-justified).** Tag+editorial audit of both halves: **genuine LIS = 0 in-band** (phrase-hits 1121 = greedy-count, 2943 = sort-scan, neither LIS-DP). Carried 1/2 (#34) rolls cross-band. |
-| DP » String | 0/2 | **2** | band-present, untouched |
+| DP » String | 0/2 | **2** | #04 partition-≤k (Greedy ride-along, no rep) + #22 flip-string-to-monotone (2026-06-16, AC but **editorial-level help — NO REP**). Both queue picks spent without credit → needs 2 FRESH non-queue picks. |
 | ~~DP » Interval/Minimax~~ | 1/2 (13) | **DEFERRED** | **DEFERRED 2026-06-15 (supply-justified).** Tag+editorial audit: **0 interval-DP in-band** (no `dp[i][j]`/Game-Theory tag; Cutting-Cake-I is greedy). Carried 1/2 (#13 Stone Game) rolls cross-band. Corrects the prior "now in-band" mislabel. |
 | **Monotonic Stack ★** | 1/2 (22) | **1** | #19 max-width-ramp (2026-06-15) was the queue's mono-stack pick but **solved via sort, not stack → NOT credited**, stays 1/2. **Reflex-gap fixed:** installed mono atom covered only NEAREST; new **Stack Atom 09** (farthest/widest) created (Socratically led = acquisition, no rep). **Rep 2 owed cold on carried #9 max-chunks** where Atom 09 must fire unaided. |
 | ~~Union-Find / DSU ★~~ | **2/2** ✅ | 0 | **OWNED 2026-06-10** (#01) — moved to owned table above |
@@ -123,7 +123,7 @@ With the deferrals out, **1600-1699 has zero new ownership targets.** It is exac
 
 **Headline process metric (carried in place of the prove-the-streak gate we skipped):** Step-2 (recompute worked example) + Step-3 (named edge cases) on *every* solve, and track **first-submission-clean rate** (rule 6C bar = ≥70%, ≤1 hinted/10). The 1550-1600 leak was ~65% clean / ~1.25 hinted-per-10 — carelessness, not algorithm. This band's real job is to close that.
 
-> **⚠ QUALITY-GATE STATUS 2026-06-16:** clean-rate **14/19 ≈ 74%** (over the 70% floor) but **hinted-rate FAILING: 3 hinted (#02, #15, #18) in 18 ≈ 1.7/10 > the ≤1/10 bar** (rule 6C → blocks graduation until pulled under 1/10). **+ OVER-MODEL recurring (4×):** push-dominoes / advantage-shuffle / max-width-ramp each dodged their target mechanic (two-ptr / two-ptr / mono-stack) via a comfort hashmap [[lc-index-bookkeeping-overmodel]] → those buckets aren't getting trained even on clean ACs. Both fixes are behavioral, not coverage. Track going forward.
+> **⚠ QUALITY-GATE STATUS 2026-06-16:** clean-rate **14/20 = 70%** (exactly on the floor — #22 flip-string editorial, no longer above) but **hinted-rate FAILING: 3 hinted (#02, #15, #18) in 18 ≈ 1.7/10 > the ≤1/10 bar** (rule 6C → blocks graduation until pulled under 1/10). **+ OVER-MODEL recurring (4×):** push-dominoes / advantage-shuffle / max-width-ramp each dodged their target mechanic (two-ptr / two-ptr / mono-stack) via a comfort hashmap [[lc-index-bookkeeping-overmodel]] → those buckets aren't getting trained even on clean ACs. Both fixes are behavioral, not coverage. Track going forward.
 
 ---
 
