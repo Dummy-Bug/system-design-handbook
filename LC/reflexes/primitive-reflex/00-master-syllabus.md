@@ -60,7 +60,7 @@ Audit: ✅ audited-complete · ▢ rough draft, audit-on-entry.
 | 7 | **Union-Find ★** *(split from Graph — own data-structure family)* | 7 (+5 deferred) | ✅ | `topics/07-union-find/00-syllabus.md` |
 | 8 | Recursion / Backtracking | 2 | ▢ | (on entry) |
 | 9 | Trees | 5 | ▢ | (on entry) |
-| 10 | Bit & Number-Theory | 5 | ▢ | (on entry) |
+| 10 | **Bit Manipulation** *(number-theory → math-reflex)* | 7 modules | ◑ building | `topics/10-bit-manipulation/00-syllabus.md` |
 | 11 | DP → `DP/01-syllabus.md` | — | ▢ | (cross-ref) |
 | 12 | Advanced (Trie ★ / SegTree-BIT / String-matching) | 3 | ▢ | (on entry) |
 
