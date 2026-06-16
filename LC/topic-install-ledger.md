@@ -14,9 +14,9 @@
 
 | Pattern | Clean ACs | Status | Source / next |
 |---|---|---|---|
-| **Monotonic Stack ★** | 1 | ◐ 1/2 | 1550-1600 #22 next-greater-node. 2nd: 1600-1699 `maximum-width-ramp` (queued) or carried 1550-1600 `max-chunks`. |
+| **Monotonic Stack ★** | 1 | ◐ 1/2 | 1550-1600 #22 next-greater-node. (1600-1699 `maximum-width-ramp` was solved via sort = over-model dodge, NOT credited.) 2nd rep queued at **1700-1799 #15 `max-chunks-to-make-sorted-ii`** (the carried ref) + #12 online-stock-span backup. |
 | **Union-Find / DSU ★** | 2 | ● **OWNED** | 1550-1600 #37 properties-graph + 1600-1699 #01 satisfiability-of-equality-equations (clean, 2026-06-10). **Blind-spot CLOSED.** |
-| **Tree-DP ★** | 0 | ⊘ 0/2 **DEFERRED** | **DEFERRED 2026-06-12 (supply-justified) — see §2.** Re-audit of 1600-1699 tree tags: ~20 tree problems, **0 force a true optimization recurrence** (House-Robber-on-tree / tree-knapsack / tree-max-path shape). The 3 once-queued "tree-DP" picks were 1 sum-fold (`max-product-splitted`, solved 2026-06-12 → re-classed **Subtree-Aggregation**, NOT credited) + 2 tree-DP-*lite* (`kth-perfect-subtree`, `collect-apples` — composite-state/conditional-cost folds, plain post-order). Rule 6B requires owning blind-spots *cross-band*; relocation to a higher band with genuine supply satisfies it. |
+| **Tree-DP ★** | 0 | ⊘ 0/2 **DEFERRED to next band** | **FULLY DEFERRED 2026-06-16 (user decision).** 1700-1799 phantom-check of 13 tree editorials = only `longest-zigzag-path` strict (1) — can't own a 2-rep bucket with 1, so **both reps relocate to next band** (~1800+, House-Robber-on-tree / tree-knapsack supply). Removed from 1700-1799 queue. (1600-1699 had 0 strict — see §2.) Rule-6B blind-spot still owed cross-band. |
 
 > UF ✅ owned in-band. Mono-Stack ownable in-band (1 to go). **Tree-DP is NOT ownable here** — no in-band problem requires the optimization recurrence, so it relocates (the 100-pt width helped UF, not Tree-DP). Only true-optimization tree-DP on hand = House Robber V (seed inventory) but it's a re-solve → no new ownership rep.
 
@@ -26,10 +26,10 @@
 
 | Pattern | Deferred at | Reason | Target |
 |---|---|---|---|
-| **Tree-DP ★** | 1600-1699 | ~20 tree problems in band but **0 force a true optimization recurrence** (all traversal/aggregation/construction). A blind-spot can't be *owned* where nothing requires it. | band with House-Robber-on-tree / tree-knapsack / tree-max-path supply (likely 1700+). Still a rule-6B blind-spot — owe 2 clean self-derived ACs cross-band. |
-| **Trie** | 1500-1550, 1550-1600, 1600-1699 | thin supply each band (≤4); all sort/prefix-solvable so far | acquire cross-band; no clean-gate pressure yet |
-| **Topological Sort** | 1600-1699 | only ~2 in band — too thin to own (can't get 2 clean) | next band (1700-1799) |
-| **Dijkstra / Shortest Path** | 1600-1699 | only ~1 in band | next band (1700-1799) |
+| **Tree-DP ★** | 1600-1699, **1700-1799** | 1600-99: 0 strict. 1700-99: only 1 strict (`longest-zigzag`), can't own a 2-rep bucket. | **FULLY DEFERRED to next band (2026-06-16, user decision)** — both reps relocate to ~1800+ (House-Robber-on-tree / tree-knapsack / tree-max-path). Removed from 1700-1799 queue. Still rule-6B blind-spot owed cross-band. |
+| **Trie** | 1500-1550, 1550-1600, 1600-1699 | thin supply each band (≤4); all sort/prefix-solvable so far | **1700-1799 BUILT — 3 in band (sum-of-prefix-scores, extra-characters, k-divisible); 2 queued as acquire. No clean-gate pressure.** |
+| **Topological Sort** | 1600-1699 | only ~2 in band — too thin to own (can't get 2 clean) | ✅ **1700-1799 BUILT 2026-06-16 — 4 in band (parallel-courses, loud-and-rich, all-ancestors-DAG, tree-diameter); editorial-verified; ≥3-rule cleared by the 100-pt merge. Own 2 here.** |
+| **Dijkstra / Shortest Path** | 1600-1699 | only ~1 in band | ✅ **1700-1799 BUILT 2026-06-16 — 3 in band (reach-last-room-i, disappearing-nodes [Dijkstra], cheapest-flights [Bellman-Ford]); editorial-verified; ≥3-rule cleared by merge. Own 2 here.** |
 | **Design / implement-interface** | ongoing | interview-only, low contest value ([[lc-defer-design-problems-reflex-track]]) | install core once, then defer indefinitely |
 
 ---
@@ -46,8 +46,8 @@
 
 | Sub-pattern | Clean | Status | Why rolling |
 |---|---|---|---|
-| **DP » LIS-variant** | 1 (1550-1600 #34) | ◐ 1/2 — DEFERRED | **LIS = 0** in both 1550-1600 and 1600-1699 bands. **Confirmed 2026-06-15 by tag+EDITORIAL audit** (the only "increasing subsequence" hits, 1121/2943, are greedy-count + sort-scan, not LIS-DP). Roll to first band that supplies a genuine LIS. Topic-map "in-band" note corrected to match. |
-| **DP » Interval / Minimax** | 1 (1550-1600 #13 Stone Game) | ◐ 1/2 — DEFERRED | No genuine interval-DP at ≤1699 ("cutting cake I" is greedy). **Confirmed 2026-06-15 by tag+EDITORIAL audit** (0 `dp[i][j]`/`dp[l][r]` in any band editorial, no Game-Theory tag). `defer.md` holds the Stone-Game family as reserve. Topic-map "now in-band" note was an unverified tag-read, now corrected. |
+| **DP » LIS-variant** | 1 (1550-1600 #34) | ◐ 1/2 → **in-band 1700-1799** | LIS = 0 at ≤1699. ✅ **GENUINE supply FOUND 1700-1799 (2026-06-16): longest-arithmetic-subsequence (LIS-variant) + sorting-three-groups (min-changes = n−LIS). Both queued — own the 2nd rep here.** |
+| **DP » Interval / Minimax** | 1 (1550-1600 #13 Stone Game) | ◐ 1/2 → **in-band 1700-1799** | No genuine interval-DP at ≤1699. ✅ **GENUINE `dp[i][j]` supply FOUND 1700-1799 (2026-06-16): minimum-insertion-steps-to-make-string-palindrome + valid-palindrome-iii (both LPS interval-DP, editorial-verified). Queued — own the 2nd rep here.** |
 
 ---
 
@@ -67,8 +67,7 @@
 | **1500-1550** | WRAPPED 2026-05-29 (floor, acquisition-only) | Greedy, Flood-Fill, Binary-Tree, Two-Ptr, Bitwise-XOR; +Mono-Stack (cross), +Linear-DP (syntax-assisted) | plain-BS OPEN, Trie DEFERRED |
 | **1550-1600** | CALLED 2026-06-10 (not fully graduated; debts rolled fwd) | ● Greedy, Prefix-Sum, Sliding-Window, Graph, Math/NT | all other debts → 1600-1699 |
 | **1600-1699** | **ACTIVE** (made active 2026-06-10; 100-pt merged band) | carries 1550-1600's 5 owned | targets: blind-spot trio + carried debts (see `1600-1700/00-Band-Topic-Map.md`) |
-| **1700-1750** | paused/backfill | see `1700-1750.md` | need ≥3 more |
-| **1750-1800** | backfill | see `1750-1800.md` | full pass owed |
+| **1700-1799** | **BUILT (sealed, NOT open) 2026-06-16** — merged 100-pt band; supersedes the old 1700-1750/1750-1800 stubs | targets: Tree-DP ★, Mono-Stack ★ (1→2), Topo-Sort + Dijkstra (new), DP-Interval/LIS (1→2), Trie (acq) + carried DP debts | 21-problem sealed queue at `1700-1800/_Sealed-Queue.md`; **rule-8 gated on 1600-1699 graduating first.** 6 old solves excluded. |
 | **1800-1850** | paused (5 logged) | see `1800-1850.md` | — |
 | **1900-1950** | acquisition notes | see `1900-1950/Phase-1-Acquisition.md` | — |
 

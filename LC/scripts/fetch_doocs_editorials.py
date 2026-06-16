@@ -1,8 +1,8 @@
 import os, csv, json, time, sys, re, urllib.request, urllib.parse
 
-BAND_TSV = "zerotrac-data/band_1500_1549_lctags.tsv"
-OUT_DIR = "editorials-data/band_1500_1549"
-SUMMARY = "editorials-data/band_1500_1549_summary.tsv"
+BAND_TSV = os.environ.get("BAND_TSV", "zerotrac-data/band_1700_1799_lctags.tsv")
+OUT_DIR = os.environ.get("OUT_DIR", "editorials-data/band_1700_1799")
+SUMMARY = os.environ.get("SUMMARY", "editorials-data/band_1700_1799_summary.tsv")
 os.makedirs(OUT_DIR, exist_ok=True)
 
 UA = {"User-Agent":"Mozilla/5.0 (Macintosh) AppleWebKit/537.36"}
