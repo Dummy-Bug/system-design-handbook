@@ -41,7 +41,7 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 | Matrix | ~22 | grid-traversal substrate |
 | Binary Search | ~18 | ● **OWNED 2/2** (#13, #14, 2026-06-15) — plain-BS debt from 1500-1550 **closed** |
 | Prefix Sum | ~17 | ● OWNED (carryover) |
-| Heap | ~16 | ◐ 1/2 — #06 reward-top-k-students (2026-06-11, clean) — abundant |
+| Heap | ~16 | ● **OWNED 2/2** (#06 reward-top-k 2026-06-11 soft + #20 max-product-after-k-increments 2026-06-16 clean, heap load-bearing) |
 | Bit Manipulation | ~13 | ● **OWNED 2/2** (2026-06-15: Unique-XOR-Triplets-I + #16 beautiful-subarrays XOR reframe) |
 | **Tree / Binary Tree** | ~20 | ⊘ **tree-DP DEFERRED 2026-06-12** — the ~20 are traversal/BFS-level/construction; **0 force a true optimization recurrence** (audited from band tags). Roll to a band with House-Robber-on-tree / tree-knapsack supply. See ledger §2. |
 | **Union-Find** | ~11 | ★ ✅ **OWNED 2/2** (#01, 2026-06-10) — blind-spot closed |
@@ -87,7 +87,7 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 | ~~Hashing (canonical/counting)~~ | **2/2** ✅ | 0 | **OWNED 2026-06-15 (seed re-audit).** #33 (1550-1600) + Mirror-Pairs (1650-1700 #02, clean) + Sum-Digit-Diff (1600-1650, clean); Closest-Equal (#10) a surplus 3rd. Moved to owned table. |
 | Two Pointers | 0/2 | **2** | 32 soft-fail, 35 soft-hinted, 38 hard-fail at 1550-1600 (none counted). **Both queue picks spent with NO credit:** #03 push-dominoes (over-modeled) + #17 advantage-shuffle (2026-06-15, solved via TreeMap-greedy = Greedy ride-along, not two-pointer). → **needs 2 FRESH sort+two-pointer picks.** |
 | ~~Binary Search~~ | **2/2** ✅ | 0 | **OWNED 2026-06-15.** #13 minimum-time-to-complete-trips (CLEAN first-sub self-derived, 18m — feasibility `Σ⌊T/t⌋`) + #14 minimum-time-to-repair-cars (CLEAN first-sub self-derived — feasibility `Σ⌊√(T/r)⌋`, isqrt). **Closes the plain-BS debt carried from 1500-1550.** (#12 mountain-height BS route 2026-06-15 was HARD FAIL/editorial — NOT counted.) |
-| Heap | 1/2 (#06) | **1** | #06 reward-top-k-students (2026-06-11, clean, soft rep). #12 mountain-height (2026-06-13, **soft fail 2×WA — NOT counted**, heap load-bearing). 21 soft-fail at 1550-1600 (not counted) |
+| ~~Heap~~ | **2/2** ✅ | 0 | **OWNED 2026-06-16.** #06 reward-top-k-students (2026-06-11, clean, soft rep — heap not load-bearing) + #20 max-product-after-k-increments (2026-06-16, CLEAN first-sub self-derived 15m, **heap load-bearing** — k× grab-min loop). #12 mountain-height (soft fail 2×WA — NOT counted). |
 | ~~Bit Manipulation~~ | **2/2** ✅ | 0 | **OWNED 2026-06-15.** Unique-XOR-Triplets-I (seed #07, bit-width cap §4.3) + #16 beautiful-subarrays (clean self-derived, XOR-cancellation → subarray-XOR-0 reframe). Moved to owned table. |
 | Stack (plain) | 0/2 | **2** | 30 hard-fail at 1550-1600. **Both queue Stack deals are spent with NO rep:** #11 min-swaps-balanced (editorial hard-fail) + #16 minimum-remove (2026-06-15 RE-SOLVE — LC 1249 pre-solved 2026-06-03 in stack-reflex track). → **needs 2 FRESH non-queue Stack picks.** |
 | ~~Backtracking / Subset-Enum~~ | **2/2** ✅ | 0 | **OWNED 2026-06-11** (#05) — moved to owned table above |
@@ -118,12 +118,12 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 ## The band's two jobs (the whole finish line)
 
 With the deferrals out, **1600-1699 has zero new ownership targets.** It is exactly:
-1. **Close carried debts.** ✅ Closed: Hashing, Binary-Search, Backtracking, Union-Find, Bit. **Still owed (7 gating buckets, 11 reps):** Two-Pointers (2), Heap (1), Stack (2), DP-Linear (2), DP-Grid (1), DP-String (2), Mono-Stack (1). **Deferred cross-band (supply <2, non-gating):** DP-LIS, DP-Interval, Tree-DP — editorial-confirmed 2026-06-15.
+1. **Close carried debts.** ✅ Closed: Hashing, Binary-Search, Backtracking, Union-Find, Bit, **Heap (#20, 2026-06-16)**. **Still owed (6 gating buckets, 10 reps):** Two-Pointers (2), Stack (2), DP-Linear (2), DP-Grid (1), DP-String (2), Mono-Stack (1). **Deferred cross-band (supply <2, non-gating):** DP-LIS, DP-Interval, Tree-DP — editorial-confirmed 2026-06-15.
 2. **Own the blind-spot trio** — ✅ **Union-Find OWNED 2/2** (#01, 2026-06-10); **Tree-DP DEFERRED 2026-06-12** (no in-band problem forces a true optimization recurrence — own it cross-band where supply exists); **Mono-Stack (1 to go)** is the only blind-spot left to own in-band.
 
 **Headline process metric (carried in place of the prove-the-streak gate we skipped):** Step-2 (recompute worked example) + Step-3 (named edge cases) on *every* solve, and track **first-submission-clean rate** (rule 6C bar = ≥70%, ≤1 hinted/10). The 1550-1600 leak was ~65% clean / ~1.25 hinted-per-10 — carelessness, not algorithm. This band's real job is to close that.
 
-> **⚠ QUALITY-GATE STATUS 2026-06-15:** clean-rate **13/18 ≈ 72%** (over the 70% floor) but **hinted-rate FAILING: 3 hinted (#02, #15, #18) in 18 ≈ 1.7/10 > the ≤1/10 bar** (rule 6C → blocks graduation until pulled under 1/10). **+ OVER-MODEL recurring (4×):** push-dominoes / advantage-shuffle / max-width-ramp each dodged their target mechanic (two-ptr / two-ptr / mono-stack) via a comfort hashmap [[lc-index-bookkeeping-overmodel]] → those buckets aren't getting trained even on clean ACs. Both fixes are behavioral, not coverage. Track going forward.
+> **⚠ QUALITY-GATE STATUS 2026-06-16:** clean-rate **14/19 ≈ 74%** (over the 70% floor) but **hinted-rate FAILING: 3 hinted (#02, #15, #18) in 18 ≈ 1.7/10 > the ≤1/10 bar** (rule 6C → blocks graduation until pulled under 1/10). **+ OVER-MODEL recurring (4×):** push-dominoes / advantage-shuffle / max-width-ramp each dodged their target mechanic (two-ptr / two-ptr / mono-stack) via a comfort hashmap [[lc-index-bookkeeping-overmodel]] → those buckets aren't getting trained even on clean ACs. Both fixes are behavioral, not coverage. Track going forward.
 
 ---
 

@@ -36,7 +36,7 @@
 18. [x] ~~https://leetcode.com/problems/apply-bitwise-operations-to-make-strings-equal/~~ ⚠️ dealt 2026-06-15 (**HINTED ("soft" — 2 counterexample-disproofs + "positions don't matter" nudge) → not clean**; positional flip-sim was the trap, answer is the positionless invariant `s.contains("1")==target.contains("1")`. **Bit owned 2/2 + Invariant/Reframe non-gating → no rep at stake.** clean-rate 12/17 ~71%) → `First-Attempt/18`
 19. [x] ~~https://leetcode.com/problems/maximum-width-ramp/~~ ✅ dealt 2026-06-15 (**CLEAN first-sub self-derived AC** via O(n log n) sort + `Map<value,Deque<index>>` min-index sweep. **Monotonic-Stack ★ NOT credited** — solved by sort, not the stack (4th over-model dodge [[lc-index-bookkeeping-overmodel]]); **Mono-Stack stays 1/2.** Reflex-gap found+fixed: nearest-only Atom 06 didn't cover "farthest/widest" → **new Stack Atom 09** installed (Socratically led = acquisition). clean-rate 13/18 ~72%) → `First-Attempt/19`
 20. [—] ~~minimum-time-to-collect-all-apples-in-a-tree~~ — **REMOVED 2026-06-12: Tree-DP DEFERRED (see ledger §2)**
-21. [ ] https://leetcode.com/problems/maximum-product-after-k-increments/
+21. [x] ~~https://leetcode.com/problems/maximum-product-after-k-increments/~~ ✅ dealt+AC 2026-06-16 (**CLEAN first-sub self-derived AC, 15m SUB-CAP**; min-heap, +1 to smallest ×k, mod running product. **Heap load-bearing here (k× grab-min loop)** → **Heap 1/2 → 2/2 → OWNED ●**. Exchange-argument proof derived in debrief. clean-rate 14/19 ≈ 74%) → `First-Attempt/20`
 22. [ ] https://leetcode.com/problems/flip-string-to-monotone-increasing/
 23. [ ] ⚠ https://leetcode.com/problems/maximum-number-of-moves-in-a-grid/ — **bucket-contaminated 2026-06-15 (Claude leaked DP-Grid); implementation rep only when dealt**
 
