@@ -13,6 +13,26 @@ Discriminator (the confusion matrix that makes bit-mapping fast): **am I —**
 
 That 4-way split is the core mapping skill for bits.
 
+## ⚠ Scope boundary — what is NOT in this family (don't re-drift)
+
+**Carry-arithmetic / positional digit-simulation is a SEPARATE primitive, not bit manipulation.** The family
+*Add Binary · Plus One · Add Strings · Add to Array-Form · Multiply Strings · Add Two Numbers (linked list)* all
+share one skeleton — *simulate grade-school positional arithmetic with carry* (`sum = digits + carry`, emit
+`sum % base`, carry `sum / base`, base-agnostic) — and it uses **`%base` / `/base` arithmetic**, not bit operators.
+It belongs to a math/array **simulation** primitive, tracked elsewhere. We touched **Add Binary** only as a
+*foundation warm-up* (it exercises base-2 representation + carry, §6/§9 of `01-Number-System`); do **not** expand
+into its cousins here.
+
+**The genuinely-bit "add" is the exception:** *Sum of Two Integers* (add without `+`) → `sum = a^b`,
+`carry = (a&b) << 1` — that one IS bit manipulation and lives in **Module 1** (addition via XOR+carry), done with operators.
+
+> Litmus test: solved with `%base`//`base` digit arithmetic → digit-simulation (not here). Solved with
+> `& | ^ ~ << >> >>>` on raw bits → bit manipulation (here).
+>
+> Note: the `01-Number-System` foundation problems (P1 Number-of-1-Bits, P2 Add-Binary, P3 Alternating-Bits) were
+> all solved via `%2`//`2` **arithmetic** as *stopgaps* — real bit manipulation begins at `02-Operators/`, after
+> which we redo them the bit way (`& 1`, `>>>`) — incl. the P1 negative-`n` cliffhanger.
+
 ## Install + test loop (per atom)
 1. **Classic** — the simpler tool solves it.
 2. **Break the simpler tool** — a constraint forces the bit move → derive it (Socratic).
