@@ -43,4 +43,12 @@ For an arbitrary `x` and position `i`, write cold (each in one line): test, set,
 - **Check Odd or Even** (`x & 1`)
 
 ## Status
-Syllabus set. Derivations pending (Socratic). Notes → `02-notes.md`; problems → `problems/`. (Builds directly on `02-Operators`; test/write/odd-even already seen there — consolidate + add set/clear/toggle.)
+✅ Notes done — `02-notes.md` §1–5 + summary table, all derived Socratically:
+- §1 `1 << i` as single-bit address (+ width caveat: safe-as-mask through i=31, wraps at ≥32, `1L<<i` for 64-bit)
+- §2 Test boolean `(x & (1<<i)) != 0` (the `!= 0` not `== 1` trap) · value `(x >> i) & 1`
+- §3 Set `x | (1<<i)` (idempotent) · §4 Clear `x & ~(1<<i)` (derived `~`-mask; works on negatives) · §5 Toggle `x ^ (1<<i)` (self-inverse, not idempotent)
+- unifying idea: `1<<i` picks position, operator does verb; set/clear idempotent vs toggle self-inverse
+
+**Problems: WAIVED as trivial** (2026-06-17). The 3 LearnYard drills (Kth Bit Set, Get/Set/Clear ith Bit, Check Odd/Even) are direct one-line applications of the derived idioms — install already happened in the Socratic derivation, and test/read + write were exercised in Reverse Bits. No grind value. Links retained for reference: GfG check-k-th-bit, GfG bit-manipulation-1666686020, GfG odd-or-even3618.
+
+✅ **TOPIC COMPLETE** (notes-derived; drills waived).
