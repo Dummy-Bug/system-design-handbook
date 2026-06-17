@@ -11,8 +11,8 @@ Module 0 is split into 4 topic folders — grouped so each is a real chunk (not 
 | Folder | Atoms | Topic | Status |
 |---|---|---|---|
 | `01-Number-System/` | 0.1, 0.2 | representation: place value, binary, conversion, fixed width/range, two's complement | ✅ notes done (§1–9); problems: P1 number-of-1-bits, P2 add-binary done · P3 alternating-bits pending |
-| `02-Operators/` | 0.3 | the 6 operators `& \| ^ ~ << >>` (+ `>>>`) — what each does bit-by-bit | ◑ building — syllabus set, deriving (start `&`) |
-| `03-Single-Bit-Ops/` | 0.4–0.8 | test / set / clear / toggle bit `i` from `1<<i`; odd-even | ▢ |
+| `02-Operators/` | 0.3 | the 6 operators `& \| ^ ~ << >>` (+ `>>>`) — what each does bit-by-bit | ✅ COMPLETE — notes §1–7 (all 7 ops) + 6 problems (1-bits redo, single-number, hamming, reverse-bits, complement, power-of-two) |
+| `03-Single-Bit-Ops/` | 0.4–0.8 | test / set / clear / toggle bit `i` from `1<<i`; odd-even | ◑ syllabus set, deriving next |
 | `04-Idioms/` | 0.9–0.18 | `x&-x`, `x&(x-1)`, masks, char tricks, power checks, range masks | ▢ |
 
 ## Atoms (drill to reflex)

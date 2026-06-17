@@ -40,4 +40,16 @@ Compute `& | ^ ~` by hand on 4-bit examples; predict `<<` / `>>` / `>>>` results
 **redo P1 (Number of 1 Bits) with `& 1` + `>>>`** — the operator version handles negatives, closing the cliffhanger.
 
 ## Status
-Syllabus set. Derivations pending (Socratic), starting with `&`. Notes → `02-notes.md`; problems → `problems/`.
+✅ All 7 operators derived (Socratic) and written to `02-notes.md`:
+- §1 AND (masking/clear-tool, `n&1` parity, extreme masks) · §2 OR (set-tool, AND/OR duality) · §3 XOR (toggle, self-inverse `a^b^b=a`, even-occurrence cancellation) · §4 NOT (`~x = −x−1`, one's complement)
+- §5 `<<` (×2^k, full fixed-width overflow traps: `1<<31` negative + `1<<32` wraps + `1L<<k` fix) · §6 `>>` (÷2^k, sign-fill, why) · §7 `>>>` (zero-fill, bit-walking, **closes P1 negative-`n` cliffhanger**, BS midpoint bonus)
+
+✅ **TOPIC COMPLETE** — 7 operators derived + 6 problems logged in `problems/`:
+1. Number of 1 Bits (operator redo) — `n & 1` + `n >>> 1`, `>>>`-over-`>>` flagged unprompted, negative-`n` cliffhanger closed
+2. Single Number — XOR self-inverse, pairs cancel
+3. Hamming Distance — XOR-marks-differences + set-bit count (first chained idiom)
+4. Reverse Bits — read `(x>>p)&1` / write `|=(b<<q)`; **`1<<k` not `Math.pow`** (overflow clamps); **AC ≠ correct** (constraint-masked bug, self-caught)
+5. Number Complement — width-bounded complement via `(1<<bitLength)-1`; `highestOneBit` returns value-not-index trap
+6. Power of Two — one-set-bit necessary-not-sufficient (`0`/MIN_VALUE slip); property-guard `n>0` over value-enumeration
+
+Deferred to `04-Idioms`: Power-of-Two via `n & (n-1)` (atom 0.10, to be derived cold).
