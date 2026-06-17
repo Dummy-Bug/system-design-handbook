@@ -13,7 +13,7 @@ Module 0 is split into 4 topic folders — grouped so each is a real chunk (not 
 | `01-Number-System/` | 0.1, 0.2 | representation: place value, binary, conversion, fixed width/range, two's complement | ✅ notes done (§1–9); problems: P1 number-of-1-bits, P2 add-binary done · P3 alternating-bits pending |
 | `02-Operators/` | 0.3 | the 6 operators `& \| ^ ~ << >>` (+ `>>>`) — what each does bit-by-bit | ✅ COMPLETE — notes §1–7 (all 7 ops) + 6 problems (1-bits redo, single-number, hamming, reverse-bits, complement, power-of-two) |
 | `03-Single-Bit-Ops/` | 0.4–0.8 | test / set / clear / toggle bit `i` from `1<<i`; odd-even | ✅ notes §1–5 (all 5 verbs derived); drills waived as trivial |
-| `04-Idioms/` | 0.9–0.18 | `x&-x`, `x&(x-1)`, masks, char tricks, power checks, range masks | ◑ syllabus set, deriving next (start `x&(x-1)`) |
+| `04-Idioms/` | 0.9–0.18 | `x&-x`, `x&(x-1)`, masks, char tricks, power checks, range masks | ✅ notes §1–7 (all atoms 0.9–0.18) + Power-of-Four problem |
 
 ## Atoms (drill to reflex)
 
@@ -53,4 +53,10 @@ Blank-page reproduce all 18 idioms in <2s each, AND solve Get/Set/Clear + Power-
 Then → Module 1.
 
 ## Status
-Atoms 0.1–0.18 listed (15 base + 3 folded from LC post 3695233). Drill/derivation pending (Socratic). No reps logged yet.
+✅ **MODULE 0 COMPLETE** (2026-06-17) — all 4 sub-topics derived Socratically + noted:
+- `01-Number-System` ✅ (§1–9 + §6B subtraction-by-borrow; revised cold 2026-06-17) — problems: P1 number-of-1-bits, P2 add-binary
+- `02-Operators` ✅ (all 7 ops §1–7) — 6 problems
+- `03-Single-Bit-Ops` ✅ (5 verbs; drills waived as trivial)
+- `04-Idioms` ✅ (atoms 0.9–0.18, §1–7) — Power-of-Four problem
+
+All 18 atoms (0.1–0.18) derived. Next: **Module 1 — Counting & bit arithmetic** (`01-counting-arithmetic`).

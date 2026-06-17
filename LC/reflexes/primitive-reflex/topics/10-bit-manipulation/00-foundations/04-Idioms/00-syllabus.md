@@ -69,4 +69,8 @@ Cold one-liners: drop-lowest-bit, isolate-lowest-bit, low-`k` mask, power-of-two
 
 Problems: `problems/01-power-of-four.md` ✅ (also exercised `n&(n-1)` pow2 mechanic → closes the rep deferred from Operators). Power-of-Three explored + **rejected as non-bit** (no bit structure for non-power-of-2 base; boundary lesson: bit tricks are for powers of 2 — divisor-of-`3^19` trick & loop noted, not installed).
 
-**Remaining atoms:** 0.11 `(1<<k)-1` low-ones mask · 0.18 keep/clear low `i` bits · 0.13 number-complement reframe (`^ mask`) · 0.16/0.17 char case bit (`|32`/`&~32`/`^32`) + letter→index (`c&31`) · 0.12 set rightmost unset `x|(x+1)` · Group E range-from-position (verify on use).
+- §5 `(1<<k)-1` low-ones mask + keep/clear low `i` bits + number-complement reframe ✅
+- §6 char case bit (`c|32` lower · `c&~32` upper · `c^32` toggle · `(c&32)` test · `c&31` index 1–26; "why 32 not 26") ✅
+- §7 `x | (x+1)` sets rightmost unset bit (mirror of `x & (x-1)`) ✅
+
+✅ **TOPIC COMPLETE** — all atoms 0.9–0.18 derived + noted. Problem: `problems/01-power-of-four.md`. (Group E range-from-position idioms left as "verify on use" — niche, not drilled.)

@@ -43,7 +43,7 @@ into its cousins here.
 
 | # | Module | Status | Syllabus |
 |---|---|---|---|
-| 0 | **Foundations** (the alphabet — ops, idioms, 2's-comp) | install now | `00-foundations/00-syllabus.md` |
+| 0 | **Foundations** (the alphabet — ops, idioms, 2's-comp) | ✅ DONE (2026-06-17) | `00-foundations/00-syllabus.md` |
 | 1 | **Counting & bit arithmetic** (popcount, Counting-Bits DP, count-bits-in-1..N, reverse, add, add-via-XOR, divide) | install now | `01-counting-arithmetic/00-syllabus.md` |
 | 2 | **XOR mastery** (cancellation, parity-invariant, two-uniques/thrice, reconstruction/decode, prefix-XOR, Gray) | install now | `02-xor-mastery/00-syllabus.md` |
 | 3 | **Per-bit thinking & properties** (per-bit contribution, XOR=sum⟺no-carry, greedy bit construction, per-bit decision) | install now | `03-per-bit-properties/00-syllabus.md` |

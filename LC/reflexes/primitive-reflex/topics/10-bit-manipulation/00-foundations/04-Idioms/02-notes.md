@@ -125,3 +125,94 @@ So the only bit that is `1` in *both* `x` and `-x` is the lowest set bit — eve
 | `x & -x` | **isolates** it (keeps only it, clears the rest) |
 
 ⚠ Edge: `x & -x` on `Integer.MIN_VALUE` returns `MIN_VALUE` (its lowest set bit *is* the sign bit) — fine as a bit pattern, watch arithmetic use. And `0 & -0 = 0` (no set bit to isolate).
+
+## 5. Low-`k` mask and keep / clear low `i` bits
+
+### The low-`k` all-ones mask: `(1 << k) - 1`
+
+Straight from the pieces you have: `1 << k` = `2^k`, and from §6 `2^k − 1` = a run of `k` ones. So:
+
+```
+(1 << 3) - 1 = 1000 - 1 = 0111      (bits 0,1,2 set)
+```
+
+> **`(1 << k) - 1`** = `k` ones in the low positions (bits `0 .. k-1`). The general-purpose "bottom-`k`-bits" mask.
+
+### Keep / clear the low `i` bits
+
+With that mask (i ones at the bottom, zeros above):
+
+- **keep** only the low `i` bits (zero everything above): `x & ((1 << i) - 1)` — AND keeps where the mask is `1`.
+- **clear** the low `i` bits (zero the bottom, keep above): `x & ~((1 << i) - 1)` — invert the mask (`0`s at bottom, `1`s above) and AND.
+
+> **Keep low `i`:** `x & ((1<<i) - 1)` · **Clear low `i`:** `x & ~((1<<i) - 1)`.
+
+The clear-mask uses the same "invert to swap keep↔clear" move as clearing a single bit (`~(1<<i)` in Single-Bit-Ops §4) — just a wider mask.
+
+⚠ **Precedence:** subtraction binds *tighter* than `&` in Java, so `(1<<i) - 1 & x` does parse as `((1<<i)-1) & x` — but always parenthesize the mask explicitly (`x & ((1<<i)-1)`) so intent is unmistakable. [[lc-java-shift-precedence-trap]]
+
+⚠ **Width:** `(1 << k) - 1` for `k = 32` is wrong on `int` (`1<<32` wraps mod 32 → `1`, giving mask `0`). For a full 32-bit mask use `-1` (all ones) or `1L`.
+
+### Number complement = the same mask, XOR'd
+
+Flipping every bit *within a width* (Operators P5 / atom 0.13) is just XOR with this mask: `x ^ ((1 << bits) - 1)`. Nothing new — `(1<<k)-1` builds the width-matched all-ones, and `^` flips (§3).
+
+## 6. Char case bit (ASCII bit 5)
+
+Characters are stored as numbers (ASCII), so bit ops work on them. The key fact: **uppercase and lowercase of the same letter differ in exactly one bit — bit 5 (value 32).**
+
+```
+'A' = 65 = 0100 0001
+'a' = 97 = 0110 0001
+                ↑ bit 5
+```
+
+`97 − 65 = 32 = 2^5`. This is by design: ASCII puts uppercase in a 32-wide block starting at `64` and lowercase in one starting at `96`, so the two blocks differ only in bit 5. The offset is `32` (a power of two = one bit), **not** `26`, precisely so case conversion is a single bit flip instead of an addition. (The 6 leftover slots per block, codes 91–96, hold punctuation `[ \ ] ^ _ \``.)
+
+### Convert / test case = set / clear / toggle bit 5
+
+Lowercase has bit 5 = `1`, uppercase has bit 5 = `0`. So the Single-Bit-Ops verbs on bit 5 (mask `32`) do all the case work — directly on `c`, no pre-masking (setting bit 5 leaves every other bit untouched):
+
+| Goal | Idiom |
+|---|---|
+| to **lowercase** (set bit 5) | `c \| 32` |
+| to **uppercase** (clear bit 5) | `c & ~32` |
+| **toggle** case (flip bit 5) | `c ^ 32` |
+| **is lowercase?** (test bit 5) | `(c & 32) != 0` |
+| **is uppercase?** | `(c & 32) == 0` (and it's a letter) |
+
+Trace `'A' → lowercase`:
+```
+65 = 0100 0001
+32 = 0010 0000
+ |  ----------
+     0110 0001  = 97 = 'a'   ✓   (only bit 5 changed)
+```
+
+### Letter → alphabet index 1–26: `c & 31`
+
+Because each block starts at a multiple of 32 (low 5 bits all zero), the letter's position **1–26 lives entirely in the low 5 bits**. Mask them off with `31` (`= 0b11111 = (1<<5)-1`, the "keep low 5 bits" idiom from §5):
+
+```
+'A' = 65 = 0100 0001,  65 & 31 = 00001 = 1
+'C' = 67 = 0100 0011,  67 & 31 = 00011 = 3
+'z' = 122= 0111 1010, 122 & 31 = 11010 = 26
+```
+
+`c & 31` gives the index 1–26 for **either** case — the high case/block bits are masked away. (Works only because the block offset is a power of two.)
+
+> **Case bit (bit 5 = 32):** `c | 32` lower · `c & ~32` upper · `c ^ 32` toggle · `(c & 32)` tests case · **`c & 31`** → alphabet index 1–26.
+
+## 7. `x | (x + 1)` sets the rightmost unset bit
+
+The mirror of `x & (x-1)`: where that clears the rightmost **set** bit, this sets the rightmost **unset** (`0`) bit.
+
+```
+x        = 1 0 1 1
+x + 1    = 1 1 0 0        (carry ripples through the trailing 1s)
+x|(x+1)  = 1 1 1 1        ← bit 2 (the rightmost 0) turned on
+```
+
+Why: `x + 1` carries through the trailing `1`s — flipping them to `0` and turning the first `0` into a `1`. OR-ing with the original `x` restores those trailing `1`s (they're `1` in `x`) and keeps the newly-created `1`, so the only net change is the rightmost `0` becoming `1`.
+
+> **`x | (x + 1)`** sets the rightmost `0` bit. (Mirror of `x & (x-1)`, which clears the rightmost `1` bit.)
