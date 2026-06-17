@@ -88,6 +88,45 @@ This is exactly the carry proof in algebra: `2S` is `S` shifted left one bit, an
 
 This fact does double duty: it's **why decimal→binary greedy is forced** (§7) and it **bounds the largest value storable in `n` bits** (§8).
 
+## 6B. Subtraction by borrow — the mirror of the carry
+
+Adding 1 to a run of ones *ripples a carry* (§6). The mirror operation, **subtracting**, ripples a **borrow** — and it works the same in any base, exactly mirroring grade-school decimal borrowing.
+
+**The general borrow rule.** Subtract digit by digit from the right. When a digit is too small to cover its subtraction, it **borrows**: it receives the base `b` added on (becoming `d + b`), does the subtraction, and passes a `−1` borrow to the next digit on the left.
+
+*Decimal trace — `4304 − 5`:*
+```
+   4 3 0 4
+ -       5
+----------
+pos 0:  4 − 5  → can't. Borrow: 4 + 10 = 14, 14 − 5 = 9.   (pos 1 owes 1)
+pos 1:  0, owes 1 → can't. Borrow: 0 + 10 = 10, 10 − 1 = 9. (pos 2 owes 1)
+pos 2:  3, owes 1 → 3 − 1 = 2. Stop.
+pos 3:  4 → unchanged.
+result: 4 2 9 9  = 4299      ✓
+```
+Note it is `d + b` — you **add** the base, not multiply.
+
+**The special case we actually need: `x − 1`.** Subtracting just `1` means only the rightmost column starts with a subtraction, and the borrow propagates left only while it keeps hitting `0`s. Each `0` it passes becomes `b − 1`; it stops at the first nonzero digit, which drops by 1.
+
+*Binary trace — `1100 − 1`* (base 2, so `b − 1 = 1`):
+```
+pos:   1 1 0 0
+pos 0:  0 → borrow → 0 + 2 − 1 = 1
+pos 1:  0 → borrow → 0 + 2 − 1 = 1
+pos 2:  1 → nonzero → 1 − 1 = 0. Stop.
+pos 3:  1 → unchanged.
+result: 1 0 1 1  = 11        ✓  (12 − 1)
+```
+
+In binary the "first nonzero digit" is always the **lowest set bit** (the only nonzero digit *is* `1`). So `x − 1` has a tidy, fixed shape:
+
+> **`x − 1` in binary:** the **lowest set bit** flips `1 → 0`, **every `0` below it** flips `0 → 1`, and **every bit above it** is unchanged.
+
+Examples: `1100 − 1 = 1011` · `1000 − 1 = 0111` · `0110 − 1 = 0101` · `0001 − 1 = 0000`.
+
+This `x − 1` shape is the engine behind the idiom `x & (x-1)` (which clears the lowest set bit — Idioms topic), and it's also why subtracting `x` from all-ones in §9 **never borrows** (all-ones has no `0` to start a borrow chain).
+
 ## 7. Decimal → binary (the reverse direction)
 
 Reading binary sums the place values. Converting *to* binary runs that backwards: given a decimal number, find which place values sum to it. The **greedy method**:
