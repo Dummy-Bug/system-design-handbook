@@ -70,6 +70,22 @@ So `all-ones-below-k + 1 = 2^k`, which means **`all-ones-below-k = 2^k − 1`**.
 
 Examples: `0111 = 2³−1 = 7` · `1111 = 2⁴−1 = 15` · `11111111 = 2⁸−1 = 255`.
 
+**A second proof: the doubling trick (GP sum).** The carry proof above is the bit-view; here's the algebra-view, and they're the same truth. The value of `k` ones is the geometric sum
+```
+S = 2^0 + 2^1 + 2^2 + ... + 2^(k-1)      (k terms)
+```
+Multiply the whole thing by 2 — every term shifts up one power (a ×2 *is* a left shift):
+```
+ S =  2^0 + 2^1 + ... + 2^(k-1)
+2S =        2^1 + ... + 2^(k-1) + 2^k
+```
+Subtract. Every middle term (`2^1` … `2^(k-1)`) appears in **both** rows and cancels, leaving only the new top term and the lost bottom term:
+```
+2S − S = 2^k − 2^0
+   S   = 2^k − 1
+```
+This is exactly the carry proof in algebra: `2S` is `S` shifted left one bit, and the subtraction lands you one short of `2^k`. It also matches the general GP formula `S = a·(rⁿ−1)/(r−1)` with `a=1, r=2, n=k` → `(2^k − 1)/1 = 2^k − 1`.
+
 This fact does double duty: it's **why decimal→binary greedy is forced** (§7) and it **bounds the largest value storable in `n` bits** (§8).
 
 ## 7. Decimal → binary (the reverse direction)
@@ -273,3 +289,22 @@ But notice the **asymmetry**: positives run `+1 … +7` (7 values), negatives ru
 **Why `−8` "loops to itself":** negate it via flip+1 → `1000 → 0111 → +1 → 1000`. You get `1000` back — `−(−8)` gives `−8`, not `+8`, because `+8` doesn't exist in 4 bits; the negation overflowed.
 
 **The real-world bug this causes:** `−Integer.MIN_VALUE` and `Math.abs(Integer.MIN_VALUE)` both return the *negative* `MIN_VALUE` (negating `−2^31` needs `+2^31`, which doesn't exist). A genuine source of bugs.
+
+### What "overflow" actually means here (it's silent, not a crash)
+
+The word *overflow* is misleading — it sounds like an error. In Java, **integer overflow is not an exception and not a crash; it is silent two's-complement wraparound.** The arithmetic just proceeds, the top carry falls off, and you're left with a wrapped (wrong) value — no signal, no log, program continues. So "`abs(MIN_VALUE)` overflows" and "`abs(MIN_VALUE)` returns the negative number" are the *same statement*: the overflow **is** what produces the negative result, not an alternative to it.
+
+Trace it through the actual `Math.abs`:
+```java
+public static int abs(int a) {
+    return (a < 0) ? -a : a;
+}
+```
+For `a = Integer.MIN_VALUE = −2^31`:
+- `a < 0` is true → it returns `-a`.
+- `-a` is computed as `~a + 1` (two's-complement negation — flip then add 1).
+- `MIN_VALUE` = `1000…0` (32 bits). Flip → `0111…1` (= `MAX_VALUE` = `2^31 − 1`). Add 1 → `1000…0` = `MIN_VALUE` again.
+
+So `-a == a == MIN_VALUE`, still negative. The *mathematical* answer `+2^31` is one past the ceiling `2^31 − 1` → it has nowhere to live in 32 bits → it wraps to `−2^31`. **That wrap is the overflow.**
+
+The real danger is the *silence*: `abs()` looks like it must return something non-negative, and this single input quietly breaks that promise with no warning. (Same effect for the unary `-Integer.MIN_VALUE`.)
