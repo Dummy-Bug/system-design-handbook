@@ -33,4 +33,4 @@ Rather than *finding* which position the bit is at (which would cost an extra st
 
 > ⚠ Parenthesize: `(n & (n-1)) == 0` — `==` binds tighter than `&` in Java. [[lc-java-shift-precedence-trap]]
 
-*Status: clean self-derived AC. Uses Idioms §1 (`x & (x-1)` drops lowest set bit) + §3 (power-of-four = pow2 on even position via `0x55555555`). Also exercises the `n & (n-1)` power-of-two mechanic (closes the rep deferred from Operators).*
+*Status: clean self-derived AC. Uses Idioms Sec. 1 (`x & (x-1)` drops lowest set bit) + Sec. 3 (power-of-four = pow2 on even position via `0x55555555`). Also exercises the `n & (n-1)` power-of-two mechanic (closes the rep deferred from Operators).*

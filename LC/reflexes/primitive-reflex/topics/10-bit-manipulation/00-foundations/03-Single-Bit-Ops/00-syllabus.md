@@ -19,7 +19,7 @@ The whole topic is just: **`1 << i` picks the position, the operator does the ve
 ## Already partly seen (consolidate, don't re-acquire)
 - **Test / read** `(x >> i) & 1` — used in Reverse Bits (read a bit at position `p`).
 - **Write a bit** `x |= (b << i)` — used in Reverse Bits (place a bit at position `q`).
-- **Odd/even** `x & 1` — derived in Operators §1.
+- **Odd/even** `x & 1` — derived in Operators Sec. 1.
 
 This topic completes the set with **set / clear / toggle** and the `~(1<<i)` clear-mask, then unifies all five under the `1 << i` address idea.
 
@@ -43,10 +43,10 @@ For an arbitrary `x` and position `i`, write cold (each in one line): test, set,
 - **Check Odd or Even** (`x & 1`)
 
 ## Status
-✅ Notes done — `02-notes.md` §1–5 + summary table, all derived Socratically:
-- §1 `1 << i` as single-bit address (+ width caveat: safe-as-mask through i=31, wraps at ≥32, `1L<<i` for 64-bit)
-- §2 Test boolean `(x & (1<<i)) != 0` (the `!= 0` not `== 1` trap) · value `(x >> i) & 1`
-- §3 Set `x | (1<<i)` (idempotent) · §4 Clear `x & ~(1<<i)` (derived `~`-mask; works on negatives) · §5 Toggle `x ^ (1<<i)` (self-inverse, not idempotent)
+✅ Notes done — `02-notes.md` Sec. 1–5 + summary table, all derived Socratically:
+- Sec. 1 `1 << i` as single-bit address (+ width caveat: safe-as-mask through i=31, wraps at ≥32, `1L<<i` for 64-bit)
+- Sec. 2 Test boolean `(x & (1<<i)) != 0` (the `!= 0` not `== 1` trap) · value `(x >> i) & 1`
+- Sec. 3 Set `x | (1<<i)` (idempotent) · Sec. 4 Clear `x & ~(1<<i)` (derived `~`-mask; works on negatives) · Sec. 5 Toggle `x ^ (1<<i)` (self-inverse, not idempotent)
 - unifying idea: `1<<i` picks position, operator does verb; set/clear idempotent vs toggle self-inverse
 
 **Problems: WAIVED as trivial** (2026-06-17). The 3 LearnYard drills (Kth Bit Set, Get/Set/Clear ith Bit, Check Odd/Even) are direct one-line applications of the derived idioms — install already happened in the Socratic derivation, and test/read + write were exercised in Reverse Bits. No grind value. Links retained for reference: GfG check-k-th-bit, GfG bit-manipulation-1666686020, GfG odd-or-even3618.

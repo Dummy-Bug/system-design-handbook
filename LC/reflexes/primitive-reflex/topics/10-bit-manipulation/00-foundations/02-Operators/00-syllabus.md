@@ -41,8 +41,8 @@ Compute `& | ^ ~` by hand on 4-bit examples; predict `<<` / `>>` / `>>>` results
 
 ## Status
 ✅ All 7 operators derived (Socratic) and written to `02-notes.md`:
-- §1 AND (masking/clear-tool, `n&1` parity, extreme masks) · §2 OR (set-tool, AND/OR duality) · §3 XOR (toggle, self-inverse `a^b^b=a`, even-occurrence cancellation) · §4 NOT (`~x = −x−1`, one's complement)
-- §5 `<<` (×2^k, full fixed-width overflow traps: `1<<31` negative + `1<<32` wraps + `1L<<k` fix) · §6 `>>` (÷2^k, sign-fill, why) · §7 `>>>` (zero-fill, bit-walking, **closes P1 negative-`n` cliffhanger**, BS midpoint bonus)
+- Sec. 1 AND (masking/clear-tool, `n&1` parity, extreme masks) · Sec. 2 OR (set-tool, AND/OR duality) · Sec. 3 XOR (toggle, self-inverse `a^b^b=a`, even-occurrence cancellation) · Sec. 4 NOT (`~x = −x−1`, one's complement)
+- Sec. 5 `<<` (×2^k, full fixed-width overflow traps: `1<<31` negative + `1<<32` wraps + `1L<<k` fix) · Sec. 6 `>>` (÷2^k, sign-fill, why) · Sec. 7 `>>>` (zero-fill, bit-walking, **closes P1 negative-`n` cliffhanger**, BS midpoint bonus)
 
 ✅ **TOPIC COMPLETE** — 7 operators derived + 6 problems logged in `problems/`:
 1. Number of 1 Bits (operator redo) — `n & 1` + `n >>> 1`, `>>>`-over-`>>` flagged unprompted, negative-`n` cliffhanger closed

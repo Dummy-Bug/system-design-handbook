@@ -30,6 +30,6 @@ class Solution {
 
 `>>>` zero-fills, so the leading `1`s drain away one per shift and `n` is guaranteed to hit `0` in ≤ 32 steps. The loop terminates for **any** input, positive or negative.
 
-This is exactly the §6/§7 sign-fill-vs-zero-fill distinction, and it closes the negative-`n` cliffhanger the arithmetic (`n / 2`) version left open.
+This is exactly the Sec. 6/Sec. 7 sign-fill-vs-zero-fill distinction, and it closes the negative-`n` cliffhanger the arithmetic (`n / 2`) version left open.
 
 *Status: clean self-derived AC. Identified the `>>>`-over-`>>` requirement unprompted ("or else the loop will never have stopped"). Closes Operators install-check item (redo P1 the operator way).*

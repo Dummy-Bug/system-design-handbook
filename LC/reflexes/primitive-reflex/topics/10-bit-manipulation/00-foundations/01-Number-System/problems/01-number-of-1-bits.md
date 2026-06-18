@@ -16,7 +16,7 @@ class Solution {
     }
 }
 ```
-Tooling used: only the `%2` / `/2` digit-peeling loop from Foundations §7 — **no bitwise operators**.
+Tooling used: only the `%2` / `/2` digit-peeling loop from Foundations Sec. 7 — **no bitwise operators**.
 
 ### The understanding
 
@@ -27,10 +27,10 @@ Tooling used: only the `%2` / `/2` digit-peeling loop from Foundations §7 — *
    - `n % 8` / `n / 8` → octal digits; `n % 16` / `n / 16` → hex digits.
    - **The loop is base-agnostic — the divisor is the only knob.** Count octal digits instead of bits? Change `BASE` to 8. Nothing else moves.
 
-3. **Conversion and reading are the *same* loop.** We don't build `1011` and then scan it. Each `% 2` *produces* the next binary digit live, and we count the `1`s as they fall out. The binary string never exists in memory. (Contrast §7, where we *collected + reversed* the remainders to build the number; here we only need the count, so we discard them.)
+3. **Conversion and reading are the *same* loop.** We don't build `1011` and then scan it. Each `% 2` *produces* the next binary digit live, and we count the `1`s as they fall out. The binary string never exists in memory. (Contrast Sec. 7, where we *collected + reversed* the remainders to build the number; here we only need the count, so we discard them.)
 
    **Generalized — the `%b` / `/b` loop *is* the base-`b` digit iterator.** Running it always walks the number's base-`b` digits, lowest-first; the conversion is happening whether or not you save the output. The only thing that varies is the **consumer** of each digit:
-   - *keep & collect* (reverse at the end) → you've **built** the representation (§7 conversion).
+   - *keep & collect* (reverse at the end) → you've **built** the representation (Sec. 7 conversion).
    - *inspect & discard* → you **examine** the representation without storing it (count `1`s here; check alternating bits; sum digits; …).
 
    So this is a reusable **recognition trigger**:
@@ -49,7 +49,7 @@ The `%2` / `/2` solution is correct **only for `n ≥ 0`**. For negative `n` it 
 - `while (n > 0)` never even enters (the sign makes the condition false), so the loop reads **zero** bits.
 - Even with `while (n != 0)`, Java's `%` keeps the dividend's sign (`-3 % 2 = -1`) and `/` rounds toward zero — neither walks the *stored* two's-complement bits. `/2` is **arithmetic division** (about value), not bit-dropping; the two only coincide for non-negatives.
 
-By §9, `-3` is stored as `1111…1101` → its true bit count is **31** (32 bits, one `0`).
+By Sec. 9, `-3` is stored as `1111…1101` → its true bit count is **31** (32 bits, one `0`).
 
 **Patches we tried — all failed, and the failures are the lesson:**
 

@@ -20,7 +20,7 @@ That 4-way split is the core mapping skill for bits.
 share one skeleton — *simulate grade-school positional arithmetic with carry* (`sum = digits + carry`, emit
 `sum % base`, carry `sum / base`, base-agnostic) — and it uses **`%base` / `/base` arithmetic**, not bit operators.
 It belongs to a math/array **simulation** primitive, tracked elsewhere. We touched **Add Binary** only as a
-*foundation warm-up* (it exercises base-2 representation + carry, §6/§9 of `01-Number-System`); do **not** expand
+*foundation warm-up* (it exercises base-2 representation + carry, Sec. 6/Sec. 9 of `01-Number-System`); do **not** expand
 into its cousins here.
 
 **The genuinely-bit "add" is the exception:** *Sum of Two Integers* (add without `+`) → `sum = a^b`,
@@ -44,9 +44,9 @@ into its cousins here.
 | # | Module | Status | Syllabus |
 |---|---|---|---|
 | 0 | **Foundations** (the alphabet — ops, idioms, 2's-comp) | ✅ DONE (2026-06-17) | `00-foundations/00-syllabus.md` |
-| 1 | **Counting & bit arithmetic** (popcount, Counting-Bits DP, count-bits-in-1..N, reverse, add, add-via-XOR, divide) | install now | `01-counting-arithmetic/00-syllabus.md` |
-| 2 | **XOR mastery** (cancellation, parity-invariant, two-uniques/thrice, reconstruction/decode, prefix-XOR, Gray) | install now | `02-xor-mastery/00-syllabus.md` |
-| 3 | **Per-bit thinking & properties** (per-bit contribution, XOR=sum⟺no-carry, greedy bit construction, per-bit decision) | install now | `03-per-bit-properties/00-syllabus.md` |
+| 1 | **Counting & bit arithmetic** (popcount, Counting-Bits DP, count-bits-in-1..N, reverse, add, add-via-XOR, divide) | ✅ DONE (2026-06-18) | `01-counting-arithmetic/00-syllabus.md` |
+| 2 | **XOR mastery** (cancellation, parity-invariant, two-uniques/thrice, reconstruction/decode, prefix-XOR, Gray) | ✅ DONE (2026-06-18) *(1442 O(n) opt owed)* | `02-xor-mastery/00-syllabus.md` |
+| 3 | **Per-bit thinking & properties** (per-bit contribution, XOR=sum⟺no-carry, greedy bit construction, per-bit decision) | install now ← NEXT | `03-per-bit-properties/00-syllabus.md` |
 | 4 | **OR/AND over subarrays** (monotonicity → bit-count-in-window; no-shared-bits window; OR≥K / AND=K; LogTrick; AND-of-range) | install now | `04-or-and-subarrays/00-syllabus.md` |
 | 5 | **Bitmask as a set** (subset/submask enumeration; int as set of ≤20; bitmask + prefix-parity) | ⏸ DEFERRED | `05-bitmask-as-set/00-syllabus.md` |
 | 6 | **Advanced** (XOR basis; bit-trie → Trie phase; Bitmask-DP; UTF-8/bit-field parsing) | ⏸ DEFERRED | `06-advanced/00-syllabus.md` |

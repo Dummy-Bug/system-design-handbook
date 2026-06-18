@@ -28,8 +28,9 @@ Bits + maths first **because they're used inside other problems**; DP last becau
 Family syllabus: `primitive-reflex/topics/10-bit-manipulation/00-syllabus.md`. Active scope = Modules 0–4.
 
 - **Module 0 — Foundations** ✅ (Number System + Operators + Single-Bit-Ops + Idioms; all 18 atoms derived)
-- Module 1 — Counting & bit arithmetic (popcount, Counting-Bits DP, reverse, add-via-XOR, divide) ▢ NEXT
-- Module 2 — XOR mastery ▢
+- **Module 1 — Counting & bit arithmetic** ✅ (2026-06-18) — popcount/Kernighan, Counting-Bits DP, count-bits-in-1..N (column-flip), reverse (in Foundations), add-via-XOR+carry, divide (batch-doubling)
+- **Module 2 — XOR mastery** ✅ (2026-06-18) — parity invariant, Single Number ×3 (136/260/137), reconstruction/decode (268/1720), prefix-XOR (1310/1442), Gray code `i^(i>>1)`. *(1 carry: LC 1442 O(n) hashmap opt owed)*
+- Module 3 — Per-bit thinking & properties ▢ NEXT
 - Module 3 — Per-bit thinking & properties ▢
 - Module 4 — OR/AND over subarrays ▢
 - Module 5 — Bitmask as a set ⏸ deferred · Module 6 — Advanced ⏸ deferred

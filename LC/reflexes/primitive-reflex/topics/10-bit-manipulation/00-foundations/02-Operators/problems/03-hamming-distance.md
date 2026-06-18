@@ -26,4 +26,4 @@ Two sub-problems chained:
 
 So Hamming distance = popcount(`x ^ y`). The whole problem collapses to "turn *differ* into *set bit* via XOR, then run the set-bit counter."
 
-*Status: clean self-derived AC. Composed two installed pieces — XOR-marks-differences (§3) + the `&1`/`>>>` set-bit walk (P1). First problem that **chains** two operator idioms rather than using one.*
+*Status: clean self-derived AC. Composed two installed pieces — XOR-marks-differences (Sec. 3) + the `&1`/`>>>` set-bit walk (P1). First problem that **chains** two operator idioms rather than using one.*

@@ -88,7 +88,7 @@ x        = 0100
 x | mask = 0101          (bit 0 on; bits 1–3 unchanged)
 ```
 
-Why the other bits survive: at every position except `i` the mask bit is `0`, and OR with `0` **keeps** the other bit (Operators §2). Only at position `i` is the mask `1`, which forces that bit on.
+Why the other bits survive: at every position except `i` the mask bit is `0`, and OR with `0` **keeps** the other bit (Operators Sec. 2). Only at position `i` is the mask `1`, which forces that bit on.
 
 It is **idempotent** — `1 | 1 = 1`, so setting an already-set bit leaves it set. Safe to apply repeatedly.
 
@@ -98,7 +98,7 @@ It is **idempotent** — `1 | 1 = 1`, so setting an already-set bit leaves it se
 
 Recall `&` **clears where the mask is `0` and keeps where the mask is `1`.** So to clear *only* bit `i` and keep everything else, the mask must be **`0` at position `i` and `1` everywhere else** — the exact opposite of `1 << i`.
 
-Build that by flipping every bit of `1 << i` with the bitwise NOT (`~`, §4 — not arithmetic `-`):
+Build that by flipping every bit of `1 << i` with the bitwise NOT (`~`, Sec. 4 — not arithmetic `-`):
 
 ```
 1 << 2      = 0100        (single 1 at position 2)
@@ -133,7 +133,7 @@ x & ~(1<<1)   = …11111100     = −4
 
 ## 5. Toggling a bit: flip bit `i`
 
-To flip bit `i` (`0→1` or `1→0`) and leave the rest, combine `x` with `1 << i` using **`^`**. At position `i` the mask is `1`, and XOR with `1` **flips** (§3); everywhere else the mask is `0`, and XOR with `0` **keeps**.
+To flip bit `i` (`0→1` or `1→0`) and leave the rest, combine `x` with `1 << i` using **`^`**. At position `i` the mask is `1`, and XOR with `1` **flips** (Sec. 3); everywhere else the mask is `0`, and XOR with `0` **keeps**.
 
 Toggle bit 2 of `x = 0110`, twice:
 
@@ -145,7 +145,7 @@ again ^ (1<<2)   = 0110      (flipped back 0→1 — back to original)
 
 > **Toggle bit `i`:** `x ^ (1 << i)`.
 
-Unlike set and clear, toggle is **not idempotent — it is self-inverse**: applying it twice returns the original (`x ^ m ^ m = x`, §3). That captures the difference between "force to a value" (`|` set, `&~` clear) and "flip" (`^` toggle).
+Unlike set and clear, toggle is **not idempotent — it is self-inverse**: applying it twice returns the original (`x ^ m ^ m = x`, Sec. 3). That captures the difference between "force to a value" (`|` set, `&~` clear) and "flip" (`^` toggle).
 
 ## Summary — the four verbs
 
@@ -159,6 +159,6 @@ Every single-bit operation = **`1 << i` picks the position, an operator does the
 | **Clear** → 0 | `x & ~(1 << i)` | `&` with inverted mask | idempotent |
 | **Toggle** (flip) | `x ^ (1 << i)` | `^` flips | self-inverse (twice = undo) |
 
-Odd/even is just **test at `i = 0`**: `x & 1` (Operators §1).
+Odd/even is just **test at `i = 0`**: `x & 1` (Operators Sec. 1).
 
 All five compare/keep the other bits because the mask is `0` (or `1` for the clear-mask) everywhere except position `i` — and at non-`i` positions each operator's "keep" rule (`|0`, `&1`, `^0`) leaves them alone.

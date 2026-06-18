@@ -42,7 +42,7 @@ This syllabus is the cure. Every topic is tied to a specific LC problem so each 
 ## 1.2 — Triangular sum
 **Fact:** `1 + 2 + ... + n = n(n+1)/2`.
 **Why:** Appears in "minimum operations" problems, "build pyramid" problems, range sum questions.
-**See also §3.11** — the *inverse* (max `k` with `k(k+1)/2 ≤ S`), which is what binary-search-on-answer feasibility checks need.
+**See also Sec. 3.11** — the *inverse* (max `k` with `k(k+1)/2 ≤ S`), which is what binary-search-on-answer feasibility checks need.
 **LC problems:**
 - *Sum of Even Numbers After Queries* (LC 985)
 - *Minimum Operations to Make Array Equal* (LC 1551)
@@ -190,7 +190,7 @@ while n > 0:
 ## 3.5 — Float cast trap
 **Fact:** `(int) Math.pow(1e9, 1.0/3)` returns `999`, not `1000`. Always `+1` after casting `Math.pow` or `Math.sqrt` to int, then verify with multiplication.
 **Why:** Floating-point inexactness. Bit you at 1500-1550 #7 (Find Good Integers).
-**See §3.12** — the exact-isqrt guard (`while` correction to `k² ≤ x < (k+1)²`) that makes this rigorous for square roots, plus the `2⁵³` exactness boundary that tells you *when* the raw cast is already safe vs when the guard is mandatory.
+**See Sec. 3.12** — the exact-isqrt guard (`while` correction to `k² ≤ x < (k+1)²`) that makes this rigorous for square roots, plus the `2⁵³` exactness boundary that tells you *when* the raw cast is already safe vs when the guard is mandatory.
 
 ## 3.6 — Bit operations baseline
 **Facts:**
@@ -214,7 +214,7 @@ while n > 0:
 ## 3.8 — Prime factorization
 **Fact:** Trial-divide by primes up to √n. Each prime p divides n at most log_p(n) times.
 **Why:** Used in divisor count, GCD/LCM via prime factorizations.
-**See also §4.12** — enumerating *all* divisors from the factorization, and the *factor n then double exponents* trick to factor `n²` without paying √(n²).
+**See also Sec. 4.12** — enumerating *all* divisors from the factorization, and the *factor n then double exponents* trick to factor `n²` without paying √(n²).
 **LC problems:**
 - *Minimum Number of Operations to Make Array XOR Equal to K* (LC 2997)
 - *Replace Non-Coprime Numbers in Array* (LC 2197)
@@ -234,12 +234,12 @@ while n > 0:
 - *Two Sum* (LC 1) — same pattern: `b = target - a`
 
 ## 3.11 — Inverting the triangular sum (solve for k given the sum)
-**Fact:** §1.2 gives the *forward* direction `1+2+…+k = k(k+1)/2`. The **inverse** — "largest `k` with `k(k+1)/2 ≤ S`" — comes from solving the quadratic `k²+k−2S ≤ 0`:
+**Fact:** Sec. 1.2 gives the *forward* direction `1+2+…+k = k(k+1)/2`. The **inverse** — "largest `k` with `k(k+1)/2 ≤ S`" — comes from solving the quadratic `k²+k−2S ≤ 0`:
 `k = floor((√(8S + 1) − 1) / 2)`.
 **Why:** any "each successive unit costs one more than the last" problem has per-item cost `wt·k(k+1)/2`. When you **binary-search the answer** (a time/budget `T`), the feasibility check "how many units can this worker do within `T`?" is exactly `max k with wt·k(k+1)/2 ≤ T` → invert the triangular sum. This is the math half of the BS-on-answer pattern (the pattern itself lives outside this file).
 **Two traps, both already in the syllabus:**
-- **Float-sqrt (§3.5):** `Math.sqrt` can land just under an exact root → compute `k` then **verify/adjust** with integer multiply (`while ((k+1)*(k+2)/2 <= S) k++;` / `while (k*(k+1)/2 > S) k--;`). Don't trust the raw cast.
-- **Overflow (§1.4):** `8S+1` and `k(k+1)/2` blow past `int` when `S ~ 1e15` (e.g. `wt ≤ 1e6`, height ≤ 1e5). Keep everything `long`. (Or sidestep the sqrt entirely with an inner binary-search for `k`.)
+- **Float-sqrt (Sec. 3.5):** `Math.sqrt` can land just under an exact root → compute `k` then **verify/adjust** with integer multiply (`while ((k+1)*(k+2)/2 <= S) k++;` / `while (k*(k+1)/2 > S) k--;`). Don't trust the raw cast.
+- **Overflow (Sec. 1.4):** `8S+1` and `k(k+1)/2` blow past `int` when `S ~ 1e15` (e.g. `wt ≤ 1e6`, height ≤ 1e5). Keep everything `long`. (Or sidestep the sqrt entirely with an inner binary-search for `k`.)
 **LC problems:**
 - *Arranging Coins* (LC 441) — the canonical inverse-triangular: max complete rows from `n` coins.
 - *Minimum Number of Seconds to Make Mountain Height Zero* (LC 3296 — your 1600-1699 #12) — BS-on-answer; feasibility per worker = invert `wt·k(k+1)/2 ≤ T`. See `1600-1700/First-Attempt/12-minimum-number-of-seconds-to-make-mountain-height-zero.md`.
@@ -247,7 +247,7 @@ while n > 0:
 **Socratic drill skeleton (fill in session):**
 ```
    _TODO: pose "I have S=20 budget, each step costs 1,2,3,… — how many steps?" cold → user solves k(k+1)/2 ≤ 20 → k=5 (15≤20, 21>20)._
-   _TODO: derive the closed form from the quadratic; then break it — show a case where Math.sqrt rounds down and the integer-verify step rescues it (ties to §3.5)._
+   _TODO: derive the closed form from the quadratic; then break it — show a case where Math.sqrt rounds down and the integer-verify step rescues it (ties to Sec. 3.5)._
    _TODO: wire to BS-on-answer — "given time T, units a worker does" IS this inversion; user states it unprompted._
    Mark ✓ after LC 441 + LC 3296 confirm the reflex.
 ```
@@ -260,7 +260,7 @@ while ((k + 1) * (k + 1) <= x) k++;   // estimate too small -> bump up
 while (k * k > x) k--;                // estimate too big   -> bump down
 ```
 The loops exit **only** when `k² ≤ x < (k+1)²` holds — so correctness no longer rests on any precision argument.
-**Why:** any BS-on-answer / closed-form whose feasibility needs `⌊√x⌋` (or `⌊√(T/r)⌋`) is one truncation away from a silent off-by-one. `(long)` *truncates* (never rounds up), so a perfect square `x=k²` whose `sqrt` returns `k−ε` casts to `k−1` → undercount → answer drifts. Generalises §3.5 (float-cast trap) and is the same guard §3.11 uses for the triangular inverse — but isolated here as a reusable primitive.
+**Why:** any BS-on-answer / closed-form whose feasibility needs `⌊√x⌋` (or `⌊√(T/r)⌋`) is one truncation away from a silent off-by-one. `(long)` *truncates* (never rounds up), so a perfect square `x=k²` whose `sqrt` returns `k−ε` casts to `k−1` → undercount → answer drifts. Generalises Sec. 3.5 (float-cast trap) and is the same guard Sec. 3.11 uses for the triangular inverse — but isolated here as a reusable primitive.
 **The two-fact safety chain (memorise the boundary `2⁵³ ≈ 9·10¹⁵`):**
 1. **Input exact:** a `double` holds every integer below `2⁵³` exactly (52-bit mantissa). If `x ≤ 2⁵³`, no rounding on the way in.
 2. **`sqrt` correctly rounded:** Java's `Math.sqrt` is IEEE-754 correctly rounded → for a perfect square it returns the nearest double = the exact integer. So **below `2⁵³` the raw cast is already exact** and the guard is belt-and-suspenders.
@@ -268,11 +268,11 @@ The loops exit **only** when `k² ≤ x < (k+1)²` holds — so correctness no l
 - **`x > 2⁵³`** (budgets up to `1e18`) → fact 1 dies, `x` is pre-rounded, perfect squares can come back low.
 - **`Math.pow(x, 0.5)`** is **not** correctly rounded (unlike `sqrt`) → loses fact 2 even below `2⁵³`. Use `sqrt`, never `pow`-to-the-half.
 **`while` vs `if`:** with correctly-rounded `sqrt` the error is `< 1` across the whole `long` range, so a single `if`-bump *would* suffice — but `while` is strictly dominant at identical cost (body runs 0–2×): correct *unconditionally*, no precision proof to get wrong, survives a sloppy `sqrt`.
-**Overflow watch (§1.4):** `(k+1)*(k+1)` overflows `long` once `k ~ 3·10⁹` (i.e. `x ~ 9·10¹⁸`) → compare as `k+1 <= x/(k+1)` instead.
+**Overflow watch (Sec. 1.4):** `(k+1)*(k+1)` overflows `long` once `k ~ 3·10⁹` (i.e. `x ~ 9·10¹⁸`) → compare as `k+1 <= x/(k+1)` instead.
 **LC problems:**
 - *Sqrt(x)* (LC 69) — the canonical isqrt, no float allowed.
 - *Minimum Time to Repair Cars* (LC 2594 — your 1600-1699 #14) — BS-on-answer, per-mechanic capacity `⌊√(budget/r)⌋`. See `1600-1700/First-Attempt/14-minimum-time-to-repair-cars.md` (full float-precision debrief).
-- *Arranging Coins* (LC 441) — pairs with §3.11 (triangular inverse uses the same guard on `√(8S+1)`).
+- *Arranging Coins* (LC 441) — pairs with Sec. 3.11 (triangular inverse uses the same guard on `√(8S+1)`).
 
 **Socratic drill skeleton (fill in session — INSTALLED 2026-06-15 via LC 2594):**
 ```
@@ -368,7 +368,7 @@ Bounded form (+ inclusion-excl) Distribute Candies Among Children II   → subtr
 
 **(b) Next step — BOUNDED (what breaks + the fix):** *Distribute Candies Among Children II* (LC 2929), *Closest Dessert Cost* (LC 1774)
 - Same setup, but each bin has an upper limit → raw `C(n+k-1,k-1)` overcounts.
-- _TODO (Socratic drill): derive the inclusion-exclusion correction (subtract distributions where a bin exceeds its cap)._  Pairs with §3.3 (inclusion-exclusion).
+- _TODO (Socratic drill): derive the inclusion-exclusion correction (subtract distributions where a bin exceeds its cap)._  Pairs with Sec. 3.3 (inclusion-exclusion).
 
 **Reflex to install:** see "non-decreasing / sorted selection of size n from k types" (or "split n into k parts") → reach for `C(n+k-1, k-1)` **before** writing a DP. The DP (memoized `(prev,length)` or BUP suffix-sum) is the fallback when bounds/constraints break the closed form.
 
@@ -397,14 +397,14 @@ Bounded form (+ inclusion-excl) Distribute Candies Among Children II   → subtr
 2. **Square-factoring shortcut:** to factor `n²` cheaply, **factor `n` (√n) then double every exponent** — `n²`'s factorization is `n`'s with each `eᵢ → 2eᵢ`. Never trial-divide `n²` directly: √(n²)=n turns an O(n) factor into O(n²) over the array.
 **Why:** "Count pairs `(b,c)` with `b·c = S`" at `n ≤ 1e5` can't all-pairs (1e10). Per target `S`, enumerate `S`'s
 divisor pairs `(d, S/d)` and look them up in a freq map — O(#divisors) not O(n). The constraint alone (1e3 vs
-1e5) flips the *same* problem from a 5-line hash-count to a factorization exercise. Sibling of §4.11 (count vs
-list); builds on §3.7 (sieve for SPF) + §3.8 (prime factorization).
+1e5) flips the *same* problem from a 5-line hash-count to a factorization exercise. Sibling of Sec. 4.11 (count vs
+list); builds on Sec. 3.7 (sieve for SPF) + Sec. 3.8 (prime factorization).
 **Gotcha:** the `f1²·f2²` shortcut (squaring `n`'s divisor pairs) yields only the *square* divisors of `n²` and
 **misses non-square pairs** like `(2,18),(3,12)` of 36 — you must sweep the full grid.
 **LC problems:**
 - *Number of Ways Where Square = Product* (LC 1577) — the `n ≤ 1e5` variant; **worked example in `problem-solving/1550-1600/First-Attempt/33-number-of-ways-square-equal-product.md`** (Scale-axis section).
 - *Four Divisors* (LC 1390) — sum a number's divisors via enumeration.
-- *Closest Divisors* (LC 1362) — pairs with §4.11.
+- *Closest Divisors* (LC 1362) — pairs with Sec. 4.11.
 
 **Socratic drill skeleton (fill in session):**
 ```

@@ -1,8 +1,8 @@
 ## 1. `x & (x - 1)` drops the lowest set bit
 
-This is the first "magic" idiom — and it falls straight out of the §6B borrow shape.
+This is the first "magic" idiom — and it falls straight out of the Sec. 6B borrow shape.
 
-Recall what `x - 1` does to the bits (§6B): the **lowest set bit** flips `1 → 0`, every `0` **below** it flips to `1`, and every bit **above** it is unchanged. Lay `x` and `x-1` side by side, using `1100` as a concrete case:
+Recall what `x - 1` does to the bits (Sec. 6B): the **lowest set bit** flips `1 → 0`, every `0` **below** it flips to `1`, and every bit **above** it is unchanged. Lay `x` and `x-1` side by side, using `1100` as a concrete case:
 
 ```
 x     = 1 1 0 0
@@ -80,13 +80,13 @@ Arithmetic alternative: powers of four satisfy `n % 3 == 1`, so `n > 0 && (n & (
 
 ## 4. `x & -x` isolates the lowest set bit
 
-The companion to `x & (x-1)`: where that one *drops* the lowest set bit, `x & -x` *keeps only* it. It's built on `-x = ~x + 1` (§4).
+The companion to `x & (x-1)`: where that one *drops* the lowest set bit, `x & -x` *keeps only* it. It's built on `-x = ~x + 1` (Sec. 4).
 
 Work it on `x = 1100`:
 
 ```
 x      = 1 1 0 0
-~x     = 0 0 1 1        (flip every bit, §4)
+~x     = 0 0 1 1        (flip every bit, Sec. 4)
 -x     = 0 1 0 0        (~x + 1)
          -------
 x & -x = 0 1 0 0        ← only the lowest set bit (position 2) survives
@@ -130,7 +130,7 @@ So the only bit that is `1` in *both* `x` and `-x` is the lowest set bit — eve
 
 ### The low-`k` all-ones mask: `(1 << k) - 1`
 
-Straight from the pieces you have: `1 << k` = `2^k`, and from §6 `2^k − 1` = a run of `k` ones. So:
+Straight from the pieces you have: `1 << k` = `2^k`, and from Sec. 6 `2^k − 1` = a run of `k` ones. So:
 
 ```
 (1 << 3) - 1 = 1000 - 1 = 0111      (bits 0,1,2 set)
@@ -147,7 +147,7 @@ With that mask (i ones at the bottom, zeros above):
 
 > **Keep low `i`:** `x & ((1<<i) - 1)` · **Clear low `i`:** `x & ~((1<<i) - 1)`.
 
-The clear-mask uses the same "invert to swap keep↔clear" move as clearing a single bit (`~(1<<i)` in Single-Bit-Ops §4) — just a wider mask.
+The clear-mask uses the same "invert to swap keep↔clear" move as clearing a single bit (`~(1<<i)` in Single-Bit-Ops Sec. 4) — just a wider mask.
 
 ⚠ **Precedence:** subtraction binds *tighter* than `&` in Java, so `(1<<i) - 1 & x` does parse as `((1<<i)-1) & x` — but always parenthesize the mask explicitly (`x & ((1<<i)-1)`) so intent is unmistakable. [[lc-java-shift-precedence-trap]]
 
@@ -155,7 +155,7 @@ The clear-mask uses the same "invert to swap keep↔clear" move as clearing a si
 
 ### Number complement = the same mask, XOR'd
 
-Flipping every bit *within a width* (Operators P5 / atom 0.13) is just XOR with this mask: `x ^ ((1 << bits) - 1)`. Nothing new — `(1<<k)-1` builds the width-matched all-ones, and `^` flips (§3).
+Flipping every bit *within a width* (Operators P5 / atom 0.13) is just XOR with this mask: `x ^ ((1 << bits) - 1)`. Nothing new — `(1<<k)-1` builds the width-matched all-ones, and `^` flips (Sec. 3).
 
 ## 6. Char case bit (ASCII bit 5)
 
@@ -191,7 +191,7 @@ Trace `'A' → lowercase`:
 
 ### Letter → alphabet index 1–26: `c & 31`
 
-Because each block starts at a multiple of 32 (low 5 bits all zero), the letter's position **1–26 lives entirely in the low 5 bits**. Mask them off with `31` (`= 0b11111 = (1<<5)-1`, the "keep low 5 bits" idiom from §5):
+Because each block starts at a multiple of 32 (low 5 bits all zero), the letter's position **1–26 lives entirely in the low 5 bits**. Mask them off with `31` (`= 0b11111 = (1<<5)-1`, the "keep low 5 bits" idiom from Sec. 5):
 
 ```
 'A' = 65 = 0100 0001,  65 & 31 = 00001 = 1

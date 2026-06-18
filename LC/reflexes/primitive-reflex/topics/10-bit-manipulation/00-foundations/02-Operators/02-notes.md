@@ -225,7 +225,7 @@ Example in 4 bits:
 ~ (0101) = 1010
 ```
 
-Flipping all bits is exactly the **one's complement** from §9 (the `1111 − x` step that never borrows).
+Flipping all bits is exactly the **one's complement** from Sec. 9 (the `1111 − x` step that never borrows).
 
 ### What `~x` equals as a value: `−x − 1`
 
@@ -266,7 +266,7 @@ Example in 4 bits — `3 << 1`:
 
 > `x << k` = `x × 2^k`.
 
-The reason is place value (§3 of the Number System notes). Sliding a bit left by one position moves it from place value `2^i` to `2^(i+1)` — it now contributes twice as much. Every bit doubles, so the whole number doubles. (This is the same move as the `2S` doubling trick used to prove `2^k − 1`: multiplying by 2 *is* a left shift.)
+The reason is place value (Sec. 3 of the Number System notes). Sliding a bit left by one position moves it from place value `2^i` to `2^(i+1)` — it now contributes twice as much. Every bit doubles, so the whole number doubles. (This is the same move as the `2S` doubling trick used to prove `2^k − 1`: multiplying by 2 *is* a left shift.)
 
 ### ⚠ The fixed-width traps in `<<`
 
@@ -279,13 +279,13 @@ A left shift assumes nothing about whether the result still fits in the type's w
 1 << 31  = 10000000 00000000 00000000 00000000   (bit at position 31)
 ```
 
-Position 31 is the **top bit**, and from §9 its place value in two's complement is **`−2^31`**, not `+2^31`. So:
+Position 31 is the **top bit**, and from Sec. 9 its place value in two's complement is **`−2^31`**, not `+2^31`. So:
 
 ```
 1 << 31  =  −2^31  =  −2147483648  =  Integer.MIN_VALUE
 ```
 
-You almost certainly *wanted* `+2^31 = 2147483648`, but that value does not fit in an `int` (max is `2^31 − 1`). The bit landed on the sign bit and the number went negative — the same silent overflow as `abs(MIN_VALUE)` in §9.
+You almost certainly *wanted* `+2^31 = 2147483648`, but that value does not fit in an `int` (max is `2^31 − 1`). The bit landed on the sign bit and the number went negative — the same silent overflow as `abs(MIN_VALUE)` in Sec. 9.
 
 *When it actually hurts:* if you build a mask `1 << i` only to **test or set a bit**, the bit *pattern* is still correct, so masking works even at `i = 31`. It bites only when the shifted value is used in **arithmetic** — e.g. `sum += 1 << 31` adds roughly minus-two-billion instead of plus-two-billion.
 
@@ -307,7 +307,7 @@ So any shift of `32` or more silently **wraps around** instead of zeroing. (For 
 
 `1L` is 64 bits wide, so its sign bit is at position **63** and shifts wrap at 64. Bit 31 is just a normal positive place value there. **Rule of thumb: the moment you shift past bit 30, write `1L << k`** (and narrow back to `int` only once you're sure the result fits).
 
-Both traps are the same lesson as §8–§9: an `int` has exactly 32 fixed slots, and a shift that assumes more than that wraps silently.
+Both traps are the same lesson as Sec. 8–Sec. 9: an `int` has exactly 32 fixed slots, and a shift that assumes more than that wraps silently.
 
 ## 6. Right shift (`>>`) — arithmetic, sign-filling
 

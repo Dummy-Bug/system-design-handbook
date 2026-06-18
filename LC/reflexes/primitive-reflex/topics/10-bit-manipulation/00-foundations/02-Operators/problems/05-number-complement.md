@@ -16,10 +16,10 @@ class Solution {
 
 ## The insight: flip-within-width = XOR with a width-matched all-ones mask
 
-Flipping bits is `^ (all ones)` (§3: XOR with a `1` toggles). But here "all ones" must be **exactly as wide as `num`**, not all 32 bits — the problem ignores leading zeros.
+Flipping bits is `^ (all ones)` (Sec. 3: XOR with a `1` toggles). But here "all ones" must be **exactly as wide as `num`**, not all 32 bits — the problem ignores leading zeros.
 
 - `bitLength = 32 - Integer.numberOfLeadingZeros(num)` = number of significant bits (MSB position + 1). For `5`: `32 − 29 = 3`.
-- `mask = (1 << bitLength) - 1` = a run of `bitLength` ones (the §6 `2^k − 1` fact). For `5`: `(1<<3) - 1 = 7 = 111`.
+- `mask = (1 << bitLength) - 1` = a run of `bitLength` ones (the Sec. 6 `2^k − 1` fact). For `5`: `(1<<3) - 1 = 7 = 111`.
 - `num ^ mask` flips exactly those bits. `5 ^ 7 = 2`. ✓
 
 ## Two bugs hit on the way

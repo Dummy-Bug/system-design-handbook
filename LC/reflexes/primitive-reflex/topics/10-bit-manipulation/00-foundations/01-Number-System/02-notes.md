@@ -86,11 +86,11 @@ Subtract. Every middle term (`2^1` … `2^(k-1)`) appears in **both** rows and c
 ```
 This is exactly the carry proof in algebra: `2S` is `S` shifted left one bit, and the subtraction lands you one short of `2^k`. It also matches the general GP formula `S = a·(rⁿ−1)/(r−1)` with `a=1, r=2, n=k` → `(2^k − 1)/1 = 2^k − 1`.
 
-This fact does double duty: it's **why decimal→binary greedy is forced** (§7) and it **bounds the largest value storable in `n` bits** (§8).
+This fact does double duty: it's **why decimal→binary greedy is forced** (Sec. 7) and it **bounds the largest value storable in `n` bits** (Sec. 8).
 
 ## 6B. Subtraction by borrow — the mirror of the carry
 
-Adding 1 to a run of ones *ripples a carry* (§6). The mirror operation, **subtracting**, ripples a **borrow** — and it works the same in any base, exactly mirroring grade-school decimal borrowing.
+Adding 1 to a run of ones *ripples a carry* (Sec. 6). The mirror operation, **subtracting**, ripples a **borrow** — and it works the same in any base, exactly mirroring grade-school decimal borrowing.
 
 **The general borrow rule.** Subtract digit by digit from the right. When a digit is too small to cover its subtraction, it **borrows**: it receives the base `b` added on (becoming `d + b`), does the subtraction, and passes a `−1` borrow to the next digit on the left.
 
@@ -125,7 +125,7 @@ In binary the "first nonzero digit" is always the **lowest set bit** (the only n
 
 Examples: `1100 − 1 = 1011` · `1000 − 1 = 0111` · `0110 − 1 = 0101` · `0001 − 1 = 0000`.
 
-This `x − 1` shape is the engine behind the idiom `x & (x-1)` (which clears the lowest set bit — Idioms topic), and it's also why subtracting `x` from all-ones in §9 **never borrows** (all-ones has no `0` to start a borrow chain).
+This `x − 1` shape is the engine behind the idiom `x & (x-1)` (which clears the lowest set bit — Idioms topic), and it's also why subtracting `x` from all-ones in Sec. 9 **never borrows** (all-ones has no `0` to start a borrow chain).
 
 ## 7. Decimal → binary (the reverse direction)
 
@@ -144,7 +144,7 @@ Convert **11** (place values `8, 4, 2, 1`):
 
 Bits in order `8 4 2 1` → **`1011`** = 11. ✓
 
-**Why greedy is forced (not just lucky):** by §6, each place value `2^k` is **larger than the sum of all smaller place values combined** (which is `2^k − 1`). So if `2^k` fits into `N`, you **must** take it — skipping it leaves you a max of `2^k − 1 < 2^k ≤ N`, unreachable. This is also why a binary representation is **unique**: every bit is forced, no choices. And after subtracting `2^k` the remainder is always `< 2^k`, so each place value is decided exactly once.
+**Why greedy is forced (not just lucky):** by Sec. 6, each place value `2^k` is **larger than the sum of all smaller place values combined** (which is `2^k − 1`). So if `2^k` fits into `N`, you **must** take it — skipping it leaves you a max of `2^k − 1 < 2^k ≤ N`, unreachable. This is also why a binary representation is **unique**: every bit is forced, no choices. And after subtracting `2^k` the remainder is always `< 2^k`, so each place value is decided exactly once.
 
 ### The other method: repeated division by 2
 
@@ -182,7 +182,7 @@ A number isn't stored in "as many bits as it needs" — it's stored in a **fixed
 Count the patterns: with `n` independent bits, each bit is 0 or 1, so there are `2 × 2 × … × 2` (`n` times) = **`2^n`** distinct patterns. They represent the values `0, 1, …, 2^n − 1`. So (treating all bits as value bits, no negatives yet):
 
 > `n` bits → **`2^n` distinct patterns** → range **`0 … 2^n − 1`**.
-> The largest value is all `n` bits set = `2^n − 1` (the §6 fact).
+> The largest value is all `n` bits set = `2^n − 1` (the Sec. 6 fact).
 
 The `−1` is just because we start counting at 0.
 
@@ -191,7 +191,7 @@ The `−1` is just because we start counting at 0.
 
 ## 9. Storing negative numbers
 
-A Java `int` can be negative — but §8 just used up **all** `2^32` patterns on the non-negative values `0 … 2^32−1`. There are no patterns left over. So something has to give.
+A Java `int` can be negative — but Sec. 8 just used up **all** `2^32` patterns on the non-negative values `0 … 2^32−1`. There are no patterns left over. So something has to give.
 
 The trade-off: **split the patterns into two halves — roughly half for non-negatives, half for negatives.** That immediately halves the largest positive we can store. (This is why a 32-bit `int` runs `−2^31 … +2^31 − 1`, not `0 … 2^32−1`.)
 
@@ -252,7 +252,7 @@ Computing `2^n − x` by subtraction every time is annoying. Watch — split the
 ```
 −x = 2^n − x = (2^n − 1) − x + 1
 ```
-Now focus on the middle piece, `(2^n − 1) − x`. The value `2^n − 1` is **all ones** (in 4 bits, `1111` — the §6 fact). Subtracting `x` from all-ones, column by column, is always `1−0=1` or `1−1=0` — **it never borrows** — so every bit of `x` simply **flips**:
+Now focus on the middle piece, `(2^n − 1) − x`. The value `2^n − 1` is **all ones** (in 4 bits, `1111` — the Sec. 6 fact). Subtracting `x` from all-ones, column by column, is always `1−0=1` or `1−1=0` — **it never borrows** — so every bit of `x` simply **flips**:
 ```
   1111
 − 0101   (x = 5)

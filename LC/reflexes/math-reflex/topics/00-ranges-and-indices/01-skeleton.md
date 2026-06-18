@@ -7,7 +7,7 @@ If any takes more than ~5 seconds, that's a floor leak to fix before anything
 else.
 
 This is the home for the off-by-one / index-arithmetic reflexes that were
-previously only documented in `math-band-1100-1399.md` §0 (analysis layer) with
+previously only documented in `math-band-1100-1399.md` Sec. 0 (analysis layer) with
 no drill home. Promoting them into the topics layer so they enter spaced rep.
 
 ## Why this exists
@@ -26,7 +26,7 @@ leak — sub-operations that must be reflex.
 ## Empirical frequency
 
 Not separately tagged — these are sub-operations, not problem types. The
-range-counting pain point is called out in `math-band-1100-1399.md` §0.1 as the
+range-counting pain point is called out in `math-band-1100-1399.md` Sec. 0.1 as the
 user's stated weak spot. Appears inside: every sliding-window problem, every
 prefix-sum range query, every "first/last k" or "middle n−k" framing,
 every "multiples in [L,R]" count.
@@ -163,5 +163,5 @@ sightings 1965 / 2012 / 2060.
   reaches for `Math.ceil` + a `double` cast. Sibling of `b` (both are division-in-
   a-range); contrast the two so floor-for-multiples vs ceil-for-cover don't blur.
 - Cross-ref: prefix-sum range index (`pre[r+1] − pre[l]`) lives in Arithmetic
-  Sums §1.5 — same off-by-one family, different home.
+  Sums Sec. 1.5 — same off-by-one family, different home.
 ```

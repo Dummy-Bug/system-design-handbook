@@ -18,7 +18,7 @@ class Solution {
 
 ## The insight: XOR self-inverse cancels the pairs
 
-XOR everything together. By the §3 property `x ^ x = 0` and `x ^ 0 = x`:
+XOR everything together. By the Sec. 3 property `x ^ x = 0` and `x ^ 0 = x`:
 - every value that appears **twice** XORs with itself → `0` (cancels out)
 - the one value appearing **once** has nothing to cancel it → it survives
 
@@ -26,4 +26,4 @@ XOR is also commutative + associative, so order doesn't matter — the pairs fin
 
 This is the canonical payoff of "even occurrences cancel, the odd one remains," and it's why XOR gives O(1) space where a hash-set would need O(n).
 
-*Status: clean self-derived AC. Direct application of the XOR self-inverse property installed in §3.*
+*Status: clean self-derived AC. Direct application of the XOR self-inverse property installed in Sec. 3.*
