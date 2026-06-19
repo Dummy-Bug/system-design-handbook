@@ -16,7 +16,7 @@ Bits + maths first **because they're used inside other problems**; DP last becau
 
 | # | Topic | Track | Status |
 |---|---|---|---|
-| 1 | **Bits** | `primitive-reflex/topics/10-bit-manipulation/` | ◑ IN PROGRESS — Module 0 (Foundations) ✅ done 2026-06-17; Modules 1–4 left (5–6 deferred) |
+| 1 | **Bits** | `primitive-reflex/topics/10-bit-manipulation/` | ◑ IN PROGRESS — Modules 0–3 ✅ done; **Module 4 left** (5–6 deferred) |
 | 2 | **Maths** (number theory) | `math-reflex/` | ▢ not started |
 | 3 | **Graph** (BFS/DFS/topo/Dijkstra/0-1 BFS/Bellman-Ford) | `primitive-reflex/topics/07-graph` (+ `07-union-find` ✅) | ▢ not started |
 | 4 | **Binary Search on answer** (guess + feasibility check) | `primitive-reflex/topics/05-binary-search` | ▢ not started |
@@ -30,9 +30,8 @@ Family syllabus: `primitive-reflex/topics/10-bit-manipulation/00-syllabus.md`. A
 - **Module 0 — Foundations** ✅ (Number System + Operators + Single-Bit-Ops + Idioms; all 18 atoms derived)
 - **Module 1 — Counting & bit arithmetic** ✅ (2026-06-18) — popcount/Kernighan, Counting-Bits DP, count-bits-in-1..N (column-flip), reverse (in Foundations), add-via-XOR+carry, divide (batch-doubling)
 - **Module 2 — XOR mastery** ✅ (2026-06-18) — parity invariant, Single Number ×3 (136/260/137), reconstruction/decode (268/1720), prefix-XOR (1310/1442), Gray code `i^(i>>1)`. *(1 carry: LC 1442 O(n) hashmap opt owed)*
-- Module 3 — Per-bit thinking & properties ▢ NEXT
-- Module 3 — Per-bit thinking & properties ▢
-- Module 4 — OR/AND over subarrays ▢
+- **Module 3 — Per-bit thinking & properties** ✅ (2026-06-19) — per-bit contribution (Hamming/AND/OR/XOR pair-sums, carry-conservation order-swap), greedy bit construction (Max AND pair), bit-algebra identities (`a+b=(a^b)+2(a&b)`, trigger `a+b==a^b ⟺ a&b==0`). *(carries: Smallest-XOR 2nd rep; LC 421/1835/1442 deferred to revision)*
+- Module 4 — OR/AND over subarrays ▢ NEXT
 - Module 5 — Bitmask as a set ⏸ deferred · Module 6 — Advanced ⏸ deferred
 
 ## How we install each (the loop)

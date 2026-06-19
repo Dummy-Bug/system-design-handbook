@@ -117,3 +117,100 @@ This is the opposite of a one-trick formula. The *reasoning pattern* — "all-pa
 decompose into independent columns" — fires on unseen problems (subset XOR sums, "sum of f(bit) over a range",
 contribution counting in general). On a novel contest Q2 you skip the 20-min "how do I avoid O(n²)" and go straight
 to "column by column, count `c`, find the per-column count." That chunk *is* the speed.
+
+---
+
+## 2. Greedy bit construction — build the answer MSB → LSB
+
+**The lemma (the engine).** A single high bit outweighs **all** lower bits combined: `2^k = (2^{k-1}+…+2^0) + 1`,
+so `1000 (=8) > 0111 (=7)`. Consequence: when constructing a number to be **as large as possible**, *always secure
+the highest bit you can first* — no combination of lower bits can ever compensate for giving up a higher one.
+
+**The reflex.** Decide bits **top-down (MSB→LSB)**. At each bit: *try to set it*; keep it set only if doing so
+stays **feasible** (enough candidates / set-bit budget remaining). A greedy high commitment is never regretted.
+When you commit a bit, **shrink the candidate set** to those still consistent with everything committed so far —
+that makes every lower-bit decision automatically restricted to numbers that already agree on the higher bits.
+
+> **Trigger:** *"maximize/construct a number under a feasibility constraint"* → build MSB→LSB, greedily set each
+> bit if it stays feasible, narrow candidates on commit.
+
+### 2a. Max AND pair — ✅ *(self-derived + coded, 2026-06-19)*
+> Given `arr`, pick two distinct indices `i ≠ j` maximizing `A[i] & A[j]`. Return the max AND value.
+Brute = O(n²) pairs → TLE at `n=10^5`. Greedy: at bit `b` (high→low), if **≥ 2** current candidates have bit `b`
+set, the answer *can* keep this bit → commit it and **narrow the pool to exactly those**. If ≤ 1 candidate has it,
+the bit stays 0 and the pool is untouched (need a *pair* to realize a bit). The narrowing guarantees the final
+survivors all share every committed bit, so a real pair achieving `ans` exists.
+
+```java
+// candidate-mask form (no list rebuilding): a number is consistent if it has ALL committed bits.
+public int maxAndPair(int[] arr) {
+    int ans = 0;
+    for (int b = 30; b >= 0; b--) {
+        int candidate = ans | (1 << b);
+        int count = 0;
+        for (int x : arr) if ((x & candidate) == candidate) count++;
+        if (count >= 2) ans = candidate;   // commit bit b only if ≥2 numbers carry all committed bits
+    }
+    return ans;
+}
+```
+Equivalent pool-narrowing form (matches the derivation literally): keep a `candidates` list; at each bit collect
+those with the bit set; if `size ≥ 2`, `ans |= 1<<b` and replace `candidates` with that sublist; else leave it.
+
+### 2b. Smallest XOR with exactly B set bits — ▢ *(to re-derive cold — claimed prior, NOT re-derived this session)*
+> Given `A`, `B`: find `X` with exactly `B` set bits minimizing `A ^ X`.
+Idea (to verify by cold re-derivation): match `A`'s set bits high→low to zero out high XOR bits (each match spends
+one of the `B` ones); if `B` exceeds `popcount(A)`, spill the leftover ones into the **lowest** zero positions
+(cheapest damage); if `B < popcount(A)`, cover only `A`'s **highest** `B` set bits. **Not counted as owned yet.**
+
+### Atom 3.2 rep ledger (honest)
+- ✅ Max AND pair — self-derived + coded (2026-06-19).
+- ▢ Smallest XOR with B set bits — re-derive cold for a 2nd clean rep.
+- ⏸ LC 421 (Max XOR pair) — trie / greedy-prefix variant; to brainstorm separately.
+
+---
+
+## 3. Bit-algebra identities — regenerate from one 2-bit table (don't memorize)
+
+**The reflex: never recall these formulas — rebuild them in 30s from the single-bit truth table.** For two single
+bits `x, y`:
+
+```
+ x   y  | x^y   x&y   x|y | x+y
+--------|-------------------|----
+ 0   0  |  0     0     0   |  0
+ 0   1  |  1     0     1   |  1
+ 1   0  |  1     0     1   |  1
+ 1   1  |  0     1     1   |  2
+```
+
+**Key observation — `x^y` and `x&y` are MUTUALLY EXCLUSIVE** (never both 1 in a bit: `&` fires only on the `(1,1)`
+row, where `^=0`). So adding `(a^b)+(a&b)` never makes two 1's collide in a column → **no carry** → per-bit
+identities lift to full integers exactly.
+
+**The identity set (all read off the table):**
+- **`a | b = (a^b) + (a&b)`** — `|`-column = `^`-column + `&`-column; exact (no carry, by mutual exclusivity).
+- **`a + b = (a|b) + (a&b)`** — `+`-column = `|`-column + `&`-column.
+- **`a + b = (a^b) + 2·(a&b)`** — substitute the first into the second. *(= Module 1.5 add-via-XOR+carry:
+  `^` is the carry-less sum, `&` is the carries, `2·` shifts them up one place.)*
+- **`a − b = a + (~b + 1)`** — two's-complement negation (from Foundations).
+
+**The contest trigger (the payload):** from `a+b = (a^b) + 2(a&b)`,
+```
+a + b == a ^ b   ⟺   2·(a&b) == 0   ⟺   a & b == 0   (a, b share NO set bit)
+```
+and when `a & b == 0`, everything collapses:
+```
+a & b == 0   ⟺   a + b  ==  a | b  ==  a ^ b
+```
+(no shared bits ⇒ nothing carries ⇒ `+`, `|`, `^` all just lay disjoint bits side by side.)
+
+> **Felt-signal:** a problem says *"`x + y = x ^ y`"*, or *"partition / distribute a number's set bits into
+> groups"*, or *"`a + b = n` with `a, b` submasks of `n`"* → that's the disguised condition **`a & b == 0`**, and
+> you may freely swap `+ / | / ^` on those disjoint parts.
+
+**Why it transfers (vs. memorizing 5 formulas):** the whole family is *one* 2-bit case table + the mutual-exclusion
+note. Regenerating beats recalling — a year from now the table is trivial to rebuild, the formulas would have rotted.
+
+### Status
+✅ Atom 3.3 owned (2026-06-19) — derived the full identity set + `a&b==0` trigger from the truth table, self-driven.

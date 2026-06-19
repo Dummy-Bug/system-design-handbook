@@ -36,7 +36,8 @@ Socratic derivation → notes written **only after** deriving → blind classic 
 Holdout = a blind 1700-1800 sealed-queue problem mapped <30 min self-derived.
 
 ## Status
-◑ IN PROGRESS (started 2026-06-18).
+✅ **MODULE 3 COMPLETE** (2026-06-19). Notes in `02-notes.md`. *(carries: 3.2 Smallest-XOR 2nd rep + the 3 deferred
+LCs below — none block module completion.)*
 - 3.1 Per-bit contribution —
   - **Hamming (LC 477) ✅ TRULY OWNED** — count differing positions, weight 1.
   - **AND-pairs ✅ TRULY OWNED (2026-06-19)** — re-derived cold; the value-decomposition / order-swap intuition is
@@ -46,10 +47,21 @@ Holdout = a blind 1700-1800 sealed-queue problem mapped <30 min self-derived.
     (= Hamming's count + value weight).
   - **OR-pairs ✅ TRULY OWNED (2026-06-19)** — self-derived count, direct split: `C(c,2) + c·(n−c)` (≥one set)
     = complement `C(n,2) − C(n−c,2)`.
-  - **LC 1835 (XOR of all ANDs) ▢** — open escalation, not started.
+  - **LC 1835 (XOR of all ANDs) ⏸ DEFERRED (optional)** — variants are infinite; reflex owned, escalation skippable.
   - **✅ Blocking gap CLOSED (2026-06-19):** the per-bit *contribution* / order-swap intuition is now installed
     (see notes §1 carry-conservation). All four pair-sums (Hamming/AND/OR/XOR) self-owned.
-- 3.2 Greedy bit construction — ▢
-- 3.3 Bit-algebra identities — ▢ *(the `a+b=(a^b)+2(a&b)` set; partly seen in Module 1.5)*
+- 3.2 Greedy bit construction —
+  - **Reflex installed (2026-06-19):** build MSB→LSB, set bit if feasible, narrow candidates on commit; engine =
+    `2^k > Σ lower bits`. **Max AND pair ✅ self-derived + coded.**
+  - ▢ Smallest XOR with B set bits — re-derive cold (2nd rep).
+- 3.3 Bit-algebra identities — ✅ OWNED (2026-06-19) — derived `a|b=(a^b)+(a&b)`, `a+b=(a|b)+(a&b)`,
+  `a+b=(a^b)+2(a&b)`, `a−b=a+(~b+1)` from a 2-bit truth table; trigger `a+b==a^b ⟺ a&b==0` (disjoint bits).
+
+## ⏸ Deferred to revision time (don't lose these)
+1. **LC 421 — Max XOR pair** (greedy-MSB + XOR-complement-in-set / trie). Brainstormed start: bit feasible when two
+   numbers **differ** there. Pick up the prefix-set construction at revision.
+2. **LC 1835 — XOR of all pair-ANDs** (the "hard version" escalation of atom 3.1; distributive + per-bit twist).
+3. **LC 1442 — Count triplets equal XOR, O(n)** (owed from Module 2 / 2.6b: `freq*k − sum` aggregate, off-by-one
+   indexing un-finalized). Re-derive & code the O(n) cleanly.
 
 Notes in `02-notes.md`.
