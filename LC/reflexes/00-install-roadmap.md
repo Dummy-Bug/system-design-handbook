@@ -2,7 +2,7 @@
 
 > The ordered plan for Socratically installing primitive/trigger reflexes **before** opening the 1700-1800 band — so band problems aren't "hitting in the dark." Point Claude here to resume: *"continue the reflex roadmap."*
 >
-> Spans both reflex tracks: **`primitive-reflex/`** (bits, graph, BS-on-answer, trie, DP) and **`math-reflex/`** (maths). Created 2026-06-17.
+> All in the **`primitive-reflex/`** track (bits, **maths**, graph, BS-on-answer, trie, DP). Created 2026-06-17. (Maths moved into primitive-reflex as a self-contained family 2026-06-19; the older `math-reflex/` *recall* track is left untouched and is NOT part of this roadmap.)
 
 ## Why this exists (the diagnosis)
 
@@ -16,8 +16,8 @@ Bits + maths first **because they're used inside other problems**; DP last becau
 
 | # | Topic | Track | Status |
 |---|---|---|---|
-| 1 | **Bits** | `primitive-reflex/topics/10-bit-manipulation/` | ◑ IN PROGRESS — Modules 0–3 ✅ done; **Module 4 left** (5–6 deferred) |
-| 2 | **Maths** (number theory) | `math-reflex/` | ▢ not started |
+| 1 | **Bits** | `primitive-reflex/topics/10-bit-manipulation/` | ◑ NEAR DONE — Modules 0–3 ✅; **Module 4 derivations done** (4.1 owned, 4.2/4.3/4.4 holdout-pending); 5–6 deferred. Only the deferred problem block remains before Bits is complete |
+| 2 | **Maths** (NT · Combinatorics · Contribution · Game/Parity) | `primitive-reflex/topics/11-maths/` | ◑ family syllabus built (2026-06-19); modules M0–M4 pending derivation |
 | 3 | **Graph** (BFS/DFS/topo/Dijkstra/0-1 BFS/Bellman-Ford) | `primitive-reflex/topics/07-graph` (+ `07-union-find` ✅) | ▢ not started |
 | 4 | **Binary Search on answer** (guess + feasibility check) | `primitive-reflex/topics/05-binary-search` | ▢ not started |
 | 5 | **Trie** (also the band blind-spot) | `primitive-reflex/topics/12-advanced` (Trie) | ▢ not started |
@@ -31,7 +31,7 @@ Family syllabus: `primitive-reflex/topics/10-bit-manipulation/00-syllabus.md`. A
 - **Module 1 — Counting & bit arithmetic** ✅ (2026-06-18) — popcount/Kernighan, Counting-Bits DP, count-bits-in-1..N (column-flip), reverse (in Foundations), add-via-XOR+carry, divide (batch-doubling)
 - **Module 2 — XOR mastery** ✅ (2026-06-18) — parity invariant, Single Number ×3 (136/260/137), reconstruction/decode (268/1720), prefix-XOR (1310/1442), Gray code `i^(i>>1)`. *(1 carry: LC 1442 O(n) hashmap opt owed)*
 - **Module 3 — Per-bit thinking & properties** ✅ (2026-06-19) — per-bit contribution (Hamming/AND/OR/XOR pair-sums, carry-conservation order-swap), greedy bit construction (Max AND pair), bit-algebra identities (`a+b=(a^b)+2(a&b)`, trigger `a+b==a^b ⟺ a&b==0`). *(carries: Smallest-XOR 2nd rep; LC 421/1835/1442 deferred to revision)*
-- Module 4 — OR/AND over subarrays ▢ NEXT
+- Module 4 — OR/AND over subarrays ◑ DERIVATIONS DONE (2026-06-19) — 4.1 ✅ owned (LC 201); 4.2 bit-count-in-window, 4.3 no-shared-bits window, 4.4 LogTrick all derived (holdout-pending; problem block deferred)
 - Module 5 — Bitmask as a set ⏸ deferred · Module 6 — Advanced ⏸ deferred
 
 ## How we install each (the loop)

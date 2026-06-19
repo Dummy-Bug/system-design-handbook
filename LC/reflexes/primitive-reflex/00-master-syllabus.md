@@ -60,7 +60,8 @@ Audit: ✅ audited-complete · ▢ rough draft, audit-on-entry.
 | 7 | **Union-Find ★** *(split from Graph — own data-structure family)* | 7 (+5 deferred) | ✅ | `topics/07-union-find/00-syllabus.md` |
 | 8 | Recursion / Backtracking | 2 | ▢ | (on entry) |
 | 9 | Trees | 5 | ▢ | (on entry) |
-| 10 | **Bit Manipulation** *(number-theory → math-reflex)* | 7 modules | ◑ building | `topics/10-bit-manipulation/00-syllabus.md` |
+| 10 | **Bit Manipulation** | 7 modules | ◑ building | `topics/10-bit-manipulation/00-syllabus.md` |
+| 10 | **Maths** *(Number Theory · Combinatorics · Contribution · Game/Parity — number-theory lives HERE now, self-contained, NOT `math-reflex/`)* | 7 modules (5 active) | ◑ family syllabus built (2026-06-19); modules pending | `topics/11-maths/00-syllabus.md` |
 | 11 | DP → `DP/01-syllabus.md` | — | ▢ | (cross-ref) |
 | 12 | Advanced (Trie ★ / SegTree-BIT / String-matching) | 3 | ▢ | (on entry) |
 
@@ -76,7 +77,7 @@ Audit: ✅ audited-complete · ▢ rough draft, audit-on-entry.
 - **Tier 7 Graph:** BFS/multi-source · DFS/flood-fill · topo-sort · cycle-detection · Dijkstra · 0-1 BFS · Bellman-Ford/Floyd  _(**Union-Find ★ split to its own audited family** → `topics/07-union-find/00-syllabus.md`)_
 - **Tier 8 Backtracking:** subsets/combos/perms skeleton · prune-on-constraint
 - **Tier 9 Trees:** recursive traversal · Tree-DP ★ · BST-inorder · build-from-traversals · LCA
-- **Tier 10 Bit & NT:** XOR cancel · bitmask subset enum · sieve · modpow · GCD/LCM
+- **Tier 10 Bit / Maths:** both now have real family syllabuses (`topics/10-bit-manipulation/`, `topics/11-maths/`) — no longer provisional. **Number theory lives in the Maths family** (self-contained, independent of the legacy `math-reflex/` recall track).
 - **Tier 12 Advanced:** Trie ★ · Segment-tree/BIT · string matching (KMP/Z/Rabin-Karp)
 
 > Note: these provisional lists are *unaudited* — entering a tier may add atoms (Stack went 4 → 7 on audit). Treat them as a sketch, not a complete toolbox, until the family syllabus is written.
