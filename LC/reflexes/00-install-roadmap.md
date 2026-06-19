@@ -19,9 +19,21 @@ Bits + maths first **because they're used inside other problems**; DP last becau
 | 1 | **Bits** | `primitive-reflex/topics/10-bit-manipulation/` | ◑ NEAR DONE — Modules 0–3 ✅; **Module 4 derivations done** (4.1 owned, 4.2/4.3/4.4 holdout-pending); 5–6 deferred. Only the deferred problem block remains before Bits is complete |
 | 2 | **Maths** (NT · Combinatorics · Contribution · Game/Parity) | `primitive-reflex/topics/11-maths/` | ◑ family syllabus built (2026-06-19); modules M0–M4 pending derivation |
 | 3 | **Graph** (BFS/DFS/topo/Dijkstra/0-1 BFS/Bellman-Ford) | `primitive-reflex/topics/07-graph` (+ `07-union-find` ✅) | ▢ not started |
-| 4 | **Binary Search on answer** (guess + feasibility check) | `primitive-reflex/topics/05-binary-search` | ▢ not started |
-| 5 | **Trie** (also the band blind-spot) | `primitive-reflex/topics/12-advanced` (Trie) | ▢ not started |
-| 6 | **DP** (last — leans on all above) | `primitive-reflex/DP/01-syllabus.md` | ▢ not started |
+| 4 | **DP** (last — leans on all above) | `primitive-reflex/DP/01-syllabus.md` | ▢ not started |
+
+### Removed from this track (2026-06-19)
+- **Binary Search on answer** — **dropped** (not a gap). Already OWNED in-band (1600-1699 #13/#14, both BS-on-answer; plain-BS carry closed [[lc-binary-search-one-bucket]]) and its feasibility-math (isqrt §3.12, triangular-inverse §3.11) is installed in `math-reflex`. Revisit ONLY if a specific BS problem surfaces a concrete gap.
+- **Trie ★** — **relocated to the 1800-1900 consolidation** (below). It's an advanced DS that skews higher-rated, so it batches with the other advanced installs there; carries the bit-trie / LC 421 max-XOR carry from bits Module 3.
+
+### Next band — 1800-1900 consolidation (Q3 tier)
+After bits/maths/graph/DP feed the **1700-1800** band, the **1800-1900** band is the Q3-tier consolidation. Two facts drive it:
+- **Band-owned ≠ reflex-installed** ([[lc-reflex-install-vs-band-owned]]): several families are band-owned but never got the bits-style install (discriminator + audited variant catalog).
+- At Q3 the failure mode is **recognition + composition under disguise**, not missing primitives — so owned buckets are *exercised on harder problems*, not re-derived ([[lc-no-vanilla-reps]]).
+
+**Committed installs at 1800-1900:**
+- **Owned-but-uninstalled** (give them the one-time bits-style install): sliding-window · prefix/suffix · heap · backtracking · trees.
+- **Advanced / new at 1800+:** Trie ★ (+ bit-trie/LC 421) · segment-tree/BIT · advanced string-matching · line-sweep variants beyond the audited Interval family.
+- Already reflex-installed (done): two-pointers ✅ · stack ✅ · interval ✅ · union-find ✅.
 
 ## Bits sub-progress (topic 1)
 
