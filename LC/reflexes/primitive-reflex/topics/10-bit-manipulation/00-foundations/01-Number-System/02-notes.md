@@ -107,6 +107,28 @@ result: 4 2 9 9  = 4299      ✓
 ```
 Note it is `d + b` — you **add** the base, not multiply.
 
+### What you actually "borrow" — you don't lend `1`, you lend a *place value* (which always arrives as `base`)
+
+A natural confusion: "in `40 − 1`, the tens digit lends `1` — so why does the ones column gain `10`?" Because **the lender gives up `1` of its OWN place value, and one unit of the place to your left is worth `base` units of yours.** You never "receive 1" — you receive `base`.
+
+- `40 − 1`: pos 1 lends 1 *ten*; 1 ten = **10 ones**, so pos 0 gets `0 + 10 − 1 = 9` → `39`.
+- The "1" the lender loses and the "10" the borrower gains are the **same quantity** in two different place values — not two different amounts.
+
+**The borrow ripples one position at a time — each handoff is `×base` of its *immediate* neighbor, never `×base^k`.** A far-away nonzero digit reaches you through a *chain* of such steps, so the receiving column always gains exactly `base` (10 in decimal, **2** in binary), regardless of how far the lender sits.
+
+*Why a far digit doesn't lend `base^k` directly — `400 − 1`:*
+```
+pos 0 (0): can't subtract 1 → asks pos 1.
+pos 1 (0): empty, nothing to lend → must borrow from pos 2 first.
+pos 2 (4): lends 1 hundred = 10 tens → pos 1 becomes 10, pos 2 → 3.
+pos 1 (now 10): lends 1 ten = 10 ones → pos 0 gets 10, pos 1 → 9.
+pos 0: 0 + 10 − 1 = 9.
+result: 3 9 9 = 399    ✓
+```
+The hundreds digit **never hands 100 to the ones place**; it hands **10** to the tens, which hands **10** to the ones. Each link is `×base` of its neighbor, not `×base²`.
+
+> **Borrow = receive `base` in your column, propagated one position at a time.** In binary that's always `+2` (`0 + 2 − 1 = 1`), which is exactly why every trailing `0` in `x − 1` becomes a `1`: the borrow chain runs left through the zeros (each `2 − 1 = 1`) until the first set bit absorbs it (`1 → 0`) and stops the chain.
+
 **The special case we actually need: `x − 1`.** Subtracting just `1` means only the rightmost column starts with a subtraction, and the borrow propagates left only while it keeps hitting `0`s. Each `0` it passes becomes `b − 1`; it stops at the first nonzero digit, which drops by 1.
 
 *Binary trace — `1100 − 1`* (base 2, so `b − 1 = 1`):
