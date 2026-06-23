@@ -51,7 +51,7 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 | Backtracking | ~5 | ◐ carried 1/2 |
 | Stack (plain) | ~5 | ◐ carried 0/2 |
 | DP » String | ~4 | ◐ carried 0/2 |
-| DP » Grid | ~2 | ◐ carried 1/2 |
+| DP » Grid | ~2 | ● **OWNED 2/2** (#22 max-moves-in-grid, 2026-06-22 — contamination overturned, immaterial leak) |
 | DP » Interval | ~0 genuine | ⊘ **DEFERRED 2026-06-15** — tag+editorial audit: 0 interval-DP in-band (Cutting-Cake-I is greedy). Carried 1/2 (#13 Stone Game) rolls cross-band. |
 | **Monotonic Stack** | ~2 | ★ blind-spot, carried 1/2 — scarce (1 more: carried #9 max-chunks or in-band) |
 | Trie | ~4 | ⊘ deferred — acquire cross-band |
@@ -91,8 +91,8 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 | ~~Bit Manipulation~~ | **2/2** ✅ | 0 | **OWNED 2026-06-15.** Unique-XOR-Triplets-I (seed #07, bit-width cap §4.3) + #16 beautiful-subarrays (clean self-derived, XOR-cancellation → subarray-XOR-0 reframe). Moved to owned table. |
 | Stack (plain) | 0/2 | **2** | 30 hard-fail at 1550-1600. **Both queue Stack deals are spent with NO rep:** #11 min-swaps-balanced (editorial hard-fail) + #16 minimum-remove (2026-06-15 RE-SOLVE — LC 1249 pre-solved 2026-06-03 in stack-reflex track). → **needs 2 FRESH non-queue Stack picks.** |
 | ~~Backtracking / Subset-Enum~~ | **2/2** ✅ | 0 | **OWNED 2026-06-11** (#05) — moved to owned table above |
-| DP » Linear | 0/2 | **2** | 28,36 soft-fail at 1550-1600 |
-| DP » Grid | 1/2 (31) | **1** | |
+| DP » Linear | 1/2 | **1** | #23 knight-dialer (2026-06-23) clean rep 1; 28,36 soft-fail at 1550-1600 |
+| ~~DP » Grid~~ | **2/2** ✅ | 0 | **OWNED 2026-06-22** (#22 max-moves-in-grid) — contamination overturned (immaterial leak) |
 | ~~DP » LIS-variant~~ | 1/2 (34) | **DEFERRED** | **DEFERRED 2026-06-15 (supply-justified).** Tag+editorial audit of both halves: **genuine LIS = 0 in-band** (phrase-hits 1121 = greedy-count, 2943 = sort-scan, neither LIS-DP). Carried 1/2 (#34) rolls cross-band. |
 | DP » String | 0/2 | **2** | #04 partition-≤k (Greedy ride-along, no rep) + #22 flip-string-to-monotone (2026-06-16, AC but **editorial-level help — NO REP**). Both queue picks spent without credit → needs 2 FRESH non-queue picks. |
 | ~~DP » Interval/Minimax~~ | 1/2 (13) | **DEFERRED** | **DEFERRED 2026-06-15 (supply-justified).** Tag+editorial audit: **0 interval-DP in-band** (no `dp[i][j]`/Game-Theory tag; Cutting-Cake-I is greedy). Carried 1/2 (#13 Stone Game) rolls cross-band. Corrects the prior "now in-band" mislabel. |
@@ -118,7 +118,7 @@ Cost acknowledged: wider ≠ faster to graduate (more total problems). The win i
 ## The band's two jobs (the whole finish line)
 
 With the deferrals out, **1600-1699 has zero new ownership targets.** It is exactly:
-1. **Close carried debts.** ✅ Closed: Hashing, Binary-Search, Backtracking, Union-Find, Bit, **Heap (#20, 2026-06-16)**. **Still owed (6 gating buckets, 10 reps):** Two-Pointers (2), Stack (2), DP-Linear (2), DP-Grid (1), DP-String (2), Mono-Stack (1). **Deferred cross-band (supply <2, non-gating):** DP-LIS, DP-Interval, Tree-DP — editorial-confirmed 2026-06-15.
+1. **Close carried debts.** ✅ Closed: Hashing, Binary-Search, Backtracking, Union-Find, Bit, **Heap (#20, 2026-06-16)**, **DP-Grid (#22, 2026-06-22)**. **Still owed (5 gating buckets, 9 reps):** Two-Pointers (2), Stack (2), DP-Linear (2), DP-String (2), Mono-Stack (1). **↻ Queue REPLENISHED 2026-06-23 with 7 mechanic-matched picks (deals #24–30)** covering 7 of these 9: Two-Ptr×2, DP-Linear×2, DP-String×1, Stack×1, Mono-Stack×1. **2 reps have no clean in-band supply → roll cross-band (rule 6B):** Stack 2nd, DP-String 2nd. **Deferred cross-band (supply <2, non-gating):** DP-LIS, DP-Interval, Tree-DP — editorial-confirmed 2026-06-15.
 2. **Own the blind-spot trio** — ✅ **Union-Find OWNED 2/2** (#01, 2026-06-10); **Tree-DP DEFERRED 2026-06-12** (no in-band problem forces a true optimization recurrence — own it cross-band where supply exists); **Mono-Stack (1 to go)** is the only blind-spot left to own in-band.
 
 **Headline process metric (carried in place of the prove-the-streak gate we skipped):** Step-2 (recompute worked example) + Step-3 (named edge cases) on *every* solve, and track **first-submission-clean rate** (rule 6C bar = ≥70%, ≤1 hinted/10). The 1550-1600 leak was ~65% clean / ~1.25 hinted-per-10 — carelessness, not algorithm. This band's real job is to close that.

@@ -38,7 +38,21 @@
 20. [—] ~~minimum-time-to-collect-all-apples-in-a-tree~~ — **REMOVED 2026-06-12: Tree-DP DEFERRED (see ledger §2)**
 21. [x] ~~https://leetcode.com/problems/maximum-product-after-k-increments/~~ ✅ dealt+AC 2026-06-16 (**CLEAN first-sub self-derived AC, 15m SUB-CAP**; min-heap, +1 to smallest ×k, mod running product. **Heap load-bearing here (k× grab-min loop)** → **Heap 1/2 → 2/2 → OWNED ●**. Exchange-argument proof derived in debrief. clean-rate 14/19 ≈ 74%) → `First-Attempt/20`
 22. [x] ~~https://leetcode.com/problems/flip-string-to-monotone-increasing/~~ ❌ dealt 2026-06-16 (**AC first-sub BUT EDITORIAL-level help → NO REP**; user reached for a local greedy "flip the 0s", Claude broke it with counterexample `10011` then volunteered the full `cost(k)=ones-before+zeros-after` boundary-enumeration approach + prefix-sum → user implemented Claude's approach. **DP-String stays 0/2.** Recognition transferred ("shape-A-then-shape-B ⇒ parametrize the boundary, price every split, minimize") but not the rep. Claude over-helped — should've stopped at the counterexample. clean-rate 14/20 = 70%, on the floor) → `First-Attempt/21`
-23. [ ] ⚠ https://leetcode.com/problems/maximum-number-of-moves-in-a-grid/ — **bucket-contaminated 2026-06-15 (Claude leaked DP-Grid); implementation rep only when dealt**
+23. [x] ~~https://leetcode.com/problems/maximum-number-of-moves-in-a-grid/~~ ✅ dealt+AC 2026-06-22 (**CLEAN first-sub self-derived AC, 15m SUB-CAP**; top-down grid DP. **Contamination OVERTURNED** — leaked "DP-Grid" label was immaterial: recognition is inherent to the statement, derivation fully self-driven → **DP » Grid 1/2 → 2/2 → OWNED ●**. Perturbation: column-`+1` ⇒ DAG layered by column ⇒ BUP needs no recursion. clean-rate 15/20) → `First-Attempt/22`
+
+### ↻ REPLENISHED 2026-06-23 — 7 fresh mechanic-matched picks (links only, blind)
+> Pulled from band tag data both halves, deduped vs solved/dealt + reflex-track, filtered for **mechanic load-bearing**
+> (avoids the old over-model dodge). Shuffled — position is not a tell. Targets the 5 owed gating buckets.
+> ⚠ **Coverage gap:** Stack 2nd-rep and DP-String 2nd-rep have **no clean in-band supply** → roll cross-band (rule 6B),
+> same precedent as DP-LIS/Interval/Tree-DP. Do NOT pad. See replenishment answer-key in the spoiler block.
+
+24. [x] ~~https://leetcode.com/problems/knight-dialer/~~ ✅ dealt+AC 2026-06-23 (**CLEAN first-sub self-derived AC, ~50m OVER-CAP** → derivation clause; brute-force draft failed LC "Run" sample 3 [not a submission] → self-pivoted to memoized return-value DP. **DP » Linear 0/2 → 1/2.** clean-rate 16/21) → `First-Attempt/23`
+25. [ ] https://leetcode.com/problems/move-pieces-to-obtain-a-string/
+26. [ ] https://leetcode.com/problems/number-of-ways-to-select-buildings/
+27. [ ] https://leetcode.com/problems/car-fleet/
+28. [ ] https://leetcode.com/problems/count-ways-to-build-good-strings/
+29. [ ] https://leetcode.com/problems/expressive-words/
+30. [ ] https://leetcode.com/problems/construct-smallest-number-from-di-string/
 
 ---
 
@@ -113,5 +127,20 @@
 
 ### ✦ Invariant / Reframe members (grow & review deck — never gates graduation)
 apply-bitwise-operations-to-make-strings-equal (STRONG), count-the-number-of-beautiful-subarrays (XOR reframe), minimum-number-of-swaps-to-make-the-string-balanced (reframe), count-number-of-bad-pairs (key reframe), maximum-width-ramp (lighter).
+
+### ↻ REPLENISHMENT 2026-06-23 — answer key for deals #24–30
+
+| Deal | LC | Problem | Bucket (target) | Mechanic-match note / trap |
+|---|---|---|---|---|
+| 24 | 935 | knight-dialer | **DP » Linear** | 10-state transition DP over `n` hops; mod each step. Clean, not dodgeable. |
+| 25 | 2337 | move-pieces-to-obtain-a-string | **Two-Pointers** | two ptrs over non-blank chars; same relative order + `L` only moves left / `R` only right. **Load-bearing — NOT hashmap-dodgeable** (the anti-over-model pick). |
+| 26 | 2222 | number-of-ways-to-select-buildings | **DP » String** | running counts of `0,1,01,10` while scanning ⇒ count `010`/`101` subsequences. Subsequence-count DP. |
+| 27 | 853 | car-fleet | **Monotonic-Stack ★** | sort by position desc, stack of arrival times, pop when caught. ⚠ **dodge-risk**: degenerates to "track running max time" scan → if solved that way, mono-stack does NOT credit (same trap as #19 ramp). Last in-band mono-stack shot. |
+| 28 | 2466 | count-ways-to-build-good-strings | **DP » Linear** | `dp[i]=dp[i-zero]+dp[i-one]`, count paths, mod. Textbook 1-D DP. |
+| 29 | 809 | expressive-words | **Two-Pointers** | two ptrs / run-length compare base vs query; group ≥3 or equal-len. Genuine two-ptr. |
+| 30 | 2375 | construct-smallest-number-from-di-string | **Stack** | push `1..9`, pop run on each `I` boundary (and at end). Genuine stack, load-bearing. |
+
+**Reps this replenishment closes (if clean+self-derived):** Two-Pointers 0→2, DP-Linear 0→2, DP-String 0→1, Stack 0→1, Mono-Stack 1→2.
+**Still uncovered after this (no clean in-band supply → roll cross-band, rule 6B):** Stack 2nd rep, DP-String 2nd rep.
 
 </details>
