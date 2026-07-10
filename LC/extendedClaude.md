@@ -112,7 +112,7 @@ If any of these fail, point it out and show the cleaner version.
 
 ### Pre-submit checklist — Java-impl bug families that have recurred across bands
 
-Run this **before clicking submit**. These are the bugs that bit across 1500-1850, derived from the actual log audit on 2026-05-22:
+Run this **before clicking submit**. These are the bugs that bit across 1500-1850, derived from the actual log audit on 2026-05-22. **Items 14-16 + the minimal-tool prompt added 2026-06-26** after the 1600-1699 re-solve audit found these four families recurring across multiple problems while never getting promoted (the protocol's own promote-on-recurrence step had never fired):
 
 1. **Overflow / cast-to-long** — any product of values near 10^9, any `mid*mid` in binary search, any sieve `i*i`. Write `(long)a * b`, never `(long)(a * b)`. Trap: `long j = i*i` overflows int *before* assignment.
 2. **Float-cast trap** — `(int) Math.pow(1e9, 1.0/3) = 999`. Always `+1` after casting `Math.pow` or `Math.sqrt` to int.
@@ -127,8 +127,15 @@ Run this **before clicking submit**. These are the bugs that bit across 1500-185
 11. **Operator precedence** — `(freq & 1) != 0` needs parens around `freq & 1` (Java precedence makes `freq & 1 != 0` parse as `freq & (1 != 0)` — compile error or wrong).
 12. **Window not fully built before use** — when iterating with a sliding window, always add `s[j]` first, then check size, then use. Checking before adding leaves the current element out.
 13. **Window-build order matches edge cases** — also test with empty window, single element, consecutive separators.
+14. **Modular-arithmetic discipline** — if the recurrence is ≥ exponential (doubling/Fibonacci) or sums outgrow `long` before the input cap, take `% MOD` at *every* step, not just at the end (1600-1699 #27: `2^n`/`φ^n` crosses `long` by length ~63-90 « the `10^5` cap; #02: no mod inside the loop → overflow WA). Recipe: exponential base `b` ⇒ overflow length `≈ 63 / log₂(b)`; if below max input, mod intermediately. **And modular *subtraction* can go negative** — `%` keeps the dividend's sign and mod is not order-preserving, so a reduced `a` can drop below a reduced `b` even when the true `a ≥ b` → always `((a - b) % MOD + MOD) % MOD` (#27).
+15. **Both endpoints must exhaust (1-to-1 correspondence)** — when two sequences must match/transform/walk in lockstep, the accept test is "*both* ran out together" (`i == n1 && j == n2`), never just one side. Checking one direction silently lets the other carry unmatched extras (#24 move-pieces: dangling `L` after target matched; #28 expressive-words: trailing `"world"` while `s` was fully built). This family recurred twice in one band — make "which side am I *not* checking?" reflexive.
+16. **Never read a slot the code may not have filled** — don't index a memo/DP/array position assuming it's populated. In memoized recursion, *invoke* `helper(x)` — don't read `dp[x]` directly (#27: recursion stepping −2/−4 from 5 never visits `dp[4]` → stale `-1`). For default-initialized accumulators/sentinels, guard before use — don't let a default (`0`/`-1`) silently act as a real value (#29 di-string: `int j = 0` flush fired on an empty stack → spurious full reverse; #12: stored cumulative desynced from its count). Sibling of item 8.
 
 Before submitting, scan this list. If your solution touches the bug family, verify the fix is applied.
+
+### Pre-*derivation* prompt — fires while modeling, before any code
+
+- **Minimal-tool check (over-model)** — before reaching for `Map<key, Deque/List<index>>` or a stack of `(value, index)` tuples, ask: ***"count or positions? what is this structure actually doing — can a running variable / counter / two-pointer replace it?"*** This is the **#1 recurring quality leak**: a comfort-Map where one scalar suffices — #03 push-dominoes, #17 advantage-shuffle, #19 max-width-ramp, #26 car-fleet, #29 di-string (**5× and counting**). Over-modeling still ACs, so the clean-rate doesn't catch it — but it dodges the target mechanic *and* burns contest time. This prompt fires at derivation time precisely because a pre-submit check is too late. See [[lc-index-bookkeeping-overmodel]].
 
 ---
 

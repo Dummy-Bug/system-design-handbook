@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Laxit Rana — Resume</title>
+<style>
+  @page { size: A4; margin: 11mm 13mm 12mm; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { font-family: Georgia, "Times New Roman", serif; color: #1b1b1b; }
+  body { font-size: 10.1pt; line-height: 1.44; }
+
+  a { color: #1a5fc4; text-decoration: none; }
+
+  header { margin-bottom: 8pt; }
+  h1 { font-size: 22pt; font-weight: 700; letter-spacing: 1.8pt; text-transform: uppercase; color: #111; }
+  .headline { font-size: 10.6pt; color: #333; margin-top: 3pt; }
+  .contact { font-size: 9.7pt; color: #444; margin-top: 4pt; }
+  .contact span + span::before { content: "  ·  "; color: #999; }
+
+  section { margin-top: 11pt; }
+  h2 {
+    font-size: 10.8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1.6pt;
+    color: #111; border-bottom: 1.4px solid #111; padding-bottom: 2.5pt; margin-bottom: 6pt;
+  }
+
+  .skills p { margin-bottom: 2pt; }
+  .skills b { color: #111; }
+
+  .role-line { display: flex; justify-content: space-between; align-items: baseline; }
+  .company { font-size: 11pt; font-weight: 700; color: #1a5fc4; }
+  .role { font-size: 10.6pt; font-weight: 700; color: #111; margin-top: 1pt; }
+  .dates { font-size: 9.6pt; color: #555; white-space: nowrap; }
+  .entry-gap { margin-top: 10.5pt; }
+
+  .project { display: flex; justify-content: space-between; align-items: baseline; margin-top: 7.5pt; }
+  .project-name { font-size: 10.5pt; font-weight: 700; color: #1a5fc4; }
+  .project-meta { font-size: 9.4pt; color: #555; font-style: italic; white-space: nowrap; }
+
+  ul { margin: 2.5pt 0 0 13pt; }
+  li { margin-bottom: 3.3pt; }
+  li b { font-weight: 700; color: #111; }
+
+  .edu-line { display: flex; justify-content: space-between; align-items: baseline; }
+  .edu-title { font-weight: 700; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Laxit Rana</h1>
+  <div class="headline">Backend Software Engineer — Java · Distributed Systems · AI Agents</div>
+  <div class="contact">
+    <span>Bangalore</span>
+    <span>+91-8284805624</span>
+    <span><a href="mailto:laxit.rana.dev@gmail.com">laxit.rana.dev@gmail.com</a></span>
+    <span><a href="https://www.linkedin.com/in/laxitrana/">linkedin.com/in/laxitrana</a></span>
+  </div>
+</header>
+
+<section class="skills">
+  <h2>Skills</h2>
+  <p><b>Languages:</b> Java (primary), Python, SQL</p>
+  <p><b>Backend:</b> Spring Boot, MVC architecture, REST APIs, Microservices, FastAPI</p>
+  <p><b>AI Systems:</b> LangGraph, LLM tool-calling, agent orchestration, human-in-the-loop workflows</p>
+  <p><b>Databases &amp; Storage:</b> DynamoDB, S3, Redis</p>
+</section>
+
+<section>
+  <h2>Experience</h2>
+
+  <div class="role-line">
+    <span class="company">Repute Network Pvt. Ltd. — Bangalore</span>
+    <span class="dates">Jan 2024 – Present</span>
+  </div>
+  <div class="role">Software Engineer</div>
+
+  <div class="project">
+    <span class="project-name">AI Assistant Platform for an enterprise HRMS</span>
+    <span class="project-meta">Nov 2025 – Present</span>
+  </div>
+  <ul>
+    <li>Designed and built the backend of a <b>multi-agent AI assistant</b> — employee self-service and HR-admin agents — using <b>FastAPI and LangGraph</b>; live in production for an enterprise HRMS product</li>
+    <li>Built conversation persistence with <b>DynamoDB checkpointing</b> (per-thread isolation) and a <b>multi-tenant data model</b> scoped HRMS → company → employee</li>
+    <li>Added TTL-based DynamoDB domain caching to keep assistant responses reliable over <b>flaky upstream HRMS APIs</b></li>
+    <li>Enforced per-role authorization across <b>18 agent tools</b> — employees restricted to their own records, admins org-wide — with <b>human-in-the-loop disambiguation</b> for ambiguous queries</li>
+    <li>Streamed the agent's <b>progress and final response as structured NDJSON events</b> over a long-lived HTTP connection, with cookie-based sessions (<b>JWT</b> validation); currently building an onboarding agent that auto-provisions new hires into <b>Jira, Slack, and Google Workspace</b></li>
+  </ul>
+
+  <div class="project">
+    <span class="project-name">Verification &amp; Data Ingestion Platform</span>
+    <span class="project-meta">2024 – 2025</span>
+  </div>
+  <ul>
+    <li>Built an extraction pipeline, raising daily throughput <b>25K → 300K (12×)</b> by switching from Selenium to a <b>direct-HTTP design</b>, with <b>worker-pool concurrency</b>, connection pooling, and <b>Redis-based per-record locking</b> to eliminate duplicate processing across instances</li>
+    <li>Re-architected a payments partner's authentication from web credentials to <b>mobile-OTP</b>, raising verification completion <b>27% → 80%</b></li>
+    <li>Onboarded <b>1,500+ sellers daily (~50% of seller traffic)</b> through a <b>Spring Boot</b> integration with a leading UPI business-payments provider</li>
+    <li>Integrated government sources (<b>EPFO, ESIC</b>) and major payroll/HRMS platforms for real-time employment &amp; income verification; raised a delivery partner's driver-verification success <b>60% → 85%</b></li>
+  </ul>
+
+  <div class="role-line entry-gap">
+    <span class="company">Repute Network Pvt. Ltd. — Bangalore</span>
+    <span class="dates">Jul 2023 – Jan 2024</span>
+  </div>
+  <div class="role">Software Developer Intern</div>
+  <ul>
+    <li>Automated payroll-portal login and data-extraction flows using <b>Selenium</b>; built scraping pipelines consolidating user profile data from third-party payroll platforms</li>
+    <li>Designed a reusable data-normalization utility that cut invalid data fields by <b>90%</b> before client delivery</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Education</h2>
+  <div class="edu-line">
+    <span class="edu-title">B.Tech, Computer Science &amp; Engineering — Jaypee University of Information Technology</span>
+    <span class="dates">2016 – 2020</span>
+  </div>
+</section>
+
+</body>
+</html>
