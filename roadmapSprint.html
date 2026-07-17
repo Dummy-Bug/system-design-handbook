@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sprint 2 — Codebase Archaeology: Deep-Dive Question Bank v2</title>
+<style>
+  @page { size: A4; margin: 13mm 14mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 9.6pt; line-height: 1.42; color: #1a2433;
+  }
+  h1 { font-size: 17pt; letter-spacing: -0.3px; margin-bottom: 2px; }
+  .subtitle { color: #4a5a70; font-size: 10.2pt; margin-bottom: 2px; }
+  .meta { color: #6a7a90; font-size: 8.6pt; margin-bottom: 8px; }
+  .lede { font-size: 9.6pt; margin: 6px 0 10px; }
+  .v2note {
+    background: #eef4fd; border: 1px solid #b9d2f2; border-left: 4px solid #2563c9;
+    padding: 7px 10px; border-radius: 4px; font-size: 9.2pt; margin-bottom: 12px;
+    break-inside: avoid;
+  }
+  h2 {
+    font-size: 11.5pt; margin: 16px 0 6px; padding: 3px 0 3px 9px;
+    border-left: 4px solid #2563c9; color: #14324f;
+    break-after: avoid;
+  }
+  h3 { font-size: 9.8pt; margin: 8px 0 4px; color: #14324f; }
+  .sectionnote { color: #5a6a80; font-size: 8.8pt; font-style: italic; margin-bottom: 6px; }
+  .q { margin: 0 0 7px 0; break-inside: avoid; padding-left: 2px; }
+  .q .stem { display: block; }
+  .qn { font-weight: 700; }
+  .must {
+    display: inline-block; background: #c9541a; color: #fff; font-size: 7.2pt;
+    font-weight: 700; padding: 0.5px 5px; border-radius: 3px; vertical-align: 1px;
+    letter-spacing: 0.4px; margin-right: 3px;
+  }
+  .hint { color: #5a6a80; font-size: 8.7pt; margin: 2px 0 0 17px; }
+  .hint b { color: #44546a; }
+  code {
+    font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 8.4pt;
+    background: #f0f3f8; padding: 0.5px 3.5px; border-radius: 3px; color: #1d3a5f;
+  }
+  .box {
+    border: 1px solid #c9d5e4; border-radius: 5px; padding: 8px 11px;
+    margin: 8px 0 10px; background: #f7fafd; break-inside: avoid;
+  }
+  .box h3 { margin-top: 0; }
+  .box ul { margin: 3px 0 5px 16px; }
+  .box li { margin-bottom: 2.5px; }
+  .warnbox { background: #fdf6ec; border-color: #ecd3a8; }
+  .warnbox h3 { color: #8a5a10; }
+  .dangerbox { background: #fdf0ef; border-color: #eec3c0; }
+  .dangerbox h3 { color: #9b2c22; }
+  .okbox { background: #f0f8f1; border-color: #bfdcc4; }
+  .okbox h3 { color: #1e6b34; }
+  ul.plain { margin: 4px 0 6px 18px; }
+  ul.plain li { margin-bottom: 3px; }
+  .cb { font-size: 10pt; margin-right: 4px; }
+  .warn { color: #9b4a10; font-weight: 600; }
+  .exit { border: 1.5px solid #2563c9; border-radius: 6px; padding: 10px 13px; margin-top: 14px; background: #f4f8fe; break-inside: avoid; }
+  .exit h2 { border: none; padding: 0; margin: 0 0 6px; }
+  .closing {
+    margin-top: 12px; padding: 8px 12px; background: #14324f; color: #eef4fb;
+    border-radius: 5px; font-size: 9.4pt; break-inside: avoid;
+  }
+  .two-col { display: flex; gap: 12px; }
+  .two-col > div { flex: 1; }
+</style>
+</head>
+<body>
+
+<h1>Sprint 2 — Codebase Archaeology</h1>
+<div class="subtitle">The Deep-Dive Question Bank <b>v2</b> · AI Assistant Platform (FastAPI + LangGraph) · Verification &amp; Extraction Pipeline</div>
+<div class="meta">Laxit Rana · Backend SDE-2 campaign · Window: <b>Jul 15 – Jul 27, 2026</b> (buffer to Jul 31) · <b>Hard stop Aug 1 — repo access dies.</b> The only deadline in the whole campaign that cannot slip. Aligned with <code>~/Desktop/Roadmap.md</code>.</div>
+
+<div class="lede">Every bullet on your resume generates predictable interview questions — this bank contains them. Answer these 45 and no interviewer can take you anywhere on this project you haven't already been. Work the repo with <b>one question open at a time</b>. Budget: 10–12 focused hours across ~13 evenings — you have slack; spend it on the ★&nbsp;MUST items.</div>
+
+<div class="v2note"><b>What v2 fixes (built with codebase awareness v1 lacked):</b> v1 assumed the platform streams <i>token deltas</i> — it doesn't. Xarvis streams <b>step-level NDJSON events</b>, never tokens (Section I rewritten around the real event vocabulary). v2 also adds: a <b>landmarks map</b> of real files/components so you dig instead of wander, the <b>claim-boundary &amp; trap-line box</b> (what's yours vs. not, verified numbers vs. cut ones), prep-debt cross-links, and the MUST/NICE ranking from Roadmap.md.</div>
+
+<div class="box">
+<h3>Ground rules</h3>
+<ul class="plain">
+<li><b>Hunt, don't wander</b> — open the repo with exactly one question in hand. Reading with purpose is the whole method.</li>
+<li><b>Own words only</b> — never copy proprietary code, configs, or data out of company systems. Your notes capture your <i>understanding</i>, nothing else.</li>
+<li><b>Say it aloud</b> — if you can't explain it out loud, you don't have it yet.</li>
+<li><b>End every "what" with a "why"</b> — interviewers always follow with "why not X?" Pre-empt it in your notes.</li>
+<li><b>Honesty beats bluffing</b> — where the real answer is "we didn't handle that," note it and design the fix. That is a senior answer.</li>
+<li><b>Read the nodes, not just the driver</b> — the Jul 9 streaming trace first concluded "one event per turn" because it read only <code>_graph_driver</code>; the rich progress feed lives in the nodes' <code>ctx.emit</code> calls. Every layer can surprise you — verify at the layer where work happens.</li>
+</ul>
+</div>
+
+<div class="box okbox">
+<h3>Landmarks — start every dig here (known components, from prior verified traces)</h3>
+<ul class="plain">
+<li><b>API / streaming edge:</b> <code>chat.py</code>, <code>stream_guard.py</code> — both return <code>StreamingResponse(media_type="application/x-ndjson")</code>.</li>
+<li><b>Streaming services:</b> <code>employee_streaming_service</code>, <code>onboarding_streaming_service</code> — both drive <code>graph.astream(..., stream_mode="updates")</code> = node-level updates. <b>No token streaming exists anywhere.</b></li>
+<li><b>Graph nodes that narrate progress:</b> <code>conversation_node</code> ("Understanding your query…"), <code>employee_profile_node</code> ("Looking up employee X…"), <code>execution_runner_node</code> (execution steps).</li>
+<li><b>Driver:</b> <code>_graph_driver</code> — emits <code>InteractionRequiredEvent</code> on <code>__interrupt__</code> (HITL) and <code>TerminalResponseEvent</code> on terminal/error.</li>
+<li><b>Event plumbing:</b> two producers (nodes via <code>ctx.emit</code> + the driver) → one <code>ctx.event_queue</code> → consumer <code>onboarding_event_stream</code> drains it → NDJSON lines. Event types: <code>ProgressEvent</code>, <code>PipelineStepEvent</code>, <code>InteractionRequiredEvent</code>, <code>TerminalResponseEvent</code>.</li>
+<li><b>Slow path:</b> <code>run_with_slow_warning</code> — fires a warning event past ~10&nbsp;s.</li>
+<li><b>Extraction pipeline:</b> <code>cron_service</code> repo (Go) — worker pool, Redis per-record locks, connection pooling.</li>
+<li><b>Paytm:</b> <code>seller/service/paytm/PaytmService</code> (yours, current OTP flow) vs. <code>PaytmWebService</code> (old web-credential flow, disabled — <code>//@Service</code> commented off).</li>
+<li><b>UPI:</b> <code>phonepemobile</code> package (yours). <code>phonepe</code> crypto — Checksum/Device generators — is Ankit's.</li>
+</ul>
+</div>
+
+<div class="box dangerbox">
+<h3>Claim boundaries &amp; trap lines — memorize before any interview, verify during the dig</h3>
+<b>Yours — claim with full confidence:</b>
+<ul class="plain">
+<li>Xarvis: built ~solo, Nov 2025 → present, live with <b>1 pilot company (~3–4 queries/day — never claim scale)</b>.</li>
+<li>Paytm mobile-OTP re-architecture: <b>27% → 80%, verified in Metabase</b> — re-run the query this window while you still can.</li>
+<li><code>phonepemobile</code> UPI seller onboarding — the one Spring Boot mention in Experience.</li>
+<li>Go extraction pipeline: 25K (your own Selenium v1) → 300K (your HTTP v2) — that's why the resume says "Built", not "Rebuilt". Language unnamed on paper; say "Go" when asked.</li>
+</ul>
+<b>Not yours — deflect precisely:</b>
+<ul class="plain">
+<li><code>phonepe</code> Checksum/Device crypto generators — Ankit's. Your story stops at the integration boundary.</li>
+<li>instaverify-backend — OFF resume. If raised: claim the domain layer only; <b>never</b> the Razorpay integration.</li>
+<li>EPFO/ESIC packages (8-author repo) — say "Integrated", never "Built".</li>
+</ul>
+<b>Never volunteer:</b>
+<ul class="plain">
+<li>The workflow-prediction system (in-flight, failing).</li>
+<li>Captcha / anti-bot specifics on government portals — ethics-screen landmine. Neutral line: <i>"moved from browser automation to the portals' underlying HTTP endpoints with proper session handling."</i></li>
+</ul>
+<b>Trap phrases:</b>
+<ul class="plain">
+<li>Never "Spring Boot <i>authentication</i>" for Paytm (baits Spring Security — the senior's code). Say "authentication-flow redesign".</li>
+<li>"Why Python?" → <i>"Java is my primary language; I built the AI platform in Python because the agent ecosystem lives there."</i></li>
+<li>Onboarding agent → always "currently building". It has not shipped.</li>
+</ul>
+</div>
+
+<div class="box warnbox">
+<h3>Prep-debt cross-links — the dig pays four existing debts for free</h3>
+<ul class="plain">
+<li><b>Q5</b> pays the JWT-structure debt (30 min). <b>Q6</b> pays the Python <code>ContextVar</code>/request-context debt. <b>Q19</b> feeds the SQL/DB-choice HLD debt. <b>Q28–Q30</b> are already half-answered by the Jul 9 streaming trace — transcribe those notes first, then verify against code.</li>
+<li>★&nbsp;<span class="must">MUST</span> items are the Roadmap.md decision-note quartet + trace/diagrams. If the window collapses, finish the ★ items and cut the rest.</li>
+</ul>
+</div>
+
+<h2>Section A · The Big Picture — start here</h2>
+<div class="sectionnote">Day 1 material. These four answers are the skeleton every interview hangs on.</div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="must">MUST</span><span class="qn">Q1.</span> Draw the complete architecture from memory: client → FastAPI layer → LangGraph orchestration → tool layer → upstream HRMS APIs + DynamoDB → streaming path back. Name every component and what it owns.</span>
+<div class="hint"><b>Hint</b> — Becomes Diagram 1 of your exit criteria. Redraw until you can produce it on a whiteboard in under 3 minutes.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="must">MUST</span><span class="qn">Q2.</span> Narrate one complete request out loud — "How many casual leaves do I have left?" — from HTTP arrival to last streamed byte: cookie → JWT validation → thread resolution → checkpoint load → graph run → tool authorization → cache check → upstream call → NDJSON stream → checkpoint save.</span>
+<div class="hint"><b>Hint</b> — The single most likely interview instruction you will receive. Rehearse aloud; target a tight 4–5 minute walkthrough. This is Roadmap.md MUST #1.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q3.</span> Why an agent architecture at all? Sketch the non-agent alternative (intent classifier + hardcoded API calls, or one LLM call with RAG) and name what LangGraph specifically bought you.</span>
+<div class="hint"><b>Hint</b> — Real wins: dynamic choice across 18 tools, multi-turn state, HITL interrupts. Real costs: latency, LLM spend, nondeterminism.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q4.</span> Why FastAPI when the company stack was Spring Boot?</span>
+<div class="hint"><b>Hint</b> — Python-native LLM ecosystem, async/ASGI for long-lived streams vs. servlet thread-per-request, async generators for NDJSON. Close with the trap-line answer: <i>"Java is my primary language; I built the AI platform in Python because the agent ecosystem lives there."</i></div></div>
+
+<h2>Section B · Request Lifecycle &amp; Auth</h2>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q5.</span> Map authentication end-to-end: who issues the cookie, which claims live inside the JWT, where validation happens (middleware vs. dependency), and what happens when a token expires mid-conversation or mid-stream.</span>
+<div class="hint"><b>Hint</b> — Find the actual middleware/dependency. Know the claim names. <b>This pays the JWT prep debt</b> — while you're in there, note header/payload/signature structure and the signing algorithm.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q6.</span> Trace how identity, role, and tenant travel from the HTTP layer down into every tool execution (request context → graph state/config → tool context).</span>
+<div class="hint"><b>Hint</b> — Security-critical plumbing; "what stops user A reading user B's data?" is answered here. The mechanism is likely <code>contextvars</code> or explicit state threading — <b>this pays the ContextVar prep debt</b>.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q7.</span> Why cookie-based sessions instead of an <code>Authorization: Bearer</code> header?</span>
+<div class="hint"><b>Hint</b> — Browser client, long-lived streaming requests, CSRF posture. If the honest answer is "platform convention," know the trade-offs anyway.</div></div>
+
+<h2>Section C · LangGraph Orchestration</h2>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q8.</span> Sketch the actual graph from the code: nodes, edges, conditional routing. Where does the employee-agent vs. HR-admin split happen — decided by role upfront, or by intent per query?</span>
+<div class="hint"><b>Hint</b> — Diagram 3. Known nodes to anchor on: <code>conversation_node</code>, <code>employee_profile_node</code>, <code>execution_runner_node</code>. The two separate streaming services (<code>employee_…</code> / <code>onboarding_…</code>) already tell you part of the split — find where role selects the graph.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q9.</span> What exactly lives in the graph state object? Which fields persist across turns vs. reset per turn, and how large does state get in a long conversation?</span></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q10.</span> How are the 18 tools described and bound to the LLM? Where does validation catch a hallucinated or malformed tool call, and what does the model see next?</span>
+<div class="hint"><b>Hint</b> — Pydantic schemas, tool descriptions, error-fed-back-to-model loops. Have one concrete bad-call story and how it resolved.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q11.</span> How many LLM calls does a typical query cost? What is the p50/p95 end-to-end latency, and which stage dominates it?</span>
+<div class="hint"><b>Hint</b> — Interviewers trust engineers who know their numbers. Approximate honestly — but have numbers, gathered <b>this window</b> while dashboards still exist.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q12.</span> Which model(s) power it, what sits in the system prompts, and how do the two agents' prompts differ?</span></div>
+
+<h2>Section D · Checkpointing &amp; State Persistence</h2>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="must">MUST</span><span class="qn">Q13.</span> <b>Why checkpointing</b> (decision note 1 of 4) — and what exactly does the DynamoDB checkpointer write? Partition key, sort key, attributes, typical item size — and when writes happen (every super-step? every turn?).</span>
+<div class="hint"><b>Hint</b> — Open the table definition. Foundation of the per-thread-isolation story AND the "stateless service" story.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q14.</span> What composes a thread ID, and what guarantees user A can never list or resume user B's thread? Where exactly is that enforced?</span></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q15.</span> A pod dies mid-conversation, or the next message lands on a different instance. Walk through exactly how the conversation resumes.</span>
+<div class="hint"><b>Hint</b> — "Checkpointing makes the service stateless and horizontally scalable" — one of your best talking points, and your honest answer to scale questions (see Q35).</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q16.</span> What stops checkpoint data growing unbounded — TTLs, trimming, summarization? What is the storage-cost story?</span>
+<div class="hint"><b>Hint</b> — If the honest answer is "we never solved this," say so and describe your fix. Honesty plus a plan beats bluffing.</div></div>
+
+<h2>Section E · Multi-Tenancy &amp; Data Model</h2>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q17.</span> Draw the HRMS → company → employee hierarchy exactly as encoded in DynamoDB keys — and in cache keys and thread IDs.</span>
+<div class="hint"><b>Hint</b> — Diagram 4 of your exit criteria.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q18.</span> At how many layers is tenant scoping enforced (API auth, tool queries, cache keys, checkpoints)? Which layer is the hard guarantee, and which are defense-in-depth?</span></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q19.</span> Why DynamoDB rather than Postgres for all of this?</span>
+<div class="hint"><b>Hint</b> — Key-value access patterns, native TTL, single-digit-ms reads — vs. what you gave up (ad-hoc queries, cross-item transactions). <b>Feeds the SQL/DB-choice HLD debt</b> — write this one as a proper trade-off table.</div></div>
+
+<h2>Section F · Tools &amp; Authorization</h2>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q20.</span> Pick three representative tools (one employee read-only, one admin, one that writes). For each: inputs, validation, upstream API hit, output shape, failure modes.</span></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="must">MUST</span><span class="qn">Q21.</span> <b>Per-role authorization across 18 tools</b> (decision note 2 of 4) — where exactly is it enforced: different tool sets bound per agent, per-call middleware, or checks inside each tool? Why that layer — and what stops a prompt-injected request from making the employee agent perform an admin action?</span>
+<div class="hint"><b>Hint</b> — Your strongest security story and a hot 2026 topic (agent security / confused deputy). Be precise about the enforcement point.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q22.</span> A tool times out or the upstream returns a 500 mid-conversation. What does the agent do — retry, degrade, apologise — and what does the user actually see?</span></div>
+
+<h2>Section G · Human-in-the-Loop</h2>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q23.</span> What triggers HITL disambiguation — how is "ambiguous" detected (model decides? rules?), and what does the interrupt mechanically look like in LangGraph?</span>
+<div class="hint"><b>Hint</b> — You already know the emission side: <code>_graph_driver</code> catches <code>__interrupt__</code> and emits <code>InteractionRequiredEvent</code>. Find the trigger side: which node/tool raises the interrupt and on what condition.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q24.</span> Walk the full pause–resume cycle: interrupt raised → clarifying question streamed → state checkpointed mid-graph → user answers minutes later, possibly on another instance → execution resumes. What exactly was frozen, and what re-runs?</span>
+<div class="hint"><b>Hint</b> — HITL + checkpointing together is your signature deep-dive. Own it completely.</div></div>
+
+<h2>Section H · Caching &amp; Reliability over Flaky Upstreams</h2>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="must">MUST</span><span class="qn">Q25.</span> <b>Why a TTL cache</b> (decision note 3 of 4) — what data is cached, keyed how, which TTL per domain type — and how were the TTL values chosen?</span></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q26.</span> Staleness trade-off: an employee's leave balance changed upstream two minutes ago but the cache disagrees. Why is that acceptable here — or how is it mitigated?</span></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q27.</span> Cache miss, and the upstream HRMS API is down. What happens? List the real failure modes you observed (timeouts, 5xx, garbage data) and how each surfaces to the user.</span>
+<div class="hint"><b>Hint</b> — "Serve stale," "fail with a friendly message," "retry with backoff" — know which you actually did, per failure mode.</div></div>
+
+<h2>Section I · Streaming — rewritten in v2 (the system does NOT stream tokens)</h2>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="must">MUST</span><span class="qn">Q28.</span> <b>Why NDJSON step-events</b> (decision note 4 of 4) — define the real event vocabulary: <code>ProgressEvent</code>, <code>PipelineStepEvent</code>, <code>InteractionRequiredEvent</code>, <code>TerminalResponseEvent</code>. Who produces each (nodes via <code>ctx.emit</code> vs. <code>_graph_driver</code>), how do two producers share one <code>ctx.event_queue</code>, and who drains it?</span>
+<div class="hint"><b>Hint</b> — The defense line, verified Jul 9: <i>"I chose step-level event streaming — progress / interaction-required / terminal — over raw token streaming so the frontend renders tool-in-progress and HITL states, not a typewriter blur."</i> Why NDJSON over SSE/WebSockets: plain HTTP and proxy-friendly; SSE adds a reconnect protocol you didn't need; WebSockets adds bidirectionality you didn't need. Never say "SSE" — the resume was specifically corrected away from it.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q29.</span> You have already sent a 200 and half a response when something throws. How does the error reach the client, and how does the client distinguish "done" from "died"?</span>
+<div class="hint"><b>Hint</b> — Likely answer shape: <code>TerminalResponseEvent</code> with an error payload as the last line vs. a clean terminal event. Verify: what happens if the exception kills the generator before any terminal event is queued?</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q30.</span> What keeps a long-lived HTTP connection healthy through load balancers and proxies — timeouts, keep-alive, buffering pitfalls you actually hit?</span></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q31.</span> What exactly does <code>stream_guard.py</code> guard? What failure existed — or was feared — that justified a dedicated module: client disconnects, generator leaks, unhandled exceptions mid-stream?</span>
+<div class="hint"><b>Hint</b> — v2 addition; the module name is a gift. "I added a guard layer because X happened" is a production war story — recover X.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q32.</span> <code>run_with_slow_warning</code> fires a warning event past ~10 s. Why 10 s, what does the user see, and which stage most often tripped it?</span>
+<div class="hint"><b>Hint</b> — v2 addition. Small feature, great interview beat: it shows you measured real latency and designed UX for the slow tail.</div></div>
+
+<h2>Section J · Engineering Judgment — prepare last</h2>
+<div class="sectionnote">These synthesize everything above. Interviewers use them to separate "worked on it" from "owned it."</div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q33.</span> Name the three weakest parts of the system, and what you would change in a rebuild.</span>
+<div class="hint"><b>Hint</b> — Calm self-critique signals seniority. Real answers, not humble-brags.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q34.</span> How did you test it? Unit tests on tools are easy — but how do you test nondeterministic agent behaviour? What broke in production that tests missed?</span></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q35.</span> Know your numbers cold — <b>with the honesty guard</b>: the pilot is 1 company at ~3–4 queries/day, and you never claim more. What you own instead: p50/p95 latency, LLM calls + tokens + cost per conversation, DynamoDB monthly spend.</span>
+<div class="hint"><b>Hint</b> — Rewritten in v2: v1 said "queries/day, concurrent conversations" as if scale existed. The senior move is leading with real numbers at pilot scale, then <i>"it's deliberately stateless via checkpointing — here's exactly what scales and what breaks first"</i> (→ Q37). Reconstruct numbers now, while dashboards and teammates exist.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q36.</span> The onboarding agent (Jira / Slack / Google Workspace provisioning): how do write-actions stay safe vs. read tools — confirmation gates, idempotency when provisioning dies halfway, retries without double-creating accounts?</span>
+<div class="hint"><b>Hint</b> — Trap line applies: this is <b>"currently building," not shipped</b> — frame every answer as design-in-progress. "How I design safe write-actions for agents" is a premium 2026 topic.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">Q37.</span> The 100× question: at 300–400 queries/day and 50 concurrent conversations, what breaks first — LLM rate limits, DynamoDB hot partitions, upstream HRMS rate limits, or cost? Sketch the mitigation for the first bottleneck.</span>
+<div class="hint"><b>Hint</b> — v2 addition. This converts "never claim scale" from a weakness into your best systems-thinking answer: you know the pilot numbers AND the failure order at scale.</div></div>
+
+<h2>Bonus · Verification &amp; Extraction Pipeline — lightning pass (~1.5 h, one evening)</h2>
+<div class="sectionnote">Carries the fintech story — Razorpay, PhonePe, Juspay and every GCC payments team will pull on these. Per Roadmap.md this whole section is NICE, not MUST — do it only after the ★ items are done.</div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">B1.</span> Why exactly was Selenium the bottleneck, and what did "direct HTTP" mean in practice — reverse-engineered endpoints, session/cookie handling, connection reuse?</span>
+<div class="hint"><b>Hint</b> — <span class="warn">Framing rule:</span> keep the story on protocol and sessions; <b>do not volunteer captcha/anti-bot specifics on government portals</b> (ethics-screen landmine). Neutral line: <i>"moved from browser automation to the portals' underlying HTTP endpoints with proper session handling."</i></div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">B2.</span> Worker-pool design: pool size, and what bounded it — CPU, IO, or upstream rate limits? How did backpressure work when upstreams slowed down?</span></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">B3.</span> Redis per-record locking: exact key pattern and TTL, what happens when a worker dies holding a lock — and why locks rather than a queue with single-consumer semantics?</span>
+<div class="hint"><b>Hint</b> — Note the symmetry with Xarvis seat-of-the-pants: this is the same "lock with TTL, lazy expiry on the reader" idea as the BMS seat locks in your LLD prep — one mental model, two production stories.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">B4.</span> What did connection pooling change concretely, and why did it matter at 300K records/day?</span></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">B5.</span> How was the 12× actually measured — which metric, measured where, over what period?</span>
+<div class="hint"><b>Hint</b> — The 25K baseline was <b>your own</b> Selenium v1 — which is exactly why the resume says "Built", not "Rebuilt". Own both halves of the number.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">B6.</span> The mobile-OTP re-architecture: old flow vs. new — and what specifically moved completion from 27% to 80%?</span>
+<div class="hint"><b>Hint</b> — Known mechanism: old = web username/password (<code>PaytmWebService</code>, now disabled via commented <code>//@Service</code>); new = phone + OTP (<code>PaytmService</code>). The auth <i>method</i> was the funnel-killer. 27→80 is <b>Metabase-verified — re-run the query this window</b>. Trap: never phrase as "Spring Boot authentication".</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">B7.</span> The UPI seller-onboarding integration (Spring Boot): idempotency keys, retries, webhooks vs. polling — what happens on partial failure?</span>
+<div class="hint"><b>Hint</b> — Boundary: the Checksum/Device crypto generators are Ankit's — your story is the <code>phonepemobile</code> integration flow. Know where your code ends.</div></div>
+
+<div class="q"><span class="stem"><span class="cb">☐</span><span class="qn">B8.</span> EPFO / ESIC integrations: rate limits, data quirks, failure handling.</span>
+<div class="hint"><b>Hint</b> — <span class="warn">v2 correction:</span> v1 quoted "60% → 85% driver verification" — that number is <b>not in the verified set</b>. Verify it in Metabase this window or drop it entirely; an unverifiable number dies under the surface-area rule (a 30→70 claim was already cut for exactly this). Also: these are 8-author packages — "Integrated", never "Built".</div></div>
+
+<div class="exit">
+<h2>Exit criteria — Sprint 2 is done only when every box is ticked</h2>
+<div class="two-col">
+<div>
+<b>MUST (Roadmap.md — keep these if time dies):</b>
+<ul class="plain">
+<li>☐ Diagram 1 — full architecture, drawable in &lt; 3 min</li>
+<li>☐ Diagram 2 — single-request lifecycle (auth → agent → tools → stream)</li>
+<li>☐ Diagram 3 — the LangGraph graph: nodes, edges, interrupt points</li>
+<li>☐ Diagram 4 — DynamoDB data model: tenancy keys + checkpoint table</li>
+<li>☐ Decision-note quartet written: checkpointing (Q13), per-role auth (Q21), TTL cache (Q25), NDJSON events (Q28)</li>
+<li>☐ Written answers, own words, Q1–Q37</li>
+<li>☐ Numbers gathered from Metabase/dashboards while access lives (Q11, Q35, B6, B8)</li>
+</ul>
+</div>
+<div>
+<b>Then:</b>
+<ul class="plain">
+<li>☐ 2-minute project pitch rehearsed aloud 3+ times</li>
+<li>☐ 30-second version ready for recruiter calls</li>
+<li>☐ Bonus B1–B8 answered (one evening — NICE, not MUST)</li>
+<li>☐ Jul 9 streaming-trace notes transcribed into the answer doc</li>
+<li>☐ All notes live outside company systems — zero copied code, zero exported data</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="closing">When every box is ticked, "I've forgotten my projects" is dead — you will walk into interviews owning this system better than anyone who questions you on it. And the ★ decision notes double as HLD case-study material for Sprint 5.</div>
+
+</body>
+</html>
