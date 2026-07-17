@@ -170,21 +170,6 @@ flowchart LR
 
 ---
 
-## Running scorecard
-
-| # | Topic | Result |
-|---|---|---|
-| Q1 | Directionality → SSE for one-way rider stream | ✅ (right call, muddled reason) |
-| Q2 | Collapse two channels into one SSE stream (named events) | ✅ |
-| Q3 | Rate vs concurrency: 900k concurrent, 90 nodes | ❌ then ✅ (the key trap) |
-| Q4 | Fan-out routing: connection registry in Redis | ✅ (delivery step hand-waved) |
-| Q5 | Node-to-node delivery: webhook ❌ → queue ⚠️ → **pub/sub** ✅ | corrected twice |
-| Q6 | Channel keyed on user → subscription replaces registry | ✅ |
-| Q7 | Pricing: 90 vs 900k subs; store ≠ operate | ✅/❌ → chose per-node registry |
-| Q8 | Reconnect after a drop: what's lost, and whose job to fix | ❌ then ✅ (fire-and-forget; state vs event stream) |
-
----
-
 ## Q8 — The tunnel: what survives a disconnect?
 
 > [!question] Interviewer
@@ -432,11 +417,295 @@ Backend picks the channel by the connection registry: **connection alive → pus
 
 ---
 
-## Running scorecard
+## Q11 — The zombie connection (detecting dead clients)
 
-*(See per-question verdicts above.)*
+> [!question] Interviewer
+> The SSE-vs-push decision from Q10 rests on the connection registry being *truthful*. Priya's phone hits a **dead zone** and dies **silently** — no clean TCP `FIN` reaches the server. Node 47 still thinks her connection is alive and keeps `priya → node47` in the registry. `arrived` gets routed to a **ghost**. (1) What happens to the event? (2) Why didn't Node 47 just *know* the connection died — what's different about *this* death vs a clean app-exit?
 
-> [!tip] The reusable lessons from this interview
+**Candidate's clarify:** How is a silent death (dead zone / battery) different from manually exiting the app or turning off the internet?
+
+> [!info]- A TCP connection is *state*, not a wire — the difference is whether a "goodbye" packet reaches the server
+> A connection isn't a physical circuit; it's a **table entry in memory on each machine**, both *believing* they're connected. They only learn about a change if a **packet tells them**.
+> - **Graceful close (exit app):** software runs `close()` → phone sends a TCP **`FIN`** ("I'm done") → it *reaches* the server → server updates its table → cleans up. **The server was told.** ✅
+> - **Silent death (tunnel / battery):** the failure is physical/sudden → no software step runs, or the `FIN` can't be transmitted (no radio) → **no goodbye packet ever reaches the server** → its table still says `ESTABLISHED`. ❌
+>
+> **The killer:** to the server, an **idle** connection and a **dead** one look *identical* — both are just "no packets arriving." TCP has no built-in "are you there?" pulse, and an **SSE stream is silent from the client by nature** (server pushes down; client sends nothing up). So Node 47 cannot tell *"Priya's fine, just quiet"* from *"Priya's phone is dead."* Result: a **zombie (half-open) connection** — alive on the server, dead on the client. The registry keeps the stale entry, `arrived` is written into a socket whose other end is gone, the backend *thinks* it delivered, and never falls back to push. *(Rule: **did a goodbye packet reach the server?** App-exit → yes. Sudden signal/power loss → no.)*
+
+**Candidate's answer:** We need some confirmation from the client that it's still there — I'm guessing.
+
+> [!success]- Verdict: ✅ right principle (make the connection prove it's alive) → the tool is a heartbeat
+> Correct soul: you can't trust silence, so you make the connection **periodically prove it's alive.** "Confirm what she received" is a heavy version (per-message ACK); the standard lightweight tool is a **heartbeat (ping/pong):**
+> ```
+> Every ~30s, send a tiny ping. Expect it to be answered/carried.
+> N pings unanswered within a timeout → declare DEAD → tear down + clean the registry.
+> ```
+> This **converts ambiguous silence into a definite signal**: before, "no packets" meant *idle OR dead*; now "no response to my ping in 90s" means **dead**. You manufacture traffic so its *absence* becomes meaningful.
+
+### How does the server detect death with no PONG? (SSE is one-way!)
+
+> [!important] "One-way" is only the *application* layer — the transport (TCP) is *always* two-way
+> The events go one way (server→client). But **every byte the server sends, the client's phone auto-acknowledges** with a tiny receipt (a TCP **ACK**) — handled by the phone's system software, *not* the app. The server detects death from **its own sends failing**, not from an app-level PONG.
+>
+> **Registered-post analogy** (the one that makes it click): sending over TCP is like **registered mail** — every package you send comes back with a **signed receipt**. Send a package and *no receipt returns*? The courier retries, then reports **"address not responding — delivery failed."** You learned the recipient is gone **purely by sending**, from the *missing receipts to your own deliveries.*
+> ```
+> Server sends keep-alive ": ping\n\n"
+>   Priya ALIVE → her phone's TCP auto-returns a receipt (ACK) → server sees it → healthy
+>   Priya DEAD  → no receipt → TCP retransmits → gives up → the WRITE fails with an error
+>                 (broken pipe / connection reset) → server learns she's dead
+> ```
+> A dead phone **can't fake ACKs**, so the server reads the *silence of receipts on its own sends*. This is *why* you send periodic keep-alives — to **force writes** so a dead socket surfaces its error (and keep proxies from killing an "idle" connection). The **client half** — client sees silence for X s → **reconnects** — is the complementary, often-faster detector. *(WebSocket is cleaner: real app-level ping/pong frames, because it's two-way.)*
+
+> [!warning] Why not rely on TCP's own keepalive?
+> TCP has an OS-level keepalive, but default timers are huge (Linux waits **~2 hours** before the first probe), it's config-dependent, and it only catches a fully-dead TCP peer — it misses an app that's frozen but whose stack still ACKs. Use **application-level heartbeats** for timely, reliable detection.
+
+> [!important] Three distinct mechanisms — don't conflate them
+> These sound alike but are different things; the app-level heartbeat **rides on** TCP ACKs and does **not** need TCP keepalive:
+> | | What it is | When it fires | Do we rely on it? |
+> |---|---|---|---|
+> | **TCP ACK** | automatic receipt for **data that was sent** | on **every** send (e.g. our keepalive write) | **Yes** — missing ACKs make our *write* fail → death detected |
+> | **TCP keepalive** | OS idle-probe feature, protocol-agnostic | only on an **idle** connection, on the OS's timer | **No** — ~2 h default, too slow/weak |
+> | **App-level heartbeat** | *our* `: ping\n\n` every ~30s + client reconnect-on-silence | our schedule, in our control | **Yes — this is the solution** |
+>
+> **Common trap:** "SSE is one-way, so I can't do an app-level heartbeat, so I must use TCP keepalive." **False.** The SSE heartbeat doesn't need an upstream app-pong — it's two one-way mechanisms: (A) server *writes* keepalives, detecting death via the failed write (transport ACKs), and (B) client sees silence and *reconnects*. Neither needs the client to send an app-level message.
+>
+> **The subtle sting (which layer ACKs the heartbeat?):** when the server sends `: ping\n\n`, the client's **TCP stack ACKs it at the transport layer, automatically — the app is not involved.** So the server-side SSE heartbeat really only confirms *"the client's TCP stack is reachable,"* **not** *"the client app is healthy"* — which is essentially what TCP keepalive detects too. Its real wins over TCP keepalive are **(1)** we control the interval (30s not 2h), **(2)** the writes double as anti-idle-timeout so proxies don't kill the stream, **(3)** fast, predictable detection. The part that confirms the *app itself* is alive is the **client-side reconnect (B)** — genuinely app-level. *(WebSocket's ping/pong is the clean fully-app-level, bidirectional version — a point for Q14.)*
+> ```
+> Server→client (SSE):  server writes ping → detected via TRANSPORT ACK (auto, app uninvolved) ≈ fast controllable keepalive
+> Client→server (SSE):  client sees silence → RECONNECTS → the genuinely app-level half
+> WebSocket ping/pong:  app-level + bidirectional → confirms the app itself responds
+> ```
+
+> [!important] Registry cleanup — two layers
+> 1. **On detected death** (failed write, or clean `FIN`): remove `priya → node47` and drop the pub/sub subscription. Immediate.
+> 2. **TTL backstop:** give each registry entry a short TTL that the **heartbeat refreshes**. If Node 47 itself **crashes** and never runs cleanup, its entries **self-expire** because nobody's left to refresh them. Covers *server* death, not just client death.
+>
+> **Full circle to Q10:** once the registry is truthful, the *"is Priya connected?"* check returns the truth → the backend correctly falls back to **APNs/FCM** instead of routing into a ghost. The heartbeat is what makes the SSE-vs-push decision trustworthy.
+
+### The detection window (candidate's question)
+
+**Candidate:** After a good heartbeat at t=0, if the client dies at t=1s, the server thinks she's alive for ~29 more seconds and sends events into the void — but is that harmless because the reconnect gives her the snapshot anyway?
+
+> [!success]- Verdict: ✅ correct, and here's exactly why (and when it wouldn't be)
+> ```
+> t=0s    keep-alive → receipt → "alive"
+> t=1s    phone dies in a tunnel (server doesn't know yet)
+> t=1–30s server keeps sending events; each gets no receipt, but the network is still RETRYING
+>         (hasn't "given up" yet) → no failure surfaced → server still thinks she's alive
+> t=30s   next keep-alive fails conclusively → declared dead → cleanup → switch to push
+> ```
+> That t=1→~30s gap is the **detection window** — it exists because the network takes time to *give up and report failure*.
+> **Harmless for order tracking because:** (1) in a tunnel she's unreachable by **any** channel anyway (no SSE, no push — no signal), so the "wasted" events cost nothing; (2) on reconnect the **snapshot re-sync** (Q8) heals her screen regardless — the lost coalescible events are subsumed by current state.
+> **When it *would* cost:** event-based streams (chat) — lost events aren't recoverable by snapshot → need replay; or when **fast push-fallback is critical** → shorten the heartbeat interval (faster detection, more overhead).
+
+> [!tip] Interview framing for Q11
+> *"A dead connection and a healthy-idle one look identical — no packets either way — so I add application-level heartbeats. SSE is one-way at the app layer, but TCP underneath still ACKs every send, so the server detects a dead client when its keep-alive write fails (no ACKs → broken pipe), and the client self-detects silence and reconnects. On detection I remove the registry entry and unsubscribe, with a heartbeat-refreshed TTL so a crashed node's entries self-expire. There's a detection window where I send into a dead socket, but it's harmless here — she's unreachable anyway and the reconnect snapshot heals the screen. Once the registry is truthful, the connection-alive check correctly falls back to push."*
+
+---
+
+## Q12 — The deploy (load balancing & zero-downtime)
+
+> [!question] Interviewer
+> You ship a new build. Deploys replace nodes, so **Node 47 is torn down** and its **~10,000 SSE connections drop at once** — and every client reconnects. Then a rolling deploy marches through all 90 nodes. (1) What load hits the backend, and how big? (2) What's the failure mode across the full deploy? (3) How do you make a deploy *not* do this?
+
+**Candidate's answer:** The 10k reconnect and the LB routes them to node-48; even with jitter node-48 can be overwhelmed and cascade the whole system down. Fix: bring the *new* node up before taking the old one down, so reconnects have somewhere to land.
+
+> [!warning]- Verdict: ⚠️ good instincts (cascade, jitter, surge) but the load model is off
+> **Correction: clients reconnect to the *load balancer*, not to "node-47."** The client only knows the service's stable address, so the 10k reconnects hit the **LB**, which **spreads them across all ~89 healthy nodes** (~112 each — trivial for connection *count*). They don't pile onto one node. So where's the real pain?
+> 1. **Simultaneity** — all 10k reconnect in the *same second* = a **10,000/sec spike of new connections**, and each reconnect = **TLS handshake + auth + a snapshot DB read** (Q8). The spike lands on the **DB/auth tier**, not the socket count.
+> 2. **Rolling cascade** (the candidate's instinct, correct) — drain 47 → its 10k spread onto the rest → drain 48, now holding its own 10k *plus* a share → each step sheds more → the storm **compounds** toward the end.
+>
+> "Bring new up before old down" = **surge capacity** (never let total capacity dip) — keep it, but it doesn't stop node-47's 10k from dropping *simultaneously*; it only gives them somewhere to land.
+
+> [!important] The three mechanisms that flatten the storm
+> The compounding only happens with two naive choices — dropping a node's **entire** load **at once**, and **rushing** to the next node. Fix both:
+> 1. **Connection draining** — don't hard-kill; close the 10k **gradually over a grace window** so reconnects *trickle* instead of spike.
+> ```
+> Naive:   10,000 dropped instantly       → 10,000 reconnects/sec  spike
+> Drained: 10,000 closed over 5 min (300s) → ~33 reconnects/sec → across 89 nodes = nothing
+> ```
+> 2. **Staggered rollout** — replace a **small batch** at a time, **pause**, let reconnects settle across the fleet, then the next batch. Bounds how many connections are ever in flux.
+> 3. **Client backoff + jitter** — each client waits a *random* short delay → de-synchronizes reconnects in **time** (LB already spreads them in **space**).
+>
+> Same total reconnect volume (~900k over the deploy), spread over a long window → **per-second rate stays trivially small at every moment; no spike to cascade from.** With stateful connections, **deploys get slower, on purpose.**
+
+> [!important] How draining actually works — TWO parties
+> The confusion "the LB only routes traffic, so how are 10k closed?" resolves once you see draining is two separate actions:
+> ```
+> LB           → stops NEW connections to node-47   (control-plane: deregister target / fail readiness probe)
+>                → does NOT touch the existing 10k
+> NODE (app)   → closes its OWN 10k gradually        (code in the SIGTERM shutdown handler, batched + sleep)
+> Orchestrator → gives the node a grace window        (SIGTERM → wait terminationGracePeriodSeconds → SIGKILL)
+> ```
+> The **gradual close is application code you write**, run by the node on shutdown:
+> ```python
+> def graceful_shutdown(connections):        # the 10k SSE streams this node holds
+>     for batch in chunks(connections, size=100):
+>         for conn in batch:
+>             conn.close()                   # ends the HTTP response, client stream drops, it reconnects
+>         sleep(1)                           # trickle: 100/sec, 10k over ~100s
+>     # node empty, exit cleanly before the force-kill
+> ```
+> **During draining the node stays fully functional:** deregistration only affects *new* client→node routing. Existing SSE streams keep serving events until the close-loop reaches each one, and the node's **Redis pub/sub subscriptions are untouched** (node↔Redis is a separate path from client↔LB), so it keeps receiving and pushing events throughout. A draining node = a healthy node told *"take no new work, wind down current work gracefully."*
+
+### The other half — the LB must be configured for streaming
+
+> [!important] "Works locally, breaks in prod" and idle-timeout kills
+> A long-lived stream needs the LB/proxy tuned, or it silently breaks:
+> - **Response buffering** — proxies buffer responses by default; a buffering proxy holds your SSE bytes instead of forwarding them → the client sees *nothing* until the buffer flushes. Disable it (`X-Accel-Buffering: no`, `proxy_buffering off`). *(FastAPI's SSE helper sets this for you; NDJSON you set manually.)*
+> - **Idle timeouts** — an LB that closes "idle" connections after, say, 60s will kill an otherwise-healthy stream. **Heartbeats double as keepalives** — the periodic `: ping` resets the idle timer.
+> - **WebSocket only — the `Upgrade` gotcha:** a WebSocket starts as an HTTP request with an `Upgrade` header. The LB must be **L7 upgrade-aware (pass the upgrade through)** or run as an **L4 TCP proxy**. Some older proxies **strip the `Upgrade`** and silently downgrade → the classic *"WebSockets work locally but not in production."* *(SSE has no `Upgrade` — it's a plain long-lived HTTP response — so this gotcha is WebSocket-only; SSE's LB concerns are buffering + idle-timeout.)*
+
+> [!tip] Interview framing for Q12
+> *"Long-lived connections make deploys disruptive — replacing a node drops all its connections at once and they reconnect in a burst that hits the DB/auth tier, and it compounds across a rolling deploy. I soften it with connection draining (the node closes its connections gradually in its SIGTERM handler while the LB stops sending it new ones), staggered rollout (small batches with pauses), and client backoff-with-jitter. Separately, the LB must not buffer the stream and must not idle-timeout it — heartbeats double as keepalives — and for WebSocket the LB has to pass the Upgrade header through, or it 'works locally but breaks in prod.'"*
+
+---
+
+## Q13 — The jumping dot (ordering & dedup)
+
+> [!question] Interviewer
+> The rider's app sends location pings 1→2→3→4 in order, but they arrive reordered — **3 before 2** — so Priya's dot jumps to 3, snaps *backward* to 2, then forward. (1) Q8 said TCP preserves order — so how are these out of order at all? (2) How do you guarantee the dot only moves *forward*? (3) After a reconnect the client sometimes gets a **duplicate** — how does the same mechanism handle it?
+
+**Candidate (stuck on part 1):** How can they arrive out of order at all — even if ping 3 is slow, isn't order preserved?
+
+> [!important]- Why order breaks: TCP preserves order per-*connection*, but the pings don't share one
+> The hidden assumption is that all pings travel down **one pipe**. They don't. Recall Q4 — *the rider's app hits the LB fresh each time, so its requests land on any node:*
+> ```
+> ping 2 → LB → Node 12
+> ping 3 → LB → Node 88     ← different node
+> ```
+> The two nodes process **in parallel, independently**. If Node 12 is slower (slow DB write / GC pause / a retransmit on its path), then **Node 88 publishes ping 3 to Redis *before* Node 12 publishes ping 2.** The moment the pings fan out onto different servers, send-order is lost — order becomes *"whichever parallel node finishes first."*
+>
+> Pub/sub then delivers in **publish order** — but publish order is already scrambled. *(And with multiple publishers — different nodes — writing to one channel, pub/sub gives no cross-publisher ordering guarantee anyway.)*
+> **Root cause:** *there is no single ordered pipe from rider to screen; TCP's ordering only ever held per-connection, and these pings span many connections and servers.*
+
+**Candidate's answer:** Add a sequence number from the rider's app; a node discards it on DB insert if its sequence is smaller. Or timestamp each ping and sort by time.
+
+> [!success]- Verdict: ✅ core is right (order lives in the event, stamped at source) — three refinements
+> **1. Sequence number beats timestamp.** Timestamps are fragile: device clocks skew, NTP can jump time *backward*, two pings in the same millisecond tie. A **per-rider monotonic counter** (`1,2,3,4…`) is strictly increasing by construction — robust for ordering one sender's own events. *(Timestamps are for ordering across different senders / wall-clock meaning.)*
+>
+> **2. The check that fixes the jumping dot lives on the CLIENT.** The dot jumps on Priya's screen, so that's where the fix lands:
+> ```
+> client tracks lastSeq (highest seq displayed)
+> event arrives with seq S:
+>     S > lastSeq → move the dot, lastSeq = S
+>     S ≤ lastSeq → DROP (don't move)      ← kills the backward snap
+> ```
+> **3. Same check = free dedup (answers part 3).** A duplicate after reconnect has an already-seen seq → `S ≤ lastSeq` → dropped. *"Only move forward"* **is** *"drop duplicates"* — one rule, both jobs.
+>
+> **Your DB idea is a valid second layer.** Client check protects the live screen; the **write-side check** (last-write-wins by seq: only overwrite if incoming seq > stored) keeps the DB's *current location* newest — so the **Q8 snapshot on reconnect** is correct, not rewound by a late ping.
+> ```
+> CLIENT-side seq check → live stream never jumps back + dedups reconnect replays
+> WRITE-side  seq check → DB "current location" stays newest → snapshot correct
+> ```
+
+> [!important] Gap handling: DROP vs BUFFER (the Q8 distinction, a 3rd time)
+> When an event arrives **newer than expected, leaving a gap** (shown 3, got 5, never saw 4) — do you show 5 now or wait for 4?
+> ```
+> Location (coalescible):  SHOW 5 NOW. 4 is a spot she already drove past — stale & useless.
+>                          Waiting would show an OLDER position + add delay. Drop 4 if it straggles in.
+>                          → SKIP the gap, never wait.
+> Chat (must-see):         DON'T show 5. Displaying 5 then 4 = messages out of order, and you can't
+>                          drop 4 (every message matters). BUFFER 5, wait for 4, then release 4→5.
+>                          → WAIT for the gap, never skip.
+> ```
+> "You can't sort a live stream" = events trickle in over time, so the only way to order them is to **hold newer ones and wait** for missing earlier ones. Location refuses to wait (skip+drop); chat must wait (buffer). Decided by the Q8 question: *does a newer event make the older irrelevant?* Yes → skip; No → wait.
+
+> [!info] The client is the reassembly point
+> No single backend node produces Priya's events in order — they're generated across parallel load-balanced nodes. So order is reconstructed at the one place her whole stream converges and where `lastSeq` is known: **her client.** (It also absorbs last-mile reordering on her own network.)
+
+> [!tip] Interview framing for Q13
+> *"Arrival order is unreliable because the rider's pings are load-balanced across parallel nodes — there's no single ordered pipe, so publish order ≠ send order. The rider stamps each ping with a monotonic sequence number; the client tracks the highest seq shown and drops anything ≤ it, which prevents backward jumps and dedups reconnect replays in one rule. On the write side I do last-write-wins by sequence so the DB stays newest for snapshots. For coalescible location I skip gaps and drop stale pings; for a must-see stream like chat I'd buffer until the gap fills instead."*
+
+---
+
+## Q14 — When is SSE the wrong call? (the SSE↔WebSocket boundary)
+
+> [!question] Interviewer
+> You've defended SSE all interview. Now flip it. (1) A feature where you'd *reject* SSE for **WebSocket** — the precise *property*, not "chat needs WS." (2) Where does SSE quietly *beat* WebSocket (don't over-reach for WS)? (3) The system sends data both ways (rider location up, Priya's cancel/contact up) — why didn't that force WebSocket?
+
+**Candidate's answers:** (1) Chat is all I can think of. (2) SSE wins when it's one-direction server→client and upstream frequency is low. (3) Same — rider sends every 5s but always client→server one direction, and HITL is infrequent.
+
+> [!success]- Verdict: right instincts, but each needs the sharp version
+> **(1) Chat is an example; the *property* is the answer.** WebSocket is forced when **one client needs to send frequent, low-latency, unsolicited messages up, interleaved with server pushes down, all on one live connection** — high-frequency + low-latency + genuinely bidirectional. Examples: multiplayer games (30–60 inputs/sec), collaborative editing (every keystroke/cursor both ways), chat with typing/presence/receipts, interactive trading. **Why it *forces* WS (not SSE+POST):** at high frequency, a separate HTTP request per upstream message is too expensive (full headers, request/response overhead 30–60×/sec) — only WS's always-open socket + tiny per-message framing keeps it cheap and low-latency.
+>
+> **(2) You named when SSE is *sufficient*, not its *advantages*.** Reasons to *prefer* SSE even when both could work:
+> - **It's just HTTP** → works through proxies/firewalls/standard LBs; WebSocket is sometimes outright *blocked* by corporate proxies.
+> - **Auto-reconnect + `Last-Event-ID` are built into the browser** (`EventSource`); WebSocket gives you nothing — you build reconnect/backoff/resume yourself.
+> - **No mandatory sticky sessions, lighter ops**; simpler to debug (readable text).
+> - → The **"SSE is underrated — don't default to WebSocket"** principle.
+>
+> **(3) The real reason: "bidirectional at the *system* level" ≠ "bidirectional on *one connection*."** The system's two-way traffic is **three separate one-way flows on separate connections:**
+> ```
+> Rider phone → backend : location pings = stateless HTTP POSTs   (rider's own connection)
+> Backend     → Priya   : SSE stream, one-way down                (her connection)
+> Priya       → backend : cancel / contact = occasional HTTP POSTs (separate requests)
+> ```
+> None is *"one client, frequent, two-way, on one live socket."* WebSocket is forced only for that. And the subtlety: **even *frequent* upstream is fine as POSTs if it stays request/response-shaped** — WS is needed only when the upstream becomes a *continuous conversational stream* that must interleave with the downstream (typing, live cursors, game inputs). "Cancel my order" is never that. So SSE + occasional POSTs isn't a compromise here — it's correct.
+
+> [!important] The boundary, one glance
+> ```
+> Reach for WebSocket  → ONE client: high-frequency + low-latency + bidirectional, on ONE socket
+>                        (games, collaborative editing, chat w/ typing, live trading)
+> Stay on SSE (+POST)   → server→client push dominates; upstream is occasional / request-response-shaped
+>                        → keep SSE's free reconnect, firewall-friendliness, simplicity
+> ```
+
+> [!tip] Interview framing for Q14
+> *"I'd switch to WebSocket only when one client needs high-frequency, low-latency, two-way traffic on a single socket — games, collaborative editing, chat with typing indicators — because there a POST-per-message is too costly and you need an always-open bidirectional socket. But I don't default to WebSocket: SSE is plain HTTP, gets auto-reconnect and Last-Event-ID for free, and isn't blocked by proxies. Our system sends data both ways overall, but that's separate one-way flows on separate connections — the rider's pings and Priya's cancel action are just occasional request/response POSTs — so no single connection needs to be bidirectional. SSE + occasional POSTs is the correct shape, not a compromise."*
+
+---
+
+## The complete design (Q1–Q14)
+
+```mermaid
+flowchart TB
+  Rider["Rider phone"] -->|"location POSTs (seq-numbered)"| LB1["Load Balancer"]
+  PriyaUp["Priya: cancel / contact (POSTs)"] --> LB1
+  LB1 --> Nodes["SSE node fleet (~90, sized by concurrent connections)"]
+  Nodes -->|"last-write-wins by seq"| DB[("DB: order state = source of truth")]
+  Nodes <-->|"per-node channel"| BUS[("Redis pub/sub + connection registry (TTL)")]
+  Nodes -->|"one SSE stream: status + location events"| Priya["Priya's app (foreground)"]
+  Nodes -.->|"no live connection → fall back"| PUSH["APNs / FCM (best-effort)"]
+  PUSH -.-> PriyaBg["Priya's phone (backgrounded)"]
+  DB -->|"snapshot re-sync on reconnect"| Priya
+```
+
+> [!info] Design decisions, end to end
+> - **Transport:** one **SSE** stream per screen, named event types (`status`, `location`); upstream actions = separate POSTs. (Q1–Q2, Q14)
+> - **Scale:** sized by **concurrent connections** (900k → ~90 nodes), not request rate. (Q3)
+> - **Routing:** **connection registry + pub/sub** (per-node channel), not a queue. (Q4–Q7)
+> - **Reliability:** DB is source of truth; **snapshot re-sync** on reconnect (state-based, coalescible); pub/sub is fire-and-forget. (Q8)
+> - **Auth:** short access token + revocable `HttpOnly` refresh token; **reactive** refresh. (Q9)
+> - **Backgrounded:** **APNs/FCM** push (best-effort, transactional). (Q10)
+> - **Liveness:** app-level **heartbeats** (failed-write detection over TCP ACKs) + registry TTL cleanup → truthful SSE-vs-push decision. (Q11)
+> - **Deploys:** **connection draining + staggered rollout + backoff-jitter**; LB no-buffer/no-idle-timeout. (Q12)
+> - **Ordering:** **monotonic seq** stamped at source; client drops `≤ lastSeq` (fixes jumps + dedup). (Q13)
+> - **Transport boundary:** SSE (+ occasional POSTs) is correct; WebSocket only for one-socket high-frequency bidirectional. (Q14)
+
+---
+
+## Running scorecard & reusable lessons
+
+| # | Topic | Result |
+|---|---|---|
+| Q1 | Directionality → SSE for one-way rider stream | ✅ (right call, muddled reason) |
+| Q2 | Collapse two channels into one SSE stream (named events) | ✅ |
+| Q3 | Rate vs concurrency: 900k concurrent, 90 nodes | ❌ then ✅ (the key trap) |
+| Q4 | Fan-out routing: connection registry in Redis | ✅ (delivery step hand-waved) |
+| Q5 | Node-to-node delivery: webhook ❌ → queue ⚠️ → **pub/sub** ✅ | corrected twice |
+| Q6 | Channel keyed on user → subscription replaces registry | ✅ |
+| Q7 | Pricing: 90 vs 900k subs; store ≠ operate | ✅/❌ → chose per-node registry |
+| Q8 | Reconnect after a drop: fire-and-forget, state vs event | ❌ then ✅ |
+| Q9 | Auth mid-stream: two-token model, reactive refresh | ❌ then ✅ (2 good catches) |
+| Q10 | Backgrounded app → APNs/FCM push | ✅ core (mechanism taught) |
+| Q11 | Zombie connection: heartbeats, TCP-ACK detection | ❌ then ✅ (deep) |
+| Q12 | Deploy storm: draining + staggered + jitter | ⚠️ then ✅ |
+| Q13 | Ordering & dedup: monotonic seq, drop ≤ lastSeq | ✅ (refined) |
+| Q14 | SSE↔WebSocket boundary | ⚠️ instincts → sharpened |
+
+*(Per-question verdicts are in the collapsed callouts above — expand each to self-test cold.)*
+
+> [!tip] The 20 reusable lessons from this interview
 > 1. **Size persistent-connection tiers by concurrent connections, not request rate.** `concurrent = arrival rate × connection duration`. (Q3: 500/sec × 1,800s = 900k, not 500.)
 > 2. **Node-to-node delivery in a stateful-connection fleet = pub/sub + a connection registry.** A *queue* (competing consumers) delivers to the wrong node and drops the message. (Q5–Q6)
 > 3. **"Equal to store" ≠ "equal to operate."** Per-user channels look free but cost 900k live subscriptions and don't shard; per-node registry is cheaper to operate at scale. (Q7)
@@ -448,12 +717,15 @@ Backend picks the channel by the connection registry: **connection alive → pus
 > 9. **Refresh reactively, not proactively — for most streams.** A `401` on any request or reconnect drives `/auth/refresh`; a stream never 401s but doesn't need to, unless the data is sensitive/long-lived (then: server closes at token `exp` to force a re-authed reconnect). (Q9)
 > 10. **A suspended app has no socket and no running code — only the OS can reach it.** Use a platform push service (APNs/FCM) that keeps one OS-owned connection shared by the whole phone; your backend addresses it via a stored device token. (Q10)
 > 11. **Push is best-effort — a "tap on the shoulder," not a data channel.** The DB stays source of truth; the app re-syncs on open. Keep transactional notifications on a separate high-trust channel from promotional. (Q10)
+> 12. **A silent death sends no `FIN`; idle and dead look identical to the server.** A TCP connection is *state*, not a wire — detection requires a packet, and sudden signal/power loss can't send the goodbye. (Q11)
+> 13. **Detect dead clients with application-level heartbeats.** "One-way" is app-layer only — TCP still ACKs every send, so a failed keep-alive *write* reveals a dead client; the client self-detects silence and reconnects. Clean up the registry on detection + heartbeat-refreshed TTL (so crashed nodes self-expire). (Q11)
+> 14. **There's a detection window where you send into a dead socket** — harmless for state-based/coalescible streams (unreachable anyway + snapshot on reconnect), costly for event-based ones (need replay) or when fast push-fallback matters (shorten the heartbeat). (Q11)
+> 15. **Deploys of a stateful-connection tier are disruptive and get slower on purpose.** Replacing a node drops all its connections at once → a reconnect burst that hits the DB/auth tier and compounds across a rolling deploy. Flatten with **connection draining + staggered rollout + backoff-with-jitter**. (Q12)
+> 16. **Draining is two parties:** the LB stops *new* connections (deregister/readiness), the **node's own SIGTERM handler** closes existing ones gradually; the orchestrator grants a grace window. The LB must also not **buffer** or **idle-timeout** the stream (heartbeat = keepalive), and for WebSocket must pass the `Upgrade` header through. (Q12)
+> 17. **Arrival order ≠ send order** — pings load-balanced across parallel nodes have no single ordered pipe. Stamp a **monotonic sequence number at the source**; the client drops anything `≤ lastSeq`, which fixes backward jumps *and* dedups reconnect replays in one rule. Write-side last-write-wins keeps the DB snapshot newest. (Q13)
+> 18. **On a gap, coalescible streams SKIP, must-see streams WAIT.** Location shows the newest and drops stragglers; chat buffers until the gap fills. Same Q8 discriminator, third time. The **client** is the reassembly point. (Q13)
+> 19. **Don't default to WebSocket.** It's forced only when *one client* needs high-frequency + low-latency + bidirectional traffic on *one socket* (games, collab editing, chat w/ typing). Otherwise SSE wins: plain HTTP, free auto-reconnect + `Last-Event-ID`, not proxy-blocked. (Q14)
+> 20. **"Bidirectional at the system level" ≠ "bidirectional on one connection."** Occasional / request-response-shaped upstream = plain POSTs beside the stream; SSE + POST is the correct shape, not a compromise. (Q14)
 
----
-
-## Pending — next dimension (not yet grilled)
-
-> [!question] Interviewer (Q11, up next)
-> **Zombie connections & registry cleanup.** Priya's phone hits a dead zone and dies silently — no clean TCP `FIN` reaches the server. Node 47 still *thinks* her SSE connection is alive and keeps her entry in the connection registry (and its pub/sub subscription). Now `arrived` gets routed to a **ghost**. How does the server detect the connection is actually dead and clean up the registry, so it doesn't route to a node that no longer holds the connection — and so it knows to fall back to push? *(Probes: heartbeats / ping-pong, why TCP keepalive isn't enough, registry TTL + cleanup-on-disconnect, and closing the "SSE or push?" decision from Q10.)*
->
-> Then, in order: **Q12** LB / zero-downtime deploys (L7 upgrade pass-through, idle-timeout kills, connection draining, staggered rollout + backoff-with-jitter) · **Q13** ordering & dedup (sequence IDs) · **Q14** when SSE is the wrong call → WebSocket.
+> [!note] The recurring meta-lesson
+> The **Q8 state-vs-event discriminator** — *does a newer event make the older one irrelevant?* — decided the answer **three separate times**: reconnect recovery (Q8), the detection window (Q11), and gap handling (Q13). One question, reused across the whole design. That's the pattern worth internalizing.
