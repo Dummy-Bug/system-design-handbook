@@ -1,186 +1,128 @@
-
-## 🎯 Intent
-
-Factory Method is a **creational design pattern** that provides an interface for creating objects in a superclass but allows subclasses to alter the type of objects that will be created.
+> [!abstract] Factory
+> Move the *"which concrete class do I create"* decision into **one place**, so every caller asks for an object by type instead of naming the class itself.
 
 ---
 
-## ❓ Problem
+## 🎯 Trigger
 
-Imagine that you are building an **HR platform integration module** that can interact with various HRMS providers like **Keka** and **Darwinbox**. Initially, the app is built to support only Keka, so the business logic is tightly coupled with `KekaEmployeeService`.
-
-However, over time, you need to support Darwinbox too. You now find your code filled with `if-else` or `switch` statements, checking which HRMS is selected and creating objects accordingly.
-
-This leads to a violation of the **Open/Closed Principle** and makes the code rigid and hard to maintain.
-
----
-
-## ✅ Solution
-
-The **Factory Method Pattern** suggests that you replace direct object construction (`new`) with a **factory method**. You delegate object creation to a single place that decides what to instantiate.
-
-By doing this:
-
-- Your core logic doesn't care _which_ object it is using
-    
-- Adding new HRMS integrations becomes easier without modifying existing code
-    
-
----
-
-## 🎯 Applicability
-
-Here are scenarios when you should use the **Factory Method Pattern**:
-
-### 🔹 When you don’t know beforehand the exact types and dependencies
-
-You might not know at compile-time which class you need. The factory pattern defers the decision to runtime, allowing selection based on inputs (like `hrmsName`).
-
-> In our example: you don’t know whether the request is for Keka or Darwinbox until runtime.
-
-### 🔹 When you want to separate product creation from usage
-
-Separating creation logic allows the main business logic to be clean and unaware of object instantiation details.
-
-> In our example: the main service or controller doesn't care _how_ the `EmployeeService` is built.
-
-### 🔹 When you want to allow extending frameworks without modifying code
-
-If users of your codebase or framework want to plug in new behavior (new HRMS vendor), they can simply extend the factory or register a new service without changing client code.
-
-> You can just add a `GreytHRService` class and update the factory.
-
-### 🔹 When object creation is expensive and you want to reuse/cache objects
-
-You can use the factory to manage object caching or pooling (e.g., DB connections, HRMS clients).
-
-> Imagine creating heavy network client objects—these can be managed and reused by the factory instead of being instantiated every time.
+> [!tip]
+> **Concrete class picked from runtime data, in more than one place → Factory.**
+>
+> - **runtime data** — the type arrives as a value (a scanned string, an API field), so you cannot write `new Car(...)` literally
+> - **more than one place** — the same mapping is needed at several call sites, so it would otherwise be copy-pasted
+>
+> Factory **concentrates** the creation decision into one file. It never eliminates it.
 
 ---
 
 ## 🧱 Structure
 
-|Component|Description|
-|---|---|
-|**Product Interface**|Common interface implemented by all HRMS services (`EmployeeService`)|
-|**Concrete Products**|Actual classes like `KekaEmployeeService`, `DarwinboxEmployeeService`|
-|**Factory Class**|`EmployeeServiceFactory` to instantiate appropriate implementation|
-|**Client**|Uses factory to get an instance and call logic, without knowing the implementation|
+```mermaid
+classDiagram
+    direction TB
 
----
-
-## 🛠 How to Implement
-
-1. Define a common product interface.
-    
-2. Create an empty factory method in the creator class.
-    
-3. Replace object construction in the creator’s code with calls to the factory method.
-    
-4. Move construction logic from the main code to the factory method.
-    
-5. Create concrete subclasses that override the factory method.
-    
-6. (Optional) Pass arguments to the factory method to choose product types dynamically.
-    
-
----
-
-## 🧾 Code Example: Keka/Darwinbox
-
-### 1. Product Interface
-
-```java
-public interface EmployeeService {
-    void fetchEmployee(String empId);
-}
-```
-
-### 2. Concrete Products
-
-```java
-public class KekaEmployeeService implements EmployeeService {
-    public void fetchEmployee(String empId) {
-        System.out.println("Fetching employee from Keka: " + empId);
+    class VehicleFactory {
+        +create(VehicleType, String)$ Vehicle
     }
-}
 
-public class DarwinboxEmployeeService implements EmployeeService {
-    public void fetchEmployee(String empId) {
-        System.out.println("Fetching employee from Darwinbox: " + empId);
+    class Vehicle {
+        <<abstract>>
+        -String plate
     }
-}
-```
 
-### 3. Factory Class
-
-```java
-public class EmployeeServiceFactory {
-    public static EmployeeService getService(String hrms) {
-        switch (hrms.toLowerCase()) {
-            case "keka": return new KekaEmployeeService();
-            case "darwinbox": return new DarwinboxEmployeeService();
-            default: throw new IllegalArgumentException("Unknown HRMS: " + hrms);
-        }
-    }
-}
-```
-
-### 4. Client Code
-
-```java
-public class Main {
-    public static void main(String[] args) {
-        EmployeeService service = EmployeeServiceFactory.getService("keka");
-        service.fetchEmployee("E123");
-    }
-}
+    VehicleFactory ..> Vehicle : creates, returns
+    Vehicle <|-- Car
+    Vehicle <|-- Truck
+    Vehicle <|-- Bike
 ```
 
 ---
 
-## 👍 Pros (with examples)
+## 🔩 Component Mapping
 
-### ✅ Avoids tight coupling between client and concrete products
-
-The client code only interacts with the `EmployeeService` interface and doesn't care which concrete implementation it uses.
-
-> Example: The controller/service layer just asks the factory for a service and calls `fetchEmployee()`. Whether it talks to **Keka** or **Darwinbox** is hidden from it.
-
----
-
-### ✅ Single Responsibility: centralizes object creation
-
-All logic for choosing and instantiating `EmployeeService` implementations is placed in one factory class.
-
-> Example: You don’t have HRMS-specific logic spread across your entire codebase. It’s all in `EmployeeServiceFactory`.
+|Component|Role|Here|
+|---|---|---|
+|**Product**|Common type the callers depend on|`Vehicle`|
+|**ConcreteProduct**|The classes actually built|`Car`, `Truck`, `Bike`|
+|**Factory**|Sole owner of the type → class mapping|`VehicleFactory`|
+|**Client**|Asks by type, never names a concrete class|entry gate, CSV import, booking API, tests|
 
 ---
 
-### ✅ Open/Closed Principle: easy to extend
+## 📐 Template
 
-You can introduce new HRMS integrations like `GreytHREmployeeService` by just adding a new class and a `case` in the factory. No need to modify the client code.
+```
+src/
+├── model/
+│   ├── VehicleType.java            ← enum, never String
+│   ├── Vehicle.java                ← product
+│   ├── Car.java                    ← concrete products
+│   ├── Truck.java
+│   └── Bike.java
+├── factory/
+│   └── VehicleFactory.java         ← sole owner of type → class
+└── EntryGate.java                  ← client
+```
 
-> Example: Add "greythr" case in the factory without changing any logic in service/controller layers.
+##### `model/VehicleType.java`
 
----
+```java
+public enum VehicleType { CAR, TRUCK, BIKE }
+```
 
-## 👎 Cons (with examples)
+##### `model/Vehicle.java`
 
-### ❌ Can lead to a lot of subclasses
+```java
+public abstract class Vehicle {
 
-For each type of product (in this case, HRMS integration), you need a new class. This can make your codebase grow rapidly.
+    private final String plate;
 
-> Example: `KekaEmployeeService`, `DarwinboxEmployeeService`, `GreytHRService`, etc. Each HRMS requires a separate concrete class.
+    protected Vehicle(String plate) {
+        this.plate = plate;
+    }
 
----
+    public String getPlate() {
+        return plate;
+    }
+}
+```
 
-### ❌ More complex than using `new` directly
+##### `model/Car.java`
 
-If you only have one or two HRMS types, this may feel over-engineered compared to just using `new KekaEmployeeService()` directly.
+```java
+public class Car extends Vehicle {
 
-> Example: If the system will **only ever** use Keka, the factory might be unnecessary abstraction.
+    public Car(String plate) {
+        super(plate);
+    }
+}
+```
 
----
+##### `factory/VehicleFactory.java`
 
-Let me know if you'd like to add **Abstract Factory** using the same HRMS example!
+```java
+public class VehicleFactory {
+
+    private VehicleFactory() {}                 // no instances — pure creation helper
+
+    public static Vehicle create(VehicleType type, String plate) {
+        return switch (type) {                  // exhaustive: adding a new enum value
+            case CAR   -> new Car(plate);       // breaks the build until handled here
+            case TRUCK -> new Truck(plate);
+            case BIKE  -> new Bike(plate);
+        };
+    }
+}
+```
+
+##### `EntryGate.java`
+
+```java
+public class EntryGate {
+
+    public void onVehicleArrival(VehicleType type, String plate) {
+        Vehicle vehicle = VehicleFactory.create(type, plate);   // never names Car / Truck / Bike
+        // ... assign a spot, issue a ticket
+    }
+}
+```

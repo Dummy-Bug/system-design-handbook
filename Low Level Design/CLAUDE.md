@@ -15,6 +15,22 @@ covers nearly all patterns/mechanics first; the long tail comes later as cheap v
 - Same flaw exists in our own notes: `01-Syllabus/09-LLD-Problems.md` (BookMyShow entry says
   "State pattern on Seat") — fix when we do that case study.
 
+## Pattern scope
+11 patterns total, ranked in `00-Pattern-Priority-List.md`: Tier 1 (Strategy, Factory,
+Observer, Singleton) produced cold; Tier 2 (**State**, CoR, Composite, Facade, Template Method,
+Decorator, Command) installed inside their anchor case studies, no upfront study. The other
+12 GoF patterns are recognize-only — never drill them.
+
+- **State moved to Tier 2 (2026-07-20)** — abstractly it teaches nothing (a 3-status seat is
+  solved by a 2-line enum, so the pattern looks like pure ceremony) and studying it cold invites
+  over-application, which fails bar point 5. Install it inside **Elevator**, where behaviour
+  genuinely differs per state (button press: IDLE starts motor / MOVING queues / DOOR_OPEN
+  closes first), and teach enum-transition-table vs state-classes as the judgment call.
+
+Pattern file format (settled): **Trigger → Structure → Component Mapping → Template**, nothing
+else. Trigger = one-line rule + what its terms mean + a short code contrast. Template = folder
+tree then one code block per file. No prose walkthroughs, no failure-case sections.
+
 ## 80-20 core set (do in this order)
 7 case studies ≈ 29% of the 24-problem list, but they cover 11 of the 12 interview patterns
 and all 5 recurring mechanics (state machine, TTL lock, fan-out notify, dependency graph,
