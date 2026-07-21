@@ -37,9 +37,9 @@ flowchart TD
     T["Text"] --> P["Split by paragraph separator"]
     P --> C{"Piece within chunk_size?"}
     C -- "yes" --> K["Keep as chunk"]
-    C -- "no" --> N["Re-split piece with next separator\n(lines → words → chars)"]
+    C -- "no" --> N["Re-split piece with next separator<br/>(lines → words → chars)"]
     N --> C
-    K --> M["Merge adjacent small pieces\nwhile they stay within chunk_size"]
+    K --> M["Merge adjacent small pieces<br/>while they stay within chunk_size"]
     M --> R["Final chunks"]
 ```
 

@@ -148,10 +148,10 @@ flowchart LR
     A --> C["Code"]
     A --> D["Markdown"]
     A --> E["JSON"]
-    B --> F["RecursiveCharacterTextSplitter\nparagraphs → lines → words"]
-    C --> G["from_language(Language.PYTHON)\nclass → def → method"]
-    D --> H["MarkdownHeaderTextSplitter\nH1 → H2 → H3 sections + metadata"]
-    E --> I["RecursiveJsonSplitter\nouter keys → nested dicts"]
+    B --> F["RecursiveCharacterTextSplitter<br/>paragraphs → lines → words"]
+    C --> G["from_language(Language.PYTHON)<br/>class → def → method"]
+    D --> H["MarkdownHeaderTextSplitter<br/>H1 → H2 → H3 sections + metadata"]
+    E --> I["RecursiveJsonSplitter<br/>outer keys → nested dicts"]
 ```
 
 One idea, four costumes: **let the document's own structure supply the separator hierarchy.** The recursion and the merge-up step never change; only the definition of "a meaningful place to cut" does.

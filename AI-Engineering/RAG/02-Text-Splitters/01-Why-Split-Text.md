@@ -39,10 +39,10 @@ Say the knowledge source is a folder with just **5 text files**. We follow the p
 
 ```mermaid
 flowchart LR
-    KS["Knowledge source\n5 text files"] --> DL["Text loader"]
+    KS["Knowledge source<br/>5 text files"] --> DL["Text loader"]
     DL --> D["5 Documents"]
-    D -- "chunking bypassed" --> EM["Embedding model\n512-dim output"]
-    EM --> KB["Knowledge base\n5 vectors (5 × 512)"]
+    D -- "chunking bypassed" --> EM["Embedding model<br/>512-dim output"]
+    EM --> KB["Knowledge base<br/>5 vectors (5 × 512)"]
 ```
 
 The loader returns 5 Documents. Each one goes to the embedding model, which converts a text into a vector of numbers capturing its meaning — say a 512-dimensional vector. Result: the knowledge base holds exactly **5 vectors**, a 5 × 512 array.
@@ -84,9 +84,9 @@ Finally, there's plain speed: creating an embedding for one giant document is a 
 ```mermaid
 flowchart LR
     KS["Knowledge source"] --> DL["Document loaders"]
-    DL --> TS["Text splitters\n(this module)"]
+    DL --> TS["Text splitters<br/>(this module)"]
     TS --> EM["Embedding model"]
-    EM --> KB["Knowledge base\n(vector database)"]
+    EM --> KB["Knowledge base<br/>(vector database)"]
     KB --> R["Retriever"]
 ```
 

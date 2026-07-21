@@ -10,3 +10,6 @@
 
 # Proprietary — company-internal architecture archaeology (never publish)
 Xarvis-Archaeology/
+
+# Un-sanitized working notes — real system and service names, never publish
+Engineering/emergent/

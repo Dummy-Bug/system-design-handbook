@@ -54,7 +54,7 @@ Try this experiment: ask an LLM about a research paper that **does not exist** �
 
 This is **hallucination**: the model generating false facts with full confidence.
 
-Why does it happen? Combine what the model is with what it must do. It has world-class language understanding and generative fluency — it learned from the entire internet what a research paper *sounds like*. And its job is next-word prediction: given your prompt, it **must** produce a plausible continuation. Nothing in that machinery checks whether the continuation is *true*. If the model has real knowledge, the fluent output happens to be correct. If it doesn't, the same machinery generates equally fluent fiction — and here's the dangerous part: **the lie is written exactly as convincingly as the truth**, so you cannot tell the difference by reading it.
+Why does it happen? Combine what the model is with what it must do. It has world-class language understanding and generative fluency — it learned from the entire internet what a research paper *sounds like*. And its job is next-word prediction: given your prompt, it **must** produce a plausible continuation. Nothing in that machinery checks whether the continuation is *true* If the model has real knowledge, the fluent output happens to be correct. If it doesn't, the same machinery generates equally fluent fiction — and here's the dangerous part: **the lie is written exactly as convincingly as the truth**, so you cannot tell the difference by reading it.
 
 > [!danger] An LLM never says "I wasn't trained on that" on its own. Where knowledge exists, it answers from knowledge; where it doesn't, it *makes knowledge up* — same confident tone in both cases.
 
@@ -116,8 +116,8 @@ When you chat with ChatGPT, each new message doesn't go to the model alone — t
 
 ```mermaid
 flowchart TD
-    Q["Query: 'What is my name?'\n+ full chat history in the prompt"] --> PK{"Is the name in\nparametric knowledge?"}
-    PK -- "no — it was never trained on you" --> CTX{"Is the name somewhere\nin the provided context?"}
+    Q["Query: 'What is my name?'<br/>+ full chat history in the prompt"] --> PK{"Is the name in<br/>parametric knowledge?"}
+    PK -- "no — it was never trained on you" --> CTX{"Is the name somewhere<br/>in the provided context?"}
     CTX -- "yes — you said it earlier in the chat" --> A["'Your name is Rahul.'"]
     CTX -- "no" --> B["'I don't know your name.'"]
 ```

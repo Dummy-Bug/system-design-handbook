@@ -31,9 +31,9 @@ Keep adding sentences to the current chunk **as long as they remain semantically
 
 ```mermaid
 flowchart TD
-    A["Text"] --> B["Split into sentences\nT1 ... T10"]
-    B --> C["Embedding model\n→ 10 vectors"]
-    C --> D["cosine similarity of\nconsecutive sentences"]
+    A["Text"] --> B["Split into sentences<br/>T1 ... T10"]
+    B --> C["Embedding model<br/>→ 10 vectors"]
+    C --> D["cosine similarity of<br/>consecutive sentences"]
     D --> E{"similarity ≥ threshold?"}
     E -- "yes" --> F["add sentence to current chunk"]
     E -- "no" --> G["close chunk, start a new one"]

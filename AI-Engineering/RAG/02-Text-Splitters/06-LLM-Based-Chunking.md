@@ -74,10 +74,10 @@ docs = [
 
 ```mermaid
 flowchart LR
-    T["Full text"] --> P["Prompt:\n'split at natural topic boundaries,\ndo not change the text'"]
-    P --> L["LLM\n(structured output)"]
-    L --> C["Chunker object\n→ list of Chunk(chunk_text, summary)"]
-    C --> D["Document objects\npage_content + summary metadata"]
+    T["Full text"] --> P["Prompt:<br/>'split at natural topic boundaries,<br/>do not change the text'"]
+    P --> L["LLM<br/>(structured output)"]
+    L --> C["Chunker object<br/>→ list of Chunk(chunk_text, summary)"]
+    C --> D["Document objects<br/>page_content + summary metadata"]
 ```
 
 ---
