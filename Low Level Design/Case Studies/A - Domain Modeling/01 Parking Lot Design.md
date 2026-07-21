@@ -145,6 +145,15 @@ The floor knows nothing about fitting rules, nothing about vehicles, and nothing
 floors. That ignorance is the point — it's why the map can be keyed by size and looked up
 directly instead of scanned.
 
+> [!important] Whoever owns the data owns the code that builds it
+> The constructor takes counts — `new Floor(1, 2, 2, 1)` — and fills its own map. It does **not**
+> take a ready-made `Map<SpotSize, List<Spot>>` built by the caller.
+> Hand-building that map in `Main` splits the knowledge: the driver would have to know the map
+> has one bucket per size, how spot ids are formatted, and that a new spot starts `FREE`.
+> Add `SpotSize.XL` for buses and you'd edit the enum *and* every caller that ever builds a floor.
+> **The test that it landed in the right class: the caller's import list gets shorter.**
+> `Main` should not import `SpotSize`, `SpotStatus`, `ArrayList`, or `Map` at all.
+
 #### `ParkingLot` — the orchestrator
 
 > *"Automatically assign parking spots based on availability"*

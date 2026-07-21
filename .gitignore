@@ -8,6 +8,13 @@
 *.log
 *.tmp
 
+# IntelliJ / Java — machine-local state and build output
+.idea/
+*.iml
+out/
+target/
+*.class
+
 # Proprietary — company-internal architecture archaeology (never publish)
 Xarvis-Archaeology/
 
