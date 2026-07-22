@@ -20,3 +20,6 @@ Xarvis-Archaeology/
 
 # Un-sanitized working notes — real system and service names, never publish
 Engineering/emergent/
+
+# Applied learning notes — reference Kramak/xarvis internals, never publish
+Engineering/machine-learning/learnings/

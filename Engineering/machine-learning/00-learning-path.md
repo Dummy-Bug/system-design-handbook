@@ -12,6 +12,11 @@
 > **Building on a deadline? Start with [[01-fast-track-order]] instead** — it re-orders this
 > catalogue by what the next build phase refuses to work without, and lists the concepts each
 > resource actually buys you. Come back here when you want the ratings and the alternatives.
+>
+> **Building the model *first*, on synthetic data (scope changed)? See [[02-model-first-syllabus]]** —
+> it supersedes the build order here for that spike: the transformer arc moves onto the critical path,
+> mining/trees/calibration/production come off it, and one new block (multi-attribute encoding) is
+> added. This catalogue's ratings still hold; only the order and scope change.
 
 You have no ML background and a system to build. The obvious move is a course. The obvious move is wrong, and it's worth knowing why before spending three months on it.
 

@@ -7,6 +7,11 @@
 > Prerequisite: [[00-learning-path]] — the full catalogue, every resource rated out of 10.
 > That note answers *"what is worth learning?"*. This one answers *"what is worth learning **this
 > week**, and what can wait until the build demands it?"*
+>
+> **Scope note:** this ordering assumes the *platform-first* build (zero ML for the first ~6–8 weeks,
+> transformer last). If you're building the **model first on synthetic data**, [[02-model-first-syllabus]]
+> supersedes the order below — the transformer arc becomes the critical path and the mining/trees
+> blocks defer.
 
 A syllabus read front-to-back makes you feel permanently behind, because it is ordered by *subject*
 and you are constrained by *time*. Re-order it by what the next thing you build refuses to work
