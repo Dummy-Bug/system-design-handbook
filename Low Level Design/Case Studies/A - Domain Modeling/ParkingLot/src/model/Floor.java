@@ -49,13 +49,20 @@ public class Floor {
         spots.put(size, list);
     }
 
+    // Claim a free spot of EXACTLY this size. The shared primitive both strategies build on.
+    public Optional<Spot> claimSpotOfSize(SpotSize size) {
+        for (Spot spot : spots.getOrDefault(size, List.of())) {
+            if (spot.tryOccupy()) return Optional.of(spot);   // find + claim, atomic
+        }
+        return Optional.empty();
+    }
+
+    // Size-or-bigger, smallest first — used by first-fit's per-floor scan.
     public Optional<Spot> claimFreeSpot(SpotSize minSize) {
         for (SpotSize size : SpotSize.values()) {
             if (size.ordinal() < minSize.ordinal()) continue;   // too small, skip
-
-            for (Spot spot : spots.getOrDefault(size, List.of())) {
-                if (spot.tryOccupy()) return Optional.of(spot);  // find + claim, atomic
-            }
+            Optional<Spot> spot = claimSpotOfSize(size);
+            if (spot.isPresent()) return spot;
         }
         return Optional.empty();
     }

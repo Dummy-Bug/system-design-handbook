@@ -1,4 +1,6 @@
 import model.*;
+import strategies.allocation.AllocationStrategy;
+import strategies.allocation.FirstFitStrategy;
 import strategies.payment.PaymentStrategy;
 import strategies.pricing.PricingStrategy;
 
@@ -12,6 +14,7 @@ public class ParkingLot {
     Map<Integer, Floor> floors = new HashMap<>();
     Map<String, Ticket> activeTickets = new ConcurrentHashMap<>();
     PricingStrategy pricingStrategy;
+    AllocationStrategy allocationStrategy = new FirstFitStrategy();   // default policy
 
 
     public static ParkingLot getInstance() {
@@ -20,15 +23,13 @@ public class ParkingLot {
 
     public Optional<Ticket> park(Vehicle vehicle) {
         SpotSize minSize = vehicle.getType().getMinSize();
-        for (Floor floor : floors.values()) {
-            Optional<Spot> spot = floor.claimFreeSpot(minSize);
-            if (spot.isPresent()) {
-                Ticket ticket = new Ticket(vehicle, spot.get());
-                activeTickets.put(ticket.getTicketId(), ticket);
-                return Optional.of(ticket);
-            }
+        Optional<Spot> spot = allocationStrategy.allocate(floors.values(), minSize);
+        if (spot.isEmpty()) {
+            return Optional.empty();   // no fitting spot anywhere — lot full
         }
-        return Optional.empty();   // no floor had a fitting spot — lot full
+        Ticket ticket = new Ticket(vehicle, spot.get());
+        activeTickets.put(ticket.getTicketId(), ticket);
+        return Optional.of(ticket);
     }
 
     public double unpark(String ticketId, PaymentStrategy payment) {
@@ -52,6 +53,10 @@ public class ParkingLot {
 
     public void setPricingStrategy(PricingStrategy pricingStrategy) {
         this.pricingStrategy = pricingStrategy;
+    }
+
+    public void setAllocationStrategy(AllocationStrategy allocationStrategy) {
+        this.allocationStrategy = allocationStrategy;
     }
 
     public void addFloor(Floor floor) {
