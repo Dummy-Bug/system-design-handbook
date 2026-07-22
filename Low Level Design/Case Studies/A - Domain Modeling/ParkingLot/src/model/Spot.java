@@ -6,8 +6,16 @@ public class Spot {
     private final SpotSize size;
     private SpotStatus status;
 
-    public void setStatus(SpotStatus status) {
-        this.status = status;
+    public synchronized boolean tryOccupy() {
+        if (status == SpotStatus.FREE) {
+            status = SpotStatus.OCCUPIED;
+            return true;
+        }
+        return false;
+    }
+
+    public synchronized void release() {
+        status = SpotStatus.FREE;
     }
 
     public Spot(String id, SpotSize size) {

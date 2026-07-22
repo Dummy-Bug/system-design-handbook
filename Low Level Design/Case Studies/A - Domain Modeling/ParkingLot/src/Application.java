@@ -5,6 +5,8 @@ import model.VehicleType;
 import strategies.payment.CashPaymentStrategy;
 import strategies.pricing.HourlyPricingStrategy;
 
+import java.util.Optional;
+
 
 public class Application {
 
@@ -23,7 +25,13 @@ public class Application {
         Vehicle bike = new Vehicle("KA-1234", VehicleType.BIKE);
 
         lot.displayAvailability();
-        Ticket t = lot.park(bike);
+
+        Optional<Ticket> parked = lot.park(bike);
+        if (parked.isEmpty()) {
+            System.out.println("Lot full");
+            return;
+        }
+        Ticket t = parked.get();
         System.out.println(t.getTicketId() + " -> " + t.getSpot().getId());
         lot.displayAvailability();
 

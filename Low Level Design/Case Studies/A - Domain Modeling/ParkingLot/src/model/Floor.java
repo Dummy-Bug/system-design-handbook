@@ -49,15 +49,14 @@ public class Floor {
         spots.put(size, list);
     }
 
-    private Optional<Spot> getFreeSpot(SpotSize minSize) {
-
+    public Optional<Spot> claimFreeSpot(SpotSize minSize) {
         for (SpotSize size : SpotSize.values()) {
-            if (size.ordinal() < minSize.ordinal()) continue;
+            if (size.ordinal() < minSize.ordinal()) continue;   // too small, skip
 
-            for (Spot spot : spots.getOrDefault(minSize, List.of()))
-                if (spot.getStatus() == SpotStatus.FREE) return Optional.of(spot);
+            for (Spot spot : spots.getOrDefault(size, List.of())) {
+                if (spot.tryOccupy()) return Optional.of(spot);  // find + claim, atomic
+            }
         }
         return Optional.empty();
-
     }
 }
