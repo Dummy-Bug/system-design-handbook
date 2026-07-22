@@ -60,7 +60,7 @@ pairwise balance map). Everything after these is a variant.
 
 | # | Case study | Pattern payload (new learning) | Status |
 |---|-----------|-------------------------------|--------|
-| 1 | Parking Lot | Factory, Strategy, Singleton, Observer + last-spot concurrency | ☐ |
+| 1 | Parking Lot | Strategy (pricing/payment/allocation), Singleton + check-then-act race. Factory/Observer deliberately dropped (no product to build, pull-based display) — installed later in Splitwise/Logger | ✅ done |
 | 2 | Snake & Ladder | Template Method (game loop), Dice Strategy — speed rep, Flipkart favorite | ☐ |
 | 3 | Elevator | scheduling Strategy (SCAN/LOOK) + PriorityQueue (State now lives in Track B) | ☐ |
 | 4 | BookMyShow | Facade, seat-lock TTL, optimistic locking, **ShowSeat fix** | ☐ |
@@ -142,9 +142,12 @@ Post-Build checklist.**
 ## Session protocol
 - One case study per session. Derive first (requirements → entities → diagram → patterns →
   code), then compare against the AlgoMaster chapter and log its flaws.
-- Interleave the tracks: core-7 for flavor A, Track B for flavor B. Suggested order —
-  Parking Lot → B1 Rate Limiter → Snake & Ladder → **B2 Circuit Breaker (installs State)** →
-  BookMyShow → B3 → … Do one flavor-C (agent-driven) repeat only after a build exists cold.
+- **Flavor A first, until fast (decided 2026-07-22).** The classic domain-modeling round is what
+  the majority of Tier-A companies still run; Track B is a bet on newer/infra shops. So finish the
+  core-7 (flavor A) and get build time down to ~90 min *before* interleaving Track B — don't smuggle
+  concurrency primitives (`ExecutorService`, CAS) into a tired flavor-A build. Order now:
+  ~~Parking Lot~~ ✅ → **Snake & Ladder** → Elevator → BookMyShow → Splitwise → Logging → Spreadsheet,
+  then braid in B1–B5. Do one flavor-C (agent-driven) repeat only after a build exists cold.
 - After each study, run the "new requirement" test (add a feature — count files touched).
 - Explanations: one concept at a time, plain English, justify with concrete scale/consequence
   ("same seat blocked for all shows"), problem before solution.
