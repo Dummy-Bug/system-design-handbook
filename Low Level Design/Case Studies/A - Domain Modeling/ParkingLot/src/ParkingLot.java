@@ -1,5 +1,4 @@
-import model.Floor;
-import model.SpotSize;
+import model.*;
 import strategies.pricing.PricingStrategy;
 
 import java.util.*;
