@@ -16,7 +16,7 @@ public class Application {
 
         lot.setPricingStrategy(new HourlyPricingStrategy(100d));
 
-        Floor f1 = new Floor(1,4,3,2);
+        Floor f1 = new Floor(1,1,3,2);   // only 1 small spot on floor 1 → forces fallthrough
         Floor f2 = new Floor(2,2,3,4);
 
         lot.addFloor(f1);
@@ -40,7 +40,28 @@ public class Application {
 
         lot.displayAvailability();
 
+        // --- FR3: fallthrough — a bike takes a car spot only when no bike spot is free ---
+        System.out.println("\n--- fallthrough (first-fit) ---");
+        for (int i = 1; i <= 2; i++) {
+            Optional<Ticket> p = lot.park(new Vehicle("BIKE-" + i, VehicleType.BIKE));
+            if (p.isPresent()) {
+                System.out.println("BIKE-" + i + " -> " + p.get().getSpot().getId());
+            } else {
+                System.out.println("BIKE-" + i + " -> no spot");
+            }
+        }
 
+        // --- FR7: full lot rejects cleanly (Optional.empty, not an exception) ---
+        System.out.println("\n--- full-lot rejection ---");
+        int count = 0;
+        while (lot.park(new Vehicle("FILL-" + count, VehicleType.BIKE)).isPresent()) {
+            count++;   // bikes fall through to bigger spots, so this fills the whole lot
+        }
+        System.out.println("Parked " + count + " more, lot now full");
+
+        Optional<Ticket> overflow = lot.park(new Vehicle("OVERFLOW", VehicleType.CAR));
+        System.out.println("One more vehicle -> " +
+                (overflow.isPresent() ? overflow.get().getSpot().getId() : "REJECTED (lot full)"));
     }
 
 }
