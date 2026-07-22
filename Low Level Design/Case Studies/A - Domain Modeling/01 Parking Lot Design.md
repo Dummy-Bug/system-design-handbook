@@ -17,7 +17,7 @@ Several entry gates operate at once, so two vehicles can arrive at the same inst
 
 1. **Multiple floors** — the lot holds a list of floors; each floor holds its own spots.
 2. **Spot sizes** — every spot has a size (`SMALL`, `MEDIUM`, `LARGE`). Every vehicle type declares the minimum size it needs.
-3. **Smallest-fits allocation** — a vehicle takes the *smallest free spot it fits in*. A bike uses a car spot only when no bike spot is free, so large spots aren't wasted on small vehicles.
+3. **Allocation policy (pluggable)** — a vehicle takes the *smallest free spot it fits in*; a bike uses a car spot only when no bike spot is free, so large spots aren't wasted on small vehicles. *Which* fitting spot wins (first-fit today; best-fit or nearest-to-entrance later) is a swappable `AllocationStrategy` — the spec now asks for more than one policy, which is what earns the Strategy.
 4. **Ticket on entry** — records the vehicle, the assigned spot, and the entry time.
 5. **Fee on exit** — computed from the ticket's duration and the vehicle type. Pricing must
    support more than one rule (hourly, flat rate).
@@ -161,12 +161,14 @@ directly instead of scanned.
 Singleton. Holds `List<Floor>`, the active `PricingStrategy`, and `Map<String, Ticket>` of live
 tickets. Three operations: `park`, `unpark`, `displayAvailability`.
 
-**This is the only class that knows the fitting rule.** `park()` walks sizes from the vehicle's
-`minSize` upward, asks each floor the dumb exact-size question, and calls `tryOccupy()` on the
-first candidate — moving on if another gate won it. Smallest-fits falls out of the walk order,
-so a bike takes a car spot only when no bike spot is free.
+`park()` derives the vehicle's `minSize`, hands the floors to the `AllocationStrategy`, wraps the
+claimed spot in a `Ticket`, and stores it. Four lines — it **sequences**, it doesn't search.
+The fitting walk itself lives in `FirstFitStrategy`: sizes from `minSize` upward, each floor asked
+the dumb exact-size question, `tryOccupy()` on the first candidate, moving on if another gate won
+it. Smallest-fits falls out of that walk order.
 
-Keeping that loop in one place is the whole reason a new vehicle type costs zero edits.
+Keeping the walk behind one interface is the whole reason a new vehicle type — or a new
+allocation policy — costs zero edits to the orchestrator.
 
 > [!tip] Eager singleton, not double-checked locking
 > `static final ParkingLot INSTANCE = new ParkingLot();` — the JVM guarantees class
@@ -195,12 +197,20 @@ spot the system believes is empty, and the next driver gets sent into it.
 > A real gateway is out of scope, and a status enum with no transitions to protect is ceremony.
 > A boolean is enough to exercise the only rule that matters here.
 
-> [!warning] What we are deliberately NOT building
-> `SpotAllocationStrategy`. The chapter ships two implementations (`NearestFirst`, `BestFit`)
-> before any requirement asks for a second policy — speculative work that costs bar point 5.
-> Write the walk hardcoded. If the interviewer asks for nearest-to-entrance, extract the
-> interface live in two minutes; doing it on request is a stronger signal than having it
-> pre-built, because pre-built can't be distinguished from lucky.
+#### `AllocationStrategy` + `FirstFitStrategy`
+
+> *"Support multiple allocation policies"*
+
+`allocate(floors, minSize) → Optional<Spot>`, returning a spot it has **already claimed**.
+`FirstFitStrategy`: first floor with any fitting spot; smallest fitting size within it; prefers
+same-floor over walking. `park()` delegates to it, so the orchestrator sequences and the strategy
+searches.
+
+> [!tip] One implementation is still worth the interface here
+> Because the interface *also* lifts the floor-loop out of `park` — it slims the orchestrator, it
+> doesn't just wrap one class. A lone interface that wraps one class and removes nothing is the
+> over-engineering to avoid; this one earns its place, and best-fit / nearest-to-entrance drop in
+> as new classes with zero edits to the lot.
 
 ---
 
