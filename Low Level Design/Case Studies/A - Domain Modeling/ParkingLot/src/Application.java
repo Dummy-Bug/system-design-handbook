@@ -12,7 +12,7 @@ public class Application {
 
         ParkingLot lot = ParkingLot.getInstance();
 
-        lot.setPricingStrategy(new HourlyPricingStrategy(100));
+        lot.setPricingStrategy(new HourlyPricingStrategy(100d));
 
         Floor f1 = new Floor(1,4,3,2);
         Floor f2 = new Floor(2,2,3,4);

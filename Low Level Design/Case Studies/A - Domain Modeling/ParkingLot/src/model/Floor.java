@@ -7,16 +7,34 @@ public class Floor {
     private final int floorNumber;
 
     private final Map<SpotSize, List<Spot>> spots = new HashMap<>();
+    private final int small;
+    private final int medium;
+    private final int large;
 
     public Floor(int number, int small, int medium, int large) {
         this.floorNumber = number;
-        addSpots(small, medium, large);
+        this.small = small;
+        this.medium = medium;
+        this.large = large;
+        addSpots();
     }
 
-    private void addSpots(int small, int medium, int large) {
+    private void addSpots() {
         addSpot(SpotSize.SMALL, small);
         addSpot(SpotSize.MEDIUM, medium);
         addSpot(SpotSize.LARGE, large);
+    }
+
+    public Map<SpotSize, Integer> freeCountsBySize() {
+        Map<SpotSize, Integer> counts = new EnumMap<>(SpotSize.class);
+        for (SpotSize size : SpotSize.values()) {
+            int free = 0;
+            for (Spot spot : spots.getOrDefault(size, List.of())) {
+                if (spot.getStatus() == SpotStatus.FREE) free++;
+            }
+            counts.put(size, free);
+        }
+        return counts;
     }
 
     public int getFloorNumber() {
