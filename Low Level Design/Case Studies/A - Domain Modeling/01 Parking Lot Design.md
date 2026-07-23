@@ -221,18 +221,22 @@ classDiagram
     direction TB
 
     class ParkingLot {
-        -List~Floor~ floors
+        -Map~Integer, Floor~ floors
         -Map~String, Ticket~ activeTickets
-        -PricingStrategy pricing
+        -PricingStrategy pricingStrategy
+        -AllocationStrategy allocationStrategy
         +getInstance()$ ParkingLot
-        +park(Vehicle) Ticket
-        +unpark(String ticketId) double
+        +addFloor(Floor)
+        +park(Vehicle) Optional~Ticket~
+        +unpark(String, PaymentStrategy) double
         +displayAvailability()
     }
     class Floor {
         -int floorNumber
         -Map~SpotSize, Spot[]~ spots
-        +findFree(SpotSize) Spot
+        +claimFreeSpot(SpotSize) Optional~Spot~
+        +claimSpotOfSize(SpotSize) Optional~Spot~
+        +freeCountsBySize() Map
     }
     class Spot {
         -String id
@@ -242,10 +246,11 @@ classDiagram
         +release()
     }
     class Ticket {
-        -String id
+        -String ticketId
         -Vehicle vehicle
         -Spot spot
         -Instant entryTime
+        -Instant exitTime
     }
     class Vehicle {
         -String plate
@@ -253,32 +258,46 @@ classDiagram
     }
     class VehicleType {
         <<enumeration>>
-        BIKE, CAR, ELECTRIC_CAR, TRUCK
+        BIKE, CAR, TRUCK
         -SpotSize minSize
     }
     class SpotSize {
         <<enumeration>>
         SMALL, MEDIUM, LARGE
     }
+    class SpotStatus {
+        <<enumeration>>
+        FREE, OCCUPIED
+    }
     class PricingStrategy {
         <<interface>>
-        +calculateFee(Ticket, Instant) double
+        +calculatePrice(Ticket, Instant) double
     }
-    class PaymentProcessor {
+    class PaymentStrategy {
+        <<interface>>
         +pay(double) boolean
+    }
+    class AllocationStrategy {
+        <<interface>>
+        +allocate(Collection~Floor~, SpotSize) Optional~Spot~
     }
 
     ParkingLot "1" o--> "*" Floor : floors
     ParkingLot --> PricingStrategy : receives, never builds
-    ParkingLot ..> PaymentProcessor : uses on exit
+    ParkingLot --> AllocationStrategy : receives, never builds
+    ParkingLot ..> PaymentStrategy : uses on exit
     Floor "1" o--> "*" Spot : by size
     Spot --> SpotSize
+    Spot --> SpotStatus
     Ticket --> Spot : frees this on exit
     Ticket --> Vehicle
     Vehicle --> VehicleType
     VehicleType --> SpotSize : minSize
-    PricingStrategy <|.. HourlyPricing
-    PricingStrategy <|.. FlatRatePricing
+    AllocationStrategy ..> Floor : claims through
+    PricingStrategy <|.. HourlyPricingStrategy
+    PaymentStrategy <|.. CashPaymentStrategy
+    AllocationStrategy <|.. FirstFitStrategy
+    AllocationStrategy <|.. BestFitStrategy
 ```
 
 ---
