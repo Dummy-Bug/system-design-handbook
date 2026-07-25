@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <title>Laxit Rana — Resume</title>
 <style>
-  @page { size: A4; margin: 11mm 13mm 12mm; }
+  @page { size: A4; margin: 8mm 12mm 8mm; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { font-family: Georgia, "Times New Roman", serif; color: #1b1b1b; }
-  body { font-size: 10.1pt; line-height: 1.44; }
+  body { font-size: 10.1pt; line-height: 1.26; }
 
   a { color: #1a5fc4; text-decoration: none; }
 
@@ -17,7 +17,7 @@
   .contact { font-size: 9.7pt; color: #444; margin-top: 4pt; }
   .contact span + span::before { content: "  ·  "; color: #999; }
 
-  section { margin-top: 11pt; }
+  section { margin-top: 7pt; }
   h2 {
     font-size: 10.8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1.6pt;
     color: #111; border-bottom: 1.4px solid #111; padding-bottom: 2.5pt; margin-bottom: 6pt;
@@ -30,14 +30,14 @@
   .company { font-size: 11pt; font-weight: 700; color: #1a5fc4; }
   .role { font-size: 10.6pt; font-weight: 700; color: #111; margin-top: 1pt; }
   .dates { font-size: 9.6pt; color: #555; white-space: nowrap; }
-  .entry-gap { margin-top: 10.5pt; }
+  .entry-gap { margin-top: 8pt; }
 
   .project { display: flex; justify-content: space-between; align-items: baseline; margin-top: 7.5pt; }
   .project-name { font-size: 10.5pt; font-weight: 700; color: #1a5fc4; }
   .project-meta { font-size: 9.4pt; color: #555; font-style: italic; white-space: nowrap; }
 
   ul { margin: 2.5pt 0 0 13pt; }
-  li { margin-bottom: 3.3pt; }
+  li { margin-bottom: 2.5pt; }
   li b { font-weight: 700; color: #111; }
 
   .edu-line { display: flex; justify-content: space-between; align-items: baseline; }
@@ -59,10 +59,10 @@
 
 <section class="skills">
   <h2>Skills</h2>
-  <p><b>Languages:</b> Java (primary), Python, SQL</p>
+  <p><b>Languages:</b> Java, Python, SQL</p>
   <p><b>Backend:</b> Spring Boot, MVC architecture, REST APIs, Microservices, FastAPI</p>
-  <p><b>AI Systems:</b> LangGraph, LLM tool-calling, agent orchestration, human-in-the-loop workflows</p>
-  <p><b>Databases &amp; Storage:</b> DynamoDB, S3, Redis</p>
+  <p><b>AI Systems:</b> LangGraph, LangSmith, MCP, RAG, LLM tool-calling, agent orchestration, context engineering, human-in-the-loop workflows, conversational AI</p>
+  <p><b>Databases &amp; Storage:</b> MySQL, DynamoDB, S3, Redis</p>
 </section>
 
 <section>
@@ -79,11 +79,11 @@
     <span class="project-meta">Nov 2025 – Present</span>
   </div>
   <ul>
-    <li>Designed and built the backend of a <b>multi-agent AI assistant</b> — employee self-service and HR-admin agents — using <b>FastAPI and LangGraph</b>; live in production for an enterprise HRMS product</li>
-    <li>Built conversation persistence with <b>DynamoDB checkpointing</b> (per-thread isolation) and a <b>multi-tenant data model</b> scoped HRMS → company → employee</li>
-    <li>Added TTL-based DynamoDB domain caching to keep assistant responses reliable over <b>flaky upstream HRMS APIs</b></li>
-    <li>Enforced per-role authorization across <b>18 agent tools</b> — employees restricted to their own records, admins org-wide — with <b>human-in-the-loop disambiguation</b> for ambiguous queries</li>
-    <li>Streamed the agent's <b>progress and final response as structured NDJSON events</b> over a long-lived HTTP connection, with cookie-based sessions (<b>JWT</b> validation); currently building an onboarding agent that auto-provisions new hires into <b>Jira, Slack, and Google Workspace</b></li>
+    <li>Architected and shipped the backend of a production <b>multi-agent AI platform</b> — resolving <b>HR, payroll, and leave</b> queries in natural language on <b>FastAPI</b> and <b>LangGraph</b>, routing each request to a <b>permission-scoped agent</b> with its own tool registry so users access only what their role allows</li>
+    <li>Engineered <b>stateful, resumable conversations</b> with <b>DynamoDB checkpointing</b> (per-thread isolation) over a <b>multi-tenant</b> HRMS → company → employee data model, and shielded the assistant from <b>flaky upstream HRMS APIs</b> with a <b>TTL-based Redis cache</b></li>
+    <li>Built an <b>interrupt-driven human-in-the-loop</b> flow for ambiguous entity resolution — pausing execution to surface <b>fuzzy-ranked</b> candidates, resuming the same checkpointed session on selection, and <b>speculatively prefetching</b> the chosen records to mask latency</li>
+    <li>Streamed live agent <b>progress and output as structured NDJSON</b> over a long-lived, <b>JWT</b>-secured HTTP session</li>
+    <li>Extending the platform into a <b>workflow-prediction system</b> — reconstructing each hire's onboarding journey from events scattered across the company's existing tools (<b>HRMS, Google Workspace, payroll, IT</b>) via <b>cross-system identity resolution</b>, as the foundation for <b>next-activity prediction</b></li>
   </ul>
 
   <div class="project">
@@ -111,9 +111,18 @@
 <section>
   <h2>Education</h2>
   <div class="edu-line">
+    <span class="edu-title">Diploma in Artificial Intelligence &amp; Machine Learning — University of Hyderabad</span>
+    <span class="dates">2021 – 2022</span>
+  </div>
+  <div class="edu-line entry-gap">
     <span class="edu-title">B.Tech, Computer Science &amp; Engineering — Jaypee University of Information Technology</span>
     <span class="dates">2016 – 2020</span>
   </div>
+</section>
+
+<section class="skills">
+  <h2>Certifications</h2>
+  <p>Scaler — Data Structures, Algorithms &amp; Backend Development <span style="color:#555;">(2023)</span></p>
 </section>
 
 </body>
