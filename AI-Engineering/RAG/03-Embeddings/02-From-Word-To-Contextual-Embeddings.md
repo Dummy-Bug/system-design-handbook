@@ -19,6 +19,29 @@ And unlike counting, word embeddings actually capture **semantic meaning** — t
 
 ---
 
+## What "semantic meaning" actually is — and what it buys RAG
+
+Be precise about the word *semantic*, because it's easy to blur. Semantic meaning is the meaning of a **word on its own**, and its concrete payoff is this: **two *different* words that mean related things land near each other** in the space.
+
+```
+login  ≈  password  ≈  username  ≈  sign-in     (different words, one topic — all nearby)
+cat    ≈  kitten    ≈  pet                        (different words, related meaning)
+```
+
+That is a genuine leap for retrieval, and you can see it best against what it replaces. Bag-of-words could only match **identical** words. So a query `login issue in app` against a chunk about `password recovery` — which share **no words at all** — scored a flat zero under bag-of-words. Dead, despite being obviously about the same thing:
+
+```
+Query:  "login issue in app"
+Chunk:  "password recovery"      ← zero shared words
+
+bag-of-words  →  similarity 0    (no word overlap — invisible to counting)
+word embeddings → real similarity (login ≈ password: related meaning)
+```
+
+Word embeddings know `login` and `password` *mean* related things, so the query and chunk now show real similarity **with no shared words**. This word-level semantic meaning is exactly what lets RAG retrieve a chunk that talks *around* a topic instead of parroting the query. Stage two handles "**different words, similar meaning**" — and that alone is most of why we left bag-of-words behind.
+
+---
+
 ## The crack in word embeddings — one word, one vector, forever
 
 There is a catch hiding in the name: *word* embeddings work **word by word.** Each word is embedded on its own, independently of the words around it. That sounds harmless until you watch it handle a word that means different things in different company.
@@ -29,22 +52,20 @@ Take two phrases, `river bank` and `money bank`:
 
 In `river bank`, `river` gets its own embedding `E1` and `bank` gets `E2` — here `bank` means the edge of a river, a *location*. Now `money bank`: `money` gets some embedding `E3`, and `bank`… gets `E2` **again** — the very same vector, even though here `bank` means a financial *institution*. The model embedded `bank` without ever looking at whether it sat next to `river` or `money`. One word, one fixed vector, no matter what it means in the sentence.
 
-> [!danger] Word embeddings capture **semantic** meaning but lose **contextual** meaning. Because each word is embedded in isolation, a word with two meanings gets one vector for both. `bank` in `river bank` and `bank` in `money bank` come out identical — the context that distinguishes them is thrown away.
+> [!danger] The one line to hold onto — the exact boundary of stage two:
+> - **Different words, similar meaning → captured.** `login` ≈ `password` sit near each other. ✅
+> - **Same word, different meaning by context → NOT captured.** `bank` in `river bank` vs `money bank` gets one shared vector. ❌
+>
+> Word embeddings capture **semantic** meaning (word-level, fixed) but lose **contextual** meaning (sense decided by neighbours). Different-words-same-meaning: yes. Same-word-different-meaning: no.
 
-## Why that loss is fatal for RAG
+## Why that gap matters for RAG
 
-You might shrug at `bank` — but context is the *entire game* in retrieval. Remember what RAG does at query time: it fetches the chunks most **similar** to the user's question. And a good match is rarely a word-for-word match. Suppose the user asks:
+You might shrug at `bank` — but a word's sense in RAG constantly depends on its sentence, and the isolation blinds word embeddings in two ways that hurt retrieval:
 
-```
-Query:  "login issue in app"
+- **Wrong-sense matches.** A user asks about their *bank account*; a chunk describes a *river bank* bursting its edges. Word embeddings handed `bank` the **same** vector both times, so the finance query can be dragged toward the geography chunk — a false match born purely from a shared word that was never read in context.
+- **Meaning lives in whole phrases, not lone words.** `password recovery` *as a phrase* means "a login problem" — but that meaning is in the two words **together**, not in `password` or `recovery` alone. Because word embeddings embed each word separately, they get you the semantic *nearness* (from the last section) but never form the phrase's overall intent. They read a bag of related words, not a single thought.
 
-Chunks in the store talk about:
-  - password recovery
-  - login
-  - username
-```
-
-None of those chunks repeats the phrase "login issue" verbatim, yet all three are clearly *about* it — resetting a password, logging in, usernames are all part of the same login world. A system that only understands words in isolation cannot see that connection. To retrieve `password recovery` for a `login issue` query, the embeddings have to understand meaning **in context** — and that is exactly what stage two cannot do.
+Both problems have the same root — no awareness of context — and the same fix: read the words **together**, in context. That is stage three.
 
 ---
 
@@ -72,7 +93,7 @@ flowchart TD
     B -->|"add context"| C["Stage 3: Contextual Embeddings<br/>BERT → OpenAI, Gemma, Sentence Transformers<br/>DENSE + context-aware · embeds whole sentences<br/>river bank & money bank → different 'bank' vectors"]
 ```
 
-> [!important] The three-stage arc in one breath: classical methods fixed *nothing about meaning* and gave sparse vectors; word embeddings made vectors **dense** and captured **semantic** meaning but embedded each word in isolation, losing context; contextual embeddings keep the dense vectors and add **context-awareness**, so the same word gets different vectors in different sentences — and they embed entire chunks, not just words. Modern RAG runs entirely on stage three.
+> [!important] The three-stage arc in one breath: classical methods fixed *nothing about meaning* and gave sparse vectors; word embeddings made vectors **dense** and captured **semantic** meaning — *different words with similar meaning sit near each other* (`login` ≈ `password`) — but embedded each word in isolation, so they could not handle *one word meaning different things by context* (`bank`); contextual embeddings keep the dense vectors and add **context-awareness**, so the same word gets different vectors in different sentences — and they embed entire chunks, not just words. Modern RAG runs entirely on stage three.
 
 **What contextual embeddings guarantee:** dense, context-aware vectors where meaning shifts with surrounding words, and whole chunks (not just words) can be embedded.
 **What they don't guarantee:** that you can read the 768 (or 512, or 1536) dimensions and know what each one "means" — the features are learned by a deep network and are not human-labelled; you trust that similar text lands on similar vectors, which is what the next note is about.

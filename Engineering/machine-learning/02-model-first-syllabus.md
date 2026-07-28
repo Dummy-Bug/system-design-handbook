@@ -172,6 +172,8 @@ build) — **[SKIPPABLE build — watch instead if crunched]**. Both rated 9–1
 > misbehaves it pays for itself. If you genuinely can't spare the day, **watch it, don't build it**,
 > and come back. Every *other* build-it block below is load-bearing and should not be compressed.
 
+> [!done] **Progress (2026-07-27):** 3B1B **ch1–3 done** — intuition solid (cost, gradient descent, backprop, SGD). **ch4 (backprop calculus) + micrograd → DEFERRED** (the compressible zone): the math teaches nothing new over ch3's intuition, and PyTorch does autograd. Revisit if a training run misbehaves, or when the interview needs LLM-math depth. **Next → Block 4 (makemore).**
+
 ---
 
 ### 4 · Next-token + embeddings — the heart of it (10h, **build both**)

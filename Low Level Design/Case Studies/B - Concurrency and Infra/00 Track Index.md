@@ -2,13 +2,13 @@
 > Flavor B builds: 45-60 min each, interleaved with the flavor-A case studies.
 > Where "concurrency answer ready" stops being a talking point and becomes code.
 
-| # | Build | Mechanic payload | Status |
-|---|-------|------------------|--------|
-| B1 | Rate Limiter | token bucket + sliding window behind one Strategy; atomic refill | ☐ |
-| B2 | **Circuit Breaker** | **State flagship** (CLOSED/OPEN/HALF_OPEN), threshold + cooldown | ☐ |
-| B3 | Retry / fallback chain | exponential backoff + jitter, fallback ordering, budget cap | ☐ |
-| B4 | Health tracker | EWMA over a ring buffer, healthy/degraded/unhealthy transitions | ☐ |
-| B5 | Thread-safe LRU cache | map + list under one lock, or striped locks; eviction race | ☐ |
+| #   | Build                  | Mechanic payload                                                 | Status |
+| --- | ---------------------- | ---------------------------------------------------------------- | ------ |
+| B1  | Rate Limiter           | token bucket + sliding window behind one Strategy; atomic refill | ☐      |
+| B2  | **Circuit Breaker**    | **State flagship** (CLOSED/OPEN/HALF_OPEN), threshold + cooldown | ☐      |
+| B3  | Retry / fallback chain | exponential backoff + jitter, fallback ordering, budget cap      | ☐      |
+| B4  | Health tracker         | EWMA over a ring buffer, healthy/degraded/unhealthy transitions  | ☐      |
+| B5  | Thread-safe LRU cache  | map + list under one lock, or striped locks; eviction race       | ☐      |
 
 Primitives to reach for cold: `synchronized` vs `ReentrantLock`, `Semaphore`,
 `AtomicInteger`/CAS, `ConcurrentHashMap.compute`, `ScheduledExecutorService`.

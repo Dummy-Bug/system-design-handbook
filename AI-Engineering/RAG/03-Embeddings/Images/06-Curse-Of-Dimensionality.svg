@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="450" viewBox="0 0 980 450" font-family="Georgia, serif">
+<rect width="980" height="450" fill="#ffffff"/>
+<text x="58" y="42" font-size="16.5" font-weight="bold" fill="#1b1b1b">A.  Same two chunk-pairs, in 2-D vs 500-D</text>
+<line x1="70" y1="370" x2="420" y2="370" stroke="#1b1b1b" stroke-width="1.5"/>
+<line x1="70" y1="370" x2="70" y2="70" stroke="#1b1b1b" stroke-width="1.5"/>
+<text x="30" y="225.76923076923077" font-size="12" fill="#888" transform="rotate(-90 30 225.76923076923077)">Euclidean distance</text>
+<rect x="125" y="353.8" width="42" height="16.2" fill="#1a5fc4"/>
+<text x="146.0" y="347.8" font-size="12" fill="#1a5fc4" text-anchor="middle">0.14</text>
+<rect x="185" y="207.3" width="42" height="162.7" fill="#d1701a"/>
+<text x="206.0" y="201.3" font-size="12" fill="#d1701a" text-anchor="middle">1.41</text>
+<text x="176" y="390" font-size="14" font-weight="bold" fill="#1b1b1b" text-anchor="middle">2-D</text>
+<text x="176" y="408" font-size="12.5" font-weight="bold" fill="#1b1b1b" text-anchor="middle">×10 apart</text>
+<rect x="285" y="112.7" width="42" height="257.3" fill="#1a5fc4"/>
+<text x="306.0" y="106.7" font-size="12" fill="#1a5fc4" text-anchor="middle">2.23</text>
+<rect x="345" y="87.3" width="42" height="282.7" fill="#d1701a"/>
+<text x="366.0" y="81.3" font-size="12" fill="#d1701a" text-anchor="middle">2.45</text>
+<text x="336" y="390" font-size="14" font-weight="bold" fill="#1b1b1b" text-anchor="middle">500-D</text>
+<text x="336" y="408" font-size="12.5" font-weight="bold" fill="#c0392b" text-anchor="middle">×1.1 apart</text>
+<rect x="220" y="58" width="13" height="13" fill="#1a5fc4"/><text x="238" y="69" font-size="12" fill="#1b1b1b">similar pair</text>
+<rect x="220" y="77" width="13" height="13" fill="#d1701a"/><text x="238" y="88" font-size="12" fill="#1b1b1b">different pair</text>
+<text x="580" y="42" font-size="16.5" font-weight="bold" fill="#1b1b1b">B.  Near-vs-far contrast collapses in high-D</text>
+<line x1="600" y1="148.0" x2="900" y2="148.0" stroke="#dddddd" stroke-width="1"/>
+<text x="592" y="152.0" font-size="11" fill="#888" text-anchor="end">10</text>
+<line x1="600" y1="256.3" x2="900" y2="256.3" stroke="#dddddd" stroke-width="1"/>
+<text x="592" y="260.3" font-size="11" fill="#888" text-anchor="end">1  (far = 2× near)</text>
+<line x1="600" y1="364.6" x2="900" y2="364.6" stroke="#dddddd" stroke-width="1"/>
+<text x="592" y="368.6" font-size="11" fill="#888" text-anchor="end">0.1</text>
+<line x1="600" y1="370" x2="900" y2="370" stroke="#1b1b1b" stroke-width="1.5"/>
+<line x1="600" y1="370" x2="600" y2="70" stroke="#1b1b1b" stroke-width="1.5"/>
+<text x="750.0" y="422" font-size="12" fill="#888" text-anchor="middle">number of dimensions (log scale)</text>
+<text x="554" y="220.0" font-size="12" fill="#888" transform="rotate(-90 554 220.0)">contrast (far-near)/near</text>
+<line x1="600.0" y1="370" x2="600.0" y2="375" stroke="#1b1b1b"/>
+<text x="600.0" y="390" font-size="11" fill="#1b1b1b" text-anchor="middle">2</text>
+<line x1="666.7" y1="370" x2="666.7" y2="375" stroke="#1b1b1b"/>
+<text x="666.7" y="390" font-size="11" fill="#1b1b1b" text-anchor="middle">8</text>
+<line x1="733.3" y1="370" x2="733.3" y2="375" stroke="#1b1b1b"/>
+<text x="733.3" y="390" font-size="11" fill="#1b1b1b" text-anchor="middle">32</text>
+<line x1="800.0" y1="370" x2="800.0" y2="375" stroke="#1b1b1b"/>
+<text x="800.0" y="390" font-size="11" fill="#1b1b1b" text-anchor="middle">128</text>
+<line x1="866.7" y1="370" x2="866.7" y2="375" stroke="#1b1b1b"/>
+<text x="866.7" y="390" font-size="11" fill="#1b1b1b" text-anchor="middle">512</text>
+<line x1="600.0" y1="81.5" x2="633.3" y2="160.7" stroke="#1a5fc4" stroke-width="2.5"/>
+<line x1="633.3" y1="160.7" x2="666.7" y2="207.3" stroke="#1a5fc4" stroke-width="2.5"/>
+<line x1="666.7" y1="207.3" x2="700.0" y2="240.8" stroke="#1a5fc4" stroke-width="2.5"/>
+<line x1="700.0" y1="240.8" x2="733.3" y2="269.4" stroke="#1a5fc4" stroke-width="2.5"/>
+<line x1="733.3" y1="269.4" x2="766.7" y2="292.9" stroke="#1a5fc4" stroke-width="2.5"/>
+<line x1="766.7" y1="292.9" x2="800.0" y2="309.4" stroke="#1a5fc4" stroke-width="2.5"/>
+<line x1="800.0" y1="309.4" x2="833.3" y2="327.7" stroke="#1a5fc4" stroke-width="2.5"/>
+<line x1="833.3" y1="327.7" x2="866.7" y2="346.5" stroke="#1a5fc4" stroke-width="2.5"/>
+<line x1="866.7" y1="346.5" x2="900.0" y2="362.3" stroke="#1a5fc4" stroke-width="2.5"/>
+<circle cx="600.0" cy="81.5" r="3.6" fill="#1a5fc4"/>
+<circle cx="633.3" cy="160.7" r="3.6" fill="#1a5fc4"/>
+<circle cx="666.7" cy="207.3" r="3.6" fill="#1a5fc4"/>
+<circle cx="700.0" cy="240.8" r="3.6" fill="#1a5fc4"/>
+<circle cx="733.3" cy="269.4" r="3.6" fill="#1a5fc4"/>
+<circle cx="766.7" cy="292.9" r="3.6" fill="#1a5fc4"/>
+<circle cx="800.0" cy="309.4" r="3.6" fill="#1a5fc4"/>
+<circle cx="833.3" cy="327.7" r="3.6" fill="#1a5fc4"/>
+<circle cx="866.7" cy="346.5" r="3.6" fill="#1a5fc4"/>
+<circle cx="900.0" cy="362.3" r="3.6" fill="#1a5fc4"/>
+<circle cx="866.7" cy="346.5" r="5.5" fill="none" stroke="#c0392b" stroke-width="2"/>
+<text x="858.7" y="334.5" font-size="12" font-weight="bold" fill="#c0392b" text-anchor="end">512-D: 0.15</text>
+<text x="858.7" y="348.5" font-size="10.5" fill="#c0392b" text-anchor="end">far ~ 1.15x near</text>
+</svg>
