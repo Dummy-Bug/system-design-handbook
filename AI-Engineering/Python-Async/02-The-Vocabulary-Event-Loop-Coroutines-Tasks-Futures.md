@@ -1,4 +1,4 @@
-The terminology is what trips most people up when they start asyncio — event loop, awaitable, coroutine, task, future — five words for what feels like one idea. This note walks through all of them the way they appear in real code, using one small file with a synchronous function and an asynchronous one side by side:
+The terminology is what trips most people up when they start asyncio — **event loop, awaitable, coroutine, task, future** — five words for what feels like one idea. This note walks through all of them the way they appear in real code, using one small file with a synchronous function and an asynchronous one side by side:
 
 ```python
 import asyncio
@@ -34,7 +34,12 @@ Notice that `main()` is defined with `async def`, and at the bottom we don't jus
 
 > [!info] The event loop is the engine that runs and manages asynchronous functions. Think of it as a **scheduler**: it keeps track of all your tasks, and when a task suspends because it's waiting on something, control returns to the loop, which finds another task to start or resume.
 
-`asyncio.run(main())` does three jobs: it starts the event loop, runs tasks until they're complete, and shuts the loop down at the end. No event loop running → no asynchronous code runs. Everything in asyncio lives inside this loop.
+`asyncio.run(main())` does three jobs: 
+* It starts the event loop.
+* Runs tasks until they're complete.
+* Shuts the loop down at the end. 
+
+No event loop running → no asynchronous code runs. Everything in asyncio lives inside this loop.
 
 ---
 
@@ -44,7 +49,7 @@ Inside async code you'll see `await` everywhere. What it does:
 
 > [!info] When you `await` something, you're telling the event loop: *pause this function right here and take control back — go run someone else.* The function stays suspended until the thing it's awaiting completes.
 
-These pause points are exactly the "voluntarily give up control" moments of cooperative multitasking. And they're the entire mechanism of concurrency: every `await` is an opening for another task to run.
+These pause points are exactly the "**voluntarily give up control**" moments of cooperative multitasking. And they're the entire mechanism of concurrency: every `await` is an opening for another task to run.
 
 Two rules govern the keyword:
 
@@ -54,7 +59,10 @@ Two rules govern the keyword:
 
 > [!important] This is why "just sprinkle async on it" doesn't work on an existing codebase. Every blocking call in the chain — every `time.sleep`, every synchronous HTTP client, every sync DB driver — is a place where the event loop *cannot* take control back. Async needs async-compatible libraries all the way down.
 
-Python has exactly **three kinds of awaitable**: coroutines, tasks, and futures. In order of how much you'll actually use them:
+Python has exactly **three kinds of awaitable**: 
+* coroutines
+* tasks
+* futures
 
 ---
 

@@ -81,10 +81,13 @@ Run it:
 Do something with 1...
 Done with 1
 Task 1 fully completed
+
 Do something with 2...
 Done with 2
 Task 2 fully completed
+
 ['Result of 1', 'Result of 2']
+
 Finished in 3.00 seconds
 ```
 
@@ -127,10 +130,13 @@ async def main():
 Do something with 1...
 Do something with 2...
 Done with 1
+
 Task 1 fully completed
 Done with 2
 Task 2 fully completed
+
 ['Result of 1', 'Result of 2']
+
 Finished in 2.00 seconds
 ```
 

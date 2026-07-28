@@ -24,10 +24,13 @@ Some people expect task 2 to run first now. Others expect both to run but task 2
 ```
 Do something with 1...
 Do something with 2...
+
 Done with 1
 Done with 2
+
 Task 2 fully completed
 Task 1 fully completed
+
 ['Result of 1', 'Result of 2']
 Finished in 2.00 seconds
 ```
@@ -64,9 +67,11 @@ async def main():
 ```
 Do something with 1...
 Do something with 2...
+
 Done with 1
 Task 1 fully completed
 Done with 2
+
 ['Result of 1', None]
 Finished in 2.50 seconds
 ```
@@ -82,7 +87,7 @@ Both tasks still ran, in the same order, both completed — `Done with 2` appear
 
 ## The design lesson — don't micromanage the loop
 
-It's tempting, after tracing these examples, to start reasoning about exactly which task the loop will pick next and in what order everything interleaves. The video's advice is to deliberately *not* do that. Real async code runs tens or hundreds of tasks concurrently; you won't know when each becomes ready, and you can't control it — the loop just does its job.
+It's tempting, after tracing these examples, to start reasoning about exactly which task the loop will pick next and in what order everything interleaves. The advice is to deliberately *not* do that. Real async code runs tens or hundreds of tasks concurrently ; you won't know when each becomes ready, and you can't control it — the loop just does its job.
 
 What you *do* control — the only thing you should enforce — is **completion points**: "do not move past this line until X is done." That's an `await`. If your code needs task 2 finished before step 5, await task 2 before step 5. Whether the loop happens to run main, task 1, or task 2 next is not your problem, and code that depends on that ordering is fragile by construction.
 
