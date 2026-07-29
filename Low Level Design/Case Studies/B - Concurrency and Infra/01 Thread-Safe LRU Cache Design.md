@@ -3,7 +3,6 @@ track: B — Concurrency & Infra
 salesforce: #1 most-likely LLD (see [[00 Loop Notes]], [[01 Problem Lists]])
 status: in progress — deriving
 ---
-
 > [!abstract] Thread-Safe LRU Cache
 > Track B (concurrency) · Salesforce #1-frequency LLD · Patterns: Strategy (eviction seam, later)
 > Build cold single-threaded first, then the *"now make it thread-safe"* escalation.
