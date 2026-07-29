@@ -1,6 +1,3 @@
-The last three notes were all concept: what a vector store is, and the two ways it indexes vectors for fast search (clustering and HNSW). Now we build one in code. The library we'll use is **ChromaDB**, wired up through LangChain, and by the end of this note you'll have created a store, inserted documents into it, searched it, updated and deleted records, and — crucially — seen the data survive after the program ends. That last part is the whole reason a vector store exists instead of a plain Python list.
-
----
 
 ## Why ChromaDB — and why it's not your only option
 
@@ -8,16 +5,19 @@ The first thing to know is that ChromaDB is **not** the only vector store LangCh
 
 So why Chroma here? Because vector stores come in two flavours. On one side are **vanilla vector stores** — simple libraries that do little more than hold embeddings and run a similarity search over them. On the other are **full vector databases** — with proper database features on top: persistence, collections, metadata filtering, and cloud/enterprise options for production. **ChromaDB is a full-fledged vector database**, it's free to run locally, and it's beginner-friendly to inspect, which makes it the ideal one to learn on.
 
-> [!info] A vector store is a swappable component in LangChain — Chroma, FAISS, Pinecone, Qdrant, Milvus, Weaviate all sit behind a similar interface. They range from **vanilla stores** (just embeddings + search) to **full vector databases** (persistence, collections, filtering, cloud features). ChromaDB is a full vector database, free and local, which is why it's the one to start with.
+> [!info] A vector store is a swappable component in LangChain — Chroma, FAISS, Pinecone, Qdrant, Milvus, Weaviate all sit behind a similar interface. 
+> 
+> They range from **vanilla stores** (just embeddings + search) to **full vector databases** (persistence, collections, filtering, cloud features). 
+> 
+> ChromaDB is a full vector database, free and local, which is why it's the one to start with.
 
 ### In-memory vs on-disk — the persistence choice
 
 Chroma can hold your vectors in one of two places, and this choice matters more than it first appears:
 
 - **In-memory** — the embeddings live in RAM while your program runs. Fast, zero setup, but the moment the process exits, everything is gone. Re-run tomorrow and you're re-embedding from scratch.
-- **On-disk (persistent)** — the embeddings are written to a directory on disk. Close the program, reopen it next week, point at the same directory, and every vector is still there — no re-embedding.
 
-On-disk persistence is the point of the whole exercise (recall the very first note in this module: *embed once, reuse forever*). We'll use it throughout, by giving Chroma a `persist_directory`.
+- **On-disk (persistent)** — the embeddings are written to a directory on disk. Close the program, reopen it next week, point at the same directory, and every vector is still there — no re-embedding.
 
 ---
 
@@ -84,7 +84,9 @@ vector_store = Chroma(
 
 Three arguments, each doing exactly what the earlier notes set up. `collection_name` names the group of vectors. `embedding_function=embeddings` hands Chroma the embedding model — from now on, whenever you give Chroma raw text, it will call this model to turn that text into a vector for you. And `persist_directory` is the on-disk home. The store is now live and empty, waiting for documents.
 
-> [!important] `Chroma(collection_name=..., embedding_function=..., persist_directory=...)` creates the store. The **`embedding_function`** is the key wiring: you hand Chroma the embedding model *once*, and thereafter you pass it plain text — Chroma embeds it internally. You never call `embed_documents` yourself here; the store does it. The `persist_directory` makes it survive across sessions.
+> [!important] The **`embedding_function`** is the key wiring: you hand Chroma the embedding model *once*, and thereafter you pass it plain text — Chroma embeds it internally. 
+> 
+> You never call `embed_documents` yourself here; the store does it. The `persist_directory` makes it survive across sessions.
 
 ---
 
@@ -130,7 +132,8 @@ document_ids = vector_store.add_documents(documents)
 
 It returns the list of IDs it stored — the same UUIDs we generated — confirming all ten landed in the collection.
 
-> [!info] `vector_store.add_documents(documents)` embeds each `Document`'s text (via the store's `embedding_function`) and inserts it, returning the stored IDs. Each `Document` carries its own `id=str(uuid4())` so it has a unique, addressable handle — essential for later updating or deleting that exact record without touching others.
+> [!info] `vector_store.add_documents(documents)` embeds each `Document`'s text (via the store's `embedding_function`) and inserts it, returning the stored IDs. 
+> Each `Document` carries its own `id=str(uuid4())` so it has a unique, addressable handle — essential for later updating or deleting that exact record without touching others.
 
 ---
 
@@ -143,7 +146,7 @@ raw_records = vector_store.get(include=["embeddings", "metadatas", "documents"])
 raw_records.keys()
 ```
 
-This returns a dictionary with `ids`, `embeddings`, `metadatas`, and `documents` keys — and it proves the point from note 01 concretely: a vector-store record isn't just a vector, it's the embedding **plus** the original text **plus** the metadata, all sitting together. You can even check the shape of the stored vectors:
+This returns a dictionary with `ids`, `embeddings`, `metadatas`, and `documents` keys — and it proves the point : a vector-store record isn't just a vector, it's the embedding **plus** the original text **plus** the metadata, all sitting together. You can even check the shape of the stored vectors:
 
 ```python
 print(raw_records["embeddings"][0:2, 0:20].shape)
@@ -180,7 +183,8 @@ vector_store.similarity_search_with_score(query=query, k=4)
 
 Each result comes back as `(Document, score)`. The score is a distance, so **lower means more similar** — the nearest neighbour has the smallest score. This is what you'd use to set a relevance threshold (e.g. "ignore anything with a distance above X") rather than blindly taking the top `k`.
 
-> [!important] `similarity_search(query, k=n)` takes **plain text** — Chroma embeds it internally and returns the `k` nearest `Document`s by meaning (HNSW under the hood). `similarity_search_with_score(query, k=n)` additionally returns a **distance score** per result, where *lower = closer*. Use the plain version for "give me the top k"; use the scored version when you need a relevance cutoff.
+> [!important] `similarity_search(query, k=n)` takes **plain text** — Chroma embeds it internally and returns the `k` nearest `Document`s by meaning (HNSW under the hood). 
+> `similarity_search_with_score(query, k=n)` additionally returns a **distance score** per result, where *lower = closer*. Use the plain version for "give me the top k"; use the scored version when you need a relevance cutoff.
 
 ---
 
@@ -232,52 +236,16 @@ print(f"Remaining document count: {len(remaining_ids)}")
 
 The count drops from ten to eight, and checking the deleted IDs against `remaining_ids` confirms they're gone. That completes the full **CRUD** set: **C**reate (`add_documents`), **R**ead (`get` / `get_by_ids` / `similarity_search`), **U**pdate (`update_documents`), **D**elete (`delete`).
 
----
 
-## The payoff — reopening the store in a new session
+> [!tip] Interview framing: "In code, ChromaDB via LangChain gives you a vector store with full CRUD. 
+> 
+> You create it with a collection name, an embedding function, and a persist directory; 
+> 
+> `add_documents` embeds and inserts `Document`s (each with a unique `uuid4` id so it's individually addressable) 
+> 
+> `similarity_search` takes plain text, embeds it, and returns the k nearest by meaning, with a `_with_score` variant for a distance cutoff; and 
+> 
+> `update_documents` / `delete` operate by id. 
+> 
+> The key production detail is the **persist directory** — reopen the same directory and collection in a new process and all vectors load from disk with no re-embedding, which is exactly why you use a vector store instead of an in-memory list."
 
-Everything so far ran in one program. Here's why the `persist_directory` was worth it: in a **completely separate** notebook — a fresh Python process, no documents added — we can reconnect to the same on-disk store and find all our data waiting.
-
-The setup is nearly identical, with one deliberate difference: **there is no `shutil.rmtree`**. We're reusing the directory, not wiping it.
-
-```python
-import os
-from pathlib import Path
-from dotenv import load_dotenv
-from langchain_chroma import Chroma
-from langchain_openai import OpenAIEmbeddings
-
-project_root = Path.cwd()
-if project_root.name == "notebooks":
-    project_root = project_root.parent
-
-load_dotenv(dotenv_path=project_root / ".env")
-
-collection_name = "demo_2"                                            # SAME name
-persist_directory = project_root / "notebooks" / "chroma_langchain_db"  # SAME directory
-
-embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
-
-vector_store = Chroma(
-    collection_name=collection_name,
-    embedding_function=embeddings,
-    persist_directory=str(persist_directory),
-)
-
-print("Connected to the existing Chroma collection.")
-```
-
-Point at the **same `collection_name` and `persist_directory`**, and Chroma doesn't create a new empty store — it **reopens the existing one**. Read it back:
-
-```python
-stored_records = vector_store.get(include=["embeddings", "metadatas", "documents"])
-print(f"Total documents in collection: {len(stored_records['ids'])}")
-```
-
-The eight documents are all there — the two Cricket ones we deleted are still gone, and documents 4 and 8 still carry their updated text. Every embedding was loaded straight from disk; **nothing was re-embedded**, so no OpenAI calls were made just to reopen the store. That is the entire promise of a persistent vector store made real: embed once, and every future session — tomorrow's, next month's, production's — reads the vectors back for free.
-
-> [!tip] Interview framing: "In code, ChromaDB via LangChain gives you a vector store with full CRUD. You create it with a collection name, an embedding function, and a persist directory; `add_documents` embeds and inserts `Document`s (each with a unique `uuid4` id so it's individually addressable); `similarity_search` takes plain text, embeds it, and returns the k nearest by meaning, with a `_with_score` variant for a distance cutoff; and `update_documents` / `delete` operate by id. The key production detail is the **persist directory** — reopen the same directory and collection in a new process and all vectors load from disk with no re-embedding, which is exactly why you use a vector store instead of an in-memory list."
-
----
-
-With the store's mechanics in hand — create, insert, search, update, delete, and persist — the last piece is to stop hand-writing documents and feed it a **real file**. That's the next note: the full PDF-to-Chroma pipeline that ties every component of this course together.

@@ -1,4 +1,4 @@
-The previous note introduced two families of Approximate Nearest Neighbour indexing and walked through the first one — clustering (IVF), where you group vectors, summarise each group with a centroid, and search only the nearest group. This note tackles the second family, the **graph-based** one, whose specific algorithm is **HNSW — Hierarchical Navigable Small World**. It is more accurate than clustering, it's what most production vector databases actually run (ChromaDB, for one, uses it under the hood), and it is comfortably the most intricate idea in the whole retrieval pipeline. We'll build it slowly, from an everyday intuition all the way to the layer-by-layer search — because rushing it is how it stays confusing.
+ **HNSW — Hierarchical Navigable Small World** is more accurate than clustering, it's what most production vector databases actually run (ChromaDB, for one, uses it under the hood), and it is comfortably the most intricate idea in the whole retrieval pipeline. We'll build it slowly, from an everyday intuition all the way to the layer-by-layer search — because rushing it is how it stays confusing.
 
 Like clustering, HNSW does its structural work **once, at initialisation** — the moment you first add embeddings to the vector store. The query-time search then rides on top of that pre-built structure. Keep that split in mind throughout: there's a *build* phase and a *search* phase.
 
@@ -148,8 +148,11 @@ The mental image from the summary says it best: brute force is *reading every bo
 - **A free build** — constructing the hierarchy (promoting nodes, wiring neighbourhoods across layers) is real work done up front; it's just not repeated per query.
 - **Zero tuning** — how many neighbours each node keeps, how many layers, how greedily to search: these are knobs trading accuracy against speed and memory.
 
-> [!tip] Interview framing: "HNSW — Hierarchical Navigable Small World — is the graph-based ANN index most production vector databases use. It builds a multi-layer graph of the embeddings at insert time: the bottom layer holds every node and connection, and each higher layer is a random sparse subset. A query enters at the sparse top and greedily walks toward its nearest neighbour, hopping to the closest local neighbour at each step and descending layer by layer, so it takes big jumps up top and pins the exact match only in the dense base. That gives **O(log N)** search versus brute force's O(N), at the cost of being *approximate* — roughly 95–99% accurate, since the greedy local walk can miss a true nearest neighbour that isn't on its path. It's the six-degrees-of-separation idea applied to vectors: a few hops through a well-connected graph reach any neighbourhood."
+> [!tip] Interview framing: "HNSW — Hierarchical Navigable Small World — is the graph-based ANN index most production vector databases use. It builds a multi-layer graph of the embeddings at insert time: 
+> The bottom layer holds every node and connection, and each higher layer is a random sparse subset. 
+> 
+> A query enters at the sparse top and greedily walks toward its nearest neighbour, hopping to the closest local neighbour at each step and descending layer by layer, so it takes big jumps up top and pins the exact match only in the dense base. That gives **O(log N)** search versus brute force's O(N), at the cost of being *approximate* — roughly 95–99% accurate, 
+> 
+> Since the greedy local walk can miss a true nearest neighbour that isn't on its path. It's the six-degrees-of-separation idea applied to vectors: a few hops through a well-connected graph reach any neighbourhood."
 
----
 
-That completes the *concept* of vector-store indexing: exact search and its O(N) wall, then the two ANN escapes — clustering (IVF) and graph-based (HNSW) — each trading a little accuracy for a lot of speed. From here the module turns to code: creating a vector store, adding documents, and running these searches against a real library like ChromaDB, where HNSW is doing all of this for you underneath a single `similarity_search` call.

@@ -1,7 +1,3 @@
-The previous note built a Chroma store by hand-writing ten little documents. Real RAG never starts that way — it starts with actual files: PDFs, web pages, company documents. This note assembles the full pipeline end to end, from a PDF on disk to a searchable vector store, using every component this course has built: a **document loader**, a **text splitter**, an **embedding model**, and the **vector store**. It's the moment all the pieces click together.
-
----
-
 ## The imports — every component in one place
 
 The import block reads like a table of contents for the whole course so far:
@@ -107,7 +103,8 @@ print(f"Stored {len(chunked_docs)} chunks in the '{collection_name}' collection.
 
 `from_documents` does three things in a single call: it creates the store, embeds every chunk with the given `embedding` model, and inserts them all — persisting to disk as it goes. It's the natural fit for ingestion, where you have a batch of documents ready and just want them in the store.
 
-> [!info] `Chroma.from_documents(documents=..., embedding=..., collection_name=..., persist_directory=...)` is the one-shot ingest: create + embed + insert + persist, all at once. Contrast with the CRUD note's two-step `Chroma(...)` then `add_documents(...)` — `from_documents` is the shortcut when you already have your chunks in hand. (Note the argument is `embedding=` here, versus `embedding_function=` on the plain `Chroma(...)` constructor — an easy detail to trip on.)
+> [!info] `Chroma.from_documents(...)` is the one-shot ingest: create + embed + insert + persist, all at once. 
+> Contrast with the CRUD note's two-step `Chroma(...)` then `add_documents(...)` — `from_documents` is the shortcut when you already have your chunks in hand. (Note the argument is `embedding=` here, versus `embedding_function=` on the plain `Chroma(...)` constructor — an easy detail to trip on.)
 
 ---
 
@@ -156,7 +153,7 @@ flowchart LR
 
 Every component you learned in isolation is doing its one job in a chain: the loader unifies the file into `Document`s, the splitter makes them embed-sized, `from_documents` embeds and persists them, and `similarity_search` retrieves by meaning. That chain — **load → split → embed → store → retrieve** — is the ingestion-and-retrieval heart of every RAG system.
 
-> [!tip] Interview framing: "The end-to-end ingestion pipeline is four components chained: `PyPDFLoader.load()` turns the file into per-page `Document`s, `RecursiveCharacterTextSplitter.split_documents()` cuts them into overlapping chunks, `Chroma.from_documents(...)` embeds every chunk and persists them to disk in one call, and `similarity_search(query, k)` retrieves the nearest chunks by meaning — with `_with_score` and the chunks' page metadata giving you relevance scores and source attribution. That's load → split → embed → store → retrieve, the backbone of RAG ingestion."
+
 
 ---
 
@@ -174,6 +171,3 @@ Every component you learned in isolation is doing its one job in a chain: the lo
 - **It isn't the full RAG answer.** The store *retrieves* relevant chunks; it doesn't generate a response. Feeding those chunks to an LLM to compose an answer is the generation step still ahead.
 - **It isn't the polished retriever.** `similarity_search` is the raw search; the **retriever** component (next in the course) wraps it with the niceties — how many to fetch, metadata filtering, re-ranking, and a standard interface the rest of a LangChain pipeline plugs into.
 
----
-
-That closes the vector-store module: from *what a vector store is* and *how it indexes* (clustering and HNSW), through *building one in code* with full CRUD and persistence, to *this* — a complete PDF-to-searchable-store pipeline. The vectors now have a home and a fast way to be searched. What comes next is the **retriever**: the component that sits on top of this store and turns "search for the nearest chunks" into the clean, configurable retrieval step the rest of a RAG system depends on.
