@@ -1,6 +1,6 @@
-The previous note argued *why* you need evaluation: vibe testing doesn't survive contact with real users, and LLM applications are harder to test than ordinary software because they're probabilistic and because "good" has several dimensions instead of one.
+Vibe testing doesn't survive contact with real users, and LLM applications are harder to test than ordinary software because they're probabilistic and because "good" has several dimensions instead of one.
 
-This note answers the next two questions. **What is an eval, precisely?** And then a split that matters enormously and confuses almost everyone at first: **there are two completely different activities hiding under the phrase "LLM evals"**, and only one of them is your job.
+**There are two completely different activities hiding under the phrase "LLM evals"**, and only one of them is our job.
 
 ---
 
@@ -50,8 +50,6 @@ And this gives the cleanest possible test for whether you're actually evaluating
 ---
 
 ## The misconception worth killing immediately: an eval is not a metric
-
-This one trips up anyone arriving from classical ML or deep learning — including Nitish, who says so directly.
 
 In ML, "evaluation" *means* metric. How do you evaluate a model? Accuracy. Precision. Recall. Those are numbers, and evaluation is the act of computing them. So the natural assumption is that LLM evals are just a different set of numbers.
 
@@ -140,14 +138,15 @@ Today's models are tested along roughly eight axes:
 
 ![[AI-Engineering/01-Agent-Evals/Images/v2-05-Benchmark-Table.png]]
 
-| Capability area | Benchmark | What it checks |
-|---|---|---|
-| General knowledge + reasoning | **MMLU** | Broad subject knowledge across science, history, law, medicine, and more |
-| Maths | **GSM8K** | Grade-school word problems and step-by-step numerical reasoning |
-| Coding | **HumanEval**, **SWE-bench** | Code generation, and real-world software-engineering issue solving |
-| Instruction following | **IFEval** | Whether the model follows explicit constraints and formatting instructions |
-| Long context | **Needle-in-a-Haystack** | Whether it can find specific information hidden inside a very long context |
-| Multimodal | **MMMU** | Reasoning over images, diagrams, charts, and visual academic problems |
+| Capability area               | Benchmark                    | What it checks                                                             |
+| ----------------------------- | ---------------------------- | -------------------------------------------------------------------------- |
+| General knowledge + reasoning | **MMLU**                     | Broad subject knowledge across science, history, law, medicine, and more   |
+| Maths                         | **GSM8K**                    | Grade-school word problems and step-by-step numerical reasoning            |
+| Coding                        | **HumanEval**, **SWE-bench** | Code generation, and real-world software-engineering issue solving         |
+| Instruction following         | **IFEval**                   | Whether the model follows explicit constraints and formatting instructions |
+| Long context                  | **Needle-in-a-Haystack**     | Whether it can find specific information hidden inside a very long context |
+| Multimodal                    | **MMMU**                     | Reasoning over images, diagrams, charts, and visual academic problems      |
+|                               |                              |                                                                            |
 
 ### The honest career note
 
@@ -159,7 +158,7 @@ So why learn it at all? Because you need to be **literate**, not practised. Spec
 
 > [!important] When you start a new project, one of your first real decisions is *which model goes in it* — OpenAI, Anthropic, or an open-source model. **That decision comes directly out of reading benchmarks.** Knowing what MMLU measures versus what SWE-bench measures is what lets you make that call on evidence instead of vibes.
 
-That's why the playlist spends exactly **one** dedicated lecture on model evals. Enough to read a benchmark table properly. Not more.
+
 
 ---
 
@@ -180,8 +179,6 @@ Look at everything that sits around the model in a real application — the user
 **The LLM is one box in that picture.** Every other box can be the thing that's broken.
 
 ### The smartphone analogy
-
-The annotation in the corner of that slide — *chip → smartphone* — is the analogy, and it's a good one.
 
 Snapdragon and MediaTek publish chip benchmarks. A new generation ships, they announce a benchmark score, and you learn how strong the processor is.
 
@@ -218,14 +215,3 @@ Every one of those is about *your* system, and none of them can be answered by a
 
 > [!tip] A useful heuristic: if you come across a video or article titled "LLM evaluation", assume roughly 99% of the time it means **application** evaluation, not model evaluation. That's also the one you need.
 
----
-
-## Where this leaves us
-
-Three things are now settled:
-
-- **Why** — vibe testing fails in public, and LLM systems are structurally harder to test than software *(note 01)*.
-- **What** — an eval is a systematic, repeatable test against clear criteria, and it means the *entire testing setup*, not a metric.
-- **Which kind** — model evals belong to the frontier labs and you need literacy in them; application evals belong to you and you need to be able to build them.
-
-What's left is **how**. And one disclaimer carries forward: everything taught from here is from the **application eval** perspective, not the model eval one.

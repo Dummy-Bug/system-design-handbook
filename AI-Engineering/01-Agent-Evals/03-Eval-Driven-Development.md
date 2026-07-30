@@ -1,13 +1,3 @@
-Two things are settled. **Why** you evaluate — vibe testing fails in public, and LLM systems are structurally harder to test than software. **What** an eval is — a systematic, repeatable test against clear criteria, meaning the entire testing setup rather than a metric, and splitting into model evals (the labs' job) and application evals (yours).
-
-What's left is **how**. This note walks the complete loop on the simplest possible example — and the reason to take a toy example seriously is that **the loop doesn't change when the system gets complicated.** The same twelve steps apply to a RAG pipeline and to a multi-step agent. Everything later in this block is this loop with more expensive pieces plugged into it.
-
-> Everything here is from the **application eval** perspective, not the model eval one.
-
----
-
-## The system we're going to evaluate
-
 A food-delivery company — say Zomato — receives an enormous volume of customer email every day. Answering it manually doesn't scale, so they want the triage automated.
 
 What they actually want is narrow: read each email, and **classify it** into one of three buckets.
@@ -69,7 +59,10 @@ This is the thing everyone means by a **golden dataset**: real inputs, human-ass
 
 ![[AI-Engineering/01-Agent-Evals/Images/v3-05-Eval-Methods.png]]
 
-Now: **who does the grading?** Three options — **automated** (code), a **human**, or **another LLM**.
+Now: **who does the grading?** Three options — 
+* ***automated** (code), 
+* a **human**, or
+* ***another LLM**.
 
 First, be clear on what "running the evaluation" mechanically is. You push the golden dataset through your system. For every row, the system emits a label. Now you have two columns side by side — what you said was correct, and what the system actually produced — and you compute how often they agree.
 
@@ -126,7 +119,7 @@ Look closely at the "Improve the model" box in that flowchart: **"model" is stru
 
 Re-trigger the evaluation. And here is where **repeatability** stops being a nice property and starts paying rent:
 
-- Tweak the prompt → re-run on the **same** golden dataset → **90%**.
+- Tweak the prompt → re-run on the **same** golden dataset → **90%**
 - Manager wants more → swap in a bigger LLM → re-run on the **same** dataset → **95%**.
 - Manager is satisfied → stop.
 

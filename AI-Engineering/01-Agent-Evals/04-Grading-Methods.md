@@ -1,11 +1,3 @@
-Note 03 walked the eval loop and, at step 4, said *"define an evaluation method — automated, human, or another LLM"* — then moved on. This note is that step, properly.
-
-Three worked examples, one per method, each following the same twelve-step loop. And the point of doing all three is that **the choice of method is forced by the thing you're measuring**, not by preference. Get it wrong in either direction and you either pay for judgment you didn't need, or you try to grade nuance with string comparison.
-
----
-
-## What an eval method is
-
 > **An LLM eval method is the mechanism you use to decide whether an LLM's output is good or not — the actual procedure that takes an output and produces a judgment about it.**
 
 ![[AI-Engineering/01-Agent-Evals/Images/v5-01-Three-Methods.png]]

@@ -61,11 +61,11 @@ The chatbot **hallucinated the policy.** It told him to book the ticket at full 
 
 He believed the chatbot, booked at full price, and later asked for his refund. Customer service told him no such thing was possible.
 
-He sued. And Air Canada's defence in court is the part worth remembering: they argued that **the chatbot was a separate entity**, and that the airline shouldn't be held responsible for what it said. The judge rejected that outright — reasoning that a chatbot deployed on your website is your property in exactly the way the website itself is your property. If it speaks, you own what it said.
+He sued. And Air Canada's defence in court is the part worth remembering: they argued that **the chatbot was a separate entity** and that the airline shouldn't be held responsible for what it said. The judge rejected that outright — reasoning that a chatbot deployed on your website is your property in exactly the way the website itself is your property. If it speaks, you own what it said.
 
 Air Canada lost and paid out. The money was small — a few hundred Canadian dollars plus fees. The precedent and the press coverage were not.
 
-> [!important] The transferable lesson is the one printed at the bottom of that slide: **companies are responsible for what their AI tells customers.** "The model said it, not us" is not a defence that works.
+> [!important] **companies are responsible for what their AI tells customers.** "The model said it, not us" is not a defence that works.
 
 ---
 
@@ -145,30 +145,13 @@ flowchart LR
     A --> $["Cost<br/><i>what did it cost to produce?</i>"]
 ```
 
-*(This is the part of the board the webcam overlay covers in the video — redrawn here.)*
 
 An answer can be perfectly factual and badly incomplete. It can be complete and grounded but take nine seconds and cost ten times what it should. It can be flawless on every content axis and use a tone that's wrong for your product. Each of those is a separate failure, and a single pass/fail verdict hides all of them.
 
 And there's one more turn of the screw: **which axes matter is a property of your application, not of LLMs.** A chatbot for an education company cares about different dimensions than a bank's support agent or an internal HR assistant. Nobody can hand you the list. Deciding what "good" means for *your* system is part of the engineering work.
 
-> [!important] Put the two differences together and you get the shape of the whole problem. Traditional testing asks a **single yes/no question about a predictable output**. LLM evaluation asks **several graded questions about an output that legitimately varies** — and you have to define the questions yourself. That's the gap this block closes.
+> [!important] Traditional testing asks a **single yes/no question about a predictable output**. LLM evaluation asks **several graded questions about an output that legitimately varies** — and you have to define the questions yourself.
 
----
 
-## What's coming
 
-Roughly ten topics, in this order:
 
-![[AI-Engineering/01-Agent-Evals/Images/09-Playlist-Roadmap.png]]
-
-1. **LLM evals** — what an eval actually is, built up from an example.
-2. **The evals landscape** — a high-level map of the techniques and tools, so that when you meet a new term you already have a slot to put it in.
-3. **LLM eval → benchmarks** — how *models* get evaluated. These are the scores quoted whenever a new model launches, and they come in distinct categories.
-4. **LLM app evals** — how an *application* built on a model gets evaluated. A different problem from (3).
-5. **Eval pipeline** — building one end to end: curating your own **golden dataset**, defining your own **rubrics**, and running it against something you built.
-6. **RAG evals** — retrieval-specific evaluation.
-7. **Agent evals** — evaluating systems that plan and call tools.
-8. **Safety evals** — adversarial and misuse-oriented evaluation.
-9. **Operational evals** — because evaluation does *not* stop at deployment. Once a system is live you're watching latency, tokens per second, time to first token, and load.
-
-> [!info] Notice how (3) and (4) split. **Evaluating a model** and **evaluating an application built on a model** are two different activities with different tools and different metrics — and conflating them is one of the most common confusions in this area. The next note starts by pulling them apart properly.
