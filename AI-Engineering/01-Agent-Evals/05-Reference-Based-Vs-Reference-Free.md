@@ -85,6 +85,3 @@ Beyond being an interview question, it tells you something operational:
 
 > [!important] So the sequence is: prefer reference-based where you can afford to build the answer key, because the number means more. Go reference-free where a correct answer genuinely doesn't exist — and then invest the saved effort into the rubric, because the rubric has become the entire definition of correct.
 
----
-
-Everything covered so far — all three methods, both reference types — is **offline evaluation**: run before the system reaches users. Once it's deployed, evaluation continues, and that's **online evaluation**. That's the next concept.

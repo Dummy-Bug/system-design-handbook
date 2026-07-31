@@ -1,5 +1,3 @@
-The previous note ended on a line that was stated but not defended:
-
 > **One LLM-based application has several LLM evals.**
 
 That's the claim this note proves. Not "here are more evals you could write" — but *why a single eval pipeline is structurally incapable of telling you your application works.* There are two independent reasons, and the first one is demonstrated with a counterexample worth sitting with, because it's genuinely surprising the first time.

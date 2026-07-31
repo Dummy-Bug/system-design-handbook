@@ -20,14 +20,19 @@ RAG evaluation has settled on four core metrics — **faithfulness, answer relev
 **4. Embeddings, the embedding space, distance metrics, dimensionality** → `03-Embeddings`
 **5. Vector stores and ANN indexing — HNSW** → `04-Vector-Stores`
 **6. Retrievers** — similarity, score-threshold, MMR, BM25, hybrid/ensemble → `05-Retrievers`
-**7. Contextual compression and parent-document retrieval** → `06-Advanced-Retrievers` *(in progress)*
+**7. Advanced retrievers** — contextual compression, parent-document, **self-query**, **multi-query** → `06-Advanced-Retrievers` *(**complete** — 6 notes, 12 images)*
+
+*Broadened 2026-07-30 — originally scoped to just contextual compression and parent-document. The course teaches all four as one unit, each with a built-in and a from-scratch implementation, so the module stays intact here rather than sending multi-query to concept 11. **Self-query is the one that reaches past retrieval quality into query understanding** — it is the first retriever in the course to put an LLM *inside* the retrieval path, which makes it the natural bridge to concepts 11-12.*
 
 **Gaps remaining in Part A:** IVF and product quantization (only HNSW is covered); the recall/latency/memory tradeoff across index types; metadata filtering and how pre- vs post-filtering interacts with an ANN index.
 
 ## B · Retrieval quality — Block 7
 
-**8. Cross-encoder reranking**
+**8. Cross-encoder reranking** → `07-Reranking-And-Query-Transforms` *(**partly done** — 4 notes, 11 images)*
 Bi-encoder vs cross-encoder vs late interaction (ColBERT). The retrieve-wide-then-rerank-narrow pattern — typically top-50 down to top-5. Why this is called the secret sauce of production RAG, and when its latency isn't worth it. LLMs as rerankers as the newer variant.
+
+*Written 2026-07-31 from the CampusX reranking lecture: why embeddings make similarity approximate (lossy compression on both sides), bi-encoder vs cross-encoder and the static/dynamic split that explains it, the two-stage filter-then-refine pattern, cross-encoder internals (`[CLS] q [SEP] d [SEP]`, bidirectional self-attention, CLS → linear → sigmoid), and both rerankers in code via `ContextualCompressionRetriever`.*
+**Still open on this concept:** **late interaction / ColBERT** and **LLMs as rerankers** — neither appears in the course. Cover separately.
 
 **9. Contextual retrieval**
 Prepending chunk-level context before embedding, so a chunk carries its document's meaning. The highest-return single upgrade in current practice. Its cost: an extra generation pass per chunk at index time.
@@ -35,8 +40,12 @@ Prepending chunk-level context before embedding, so a chunk carries its document
 **10. Late chunking**
 Embedding all tokens with a long-context model *first*, then chunking, so chunk embeddings retain full context. The honest comparison: more efficient than contextual retrieval, but tends to sacrifice relevance and completeness.
 
-**11. Query transforms**
+**11. Query transforms** → `07-Reranking-And-Query-Transforms` *(**partly done** — 7 notes, 17 images)*
 HyDE, multi-query expansion, step-back prompting, and sub-question decomposition. What each fixes. Where each makes things worse — and decomposition specifically can.
+
+*Written 2026-07-31 from the CampusX RAG Fusion lecture: the user-phrasing dependency, why multi-query's deduplication throws away the rank information, **RRF** in full (`Σ 1/(rank + 60)`, worked example, consistency-over-rank, the constant as a damping dial), the end-to-end pipeline and its unconditional LLM-call/latency/cost, and a from-scratch `RAGFusion` class.*
+*Also written 2026-07-31 from the HyDE lecture: the query/document **form asymmetry** (not a word-choice problem — a short question and a long passage embed differently regardless), the query vector landing outside every cluster, the LLM's NLU+NLG writing a hypothetical document as a **search probe**, the fake-document objection and why factual errors are tolerable but topical errors are not, the 2022 paper (Contriever, multiple documents + averaged embeddings), and `CustomHypotheticalDocumentEmbedder`.*
+**Still open on this concept:** **step-back prompting**, **sub-question decomposition** as its own technique.
 
 **12. Query understanding and routing**
 Classifying intent before retrieving. Routing across multiple distinct corpora — docs, tickets, code, structured tables. When a query shouldn't hit retrieval at all.
@@ -58,8 +67,13 @@ Near-duplicates, document versions, boilerplate, quoted email threads. Why dupli
 
 ## C · Architecture — Block 7
 
-**18. Agentic RAG**
+**18. Agentic RAG** → `09-RAG-Architecture` *(**partly done** — 15 notes, corrective RAG + Self-RAG)*
 Replacing the linear pipeline with a loop: retrieve, evaluate sufficiency, re-retrieve. Retrieval-as-a-tool. Self-RAG and corrective RAG — and whether they earn their complexity in production.
+
+*Written 2026-07-31 from the CampusX Corrective RAG lecture (**YouTube transcript, no local recording** — so no screenshots in this module): the blind-trust prompt and the retriever that always returns `k`, the parametric-knowledge leak demonstrated live (transformer question answered fluently from four chunks about MLPs/CNNs/regularization/index pages), the **retrieval evaluator** and its three verdicts, **knowledge refinement** (decompose → filter → recompose; T5-large 770M, checkpoint never released), the 0.7/0.3 thresholds and the easily-missed rule that even a **correct** verdict drops documents below the lower threshold, **web search as the incorrect-path fallback** with web docs refined identically so `refine`/`generate` are reused, **query rewriting** before search (and the lecture's honest verdict that it rarely helps), and the **ambiguous path collapsed out of the graph entirely** — two routes, merged via `good_docs + web_docs` inside `refine`, because state persists.*
+*Also written 2026-07-31 from the CampusX Self-RAG lecture (again a **YouTube transcript, no recording**): the three problems traditional RAG has — **indiscriminate retrieval** (the "how many seconds in a minute" hedge, where extra context makes a known answer *less* confident), blind trust (semantic similarity matches the **topic**, not the **question type** — "what causes diabetes" retrieving a chunk about effects), and no self-verification; the **four reflection questions** and why grounded ≠ useful; the three support levels including hallucination-as-**invented-correlation** and hallucination-as-**editorialising** (the prompt bans "generous", "culture", "employee-first"); the quote-only reviser as deliberate over-correction; **two nested loops** with independent counters (`MAX_RETRIES=10` inner, `MAX_REWRITE_TRIES=3` outer) plus a raised `recursion_limit`; and the relevance filter deliberately **loosened** across the build once later checks existed.*
+
+**Still open on this concept:** **retrieval-as-a-tool / true agentic RAG** (where an LLM holds the controller role rather than a hand-written router) — a separate lecture. Also: the papers' actual mechanisms, since both course implementations replace fine-tuned models with prompted LLM judges.
 
 **19. GraphRAG and structured knowledge**
 When graph structure beats chunks. The cost of building and maintaining it. Where plain RAG structurally fails — aggregation and multi-entity questions.
@@ -94,9 +108,9 @@ Part A continues in the existing numbered subfolders. Parts B-E get a new subfol
 ├── 00-Syllabus.md          ← this file
 ├── 00-Resources.md
 ├── 00-Fundamentals/ … 06-Advanced-Retrievers/    ← existing, ~5,300 lines
-├── 07-Reranking-And-Query-Transforms/            ← concepts 8-13
+├── 07-Reranking-And-Query-Transforms/            ← concepts 8-13  *(started: reranking done)*
 ├── 08-Hard-Content-And-Freshness/                ← concepts 14-17
-├── 09-RAG-Architecture/                          ← concepts 18-20
+├── 09-RAG-Architecture/                          ← concepts 18-20  *(started: corrective RAG done)*
 ├── 10-Permission-Aware-Retrieval/                ← concepts 21-22
 └── 11-RAG-Evaluation/                            ← concepts 23-24
 ```

@@ -15,7 +15,7 @@ People rate, rank, or compare outputs directly. **The most expensive and slowest
 **3 · Model-graded (LLM-as-judge)** — *a model produces the verdict.*
 A strong LLM scores or ranks the output against a rubric. **Used where there's no single right answer but you can describe what "good" looks like** — helpfulness, tone, groundedness.
 
-> [!note] The Zomato email classifier from note 03 was **programmatic** — a few lines of Python compared predicted label to expected label and computed accuracy. That was never a preference; it was the only sensible choice, because `billing == billing` is mechanically checkable.
+> [!note] The Zomato email classifier was **programmatic** — a few lines of Python compared predicted label to expected label and computed accuracy. That was never a preference; it was the only sensible choice, because `billing == billing` is mechanically checkable.
 
 ---
 
@@ -23,7 +23,8 @@ A strong LLM scores or ranks the output against a rubric. **Used where there's n
 
 CampusX builds a RAG chatbot so users get help without emailing. We decide to evaluate it properly, and we start at the **component level** with the retriever.
 
-**Target:** a single component — the retriever. **Task:** is it fetching the right documents?
+**Target:** a single component — the retriever. 
+**Task:** is it fetching the right documents?
 
 ## Success criteria — Recall@k
 
@@ -40,7 +41,12 @@ Work one row by hand. Question: *"What are the prerequisites for the ML course a
 
 Of the two correct documents, it found one. **Recall = 1/2 = 0.5.** Bounded between 0 and 1; ideally 1.
 
-> [!info] Relevance has more than one aspect, and Recall@k only covers the first: (a) of all the correct documents, how many did you fetch — **recall**; (b) of the documents you fetched, how many were useless — **precision**; (c) were they in a sensible **order** — ranking metrics. We're deliberately measuring one aspect here.
+> [!info] Relevance has more than one aspect, and Recall@k only covers the first: 
+> (a) of all the correct documents, how many did you fetch — **recall**; 
+> 
+> (b) of the documents you fetched, how many were useless — **precision**; 
+> 
+> (c) were they in a sensible **order** — ranking metrics. We're deliberately measuring one aspect here.
 
 ## Build the dataset
 
@@ -67,7 +73,7 @@ Study the rows with the worst recall, then reach for one of four levers:
 - **Increase k** — try `k=10` instead of `5`
 - **Reranking** — if the right document was at position 8, a reranker can lift it to position 3
 
-> [!important] One clarification that trips people up. Whether an eval is programmatic, human, or model-graded depends on **who executes it and extracts the scores** — nothing else. **Creating the golden dataset is a separate activity, and it is essentially always done by a human.** This retriever eval is *programmatic* even though a human labelled the gold document IDs.
+> [!important] Whether an eval is programmatic, human, or model-graded depends on **who executes it and extracts the scores** — nothing else. **Creating the golden dataset is a separate activity, and it is essentially always done by a human.** This retriever eval is *programmatic* even though a human labelled the gold document IDs.
 
 ---
 

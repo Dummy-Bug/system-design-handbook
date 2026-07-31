@@ -1,7 +1,3 @@
-The previous note established the shape of a retriever: ask the store for one with `.as_retriever(...)`, then drive it with `.invoke(query)`. What makes one retriever different from another is the `search_type` you pass. This note walks through the two most basic search types in code, and they sit at opposite ends of one simple question: **how do you decide how many documents come back?** The first fixes the *count*. The second fixes the *quality bar*.
-
----
-
 ## Building a store to retrieve from
 
 Both notebooks start the same way — a handful of small documents across a few topics, embedded and dropped into a Chroma collection. The topic metadata is there so we can see, at a glance, whether the retriever pulled back the right subject.

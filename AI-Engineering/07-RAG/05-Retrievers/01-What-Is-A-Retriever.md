@@ -1,4 +1,4 @@
-By now the pipeline has built up a knowledge base. Documents were loaded, split into chunks, each chunk was embedded, and every embedding was persisted inside a vector store together with its text and metadata. But storing was never the point — **retrieving** is. When a user asks a question, something has to reach into that store and pull out the handful of chunks that actually answer it. That something is the **retriever**, and it is the component this module is about.
+By now the pipeline has built up a knowledge base. Documents were loaded, split into chunks, each chunk was embedded, and every embedding was persisted inside a vector store together with its text and metadata. But storing was never the point — **retrieving** is. When a user asks a question, something has to reach into that store and pull out the handful of chunks that actually answer it. That something is the **retriever**.
 
 ---
 
@@ -25,12 +25,18 @@ There is an obvious objection here. Back in the vector-store module, `vector_sto
 
 Two reasons, and they are the whole justification for this module.
 
-**First, customizability.** The store's built-in `similarity_search` does exactly one thing: basic top-`k` nearest-neighbour retrieval. It offers almost no knobs. But "find the closest few" is not the only way you ever want to retrieve. Sometimes you want to keep only documents above a quality bar. Sometimes you want results that are relevant *and* diverse, so you don't get three near-identical chunks. Sometimes you want old-fashioned keyword matching instead of semantic similarity. A full-fledged retriever is the object that lets you choose the **search algorithm** and tune its **parameters** — the number to fetch, a score cutoff, metadata filters, and more. `similarity_search` gives you basic retrieval; a retriever gives you *retrieval strategies*.
+**First, customizability.** The store's built-in `similarity_search` does exactly one thing: basic top-`k` nearest-neighbour retrieval. It offers almost no knobs. But "find the closest few" is not the only way you ever want to retrieve.
+* Sometimes you want to keep only documents above a quality bar. 
+* Sometimes you want results that are relevant *and* diverse, so you don't get three near-identical chunks. 
+* Sometimes you want old-fashioned keyword matching instead of semantic similarity. 
+A full-fledged retriever is the object that lets you choose the **search algorithm** and tune its **parameters** — the number to fetch, a score cutoff, metadata filters, and more. `similarity_search` gives you basic retrieval; a retriever gives you *retrieval strategies*.
 
 **Second, a standard interface.** In LangChain, a retriever is a standard, composable component — it exposes a uniform `.invoke(query)` method, the same shape every other piece of a LangChain pipeline uses. That means the retrieval step slots into a chain right next to the loader, the splitter, the prompt, and the LLM, all speaking the same interface. The raw `similarity_search` method is a method on the store; the retriever is a first-class *component* you can drop into a pipeline. That composability is why, in practice, you almost always retrieve through a retriever rather than by calling the store's search method directly.
 
 > [!important] The vector store's `similarity_search` only does **basic** retrieval, with almost no tuning.
-> A **retriever** exists to give you (1) **customizable search strategies and parameters**, and (2) a **standard `.invoke()` interface** that plugs uniformly into a LangChain pipeline.
+> A **retriever** exists to give you
+>  (1) **customizable search strategies and parameters**, and 
+>  (2) a **standard `.invoke()` interface** that plugs uniformly into a LangChain pipeline.
 
 ---
 

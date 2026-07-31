@@ -1,5 +1,5 @@
 The contextual compression retriever cut the noise *inside* a retrieved chunk. The **parent document retriever** goes after a deeper tension — one baked into the chunk *size* itself. It turns out that the ideal chunk size for finding the right passage is the exact opposite of the ideal chunk size for feeding the answer, and no single size can satisfy both. This retriever's whole trick is to stop trying.
-
+ 
 ---
 
 ## The compression problem — small chunks embed better than big ones
