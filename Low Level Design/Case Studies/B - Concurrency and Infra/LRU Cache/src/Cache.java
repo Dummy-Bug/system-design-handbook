@@ -40,7 +40,7 @@ public class Cache<K, V> {
     }
 
 
-    public V get(K key) {
+    public synchronized V get(K key) {
         if (!map.containsKey(key)) return null;
         Node node = map.get(key);
         removeNode(node);
@@ -63,7 +63,7 @@ public class Cache<K, V> {
 
     }
 
-    public void put(K key, V value) {
+    public synchronized void put(K key, V value) {
 
         if (map.containsKey(key)) {
             Node node = map.get(key);

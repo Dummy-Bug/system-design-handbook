@@ -9,6 +9,30 @@ status: in progress — deriving
 
 ---
 
+## 📖 Jargon (say these by name in the room)
+
+- **Sentinel node** — a dummy `head`/`tail` node that holds no real data, sitting permanently at
+  each end of the linked list. Because there's always a dummy on both sides, no real node ever has a
+  null `prev`/`next`, so insert/remove need **zero** null-checks or special cases.
+- **TOCTOU** — *Time-Of-Check to Time-Of-Use.* A race where you check a condition, then act on it,
+  and another thread changes things **in the gap** so the check is stale. Our `get`:
+  `containsKey` says yes → another thread evicts → `map.get` returns null → `.value` is an NPE. Fix:
+  put check + use inside **one lock** so nothing can slip into the gap. (Same shape as Parking Lot's
+  find-then-occupy.) More precise than saying "race condition."
+- **Lost update** — two threads read the same value, both write based on it, one write silently
+  overwrites the other. Our `addToFront`: two threads both read the same `head.next`, one insertion
+  is lost. No exception — just silent corruption.
+- **Sharding** — splitting into N independent smaller caches, each with its **own map + list + lock**.
+  A key is routed by `hash(key) % N` to one shard. Different keys → different locks → run in
+  parallel, cutting lock contention ~N-fold. Cost: LRU becomes per-shard (approximate global LRU),
+  which is fine for a cache. *This is the answer to "reduce contention at scale" — name it, don't
+  build it at 3 YOE.* Not to be confused with **striping** (many locks over **one** shared structure)
+  — striping can't work here because the single linked list is shared by all keys.
+- **Read-write lock** — a lock that allows many concurrent readers OR one writer. **Useless here**
+  because `get` mutates the list (moves node to front), so every operation is a *writer*.
+
+---
+
 ## 📄 Problem Statement
 
 Design an in-memory cache with a **fixed capacity**. When it fills up, evict the **least recently
@@ -73,11 +97,72 @@ updates**. → *derivation continues below.*
 
 ---
 
-## 🧱 Classes
-*(to derive)*
+## 🧱 Classes (single-threaded — ✅ built & passing)
+
+**`Node`** — `private class Node { K key; V value; Node prev, next; }`. Inner class (implementation
+detail, never public). Holds **both** key and value: value because the node *is* the storage (one
+map does lookup + ordering); key because eviction starts from a node (`tail.prev`) and must reach
+back into the map — `map.remove(node.key)` — and the map is one-directional `K → Node`.
+
+**`Cache<K,V>`** — owns:
+- `Map<K, Node> map` — O(1) key → node
+- doubly-linked list with **dummy `head` and `tail` sentinels** (wired `head <-> tail` in the ctor).
+  `head` = MRU end, `tail` = LRU end. Sentinels are `final`, never reassigned.
+
+> [!important] Only two methods touch pointers — everything else calls them
+> `addToFront(node)` and `removeNode(node)` are the **only** pointer surgery. `get`, `put`, and
+> `removeLRU` are written in terms of those two. Every bug during the build was a hand-written
+> special case (`if head.next == node`, `if tail.prev == node`, manual `tail.prev = tail.prev.prev`);
+> every fix was "delete the special case, reuse the helper." Sentinels exist precisely so `add`/
+> `remove` need **zero** special cases — `prev`/`next` are never null, so the same 4/2 lines work at
+> front, middle, or back.
+> ```java
+> void addToFront(Node n){ n.prev=head; n.next=head.next; head.next.prev=n; head.next=n; }
+> void removeNode(Node n){ n.prev.next=n.next; n.next.prev=n.prev; }
+> ```
+
+- `get(key)` → miss ⇒ null; hit ⇒ `removeNode` + `addToFront` (move to MRU), return value. O(1).
+- `put(key,value)` → existing ⇒ update value + move to front; new ⇒ evict LRU if full, `addToFront`,
+  `map.put`. O(1).
+- `removeLRU()` → `node = tail.prev`; `map.remove(node.key)`; `removeNode(node)`. **Must unlink both
+  directions** — the bug was updating only the backward pointer, leaving the evicted node a *ghost*
+  in the forward chain (symptom: `size == 3` but 4 rows printed).
+
+## 🔒 Making it thread-safe (the Salesforce escalation)
+
+Not thread-safe as built. The races, precisely (Java maps don't throw "key not found" — get the
+failure mode right):
+
+1. **Eviction over-evict** — two threads both pass the `size == CAPACITY` check, both evict → two
+   entries dropped when one should go, and concurrent pointer surgery on the same `tail.prev`.
+2. **`get` TOCTOU → NPE** — `containsKey` passes, another thread evicts the key, `map.get(key)`
+   returns null, `.value` → **NullPointerException** (not "not found").
+3. **`addToFront` lost update** — two threads (even two `get`s on *different* keys) both read the
+   same `head.next`; one insertion is silently lost. Corrupts the DLL with **no exception**.
+4. **Plain `HashMap` self-corruption** — concurrent writes can corrupt its own buckets (resize race).
+
+**Root:** races span **both** structures (map + DLL) and **both** methods (`get` + `put`), and the
+two structures must stay mutually consistent. A `get` *writes* (moves to front) — so reads are not
+read-only.
+
+> [!warning] Why the "clever" options don't apply here
+> - **Read-write lock** — no. `get` mutates the DLL, so it's a *writer*, not a reader. RWLock buys
+>   nothing when every op is a write.
+> - **Striped / per-key locks** — no. The DLL is one shared structure (all nodes share `head`/`tail`);
+>   you can't partition it by key.
+> - **`ConcurrentHashMap` alone** — no. It makes the map safe but the DLL invariant spans map *and*
+>   list; they must update atomically *together*, which one concurrent map can't guarantee.
+> → **One lock guarding the whole cache** (both structures, both methods) is the correct answer for a
+> single-node in-memory LRU. `synchronized` on `get`/`put`, or one `ReentrantLock`. Say out loud that
+> it serializes access, and that that's acceptable because each op is O(1) (µs), not I/O-bound.
+> *Distributed* escalation → Redis / consistent hashing (different problem).
 
 ## 📐 Build Scope
-*(to derive)*
+- ✅ single-threaded LRU, O(1) get/put, correct eviction, driver prints eviction visibly
+- ☐ thread-safe version (one lock)
+- ☐ (stretch) LFU as a second policy → *then* extract `EvictionPolicy` seam
 
 ## 🔍 Post-Build
-*(to derive)*
+- ☐ extension test: add LFU — does the eviction seam extract cleanly on the second policy?
+- ☐ concurrency walkthrough out loud: name races 1–3 + the one lock that closes them
+- ☐ say the `LinkedHashMap` production one-liner
