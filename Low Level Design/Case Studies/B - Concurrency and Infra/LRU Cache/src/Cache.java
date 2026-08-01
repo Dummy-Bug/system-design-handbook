@@ -81,7 +81,7 @@ public class Cache<K, V> {
         map.put(key, node);
     }
 
-    public void displayCache() {
+    public synchronized void displayCache() {
         System.out.println("Cache size == " + map.size());
         Node temp = head.next;
 
