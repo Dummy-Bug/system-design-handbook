@@ -1,5 +1,4 @@
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Cache<K, V> {
@@ -18,70 +17,79 @@ public class Cache<K, V> {
         }
     }
 
-    private final int capacity;
+    private final int CAPACITY;
     private final Map<K, Node> map = new HashMap<>();
 
     private final Node head = new Node(null, null);
     private final Node tail = new Node(null, null);
 
     public Cache(int size) {
-        this.capacity = size;
+        CAPACITY = size;
         head.next = tail;
         tail.prev = head;
     }
 
-    private void updateOrdering(K key) {
-        Node node = map.get(key);
-        if (head.next == node) {
-            return;
-        } else if (tail.prev == node) {
-            head.next.prev = node;
-            node.next = head.next;
+    private void addToFront(Node node) {
 
-            tail.prev = node.prev;
-            node.prev = null;
+        node.prev = head;
+        node.next = head.next;
 
-        } else {
-            node.prev.next = node.next;
-            node.next.prev = node.prev;
-
-            head.next.prev = node;
-            node.next = head.next;
-            node.prev = null;
-
-        }
+        head.next.prev = node;
+        head.next = node;
 
     }
+
 
     public V get(K key) {
         if (!map.containsKey(key)) return null;
-        updateOrdering(key);
-        return map.get(key).value;
+        Node node = map.get(key);
+        removeNode(node);
+        addToFront(node);
+        return node.value;
     }
 
-    private void initializeMap(K key, V value) {
-        Node node = new Node(value);
-        head = node;
-        tail = node;
-        map.put(key, node);
+    private void removeLRU() {
+        if (tail.prev == head) return;
+        Node node = tail.prev;
+        map.remove(node.key);
+        removeNode(node);
+    }
+    private void removeNode(Node node) {
+        if (tail.prev == node) {
+            tail.prev = node.prev;
+        }
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+
     }
 
     public void put(K key, V value) {
-        if (map.isEmpty()) {
-            initializeMap(key, value);
-            return;
-        }
+
         if (map.containsKey(key)) {
-            updateOrdering(key);
             Node node = map.get(key);
             node.value = value;
-        } else {
-
+            removeNode(node);
+            addToFront(node);
+            return;
         }
+        Node node = new Node(key, value);
+        if (map.size() == CAPACITY) {
+            System.out.println("Cache FULL size == " + map.size() + " Inserting Key :: " + key);
+            removeLRU();
+        }
+        addToFront(node);
+        map.put(key, node);
     }
 
-    private Node<V> findNodeToEvict() {
-        return tail;
+    public void displayCache() {
+        System.out.println("Cache size == " + map.size());
+        Node temp = head.next;
+
+        while (temp != tail) {
+            System.out.print("\t" + temp.key + " - " + temp.value + "\n");
+            temp = temp.next;
+        }
+
     }
 
 

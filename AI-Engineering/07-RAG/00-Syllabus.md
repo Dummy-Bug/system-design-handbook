@@ -67,13 +67,15 @@ Near-duplicates, document versions, boilerplate, quoted email threads. Why dupli
 
 ## C · Architecture — Block 7
 
-**18. Agentic RAG** → `09-RAG-Architecture` *(**partly done** — 15 notes, corrective RAG + Self-RAG)*
+**18. Agentic RAG** → `09-RAG-Architecture` *(**done** — 23 notes: corrective RAG, Self-RAG, agentic RAG theory)*
 Replacing the linear pipeline with a loop: retrieve, evaluate sufficiency, re-retrieve. Retrieval-as-a-tool. Self-RAG and corrective RAG — and whether they earn their complexity in production.
 
 *Written 2026-07-31 from the CampusX Corrective RAG lecture (**YouTube transcript, no local recording** — so no screenshots in this module): the blind-trust prompt and the retriever that always returns `k`, the parametric-knowledge leak demonstrated live (transformer question answered fluently from four chunks about MLPs/CNNs/regularization/index pages), the **retrieval evaluator** and its three verdicts, **knowledge refinement** (decompose → filter → recompose; T5-large 770M, checkpoint never released), the 0.7/0.3 thresholds and the easily-missed rule that even a **correct** verdict drops documents below the lower threshold, **web search as the incorrect-path fallback** with web docs refined identically so `refine`/`generate` are reused, **query rewriting** before search (and the lecture's honest verdict that it rarely helps), and the **ambiguous path collapsed out of the graph entirely** — two routes, merged via `good_docs + web_docs` inside `refine`, because state persists.*
 *Also written 2026-07-31 from the CampusX Self-RAG lecture (again a **YouTube transcript, no recording**): the three problems traditional RAG has — **indiscriminate retrieval** (the "how many seconds in a minute" hedge, where extra context makes a known answer *less* confident), blind trust (semantic similarity matches the **topic**, not the **question type** — "what causes diabetes" retrieving a chunk about effects), and no self-verification; the **four reflection questions** and why grounded ≠ useful; the three support levels including hallucination-as-**invented-correlation** and hallucination-as-**editorialising** (the prompt bans "generous", "culture", "employee-first"); the quote-only reviser as deliberate over-correction; **two nested loops** with independent counters (`MAX_RETRIES=10` inner, `MAX_REWRITE_TRIES=3` outer) plus a raised `recursion_limit`; and the relevance filter deliberately **loosened** across the build once later checks existed.*
 
-**Still open on this concept:** **retrieval-as-a-tool / true agentic RAG** (where an LLM holds the controller role rather than a hand-written router) — a separate lecture. Also: the papers' actual mechanisms, since both course implementations replace fine-tuned models with prompted LLM judges.
+*Also written 2026-07-31 from the CampusX Agentic RAG lecture (**OBS recording, 12 screenshots** — the first module here with images). Notes `16`–`23`. A pure-theory lecture, no code walkthrough: traditional RAG's **benefits** first (simple to implement, low latency) before its two structural failures — **no control on retrieval** and **fixed order**; the LLM-vs-agent distinction (an LLM is standalone, an agent is a larger system where the LLM is a sub-component) and the three components **brain / memory / tools**, with **NLU and NLG** named as the two LLM properties agentic RAG leans on; the five agent properties and the **reason → act → observe** loop; **the four questions — IF, WHERE, HOW, WHEN** — which map exactly onto traditional RAG's two failures; the **eight must-have properties** walked stage by stage; and three **good-to-have** ones (memory for context-window management, dynamic prompt construction, graceful fallback).*
+
+**Still open on this concept:** the **code build** — `Advanced_Rag_Codes/08_agentic_rag/` has seven notebooks (`00_base_rag` → `01_conditional_retrieval` → `02`/`03_tool_use_retrieval` → `04_retrieval_evaluation_and_rewriting` → `05_query_decomposition` → `agentic_rag`) and the theory lecture never opens them, so that is a separate video. Also: the papers' actual mechanisms, since the CRAG and Self-RAG course implementations replace fine-tuned models with prompted LLM judges.
 
 **19. GraphRAG and structured knowledge**
 When graph structure beats chunks. The cost of building and maintaining it. Where plain RAG structurally fails — aggregation and multi-entity questions.
@@ -110,7 +112,7 @@ Part A continues in the existing numbered subfolders. Parts B-E get a new subfol
 ├── 00-Fundamentals/ … 06-Advanced-Retrievers/    ← existing, ~5,300 lines
 ├── 07-Reranking-And-Query-Transforms/            ← concepts 8-13  *(started: reranking done)*
 ├── 08-Hard-Content-And-Freshness/                ← concepts 14-17
-├── 09-RAG-Architecture/                          ← concepts 18-20  *(started: corrective RAG done)*
+├── 09-RAG-Architecture/                          ← concepts 18-20  *(concept 18 done; 19-20 open)*
 ├── 10-Permission-Aware-Retrieval/                ← concepts 21-22
 └── 11-RAG-Evaluation/                            ← concepts 23-24
 ```
