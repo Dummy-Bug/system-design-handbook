@@ -138,6 +138,14 @@ Post-Build checklist.**
   practice belongs to the HLD track, where the diagram is mandatory and separately graded.
 - Every disagreement with the AlgoMaster chapter gets recorded inline with its reason — and so
   does every place the chapter was *right* and we were wrong. Both directions, honestly.
+- **The note must be revision-sufficient on its own (decided 2026-07-28).** After the class
+  structure, embed the *major code snippets from the actual build* inline (the key methods:
+  helpers, the core ops, the thread-safe version), each with a one-line what/why. Goal: revising
+  the note alone recovers the important concepts *and* the load-bearing code; the full source file
+  is opened only for a complete line-by-line re-read. **No process-checklist noise in the note**
+  (no "☐ say X out loud", "☐ run extension test") — those are session actions, not revision
+  content. Keep a short **Jargon** block (terms to say by name) and a **Strong-hire talking
+  points** block (spoken gaps, researched against senior rubrics) — both are revision content.
 
 ## Session protocol
 - One case study per session. Derive first (requirements → entities → diagram → patterns →

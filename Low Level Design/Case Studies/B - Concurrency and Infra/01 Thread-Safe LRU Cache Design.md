@@ -1,7 +1,7 @@
 ---
 track: B — Concurrency & Infra
 salesforce: #1 most-likely LLD (see [[00 Loop Notes]], [[01 Problem Lists]])
-status: in progress — deriving
+status: ✅ built — single-threaded + thread-safe (one lock)
 ---
 > [!abstract] Thread-Safe LRU Cache
 > Track B (concurrency) · Salesforce #1-frequency LLD · Patterns: Strategy (eviction seam, later)
@@ -99,15 +99,33 @@ updates**. → *derivation continues below.*
 
 ## 🧱 Classes (single-threaded — ✅ built & passing)
 
-**`Node`** — `private class Node { K key; V value; Node prev, next; }`. Inner class (implementation
-detail, never public). Holds **both** key and value: value because the node *is* the storage (one
-map does lookup + ordering); key because eviction starts from a node (`tail.prev`) and must reach
-back into the map — `map.remove(node.key)` — and the map is one-directional `K → Node`.
+**`Node`** — private inner class (implementation detail, never public). Holds **both** key and value:
+value because the node *is* the storage (one map does lookup + ordering); key because eviction starts
+from a node (`tail.prev`) and must reach back into the one-directional map — `map.remove(node.key)`.
 
-**`Cache<K,V>`** — owns:
-- `Map<K, Node> map` — O(1) key → node
-- doubly-linked list with **dummy `head` and `tail` sentinels** (wired `head <-> tail` in the ctor).
-  `head` = MRU end, `tail` = LRU end. Sentinels are `final`, never reassigned.
+```java
+private class Node {
+    K key; V value;
+    Node prev, next;
+    Node(K key, V value) { this.key = key; this.value = value; }
+}
+```
+
+**`Cache<K,V>`** — a `Map<K,Node>` for O(1) lookup + a doubly-linked list for recency order.
+`head` = MRU end, `tail` = LRU end; both are **dummy sentinels**, `final`, never reassigned.
+
+```java
+private final int CAPACITY;
+private final Map<K, Node> map = new HashMap<>();
+private final Node head = new Node(null, null);   // dummy MRU sentinel
+private final Node tail = new Node(null, null);   // dummy LRU sentinel
+
+public Cache(int size) {
+    CAPACITY = size;
+    head.next = tail;   // empty list = head <-> tail
+    tail.prev = head;
+}
+```
 
 > [!important] Only two methods touch pointers — everything else calls them
 > `addToFront(node)` and `removeNode(node)` are the **only** pointer surgery. `get`, `put`, and
@@ -121,12 +139,48 @@ back into the map — `map.remove(node.key)` — and the map is one-directional 
 > void removeNode(Node n){ n.prev.next=n.next; n.next.prev=n.prev; }
 > ```
 
-- `get(key)` → miss ⇒ null; hit ⇒ `removeNode` + `addToFront` (move to MRU), return value. O(1).
-- `put(key,value)` → existing ⇒ update value + move to front; new ⇒ evict LRU if full, `addToFront`,
-  `map.put`. O(1).
-- `removeLRU()` → `node = tail.prev`; `map.remove(node.key)`; `removeNode(node)`. **Must unlink both
-  directions** — the bug was updating only the backward pointer, leaving the evicted node a *ghost*
-  in the forward chain (symptom: `size == 3` but 4 rows printed).
+**`get`** — miss ⇒ null; hit ⇒ move to MRU, return value. `get` **writes** (reorders) — that's why
+reads aren't read-only under concurrency.
+
+```java
+public synchronized V get(K key) {
+    if (!map.containsKey(key)) return null;
+    Node node = map.get(key);
+    removeNode(node);
+    addToFront(node);        // touch = move to MRU
+    return node.value;
+}
+```
+
+**`put`** — existing key ⇒ update + move to front; new key ⇒ evict LRU if full, then insert.
+
+```java
+public synchronized void put(K key, V value) {
+    if (map.containsKey(key)) {          // existing: update + promote
+        Node node = map.get(key);
+        node.value = value;
+        removeNode(node);
+        addToFront(node);
+        return;
+    }
+    if (map.size() == CAPACITY) removeLRU();   // full: evict before insert
+    Node node = new Node(key, value);
+    addToFront(node);
+    map.put(key, node);
+}
+```
+
+**`removeLRU`** — LRU is `tail.prev`. **Must unlink both directions** — the ghost bug (`size == 3`
+but 4 rows printed) came from fixing only the backward pointer.
+
+```java
+private void removeLRU() {
+    if (tail.prev == head) return;   // empty
+    Node node = tail.prev;
+    map.remove(node.key);            // node.key → why Node stores the key
+    removeNode(node);
+}
+```
 
 ## 🔒 Making it thread-safe (the Salesforce escalation)
 
@@ -157,12 +211,19 @@ read-only.
 > it serializes access, and that that's acceptable because each op is O(1) (µs), not I/O-bound.
 > *Distributed* escalation → Redis / consistent hashing (different problem).
 
-## 📐 Build Scope
-- ✅ single-threaded LRU, O(1) get/put, correct eviction, driver prints eviction visibly
-- ☐ thread-safe version (one lock)
-- ☐ (stretch) LFU as a second policy → *then* extract `EvictionPolicy` seam
+## 🎯 Strong-hire talking points (SDE-2, 3–4 YOE — say these out loud)
 
-## 🔍 Post-Build
-- ☐ extension test: add LFU — does the eviction seam extract cleanly on the second policy?
-- ☐ concurrency walkthrough out loud: name races 1–3 + the one lock that closes them
-- ☐ say the `LinkedHashMap` production one-liner
+Researched against senior LRU rubrics. Build is at the bar; these close the spoken gaps.
+
+- **TTL / expiry** (the follow-up we scoped out). One-liner: *"per-entry `expiresAt` timestamp;
+  evict **lazily** — on `get`, if expired, drop it and return null; optionally a background sweeper
+  thread for proactive cleanup."* Lazy-on-access is the cheap, expected answer.
+- **LFU is the standard next policy** (Google L5+ asks it). We named the seam; **building LFU is the
+  bulletproofing stretch** and doubles as the extension test. Its structure: `Map<K,Node>` +
+  `Map<freq, DLL>` + a `minFreq` pointer; on access, move node from its freq-bucket to freq+1; evict
+  from `minFreq` bucket's tail. All O(1). *This* is why eviction isn't a `pickVictim()` Strategy —
+  each policy owns a different bookkeeping structure.
+- **Thread-safety is whole-class.** One lock on `get`/`put` is right, but a public `displayCache()`
+  or `size()` that reads the list must be synchronized too, or "is it thread-safe?" → "no."
+- **Reduce contention at scale → shard** (see [[#📖 Jargon]]): N sub-caches, own lock each,
+  `hash(key) % N`. Name it; don't build it at 3–4 YOE.

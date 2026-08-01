@@ -302,24 +302,103 @@ classDiagram
 
 ---
 
-## 📐 Build Scope (90 min)
+## 🔑 Key code (the load-bearing bits — revise these, not the whole file)
 
-| # | Deliverable |
-|---|-------------|
-| 1 | `ParkingLot` singleton holding `List<Floor>`; spots keyed by `SpotSize` |
-| 2 | `park()` — walks sizes upward, `Spot.tryOccupy()` claims atomically, returns a `Ticket` |
-| 3 | `unpark()` — ticket → spot, fee via `PricingStrategy`, pay, free spot **on success only** |
-| 4 | `displayAvailability()` — free spots per floor per size |
-| 5 | `Main` driver printing every case below |
+**Size/type decoupling** — `VehicleType` carries its `minSize` as an enum-constructor field; the
+fitting rule reads size, never type. Adding `MINI_TRUCK` is one constant, zero other edits.
 
-Driver must show: two vehicle types parking · a bike falling through to a car spot ·
-a full-lot rejection · an exit with the fee printed · availability before and after.
+```java
+public enum VehicleType {
+    BIKE(SpotSize.SMALL), CAR(SpotSize.MEDIUM), TRUCK(SpotSize.LARGE);
+    private final SpotSize minSize;
+    VehicleType(SpotSize minSize) { this.minSize = minSize; }
+    public SpotSize getMinSize() { return minSize; }
+}
+```
 
----
+**The concurrency answer** — `tryOccupy()` makes check-and-claim one atomic step, so two gates
+can't win the same spot. The search loop *is* the retry: a lost race returns `false`, caller moves on.
 
-## 🔍 Post-Build
+```java
+public synchronized boolean tryOccupy() {
+    if (status == SpotStatus.FREE) { status = SpotStatus.OCCUPIED; return true; }
+    return false;                       // someone beat me → caller tries next spot
+}
+public synchronized void release() { status = SpotStatus.FREE; }
+```
 
-- [ ] Extension test — add a vehicle type, count files touched (target: 1 line, 0 modified)
-- [ ] Concurrency walkthrough said out loud
-- [ ] AlgoMaster chapter read and its diffs critiqued
-- [ ] 20-min AI-assisted calibration rebuild (flavor C)
+**Fallthrough (FR3)** — `Floor` walks sizes from `minSize` up; `ordinal()` gives "bigger fits" free.
+Two primitives so best-fit can reuse the exact-size claim.
+
+```java
+public Optional<Spot> claimSpotOfSize(SpotSize size) {          // exact bucket
+    for (Spot spot : spots.getOrDefault(size, List.of()))
+        if (spot.tryOccupy()) return Optional.of(spot);
+    return Optional.empty();
+}
+public Optional<Spot> claimFreeSpot(SpotSize minSize) {         // size-or-bigger, smallest first
+    for (SpotSize size : SpotSize.values()) {
+        if (size.ordinal() < minSize.ordinal()) continue;
+        Optional<Spot> spot = claimSpotOfSize(size);
+        if (spot.isPresent()) return spot;
+    }
+    return Optional.empty();
+}
+```
+
+**`park` sequences, doesn't search** — derives `minSize`, delegates to the `AllocationStrategy`,
+wraps in a `Ticket`. `Optional.empty()` = lot full (FR7, a clean return, not an exception).
+
+```java
+public Optional<Ticket> park(Vehicle vehicle) {
+    SpotSize minSize = vehicle.getType().getMinSize();
+    Optional<Spot> spot = allocationStrategy.allocate(floors.values(), minSize);
+    if (spot.isEmpty()) return Optional.empty();          // lot full
+    Ticket ticket = new Ticket(vehicle, spot.get());
+    activeTickets.put(ticket.getTicketId(), ticket);
+    return Optional.of(ticket);
+}
+```
+
+**`unpark` — release on success ONLY** (FR6). Payment fails ⇒ spot stays `OCCUPIED` (the car is
+still physically there). Unknown ticket ⇒ throw (broken caller, not an expected outcome).
+
+```java
+public double unpark(String ticketId, PaymentStrategy payment) {
+    Ticket ticket = activeTickets.get(ticketId);
+    if (ticket == null) throw new IllegalArgumentException("No active ticket: " + ticketId);
+    ticket.setExitTime(Instant.now());
+    double fee = pricingStrategy.calculatePrice(ticket, ticket.getExitTime());
+    if (!payment.pay(fee)) throw new IllegalStateException("Payment failed");  // spot NOT freed
+    ticket.getSpot().release();                          // only on success
+    activeTickets.remove(ticketId);
+    return fee;
+}
+```
+
+**Integer ceil pricing** — `(a + b - 1) / b`, min 1 hour, no floating point.
+
+```java
+long minutes = Duration.between(t.getEntryTime(), exitTime).toMinutes();
+long hours = Math.max(1, (minutes + 59) / 60);   // ceil(minutes/60), min 1 hour
+return hours * hourlyRate;
+```
+
+## 🎯 Strong-hire talking points (SDE-2, 3–4 YOE — say these out loud)
+
+Researched against senior LLD rubrics. The build is at the bar; these are the *spoken* gaps that
+separate hire from strong-hire — they cost zero code.
+
+- **Deadlock-freedom.** The classic parking-lot deadlock is "car holds a floor lock *and* waits for
+  a spot lock." We avoid it structurally: **only one lock is ever held — the spot's** (`tryOccupy`).
+  No nested locks → no deadlock. Say this; it's the difference between "I used a lock" and "I
+  reasoned about lock ordering."
+- **Optimistic locking = the distributed answer.** Single-JVM uses `synchronized` per spot
+  (pessimistic). Make it multi-node and that becomes a **version column + CAS**:
+  `UPDATE spot SET status=OCCUPIED WHERE id=? AND version=?` — retry on 0 rows updated. Name this
+  when asked "now make it distributed." (See [[CLAUDE#Concurrency control cheat-sheet]].)
+- **Lock granularity, stated as a choice.** Per-spot lock (fine-grained, high throughput) vs one lock
+  on the lot (simple, serializes every gate). We chose per-spot; say *why* — the lot lock makes two
+  gates on different floors block each other for no reason.
+- **Fair queue (if pushed on ordering).** If cars must be served first-come-first-served under
+  contention, a fair `ReentrantLock(true)` or a request queue — name it, don't build it.
