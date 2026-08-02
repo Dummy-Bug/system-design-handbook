@@ -78,11 +78,12 @@ Both feed directly into cost. A model's price is largely decided by how many par
 
 ### How do you tell whether a task is complex?
 
-A student asked how to decide this dynamically, and the answer is two contrasting examples:
-
-> **Simple.** You read a row from a database with five or seven columns, and you need to infer something from those values. You can query the database yourself, it is a very small amount of data, and you feed it to the model. **Even a simple LLM can do this.**
-
-> **Complex.** You have a **thousand-page PDF** and you want to determine whether a company is fraudulent. That will probably need a considerably more powerful model.
+> [!question]- How do you tell whether a task needs a bigger model or a cheaper one?
+> Two contrasting examples:
+>
+> > **Simple.** You read a row from a database with five or seven columns, and you need to infer something from those values. You can query the database yourself, it is a very small amount of data, and you feed it to the model. **Even a simple LLM can do this.**
+>
+> > **Complex.** You have a **thousand-page PDF** and you want to determine whether a company is fraudulent. That will probably need a considerably more powerful model.
 
 And an admission worth keeping:
 

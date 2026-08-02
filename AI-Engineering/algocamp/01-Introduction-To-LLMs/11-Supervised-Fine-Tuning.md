@@ -84,7 +84,8 @@ im_start  user  im_sep  what is the value of pi  im_end
 | `im_sep` | separator between the role and the message body |
 | `im_end` | the end of that message |
 
-A student asked whether these are flags telling the model who is speaking. **Yes** — they are separator tokens, and that is exactly what they are for.
+> [!question]- Are `im_start` / `im_sep` / `im_end` just flags telling the model who is speaking?
+> **Yes** — they are separator tokens, and that is exactly what they are for.
 
 ```mermaid
 flowchart LR
@@ -154,9 +155,8 @@ In other words: it learns **how experts actually answer**, and how humans actual
 
 ## What SFT still doesn't fix
 
-A question from the room: how does the model decide whether to just predict the next token or to compute something?
-
-The honest answer is that **after SFT you still have a model that generates the next token**. That is what any LLM does. What changed is the data it was tuned on — the base model's corpus had no conversations in it, only raw internet text, so it did not know how to compute, answer, or think.
+> [!question]- How does the model know whether to just continue the text or actually work something out?
+> The honest answer is that **after SFT you still have a model that generates the next token**. That is what any LLM does. What changed is the data it was tuned on — the base model's corpus had no conversations in it, only raw internet text, so it did not know how to compute, answer, or think.
 
 > [!info] **Chain of thought, flagged for later.** The course returns to this with chain-of-thought prompting: give a model examples *and a way to think*, and it learns that for a certain kind of question, the next tokens it should generate are the **reasoning**, not the answer.
 >

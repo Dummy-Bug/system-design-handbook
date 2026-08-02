@@ -156,8 +156,3 @@ Someone asked what training GPT actually cost. There is no reliably published nu
 **They do not guarantee the coefficients transfer.** The two papers disagree on the exponent using similar methods — which is itself the caution. A scaling law is an empirical fit over a particular family of models, not a law of nature.
 
 **Bigger is only better in tandem.** The single most misread version of this work is "more parameters = better model". Both papers say the opposite when data is held fixed: scaling one alone enters diminishing returns.
-
----
-
-> [!tip] Interview framing
-> "There are two scaling-law papers and they're usually cited together. The OpenAI 2020 paper found that cross-entropy loss follows a power law in three variables — N for parameters, D for dataset size, C for compute — and that performance improves predictably as long as you scale N and D in tandem, with diminishing returns if you freeze either. Their specific finding is that the penalty depends on N^0.74/D, so an 8× bigger model needs only about 5× the data. They also showed training curves are predictable enough that you can extrapolate the early part to forecast final loss, which matters when a run costs millions. Then DeepMind's 2022 compute-optimal paper contradicts the ratio: they say model size and training tokens should scale at **equal** rates, so doubling the model means doubling the tokens. Both agree on the direction — bigger model plus bigger dataset is better — they disagree on the proportion. The misreading to avoid is 'more parameters equals better model'; both papers say scaling parameters alone hits diminishing returns."

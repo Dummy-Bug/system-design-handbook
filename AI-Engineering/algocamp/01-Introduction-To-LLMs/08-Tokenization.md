@@ -137,13 +137,17 @@ These come out of the demo and out of student questions, and each one has practi
 
 ## Questions from the room
 
-**Is it like hashing?** At some level, yes — you are mapping strings to numbers. But the real algorithms are considerably more complex than direct hashing.
+> [!question]- Is tokenization just hashing — mapping strings to numbers?
+> At some level, yes — you are mapping strings to numbers. But the real algorithms are considerably more complex than direct hashing.
 
-**Why not just give every word a single token ID?** Because different tokenization algorithms take different approaches. BPE decides by frequency, WordPiece by probability. Neither was designed around the idea that a word is the natural unit — sub-word units handle unseen words far better, which is exactly what the split surname demonstrates.
+> [!question]- Why not just give every word a single token ID and be done with it?
+> Because different tokenization algorithms take different approaches. BPE decides by frequency, WordPiece by probability. Neither was designed around the idea that a word is the natural unit — sub-word units handle unseen words far better, which is exactly what the split surname demonstrates.
 
-**What happens to a word the algorithm has never seen?** It gets divided. The tokenizer does not know the name, so it breaks it into pieces it does know. That is a feature: it means no input is ever untokenizable.
+> [!question]- What happens to a word the tokenizer has never seen before?
+> It gets divided. The tokenizer does not know the name, so it breaks it into pieces it does know. That is a feature: it means no input is ever untokenizable.
 
-**How is the splitting decided?** There is a useful comparison to the classic data-structures exercise of tokenizing a string. You could split on spaces. You could split on some other delimiter. Different rules give different tokens — but once a token is identified, **two identical tokens always share an ID**.
+> [!question]- How does the tokenizer decide where to split?
+> There is a useful comparison to the classic data-structures exercise of tokenizing a string. You could split on spaces. You could split on some other delimiter. Different rules give different tokens — but once a token is identified, **two identical tokens always share an ID**.
 
 > [!important] **On minimising tokens.** A student observed that we should use as few tokens as possible.
 >

@@ -133,8 +133,3 @@ That is the real argument for the pipeline above. Every filter in it is there be
 **It does not guarantee quality.** Raw internet text contains toxicity, factual errors and unstructured rambling — a point [[11-Supervised-Fine-Tuning]] returns to as the *misalignment trap*, because it is precisely what post-training has to correct.
 
 **Filtering is lossy and opinionated.** Deciding which URLs are unwanted and which language to keep is a judgement, made once, that shapes everything the model will ever know. A corpus filtered to English produces a model that is worse in every other language, and no amount of later fine-tuning fully recovers that.
-
----
-
-> [!tip] Interview framing
-> "Pre-training is the first and most expensive stage, and it starts with getting the data — early LLMs were trained on raw internet text. Common Crawl is the canonical source: a non-profit that's been crawling the public web since around 2007 and publishes the datasets freely, billions of pages. The pipeline is basically the classic 'design a web crawler' interview question — seed URLs, download HTML, extract hyperlinks to keep crawling, filter out unwanted URLs, extract the text, then a second round of filtering for language and duplicates. FineWeb on Hugging Face is a good concrete example of the output: 15 trillion tokens, 44 terabytes, built from 96 Common Crawl snapshots. Two things I'd flag — the leading labs don't publish their corpora, so Llama 3 and Mixtral are open-weights but not open-data; and the filtering isn't housekeeping, it's essential, because a training run costs millions and you can't discover mid-run that the corpus was junk."

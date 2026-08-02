@@ -22,11 +22,10 @@ This is the **G** in GPT from [[05-Transformers-And-Attention]] — *generative*
 
 ## How generation actually works
 
-A student asked the sharpest question in the session: if you ask about photosynthesis, does the model go and search Common Crawl for that phrase and see what follows?
-
-**No.** And getting this wrong makes everything downstream confusing, so it is worth being exact.
-
-> [!danger] **It is not a substring lookup.** The model does not search the training corpus at inference time. It does not hold the corpus at all. The corpus shaped its parameters during training and then went away.
+> [!question]- When I ask about photosynthesis, does the model go and look that word up in the text it was trained on?
+> **No.** And getting this wrong makes everything downstream confusing, so it is worth being exact.
+>
+> > [!danger] **It is not a substring lookup.** The model does not search the training corpus at inference time. It does not hold the corpus at all. The corpus shaped its parameters during training and then went away.
 
 Here is what actually happens:
 

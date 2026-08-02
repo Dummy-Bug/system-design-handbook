@@ -116,9 +116,8 @@ Worth knowing who published this.
 
 ## How much of this do you need?
 
-A student asked how many reinforcement question-answer pairs it takes.
-
-**A lot.** Not ten questions, not twenty. Tuning a model this way needs a very large volume of scored generations — which is why, once again, this is not something an individual does.
+> [!question]- How many scored question-answer pairs does reinforcement learning actually need?
+> **A lot.** Not ten questions, not twenty. Tuning a model this way needs a very large volume of scored generations — which is why, once again, this is not something an individual does.
 
 ---
 

@@ -104,15 +104,14 @@ Same loop, with the LLM's specifics filled in:
 
 ## The training window
 
-A question from the room, and a good one: *how does the network know which part of the input to use? Is it limited by length — like, use the past 20 tokens to predict the 21st?*
-
-Yes, in the sense that there is a window:
-
-> During training you define a **window** of text. Say the window is **1024 tokens**. The model takes a chunk of 1024 tokens and predicts the next possible token — take 1023 tokens, predict the 1024th.
-
-You then slide that window over your enormous corpus, taking different chunks. **Different models keep different window sizes** — 1,000 tokens, 5,000, more.
-
-*Which* parts of that window matter for the prediction is the job of the attention mechanism from [[05-Transformers-And-Attention]].
+> [!question]- When predicting the next token, does the model look at all the text before it, or only the last N tokens?
+> Only a fixed span — there is a **window**:
+>
+> > During training you define a **window** of text. Say the window is **1024 tokens**. The model takes a chunk of 1024 tokens and predicts the next possible token — take 1023 tokens, predict the 1024th.
+>
+> You then slide that window over your enormous corpus, taking different chunks. **Different models keep different window sizes** — 1,000 tokens, 5,000, more.
+>
+> *Which* parts of that window matter for the prediction is the job of the attention mechanism from [[05-Transformers-And-Attention]].
 
 ---
 
@@ -146,8 +145,3 @@ It is a continuous mechanism: check the loss, reduce the loss, move forward, fee
 **It does not guarantee** the model learns anything you wanted. The objective is next-token prediction and nothing more. A model can become excellent at it and still be useless as an assistant, which is exactly the situation [[10-The-Base-Model]] describes.
 
 **Low loss is not correctness.** The target is "what actually followed in the corpus", so the model is being trained to reproduce the corpus's patterns — including its errors.
-
----
-
-> [!tip] Interview framing
-> "The pre-training objective is one sentence: given a sequence of tokens, predict the probability distribution over what the next token should be. The distribution part matters — it's not one predicted token, it's a probability for every token in the vocabulary. Mechanically it's the standard neural network loop: forward pass to get an output, compare against the actual next token to compute a loss, then adjust the parameters and repeat, with back-propagation doing the adjusting. The analogy I like is a DJ tuning knobs based on crowd feedback — the knobs are the parameters, the feedback is the loss. In practice you slide a fixed window over the corpus, say 1024 tokens predicting the 1024th, and it runs for months over billions or trillions of parameters. The important limitation is that low loss just means it reproduces the corpus well — it doesn't mean the model can hold a conversation, which is why post-training exists."

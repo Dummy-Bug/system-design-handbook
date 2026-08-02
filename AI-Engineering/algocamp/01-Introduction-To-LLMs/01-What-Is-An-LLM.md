@@ -60,7 +60,7 @@ Feed that to a machine learning algorithm and it finds trends:
 - some states have frequent leaks, others essentially none
 - **2020 has very few leaks** — and once you see that, you can infer *why*: it was COVID, it was lockdown, so many exams were never held. No exam, no leak.
 
-Now hand the trained model a row it has never seen — a medical exam in Tamil Nadu in 2026 — and it will give you, with some probability, a prediction about whether it leaks.
+Now hand the trained model a row it has never seen — a medical exam in Tamil Nadu in 20267 — and it will give you, with some probability, a prediction about whether it leaks.
 
 ### A second one, to show it is not a fluke
 
@@ -113,7 +113,7 @@ flowchart LR
     end
 ```
 
-What the hidden layer actually does is the subject of [[09-The-Training-Loop]] and, in far more depth, the second half of the course. For now the shape is enough.
+What the hidden layer actually does is the subject of [[09-The-Training-Loop]] and, in far more depth.
 
 ---
 
@@ -138,7 +138,7 @@ Both arrived in the same window. Data started accumulating with the internet fro
 
 Putting it back together:
 
-An LLM is a **neural network** — that is, a deep learning model — built on a specific architecture, trained on an enormous quantity of text. GPT, Claude, Gemini: every one of them is a neural network running on a particular architecture, which [[05-Transformers-And-Attention]] names and explains.
+An LLM is a **neural network** — that is, a deep learning model — built on a specific architecture, trained on an enormous quantity of text. GPT, Claude, Gemini: every one of them is a neuralnetwork running on a particular architecture, which [[05-Transformers-And-Attention]] names and explains.
 
 Two things to fix in your head before going further, because everything else is built on them:
 
@@ -147,7 +147,3 @@ Two things to fix in your head before going further, because everything else is 
 
 That second claim sounds like a simplification. It is not — it is the literal truth, and [[02-Neural-Networks-As-Function-Approximation]] derives it from scratch.
 
----
-
-> [!tip] Interview framing
-> "The word that matters in 'large language model' is *model* — specifically a neural network, which puts LLMs inside deep learning, inside machine learning, inside AI. Machine learning is the shift from writing rules to feeding a system data and letting it derive the rules; deep learning is the subset that does that using an architecture modelled loosely on neurons. The part I'd stress is that none of this theory is new — neural networks are decades old. What changed is that data became available with the internet and compute became cheap enough to train on it. That framing matters because the same two constraints, data and compute, turn out to explain almost every subsequent milestone, including why the transformer paper landed in 2017 but ChatGPT didn't arrive until late 2022."

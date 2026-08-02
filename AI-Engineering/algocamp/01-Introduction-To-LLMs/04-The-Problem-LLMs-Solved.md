@@ -108,8 +108,3 @@ flowchart LR
 **The old approach is not obsolete.** Task-specific models remain the right answer when the task is narrow, the data is available, and the cost of a general-purpose model at inference time is not justified. [[14-Choosing-A-Model]] makes the same argument in its modern form.
 
 **"No new dataset" turned out to be optimistic.** LLMs removed the per-task dataset — but only by requiring an enormous one-time dataset instead, which is what [[07-Pre-Training-The-Data]] is about. The cost moved; it did not vanish.
-
----
-
-> [!tip] Interview framing
-> "Before LLMs, deep learning worked but it worked one model per task — a network for number-plate detection, a separate one for sentiment analysis, a separate one for stock prediction. Each needed its own dedicated dataset and its own training run, and training needs serious GPU time, so it's expensive. Transfer learning helped by letting you retrain only part of an existing model, but it didn't change the structure: every new problem still meant a new dataset and a new run. The vision that produced LLMs was a general-purpose model that handles many tasks without retraining and without collecting new data — where you give it a couple of examples instead. Worth noting the cost didn't disappear, it relocated: instead of many small datasets you now need one enormous one, and pre-training runs cost on the order of a hundred million dollars."

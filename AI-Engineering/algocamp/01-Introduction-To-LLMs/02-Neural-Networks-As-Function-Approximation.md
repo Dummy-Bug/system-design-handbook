@@ -114,7 +114,7 @@ Draw one curve with one set of values and a second curve with a different set. B
 
 So "learning" is precisely this: **finding the values of `a`, `b` and `c` that make the curve fit your data best.**
 
-> [!important] Those constants are called **parameters**. In neural-network vocabulary they are **weights and biases**, but that name introduces machinery — what happens inside the layers — that you do not need yet. Until [[09-The-Training-Loop]] shows how they get adjusted, "parameters" is the right word.
+> [!important] Those constants are called **parameters**. In neural-network vocabulary they are **weights and biases**
 >
 > This is also where the *large* in large language model comes from. Our example has three parameters. A large language model has **billions or trillions** of them.
 
@@ -122,15 +122,14 @@ So "learning" is precisely this: **finding the values of `a`, `b` and `c` that m
 
 ## The question that makes it concrete
 
-A student asked why the examples are abstract graphs rather than real-world data. The answer is worth keeping, because it turns the whole note into something recognisable.
-
-Let **x be a company's earnings** and **y be its stock price**.
-
-You might expect a straight line — earn more, be worth more. Broadly the trend holds, but it is not clean. Sometimes earnings rise and the stock falls, because other factors intervene:
-
-> Google earns enormous sums from ads. But it also spends enormous sums — heavy capital expenditure. So the company's net cash in the bank can be *shrinking* while earnings grow. Investors dislike that, and the stock price drops.
-
-So the relationship between earnings and stock price is **real but not simple**. It is exactly the kind of complex, non-linear relationship you would want to approximate — and exactly the kind a straight line cannot capture.
+> [!question]- We keep plotting `x` against `y` with nothing on the axes. In a real problem, what are `x` and `y`?
+> Let **x be a company's earnings** and **y be its stock price**.
+>
+> You might expect a straight line — earn more, be worth more. Broadly the trend holds, but it is not clean. Sometimes earnings rise and the stock falls, because other factors intervene:
+>
+> > Google earns enormous sums from ads. But it also spends enormous sums — heavy capital expenditure. So the company's net cash in the bank can be *shrinking* while earnings grow. Investors dislike that, and the stock price drops.
+>
+> So the relationship between earnings and stock price is **real but not simple**. It is exactly the kind of complex, non-linear relationship you would want to approximate — and exactly the kind a straight line cannot capture.
 
 ---
 
@@ -141,8 +140,3 @@ So the relationship between earnings and stock price is **real but not simple**.
 **It does not guarantee a good fit.** Approximation is not exactness. There is always residual error, and the whole game is minimising it, not eliminating it.
 
 **It does not remove the two constraints.** From [[01-What-Is-An-LLM]]: you still need **enough data** and **enough compute**. Without both, a neural network will do worse than a simple approximation — the capability is only unlocked when both are present.
-
----
-
-> [!tip] Interview framing
-> "The cleanest way I know to explain a neural network is to start with linear regression. You have scattered data, you draw candidate lines, and you pick the one with the smallest total error — for instance if the true value at x=10 is 30 and one line predicts −9 while another predicts 28, the absolute errors are 39 and 2, so the second is better. That's linear regression, and it works fine until the data isn't linear. Then you need a curve, or a hyperplane, or something in thousands of dimensions you can't visualise, and finding the coefficients by hand is infeasible because there are infinitely many candidate curves each with its own coefficients. That's the job a neural network does — it's a function approximator that finds those coefficients, and it isn't limited to linear functions. The coefficients are what we call parameters, and 'large' in large language model refers to having billions or trillions of them rather than three."

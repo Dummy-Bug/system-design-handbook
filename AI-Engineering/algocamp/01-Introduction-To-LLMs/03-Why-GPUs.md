@@ -117,10 +117,6 @@ A fair question, and the answer is a genuine trade-off rather than GPUs simply w
 
 A single CPU core outperforms a single GPU core. The CPU's weakness is only that it cannot do many things at once. So work that is inherently sequential — one step genuinely depending on the last — belongs on a CPU, and no number of GPU cores helps.
 
-> [!info] Two things flagged for later in the course, both worth remembering:
-> - **The inference phase** — actually *using* a trained model, covered in [[10-The-Base-Model]] — has different hardware needs from training, and CPUs have a role there.
-> - **Memory, not compute, is increasingly the bottleneck.** The constraint is shifting from "can we calculate fast enough" to "can we hold and move enough data".
-
 And the same parallelism explains GPUs' original market: gaming and frame rates, video processing, high-end image processing. All of them are the same shape of problem — many independent calculations, all at once.
 
 ---
@@ -136,4 +132,4 @@ And the same parallelism explains GPUs' original market: gaming and frame rates,
 ---
 
 > [!tip] Interview framing
-> "The reason neural networks need GPUs comes down to one property of matrix multiplication, which is the dominant operation inside almost every architecture. If you multiply a 3×4 matrix by a 4×5 matrix you get 15 output cells, and the key observation is that **no output cell depends on any other** — each one needs only a row of the first matrix and a column of the second. So there's no requirement for serial execution; every cell can be computed simultaneously. A CPU can't exploit that because a core does one operation at a time and six or eight cores is the ceiling — what looks like parallelism on a single core is just context switching. A GPU is essentially thousands of small cores, so it can. That's also why CPUs haven't gone away: a single CPU core is more powerful than a single GPU core, it just can't do many things at once, so sequential work still belongs there."
+> The reason neural networks need GPUs comes down to one property of matrix multiplication, which is the dominant operation inside almost every architecture. If you multiply a 3×4 matrix by a 4×5 matrix you get 15 output cells, and the key observation is that **no output cell depends on any other** — each one needs only a row of the first matrix and a column of the second. So there's no requirement for serial execution; every cell can be computed simultaneously. A CPU can't exploit that because a core does one operation at a time and six or eight cores is the ceiling — what looks like parallelism on a single core is just context switching. A GPU is essentially thousands of small cores, so it can. That's also why CPUs haven't gone away: a single CPU core is more powerful than a single GPU core, it just can't do many things at once, so sequential work still belongs there.
