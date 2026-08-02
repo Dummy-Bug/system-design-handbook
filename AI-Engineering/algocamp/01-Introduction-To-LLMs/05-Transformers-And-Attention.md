@@ -1,7 +1,3 @@
-[[04-The-Problem-LLMs-Solved]] left off with an ambition: one general-purpose model instead of one model per task. This note is about the architecture that made it possible, and the single idea inside it that everything else rests on.
-
----
-
 ## The paper
 
 In **December 2017** a research paper was published titled **"Attention Is All You Need"**.
@@ -19,7 +15,7 @@ Each step improved on the last, and each still carried real limitations. The 201
 
 > [!important] **Transformers are fundamentally behind everything you are currently using.** GPT, Claude, Gemini, Qwen — every one of them is, at some level, built on the transformer architecture.
 >
-> And a transformer is still deep learning. It is a neural-network architecture, so everything in [[01-What-Is-An-LLM]] and [[02-Neural-Networks-As-Function-Approximation]] still applies to it.
+> And a transformer is still deep learning. It is a neural-network architecture, so everything already true of neural networks still applies to it.
 
 ---
 
@@ -27,9 +23,9 @@ Each step improved on the last, and each still carried real limitations. The 201
 
 Natural language has a property that makes it awkward for a machine.
 
-**A word on its own often carries very little information.** What matters is the word *in the context of the other words around it*.
+**A word on its own often carries very little information.** What matters is the word *in the context of the other words around it* 
 
-The example the lecture uses:
+The example:
 
 > Take the word **bank**.
 >
@@ -68,7 +64,7 @@ That is the whole idea in one sentence. Not "what does this word mean" but "give
 
 When a model applies this within a single sequence — every word attending to every other word in the same input — it is called **self-attention**.
 
-> [!info] The mathematics of how attention is computed is deliberately deferred. It is covered in the second half of the course, alongside actually building a transformer. At this stage the conceptual statement is the load-bearing part, and it is enough to reason about everything in this chapter.
+> [!info] The mathematics of how attention is computed is deliberately deferred. It comes later, alongside actually building a transformer. At this stage the conceptual statement is the load-bearing part, and it is enough to reason about everything in this chapter.
 
 **Everything after 2017 is built on this.** The majority of research you will encounter sits on top of the transformer architecture rather than replacing it.
 
@@ -80,11 +76,11 @@ Worth stopping on, because it is hiding in plain sight.
 
 **GPT** = **G**enerative **P**re-trained **T**ransformer.
 
-| Letter | Meaning | Where it is explained |
-|---|---|---|
-| **G** | Generative — it produces new output | [[10-The-Base-Model]] |
-| **P** | **Pre-trained** — it went through a pre-training phase | [[07-Pre-Training-The-Data]] |
-| **T** | **Transformer** — the architecture | this note |
+| Letter | Meaning                                                |
+| ------ | ------------------------------------------------------ |
+| **G**  | Generative — it produces new output                    |
+| **P**  | **Pre-trained** — it went through a pre-training phase |
+| **T**  | **Transformer** — the architecture                     |
 
 So "ChatGPT" is not an opaque brand name. It is a description: a generative model, pre-trained, built on transformers.
 
@@ -92,11 +88,11 @@ So "ChatGPT" is not an opaque brand name. It is a description: a generative mode
 
 ## Why 2017 didn't feel like anything
 
-Here is the question a student asked, and it is the right one:
+Which raises the right question:
 
 > The transformer arrived in 2017. So why did the fuss about LLMs only start in **2022**, when ChatGPT launched?
 
-Part of the answer is that Google was *already ahead* — they published the transformer architecture. But the constraint was the one from [[01-What-Is-An-LLM]] that keeps reappearing: **training these things is not cheap, and you need an enormous dataset**.
+Part of the answer is that Google was *already ahead* — they published the transformer architecture. But the constraint was the one that keeps reappearing: **training these things is not cheap, and you need an enormous dataset**.
 
 So the work was happening the whole time, quietly:
 
@@ -120,9 +116,9 @@ timeline
 
 > [!important] The point of the timeline: **this is not three years old.** People were working on it from 2017 onward, and the neural-network architecture underneath is very much older than that.
 >
-> What changed was not the discovery of a new idea in 2022. It was that enough compute became available, enough data became available, and the architecture had been improved to the point where it became **general-purpose** — which is exactly the ambition from [[04-The-Problem-LLMs-Solved]].
+> What changed was not the discovery of a new idea in 2022. It was that enough compute became available, enough data became available, and the architecture had been improved to the point where it became **general-purpose** — which is exactly the ambition that motivated the whole effort.
 >
-> A great deal happened in the gap. Most of it was **pre-training and post-training**, which [[06-The-Three-Stages]] onwards covers in full.
+> A great deal happened in the gap. Most of it was **pre-training and post-training**, which is covered in full later.
 
 ---
 
@@ -142,16 +138,6 @@ The difference is not capability in principle. It is that transformers are far h
 That last one is what actually mattered.
 
 > [!info] And this may not last. Someone may introduce a new architecture tomorrow, and modern LLMs would move onto it — research in the field moves at a tremendous pace, so nobody knows. But for now, in **2026 and 2027**, the architectures you will deal with are transformer-based.
-
----
-
-## Guarantees
-
-**It guarantees** that context is available to the model — every token can be influenced by every other token in the input, rather than by a fixed window of neighbours.
-
-**It does not guarantee correct interpretation.** Attention decides *how much* each word influences another; it does not guarantee those weights are right. A model can attend to the wrong context and produce a confidently wrong reading.
-
-**It is not free.** Letting every word look at every other word is quadratic in sequence length — which is a large part of why long inputs cost more, a thread picked up in [[14-Choosing-A-Model]].
 
 ---
 

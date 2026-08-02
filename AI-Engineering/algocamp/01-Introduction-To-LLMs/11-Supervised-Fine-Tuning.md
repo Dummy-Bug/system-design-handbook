@@ -1,6 +1,4 @@
-[[10-The-Base-Model]] ended with a model that predicts the next token and cannot do anything else. Now begins **post-training** — the phase whose whole purpose is to *turn the LLM into an assistant*.
-
-The first step of it is **supervised fine-tuning**, usually shortened to **SFT**.
+**Post-training** is the phase whose whole purpose is to *turn the LLM into an assistant*. Its first step is **supervised fine-tuning**, usually shortened to **SFT**.
 
 > **Supervised fine-tuning** is the process of continuing the training of your base model on a **curated set of conversations**.
 
@@ -96,7 +94,7 @@ flowchart LR
 
 > [!important] **Under the hood it is a one-dimensional, long sequence of tokens. Nothing more, nothing less.**
 >
-> Even with a hundred thousand conversations, everything eventually collapses to a flat token sequence — the same thing [[08-Tokenization]] produced from raw web text. The structure lives entirely in those special tokens.
+> Even with a hundred thousand conversations, everything eventually collapses to a flat token sequence — the same thing tokenization produced from raw web text. The structure lives entirely in those special tokens.
 
 ---
 
@@ -114,7 +112,7 @@ The landmark result here is a **2022 OpenAI paper**, *Training Language Models t
 >
 > The statistically likely next word is not necessarily the word you need.
 
-**What it did.** InstructGPT bridged the gap by taking a GPT-3 model and aligning it using **reinforcement learning from human feedback (RLHF)** — the subject of [[12-Reinforcement-Learning]]. Human labellers wrote the instructions defining how a conversation should go, and the model learned from those.
+**What it did.** InstructGPT bridged the gap by taking a GPT-3 model and aligning it using **reinforcement learning from human feedback (RLHF)**, covered later. Human labellers wrote the instructions defining how a conversation should go, and the model learned from those.
 
 **The result that makes the point:**
 
@@ -158,21 +156,11 @@ In other words: it learns **how experts actually answer**, and how humans actual
 > [!question]- How does the model know whether to just continue the text or actually work something out?
 > The honest answer is that **after SFT you still have a model that generates the next token**. That is what any LLM does. What changed is the data it was tuned on — the base model's corpus had no conversations in it, only raw internet text, so it did not know how to compute, answer, or think.
 
-> [!info] **Chain of thought, flagged for later.** The course returns to this with chain-of-thought prompting: give a model examples *and a way to think*, and it learns that for a certain kind of question, the next tokens it should generate are the **reasoning**, not the answer.
+> [!info] **Chain of thought, flagged for later.** This comes back as chain-of-thought prompting: give a model examples *and a way to think*, and it learns that for a certain kind of question, the next tokens it should generate are the **reasoning**, not the answer.
 >
 > The example given: *how much profit do I make buying a stock at 100 and selling at 120?* You show it that the buy price is 100, the sell price is 120, so the profit per unit is 20, and for 10 units that is 20 × 10 = 200.
 >
-> **The next token generated is not the direct answer. It is the sequence of thinking.** That idea is what makes reasoning models work, and it gets its own treatment later in the course.
-
----
-
-## Guarantees
-
-**It guarantees** that the model adopts the *form* of helpful assistant behaviour — it will respond to instructions rather than auto-complete them.
-
-**It does not guarantee correctness.** SFT teaches the shape of a good answer, not the truth of one. A well-structured wrong answer is exactly what SFT optimises toward if the training conversations contain one.
-
-**It is bounded by the labellers.** Everything the model learns about "a good reply" comes from what human annotators wrote. Their blind spots become the model's.
+> **The next token generated is not the direct answer. It is the sequence of thinking.** That idea is what makes reasoning models work, and it gets its own treatment later.
 
 ---
 

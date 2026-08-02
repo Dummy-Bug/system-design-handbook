@@ -1,10 +1,10 @@
-A question from the room, near the end of the session, which is the right question to end on:
+The right question to end the chapter on:
 
 > **What makes a model more powerful — the number of parameters, the size, or the training data?**
 
-Two research papers answer it, and they do not fully agree. Both were set as reading.
+Two research papers answer it, and they do not fully agree. Both are worth reading in full.
 
-> [!info] This note covers **only what was explained in the lecture** about these two papers. Reading them properly is a separate exercise.
+> [!info] This note covers **only the overview** of these two papers. Reading them properly is a separate exercise.
 >
 > - **Scaling Laws for Neural Language Models** — OpenAI, 2020 · [arxiv.org/pdf/2001.08361](https://arxiv.org/pdf/2001.08361)
 > - **Training Compute-Optimal Large Language Models** — DeepMind, 2022 · [arxiv.org/pdf/2203.15556](https://arxiv.org/pdf/2203.15556)
@@ -23,7 +23,7 @@ Unpacked, that is:
 
 | Term in the paper | What it means here |
 |---|---|
-| **cross-entropy loss** | the loss the model generates — the measure from [[09-The-Training-Loop]] |
+| **cross-entropy loss** | the loss the model generates |
 | **model size** | the **number of parameters** |
 | **dataset size** | the corpus you trained on |
 | **amount of compute** | how much you trained it — how many iterations you could afford |
@@ -85,11 +85,11 @@ The result is exactly what you would expect from the above: **smaller models hav
 
 ### On architecture
 
-One more finding, which came up when a student asked whether there is an algorithm for deciding the number of parameters:
+One more finding, on whether there is an algorithm for deciding the number of parameters:
 
 > The scaling-law paper reports that **how you distribute the parameters** — how you architect the internal layers — has **relatively little effect** on accuracy. What matters is the **number** of parameters.
 
-> [!info] **Wide versus broad**, as used in the lecture. Look back at the artificial neural network diagram in [[01-What-Is-An-LLM]], which has two hidden layers.
+> [!info] **Wide versus broad.** Think back to the artificial neural network diagram, the one with two hidden layers.
 >
 > - Replace those two hidden layers with **20 hidden layers** → a very **wide** model.
 > - Keep a **single hidden layer** but give it a great many activation functions → a very **broad** model.
@@ -100,7 +100,7 @@ One more finding, which came up when a student asked whether there is an algorit
 
 ## Paper 2 — Training Compute-Optimal LLMs (DeepMind, 2022)
 
-A newer paper — 2022 against 2020 — and, as the lecture puts it, with newer work come newer findings.
+A newer paper — 2022 against 2020 — and with newer work come newer findings.
 
 They also trained a large number of language models. Their conclusion:
 
@@ -145,14 +145,4 @@ Someone asked what training GPT actually cost. There is no reliably published nu
 
 > [!danger] **Easily $100 million.**
 >
-> And the reason is now fully assembled from everything in this folder: you need **compute** ([[03-Why-GPUs]]), you need a **dataset** ([[07-Pre-Training-The-Data]]), you need **multiple training runs** ([[09-The-Training-Loop]]), and after all that you still need **post-training** — SFT ([[11-Supervised-Fine-Tuning]]) and reinforcement learning ([[12-Reinforcement-Learning]]).
-
----
-
-## Guarantees
-
-**They guarantee** predictability, which is their real contribution. Before this work, whether a bigger model would be better was a guess; after it, the relationship is a curve you can extrapolate.
-
-**They do not guarantee the coefficients transfer.** The two papers disagree on the exponent using similar methods — which is itself the caution. A scaling law is an empirical fit over a particular family of models, not a law of nature.
-
-**Bigger is only better in tandem.** The single most misread version of this work is "more parameters = better model". Both papers say the opposite when data is held fixed: scaling one alone enters diminishing returns.
+> And the reason is now fully assembled from everything in this folder: you need **compute**, you need a **dataset**, you need **multiple training runs**, and after all that you still need **post-training** — SFT and reinforcement learning.

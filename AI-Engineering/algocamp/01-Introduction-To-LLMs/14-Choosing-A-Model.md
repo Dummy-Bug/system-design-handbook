@@ -1,4 +1,4 @@
-Thirteen notes on what an LLM is and how one gets built. So the fair question, asked in the session itself:
+The fair question:
 
 > **Does any of this actually matter to us as AI engineers?**
 
@@ -12,7 +12,7 @@ The answer is honest and slightly deflating, and it is the most practically usef
 >
 > What matters is that you **understand what an LLM is**, and that you understand **which LLM is good for which type of task**.
 
-Fine-tuning, later in the course, does draw on some of this theory. And if you go into **AI research** you will be training models and devising architectures, so all of it matters. But for AI *engineering* the relevant skill is knowing what a model is capable of and whether that capability is relevant to your task.
+Fine-tuning does draw on some of this theory. And if you go into **AI research** you will be training models and devising architectures, so all of it matters. But for AI *engineering* the relevant skill is knowing what a model is capable of and whether that capability is relevant to your task.
 
 So why does the second half — picking the right model — matter so much? Because **LLMs are costly**.
 
@@ -27,7 +27,7 @@ Open any provider's model pricing page and you will find **two** prices per mode
 | **Input price** | every million tokens you send **in** |
 | **Output price** | every million tokens the model generates **out** |
 
-The figures shown in the session, as an illustration of the shape: **$5 per million input tokens** and **$30 per million output tokens**.
+As an illustration of the shape: **$5 per million input tokens** and **$30 per million output tokens**.
 
 Two patterns hold generally:
 
@@ -35,7 +35,7 @@ Two patterns hold generally:
 
 > There is a lot of internal pre-processing and **internal reasoning** happening. For every step of that reasoning the model is also generating tokens — and you pay for those too.
 
-This is the direct financial version of the warning in [[08-Tokenization]] about not over-optimising token counts: the "wasted" tokens are frequently the thinking, and the thinking is what makes the answer good.
+This is the direct financial version of the earlier warning about not over-optimising token counts: the "wasted" tokens are frequently the thinking, and the thinking is what makes the answer good.
 
 **More powerful means more expensive.** Within any model family there is a cheapest tier and a most capable tier, and the price gap between them is large.
 
@@ -59,7 +59,7 @@ flowchart TB
     S3 --> M2
 ```
 
-The instructor's own example, from a real project: multiple sub-level tasks, where some were handled by **Claude Haiku**, some by **Sonnet**, and some by **Opus** — the small, mid and large tiers of the same family, assigned by how hard the subtask was.
+An example from a real project: multiple sub-level tasks, where some were handled by **Claude Haiku**, some by **Sonnet**, and some by **Opus** — the small, mid and large tiers of the same family, assigned by how hard the subtask was.
 
 **Cost optimisation is part of the design**, not an afterthought.
 
@@ -71,8 +71,8 @@ Two properties:
 
 | Property | Meaning |
 |---|---|
-| **The configuration — how big the model is** | its **number of parameters**, the measure from [[10-The-Base-Model]] |
-| **Its reasoning capabilities** | covered later in the course, alongside chain of thought |
+| **The configuration — how big the model is** | its **number of parameters** |
+| **Its reasoning capabilities** | covered later, alongside chain of thought |
 
 Both feed directly into cost. A model's price is largely decided by how many parameters have to be loaded and used, and by how much reasoning it does.
 
@@ -95,7 +95,7 @@ And an admission worth keeping:
 
 ## The takeaway from the whole chapter
 
-The session closes by rebuilding everything from scratch, and it is worth having in this compressed form.
+Rebuilt from scratch, the whole chapter compresses to this.
 
 ```mermaid
 flowchart TB
@@ -113,7 +113,7 @@ And how one is made:
 | **Supervised fine-tuning** | feed it good conversations | so it knows **how to reply** |
 | **Reinforcement learning** | give it questions, have it generate multiple answers, rate the better ones | so it improves further |
 
-Plus the scaling relationship from [[13-Scaling-Laws]]:
+Plus the scaling relationship:
 
 > The bigger the network — that is, the **higher the number of parameters** — the better its performance. But you will need **higher compute** and a **larger dataset** to match.
 
@@ -123,9 +123,9 @@ Plus the scaling relationship from [[13-Scaling-Laws]]:
 
 ---
 
-## Where the course goes from here
+## What comes next
 
-Stated at the end of the session, and useful for orientation:
+Useful for orientation:
 
 ```mermaid
 flowchart LR
@@ -140,19 +140,9 @@ flowchart LR
 
 The first two weeks are introductory interaction plus a lot of prompting; transformer internals come in the second phase.
 
-> [!info] **Homework set in the session:** read both papers from [[13-Scaling-Laws]] and understand how the training aspects affect LLMs.
+> [!info] **Homework:** read both scaling-law papers and understand how the training aspects affect LLMs.
 >
 > And the advice attached to it, which is good general advice for reading any paper: **if you hit a term you don't understand, look it up with an LLM.** That is how you build the habit of reading papers rather than bouncing off them.
-
----
-
-## Guarantees
-
-**It guarantees** cost control if you actually do it. Tiering models by subtask is the single largest lever on the bill of an LLM application.
-
-**It does not guarantee quality holds.** A cheaper model on a subtask you judged simple may fail in ways that only show up in production, and the failure can be silent — a confident wrong answer rather than an error.
-
-**"Complex or simple" is a judgement, not a measurement.** There is no reliable a-priori test, which is why the honest answer includes trial and error, and why that trial and error is itself a budget line.
 
 ---
 

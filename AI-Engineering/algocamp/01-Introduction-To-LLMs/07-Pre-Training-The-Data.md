@@ -1,6 +1,4 @@
-Stage one of the three in [[06-The-Three-Stages]]. **Pre-training** is where a network with random parameters becomes something that knows about the world — and it is described as the first and **one of the most expensive** stages of building an LLM.
-
-Before any training can happen, you need the data. That turns out to be a substantial engineering problem in its own right, and it is what this note is about.
+**Pre-training** is where a network with random parameters becomes something that knows about the world. It is the first and **one of the most expensive** stages of building an LLM — and before any of it can happen, you need the data. That turns out to be a substantial engineering problem in its own right.
 
 ---
 
@@ -28,7 +26,7 @@ That makes it the default starting point for anyone assembling a pre-training co
 
 ## How web scraping actually works
 
-The instructor pauses here to build the crawler out, and notes it is also a **famous system design interview question**: *design a web crawler*.
+The crawler is worth building out in full, because it is also a **famous system design interview question**: *design a web crawler*.
 
 ```mermaid
 flowchart TB
@@ -76,7 +74,7 @@ One of those datasets is **FineWeb**, which describes itself as the finest colle
 | Derived from | **96 Common Crawl snapshots** |
 | Claim | produces better-performing LLMs than other pre-training datasets |
 
-*Tokens* is defined in [[08-Tokenization]]; for now read it as "units of text".
+*Tokens* is defined later; for now read it as "units of text".
 
 And the framing that comes with it is the thesis of this whole note:
 
@@ -110,7 +108,7 @@ Common Crawl is not the only source. There is an entire industry supplying train
 
 Some of this data is free — Common Crawl's, as far as is known. Others charge: there are **commercial data crawlers** and **human-annotation-based data companies** that sell their output.
 
-These companies come back in [[11-Supervised-Fine-Tuning]], where the data being sold is human-written conversations rather than scraped text.
+These companies come back later, where the data being sold is human-written conversations rather than scraped text.
 
 ---
 
@@ -123,13 +121,3 @@ It would be easy to treat filtering as housekeeping. It is not.
 > The data has to be refined, cleaned and filtered so that your model does not get trained on unnecessary material — and you only get one expensive shot at it. There is no cheap way to notice halfway through a multi-month run that the corpus was full of junk.
 
 That is the real argument for the pipeline above. Every filter in it is there because the cost of *not* having it is a wasted training run.
-
----
-
-## Guarantees
-
-**It guarantees** a corpus large enough to train on. Scale is the one thing web crawling reliably delivers.
-
-**It does not guarantee quality.** Raw internet text contains toxicity, factual errors and unstructured rambling — a point [[11-Supervised-Fine-Tuning]] returns to as the *misalignment trap*, because it is precisely what post-training has to correct.
-
-**Filtering is lossy and opinionated.** Deciding which URLs are unwanted and which language to keep is a judgement, made once, that shapes everything the model will ever know. A corpus filtered to English produces a model that is worse in every other language, and no amount of later fine-tuning fully recovers that.

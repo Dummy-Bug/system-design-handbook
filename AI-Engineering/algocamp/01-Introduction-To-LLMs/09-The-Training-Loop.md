@@ -1,7 +1,3 @@
-The corpus is collected ([[07-Pre-Training-The-Data]]) and converted to integers ([[08-Tokenization]]). Now the network actually gets trained. This note is what "training" means, mechanically.
-
----
-
 ## The objective, stated exactly
 
 There is one sentence to memorise here, and everything else in this note is commentary on it:
@@ -20,7 +16,7 @@ Take the word *photosynthesis*, and consider two articles that might both be sit
 
 > **Article B** — *Green plants and algae can use light energy to make their own food. This process is called photosynthesis. Almost all life on earth depends on this process.*
 
-Same subject. Completely different sequences of words — and therefore, after [[08-Tokenization]], completely different sequences of tokens.
+Same subject. Completely different sequences of words — and therefore, after tokenization, completely different sequences of tokens.
 
 Now give the network the fragment **"photosynthesis is"** and ask what comes next. Candidates include `a`, `the`, `process` — and also, in principle, `hi`, and every other token in the vocabulary. Each gets a probability:
 
@@ -60,7 +56,7 @@ Step by step:
 3. **Adjust.** Based on how far off you were, you modify the network.
 4. **Repeat.**
 
-> [!info] Step 2 is the same measurement from [[02-Neural-Networks-As-Function-Approximation]], unchanged. There, at x = 10 the true value was 30; one line predicted 28 — close — and another predicted −9, which is 39 away. Loss is that idea, generalised.
+> [!info] Step 2 is the same measurement as before, unchanged. Earlier, at x = 10 the true value was 30; one line predicted 28 — close — and another predicted −9, which is 39 away. Loss is that idea, generalised.
 
 ### What "modify the network" means
 
@@ -78,7 +74,7 @@ Those constants are the **parameters** — in neural-network vocabulary, **weigh
 
 And the starting position is worth being clear about. A fresh network **knows nothing** — it has learned nothing, so its first output will be wildly far from the truth. So you nudge: increase `a`, decrease `b` slightly, increase `c` slightly. Try again. Now it is a bit better, but not right. Nudge again.
 
-**This back-and-forth is the entire training process.** The algorithm that decides how to nudge is called **back-propagation**, covered later in the course.
+**This back-and-forth is the entire training process.** The algorithm that decides how to nudge is called **back-propagation**, covered later.
 
 ---
 
@@ -96,7 +92,7 @@ Same loop, with the LLM's specifics filled in:
 
 > [!danger] **Large language models are not simple equations like `ax² + bx + c`.** They are very complex ones, and the parameters to tune number in the **billions or trillions**.
 >
-> This cannot be done by hand. It is not tedious — it is impossible. Dedicated algorithms are the only way, which is why back-propagation exists and why [[03-Why-GPUs]] matters.
+> This cannot be done by hand. It is not tedious — it is impossible. Dedicated algorithms are the only way, which is why back-propagation exists and why GPUs matter.
 
 **And it runs for months.** Not hours.
 
@@ -111,7 +107,7 @@ Same loop, with the LLM's specifics filled in:
 >
 > You then slide that window over your enormous corpus, taking different chunks. **Different models keep different window sizes** — 1,000 tokens, 5,000, more.
 >
-> *Which* parts of that window matter for the prediction is the job of the attention mechanism from [[05-Transformers-And-Attention]].
+> *Which* parts of that window matter for the prediction is the job of the attention mechanism.
 
 ---
 
@@ -130,18 +126,8 @@ It is a continuous mechanism: check the loss, reduce the loss, move forward, fee
 
 **What is the model's output compared against?** The corpus you trained on. If you used Common Crawl, comparison is against Common Crawl. Whatever corpus of text you used, that is the ground truth.
 
-**Where are these tokens stored?** Not in a SQL or NoSQL database. The instructor points to **vector databases** — dedicated stores that hold text in this numeric, vector form — and notes there are also "vectorless" strategies where you store the raw text instead and feed the full raw text to the model.
+**Where are these tokens stored?** Not in a SQL or NoSQL database, but in **vector databases** — dedicated stores that hold text in this numeric, vector form. There are also "vectorless" strategies where you store the raw text instead and feed the full raw text to the model.
 
-> [!info] That answer is a forward reference. Vector databases become central much later in the course, when the subject is retrieval rather than training — the question was asked and answered in passing here.
+> [!info] That is a forward reference. Vector databases become central much later, when the subject is retrieval rather than training.
 
 **Is there a train/test split like normal machine learning?** Not in the usual form. In standard ML you split a dataset into training and testing sets, train on one and measure accuracy on the other. LLM pre-training does not do exactly that — it keeps generating probability distributions over the next token across the corpus, with the transformer's attention mechanism weighing relevance as it goes.
-
----
-
-## Guarantees
-
-**It guarantees** that the loss decreases, given enough passes — the loop is designed to do nothing else.
-
-**It does not guarantee** the model learns anything you wanted. The objective is next-token prediction and nothing more. A model can become excellent at it and still be useless as an assistant, which is exactly the situation [[10-The-Base-Model]] describes.
-
-**Low loss is not correctness.** The target is "what actually followed in the corpus", so the model is being trained to reproduce the corpus's patterns — including its errors.

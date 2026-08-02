@@ -1,9 +1,3 @@
-You have an architecture — the transformer from [[05-Transformers-And-Attention]]. That is not a model. Turning it into something you can talk to takes three distinct stages, and this note is the map of them.
-
-It is short on purpose. The next six notes are these three stages worked out in detail; this one exists so you can hold the shape in your head while reading them.
-
----
-
 ## The three stages
 
 ```mermaid
@@ -15,11 +9,11 @@ flowchart LR
     R --> F(["Final model<br/>you actually use"])
 ```
 
-| Stage | What happens | Notes |
-|---|---|---|
-| **1 · Pre-training** | Expose the network to an enormous corpus of raw text and train it to predict the next token | [[07-Pre-Training-The-Data]], [[08-Tokenization]], [[09-The-Training-Loop]], [[10-The-Base-Model]] |
-| **2 · Supervised fine-tuning** | Continue training on curated **conversations**, so it learns to behave like an assistant | [[11-Supervised-Fine-Tuning]] |
-| **3 · Reinforcement learning** | Have it generate multiple answers and score them, so it learns which approaches are good | [[12-Reinforcement-Learning]] |
+| Stage | What happens |
+|---|---|
+| **1 · Pre-training** | Expose the network to an enormous corpus of raw text and train it to predict the next token |
+| **2 · Supervised fine-tuning** | Continue training on curated **conversations**, so it learns to behave like an assistant |
+| **3 · Reinforcement learning** | Have it generate multiple answers and score them, so it learns which approaches are good |
 
 Two pieces of vocabulary that get used constantly:
 
@@ -30,7 +24,7 @@ Two pieces of vocabulary that get used constantly:
 
 ## The analogy that holds all three together
 
-This is the spine of the entire chapter. The instructor returns to it at every stage, and it is worth memorising in this form.
+This is the spine of the entire chapter, and it is worth memorising in this form.
 
 ```mermaid
 flowchart TB
@@ -67,7 +61,7 @@ The three stages are not equal in cost.
 | Supervised fine-tuning | moderate | requires human-written conversations, which must be paid for |
 | Reinforcement learning | moderate | requires human ranking of generated outputs |
 
-Pre-training is described as *the first and one of the most expensive stages* of LLM training, and that framing matters — it is why almost nobody trains a base model, and why the economics in [[14-Choosing-A-Model]] look the way they do.
+Pre-training is described as *the first and one of the most expensive stages* of LLM training, and that framing matters — it is why almost nobody trains a base model, and why the economics look the way they do.
 
 ---
 
@@ -77,7 +71,7 @@ Worth saying now rather than at the end, because it changes how you read the nex
 
 > [!info] For **90–95% of AI engineering work, how a model was trained does not matter to you.** You will not train one. What matters is understanding *what an LLM is* and *which LLM suits which task*.
 >
-> So read stages 1–3 for the understanding, not as a manual. The exception is fine-tuning, which comes later in the course and does draw on this theory. The full version of this argument is in [[14-Choosing-A-Model]].
+> So read stages 1–3 for the understanding, not as a manual. The exception is fine-tuning, which does draw on this theory. The full version of this argument comes later.
 
 ---
 

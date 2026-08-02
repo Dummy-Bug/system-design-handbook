@@ -14,7 +14,7 @@ These three come up constantly in this course and they are not interchangeable.
 
 > Give a computer `2 + 2`. It has to take both inputs, take the operator, and perform an operation to produce 4. **That is compute.**
 
-When [[01-What-Is-An-LLM]] said the two constraints were data and compute, *compute* meant this — cycles, not disk space.
+The two constraints on a neural network are data and compute. *Compute* means this — cycles, not disk space.
 
 ---
 
@@ -48,7 +48,7 @@ To compute one output cell you take **one row of A** and **one column of B**, mu
 
 ## The insight
 
-Now look carefully at those 15 output cells and ask a question the lecture keeps returning to:
+Now look carefully at those 15 output cells and ask the question everything else depends on:
 
 **Does any output cell depend on any other output cell?**
 
@@ -101,7 +101,7 @@ And here is the constraint that makes core count decisive. **One core can perfor
 
 That is a GPU. Nothing more mysterious than that.
 
-This is why **Nvidia** and **AMD** became central to AI, and note the ordering: all of this predates LLMs entirely. It is plain neural-network theory. Better GPUs made it practical to train large neural networks, and only then did the architectures in [[05-Transformers-And-Attention]] become trainable at scale.
+This is why **Nvidia** and **AMD** became central to AI, and note the ordering: all of this predates LLMs entirely. It is plain neural-network theory. Better GPUs made it practical to train large neural networks, and only then did the architectures behind LLMs become trainable at scale.
 
 ---
 
@@ -118,16 +118,6 @@ A fair question, and the answer is a genuine trade-off rather than GPUs simply w
 A single CPU core outperforms a single GPU core. The CPU's weakness is only that it cannot do many things at once. So work that is inherently sequential — one step genuinely depending on the last — belongs on a CPU, and no number of GPU cores helps.
 
 And the same parallelism explains GPUs' original market: gaming and frame rates, video processing, high-end image processing. All of them are the same shape of problem — many independent calculations, all at once.
-
----
-
-## Guarantees
-
-**It guarantees** that any workload dominated by matrix multiplication will parallelise well, because the independence is a property of the mathematics rather than of any particular implementation.
-
-**It does not guarantee** that more GPU always means faster. Work that is genuinely sequential gains nothing from extra cores, and a model that does not fit in GPU memory will not run faster for having more compute available.
-
-**It does not mean GPUs are simply better.** Per-unit, a CPU core is stronger. GPUs win on throughput for parallel work, and lose everywhere else.
 
 ---
 

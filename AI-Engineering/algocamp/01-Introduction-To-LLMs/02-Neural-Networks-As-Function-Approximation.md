@@ -1,7 +1,3 @@
-[[01-What-Is-An-LLM]] ended on a claim that sounds like a slogan: a neural network is a complex mathematical function. This note earns it, by starting with a problem simple enough to solve by hand and then breaking it.
-
----
-
 ## The easy case: fitting a line
 
 Suppose someone hands you a scatter of data points. Call the horizontal axis **x**, your input. Call the vertical axis **y**, your output.
@@ -47,7 +43,7 @@ Then you do that for **every** point. If the dataset has 10,000 points, you comp
 >
 > Either way the principle is identical: turn "how wrong is this line" into a single number you can minimise.
 
-**This procedure has a name: linear regression.** It is a machine learning algorithm, and it is the concrete version of the pattern-finding described in [[01-What-Is-An-LLM]].
+**This procedure has a name: linear regression.** It is a machine learning algorithm, and it is the concrete version of that pattern-finding.
 
 ---
 
@@ -130,13 +126,3 @@ So "learning" is precisely this: **finding the values of `a`, `b` and `c` that m
 > > Google earns enormous sums from ads. But it also spends enormous sums — heavy capital expenditure. So the company's net cash in the bank can be *shrinking* while earnings grow. Investors dislike that, and the stock price drops.
 >
 > So the relationship between earnings and stock price is **real but not simple**. It is exactly the kind of complex, non-linear relationship you would want to approximate — and exactly the kind a straight line cannot capture.
-
----
-
-## Guarantees
-
-**It guarantees** that given enough data and enough compute, a neural network can approximate a function you could never find by hand — including non-linear ones in dimensions you cannot picture.
-
-**It does not guarantee a good fit.** Approximation is not exactness. There is always residual error, and the whole game is minimising it, not eliminating it.
-
-**It does not remove the two constraints.** From [[01-What-Is-An-LLM]]: you still need **enough data** and **enough compute**. Without both, a neural network will do worse than a simple approximation — the capability is only unlocked when both are present.

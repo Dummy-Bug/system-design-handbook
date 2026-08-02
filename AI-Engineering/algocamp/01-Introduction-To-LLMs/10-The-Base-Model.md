@@ -16,7 +16,7 @@ What you get out is precise, and modest:
 
 That is all. Give it `hello how are` and it will very likely continue with `you`. Give it `hello how` and it might continue `is the weather today`.
 
-This is the **G** in GPT from [[05-Transformers-And-Attention]] — *generative*. Generation is exactly this and nothing more.
+This is the **G** in GPT — *generative*. Generation is exactly this and nothing more.
 
 ---
 
@@ -61,7 +61,7 @@ While we are here, the term for the other half of a model's life:
 
 > **Inference** is the phase where you are actually *using* the neural network — the parameters are now fixed, the model is trained, and you are getting output from it.
 
-Training tunes parameters. Inference uses them. They are different activities with different hardware profiles, which is part of the answer to "why do CPUs still exist" in [[03-Why-GPUs]].
+Training tunes parameters. Inference uses them. They are different activities with different hardware profiles, which is part of the answer to why CPUs still exist.
 
 > [!info] **This is where your job is.** Inference is described as the layer where an AI engineer spends the majority of their time. Everything in this chapter about pre-training is context; the work is on this side of the line.
 
@@ -87,7 +87,7 @@ Getting the right answer, if it happens, is a statistical accident rather than a
 
 ### It cannot behave as an assistant
 
-No assistant-level behaviour. No agentic behaviour. You cannot build agents on top of it or hold a conversation with it, because **conversation was never in its training data** — [[07-Pre-Training-The-Data]] filled it with blog posts, articles and web pages, not dialogue.
+No assistant-level behaviour. No agentic behaviour. You cannot build agents on top of it or hold a conversation with it, because **conversation was never in its training data** — pre-training filled it with blog posts, articles and web pages, not dialogue.
 
 ### It cannot remember anything new
 
@@ -115,7 +115,7 @@ Models that are **only pre-trained on a raw corpus of text, without alignment po
 
 Those `8B` and `70B` suffixes are **parameter counts**, and that is what "small" versus "large" language model means:
 
-> [!important] **Small and large refer to the number of parameters.** You will hear "a 1 trillion parameter model", "a 30 billion parameter model". Parameters are the `a`, `b`, `c` of [[02-Neural-Networks-As-Function-Approximation]] — the knobs from the DJ console in [[09-The-Training-Loop]].
+> [!important] **Small and large refer to the number of parameters.** You will hear "a 1 trillion parameter model", "a 30 billion parameter model". Parameters are the `a`, `b`, `c` of the curve-fitting example — the knobs on the DJ console.
 >
 > You can see this concretely in a tool like **LM Studio**, where you pick a model to download and its parameter count is right there in the name. Even if you never train a model, **you should know what the word parameter refers to** when you choose one.
 
@@ -123,17 +123,7 @@ Those `8B` and `70B` suffixes are **parameter counts**, and that is what "small"
 
 ## What happens next
 
-On top of these base models you run the two remaining stages from [[06-The-Three-Stages]] — **supervised fine-tuning** and **reinforcement learning** — to turn a next-token generator into a general-purpose assistant.
-
----
-
-## Guarantees
-
-**It guarantees** fluent, plausible continuation of text. A base model reproduces the shape of its corpus well.
-
-**It does not guarantee truth, helpfulness, or task completion.** It was optimised for one objective and it satisfies that objective. Everything else is out of scope by construction.
-
-**Fluency is not understanding.** A base model that continues `what is 2 + 5` with something confident and wrong is not malfunctioning — it is doing precisely what it was trained to do.
+On top of these base models you run the two remaining stages — **supervised fine-tuning** and **reinforcement learning** — to turn a next-token generator into a general-purpose assistant.
 
 ---
 

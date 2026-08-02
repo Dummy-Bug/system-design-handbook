@@ -29,7 +29,7 @@ Each ring is a **subset** of the one outside it. Read it as four sentences: an L
 
 **Artificial intelligence** is a broad field of computer science concerned with building systems capable of performing tasks that would otherwise require human intelligence. It is not one algorithm. It is a large collection of different techniques, activities and algorithms whose shared aim is making machines smarter.
 
-The lecture motivates it by asking how *humans* acquire knowledge, since that is what we are trying to imitate.
+Start with how *humans* acquire knowledge, since that is what we are trying to imitate.
 
 > Teach a child to cross the road. You start with a set of rules — look left, look right, look left again. Then the child applies judgement on top of the rules: is anything coming, is it moving too fast, is there time. Rules first, then learned judgement layered over them.
 
@@ -113,7 +113,7 @@ flowchart LR
     end
 ```
 
-What the hidden layer actually does is the subject of [[09-The-Training-Loop]] and, in far more depth.
+What the hidden layer actually does comes later.
 
 ---
 
@@ -138,12 +138,12 @@ Both arrived in the same window. Data started accumulating with the internet fro
 
 Putting it back together:
 
-An LLM is a **neural network** — that is, a deep learning model — built on a specific architecture, trained on an enormous quantity of text. GPT, Claude, Gemini: every one of them is a neuralnetwork running on a particular architecture, which [[05-Transformers-And-Attention]] names and explains.
+An LLM is a **neural network** — that is, a deep learning model — built on a specific architecture, trained on an enormous quantity of text. GPT, Claude, Gemini: every one of them is a neural network running on a particular architecture, which gets named and explained later.
 
 Two things to fix in your head before going further, because everything else is built on them:
 
 1. **It is a neural network.**
 2. **A neural network is a complex mathematical function** that has been prepared for you.
 
-That second claim sounds like a simplification. It is not — it is the literal truth, and [[02-Neural-Networks-As-Function-Approximation]] derives it from scratch.
+That second claim sounds like a simplification. It is not — it is the literal truth, and it gets derived from scratch later.
 

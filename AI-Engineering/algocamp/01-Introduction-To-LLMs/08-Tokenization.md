@@ -1,10 +1,6 @@
-[[07-Pre-Training-The-Data]] left you with terabytes of clean text. Now comes a problem that stops the whole project dead if you do not solve it.
-
----
-
 ## The problem
 
-A neural network is a **complex mathematical function** — that was the conclusion of [[02-Neural-Networks-As-Function-Approximation]], and it is about to bite.
+A neural network is a **complex mathematical function**, and that fact is about to bite.
 
 Write a function in front of someone:
 
@@ -97,7 +93,7 @@ BPE is a **bottom-up greedy compression algorithm**, adapted for text. In one se
 
 > It **iteratively merges the most frequent consecutive byte pairs into a single token.**
 
-The word *byte* there is load-bearing, and the lecture explains why with a detour:
+The word *byte* there is load-bearing, and it takes a short detour to see why:
 
 ```mermaid
 flowchart LR
@@ -113,13 +109,13 @@ So you go one level up, to **bytes**, and get much shorter sequences. Then BPE l
 
 That is why frequent words end up as one token and rare names end up in fragments — the merging was driven by how often things co-occurred in the training text.
 
-> [!info] The full mechanics of BPE are revisited later in the course, in the deep-learning module alongside the transformer architecture. What is needed here is the shape: text → bytes → merge frequent pairs → tokens.
+> [!info] The full mechanics of BPE are revisited later, alongside the transformer architecture. What is needed here is the shape: text → bytes → merge frequent pairs → tokens.
 
 ---
 
 ## The quirks that matter
 
-These come out of the demo and out of student questions, and each one has practical consequences.
+Each of these has practical consequences.
 
 **Case matters.** `World` and `world` are **different tokens** with different IDs. The tokenizer does not know they are the same word.
 
@@ -135,7 +131,7 @@ These come out of the demo and out of student questions, and each one has practi
 
 ---
 
-## Questions from the room
+## Questions worth keeping
 
 > [!question]- Is tokenization just hashing — mapping strings to numbers?
 > At some level, yes — you are mapping strings to numbers. But the real algorithms are considerably more complex than direct hashing.
@@ -149,21 +145,11 @@ These come out of the demo and out of student questions, and each one has practi
 > [!question]- How does the tokenizer decide where to split?
 > There is a useful comparison to the classic data-structures exercise of tokenizing a string. You could split on spaces. You could split on some other delimiter. Different rules give different tokens — but once a token is identified, **two identical tokens always share an ID**.
 
-> [!important] **On minimising tokens.** A student observed that we should use as few tokens as possible.
+> [!important] **On minimising tokens.** The obvious conclusion from all this is that you should use as few tokens as possible.
 >
-> That statement is generally made about **cost** — the fewer tokens you process and generate, the less you pay, which [[14-Choosing-A-Model]] quantifies.
+> That statement is generally made about **cost** — the fewer tokens you process and generate, the less you pay, which gets quantified later.
 >
-> But it comes with a warning: **your LLM may underperform if you optimise on tokens unnecessarily.** Squeezing the token count is not free, and the course returns to why — it connects directly to chain-of-thought reasoning, where the "wasted" tokens are the thinking.
-
----
-
-## Guarantees
-
-**It guarantees** that any text can be represented as integers a network can process — there is no input the tokenizer cannot handle, because unknown words fragment rather than fail.
-
-**It does not guarantee** that the representation is efficient for your text. A tokenizer built mainly on English text fragments other languages aggressively, so the same sentence costs far more tokens — and therefore more money and more of the context window.
-
-**It is a permanent commitment.** The tokenizer is fixed at pre-training time and cannot be changed afterwards without discarding the model.
+> But it comes with a warning: **your LLM may underperform if you optimise on tokens unnecessarily.** Squeezing the token count is not free — it connects directly to chain-of-thought reasoning, where the "wasted" tokens are the thinking.
 
 ---
 
