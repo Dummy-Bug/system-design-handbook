@@ -35,8 +35,8 @@ What looks, from the outside, like "I hit a URL and got JSON back" is actually n
 
 ```mermaid
 flowchart TB
-    C["Client"] -->|"1 — HTTP request"| U1["uvicorn<br/><i>the ASGI server</i>"]
-    U1 -->|"raw bytes"| ST["2 — Starlette<br/><i>route matching</i>"]
+    C["Client"] -->|"1 — HTTP request, raw bytes"| U1["uvicorn<br/><i>the ASGI server</i>"]
+    U1 -->|"parsed ASGI request"| ST["2 — Starlette<br/><i>route matching</i>"]
     ST --> MW1["3 — Middleware<br/><i>CORS, auth, logging — optional</i>"]
     MW1 --> DI["4 — Dependency resolution<br/><i>DB sessions, auth, etc.</i>"]
     DI --> PV1["5 — Pydantic<br/><i>validates the REQUEST</i>"]
@@ -53,7 +53,7 @@ A client sends an HTTP request — GET, POST, whatever the method. It's received
 
 ### 2 — Starlette matches the route
 
-uvicorn hands those bytes to **Starlette**, and Starlette's job here is **route matching**: look at the URL, and work out which function is supposed to handle it. This is the actual answer to "how did it know `/order/status` should run `get_order_status`?" — Starlette looked at the path, matched it against the routes registered via `@app.get(...)` decorators, and picked the right one.
+Before handing anything onward, uvicorn **parses** those raw bytes — the HTTP method, path, and headers — into a structured dictionary called the ASGI **scope**. That parsed scope, not the raw bytes, is what gets handed to **Starlette**. Starlette's job here is **route matching**: look at `scope["path"]`, and work out which function is supposed to handle it. This is the actual answer to "how did it know `/order/status` should run `get_order_status`?" — Starlette read the already-parsed path, matched it against the routes registered via `@app.get(...)` decorators, and picked the right one.
 
 ### 3 — Middleware (optional)
 
@@ -84,6 +84,15 @@ Response-side middleware can run here — further transforming the response, sec
 ### 9 — uvicorn sends it back
 
 Finally, the response goes to uvicorn, and uvicorn is what actually sends the HTTP response back to the client. Your code never talks to the client directly — it always goes through uvicorn on both ends.
+
+By this point the response is still a structured Python object — a status code, headers, a body — not yet anything resembling HTTP. **uvicorn serializes it back into raw bytes**: the status line (`HTTP/1.1 200 OK`), the header lines, a blank line, then the body, and writes exactly that onto the socket. This is the mirror image of stage 1, in reverse.
+
+```
+Client → raw bytes → uvicorn parses → structured request  → Starlette / dependencies / Pydantic / your function
+your function → structured response → uvicorn serializes → raw bytes → Client
+```
+
+> [!note] uvicorn is the only piece in this entire chain that ever touches a literal socket or raw bytes, on either end. Everything between stage 1 and stage 9 — routing, middleware, dependency resolution, both Pydantic passes, your function — works purely with parsed Python objects, and never needs to know what HTTP looks like on the wire.
 
 ---
 
@@ -123,6 +132,3 @@ flowchart LR
 >
 > Two different jobs, two different directions, same tool doing both.
 
----
-
-The practical payoff of knowing this chain: nearly everything built from here — middleware, auth, database sessions via dependencies, custom validation — is really just "which of these nine stages am I writing code for." Once the stage is identified, the rest is mechanics.
