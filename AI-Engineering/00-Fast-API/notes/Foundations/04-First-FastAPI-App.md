@@ -8,6 +8,8 @@ Time to move from theory to a running application.
 
 Python needs to already be installed. Any recent version is fine.
 
+The reason this happens **per project, not once per machine**: the system's global Python may already have other projects' packages installed on it — different versions, different requirements, none of which should leak into or be affected by this one. A virtual environment contains everything a project installs to a folder scoped to just that project, so it can be handed to anyone else and reproduced exactly, without carrying along unrelated baggage from whatever machine it was built on.
+
 ```bash
 
 # Mac
@@ -15,6 +17,8 @@ python3 -m venv venv
 ```
 
 This creates a `venv` folder holding an isolated Python environment. A name like `.venv` works too — some tooling can be fussier about dotfiles, but it's not a real obstacle either way.
+
+> [!note] This command occasionally gets interrupted partway — the terminal reports warnings or an incomplete install. Not a sign anything is broken; just run it again.
 
 Activate it:
 
@@ -42,6 +46,25 @@ pip freeze > requirements.txt
 ```
 
 This is the standard way to hand off a project — anyone else can recreate the same environment from that one file.
+
+### `requirements.txt`, written by hand
+
+The other direction: write the file first, then install from it — the more common pattern for a real, shareable project, rather than installing ad hoc and freezing afterward.
+
+```
+fastapi
+uvicorn[standard]
+```
+
+```bash
+pip install -r requirements.txt
+```
+
+The `-r` flag tells `pip` to read package names from a file rather than the command line, so every dependency the project needs lives in one checked-in place instead of scattered across whatever commands happened to get typed during setup.
+
+> [!important] This isn't quite the same install as `fastapi[standard]`. Writing `fastapi[standard]` pulls in FastAPI's own extras (email validation, and others). Writing `fastapi` and `uvicorn[standard]` as two separate lines gets uvicorn's extras — `uvloop`, `httptools`, `websockets`, `watchfiles` for hot reload — but not FastAPI's own `[standard]` extras. Both are reasonable; they're just not identical installs, so it's worth knowing which one is actually sitting in `requirements.txt` rather than assuming.
+
+A typo in that file (`uvcorn` instead of `uvicorn`) produces a clear "could not find a version that satisfies the requirement" error — not a crash, just `pip` correctly reporting that no package by that misspelled name exists. Errors like this are routine during setup, not a sign something is fundamentally wrong.
 
 ---
 
@@ -88,6 +111,12 @@ uvicorn main:app --reload
 Reading that command: run the file `main`, find the object named `app` inside it, and serve it. `--reload` makes uvicorn watch the files and restart automatically on every change — **hot reload**.
 
 This starts the server at `localhost:8000`. Visiting `/` in a browser shows the returned JSON directly.
+
+### Watching uvicorn's request log
+
+Every request — from a browser, a request client, anything — shows up as a line in the terminal uvicorn is running in: method, path, response status, roughly as it happens. This includes requests that **aren't** the app's own routes — a browser automatically requesting `/favicon.ico`, for instance, which the app never defined and which just comes back as a 404.
+
+This log is the plainest possible window into "is my server actually being hit, and by what" — worth glancing at any time a request doesn't seem to be landing where expected, before assuming the code itself is wrong.
 
 ### Common flags
 
