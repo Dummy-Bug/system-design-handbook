@@ -76,5 +76,35 @@ async def request_info(request: Request):
     }
 
 
+@app.get(
+    "/orders/active",
+    summary="Get active orders",
+    description="""
+    Returns all orders that are currently in the system being prepared,
+    or are out for delivery.
+    """,
+    tags=["orders"],
+    response_description="A list of active order objects",
+    deprecated=False,
+)
+def get_active_order():
+    """
+    Returns all orders that are currently in the system being prepared.
+    """
+    return {
+        "active_orders": [
+            {"id": 1, "item": "Masala Dosa", "status": "out for delivery"},
+        ]
+    }
+
+
+@app.get("/restaurants", tags=["restaurants"])
+def list_restro():
+    """
+    List restaurants.
+    """
+    return {"restaurants": "test"}
+
+
 if __name__ == "__main__":
     uvicorn.run("01-fast-api-foundation:app", host="127.0.0.1", port=8000, reload=True)
