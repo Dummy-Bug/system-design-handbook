@@ -8,3 +8,6 @@ def read_root():
         "message": "Welcome to Swiggy orders service",
         "status": "healthy"
     }
+
+
+## from root run the following -- uvicorn main:app --reload

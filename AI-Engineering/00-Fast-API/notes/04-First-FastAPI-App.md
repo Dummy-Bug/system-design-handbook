@@ -97,7 +97,7 @@ uvicorn main:app --reload --port 8001 --host 0.0.0.0
 
 - `--port` — run on a different port than the default 8000
 - `--host` — `0.0.0.0` instead of `127.0.0.1` to accept connections from outside localhost
-- `--workers` — how many worker processes to run; a production concern, not a development one
+- `--workers` — how many **worker processes** to run; a production concern, not a development one
 
 ### Running it from Python directly
 
@@ -181,10 +181,3 @@ Run it:
 ```bash
 uvicorn 01-fastapi-foundation:app --reload
 ```
-
-> [!question]- I wrote maybe 20-30 lines total and got two fully documented, JSON-serializing routes. Is that actually representative, or a toy-example simplification?
-> It is representative — that speed is close to the entire pitch for FastAPI covered earlier. No manual JSON serialization step, no manually written docs (the `/docs` and `/redoc` pages are generated straight from the code and the docstrings), and the routing is a one-line decorator per endpoint.
->
-> What is *not* shown yet: request bodies, path/query parameters, validation on incoming data, error handling, database calls. Those add real lines of code. But the baseline — stand up a route, return structured data, get documentation for free — really is close to this fast.
-
-Visiting either route in a browser normally isn't how this gets tested in practice, though — that's what web request clients (Postman, etc.) are for, and they're where the workflow moves next.
