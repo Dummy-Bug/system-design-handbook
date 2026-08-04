@@ -59,12 +59,58 @@ def create_review(review: ReviewCreate, session: Session = Depends(get_session))
 
 A few things worth being precise about:
 
-- **`yield`, not `return`.** This makes `get_session` a **generator-based dependency**, and FastAPI specifically recognizes this pattern. Code *before* the `yield` runs as setup, the *yielded value* is what gets injected into the route as `session`, and anything *after* the `yield` (were there anything here) would run as cleanup, once the request has finished being handled — not before.
-- **`with Session(engine) as session:`** — the same context-manager pattern as opening a file. When the generator resumes past its `yield` (because the request is done), the `with` block's exit logic runs automatically, closing the session. No `try`/`finally` needs to be written by hand here — the context manager already handles it.
+- **`yield`, not `return`.** This makes `get_session` a **generator-based dependency**, and FastAPI specifically recognizes this pattern. Code *before* the `yield` runs as setup, the *yielded value* is what gets injected into the route as `session`, and anything *after* the `yield` runs as cleanup — but not simply "once the route function returns." Per FastAPI's own documentation, the exact order is: setup runs → the yielded value is injected → the route runs → **the response is fully prepared and sent to the client** → only then does the code after `yield` run. Cleanup is the very last thing that happens, strictly after the caller already has their response in hand.
+- **`with Session(engine) as session:`** — the same context-manager pattern as opening a file. When the generator resumes past its `yield`, the `with` block's exit logic runs automatically, closing the session. No `try`/`finally` needs to be written by hand here — the context manager already handles it.
 - **`Depends(get_session)`** is what actually wires this dependency into a route — the concrete syntax behind the abstract "dependency resolution" stage covered much earlier, now doing real work: FastAPI calls `get_session()`, takes what it yields, and hands that to the route as the `session` parameter.
 
-> [!note] No `@asynccontextmanager` here, unlike `lifespan` — and deliberately so, not an omission. `lifespan` is driven by Starlette's ASGI lifespan handling, which calls `async with` directly on it — for that to work, it genuinely has to be a real context manager object, which is exactly what `@asynccontextmanager` produces from a plain generator. `get_session`, by contrast, is consumed by FastAPI's own `Depends(...)` machinery, which has built-in native support for **any function that yields exactly once** — no decorator required. FastAPI drives the generator itself: runs it up to `yield`, injects the yielded value into the route, then resumes it (running whatever comes after `yield`) once the request finishes. Same setup/yield/cleanup shape in both places, but two different consumers with two different requirements — only one of them demands an actual context manager object.
+> [!note] No `@asynccontextmanager` here, unlike `lifespan` — and deliberately so, not an omission. `lifespan` is driven by Starlette's ASGI lifespan handling, which calls `async with` directly on it — for that to work, it genuinely has to be a real context manager object, which is exactly what `@asynccontextmanager` produces from a plain generator. `get_session`, by contrast, is consumed by FastAPI's own `Depends(...)` machinery, which has built-in native support for **any function that yields exactly once** — no decorator required. FastAPI drives the generator itself: runs it up to `yield`, injects the yielded value into the route, then resumes it (running whatever comes after `yield`) once the response is on its way. Same setup/yield/cleanup shape in both places, but two different consumers with two different requirements — only one of them demands an actual context manager object.
 
 > [!important] This is not "a new connection for every single request." Database connections are relatively expensive to open, so they're **pooled** — a limited set of connections shared across requests, handed out and returned rather than created fresh each time. `get_session` participates in that pooling; it doesn't bypass it. The `with` block ensures a session gets returned to the pool promptly once a request is done with it, rather than being held open indefinitely.
 
 The overall shape — a small amount of code producing a large amount of behavior — is intentional. Session lifecycle, connection pooling, and automatic cleanup are all happening underneath these two or three lines; the comments in the actual source exist specifically because so much is implied by so little code.
+
+### The order, traced on a real request
+
+Instrumenting `get_session` and a route with print statements and sending one real request confirms the exact sequence:
+
+```
+>>> [get_session] BEFORE yield: opening session
+>>> [get_session] about to yield the session
+>>> [route] create_review STARTED
+>>> [route] create_review FINISHED, about to return
+>>> [get_session] AFTER yield: closing session (cleanup)
+```
+
+Setup, then the route runs completely start to finish, then — only after the response has gone out to whoever made the request — the line after `yield` finally runs. Nothing about `db_review`'s data changes based on this ordering, but it matters for reasoning about *when* the session is guaranteed to still be open: for the entire duration the route function is running, without exception.
+
+---
+
+## What `session.add()` actually does — object states
+
+A freshly created `ReviewTable(...)` object has no relationship to the database at all. SQLAlchemy tracks every object through real, named states:
+
+| State | Meaning |
+|---|---|
+| **transient** | Just created. The session doesn't know this object exists. |
+| **pending** | Added to the session (`session.add(...)`), waiting for the next flush to actually be inserted. |
+| **persistent** | Flushed/committed — has a real row and a real `id`. |
+
+Checked directly on a real object:
+
+```
+just created, before add():
+  transient = True  | pending = False  | persistent = False
+after session.add(), before flush/commit:
+  transient = False  | pending = True  | persistent = False
+after session.commit():
+  transient = False  | pending = False | persistent = True
+```
+
+> [!important] `session.add()` is not optional bookkeeping — it's the only thing that gives the session any knowledge this object exists. Skipping it and calling `session.commit()` anyway does genuinely nothing: `commit()` only processes objects the session is actually tracking, and an object that was never `add()`-ed was never tracked. No error, no row, `id` stays `None` forever — the object simply isn't part of what gets committed.
+
+### `flush` vs. `commit` — two different steps, not one
+
+`session.commit()` is really two things happening in sequence: it unconditionally performs a **flush** first, then commits. **Flush** is the moment the actual SQL — the real `INSERT` — gets generated and sent to the database. **Commit** is the separate step that finalizes the transaction, making it permanent.
+
+They're genuinely separable: calling `session.flush()` alone sends the `INSERT` and gets a real `id` assigned back — but calling `session.rollback()` afterward, instead of `commit()`, undoes it completely, as if it never happened. The SQL ran and was even answered by the database; without a commit, none of it survives.
+
