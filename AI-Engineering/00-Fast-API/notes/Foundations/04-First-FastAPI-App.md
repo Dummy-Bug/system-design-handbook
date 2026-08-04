@@ -140,6 +140,21 @@ if __name__ == "__main__":
 
 This is the standard `if __name__ == "__main__":` guard, doing the exact same thing the terminal command did — just triggered by running the file with `python main.py` instead.
 
+### Why `uvicorn.run(...)` takes a *string* here, not the `app` object
+
+`uvicorn.run("main:app", ...)` looks like it should be simpler as `uvicorn.run(app, ...)` — the object is right there, already built, why hand over a string that just points back at it? The reason is `reload=True`.
+
+Think of it like ordering food versus cooking it yourself:
+
+- **The `app` object** is a finished, cooked meal — it already exists, fully assembled, sitting in this process's memory.
+- **The string `"main:app"`** is a recipe — instructions for building that same meal again, from scratch, anywhere.
+
+`--reload` doesn't patch a running app in place. When a file changes, uvicorn throws away the current process entirely and starts a **brand new one** — a fresh Python interpreter with empty memory, remembering nothing from before.
+
+> [!important] A finished meal can't be handed across to a different kitchen. Neither can a live Python object be handed to a different process — separate processes don't share memory (the same fact behind why WSGI workers need separate copies of the app). So if `uvicorn.run(app, ...)` were used, the moment reload needs to spin up a new process, there is nothing to give it — the object only exists in the process that's about to be thrown away.
+>
+> The **recipe**, on the other hand, works anywhere. Every new process — including the very first one — just follows it: `import main`, grab `app` off it, done. That's why the string form is required the instant reload (or `--workers`, for the same reason: multiple *simultaneous* processes) is involved. Passing the object directly only works for a single process that's never going to need to restart itself.
+
 ---
 
 ## A more deliberate second file
