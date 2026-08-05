@@ -121,7 +121,7 @@ Note the two steps hiding in `HANDLERS[kind](payload)`: `HANDLERS[kind]` *fetche
 
 The dict version does not just look tidier. Adding a handler is now adding a row of data, not editing control flow — which is exactly how every agent framework maintains a tool registry, and how a router maps a path to a view.
 
-> [!info] **Currency check (Python 3.10+, 2021).** `match`/`case` (structural pattern matching) is often pitched as "Python finally got a switch statement," which makes it sound like a newer replacement for this dict-dispatch pattern. It isn't, for this use case: `match`/`case` branches are still hard-coded in source at each `case` line — you can't hand it a dict built at runtime and have it call whichever function is stored under a matching key. The dispatch-dict pattern above is still the idiomatic way to route on a value using functions as data. `match`/`case` is worth knowing, but it solves a different problem (readable branching on a value's *shape*, e.g. unpacking a tuple or checking a class), not this one.
+> [!tip] `match`/`case` is often described as "Python's switch statement", which makes it sound like the replacement for this pattern. It isn't. Its branches are written out in the source at each `case` line, so you can't hand it a dict assembled at runtime and have it call whichever function is stored under a matching key — the thing that makes the registry above extensible. `match`/`case` solves a different problem: readable branching on a value's *shape*, like unpacking a tuple or checking a class.
 
 ---
 
