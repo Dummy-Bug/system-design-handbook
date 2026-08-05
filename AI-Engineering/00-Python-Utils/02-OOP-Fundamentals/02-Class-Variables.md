@@ -82,6 +82,50 @@ flowchart TD
     A -->|"would be Yes if<br/>emp_1 had set it directly"| D["returns the instance's<br/>own value instead"]
 ```
 
+### What `__dict__` actually holds
+
+It's tempting to read `emp_1.__dict__` as "everything about this employee" — every attribute *and* every method. It isn't. It holds **only what this one instance personally owns**, which means the things assigned to `self` inside `__init__`, and nothing else:
+
+```python
+print('full_name'    in emp_1.__dict__)   # False
+print('raise_amount' in emp_1.__dict__)   # False
+```
+
+The method and the class variable are both missing, because neither belongs to the instance. They live on the class:
+
+```python
+print([k for k in Employee.__dict__
+       if not k.startswith('__')])
+# ['raise_amount', 'full_name']
+```
+
+So `emp_1.full_name()` and `emp_1.raise_amount` both work by exactly the same fallthrough this section just described — miss on the instance, find it on the class. Methods aren't a special case; they're class attributes that happen to be functions.
+
+It's a live namespace rather than a snapshot, too. Attach something after the fact and it appears:
+
+```python
+emp_1.nickname = 'Coz'
+print(emp_1.__dict__)
+# {'first': 'Corey', ..., 'nickname': 'Coz'}
+```
+
+If what you actually want is *everything reachable through the instance* — its own attributes plus everything it inherits from the class — that's a different tool, `dir()`:
+
+```python
+print([n for n in dir(emp_1)
+       if not n.startswith('_')])
+# ['email', 'first', 'full_name', 'last',
+#  'nickname', 'pay', 'raise_amount']
+```
+
+| | Shows |
+|---|---|
+| `emp_1.__dict__` | what this instance owns — a real, editable dict |
+| `Employee.__dict__` | what the class owns: class variables and methods |
+| `dir(emp_1)` | every name reachable through it, wherever it lives |
+
+That first row is why `__dict__` is the right tool for this section specifically. `dir()` merges the two namespaces and so can never tell you *where* a name came from — but the whole question of shadowing, coming up next, is precisely a question about where a value lives.
+
 ## Setting it through the class vs. through an instance — these are not the same operation
 
 ```python
