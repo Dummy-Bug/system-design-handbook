@@ -41,7 +41,7 @@ Still 2.00 seconds — still concurrent. And look closely: **task 1 still ran fi
 
 The animation makes the mechanism visible. Main suspends on `await task2` — but the loop picks up `fetch_data(1)` first (it was scheduled first and is ready). Both timers overlap as usual, and the 1-second timer fires first, so **task 1 completes while main isn't even awaiting it**:
 
-![[AI-Engineering/00-Python-Async/Images/08-Await-Task2-Task1-Completes-Anyway.png]]
+![[AI-Engineering/00-Python-Utils/08-Async/Images/08-Await-Task2-Task1-Completes-Anyway.png]]
 
 Task 1 is green — Complete — while `main()` still sits suspended on `await task2`. Nothing wakes main up, because task 1's completion isn't what it's waiting on. So what happens to task 1's return value? **It's saved in memory.** Later, when task 2 finally completes and main reaches `await task1`, there's nothing left to wait for — the await just pulls the already-stored result out and assigns it. Instant.
 

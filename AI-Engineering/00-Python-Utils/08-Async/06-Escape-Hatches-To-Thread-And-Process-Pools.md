@@ -44,7 +44,7 @@ async def main():
 
 The animation shows where the work went. The Event Loop column holds two lightweight `to_thread` wrapper tasks — suspended, showing just "Running in thread pool..." — while Background I/O shows the real story: **both `fetch_data` calls executing in their own threads simultaneously**, blocking sleeps and all:
 
-![[AI-Engineering/00-Python-Async/Images/10-To-Thread-Both-Threads-Running.png]]
+![[AI-Engineering/00-Python-Utils/08-Async/Images/10-To-Thread-Both-Threads-Running.png]]
 
 The animation deliberately doesn't show the function's code inside those wrapper tasks — because that code *isn't running in our thread anymore*. When a thread finishes, it notifies its wrapper task, the task completes, and the await chain wakes up exactly as with any other task. The blocking code never touched the event loop's thread.
 
@@ -69,7 +69,7 @@ Threads solve *blocking I/O*. But if the blocking code is **CPU-bound** — real
 
 Three moving parts instead of one function call: grab the running loop with `asyncio.get_running_loop()`, create a `ProcessPoolExecutor` (imported from `concurrent.futures`), and schedule with `loop.run_in_executor(executor, func, *args)`. Same golden rule — function and arguments passed separately — and same result: a future you can await while the work runs in a whole separate Python process:
 
-![[AI-Engineering/00-Python-Async/Images/11-Run-In-Executor-Both-Processes-Running.png]]
+![[AI-Engineering/00-Python-Utils/08-Async/Images/11-Run-In-Executor-Both-Processes-Running.png]]
 
 ---
 

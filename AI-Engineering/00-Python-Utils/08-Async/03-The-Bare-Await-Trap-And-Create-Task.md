@@ -4,7 +4,7 @@ All three versions share the same shape: a `fetch_data(param)` function that pre
 
 Each version comes with an animation (from the video's companion site) that shows three columns: the **Python Thread** executing code, the **Event Loop** with every scheduled coroutine and its state (Running / Ready / Suspended / Complete), and **Background I/O** where sleeps and timers actually live:
 
-![[AI-Engineering/00-Python-Async/Images/01-Animation-Layout-Three-Columns.png]]
+![[AI-Engineering/00-Python-Utils/08-Async/Images/01-Animation-Layout-Three-Columns.png]]
 
 ---
 
@@ -44,7 +44,7 @@ Finished in 3.00 seconds
 
 In the animation, the Event Loop column stays **empty for the whole run** — and look at where the program spends its life: parked on the `time.sleep` line while a blocking sleep runs in Background I/O. The Python thread does *nothing* for that entire second — it just stands there holding the sleep:
 
-![[AI-Engineering/00-Python-Async/Images/02-Sync-Blocking-Sleep.png]]
+![[AI-Engineering/00-Python-Utils/08-Async/Images/02-Sync-Blocking-Sleep.png]]
 
 Then the same thing again for two more seconds on the second call. **1 + 2 = 3 seconds**, of which almost all is idle waiting. That idle time is what we're trying to reclaim.
 
@@ -97,11 +97,11 @@ Finished in 3.00 seconds
 
 So where does the time actually go? Follow the animation. When `await task1` executes, two things happen *at once*: the coroutine finally gets scheduled on the loop, and `main()` suspends until it finishes:
 
-![[AI-Engineering/00-Python-Async/Images/03-Await-Schedules-And-Suspends.png]]
+![[AI-Engineering/00-Python-Utils/08-Async/Images/03-Await-Schedules-And-Suspends.png]]
 
 `fetch_data(1)` runs, hits its own `await asyncio.sleep(1)`, kicks off a timer in Background I/O, and suspends. And now look at the picture — this is the whole story in one frame:
 
-![[AI-Engineering/00-Python-Async/Images/04-One-Timer-No-Concurrency.png]]
+![[AI-Engineering/00-Python-Utils/08-Async/Images/04-One-Timer-No-Concurrency.png]]
 
 **One timer.** `main()` is suspended waiting on `fetch_data(1)`; `fetch_data(1)` is suspended waiting on its sleep; and `fetch_data(2)` is nowhere — it doesn't exist on the loop yet, because nothing scheduled it. The event loop scans for ready tasks and finds none. It has all this idle waiting time and **no other task to spend it on**.
 
@@ -144,17 +144,17 @@ Read the first two lines of that output: **both fetches started before either fi
 
 The animation shows why. `create_task` **schedules immediately, without suspending anything** — after the two `create_task` lines, `main()` is *still running* and both `fetch_data` tasks sit on the loop as Ready. This is the state Version 2 could never reach — work queued up *before* any waiting begins:
 
-![[AI-Engineering/00-Python-Async/Images/05-Create-Task-Both-Ready-Main-Running.png]]
+![[AI-Engineering/00-Python-Utils/08-Async/Images/05-Create-Task-Both-Ready-Main-Running.png]]
 
 Now `await task1` suspends `main()`, and the loop goes looking for ready work. It finds `fetch_data(1)`, runs it to its sleep, suspends it — **and keeps looking**. This time there's more in the queue: it finds `fetch_data(2)`, runs it to *its* sleep, suspends it too. The frame below is the payoff — the money shot of the whole video:
 
-![[AI-Engineering/00-Python-Async/Images/06-Both-Timers-Running-Concurrency.png]]
+![[AI-Engineering/00-Python-Utils/08-Async/Images/06-Both-Timers-Running-Concurrency.png]]
 
 **Two timers in Background I/O, ticking at the same time.** Every coroutine is suspended; the loop is idle; both waits overlap. The 1-second and 2-second sleeps are being served *simultaneously* on a single thread.
 
 From here it unwinds by wake-ups: the 1-second timer fires first, `fetch_data(1)` resumes, prints, returns, completes — while the 2-second timer is *still running in the background*:
 
-![[AI-Engineering/00-Python-Async/Images/07-Task1-Complete-Timer2-Still-Running.png]]
+![[AI-Engineering/00-Python-Utils/08-Async/Images/07-Task1-Complete-Timer2-Still-Running.png]]
 
 Task 1's completion wakes `main()` (it was awaiting exactly that), which prints and moves to `await task2` — where there's nothing to do but wait for the second timer, most of which has *already elapsed*. Timer fires, `fetch_data(2)` completes, `main()` finishes. Total wall time: the longest wait, not the sum.
 

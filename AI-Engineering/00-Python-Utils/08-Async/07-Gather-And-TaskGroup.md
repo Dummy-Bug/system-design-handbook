@@ -52,7 +52,7 @@ Two mechanics to read carefully:
 
 **Coroutines or tasks — both work, and the difference is familiar.** Section 2 hands `gather` bare *coroutine objects*: nothing was scheduled when the list was built (building a list of coroutines schedules nothing — same lesson as the bare-await trap), and it's `gather` itself that schedules them all and runs them concurrently. The animation catches that moment — main suspended on the `await asyncio.gather(...)` line, both fetches on the loop, **both timers overlapping in Background I/O**:
 
-![[AI-Engineering/00-Python-Async/Images/12-Gather-Coroutines-Both-Timers.png]]
+![[AI-Engineering/00-Python-Utils/08-Async/Images/12-Gather-Coroutines-Both-Timers.png]]
 
 Section 3 hands `gather` a list of *tasks* instead — those were scheduled the moment `create_task` ran, before `gather` was even called. Which to pass? If you only want the results, coroutines are fine — `gather` schedules them for you. If you want to **monitor or interact with the tasks before they complete** (check status, cancel one, name them), create tasks — that's the extra functionality tasks carry.
 
@@ -73,7 +73,7 @@ This is the first **async context manager** in the series. Just like functions, 
 
 The striking thing: **there is no `await` anywhere.** You don't await the tasks inside the block, and you don't await anything after it. The TaskGroup awaits *for* you — **when the `async with` block exits, it suspends there until every task created in the group is complete.** The animation shows the setup state: both `tg.create_task` tasks scheduled and Ready while main is still inside the block:
 
-![[AI-Engineering/00-Python-Async/Images/13-TaskGroup-Tasks-Ready-On-Exit.png]]
+![[AI-Engineering/00-Python-Utils/08-Async/Images/13-TaskGroup-Tasks-Ready-On-Exit.png]]
 
 After the block, each item in `results` is a completed Task, so you collect values with `.result()`.
 

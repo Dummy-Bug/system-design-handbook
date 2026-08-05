@@ -44,7 +44,7 @@ Finished in 3.01 seconds
 
 Walk the animation. Main suspends on `await task1`; the loop runs `fetch_data(1)`; it prints; it reaches `time.sleep(1)`. The sleep starts — but there was **no await**, so the task **never suspends**. It just stands there, running, holding the only thread, while the sleep blocks:
 
-![[AI-Engineering/00-Python-Async/Images/09-Time-Sleep-Blocks-The-Event-Loop.png]]
+![[AI-Engineering/00-Python-Utils/08-Async/Images/09-Time-Sleep-Blocks-The-Event-Loop.png]]
 
 Read that frame carefully — it's the whole failure in one image. The blocking sleep is ticking in Background I/O with the annotation spelled out: *"time.sleep() blocks the entire event loop — no other tasks can run during this time!"* The running task still says **Running** (it never suspended), and the other task sits **Ready** — ready, waiting, and completely starved. The event loop can't run it. The event loop can't run *anything*. Control only returns when the blocking call finishes on its own.
 
