@@ -113,7 +113,8 @@ The failure mode is feedback that arrives two months later. By then the develope
 
 You can compress the entire subject into two words, and this is the compression worth memorising:
 
-> **Fast delivery. Reliable delivery.**
+> **Fast delivery. 
+> Reliable delivery.**
 
 **Fast delivery** is what every company wants: I ask for a payment feature, and it is live in two or three days rather than two months.
 
@@ -121,4 +122,5 @@ You can compress the entire subject into two words, and this is the compression 
 
 DevOps is the claim that you can have both at once. Everything in the rest of this course — Jenkins, Grafana, Kubernetes, Docker, every tool and every practice — exists to make one or both of those two things true.
 
-> [!tip] **Interview framing.** *"What is DevOps?"* has a good short answer built from this note: it is developers and operations both taking end-to-end responsibility, supported by automation and a culture that makes that possible, in order to achieve fast and reliable delivery. Naming the two goals is what separates an answer that sounds memorised from one that sounds understood.
+> [!tip] **Interview framing.** *"What is DevOps?"* 
+> It is developers and operations both taking end-to-end responsibility, supported by automation and a culture that makes that possible, in order to achieve fast and reliable delivery. Naming the two goals is what separates an answer that sounds memorised from one that sounds understood.

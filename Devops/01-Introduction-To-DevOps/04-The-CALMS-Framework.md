@@ -1,6 +1,5 @@
-The previous note left a gap. If DevOps is a *philosophy* that a company either lives by or does not, how do you tell which? You cannot look at the job titles — a company can employ three DevOps engineers and still be a set of silos.
 
-**CALMS** is the answer to that. It is a five-part checklist for judging whether an organisation genuinely practises DevOps.
+**CALMS** is a five-part checklist for judging whether an organisation genuinely practises DevOps.
 
 ```mermaid
 flowchart LR

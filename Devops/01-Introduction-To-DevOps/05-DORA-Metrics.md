@@ -2,7 +2,7 @@ CALMS ends with **Measurement**, and leaves the question open: measure *what*, e
 
 **DORA metrics** are the answer. Four numbers that let you look at a company and say something factual about whether it practises DevOps, rather than something impressionistic.
 
-> [!danger] **The lecture gets the acronym slightly wrong.** It is given as *"DevOps Research and Training… and Assessment"*. The correct expansion is **DevOps Research and Assessment** — the name of the research group whose long-running study of engineering organisations produced these metrics. Worth having right, because this is the kind of thing an interviewer asks directly.
+> [!danger] DORA stands for  **DevOps Research and Assessment** — the name of the research group whose long-running study of engineering organisations produced these metrics. Worth having right, because this is the kind of thing an interviewer asks directly.
 
 ---
 
@@ -12,7 +12,7 @@ Something important, and easy to miss:
 
 > [!important] **DORA does not measure how skilled the engineers are.** A company can hire outstanding developers, an outstanding operations team and an outstanding DevOps engineer, and still score badly. If the numbers are bad, that company is drifting toward the silo model no matter who it employs.
 >
-> This is the same claim as note `02`, arriving from the other direction: **the shape of the organisation dominates the talent inside it.** DORA measures the shape.
+> **The shape of the organisation dominates the talent inside it.** DORA measures the shape.
 
 ---
 
@@ -118,7 +118,7 @@ $$\frac{150 \text{ minutes}}{3 \text{ incidents}} = 50 \text{ minutes}$$
 
 So the mean time to recovery is **50 minutes**: on average, when something breaks in production, this company has it working again within roughly an hour.
 
-> [!info] **On the name.** The lecture calls this *"mean recovery time"* or *"failure recovery time"*. The standard term is **Mean Time to Recovery (MTTR)**, sometimes written as "time to restore service." All three describe the same measurement.
+> [!info] The standard term is **Mean Time to Recovery (MTTR)**, sometimes written as "time to restore service." 
 
 What "recovering" actually consists of turns out to be a genuine question with three different answers — which is the next note.
 

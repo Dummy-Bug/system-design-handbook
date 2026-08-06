@@ -110,15 +110,51 @@ Mutable defaults; annotating `self`; the `Optional` vs default confusion from co
 
 ## Coverage — what is written and what is not
 
-| # | Concept | Note |
-|---|---|---|
-| 1 | What a hint is / is not | `01-Hinting-Vs-Checking-Vs-Validation` |
-| 2 | Why bother | `01-Hinting-Vs-Checking…` |
-| 3 | Static type checkers | `01-Hinting-Vs-Checking…` — described, not run |
-| 4 | Where annotations live | `01-Hinting-Vs-Checking…` — `__annotations__` only |
-| 5–26 | everything else | — |
+**Two kinds of note in this folder, deliberately separated.**
 
-**3.5 of 26 written.** Concept 3 is marked partial deliberately: that section was written without a checker installed on this machine, so it describes the error output rather than showing a captured run. Installing `mypy` and re-running the note's examples would close it.
+- **At the folder root** — concepts worked through Socratically, then written from what was derived. These are *learned*.
+- **In `Video/`** — notes made from watching a tutorial, kept verbatim as anchors. Correct and verified, but **not yet learned**. When a rung is properly worked through, its Socratic note appears at the root and the `Video/` file stays put as the original reference, so re-watching is never necessary.
+
+Counting them together would be the exact accounting trap this vault warns about, so they're counted apart.
+
+| # | Concept | Learned (root) | Anchor (`Video/`) |
+|---|---|---|---|
+| 1 | What a hint is / is not | `01-What-A-Type-Hint-Is` | `01-Hinting-Vs-Checking…` |
+| 2 | Why bother | `02-Why-Bother-If-Nothing-Enforces-Them` | `01-Hinting-Vs-Checking…` |
+| 3 | Static type checkers | `03-Static-Type-Checkers` | `01-Hinting-Vs-Checking…` |
+| 4 | Where annotations live | `04-Where-Annotations-Live` | `01-Hinting-Vs-Checking…` |
+| 5 | Built-in generics | `05-Built-In-Generics` | `05-Built-In-Generics` |
+| 6 | Abstract collection types | `06-Abstract-Collection-Types` | — |
+| 7 | Unions and optionality | `07-Unions-And-Optionality` | `Video/07-Unions-And-Optionality` |
+| 8 | `Any`, `object`, `Never` | — | partial — `13-TypeVar…` covers `Any` |
+| 9 | `Literal`, `Final`, `ClassVar` | — | — |
+| 10 | `Callable`, `ParamSpec` | — | — |
+| 11 | `TypedDict` | — | `11-TypedDict` |
+| 12 | Type aliases and `NewType` | — | `12-Type-Aliases-And-NewType` |
+| 13 | `TypeVar`, generic functions | — | `13-TypeVar-And-Generic-Functions` |
+| 14–21 | generic classes → deferred evaluation | — | — |
+| 22 | Stubs and `py.typed` | — | `22-Stubs-And-Third-Party-Types` |
+| 23 | `cast`, `# type: ignore` | — | — |
+| 24 | Gradual adoption and strict mode | — | — |
+| 25 | Choosing a structured-data type | — | partial — `11-TypedDict` |
+| 26 | Common traps | — | — |
+
+**Learned: 7 of 26 — Section A complete, section B three rungs in.** Anchored but not learned: 5 more.
+
+`Video/01-Hinting-Vs-Checking-Vs-Validation`, `Video/05-Built-In-Generics` and `Video/07-Unions-And-Optionality` are now fully superseded as *learning* sources; everything they covered has been derived rather than watched. They stay in `Video/` as the record of what the tutorial said.
+
+**Next unlearned rung: concept 8** — `Any`, `object`, `Never`. No anchor beyond the partial `Any` coverage in `Video/13-TypeVar…`.
+
+Threads left hanging on purpose, each owed to a later rung:
+
+| Left by | Owed to | What |
+|---|---|---|
+| 5 | 11 | A record-shaped dictionary forces every value into one union, which flags correct code and misses real bugs. `TypedDict` is the fix. |
+| 6 | 15 | `Sequence` accepts callers `list` would reject — but *why* the checker is stricter about mutable containers is variance. |
+| 7 | 18 | Narrowing is introduced via `is None`; `isinstance`, `TypeGuard` and `TypeIs` are the full treatment. |
+| 5, 7 | 22 | Both notes say "mypy ships descriptions of the built-ins" without explaining stub files. |
+
+**Verification note (2026-08-06).** Every checker message quoted in notes 05, 07, 11, 12, 13, and 22 was captured from a real run of **mypy 2.3.0** on Python 3.13.3 via `uvx mypy`, not written from memory. Runtime behaviour in those notes (`NewType` returning a plain tuple, `TypedDict` instances being real dicts, `__type_params__`, `User.__value__`) was executed and its output pasted. This matters because an earlier version of note 01 asserted that a static checker reads `__annotations__` — it does not, it reads the source text — and that error survived because nothing in the note had been run.
 
 ## Deferred
 

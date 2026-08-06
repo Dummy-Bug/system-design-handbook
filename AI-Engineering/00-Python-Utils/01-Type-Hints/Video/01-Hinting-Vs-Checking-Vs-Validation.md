@@ -58,7 +58,22 @@ The payoff is real but indirect: the function documents itself, and your editor 
 > ```
 > A list where an `int` was declared, and the function runs to completion.
 
-The hints aren't discarded, though — they're stored on the function object, which is exactly how other tools get at them:
+### Where the hints go
+
+The hints aren't discarded. They're stored — and knowing exactly *where* is what makes the next two sections make sense.
+
+Start with the fact underneath: **a function is an object.** `def` doesn't create some special interpreter construct; it builds a value sitting in memory, the same way `[1, 2]` does, and points a name at it. Because it's an ordinary object, things can be attached to it:
+
+```python
+print(create_user)              # <function create_user at 0x102b70cc0>
+print(type(create_user))        # <class 'function'>
+print(create_user.__name__)     # create_user
+
+create_user.owner = 'laxya'     # attach anything you like
+print(create_user.owner)        # laxya
+```
+
+`__annotations__` is one more attribute hanging off that object, no different in kind from `__name__`:
 
 ```python
 print(create_user.__annotations__)
@@ -66,7 +81,66 @@ print(create_user.__annotations__)
 #  'age': <class 'int'>, 'return': <class 'dict'>}
 ```
 
-That dictionary is the entire mechanism. Annotations are **metadata**, and everything in the next two sections is some tool choosing to read it.
+Parameter names become the keys; the return annotation gets the special key `'return'`.
+
+### What `<class 'str'>` actually is
+
+Not a description of the parameter, and not the word "str". It is **the `str` class itself** — the same object you call when you write `str(38)`:
+
+```python
+a = create_user.__annotations__
+
+print(a['first_name'] is str)   # True   ← the same object, not a copy
+print(a['first_name'](38))      # '38'   ← so it can be called
+```
+
+`str` is a name pointing at a class object, exactly as `Employee` is a name pointing at a class object once you've written `class Employee:`. `<class 'str'>` is simply how Python prints such an object — the same convention as `<function create_user at 0x...>` above.
+
+### Python files it away without looking at it
+
+Here is the complete behaviour: **whatever you write after the colon, Python evaluates it and files the result under that parameter's name. Then it stops.** There is no step that asks whether the thing you wrote is a sensible type.
+
+```python
+def nonsense(x: 'banana', y: 12345) -> ['not', 'a', 'type']:
+    return x
+
+print(nonsense.__annotations__)
+# {'x': 'banana', 'y': 12345, 'return': ['not', 'a', 'type']}
+
+print(nonsense(999, 'whatever'))   # 999
+```
+
+`'banana'` is not a type. `12345` is not a type. Python filed all three and the function runs normally. Write `x: 2 + 2` and the dictionary will hold `4`.
+
+So `x: str` and `y: 'banana'` sit side by side in one dictionary holding two entirely different kinds of value — a class and a string — and Python distinguishes them not at all.
+
+> [!important] The difference between `str` and `'banana'` is not a difference **Python** knows about. It matters only to whoever reads that dictionary afterwards — and Python is not one of those readers.
+
+### The dictionary is built, not stored
+
+One more property, and the next section turns on it: `__annotations__` exists **only while your program is running.**
+
+The file on your disk holds nothing but characters:
+
+```
+d   e   f       c   r   e   a   t   e   _   u   s   e   r   (
+f   i   r   s   t   _   n   a   m   e   :       s   t   r   )
+```
+
+No dictionary, no `<class 'str'>` — a colon, a space, and three letters. The dict is *manufactured* from those letters when the `def` line executes, and discarded when the process exits. Run the same file three times and you get three different dictionaries at three different addresses in memory.
+
+And `def` genuinely is an instruction that runs, not a declaration the interpreter reads ahead:
+
+```python
+def outer():
+    def inner(x: str) -> bool:
+        return True
+    return inner
+```
+
+Until `outer()` is actually called, that inner `def` never executes — so no function object is created and no annotations dictionary is created, even though the annotation sits there in the source in plain sight.
+
+So: annotations are **metadata**, meaning data *about* your code rather than data your code uses. `__annotations__` is where that metadata lives at runtime. It is not, as it's tempting to assume, the one channel every tool reads — the next section is a tool that never touches it.
 
 ## 2. Type checking
 

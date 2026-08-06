@@ -58,7 +58,7 @@ flowchart TB
 
 You pull the code back out of production. As far as the running system is concerned, that feature no longer exists — you have taken it away.
 
-The platform is stable again, which means you have recovered, even though the feature is not working. That is the point of defining recovery as stability rather than as functionality.
+**The platform is stable again, which means you have recovered, even though the feature is not working**. That is the point of defining recovery as stability rather than as functionality.
 
 > [!info] **How this works in Git.** If the feature reached production through a merge, you do not delete history — you **revert the merge**. That creates a *new* commit which undoes the changes the merge introduced. The feature's code is retracted from the branch, and the record of both the merge and the revert stays intact.
 
