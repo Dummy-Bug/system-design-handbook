@@ -29,8 +29,7 @@ Nothing here says what those parameters should be. A reader has to infer it from
 Annotations go after a colon on each parameter, and after `->` for the return:
 
 ```python
-def create_user(first_name: str, last_name: str,
-                age: int) -> dict:
+def create_user(first_name: str, last_name: str,age: int) -> dict:
     email = f'{first_name}.{last_name}@email.com'
     return {...}
 ```
@@ -41,7 +40,7 @@ Variables can carry them too:
 user: dict = create_user('John', 'Smith', 38)
 ```
 
-That last one is a trade-off rather than a free win — it states the type at the point you read it, but now there are two places to update if the function's return type changes. Annotating obvious assignments (`email: str = f'...'`) mostly adds noise; function parameters and return types are where hints earn their keep.
+**That last one is a trade-off rather than a free win** — it states the type at the point you read it, but now there are two places to update if the function's return type changes. Annotating obvious assignments (`email: str = f'...'`) mostly adds noise; function parameters and return types are where hints earn their keep.
 
 The payoff is real but indirect: the function documents itself, and your editor can autocomplete on `age` knowing it's an `int`.
 
@@ -86,7 +85,8 @@ Two things about this are easy to miss and both matter.
 
 **It does not stop the code from running.** The error appears in your editor or terminal; `python script.py` runs exactly as before. Static analysis is advice delivered early, not a gate.
 
-> [!warning] **A checker can only reason about what it can see in the source.** It knows `create_user('John', 'Smith', '38')` is wrong because the literal `'38'` is right there. It has no idea what arrives from an HTTP request, a JSON file, a database row, or `input()` — those values don't exist until runtime. Every claim a static checker makes stops at the program's boundary, which is precisely where bad data comes from.
+> [!warning] **A checker can only reason about what it can see in the source.** It knows `create_user('John', 'Smith', '38')` is wrong because the literal `'38'` is right there.
+>  It has no idea what arrives from an HTTP request, a JSON file, a database row, or `input()` — those values don't exist until runtime. Every claim a static checker makes stops at the program's boundary, which is precisely where bad data comes from.
 
 ## 3. Data validation
 
@@ -129,12 +129,9 @@ create_user('John', 'Smith', 'thirty-eight')
 ```
 
 ```
-1 validation error for create_user
-2
-  Input should be a valid integer, unable to parse
-  string as an integer
-  [type=int_parsing, input_value='thirty-eight',
-   input_type=str]
+1. validation error for create_user
+
+2. Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='thirty-eight', input_type=str]
 ```
 
 Which parameter failed, what was expected, what actually arrived, and a machine-readable error code — none of it hand-written.
@@ -158,23 +155,7 @@ Which parameter failed, what was expected, what actually arrived, and a machine-
 > # [type=int_type, input_value='38', input_type=str]
 > ```
 
-Validation also reaches past types entirely, into values — the thing neither hints nor checkers can express:
-
-```python
-from typing import Annotated
-from pydantic import Field
-
-@validate_call
-def create_user(age: Annotated[int, Field(ge=0, le=130)]):
-    ...
-```
-
-```python
-create_user(-5)    # Input should be greater than or equal to 0
-create_user(200)   # Input should be less than or equal to 130
-```
-
-`-5` is a perfectly good `int`. A type checker has no complaint about it, and never will. Whether it's a plausible *age* is a runtime question about the value, and that's the category validation covers — ranges, formats, email addresses, non-empty strings.
+Validation also reaches past types entirely, into values. `-5` is a perfectly good `int`, so a type checker has no complaint about it and never will — but whether it's a plausible *age* is a question about the value, and only answerable once a value exists. Ranges, formats, non-empty strings: that whole category belongs to validation alone, and how it's expressed is `09-Pydantic`'s subject.
 
 > [!warning] `@validate_call` validates **arguments**, not the return value, despite the `-> dict` annotation sitting right there:
 > ```python
