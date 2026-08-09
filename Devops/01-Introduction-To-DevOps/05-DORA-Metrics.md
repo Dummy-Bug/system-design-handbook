@@ -29,6 +29,8 @@ The whole framework is four questions you could ask any engineering organisation
 
 If a company can answer all four with real numbers, you can form a genuine view of how much DevOps philosophy it applies.
 
+> [!info] **DORA's current model has five metrics, not four.** The four below are the classic set — what the class teaches, what most writing on the subject describes, and what an interviewer will usually mean. Learn them first. What changed, and why the changes are improvements, is at the end of this note.
+
 And notice how they split:
 
 ```mermaid
@@ -118,10 +120,82 @@ $$\frac{150 \text{ minutes}}{3 \text{ incidents}} = 50 \text{ minutes}$$
 
 So the mean time to recovery is **50 minutes**: on average, when something breaks in production, this company has it working again within roughly an hour.
 
-> [!info] The standard term is **Mean Time to Recovery (MTTR)**, sometimes written as "time to restore service." 
+> [!info] The lecture calls this *"mean recovery time"* or *"failure recovery time"*. The long-standing term is **Mean Time to Recovery (MTTR)**, sometimes written as "time to restore service". DORA has since replaced this metric with a more precise one — see below.
 
 What "recovering" actually consists of turns out to be a genuine question with three different answers — which is the next note.
 
 ---
 
-> [!tip] **Interview framing.** This is theory, and DevOps interviews ask theory directly. You are not expected to have the four names memorised as vocabulary — you are expected to know **what each one measures and why anyone cares**. The strongest version of the answer connects them back: two of these measure speed, two measure reliability, and those are the only two things DevOps claims to deliver.
+## The model has five metrics now
+
+Everything above is the **four-metric model**, and it is what the class teaches, what most articles describe, and what an interviewer is most likely to be thinking of. Learn it first — it is not wrong, and it is still the common currency.
+
+But DORA's own current guidance publishes **five** metrics, and the changes are worth knowing, because two of them fix real problems with the four.
+
+| Category | Metric | Measures |
+|---|---|---|
+| **Throughput** | Change Lead Time | how quickly a committed change reaches production |
+| **Throughput** | Deployment Frequency | how often changes are deployed to production |
+| **Throughput** | Failed Deployment Recovery Time | how quickly the team recovers from a *failed deployment* |
+| **Instability** | Change Fail Rate | how often deployments require immediate intervention |
+| **Instability** | Deployment Rework Rate | how often unplanned deployments are needed because of production incidents |
+
+Note that the split has been renamed as well. "Speed and reliability" from the lecture becomes **Throughput and Instability** — same idea, and the second name is the more honest one, because it says what a bad score means.
+
+### What changed, and why each change is an improvement
+
+**MTTR became Failed Deployment Recovery Time.**
+
+The problem with MTTR is that nobody agrees what the letters stand for. Mean Time To **Repair**? **Recover**? **Restore**? **Resolve**? All four are in active use, they mean subtly different things, and two teams comparing their MTTR may be measuring two different quantities.
+
+The replacement is deliberately narrow: **how long it takes to restore service after a deployment fails and needs immediate intervention.** No ambiguity about what event starts the clock.
+
+**Deployment Rework Rate is entirely new**, and it measures something the original four could not see.
+
+Change Fail Rate tells you what proportion of deployments *broke*. Rework Rate tells you what proportion of deployments *existed only to fix an earlier break* — emergency patches, corrective deploys, incident-driven configuration changes.
+
+> [!important] **This is a measure of wasted capacity**, and it connects straight back to **Lean** in note `04`.
+>
+> A team deploying twenty times a week looks excellent on Deployment Frequency. If twelve of those deploys are repairs of the other eight, that team is not shipping fast — it is running to stay still. Deployment Frequency alone cannot tell you the difference; Rework Rate is what exposes it.
+
+```mermaid
+flowchart TB
+    subgraph T["Throughput — are we delivering?"]
+        A["Change Lead Time"]
+        B["Deployment Frequency"]
+        C["Failed Deployment<br/>Recovery Time"]
+    end
+    subgraph I["Instability — at what cost?"]
+        D["Change Fail Rate"]
+        E["Deployment Rework Rate"]
+    end
+```
+
+---
+
+## How to use them, and how people misuse them
+
+The metrics are designed to be read **together**. Each one alone is trivially gameable:
+
+- Deploy fifty typo fixes a day and Deployment Frequency looks superb.
+- Deploy nothing at all and Change Fail Rate is a perfect zero.
+
+Neither team is doing well. The set exists so that gaming one shows up in another.
+
+> [!danger] **Do not use these to evaluate individual engineers.** This is the most common and most damaging misuse.
+>
+> DORA metrics describe a **delivery system** — its bottlenecks, its handoffs, its automation. The moment they become someone's performance target, they stop measuring the system and start measuring people's ability to make a number look good. Deployment Frequency in particular can be inflated to any figure you like by anyone willing to split their work into meaningless commits.
+>
+> The same applies to comparing unrelated teams. A team shipping a payments service and a team shipping an internal dashboard face different risks and will produce different numbers, and neither figure says anything about the other.
+
+Used well, they are: measured **per service**, watched as **trends over time** rather than as absolute scores, interpreted in the context of what that service does, and shared across development, operations and release teams as a shared diagnostic rather than a scoreboard.
+
+---
+
+> [!tip] **Interview framing.** This is theory, and DevOps interviews ask theory directly. You are not expected to have the names memorised as vocabulary — you are expected to know **what each one measures and why anyone cares**.
+>
+> The strongest version connects them back: **two measure speed, two measure reliability, and those are the only two things DevOps claims to deliver.** Then, if you want to be clearly ahead of a memorised answer: note that DORA now publishes five, that MTTR was replaced because the acronym was ambiguous, and that Deployment Rework Rate was added to catch teams whose high deployment frequency is mostly repair work.
+>
+> Knowing both models is also the safe play. An interviewer working from the classic four will find your answer complete; one who has read the current guidance will notice you have too.
+
+> [!info] **On sourcing.** The four-metric model above is what the lecture taught. The five-metric model in this section is **not from the class** — it comes from DORA's current published guidance, which the course's own written notes also reference. It is included because a note that teaches only the superseded version would leave you exposed on exactly the question this material exists to answer.

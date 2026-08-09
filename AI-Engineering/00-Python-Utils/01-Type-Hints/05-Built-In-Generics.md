@@ -19,6 +19,7 @@ Nothing is missing here. The parameter is annotated, the return is annotated. Co
 Run it:
 
 ```
+$ python3 bare.py
 80.0
 TypeError: unsupported operand type(s) for +: 'int' and 'str'
 ```
@@ -52,6 +53,7 @@ print(average(["90", "80", "70"]))
 ```
 
 ```
+$ mypy param.py
 param.py:6: error: List item 0 has incompatible type "str"; expected "int"  [list-item]
 param.py:6: error: List item 1 has incompatible type "str"; expected "int"  [list-item]
 param.py:6: error: List item 2 has incompatible type "str"; expected "int"  [list-item]
@@ -79,6 +81,7 @@ tags.add(99)
 ```
 
 ```
+$ mypy four.py
 four.py:6: error: Argument 1 to "append" of "list" has incompatible type "int"; expected "str"  [arg-type]
 four.py:7: error: Incompatible types in assignment (expression has type "str", target has type "int")  [assignment]
 four.py:8: error: Argument 1 to "add" of "set" has incompatible type "int"; expected "str"  [arg-type]
@@ -95,6 +98,7 @@ bad: dict[str, str, str | None] = {}
 ```
 
 ```
+$ mypy dictarity.py
 dictarity.py:1: error: "dict" expects 2 type arguments, but 3 given  [type-arg]
 ```
 
@@ -154,6 +158,7 @@ wrong:  tuple[str, int] = (30, "alice")
 ```
 
 ```
+$ mypy tuples.py
 tuples.py:1: error: ... expression has type "tuple[int, int, int]", variable has type "tuple[int, int]"
 tuples.py:4: error: ... expression has type "tuple[int, str]",       variable has type "tuple[str, int]"
 ```
@@ -188,6 +193,7 @@ c: tuple[int] = (10, 20)
 ```
 
 ```
+$ mypy tuple1.py
 tuple1.py:1: error: ... expression has type "tuple[int, int, int]", variable has type "tuple[int]"
 tuple1.py:3: error: ... expression has type "tuple[int, int]",      variable has type "tuple[int]"
 ```
@@ -243,6 +249,7 @@ That is correct. mypy accepts it. Now be a caller:
 Line 7 is correct code. Line 9 puts a string in the age. Line 11 misspells a key.
 
 ```
+$ mypy record.py
 record.py:7: error: Item "int" of "str | int | None" has no attribute "upper"  [union-attr]
 record.py:7: error: Item "None" of "str | int | None" has no attribute "upper"  [union-attr]
 Found 2 errors in 1 file (checked 1 source file)

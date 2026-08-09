@@ -72,6 +72,31 @@ flowchart LR
 
 Each stage runs automatically, in order, and the code only moves forward if the stage before it passed.
 
+### Automation's other half: the machines themselves
+
+Automating the *pipeline* is the obvious half. There is a second half that is easy to miss, because the work it replaces does not look like work — it looks like setting things up once.
+
+Consider how a server gets ready to run your application. Someone installs a runtime. Creates a user. Opens a port. Sets environment variables. Adjusts a config file. Installs a dependency that turned out to be missing. Each step typed by hand, at some point, by somebody.
+
+At the end the server works. And now ask the question that matters:
+
+> **Could you build a second one exactly like it?**
+
+Probably not. The final state exists, but the path to it does not — it was thirty commands over two afternoons, some of them undone and redone, none of them written down. The person who did it has forgotten half. When that server dies, or you need an identical one for staging, you are reconstructing from memory.
+
+**Infrastructure as Code** is the fix: describe the server and its configuration in **files**, kept in version control, and let a tool build the machine from those files.
+
+What that buys you is the same thing version control buys you for application code:
+
+| | |
+|---|---|
+| **Repeatable** | build the tenth machine exactly like the first |
+| **Reviewable** | a change to a server is a diff someone can read before it happens |
+| **Traceable** | who changed this machine, when, and why — answerable |
+| **Recoverable** | the machine is rebuildable because its definition still exists |
+
+> [!info] **Not from the lecture.** The class covers pipeline automation; infrastructure as code comes from the course's written notes. It is included here because "automation" without it is only half the idea, and because Terraform and Ansible — both on this course's tool list — are exactly this and will make no sense without the motivation.
+
 ---
 
 ## 3 · Small and regular deployments

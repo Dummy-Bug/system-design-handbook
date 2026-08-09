@@ -32,6 +32,7 @@ def f(x: ) -> int:
 ```
 
 ```
+$ python3 bad_syntax.py
   File "bad_syntax.py", line 3
     def f(x: ) -> int:
              ^
@@ -50,6 +51,7 @@ def f(x: does_not_exist) -> int:
 ```
 
 ```
+$ python3 bad_name.py
 STEP 1: the module started running
 Traceback (most recent call last):
   File "bad_name.py", line 3, in <module>
@@ -88,6 +90,7 @@ print(helper.greet("laxya"))
 Before running, the folder holds exactly what you wrote:
 
 ```
+$ ls
 helper.py
 main.py
 ```
@@ -95,6 +98,7 @@ main.py
 Run `python main.py`:
 
 ```
+$ python3 main.py
 main.py executing
    helper.py executing
 hi laxya
@@ -103,6 +107,7 @@ hi laxya
 and something new has appeared:
 
 ```
+$ ls
 __pycache__     helper.py     main.py
 
 __pycache__ contains:

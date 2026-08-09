@@ -110,6 +110,7 @@ print("STEP 2: past the def")
 ```
 
 ```
+$ python3 bad_name.py
 STEP 1: the module started running
 NameError: name 'does_not_exist' is not defined
 ```
@@ -126,6 +127,7 @@ def f(x: ) -> int:
 ```
 
 ```
+$ python3 bad_syntax.py
   File "bad_syntax.py", line 3
     def f(x: ) -> int:
              ^
@@ -145,6 +147,7 @@ It works because **the editor doesn't run your code. It reads it**, the same way
 Here is a program doing exactly that to the file that *crashes when run*:
 
 ```
+$ python3 read_annotations.py
 found: parameter 'x' annotated does_not_exist
 found: returns int
 

@@ -30,6 +30,7 @@ Three things about **where** that bug sits, all of which matter:
 Run it:
 
 ```
+$ python3 cart_check.py
 small cart : 350.0
 big cart   : TypeError: unsupported operand type(s) for /: 'str' and 'int'
 ```
@@ -45,6 +46,7 @@ Now check the two readers you already have.
 ## What's left
 
 ```
+$ mypy cart_check.py
 cart_check.py:8: error: Argument 2 to "get_discount" has incompatible type
 "str"; expected "int"  [arg-type]
 Found 1 error in 1 file (checked 1 source file)
@@ -89,6 +91,7 @@ checkout(fetch_cart(42))
 ```
 
 ```
+$ mypy reach_a.py
 Success: no issues found in 1 source file
 ```
 
@@ -100,6 +103,7 @@ def fetch_cart(order_id: int) -> list[str]:     # ← annotated
 ```
 
 ```
+$ mypy reach_b.py
 reach_b.py:9: error: Argument 1 to "checkout" has incompatible type
 "list[str]"; expected "list[float]"  [arg-type]
 ```
@@ -107,12 +111,47 @@ reach_b.py:9: error: Argument 1 to "checkout" has incompatible type
 One annotation is the entire difference between a precise error and silence. And the first file still crashes when you run it:
 
 ```
+$ python3 reach_a.py
 TypeError: unsupported operand type(s) for +: 'int' and 'str'
 ```
 
 > [!warning] **`Success: no issues found` is not a statement about your code. It's a statement about the claims you gave the checker.** On the unannotated version it is a false all-clear over code that provably crashes — which makes that version *worse* than having no checker at all, because you'd have run it feeling covered.
 
 A checker has no crystal ball. It knows what you told it, propagates that as far as the code lets it, and where you told it nothing it stops — quietly, reporting success. Its reach is exactly the reach of your annotations.
+
+## Telling the two kinds of error apart
+
+Since two different programs are now producing messages about the same file, it's worth being able to tell at a glance which one is talking. **Every output block in these notes shows the command that produced it** — `$ mypy file.py` or `$ python3 file.py` — but the messages themselves are also distinguishable by shape.
+
+**A checker error** starts with the filename and line, and ends with a bracketed code:
+
+```
+cart_check.py:8: error: Argument 2 to "get_discount" has incompatible type "str"; expected "int"  [arg-type]
+                                                                                                  ^^^^^^^^^^
+```
+
+`[arg-type]`, `[attr-defined]`, `[return-value]`, `[assignment]`, `[index]`, `[call-arg]`, `[union-attr]`, `[list-item]` — **Python never prints bracketed codes.** They're mypy's identifier for the rule that fired, and you can silence one specifically by name.
+
+**A Python runtime error** is a traceback ending in an exception class:
+
+```
+Traceback (most recent call last):
+  File "cart_check.py", line 8, in checkout
+    return get_discount(total, "10")
+TypeError: unsupported operand type(s) for /: 'str' and 'int'
+^^^^^^^^^
+```
+
+The word `Traceback`, a stack of frames showing how execution got there, and a name ending in `Error`. **A checker never prints a traceback of your program**, because it never runs your program.
+
+| output | who said it | when |
+|---|---|---|
+| `file.py:8: error: ... [arg-type]` | **the checker** | when you run `mypy` |
+| `note: Revealed type is "..."` | **the checker** | `reveal_type()`, checker only |
+| `SyntaxError: invalid syntax` | **Python, compiling** | before any line runs |
+| `Traceback ... TypeError: ...` | **Python, executing** | when it reached that line |
+
+The third row is the odd one — it's Python, but it happens before execution, which is why nothing prints at all. That's the `bad_syntax.py` case in `00-How-Python-Runs-Code/01-Compile-Then-Execute`.
 
 ## What this concept claims
 

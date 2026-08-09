@@ -40,10 +40,10 @@ The everyday best practice, and the one most people never learn: **annotate para
 `str | None` (3.10+) vs the older `Optional[str]` / `Union[str, None]`. The distinction the Pydantic notes leaned on: "optional" meaning *has a default* is not the same as "optional" meaning *can be None*. All four combinations are expressible and mean different things.
 
 **8. The extreme types — `Any`, `object`, `Never`**
-`Any` disables checking; `object` accepts anything but permits nothing; `Never` (3.11+, formerly `NoReturn`) is the type with no values at all — what a function that always raises "returns". Reaching for `Any` is a decision to stop type-checking a region of code, not a description of the data. `Never` earns its place through `assert_never()`, which turns "did I handle every case?" into a question the checker answers for you.
+`Any` disables checking; `object` accepts anything but permits nothing; `Never` (3.11+, formerly `NoReturn`) is the type with no values at all — what a function that always raises "returns". Reaching for `Any` is a decision to stop type-checking a region of code, not a description of the data. The other half of `Any` is that it **spreads** — every operation on an `Any` yields another `Any`, so one at a boundary disables checking for everything downstream. `Never` here is the return type of a function that always raises; its second use, `assert_never()`, was moved to concept 9 because it needs `Literal` to mean anything.
 
-**9. `Literal`, `Final`, `ClassVar`**
-Restricting to exact values (already used for the `status` field in the Pydantic notes), constants, and class-level vs instance-level attributes. `Literal` is also what makes the exhaustiveness check in concept 8 possible.
+**9. `Literal`, `Final`, `ClassVar` — and `assert_never`**
+Restricting to exact values, constants, and class-level vs instance-level attributes. **`assert_never` lives here, not in concept 8** — the exhaustiveness check only means anything once `Literal` exists, so it was moved rather than taught twice. The demo is derived and verified: a three-state `Literal` with `assert_never` at the bottom passes; adding a fourth state and touching nothing else produces `error: Argument 1 to "assert_never" has incompatible type "Literal['failed']"; expected "Never"`, naming the exact unhandled case; the same omission without `assert_never` reports `Success` and silently does nothing at runtime.
 
 **10. `Callable` and `ParamSpec`**
 Typing a function *as a value* — the thing you need the moment you write a decorator (folder 03) or a `default_factory` (already seen in Pydantic). `ParamSpec` is what lets a decorator preserve the signature of what it wraps instead of flattening it to `(*args, **kwargs)`.
@@ -126,33 +126,87 @@ Counting them together would be the exact accounting trap this vault warns about
 | 5 | Built-in generics | `05-Built-In-Generics` | `05-Built-In-Generics` |
 | 6 | Abstract collection types | `06-Abstract-Collection-Types` | — |
 | 7 | Unions and optionality | `07-Unions-And-Optionality` | `Video/07-Unions-And-Optionality` |
-| 8 | `Any`, `object`, `Never` | — | partial — `13-TypeVar…` covers `Any` |
-| 9 | `Literal`, `Final`, `ClassVar` | — | — |
-| 10 | `Callable`, `ParamSpec` | — | — |
-| 11 | `TypedDict` | — | `11-TypedDict` |
-| 12 | Type aliases and `NewType` | — | `12-Type-Aliases-And-NewType` |
-| 13 | `TypeVar`, generic functions | — | `13-TypeVar-And-Generic-Functions` |
-| 14–21 | generic classes → deferred evaluation | — | — |
-| 22 | Stubs and `py.typed` | — | `22-Stubs-And-Third-Party-Types` |
-| 23 | `cast`, `# type: ignore` | — | — |
-| 24 | Gradual adoption and strict mode | — | — |
-| 25 | Choosing a structured-data type | — | partial — `11-TypedDict` |
-| 26 | Common traps | — | — |
+| 8 | `Any`, `object`, `Never` | `08-Any-Object-Never` | partial — `13-TypeVar…` covers `Any` |
+| 9 | `Literal`, `Final`, `ClassVar`, `assert_never` | `09-Literal-Final-ClassVar` | — |
+| 10 | `Callable`, `ParamSpec` | `10-Callable-And-ParamSpec` | — |
+| 11 | `TypedDict` | `11-TypedDict` | `Video/11-TypedDict` |
+| 12 | Type aliases and `NewType` | `12-Type-Aliases-And-NewType` | `Video/12-Type-Aliases-And-NewType` |
+| 13 | `TypeVar`, generic functions | `13-TypeVar-And-Generic-Functions` | `Video/13-TypeVar-And-Generic-Functions` |
+| 14 | Generic classes | `14-Generic-Classes` | — |
+| 15 | Variance | `15-Variance` | — |
+| 16 | `Protocol` — structural typing | `16-Protocol` | — |
+| 17 | `@overload` | `17-Overload` | — |
+| 18 | Narrowing — `isinstance`, `TypeGuard`, `TypeIs` | `18-Narrowing` | — |
+| 19 | `Self` | `19-Self` | — |
+| 20 | `Annotated` | `20-Annotated` | — |
+| 21 | Deferred evaluation | `21-Deferred-Evaluation` | — |
+| 22 | Stubs and `py.typed` | `22-Third-Party-Libraries` | `22-Stubs-And-Third-Party-Types` |
+| 23 | `cast`, `# type: ignore`, `Any` | `23-Escape-Hatches` | — |
+| 24 | Gradual adoption and strict mode | `24-Gradual-Adoption` | — |
+| 25 | Choosing a structured-data type | `25-Choosing-A-Structured-Data-Type` | partial — `11-TypedDict` |
+| 26 | Common traps | `26-Common-Traps` | — |
 
-**Learned: 7 of 26 — Section A complete, section B three rungs in.** Anchored but not learned: 5 more.
+**Learned: 26 of 26 — the folder is complete, closed 2026-08-08.** Every section A through F is done, and every `Video/` anchor has a derived root note behind it; nothing remains anchor-only.
+
+**Example convention, adopted 2026-08-07 from concept 12 onward:** examples are drawn from **generic agent/LangGraph concepts** — thread ids, run ids, tool names, node names, model calls — rather than arbitrary domains or employer-specific internals. The guardrail: the example must stay small enough that the *typing* point is what's visible. When the domain starts needing its own explanation, it has stopped being a good example.
 
 `Video/01-Hinting-Vs-Checking-Vs-Validation`, `Video/05-Built-In-Generics` and `Video/07-Unions-And-Optionality` are now fully superseded as *learning* sources; everything they covered has been derived rather than watched. They stay in `Video/` as the record of what the tutorial said.
 
-**Next unlearned rung: concept 8** — `Any`, `object`, `Never`. No anchor beyond the partial `Any` coverage in `Video/13-TypeVar…`.
+**No unlearned rungs remain.** The folder closed on 2026-08-08.
+
+**What is still open, and does not belong to any concept:**
+
+- **`03-Static-Type-Checkers` owes a section on checker disagreement.** Two verified cases are logged in the debt table below — concept 16's protocol parameter-name mismatch, and concept 17's overload argument-expansion split. That note currently asserts checkers disagree; it now has two runnable examples instead.
+- **Revision pass planned for Sunday 2026-08-09.** Each note ends with a *"What this concept claims"* section — one sentence plus four or five numbered points. Those are the retrieval surface; re-reading the note bodies is the fluency illusion this vault warns about. See the ordering below; the remaining concepts are not taken in numeric order.
+
+## Learning order for the rest of the folder (decided 2026-08-07)
+
+The stated goal changed: **build production-grade coding / RAG / conversational agents**, learning the typing concepts those agents actually use *first*. Folder *sequence* is unchanged — within a folder, pick by priority.
+
+A two-pass split was drawn up, with 17 / 19 / 24 deferred to a second pass. **That second pass was then folded back in** — three concepts isn't worth a separate sweep, and concept 24 is one of the seven interview hooks. So: **all 26 concepts, full Socratic depth, agent-relevant ones first.** This reorders; it does not abbreviate.
+
+Remaining order: **none — all done.** (17, 18, 19, 20, 21, 22, 23, 24, 25 and 26 all learned; the folder closed 2026-08-08.)
+
+A fast single-demo pass for 26 / 17 / 19 / 24 was floated on 2026-08-07 and **withdrawn the same day.** The reason given was decisive: this is not interview-only prep, and the AI course has barely started, so frontloading fundamentals is correct sequencing — this folder is load-bearing for `02` (dataclasses, properties, ABCs), `03` (decorators), `08` (async annotations) and `09` (annotations enforced at runtime), each of which becomes recognition rather than new material. All remaining concepts get full Socratic depth.
+
+**Agent-code-bearing, taken first:**
+
+| Order | # | Concept | Why it comes first |
+|---|---|---|---|
+| ~~1~~ | ~~20~~ | ~~`Annotated`~~ | **Done.** `Annotated[list[str], operator.add]` **is** the LangGraph state idiom — the reducer is metadata on a type. Also FastAPI `Depends` and every Pydantic `Field` constraint. |
+| ~~2~~ | ~~25~~ | ~~Choosing a structured-data type~~ | **Done.** Decided on four questions: is it already a dict, does it need behaviour, must it be hashable/frozen, did it come from outside — the last outranking the rest. |
+| ~~3~~ | ~~18~~ | ~~Narrowing~~ | **Done.** `isinstance` narrows both branches; factoring the check into a `-> bool` function destroys that, because a call site is checked from the signature alone. `TypeIs` (both branches, subtype required) over `TypeGuard` (positive only, no subtype requirement) as the default. |
+| ~~4~~ | ~~23~~ | ~~Escape hatches — `cast`, `# type: ignore`~~ | **Done.** Three hatches ranked by *reach*: `cast` one value, `# type: ignore[code]` one line and one code, `Any` every line the value reaches. None verify anything. The test for legitimacy: a hatch may **record** a fact established some other way, never **substitute** for establishing it — so at a trust boundary the answer is validate-then-`cast`, or a validating model and no hatch at all. |
+| ~~5~~ | ~~22~~ | ~~Stubs and `py.typed`~~ | **Done.** A `.pyi` stub is a types-only file read *instead of* the source; `py.typed` is an empty marker granting permission to trust the source's own annotations — deleting zero bytes takes an installed annotated package from `int` to `Any`. Six options ranked, and the usual right answer is none of them: a thin typed wrapper module that confines the `Any` to one reviewable file. |
+| ~~6~~ | ~~21~~ | ~~Deferred evaluation, `TYPE_CHECKING`~~ | **Done.** A `class` statement is executed, so its own name isn't bound until the body finishes — `-> Agent` inside `class Agent` is a `NameError` at import time while mypy passes. Quotes or the future import fix the annotation; `if TYPE_CHECKING:` (a plain constant, `False` at runtime) fixes the import. Circular imports need **both** — either alone still crashes, just on a different line. |
+| ~~7~~ | ~~26~~ | ~~Common traps~~ | **Done.** Not typing bugs — Python's execution model showing through. A `def` evaluates its **defaults** at definition, so `= []` is one shared list forever. `list[str] = None` is a contradiction (implicit `Optional` is dead). "Optional" means two unrelated things: the `=` and the `\| None`. `self` needs no annotation but `-> "Agent"` degrades every subclass → 19. |
+
+**Taken last, and still taken:** ~~**17** `@overload`~~ (**done** — enumerate calling patterns when the return type depends on *how* you call rather than what you pass; `Literal` makes `True` and `False` different *types*, which is what `TypeVar` couldn't do since Python has no conditional types), ~~**19** `Self`~~ (**done** — names the class a method was *called on*, not the one it was *written in*; the check-time twin of `type(self)`. Per-subclass overrides are legal by `15-Variance`'s covariant returns but duplicate the body and break again one level down), ~~**24** gradual adoption and strict mode~~ (**done** — and keeping it in was right: `--strict` turns out to be **thirteen flags** under one name, which gives a second migration dial alongside per-module overrides. The answer to the hook is *"strict by default with a shrinking exemption list"*, and the surviving errors mark the typed/untyped boundary, i.e. the work queue).
+
+**Vocabulary note for concept 15:** the note deliberately avoids arrow notation (`sub → base`), which proved ambiguous when taught — it reads as both "substitute this for that" and "this becomes that". It uses **wider** / **narrower** instead, defined once, with every rule phrased identically as *"you have this; can you pass it where that is wanted?"*
+
+`14-Generic-Classes` also settles the Java-erasure question raised back in concept 1: `Store[str]()` produces a plain `Store`, `type(a) is type(b)` for differently-parameterised stores, so erasure applies to **generic type parameters** exactly as in Java — `age: int` was never that case.
+
+Concept 11's own thread — that `TypedDict` never validates, and choosing between it and a runtime-validating model is a real decision — is **closed by `25-Choosing-A-Structured-Data-Type`**. Concept 10 introduced the decorator syntax `@logged` ≡ `greet = logged(greet)` as one line of vocabulary. The mechanics — `functools.wraps`, decorators with arguments, class decorators — remain deferred to folder 03, which should now feel like recognition.
+
+**Depth decision (2026-08-07).** A three-way triage was proposed — full depth for the four interview hooks, a fast single-demo pass for six, anchor-only for seven — on the grounds that seventeen more rungs at concepts 1–9's depth is expensive against a Jan-2027 target with `02-Observability` through `06-Agent-Reliability` still empty.
+
+**Overruled deliberately: all 26 concepts in this folder get the full Socratic treatment.** The pace question is deferred to the *rest* of `00-Python-Utils` — folders 02, 03, 08 and 09 — and will be decided when this folder closes, not before.
+
+**Convention adopted 2026-08-07:** every output block in this folder is prefixed with the command that produced it — `$ mypy file.py` or `$ python3 file.py`. All 9 existing notes were retrofitted (32 blocks). `03-Static-Type-Checkers` now carries the reference table for telling checker output from Python output by shape: bracketed `[error-codes]` are always mypy, `Traceback`/`…Error` is always Python.
 
 Threads left hanging on purpose, each owed to a later rung:
 
 | Left by | Owed to | What |
 |---|---|---|
-| 5 | 11 | A record-shaped dictionary forces every value into one union, which flags correct code and misses real bugs. `TypedDict` is the fix. |
-| 6 | 15 | `Sequence` accepts callers `list` would reject — but *why* the checker is stricter about mutable containers is variance. |
-| 7 | 18 | Narrowing is introduced via `is None`; `isinstance`, `TypeGuard` and `TypeIs` are the full treatment. |
-| 5, 7 | 22 | Both notes say "mypy ships descriptions of the built-ins" without explaining stub files. |
+| ~~5~~ | ~~11~~ | **Closed.** `11-TypedDict` opens on concept 5's three lines and reverses every verdict. |
+| ~~6~~ | ~~15~~ | **Closed.** `15-Variance` gives the real reason: a writable container is unsafe in both directions, a read-only one is safe sub-to-base. |
+| ~~7~~ | ~~18~~ | **Closed.** `18-Narrowing` opens on concept 7's `is None` case and generalises it — `isinstance` on both branches, then `TypeIs`/`TypeGuard` for predicates of your own. |
+| ~~5, 7~~ | ~~22~~ | **Closed.** `22-Third-Party-Libraries` builds a stub from scratch — `.pyi`, types-only, signatures with `...` bodies, read *instead of* the real source — and proves which one wins by making the two disagree on purpose. |
+| ~~11~~ | ~~23~~ | **Closed, backfilled 2026-08-08.** Concept 11 showed `type(user)` is `dict` but never drew the consequence that you therefore cannot ask *"is this a `User`?"* at all. `23-Escape-Hatches` needed exactly that gap to motivate `cast`, so `11-TypedDict` gained a section for it — the `__mro__`-says-yes / `type()`-says-no pair read together, the double refusal by mypy **and** Python, and a forward pointer to 23. |
+| ~~13~~ | ~~16~~ | **Closed.** Constraints reached for because unrelated classes share a *method* — `16-Protocol` is that tool, and `Candidate`/`ToolCall`/`RetrievedDoc` is the same example carried over. |
+| 16 | — | **Open, unowned.** mypy accepts a protocol whose implementer renames a parameter; pyright rejects it by name. Verified on the same file. No later rung owns this — it belongs to `03-Static-Type-Checkers`, which now has a concrete case for its "why two checkers disagree" claim. |
+| 17 | — | **Open, unowned — second instance.** Given overloads on `Literal[True]`/`Literal[False]`, a call passing a runtime `bool` is a `[call-overload]` error in mypy and **accepted** by pyright, which does *argument type expansion* (split the `bool` into its literals, resolve once per piece, union the results → `AsyncIterator[str] \| str`). mypy reveals `Any`. Same file, opposite verdicts. Also for `03-Static-Type-Checkers`; the portable workaround is in `17-Overload`. |
 
 **Verification note (2026-08-06).** Every checker message quoted in notes 05, 07, 11, 12, 13, and 22 was captured from a real run of **mypy 2.3.0** on Python 3.13.3 via `uvx mypy`, not written from memory. Runtime behaviour in those notes (`NewType` returning a plain tuple, `TypedDict` instances being real dicts, `__type_params__`, `User.__value__`) was executed and its output pasted. This matters because an earlier version of note 01 asserted that a static checker reads `__annotations__` — it does not, it reads the source text — and that error survived because nothing in the note had been run.
 
@@ -176,12 +230,12 @@ Threads left hanging on purpose, each owed to a later rung:
 Seven questions that recur, now each with a concept behind it:
 
 - *"Are type hints enforced at runtime?"* — concept 1, and the answer that separates people is **"no — Pydantic enforces them, by choosing to read them at runtime."**
-- *"`Protocol` or ABC — which and why?"* — concept 16. Runtime enforcement vs check-time, and whether you own the class.
+- *"`Protocol` or ABC — which and why?"* — concept 16, **answerable now**. The sharpest form of the answer is directional: an ABC points from the implementer to the abstraction, a `Protocol` points from the consumer to it. Own the hierarchy and want incomplete implementations to be impossible → ABC (enforced at runtime, at instantiation). Describing a boundary that third-party objects and test doubles arrive at → `Protocol`.
 - *"Why isn't `list[Dog]` a `list[Animal]`?"* — concept 15.
 - *"Why would you annotate a parameter `Sequence[str]` rather than `list[str]`?"* — concept 6, and it's really concept 15 wearing everyday clothes.
-- *"How would you add typing to a large untyped codebase?"* — concept 24.
-- *"What do you do about a dependency with no type hints?"* — concept 22.
-- *"When would you use `TypedDict` over a dataclass over a Pydantic model?"* — concept 25.
+- *"How would you add typing to a large untyped codebase?"* — concept 24, **answerable now**. Not "turn on strict mode" — that prints ~1600 errors on a 400-function service (one per definition, one per call site), CI goes red on day one, and the team learns to ignore the checker. The answer is **strict by default with an explicit per-module exemption list that only shrinks**, plus the second dial: `--strict` is thirteen named flags, so one check can go on repo-wide at a time. The kicker: a per-module setting applies where the error is *reported*, so exempting `legacy.*` leaves call sites in `core` red — and those surviving errors are exactly the typed/untyped boundary, which is the work queue.
+- *"What do you do about a dependency with no type hints?"* — concept 22, **answerable now**. First ask which case it is: annotated but unmarked → `follow_untyped_imports` scoped to that module; a stub package exists → install it; genuinely untyped → a **thin typed wrapper module** of your own that absorbs the `Any` in one file and re-exports behind signatures you wrote. A hand-written `.pyi` is the fallback, and the reason it's a fallback is the sharp bit: a stub is the *complete* truth about its module, so anything you omit stops existing for the checker while still running fine.
+- *"When would you use `TypedDict` over a dataclass over a Pydantic model?"* — concept 25, **answerable now**. `TypedDict` for dicts you already have, `@dataclass` for objects you create, `NamedTuple` when it must be hashable or frozen, a validating model for anything arriving from outside — and the last question outranks the others, because the argument for validation is *where* the failure surfaces, not whether one happens.
 
 Sarvam's Stage 2 screen covers foundational Python, and Pydantic v2 strict schema enforcement is named explicitly under agent orchestration.
 

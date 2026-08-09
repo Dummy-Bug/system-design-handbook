@@ -46,6 +46,7 @@ print(add("hello", "world"))
 ```
 
 ```
+$ python3 add.py
 helloworld
 ```
 
@@ -75,6 +76,7 @@ add(5, "world")
 ```
 
 ```
+$ python3 add.py
 TypeError: unsupported operand type(s) for +: 'int' and 'str'
 ```
 
@@ -107,7 +109,7 @@ get_name(["name"])      # TypeError: list indices must be integers
                         #            or slices, not str
 ```
 
-The second is the telling one. A list *was* passed where `dict` was annotated — and the complaint that came back was not "you promised me a dict." It was "you can't index a list with a string." Python hit the real operation, found it invalid for the real object, and reported *that*.
+The second is the telling one. A list *was* passed where `dict` was annotated — and the complaint that came back was not "**you promised me a dict**." It was "you can't index a list with a string." Python hit the real operation, found it invalid for the real object, and reported ***that*.**
 
 ## So where does the hint go?
 
@@ -134,7 +136,8 @@ print(nonsense.__annotations__)
 print(nonsense(999, 'whatever'))   # 999
 ```
 
-Three things that are not types, all filed without comment, and the function runs normally. Write `x: 2 + 2` and the dictionary holds `4`.
+Three things that are not types, all filed without comment, and the function runs normally. Write 
+`x: 2 + 2` and the dictionary holds `4`.
 
 > [!warning] **"Kept and ignored" is not the same as "removed", and the difference is load-bearing.** 
 > If annotations really were discarded, nothing could read them once the program is running — no runtime validation, no framework reading a function's signature to work out what to hand it. They survive in full precisely so that other tools can pick them up. Nothing *has* to; Python itself doesn't.
@@ -148,7 +151,7 @@ def outer():
     return inner
 ```
 
-Until `outer()` is called, that inner `def` never executes — so no function object exists and no annotations dictionary exists, even though the annotation is sitting in the source in plain sight.
+Until `outer()` is called, that inner `def` never **executes** — so no function object exists and no annotations dictionary exists, even though the annotation is sitting in the source in plain sight.
 
 ## What this concept claims
 

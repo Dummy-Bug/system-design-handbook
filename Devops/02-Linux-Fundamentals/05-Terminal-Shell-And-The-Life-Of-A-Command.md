@@ -80,12 +80,19 @@ Step by step:
 
 1. **The terminal takes your input** and passes the line to the shell.
 2. **The shell splits it up.** `ls` is the command; anything after it is an argument. Given `cd home/desktop`, the two pieces are `cd` and `home/desktop`.
-3. **The shell finds the program.** `ls` is a real executable file sitting on disk. The shell knows where to look for it.
+3. **The shell finds the program.** `ls` is a real executable file sitting on disk — and the shell finds it by consulting **`PATH`**, a list of directories it searches in order. The first match wins, and that is the program that runs.
 4. **The shell asks the kernel to run it** — to turn that program into a **process**, which means loading it into RAM so it can execute.
 5. **The kernel checks permission first.** Before creating anything, it asks whether this user is allowed to run this program.
 6. **The program runs**, receiving the argument as a parameter — which is exactly what it would be if you had written the program yourself, as a function taking a string.
 7. **The kernel checks permission again**, this time on the target. Are you allowed to read *that* directory?
 8. **The result travels back**: kernel → shell → terminal → your screen.
+
+> [!info] **`PATH` is why you type `ls` and not `/usr/bin/ls`.** It is an ordinary list of directories, and the shell walks it top to bottom looking for a file with the name you typed. Most commands you know live in `/usr/bin`, which is on that list by default.
+>
+> Two consequences worth carrying:
+>
+> - **A program not on `PATH` cannot be run by name.** This is the whole explanation for `command not found` on something you know is installed — the file exists, it is simply not in any directory the shell searches.
+> - **Order decides which one wins.** Two versions of the same program in two directories, and the one earlier in `PATH` is the one you get. This is how version managers work, and how you end up running a different Python than you thought.
 
 > [!info] **Why permission gets checked twice.** They are different questions. *May you run this program?* is about the program file. *May you read that directory?* is about the thing the program is trying to touch. Being allowed to run `ls` does not entitle you to list somebody else's private folder.
 >

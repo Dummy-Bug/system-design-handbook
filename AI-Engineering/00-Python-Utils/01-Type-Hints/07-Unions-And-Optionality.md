@@ -18,6 +18,7 @@ print(find_email("carol").upper())      # line 7
 `dict.get` is the safe lookup — it hands back the value when the key is there and doesn't raise when it isn't.
 
 ```
+$ python3 find1.py
 ALICE@EXAMPLE.COM
 AttributeError: 'NoneType' object has no attribute 'upper'
 ```
@@ -52,6 +53,7 @@ type(None)              # <class 'NoneType'>
 And the checker says so:
 
 ```
+$ mypy find1.py
 find1.py:3: error: Incompatible return value type (got "str | None", expected "str")  [return-value]
 ```
 
@@ -68,6 +70,7 @@ def find_email(name: str) -> str | None:
 The pipe reads as **or**: *"a `str`, or `None`."* That's a **union** — a type made of several types, where a value is one of them.
 
 ```
+$ mypy find2.py
 find2.py:6: error: Item "None" of "str | None" has no attribute "upper"  [union-attr]
 find2.py:7: error: Item "None" of "str | None" has no attribute "upper"  [union-attr]
 ```
@@ -92,8 +95,10 @@ else:
 ```
 
 ```
+$ mypy narrow.py
 Success: no issues found in 1 source file
 
+$ python3 narrow.py
 no such user
 ```
 
@@ -112,6 +117,7 @@ def c(x: Union[str, None]) -> None: ...
 ```
 
 ```
+$ mypy opt.py
 opt.py:9:  note: Revealed type is "def (x: str | None)"
 opt.py:10: note: Revealed type is "def (x: str | None)"
 opt.py:11: note: Revealed type is "def (x: str | None)"
@@ -141,6 +147,7 @@ def z(name: str | None = None) -> None: ...
 Call each one twice — once omitting the argument, once passing `None`:
 
 ```
+$ mypy four.py
 four.py:6:  error: Missing positional argument "name" in call to "w"  [call-arg]
 four.py:7:  error: Argument 1 to "w" has incompatible type "None"; expected "str"  [arg-type]
 four.py:10: error: Argument 1 to "x" has incompatible type "None"; expected "str"  [arg-type]
@@ -172,6 +179,7 @@ def greet(name: str = None) -> None:
 ```
 
 ```
+$ mypy badefault.py
 badefault.py:1: error: Incompatible default for parameter "name" (default has type "None", parameter has type "str")  [assignment]
 badefault.py:1: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
 ```

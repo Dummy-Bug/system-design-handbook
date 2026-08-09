@@ -24,6 +24,7 @@ The parameter is properly parameterised — `list[str]`, exactly as the previous
 Run it:
 
 ```
+$ python3 shout.py
 ALICE
 BOB
 ALICE
@@ -39,6 +40,7 @@ BOB
 Check it:
 
 ```
+$ mypy shout.py
 shout.py:7: error: Argument 1 to "shout" has incompatible type "tuple[str, str]"; expected "list[str]"  [arg-type]
 shout.py:8: error: Argument 1 to "shout" has incompatible type "set[str]";        expected "list[str]"  [arg-type]
 shout.py:9: error: Argument 1 to "shout" has incompatible type "Generator[str, None, None]"; expected "list[str]"  [arg-type]
@@ -82,6 +84,7 @@ shout("xyz")                       # a plain string
 ```
 
 ```
+$ mypy shout2.py
 Success: no issues found in 1 source file
 ```
 
@@ -94,6 +97,7 @@ Two of those callers are new, and both are worth looking at.
 **The plain string passed too**, and this one is a trap:
 
 ```
+$ python3 shout2.py
 X
 Y
 Z
@@ -122,6 +126,7 @@ def first_and_last(names: Iterable[str]) -> str:
 ```
 
 ```
+$ mypy firstlast.py
 firstlast.py:5: error: Value of type "Iterable[str]" is not indexable  [index]
 ```
 
@@ -130,6 +135,7 @@ The complaint is about the **definition**, not any caller — there aren't any y
 Which iterables actually break on `names[0]`? Feed it seven:
 
 ```
+$ python3 indexprobe.py
 list      | Sequence? True  | alice ... carol
 tuple     | Sequence? True  | alice ... carol
 str       | Sequence? True  | x ... z
@@ -176,8 +182,10 @@ print(first_and_last(("alice", "bob", "carol")))
 ```
 
 ```
+$ mypy seq.py
 Success: no issues found in 1 source file
 
+$ python3 seq.py
 alice ... carol  (of 3)
 alice ... carol  (of 3)
 ```
@@ -190,6 +198,7 @@ first_and_last(n for n in ["alice", "bob"])      # a generator
 ```
 
 ```
+$ mypy seq_bad.py
 seq_bad.py:8: error: Argument 1 to "first_and_last" has incompatible type "set[str]"; expected "Sequence[str]"  [arg-type]
 seq_bad.py:9: error: Argument 1 to "first_and_last" has incompatible type "Generator[str, None, None]"; expected "Sequence[str]"  [arg-type]
 ```
@@ -208,6 +217,7 @@ def add_one(names: Sequence[str]) -> None:
 ```
 
 ```
+$ mypy mutate.py
 mutate.py:5: error: "Sequence[str]" has no attribute "append"  [attr-defined]
 ```
 
@@ -236,6 +246,7 @@ def add_person(ages: Mapping[str, int]) -> None:
 ```
 
 ```
+$ mypy mapping_bad.py
 mapping_bad.py:5: error: Unsupported target for indexed assignment ("Mapping[str, int]")  [index]
 ```
 
@@ -297,6 +308,7 @@ a.append("dave")     # line 15
 ```
 
 ```
+$ mypy ret.py
 ret.py:13: error: Value of type "Iterable[str]" is not indexable  [index]
 ret.py:14: error: Argument 1 to "len" has incompatible type "Iterable[str]"; expected "Sized"  [arg-type]
 ret.py:15: error: "Iterable[str]" has no attribute "append"  [attr-defined]

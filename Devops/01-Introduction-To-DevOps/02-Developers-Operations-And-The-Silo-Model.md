@@ -107,4 +107,37 @@ Hand such a company a product to build and watch what happens when it fails. The
 
 A company in this state may well employ someone with "DevOps" in their job title. It will not have DevOps. The title will just be another silo, with someone sitting in it.
 
+---
+
+## The trap: solving silos by adding a silo
+
+That last sentence deserves its own section, because it describes the most common way organisations get this wrong — and they get it wrong while believing they are fixing it.
+
+A company notices the friction between development and operations. So it creates a **DevOps team** to sit between them and own the delivery pipeline.
+
+```mermaid
+flowchart LR
+    D["Developers"] -->|"raise a ticket"| X["DevOps team"]
+    X -->|"hand over"| O["Operations"]
+    X -.->|"and now everything<br/>queues here"| X
+```
+
+Look at what has actually been built. There were two handovers; now there are three. The new team is a **wall with a ticket queue in front of it**, and it is a wall that every single change has to pass through.
+
+> [!danger] **The test is whether developers can act.** If a developer needs a new environment variable, a pipeline change, or a look at a production log, and the only route is filing a ticket and waiting — the DevOps team has become a third silo. It does not matter how good they are; they are now the bottleneck for everyone.
+
+The confusing part is that a dedicated team is not automatically wrong. The same team is genuinely valuable when it:
+
+- builds shared automation other teams use directly
+- creates reusable delivery patterns rather than bespoke one-offs
+- improves **self-service** — so developers do the thing themselves, safely
+- makes production feedback easy for product teams to reach
+- coaches those teams rather than working on their behalf
+
+> [!important] **The distinction is enabling versus gatekeeping.** A DevOps team that makes other teams *more* able to own their delivery is doing the job. One that is the only team permitted to understand or operate the delivery system has recreated exactly the problem it was hired to solve — with better tooling and an extra queue.
+
+> [!info] **Not from the lecture.** The class describes the silo model and notes that a DevOps job title does not create DevOps. This section names the specific failure that follows from it; it comes from the course's written notes rather than the session, and it is included because it is the shape the mistake actually takes in real companies.
+
+---
+
 Which raises the obvious question — what is the alternative supposed to look like?

@@ -23,6 +23,7 @@ print(Employee.name)      # ?
 ```
 
 ```
+$ python3 employee.py
 AttributeError: type object 'Employee' has no attribute 'name'
 ```
 
@@ -74,6 +75,7 @@ class Node:
 ```
 
 ```
+$ python3 node.py
     parent: Node
             ^^^^
 NameError: name 'Node' is not defined
@@ -151,6 +153,7 @@ class A:
 ```
 
 ```
+$ python3 resolve.py
 NameError: name 'abc' is not defined
 ```
 
@@ -166,6 +169,7 @@ class B:
 ```
 
 ```
+$ python3 resolve.py
 {'thing': <class 'int'>}
 ```
 
@@ -179,6 +183,7 @@ class C:
 ```
 
 ```
+$ python3 resolve.py
 {'thing': 42}
 ```
 

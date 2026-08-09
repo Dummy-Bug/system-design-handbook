@@ -21,7 +21,7 @@ cross-reference them, do not let their status distract this one.
 | **Language** | ~95% Hindi, ~5% English |
 | **Modules** | *fill once the syllabus is known* |
 | **Started** | 2026-08-05 |
-| **Course repo / lab files** | *fill on first session — this becomes ground truth for commands* |
+| **Course repo / lab files** | `github.com/Rohitnegi9/Thunder` → `04 Devops/Lecture <nn>/`. Per-lecture `Notes.pdf` and an Excalidraw export. **Read the caveats in `~/Desktop/Transcribe/tracks/devops.md` before trusting it** — it is a lesson plan rather than a record, and its PDF text layer eats the spaces in commands. |
 
 ## Who the notes are for
 
@@ -160,5 +160,14 @@ telling him the command.
 
 ## Status
 
-**Nothing written yet.** Track opened 2026-08-05; first class recorded the same evening. Running
-status and the transcription profile live in `~/Desktop/Transcribe/tracks/devops.md`.
+**Three modules written**, through class 2 (2026-08-09):
+
+- `01-Introduction-To-DevOps/` — 7 notes
+- `02-Linux-Fundamentals/` — 6 notes
+- `03-Linux-Filesystem-And-Deployment/` — 8 notes
+
+All mermaid, no images yet. Classes run **Wednesday and Saturday, 9:00 pm, 2–2½ hours**.
+
+Running status, the per-part transcript table, the course-repo caveats and the **playback-speed
+rules** (recording at 2× destroys a transcript, and the usual density check misses it) live in
+`~/Desktop/Transcribe/tracks/devops.md`. **Read that file before transcribing anything.**

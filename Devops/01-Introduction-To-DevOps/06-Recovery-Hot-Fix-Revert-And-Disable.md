@@ -88,6 +88,37 @@ Now nobody can apply the promo code. Nothing was redeployed, nothing was reverte
 >
 > This is the real lesson hiding in the example: whether you *can* disable something is decided when you build it, not when it breaks.
 
+### The bigger idea: deploying is not releasing
+
+Feature flags are usually introduced as a recovery tool, which is how they arrived here. But they enable something larger, and it is worth taking the detour because it changes what the word "deploy" means.
+
+Two words that get used interchangeably and should not be:
+
+| | |
+|---|---|
+| **Deployment** | the software is installed and running in the production environment |
+| **Release** | the functionality is available to users |
+
+In a system without feature flags these happen at the same instant, so there is no reason to distinguish them. Push the code, and the moment it is live, users have the feature. That is also why the two words blur together for most people.
+
+A flag prises them apart:
+
+```mermaid
+flowchart TB
+    D["Code deployed to production"] --> F["Feature flag stays OFF"]
+    F --> V["Team verifies the deployment<br/><i>is it running? are the logs clean?</i>"]
+    V --> E["Flag switched on for a few users"]
+    E --> A["Then everyone"]
+```
+
+The code ships to production *switched off*. You confirm the deployment itself is healthy — the application started, nothing is erroring, the logs look right — before a single user sees anything new. Then the feature is turned on, often for a small group first.
+
+> [!important] **This is what makes frequent deployment safe rather than reckless.** Note `03` argued for small, frequent deployments; the obvious objection is that shipping more often means exposing users to risk more often. Separating deployment from release is the answer: **you can deploy constantly while releasing deliberately.** The risky act stops being the deploy and becomes the flag flip — which is instant, needs no pipeline, and is reversible in seconds.
+
+It also reframes the third recovery option from earlier in this note. "Disable" is not a special emergency measure bolted on; it is the same switch, used in the other direction.
+
+> [!info] **Not from the lecture.** The class covers feature flags as a way to switch a broken feature off. The deployment/release distinction comes from the course's written notes, and it is worth having because it is the standard vocabulary for this — and because "how do you deploy safely?" is an interview question whose strongest answer is this distinction.
+
 ---
 
 ## Choosing between them
