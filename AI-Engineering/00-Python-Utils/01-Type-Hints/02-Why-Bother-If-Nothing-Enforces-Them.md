@@ -10,14 +10,14 @@ So the question has to be answered properly rather than waved away. **Why write 
 The easy answer is "documentation" — and it collapses immediately, because a comment does that too:
 
 ```python
-# a and b are ints, returns an int
-def add(a, b):
-    return a + b
+1  # a and b are ints, returns an int
+2  def add(a, b):
+3      return a + b
 ```
 
 ```python
-def add(a: int, b: int) -> int:
-    return a + b
+1  def add(a: int, b: int) -> int:
+2      return a + b
 ```
 
 Both state the same thing in the same file. Neither is enforced — Python ignores the comment, and the previous note proved it ignores the annotation just as thoroughly. Both can be wrong and stay wrong forever. The comment is arguably friendlier, since it can say things like *"b must be positive"* that no annotation can express.
@@ -29,12 +29,12 @@ If "it documents the code" were the whole answer, the top version would win. So 
 Ask Python for the claim back.
 
 ```python
-# a and b are ints, returns an int
-def add_a(a, b):
-    return a + b
-
-def add_b(a: int, b: int) -> int:
-    return a + b
+1  # a and b are ints, returns an int
+2  def add_a(a, b):
+3      return a + b
+4
+5  def add_b(a: int, b: int) -> int:
+6      return a + b
 ```
 
 ```python
@@ -63,14 +63,14 @@ print(t('38'), type(t('38')))   # 38 <class 'int'>
 
 That isn't a description of `int`. It's `int` — the real class, which can be called, compared, passed around, put in a registry.
 
-Stored **where**, and **when**? On the function object, as an attribute named `__annotations__`, built the moment the `def` line executes:
+Stored **where**, and **when**? On the function object, as an attribute named `__annotations__`, built the moment the `def` line **executes**:
 
 ```python
-def add(a: int, b: int) -> int:
-    return a + b
-
-print(add.__annotations__)      # add() has NOT been called yet
-# {'a': <class 'int'>, 'b': <class 'int'>, 'return': <class 'int'>}
+1  def add(a: int, b: int) -> int:
+2      return a + b
+3
+4  print(add.__annotations__)      # add() has NOT been called yet
+5  # {'a': <class 'int'>, 'b': <class 'int'>, 'return': <class 'int'>}
 ```
 
 Not when the function is *called* — when the `def` itself runs. Once, and every later call reuses the same dictionary rather than rebuilding it. The full derivation is in `01-What-A-Type-Hint-Is`; all that matters here is that the claim ends up somewhere a program can reach, which is exactly what the comment failed to do.
@@ -101,12 +101,12 @@ Which is all this note needs, plus the consequence that follows from it: because
 Take a file that starts executing and then fails, because the annotation names something undefined:
 
 ```python
-print("STEP 1: the module started running")
-
-def f(x: does_not_exist) -> int:
-    return x
-
-print("STEP 2: past the def")
+1  print("STEP 1: the module started running")
+2
+3  def f(x: does_not_exist) -> int:
+4      return x
+5
+6  print("STEP 2: past the def")
 ```
 
 ```
@@ -120,10 +120,10 @@ Note that STEP 1 *did* print. Python was content with the file as written, start
 Contrast a file that is not valid Python at all:
 
 ```python
-print("STEP 1: the module started running")
-
-def f(x: ) -> int:
-    return x
+1  print("STEP 1: the module started running")
+2
+3  def f(x: ) -> int:
+4      return x
 ```
 
 ```
@@ -174,9 +174,14 @@ The third is the one that changes what you can build, and it rests entirely on t
 A FastAPI route, complete:
 
 ```python
-@app.get('/items/{item_id}')
-def read_item(item_id: int):
-    return {'value': item_id, 'python_type': type(item_id).__name__}
+1  from fastapi import FastAPI
+2
+3  app = FastAPI()
+4
+5
+6  @app.get('/items/{item_id}')
+7  def read_item(item_id: int):
+8      return {'value': item_id, 'python_type': type(item_id).__name__}
 ```
 
 Two requests:
@@ -198,7 +203,7 @@ The second request didn't crash either. It came back as a structured error namin
 Now delete three characters, changing nothing else:
 
 ```python
-def read_item(item_id):          # ": int" removed
+7  def read_item(item_id):          # ": int" removed
 ```
 
 ```

@@ -6,10 +6,10 @@ So far annotations have only appeared on functions. They also go on classes and 
 ## An annotation binds nothing
 
 ```python
-class Employee:
-    name: str
-    age: int = 30
-    company = 'Repute'
+1  class Employee:
+2      name: str
+3      age: int = 30
+4      company = 'Repute'
 ```
 
 Three lines, three different shapes. `name` has an annotation and no value. `age` has both. `company` has a value and no annotation.
@@ -17,17 +17,19 @@ Three lines, three different shapes. `name` has an annotation and no value. `age
 Ask the class for each of them:
 
 ```python
-print(Employee.age)       # 30
-print(Employee.company)   # Repute
-print(Employee.name)      # ?
+6  print(Employee.age)
+7  print(Employee.company)
+8  print(Employee.name)
 ```
 
 ```
 $ python3 employee.py
+30
+Repute
 AttributeError: type object 'Employee' has no attribute 'name'
 ```
 
-Not `None`, not an empty slot — **`name` does not exist on the class at all.**
+> [!info] Not `None`, not an empty slot — **`name` does not exist on the class at all.**
 
 The reason is one you can read straight off the source. `= 30` is an assignment; `: str` is not. An assignment creates something. An annotation is a claim *about* a name, and writing a claim about a name has never been the same as binding it.
 
@@ -51,7 +53,7 @@ Two dictionaries, and they overlap only where a line happened to do both jobs:
 | `age` | yes | yes |
 | `company` | **no** | yes |
 
-Neither is a subset of the other. Anything that wants a complete picture of a class's fields has to read **both** — the annotations alone miss `company`, the namespace alone misses `name`.
+> [!info] Neither is a subset of the other. Anything that wants a complete picture of a class's fields has to read **both** — the annotations alone miss `company`, the namespace alone misses `name`
 
 This is the same `__annotations__` from concept 1, in a second location. It also exists on modules:
 
@@ -69,9 +71,9 @@ Same behaviour — the module's `__annotations__` records it, and no variable is
 A node points at another node of the same kind. Say that directly:
 
 ```python
-class Node:
-    value: int
-    parent: Node
+1  class Node:
+2      value: int
+3      parent: Node
 ```
 
 ```
@@ -81,14 +83,14 @@ $ python3 node.py
 NameError: name 'Node' is not defined
 ```
 
-The class body runs top to bottom *before* Python finishes building the class. On line 3, `Node` is still under construction — the name isn't bound yet, so the lookup fails and the class is never created.
+The class body runs top to bottom *before* Python finishes building the class. **On line 3, `Node` is still under construction — the name isn't bound yet**, so the lookup fails and the class is never created.
 
 The fix is quotes:
 
 ```python
-class Node:
-    value: int
-    parent: "Node"
+1  class Node:
+2      value: int
+3      parent: "Node"
 ```
 
 ```python
@@ -111,15 +113,15 @@ print(isinstance(raw['parent'], type))   # False
 A string that spells a type is not a type. To get something usable, the name has to be looked up — and by then it exists, because the class body finished long ago. `typing.get_type_hints()` does that lookup:
 
 ```python
-from typing import get_type_hints
-
-print(Node.__annotations__)
-# {'value': <class 'int'>, 'parent': 'Node'}
-
-print(get_type_hints(Node))
-# {'value': <class 'int'>, 'parent': <class '__main__.Node'>}
-
-print(get_type_hints(Node)['parent'] is Node)   # True
+1  from typing import get_type_hints
+2
+3  print(Node.__annotations__)
+4  # {'value': <class 'int'>, 'parent': 'Node'}
+5
+6  print(get_type_hints(Node))
+7  # {'value': <class 'int'>, 'parent': <class '__main__.Node'>}
+8
+9  print(get_type_hints(Node)['parent'] is Node)   # True
 ```
 
 Two ways of asking the same class, two different answers:
@@ -128,8 +130,8 @@ Two ways of asking the same class, two different answers:
 - **`get_type_hints()`** — the real objects, with strings looked up. Can fail, because it's the only one doing a lookup.
 
 ```python
-class Broken:
-    thing: "NeverDefined"
+1  class Broken:
+2      thing: "NeverDefined"
 ```
 
 ```python
@@ -146,10 +148,10 @@ It's tempting to read `get_type_hints()` as a validation step. It isn't, and thr
 Give the name a value that is itself a string:
 
 ```python
-NeverDefined = "abc"
-
-class A:
-    thing: "NeverDefined"
+1  NeverDefined = "abc"
+2
+3  class A:
+4      thing: "NeverDefined"
 ```
 
 ```
@@ -162,10 +164,10 @@ The complaint has moved. `NeverDefined` resolved perfectly well — it yielded `
 Give the name a class and it stops after one hop:
 
 ```python
-NeverDefined = int
-
-class B:
-    thing: "NeverDefined"
+1  NeverDefined = int
+2
+3  class B:
+4      thing: "NeverDefined"
 ```
 
 ```
@@ -176,10 +178,10 @@ $ python3 resolve.py
 And give it something that is neither a string nor a type:
 
 ```python
-NeverDefined = 42
-
-class C:
-    thing: "NeverDefined"
+1  NeverDefined = 42
+2
+3  class C:
+4      thing: "NeverDefined"
 ```
 
 ```
@@ -189,7 +191,8 @@ $ python3 resolve.py
 
 **No error.** It resolved to the number `42` and handed it back without comment. `42` is not a class, not a type, and meaningless as an annotation — and nothing in the pipeline cared.
 
-> [!warning] `get_type_hints()` answers one question: **"can I find what these names refer to?"** It chases strings until it hits a non-string, then stops. Whether the result makes any sense as a type is a question nobody here is asking. The only tool that would object reads the source text and never runs any of this.
+> [!warning] `get_type_hints()` answers one question: **"can I find what these names refer to?"** It chases strings until it hits a non-string, then stops.
+>  Whether the result makes any sense as a type is a question nobody here is asking. The only tool that would object reads the source text and never runs any of this.
 
 ## What this concept claims
 

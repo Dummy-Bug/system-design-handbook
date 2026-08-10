@@ -8,15 +8,15 @@ Before showing it, it has to earn its place. What is left that the other two can
 ## A bug neither of them catches
 
 ```python
-def get_discount(price: float, pct: int) -> float:
-    return price * (pct / 100)
-
-
-def checkout(cart: list[float]) -> float:
-    total = sum(cart)
-    if total > 10_000:
-        return get_discount(total, "10")
-    return total
+1  def get_discount(price: float, pct: int) -> float:
+2      return price * (pct / 100)
+3
+4
+5  def checkout(cart: list[float]) -> float:
+6      total = sum(cart)
+7      if total > 10_000:
+8          return get_discount(total, "10")
+9      return total
 ```
 
 Line 8 passes `"10"` — a string — where `pct: int` was promised.
@@ -79,15 +79,15 @@ The limit is sharp, and it is the most important thing in this note.
 Same bug, in two files that differ by one annotation. The cart now comes from somewhere:
 
 ```python
-def fetch_cart(order_id):               # ← no annotations
-    return ["9000", "5000"]
-
-
-def checkout(cart: list[float]) -> float:
-    return sum(cart)
-
-
-checkout(fetch_cart(42))
+1  def fetch_cart(order_id):               # ← no annotations
+2      return ["9000", "5000"]
+3
+4
+5  def checkout(cart: list[float]) -> float:
+6      return sum(cart)
+7
+8
+9  checkout(fetch_cart(42))
 ```
 
 ```
@@ -98,8 +98,15 @@ Success: no issues found in 1 source file
 Annotate the source function, change nothing else:
 
 ```python
-def fetch_cart(order_id: int) -> list[str]:     # ← annotated
-    return ["9000", "5000"]
+1  def fetch_cart(order_id: int) -> list[str]:     # ← annotated
+2      return ["9000", "5000"]
+3
+4
+5  def checkout(cart: list[float]) -> float:
+6      return sum(cart)
+7
+8
+9  checkout(fetch_cart(42))
 ```
 
 ```

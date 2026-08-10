@@ -22,6 +22,7 @@ Every annotation so far has described **data** — a number, a list of strings, 
 
 ```
 $ mypy call0.py
+
 Success: no issues found in 1 source file
 ```
 
@@ -127,8 +128,11 @@ Always exactly two slots. The first is a **list** of parameter types, because a 
 
 ```
 $ mypy call2.py
+
 call2.py:21: error: Argument 1 to "apply_twice" has incompatible type "str"; expected "Callable[[int], int]"  [arg-type]
+
 call2.py:22: error: Argument 1 to "apply_twice" has incompatible type "Callable[[str], str]"; expected "Callable[[int], int]"  [arg-type]
+
 call2.py:23: error: Argument 1 to "apply_twice" has incompatible type "Callable[[int, int], int]"; expected "Callable[[int], int]"  [arg-type]
 ```
 
@@ -167,7 +171,9 @@ Worth pinning down before going further, because the two look interchangeable an
 
 ```
 $ mypy ellipsis.py
+
 ellipsis.py:18: error: Argument 1 to "takes_one_any" has incompatible type "Callable[[], str]"; expected "Callable[[Any], Any]"  [arg-type]
+
 ellipsis.py:20: error: Argument 1 to "takes_one_any" has incompatible type "Callable[[int, int], str]"; expected "Callable[[Any], Any]"  [arg-type]
 ```
 
@@ -214,6 +220,7 @@ Success: no issues found in 1 source file
 
 ```
 $ python3 deco0.py
+
 calling greet
 hello laxya hello laxya 
 calling greet
@@ -311,9 +318,14 @@ Same file as before, one decorator changed:
 
 ```
 $ mypy deco2.py
+
 deco2.py:16: note: Revealed type is "def (name: str, times: int) -> str"
-deco2.py:19: error: Missing positional argument "times" in call to "greet"  [call-arg]
+
+deco2.py:19: error: Missing positional argument "times" in call to "greet"  
+[call-arg]
+
 deco2.py:20: error: Argument 1 to "greet" has incompatible type "int"; expected "str"  [arg-type]
+
 deco2.py:20: error: Argument 2 to "greet" has incompatible type "str"; expected "int"  [arg-type]
 ```
 
@@ -329,12 +341,14 @@ A natural question, since `P` needed the `**` and `R` didn't. **A Python functio
 
 ```
 $ python3 multiret.py
+
 returned: ('alice', 30)
 how many objects came back: 1 - a tuple
 ```
 
 ```
 $ mypy multiret.py
+
 multiret.py:7: note: Revealed type is "tuple[str, int]"
 multiret.py:8: note: Revealed type is "str"
 multiret.py:9: note: Revealed type is "int"
@@ -350,6 +364,7 @@ So `R` never needs to stand for a list, and `**R` is rejected outright:
 
 ```
 $ mypy badspec.py
+
 badspec.py:4: error: Invalid location for ParamSpec "R"  [valid-type]
 badspec.py:4: note: You can use ParamSpec as the first argument to Callable, e.g., "Callable[R, int]"
 ```

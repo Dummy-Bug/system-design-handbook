@@ -6,12 +6,12 @@ Every annotation so far has been a single word — `int`, `str`, `Node`. That's 
 ## A claim that is true and useless
 
 ```python
-def average(scores: list) -> float:
-    return sum(scores) / len(scores)
-
-
-print(average([90, 80, 70]))
-print(average(["90", "80", "70"]))
+1  def average(scores: list) -> float:
+2      return sum(scores) / len(scores)
+3
+4
+5  print(average([90, 80, 70]))
+6  print(average(["90", "80", "70"]))
 ```
 
 Nothing is missing here. The parameter is annotated, the return is annotated. Compare that with the blind spot from `03-Static-Type-Checkers`, where the checker went quiet because a function had **no** annotations at all — that excuse isn't available now.
@@ -44,12 +44,12 @@ And the checker is right. `["90", "80", "70"]` *is* a list. You claimed the argu
 Say what's inside:
 
 ```python
-def average(scores: list[int]) -> float:
-    return sum(scores) / len(scores)
-
-
-print(average([90, 80, 70]))
-print(average(["90", "80", "70"]))
+1  def average(scores: list[int]) -> float:
+2      return sum(scores) / len(scores)
+3
+4
+5  print(average([90, 80, 70]))
+6  print(average(["90", "80", "70"]))
 ```
 
 ```
@@ -66,24 +66,27 @@ Square brackets after a container type give it a **parameter** — the type of w
 ## Four shapes
 
 ```python
-names:  list[str]       = ["alice", "bob"]
-ages:   dict[str, int]  = {"alice": 30, "bob": 25}
-tags:   set[str]        = {"python", "backend"}
-point:  tuple[int, int] = (10, 20)
+1  names:  list[str]       = ["alice", "bob"]
+2  ages:   dict[str, int]  = {"alice": 30, "bob": 25}
+3  tags:   set[str]        = {"python", "backend"}
+4  point:  tuple[int, int] = (10, 20)
 ```
 
 Each one holds afterwards:
 
 ```python
-names.append(42)
-ages["carol"] = "thirty"
-tags.add(99)
+6  names.append(42)
+7  ages["carol"] = "thirty"
+8  tags.add(99)
 ```
 
 ```
 $ mypy four.py
+
 four.py:6: error: Argument 1 to "append" of "list" has incompatible type "int"; expected "str"  [arg-type]
+
 four.py:7: error: Incompatible types in assignment (expression has type "str", target has type "int")  [assignment]
+
 four.py:8: error: Argument 1 to "add" of "set" has incompatible type "int"; expected "str"  [arg-type]
 ```
 
@@ -94,7 +97,7 @@ Worth noticing what those errors are *about*. You annotated three variables. Nob
 Two is also all it takes:
 
 ```python
-bad: dict[str, str, str | None] = {}
+1  bad: dict[str, str, str | None] = {}
 ```
 
 ```
@@ -152,15 +155,17 @@ The usage difference follows from all this. **A list is a bag of like things** �
 Which is where the annotation diverges from the other three:
 
 ```python
-point:  tuple[int, int] = (10, 20, 30)
-person: tuple[str, int] = ("alice", 30)
-wrong:  tuple[str, int] = (30, "alice")
+1  point:  tuple[int, int] = (10, 20, 30)
+2  person: tuple[str, int] = ("alice", 30)
+3  wrong:  tuple[str, int] = (30, "alice")
 ```
 
 ```
 $ mypy tuples.py
+
 tuples.py:1: error: ... expression has type "tuple[int, int, int]", variable has type "tuple[int, int]"
-tuples.py:4: error: ... expression has type "tuple[int, str]",       variable has type "tuple[str, int]"
+
+tuples.py:3: error: ... expression has type "tuple[int, str]",       variable has type "tuple[str, int]"
 ```
 
 Read the two failures together.
@@ -187,14 +192,16 @@ So the brackets mean two different things depending on the container:
 Because `tuple[int, int]` describes positions rather than elements, the obvious shortcut means the opposite of what it looks like:
 
 ```python
-a: tuple[int] = (10, 20, 30)
-b: tuple[int] = (10,)
-c: tuple[int] = (10, 20)
+1  a: tuple[int] = (10, 20, 30)
+2  b: tuple[int] = (10,)
+3  c: tuple[int] = (10, 20)
 ```
 
 ```
 $ mypy tuple1.py
+
 tuple1.py:1: error: ... expression has type "tuple[int, int, int]", variable has type "tuple[int]"
+
 tuple1.py:3: error: ... expression has type "tuple[int, int]",      variable has type "tuple[int]"
 ```
 
@@ -220,14 +227,15 @@ Everything so far has been the brackets working. The last rung is the shape they
 A function returning a user record:
 
 ```python
-def create_user(name: str, age: int) -> dict:
-    return {"name": name, "age": age, "email": None}
+1  def create_user(name: str, age: int) -> dict:
+2      return {"name": name, "age": age, "email": None}
 ```
 
 `-> dict` is bare, and by now that's obviously too coarse. Tighten it. The name is a string, the age is a number, the email might be nothing — so the only accurate parameterisation admits all three:
 
 ```python
-def create_user(name: str, age: int) -> dict[str, str | int | None]:
+1  def create_user(name: str, age: int) -> dict[str, str | int | None]:
+2      return {"name": name, "age": age, "email": None}
 ```
 
 That is correct. mypy accepts it. Now be a caller:
@@ -250,15 +258,12 @@ Line 7 is correct code. Line 9 puts a string in the age. Line 11 misspells a key
 
 ```
 $ mypy record.py
-record.py:7: error: Item "int" of "str | int | None" has no attribute "upper"  [union-attr]
-record.py:7: error: Item "None" of "str | int | None" has no attribute "upper"  [union-attr]
-Found 2 errors in 1 file (checked 1 source file)
-```
 
-```
-$ python3 record.py
-ALICE
-KeyError: 'emial'
+record.py:7: error: Item "int" of "str | int | None" has no attribute "upper"  [union-attr]
+
+record.py:7: error: Item "None" of "str | int | None" has no attribute "upper"  [union-attr]
+
+Found 2 errors in 1 file (checked 1 source file)
 ```
 
 Both complaints land on **line 7**, and neither of the other two lines is mentioned.
@@ -266,6 +271,14 @@ Both complaints land on **line 7**, and neither of the other two lines is mentio
 **Line 7 — flagged, and it works.** It printed `ALICE`. But the annotation gave *one* type to *all* values, so the checker has no way to know that the `"name"` key in particular holds a string. It sees `str | int | None` and has to assume the worst, and neither `int` nor `None` has `.upper()`.
 
 **Line 9 — silent.** Putting `"thirty"` in the age is a real bug. It passes because `str` is in the union, and the union applies to every key equally.
+
+```
+$ python3 record.py
+ALICE
+KeyError: 'emial'
+```
+
+
 
 **Line 11 — silent.** `user["emial"]` raises `KeyError` when it runs. The annotation says keys are strings; `"emial"` is a string. Nothing to object to.
 

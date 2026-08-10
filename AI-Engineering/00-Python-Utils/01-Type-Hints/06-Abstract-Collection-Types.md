@@ -1,22 +1,17 @@
 #python #type-hints #typing #collections #python-utils
 
-
-`05-Built-In-Generics` was one long argument for saying more. A bare `list` is a weak claim; `list[str]` is a strong one; the brackets cost four characters and buy real checking.
-
-Push that habit one step further and it turns on you.
-
 ## An annotation that rejects working code
 
 ```python
-def shout(names: list[str]) -> None:
-    for n in names:
-        print(n.upper())
-
-
-shout(["alice", "bob"])                    # a list
-shout(("alice", "bob"))                    # a tuple
-shout({"alice", "bob"})                    # a set
-shout(n for n in ["alice", "bob"])         # a generator
+1  def shout(names: list[str]) -> None:
+2      for n in names:
+3          print(n.upper())
+4
+5
+6  shout(["alice", "bob"])                    # a list
+7  shout(("alice", "bob"))                    # a tuple
+8  shout({"alice", "bob"})                    # a set
+9  shout(n for n in ["alice", "bob"])         # a generator
 ```
 
 The parameter is properly parameterised — `list[str]`, exactly as the previous note taught. Four callers pass four different containers.
@@ -27,10 +22,13 @@ Run it:
 $ python3 shout.py
 ALICE
 BOB
+
 ALICE
 BOB
+
 ALICE
 BOB
+
 ALICE
 BOB
 ```
@@ -41,8 +39,11 @@ Check it:
 
 ```
 $ mypy shout.py
+
 shout.py:7: error: Argument 1 to "shout" has incompatible type "tuple[str, str]"; expected "list[str]"  [arg-type]
+
 shout.py:8: error: Argument 1 to "shout" has incompatible type "set[str]";        expected "list[str]"  [arg-type]
+
 shout.py:9: error: Argument 1 to "shout" has incompatible type "Generator[str, None, None]"; expected "list[str]"  [arg-type]
 ```
 
@@ -55,9 +56,9 @@ And the checker is right both times. It is enforcing the claim it was given. `li
 ## What the body actually needs
 
 ```python
-def shout(names: list[str]) -> None:
-    for n in names:
-        print(n.upper())
+1  def shout(names: list[str]) -> None:
+2      for n in names:
+3          print(n.upper())
 ```
 
 Read the two lines and ignore what you happen to call it with. The function loops over `names`, and calls `.upper()` on whatever comes out.
@@ -67,20 +68,20 @@ That's the entire requirement: **something you can loop over, yielding strings.*
 ## Saying the requirement instead
 
 ```python
-from collections.abc import Iterable
-
-
-def shout(names: Iterable[str]) -> None:
-    for n in names:
-        print(n.upper())
-
-
-shout(["alice", "bob"])
-shout(("alice", "bob"))
-shout({"alice", "bob"})
-shout(n for n in ["alice", "bob"])
-shout({"alice": 1, "bob": 2})      # a dict
-shout("xyz")                       # a plain string
+ 1  from collections.abc import Iterable
+ 2
+ 3
+ 4  def shout(names: Iterable[str]) -> None:
+ 5      for n in names:
+ 6          print(n.upper())
+ 7
+ 8
+ 9  shout(["alice", "bob"])
+10  shout(("alice", "bob"))
+11  shout({"alice", "bob"})
+12  shout(n for n in ["alice", "bob"])
+13  shout({"alice": 1, "bob": 2})      # a dict
+14  shout("xyz")                       # a plain string
 ```
 
 ```
@@ -118,30 +119,39 @@ Nothing about the import is magic. It brings in a name to write after the colon,
 Different body, same annotation. This one indexes instead of looping:
 
 ```python
-from collections.abc import Iterable
-
-
-def first_and_last(names: Iterable[str]) -> str:
-    return f"{names[0]} ... {names[-1]}"
+1  from collections.abc import Iterable
+2
+3
+4  def first_and_last(names: Iterable[str]) -> str:
+5      return f"{names[0]} ... {names[-1]}"
 ```
 
 ```
 $ mypy firstlast.py
+
 firstlast.py:5: error: Value of type "Iterable[str]" is not indexable  [index]
 ```
 
-The complaint is about the **definition**, not any caller — there aren't any yet. `Iterable` promises one thing, looping, and the body is doing something else.
+The complaint is about the **definition**, not any caller — there aren't any yet. 
+`Iterable` **promises one thing, looping, and the body is doing something else**.\
 
 Which iterables actually break on `names[0]`? Feed it seven:
 
 ```
 $ python3 indexprobe.py
+
 list      | Sequence? True  | alice ... carol
+
 tuple     | Sequence? True  | alice ... carol
+
 str       | Sequence? True  | x ... z
+
 range     | Sequence? True  | 0 ... 2
+
 set       | Sequence? False | TypeError: 'set' object is not subscriptable
+
 generator | Sequence? False | TypeError: 'generator' object is not subscriptable
+
 dict      | Sequence? False | KeyError: 0
 ```
 
@@ -157,7 +167,8 @@ Something is a sequence when its items sit at **numbered positions**, starting a
 - `len(x)` — how many
 - looping returns them in the **same order every time**
 
-The word is ordinary Python vocabulary, not a typing invention. The built-in sequences are `list`, `tuple`, `str`, `range` and `bytes` — all familiar, they just never had a collective name.
+The word is ordinary Python vocabulary, not a typing invention. The built-in sequences are 
+`list`, `tuple`, `str`, `range` and `bytes` — all familiar, they just never had a collective name.
 
 Read the three failures against that definition:
 
@@ -170,15 +181,15 @@ Read the three failures against that definition:
 ### Saying it
 
 ```python
-from collections.abc import Sequence
-
-
-def first_and_last(names: Sequence[str]) -> str:
-    return f"{names[0]} ... {names[-1]}  (of {len(names)})"
-
-
-print(first_and_last(["alice", "bob", "carol"]))
-print(first_and_last(("alice", "bob", "carol")))
+1  from collections.abc import Sequence
+2
+3
+4  def first_and_last(names: Sequence[str]) -> str:
+5      return f"{names[0]} ... {names[-1]}  (of {len(names)})"
+6
+7
+8  print(first_and_last(["alice", "bob", "carol"]))
+9  print(first_and_last(("alice", "bob", "carol")))
 ```
 
 ```
@@ -193,13 +204,22 @@ alice ... carol  (of 3)
 List and tuple both accepted — the `list[str]` annotation would have thrown the tuple away for nothing. And the two that genuinely cannot do it:
 
 ```python
-first_and_last({"alice", "bob"})                 # a set
-first_and_last(n for n in ["alice", "bob"])      # a generator
+1  from collections.abc import Sequence
+2
+3
+4  def first_and_last(names: Sequence[str]) -> str:
+5      return f"{names[0]} ... {names[-1]}  (of {len(names)})"
+6
+7
+8  first_and_last({"alice", "bob"})                 # a set
+9  first_and_last(n for n in ["alice", "bob"])      # a generator
 ```
 
 ```
 $ mypy seq_bad.py
+
 seq_bad.py:8: error: Argument 1 to "first_and_last" has incompatible type "set[str]"; expected "Sequence[str]"  [arg-type]
+
 seq_bad.py:9: error: Argument 1 to "first_and_last" has incompatible type "Generator[str, None, None]"; expected "Sequence[str]"  [arg-type]
 ```
 
@@ -212,8 +232,11 @@ Rejected, and correctly this time — `names[0]` on either would be a real error
 Inside a function taking `names: Sequence[str]`:
 
 ```python
-def add_one(names: Sequence[str]) -> None:
-    names.append("dave")
+1  from collections.abc import Sequence
+2
+3
+4  def add_one(names: Sequence[str]) -> None:
+5      names.append("dave")
 ```
 
 ```
@@ -231,33 +254,42 @@ print(hasattr('', 'append'))    # False
 
 A tuple is a sequence. A string is a sequence. Neither has `append`. So `append` **cannot** be part of what `Sequence` promises, or the promise would be false for two of its most common members.
 
-`Sequence` is read-only — look, count, loop. Changing is a stronger promise with its own name:
+**`Sequence` is read-only — look, count, loop.** Changing is a stronger promise with its own name:
 
 ```python
-def add_two(names: MutableSequence[str]) -> None:
-    names.append("dave")     # accepted
+1  from collections.abc import MutableSequence
+2
+3
+4  def add_two(names: MutableSequence[str]) -> None:
+5      names.append("dave")     # accepted
 ```
 
 The dictionary family works the same way. `Mapping[str, int]` promises key lookup, `len`, and looping the keys, and nothing about modification:
 
 ```python
-def add_person(ages: Mapping[str, int]) -> None:
-    ages["dave"] = 40
+1  from collections.abc import Mapping
+2
+3
+4  def add_person(ages: Mapping[str, int]) -> None:
+5      ages["dave"] = 40
 ```
 
 ```
 $ mypy mapping_bad.py
-mapping_bad.py:5: error: Unsupported target for indexed assignment ("Mapping[str, int]")  [index]
+
+mapping_bad.py:5: error: Unsupported target for indexed assignment 
+("Mapping[str, int]")  [index]
 ```
 
 `MutableMapping[str, int]` is the version that allows it.
 
 So there are two families, three rungs each:
 
-| loop only | + read by position/key | + change it |
-|---|---|---|
-| `Iterable[T]` | `Sequence[T]` | `MutableSequence[T]` |
-| `Iterable[K]` | `Mapping[K, V]` | `MutableMapping[K, V]` |
+| loop only     | + read by position/key | + change it            |
+| ------------- | ---------------------- | ---------------------- |
+| `Iterable[T]` | `Sequence[T]`          | `MutableSequence[T]`   |
+| `Iterable[K]` | `Mapping[K, V]`        | `MutableMapping[K, V]` |
+|               |                        |                        |
 
 > [!tip] **In practice you will never write the `Mutable*` names.** Check which built-in types they actually cover:
 >
@@ -274,7 +306,9 @@ So there are two families, three rungs each:
 > frozenset  False     False    False    False
 > ```
 >
-> **`MutableSequence` is `list`** — plus `bytearray`, which you are unlikely ever to annotate. **`MutableMapping` is `dict`.** So if your function modifies its argument, write `list[str]` or `dict[str, int]`: shorter, clearer, no import, and the only caller you turn away is one holding something that couldn't be modified anyway.
+> **`MutableSequence` is `list`** — plus **`bytearray`**, which you are unlikely ever to annotate. 
+> 
+> **`MutableMapping` is `dict`.** So if your function modifies its argument, write `list[str]` or `dict[str, int]`: shorter, clearer, no import, and the only caller you turn away is one holding something that couldn't be modified anyway.
 >
 > Worth knowing the names exist, because you'll read them in library code and in older codebases. Not worth typing.
 
@@ -294,39 +328,49 @@ And the everyday payoff of the middle two is not really about accepting exotic c
 Everything so far has been about parameters. Now a function that builds something and hands it back:
 
 ```python
-def load_names() -> Iterable[str]:
-    return ["alice", "bob", "carol"]
+1  from collections.abc import Iterable
+2
+3
+4  def load_names() -> Iterable[str]:
+5      return ["alice", "bob", "carol"]
 ```
 
 By the rule so far this looks right — `Iterable[str]` is the weakest true statement, and it *is* true. Watch what it does to the caller:
 
 ```python
-a = load_names()
-print(a[0])          # line 13
-print(len(a))        # line 14
-a.append("dave")     # line 15
+ 8  a = load_names()
+ 9
+10  print(a[0])
+11  print(len(a))
+12  a.append("dave")
 ```
 
 ```
 $ mypy ret.py
-ret.py:13: error: Value of type "Iterable[str]" is not indexable  [index]
-ret.py:14: error: Argument 1 to "len" has incompatible type "Iterable[str]"; expected "Sized"  [arg-type]
-ret.py:15: error: "Iterable[str]" has no attribute "append"  [attr-defined]
+
+ret.py:10: error: Value of type "Iterable[str]" is not indexable  [index]
+
+ret.py:11: error: Argument 1 to "len" has incompatible type "Iterable[str]"; expected "Sized"  [arg-type]
+
+ret.py:12: error: "Iterable[str]" has no attribute "append"  [attr-defined]
 ```
 
 ```
 $ python3 ret.py
+
 alice
 3
 ```
 
 **It is a list.** It indexes, it has a length, it appends — the run proves all three. The annotation threw that away and left the caller holding the least capable description you could have written. Change the return to `list[str]` and every line is fine.
 
-The same reasoning applies to autocomplete: an editor offers what the *annotation* permits, so `-> Iterable[str]` suggests one method on a value that really supports thirty.
+The same reasoning applies to autocomplete: an editor offers what the *annotation* permits, 
+so `-> Iterable[str]` suggests one method on a value that really supports thirty.
 
 > [!important] **Accept abstract, return concrete.**
 > The rule doesn't reverse — the audience does.
 > - **Parameter — weak is generous.** You're describing what you'll *accept*, so a looser type lets more callers in.
+> 
 > - **Return — weak is stingy.** You're describing what they *get*, so a looser type hands back less than you built.
 >
 > Both are the same instinct — say the true thing that serves the other side — pointed in opposite directions.

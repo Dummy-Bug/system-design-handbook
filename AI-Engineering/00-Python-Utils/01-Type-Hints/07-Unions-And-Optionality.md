@@ -6,19 +6,20 @@ Every annotation so far has named one type. Real functions don't always cooperat
 ## A lookup that sometimes finds nothing
 
 ```python
-def find_email(name: str) -> str:
-    users = {"alice": "alice@example.com", "bob": "bob@example.com"}
-    return users.get(name)
-
-
-print(find_email("alice").upper())      # line 6
-print(find_email("carol").upper())      # line 7
+1  def find_email(name: str) -> str:
+2      users = {"alice": "alice@example.com", "bob": "bob@example.com"}
+3      return users.get(name)
+4
+5
+6  print(find_email("alice").upper())
+7  print(find_email("carol").upper())
 ```
 
 `dict.get` is the safe lookup — it hands back the value when the key is there and doesn't raise when it isn't.
 
 ```
 $ python3 find1.py
+
 ALICE@EXAMPLE.COM
 AttributeError: 'NoneType' object has no attribute 'upper'
 ```
@@ -31,7 +32,8 @@ Before the fix, the question the error raises: is `-> str` a true annotation? It
 
 No — and the reason matters more than the answer.
 
-> [!important] **An annotation is a claim about every possible run, not the typical one.** `-> str` says *"whenever this function returns, the thing coming back is a `str`."* Not usually, not when the key exists. One path returning something else makes the claim false, however rare that path is. There's no partial credit: either a checker can rely on the claim or it can't.
+> [!important] **An annotation is a claim about every possible run, not the typical one.** `-> str` says *"whenever this function returns, the thing coming back is a `str`."*
+>  Not usually, not when the key exists. One path returning something else makes the claim false, however rare that path is. There's no partial credit: either a checker can rely on the claim or it can't.
 
 Worth contrasting with Java, because Java has the opposite behaviour and it's the more familiar one:
 
@@ -54,7 +56,9 @@ And the checker says so:
 
 ```
 $ mypy find1.py
-find1.py:3: error: Incompatible return value type (got "str | None", expected "str")  [return-value]
+
+find1.py:3: error: 
+Incompatible return value type (got "str | None", expected "str")  [return-value]
 ```
 
 Notice **where**. Line 3 — the `return` statement — not line 7 where it crashes, and not the call sites at all. It caught the *lie*, and the lie is visible without any caller existing.
@@ -64,20 +68,31 @@ Notice also `got "str | None"`. Nobody wrote that. mypy ships descriptions of th
 ## Saying "or"
 
 ```python
-def find_email(name: str) -> str | None:
+1  def find_email(name: str) -> str | None:
+2      users = {"alice": "alice@example.com", "bob": "bob@example.com"}
+3      return users.get(name)
+4
+5
+6  print(find_email("alice").upper())
+7  print(find_email("carol").upper())
 ```
 
 The pipe reads as **or**: *"a `str`, or `None`."* That's a **union** — a type made of several types, where a value is one of them.
 
 ```
 $ mypy find2.py
-find2.py:6: error: Item "None" of "str | None" has no attribute "upper"  [union-attr]
-find2.py:7: error: Item "None" of "str | None" has no attribute "upper"  [union-attr]
+
+find2.py:6: error: 
+Item "None" of "str | None" has no attribute "upper"  [union-attr]
+
+find2.py:7: error: 
+Item "None" of "str | None" has no attribute "upper"  [union-attr]
 ```
 
 Line 3 has gone quiet — the annotation is true now. And the complaint moved to **both** call sites, including line 6, which works perfectly when you run it.
 
-That's the worst-case assumption again, the same one that made a record-shaped `dict[str, str | int | None]` unusable. The checker doesn't know `"alice"` is in the dictionary and `"carol"` isn't; it knows the function returns `str | None`, so `.upper()` might land on `None`. Both lines get flagged.
+That's the worst-case assumption again, the same one that made a record-shaped 
+`dict[str, str | int | None]` unusable. The checker doesn't know `"alice"` is in the dictionary and `"carol"` isn't; it knows the function returns `str | None`, so `.upper()` might land on `None`. Both lines get flagged.
 
 **That is the union working, not failing.** The errors now sit on the two lines that genuinely aren't safe, and they arrived before anyone ran anything.
 
@@ -86,12 +101,17 @@ That's the worst-case assumption again, the same one that made a record-shaped `
 The way out is to handle the case:
 
 ```python
-email = find_email("carol")
-
-if email is None:
-    print("no such user")
-else:
-    print(email.upper())
+ 1  def find_email(name: str) -> str | None:
+ 2      users = {"alice": "alice@example.com", "bob": "bob@example.com"}
+ 3      return users.get(name)
+ 4
+ 5
+ 6  email = find_email("carol")
+ 7
+ 8  if email is None:
+ 9      print("no such user")
+10  else:
+11      print(email.upper())
 ```
 
 ```
@@ -111,15 +131,26 @@ Nothing was annotated differently. `email` is still `str | None`, and `.upper()`
 ## Two older spellings
 
 ```python
-def a(x: str | None) -> None: ...
-def b(x: Optional[str]) -> None: ...
-def c(x: Union[str, None]) -> None: ...
+ 1  from typing import Optional, Union
+ 2
+ 3
+ 4  def a(x: str | None) -> None: ...
+ 5  def b(x: Optional[str]) -> None: ...
+ 6  def c(x: Union[str, None]) -> None: ...
+ 7
+ 8
+ 9  reveal_type(a)
+10  reveal_type(b)
+11  reveal_type(c)
 ```
 
 ```
 $ mypy opt.py
+
 opt.py:9:  note: Revealed type is "def (x: str | None)"
+
 opt.py:10: note: Revealed type is "def (x: str | None)"
+
 opt.py:11: note: Revealed type is "def (x: str | None)"
 ```
 
@@ -138,28 +169,46 @@ All three still work and all three appear in real codebases, so you need to read
 Four functions, all legal, all different:
 
 ```python
-def w(name: str) -> None: ...
-def x(name: str = "friend") -> None: ...
-def y(name: str | None) -> None: ...
-def z(name: str | None = None) -> None: ...
+ 1  def w(name: str) -> None: ...
+ 2  def x(name: str = "friend") -> None: ...
+ 3  def y(name: str | None) -> None: ...
+ 4  def z(name: str | None = None) -> None: ...
 ```
 
 Call each one twice — once omitting the argument, once passing `None`:
 
+```python
+ 6  w()
+ 7  w(None)
+ 8
+ 9  x()
+10  x(None)
+11
+12  y()
+13  y(None)
+14
+15  z()
+16  z(None)
+```
+
 ```
 $ mypy four.py
+
 four.py:6:  error: Missing positional argument "name" in call to "w"  [call-arg]
+
 four.py:7:  error: Argument 1 to "w" has incompatible type "None"; expected "str"  [arg-type]
+
 four.py:10: error: Argument 1 to "x" has incompatible type "None"; expected "str"  [arg-type]
+
 four.py:12: error: Missing positional argument "name" in call to "y"  [call-arg]
 ```
 
-| | `f()` — omit it | `f(None)` — pass nothing-ish |
-|---|---|---|
-| `name: str` | **error** | **error** |
-| `name: str = "friend"` | fine | **error** |
-| `name: str \| None` | **error** | fine |
-| `name: str \| None = None` | fine | fine |
+|                             | `f()` — omit it | `f(None)` — pass nothing-ish |
+| --------------------------- | --------------- | ---------------------------- |
+| `name: str`                 | **error**       | **error**                    |
+| `name: str = "friend"`      | fine            | **error**                    |
+| `name: str `\| None`        | **error**       | fine                         |
+| `name: str `\| None = None` | fine            | fine                         |
 
 > [!important] **Two independent switches.**
 > - **A default** decides whether the caller may *omit* the argument. It has nothing to do with types.
@@ -174,20 +223,24 @@ That's a genuinely useful signature — *"tell me explicitly, even if the answer
 ## The trap that falls out
 
 ```python
-def greet(name: str = None) -> None:
-    print(name)
+1  def greet(name: str = None) -> None:
+2      print(name)
 ```
 
 ```
 $ mypy badefault.py
-badefault.py:1: error: Incompatible default for parameter "name" (default has type "None", parameter has type "str")  [assignment]
+
+badefault.py:1: error: Incompatible default for parameter "name" 
+(default has type "None", parameter has type "str")  [assignment]
+
 badefault.py:1: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
 ```
 
 Very common, and wrong on its face: the annotation says `str` and the default on the same line is `None`. The two contradict each other. The fix is to write what was meant:
 
 ```python
-def greet(name: str | None = None) -> None:
+1  def greet(name: str | None = None) -> None:
+2      print(name)
 ```
 
 The note about *implicit Optional* is history worth knowing. Older mypy silently rewrote `str = None` into `str | None = None` for you. That guessing was removed precisely because it erased the difference between the second and fourth rows of the grid — the reader could no longer tell whether `None` was a meaningful value or just a placeholder default.

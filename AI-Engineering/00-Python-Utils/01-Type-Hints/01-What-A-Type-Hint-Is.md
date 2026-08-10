@@ -6,8 +6,8 @@
 A function with nothing written down about its inputs:
 
 ```python
-def add(a, b):
-    return a + b
+1  def add(a, b):
+2      return a + b
 ```
 
 Reading this, you cannot answer a basic question: **what is `add` for?** Numbers, presumably. But `a + b` also joins two strings, also concatenates two lists, also works on anything that has decided what `+` means for itself. The code doesn't say which of those was intended, so a reader has to guess, and the editor can't offer any help — it has nothing to go on either.
@@ -19,8 +19,8 @@ The author knew. That knowledge just never made it into the file.
 A **type hint** is that knowledge, written down. A colon after a parameter, an arrow before the return:
 
 ```python
-def add(a: int, b: int) -> int:
-    return a + b
+1  def add(a: int, b: int) -> int:
+2      return a + b
 ```
 
 Read it as a sentence: *takes two ints, gives back an int.* Nothing else about the function changed.
@@ -28,8 +28,8 @@ Read it as a sentence: *takes two ints, gives back an int.* Nothing else about t
 Variables can carry one too, though it's rarely worth it when the value is sitting right there:
 
 ```python
-count: int = 0
-name: str = 'Corey'
+1  count: int = 0
+2  name: str = 'Corey'
 ```
 
 That's the entire feature at surface level. Now the question that decides everything else about this folder.
@@ -39,10 +39,10 @@ That's the entire feature at surface level. Now the question that decides everyt
 The function says `int`. Give it strings:
 
 ```python
-def add(a: int, b: int) -> int:
-    return a + b
-
-print(add("hello", "world"))
+1  def add(a: int, b: int) -> int:
+2      return a + b
+3
+4  print(add("hello", "world"))
 ```
 
 ```
@@ -69,10 +69,10 @@ So the puzzle sharpens. The annotation says `int, int`. The first two calls both
 Delete the hints entirely and run the same broken call:
 
 ```python
-def add(a, b):          # no hints at all
-    return a + b
-
-add(5, "world")
+1  def add(a, b):          # no hints at all
+2      return a + b
+3
+4  add(5, "world")
 ```
 
 ```
@@ -90,13 +90,13 @@ The identical error, from a file containing no annotation anywhere. The hint con
 The return annotation goes unchecked for the same reason:
 
 ```python
-def get_name(user: dict) -> str:
-    return user["name"]
-
-r = get_name({"name": 42})
-
-print(r)                    # 42
-print(type(r).__name__)     # int
+1  def get_name(user: dict) -> str:
+2      return user["name"]
+3
+4  r = get_name({"name": 42})
+5
+6  print(r)                    # 42
+7  print(type(r).__name__)     # int
 ```
 
 Annotated `-> str`, returns an `int`, and nothing anywhere objects. The claim was simply false and no one was checking.
@@ -127,13 +127,13 @@ Printed *after* the call that returned an `int` from a `-> str` function. **The 
 And Python does no vetting on the way in. Whatever you write after the colon is evaluated and stored, whether or not it is a type at all:
 
 ```python
-def nonsense(x: 'banana', y: 12345) -> ['not', 'a', 'type']:
-    return x
-
-print(nonsense.__annotations__)
-# {'x': 'banana', 'y': 12345, 'return': ['not', 'a', 'type']}
-
-print(nonsense(999, 'whatever'))   # 999
+1  def nonsense(x: 'banana', y: 12345) -> ['not', 'a', 'type']:
+2      return x
+3
+4  print(nonsense.__annotations__)
+5  # {'x': 'banana', 'y': 12345, 'return': ['not', 'a', 'type']}
+6
+7  print(nonsense(999, 'whatever'))   # 999
 ```
 
 Three things that are not types, all filed without comment, and the function runs normally. Write 
@@ -145,10 +145,10 @@ Three things that are not types, all filed without comment, and the function run
 One consequence, since `def` is an instruction that runs rather than a declaration read ahead:
 
 ```python
-def outer():
-    def inner(x: str) -> bool:
-        return True
-    return inner
+1  def outer():
+2      def inner(x: str) -> bool:
+3          return True
+4      return inner
 ```
 
 Until `outer()` is called, that inner `def` never **executes** — so no function object exists and no annotations dictionary exists, even though the annotation is sitting in the source in plain sight.

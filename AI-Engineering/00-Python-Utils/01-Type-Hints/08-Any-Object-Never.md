@@ -1,10 +1,5 @@
 #python #type-hints #typing #any #python-utils
 
-
-Concept 7 ended with unions — a way to say a value is one of several types. The obvious next question is what you write when it could be *anything*.
-
-There are two candidates, they look interchangeable, and they are opposites.
-
 ## Two ways to say "anything"
 
 ```python
@@ -29,6 +24,7 @@ Lines 5 and 9 are the same statement. Both parameters accept a string and an int
 
 ```
 $ mypy anyobj.py
+
 anyobj.py:9: error: "object" has no attribute "upper"  [attr-defined]
 Found 1 error in 1 file (checked 1 source file)
 ```
@@ -129,6 +125,7 @@ Which sharpens the contrast:
 
 ```
 $ python3 json_types.py
+
 {"retries": 3}     -> dict
 [1, 2, 3]          -> list
 "hello"            -> str
@@ -232,11 +229,15 @@ You can watch it happen with `reveal_type`, which asks mypy what it believes a v
 
 ```
 $ mypy spread3.py
+
 spread3.py:9:  note: Revealed type is "dict[str, int]"
 spread3.py:12: note: Revealed type is "int"
+
 spread3.py:14: error: "int" has no attribute "upper"  [attr-defined]
+
 spread3.py:15: note: Revealed type is "Any"
 spread3.py:18: note: Revealed type is "Any"
+
 Found 1 error in 1 file (checked 1 source file)
 ```
 
@@ -298,7 +299,9 @@ Change one word, the return annotation on line 4, and nothing else:
 
 ```
 $ mypy never2.py
-never2.py:9: error: Incompatible return value type (got "int | None", expected "int")  [return-value]
+
+never2.py:9: error: 
+Incompatible return value type (got "int | None", expected "int")  [return-value]
 ```
 
 **With `-> None`:** the checker believes `crash` returns normally having produced nothing. So line 8 runs, control falls out of the `if`, and reaches line 9 with `port` still possibly `None`. A correct complaint, given what it was told.
@@ -335,6 +338,7 @@ The exception behaves exactly as it always did:
 
 ```
 $ python3 neverrun.py
+
 THIS LINE NEVER RUNS when port is missing
 8080
 Traceback (most recent call last):

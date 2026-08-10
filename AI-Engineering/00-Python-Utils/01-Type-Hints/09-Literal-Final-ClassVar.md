@@ -1,8 +1,5 @@
 #python #type-hints #typing #literal #python-utils
 
-
-`05-Built-In-Generics` made the same move one level out: `list` named a container and said nothing about the contents, so the brackets were added. This concept makes it again, one level further in. The annotation names a *type* and says nothing about **which values**.
-
 ## `str` is true and far too wide
 
 ```python
@@ -48,7 +45,9 @@ Both go through. `str` is a completely true annotation for all three, and every 
 
 ```
 $ mypy st1.py
+
 st1.py:9:  error: Argument 2 to "set_status" has incompatible type "Literal['runnning']"; expected "Literal['pending', 'running', 'done']"  [arg-type]
+
 st1.py:10: error: Argument 2 to "set_status" has incompatible type "Literal['banana']"; expected "Literal['pending', 'running', 'done']"  [arg-type]
 ```
 
@@ -80,6 +79,7 @@ A fixed set of named values is what an enum is for in most languages, and Python
 
 ```
 $ mypy st2.py
+
 st2.py:15: error: Argument 2 to "set_status" has incompatible type "str"; expected "Status"  [arg-type]
 ```
 
@@ -134,9 +134,13 @@ Give the union a name on line 3 and reuse it:
 
 ```
 $ mypy narrowlit.py
+
 narrowlit.py:7:  note: Revealed type is "Literal['pending'] | Literal['running'] | Literal['done']"
+
 narrowlit.py:10: note: Revealed type is "Literal['running'] | Literal['done']"
+
 narrowlit.py:13: note: Revealed type is "Literal['done']"
+
 Success: no issues found in 1 source file
 ```
 
@@ -198,6 +202,7 @@ Now the thing that happens six months later — someone adds a state on **line 3
 
 ```
 $ mypy exh2.py
+
 exh2.py:13: error: Argument 1 to "assert_never" has incompatible type "Literal['failed']"; expected "Never"  [arg-type]
 ```
 
@@ -352,6 +357,7 @@ Two lines in a class body, identical in shape:
 
 ```
 $ python3 cv0.py
+
 build test
 2 2 2
 unnamed
@@ -395,7 +401,8 @@ cv1.py:9: error: Cannot assign to class variable "name" via instance  [misc]
 
 Line 9 is now an error — and line 9 is `self.name = name`, the line the constructor needs. Marking `name` as `ClassVar` contradicts what the class does.
 
-> [!important] `ClassVar` does not mean "declared in the class body" — every line there is. It means **"this belongs to the class, and no instance ever gets its own."**
+> [!important] `ClassVar` does not mean "declared in the class body" — every line there is. It means 
+> **"this belongs to the class, and no instance ever gets its own."**
 
 `total_created` qualifies. `name` does not: line 9 gives each instance its own, and the class-body value is just a default for anyone who skips it.
 
@@ -438,9 +445,12 @@ The runtime shows why they are not interchangeable:
 
 ```
 $ python3 cv3.py
+
 start            2   2   2
-after Job.  =99  99  99  99
-after a.   =500 500  99  99
+
+after Job.  =    99  99  99  99
+after a.   =.    500 500  99  99
+
 a.__dict__ = {'total_created': 500}
 b.__dict__ = {}
 ```
