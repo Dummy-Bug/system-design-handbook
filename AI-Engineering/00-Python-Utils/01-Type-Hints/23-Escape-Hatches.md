@@ -43,6 +43,9 @@ So the simple tool suffices. Now break it.
 You don't want one field. You want to hand the **whole dictionary** to something that expects a `ToolCall`:
 
 ```python
+ 1  from typing import TypedDict
+ 2
+ 3
  4  class ToolCall(TypedDict):
  5      name: str
  6      args: dict[str, str]
@@ -56,6 +59,9 @@ You don't want one field. You want to hand the **whole dictionary** to something
 14      if isinstance(payload, ToolCall):
 15          return dispatch(payload)
 16      raise TypeError("not a tool call")
+17
+18
+19  print(handle({"name": "search", "args": {"q": "hi"}}))
 ```
 
 Line 14 is the same move as line 3 above. This time it is refused **twice**:
@@ -75,6 +81,14 @@ Two refusals is unusual. Normally the checker objects to something Python would 
 ### Why — there is nothing on the object to look at
 
 ```python
+ 1  from typing import TypedDict
+ 2
+ 3
+ 4  class ToolCall(TypedDict):
+ 5      name: str
+ 6      args: dict[str, str]
+ 7
+ 8
  9  print(ToolCall.__mro__)
 10  print(ToolCall(name="search", args={}).__class__)
 ```
@@ -94,8 +108,16 @@ So `isinstance` has nothing to follow. It walks `__mro__` (see `16-Protocol`), a
 And the check that *is* legal buys nothing:
 
 ```python
+11
+12
+13  def dispatch(call: ToolCall) -> str:
+14      return f"{call['name']}({call['args']})"
+15
+16
+17  def handle(payload: dict[str, object]) -> str:
 18      if isinstance(payload, dict):
 19          return dispatch(payload)
+20      raise TypeError("not a tool call")
 ```
 
 ```
@@ -116,9 +138,24 @@ Every dictionary ever made passes that check, so mypy learns nothing from it. Li
 Said in plain English, what you want is: *trust me, this is a `ToolCall`.* That sentence has a spelling.
 
 ```python
+ 1  from typing import TypedDict, cast
+ 2
+ 3
+ 4  class ToolCall(TypedDict):
+ 5      name: str
+ 6      args: dict[str, str]
+ 7
+ 8
+ 9  def dispatch(call: ToolCall) -> str:
+10      return f"{call['name']}({call['args']})"
+11
+12
 13  def handle(payload: dict[str, object]) -> str:
 14      call = cast(ToolCall, payload)
 15      return dispatch(call)
+16
+17
+18  print(handle({"name": "search", "args": {"q": "hi"}}))
 ```
 
 ```
@@ -138,6 +175,18 @@ Read line 14 in the order you'd say it out loud — *treat `payload` as a `ToolC
 The whole character of the tool is in what happens when the claim is false. Same code; the payload now arrives with no `args` key:
 
 ```python
+ 1  from typing import TypedDict, cast
+ 2
+ 3
+ 4  class ToolCall(TypedDict):
+ 5      name: str
+ 6      args: dict[str, str]
+ 7
+ 8
+ 9  def dispatch(call: ToolCall) -> str:
+10      return f"{call['name']}({call['args']})"
+11
+12
 13  def handle(payload: dict[str, object]) -> str:
 14      call = cast(ToolCall, payload)
 15      print("survived the cast:", call)
@@ -218,9 +267,12 @@ What is needed is a tool that acts on a **line** rather than a value.
 
 ```python
 1  import hrms_sdk  # type: ignore
-...
+2
+3
+4  def fetch(employee_id: int) -> str:
 5      reveal_type(hrms_sdk)
 6      reveal_type(hrms_sdk.get_employee)
+7      return hrms_sdk.get_employee(employee_id)
 ```
 
 ```
@@ -248,6 +300,7 @@ Here is a line carrying **two independent problems** — a `str | None` used as 
 
 ```
 $ mypy ig2.py
+
 ig2.py:5: error: Item "None" of "str | None" has no attribute "upper"  [union-attr]
 ig2.py:5: error: Incompatible types in assignment (expression has type "str | Any", variable has type "int")  [assignment]
 ```
@@ -257,6 +310,10 @@ Two errors, two different codes, sharing a line by coincidence.
 **Bare:**
 
 ```python
+1  def get_name() -> str | None:
+2      return "alice"
+3
+4
 5  value: int = get_name().upper()  # type: ignore
 ```
 
@@ -270,6 +327,10 @@ Both silenced. Nothing changed type — a bare `# type: ignore` means *say nothi
 **With the code in brackets:**
 
 ```python
+1  def get_name() -> str | None:
+2      return "alice"
+3
+4
 5  value: int = get_name().upper()  # type: ignore[union-attr]
 ```
 
@@ -420,6 +481,18 @@ It should have been caught at the **boundary, at runtime** — the instant the d
 Same function, two checks added in front:
 
 ```python
+ 1  from typing import TypedDict, cast
+ 2
+ 3
+ 4  class ToolCall(TypedDict):
+ 5      name: str
+ 6      args: dict[str, str]
+ 7
+ 8
+ 9  def dispatch(call: ToolCall) -> str:
+10      return f"{call['name']}({call['args']})"
+11
+12
 13  def handle(payload: dict[str, object]) -> str:
 14      if not isinstance(payload.get("name"), str):
 15          raise ValueError(f"name must be a string, got {payload.get('name')!r}")
@@ -480,7 +553,7 @@ Before reaching for any hatch, one question: *why does the checker disagree with
 
 Row two of that table said *validate at the boundary*. Hand-writing `isinstance` ladders is one way; at a real boundary there is a better one.
 
-A `@dataclass` is **not** it — `25-Choosing-A-Structured-Data-Type` established that it generates `__init__`, `__repr__` and `__eq__` from the annotations and validates none of them. A validating model is:
+A `@dataclass` is **not** it: it generates `__init__`, `__repr__` and `__eq__` from the annotations and validates none of them — `25-Choosing-A-Structured-Data-Type` is where that gets taken apart properly. A validating model is:
 
 ```python
  1  from pydantic import BaseModel

@@ -1,10 +1,5 @@
 #python #type-hints #typing #forward-references #type-checking #python-utils
 
-
-`20-Annotated` established something small that turns out to have large consequences: **an annotation is an ordinary Python expression, and Python evaluates it.** That was why `x: int > 0` failed with a `TypeError` rather than being quietly ignored — the `>` really ran.
-
-An expression can only name things that already exist. This concept is what happens when the thing you need to name doesn't exist yet.
-
 ## A class that cannot mention itself
 
 Completely ordinary code — a class that makes another of itself:
@@ -153,6 +148,7 @@ Success: no issues found in 1 source file
 
 ```
 $ python3 fw3.py
+
 child name: root-child
 spawn_child: {'return': 'Agent'}
 __init__   : {'name': 'str', 'return': 'None'}
@@ -258,7 +254,7 @@ A self-referencing class is the textbook example. The one that shows up in real 
  7
  8      async def run(self, state: AgentState) -> str:
  9          state.record(self)
-10         return f"{self.name} ran"
+10          return f"{self.name} ran"
 ```
 
 ```
@@ -268,6 +264,7 @@ Success: no issues found in 1 source file
 
 ```
 $ python3 main.py
+
   File "state.py", line 1, in <module>
     from tools import Tool
   File "tools.py", line 1, in <module>
@@ -324,8 +321,11 @@ So the requirement is precise: **the import must run for mypy and not run for Py
  7
  8
  9  class AgentState:
-...
+10      def __init__(self) -> None:
+11          self.history: list[str] = []
+12
 13      def record(self, tool: Tool) -> None:
+14          self.history.append(tool.name)
 ```
 
 ```

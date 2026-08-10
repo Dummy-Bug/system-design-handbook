@@ -37,6 +37,17 @@ The message names the offending member — `Item "ToolMessage" of "HumanMessage 
 ## `isinstance` narrows both branches
 
 ```python
+ 1  class HumanMessage:
+ 2      def __init__(self, text: str) -> None:
+ 3          self.text = text
+ 4
+ 5
+ 6  class ToolMessage:
+ 7      def __init__(self, tool_name: str, result: str) -> None:
+ 8          self.tool_name = tool_name
+ 9          self.result = result
+10
+11
 12  def render(msg: HumanMessage | ToolMessage) -> str:
 13      reveal_type(msg)
 14      if isinstance(msg, HumanMessage):
@@ -69,6 +80,17 @@ Line 17 is the half people miss. `isinstance` narrows **both** branches: inside,
 Real code names a check once and calls it from three places:
 
 ```python
+ 1  class HumanMessage:
+ 2      def __init__(self, text: str) -> None:
+ 3          self.text = text
+ 4
+ 5
+ 6  class ToolMessage:
+ 7      def __init__(self, tool_name: str, result: str) -> None:
+ 8          self.tool_name = tool_name
+ 9          self.result = result
+10
+11
 12  def is_tool(msg: HumanMessage | ToolMessage) -> bool:
 13      return isinstance(msg, ToolMessage)
 14
@@ -106,13 +128,27 @@ The obvious objection is that a human reading `is_tool` can see what it does. Tw
 **Often there is no body.**
 
 ```python
- 4  def render(
- 5      msg: HumanMessage | ToolMessage,
- 6      check: Callable[[HumanMessage | ToolMessage], bool],
- 7  ) -> str:
- 8      if check(msg):
- 9          return msg.result
-10      return msg.text
+ 1  from collections.abc import Callable
+ 2
+ 3
+ 4  class HumanMessage:
+ 5      def __init__(self, text: str) -> None:
+ 6          self.text = text
+ 7
+ 8
+ 9  class ToolMessage:
+10      def __init__(self, tool_name: str, result: str) -> None:
+11          self.tool_name = tool_name
+12          self.result = result
+13
+14
+15  def render(
+16      msg: HumanMessage | ToolMessage,
+17      check: Callable[[HumanMessage | ToolMessage], bool],
+18  ) -> str:
+19      if check(msg):
+20          return msg.result
+21      return msg.text
 ```
 
 ```
@@ -134,6 +170,20 @@ nr4.py:21: error: Item "ToolMessage" of "HumanMessage | ToolMessage" has no attr
 One change — the return type:
 
 ```python
+ 1  from typing import TypeIs
+ 2
+ 3
+ 4  class HumanMessage:
+ 5      def __init__(self, text: str) -> None:
+ 6          self.text = text
+ 7
+ 8
+ 9  class ToolMessage:
+10      def __init__(self, tool_name: str, result: str) -> None:
+11          self.tool_name = tool_name
+12          self.result = result
+13
+14
 15  def is_tool(msg: HumanMessage | ToolMessage) -> TypeIs[ToolMessage]:
 16      return isinstance(msg, ToolMessage)
 17
@@ -170,6 +220,20 @@ That is the sentence `-> bool` could not express: not merely that something is t
 `TypeIs` arrived in 3.13. Before it there was `TypeGuard`, which you'll meet in existing code. Same file as above, one word different:
 
 ```python
+ 1  from typing import TypeGuard
+ 2
+ 3
+ 4  class HumanMessage:
+ 5      def __init__(self, text: str) -> None:
+ 6          self.text = text
+ 7
+ 8
+ 9  class ToolMessage:
+10      def __init__(self, tool_name: str, result: str) -> None:
+11          self.tool_name = tool_name
+12          self.result = result
+13
+14
 15  def is_tool(msg: HumanMessage | ToolMessage) -> TypeGuard[ToolMessage]:
 16      return isinstance(msg, ToolMessage)
 17
@@ -235,13 +299,34 @@ nr6.py:16: note: Revealed type is "list[object]"
 ## Neither is verified
 
 ```python
+ 1  from typing import TypeIs
+ 2
+ 3
+ 4  class HumanMessage:
+ 5      def __init__(self, text: str) -> None:
+ 6          self.text = text
+ 7
+ 8
+ 9  class ToolMessage:
+10      def __init__(self, tool_name: str, result: str) -> None:
+11          self.tool_name = tool_name
+12          self.result = result
+13
+14
 15  def is_tool(msg: HumanMessage | ToolMessage) -> TypeIs[ToolMessage]:
 16      return True
-...
+17
+18
+19  def render(msg: HumanMessage | ToolMessage) -> str:
+20      if is_tool(msg):
+21          return msg.result
+22      return msg.text
+23
+24
 25  print(render(HumanMessage("hi")))
 ```
 
-Line 16 returns `True` for anything. Line 25 passes a `HumanMessage`.
+Line 16 returns `True` for anything. Line 25 passes a `HumanMessage`. The `reveal_type` calls are gone, which is why `return msg.result` has moved up to line 21.
 
 ```
 $ mypy nr7.py

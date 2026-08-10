@@ -1,8 +1,5 @@
 #python #type-hints #typing #generics #python-utils
 
-
-`13-TypeVar-And-Generic-Functions` put a placeholder on a function, resolved fresh at every call. Some types have to remember the answer instead — you put a tool name in a store, and much later you take a tool name back out.
-
 ## A store that forgets
 
 The shape behind a checkpoint store, a tool registry, a message buffer:
@@ -33,6 +30,7 @@ The shape behind a checkpoint store, a tool registry, a message buffer:
 
 ```
 $ mypy gc0.py
+
 gc0.py:19: note: Revealed type is "Any"
 Success: no issues found in 1 source file
 ```
@@ -57,7 +55,9 @@ The obvious repair is the one that worked last time:
 
 ```
 $ mypy gc1.py
+
 gc1.py:3: error: Name "T" is not defined  [name-defined]
+
 gc1.py:8: error: A function returning TypeVar should receive at least one argument containing the same TypeVar  [type-var]
 ```
 
@@ -103,11 +103,14 @@ Two failures, and the second is the structural one.
 
 ```
 $ mypy gc2.py
+
 gc2.py:17: error: Argument 1 to "add" of "Store" has incompatible type "int"; expected "str"  [arg-type]
+
 gc2.py:19: note: Revealed type is "gc2.Store[str]"
 gc2.py:20: note: Revealed type is "str"
 gc2.py:21: note: Revealed type is "list[str]"
 gc2.py:26: note: Revealed type is "dict[str, str]"
+
 gc2.py:27: error: "dict[str, str]" has no attribute "upper"  [attr-defined]
 ```
 
@@ -127,6 +130,17 @@ Which is what `list[str]` has been doing since `05-Built-In-Generics`. `list` is
 Two places, and they mean the same thing:
 
 ```python
+ 1  class Store[T]:
+ 2      def __init__(self) -> None:
+ 3          self._items: list[T] = []
+ 4
+ 5      def add(self, item: T) -> None:
+ 6          self._items.append(item)
+ 7
+ 8      def get(self, i: int) -> T:
+ 9          return self._items[i]
+10
+11
 12  a: Store[str] = Store()      # on the variable
 13  reveal_type(a)
 14
@@ -140,8 +154,10 @@ Two places, and they mean the same thing:
 
 ```
 $ mypy gc3.py
+
 gc3.py:13: note: Revealed type is "gc3.Store[str]"
 gc3.py:16: note: Revealed type is "gc3.Store[str]"
+
 gc3.py:18: error: Need type annotation for "c"  [var-annotated]
 gc3.py:20: note: Revealed type is "gc3.Store[Any]"
 ```
@@ -153,9 +169,14 @@ Lines 12 and 15 produce identical results. `Store[str]()` is the `new ArrayList<
 `__init__` took no arguments, so there was nothing to infer from. Give it one:
 
 ```python
- 2  def __init__(self, first: T) -> None:
- 3      self._items: list[T] = [first]
-...
+ 1  class Store[T]:
+ 2      def __init__(self, first: T) -> None:
+ 3          self._items: list[T] = [first]
+ 4
+ 5      def get(self, i: int) -> T:
+ 6          return self._items[i]
+ 7
+ 8
  9  d = Store("search")
 10  reveal_type(d)
 11  reveal_type(d.get(0))
@@ -163,6 +184,7 @@ Lines 12 and 15 produce identical results. `Store[str]()` is the `new ArrayList<
 
 ```
 $ mypy gc4.py
+
 gc4.py:10: note: Revealed type is "gc4.Store[str]"
 gc4.py:11: note: Revealed type is "str"
 Success: no issues found in 1 source file
@@ -186,6 +208,14 @@ No annotation anywhere and `T` is `str`, inferred from the constructor argument 
 It's genuine inference, not an unchecked assignment:
 
 ```python
+ 1  class Store[T]:
+ 2      def __init__(self) -> None:
+ 3          self._items: list[T] = []
+ 4
+ 5      def add(self, item: T) -> None:
+ 6          self._items.append(item)
+ 7
+ 8
  9  a: Store[str] = Store()       # bare — inferred from the left
 10  a.add("search")
 11  a.add(42)
@@ -200,8 +230,11 @@ It's genuine inference, not an unchecked assignment:
 
 ```
 $ mypy gc6.py
+
 gc6.py:11: error: Argument 1 to "add" of "Store" has incompatible type "int"; expected "str"  [arg-type]
+
 gc6.py:13: error: Incompatible types in assignment (expression has type "Store[int]", variable has type "Store[str]")  [assignment]
+
 gc6.py:18: error: Incompatible types in assignment (expression has type "Store[int]", variable has type "Store[str]")  [assignment]
 ```
 
@@ -226,12 +259,19 @@ A natural mis-guess is `Store(str)` — passing the type in like a value:
 
 ```
 $ python3 gc5.py
+
 Store[str]       -> __main__.Store[str]
+
 type of that     -> <class 'typing._GenericAlias'>
+
 Store[str]()     -> <__main__.Store object at 0x104e12cf0>
+
 type(b)          -> <class '__main__.Store'>
+
 type(b) is Store -> True
+
 type(a)          -> <class '__main__.Store'>
+
 a and b same type? True
 
 now trying Store(str):

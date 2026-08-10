@@ -46,7 +46,9 @@ Written as a class — but line 11 still returns a plain dictionary literal. No 
 
 ```
 $ mypy td0.py
+
 td0.py:17: error: Value of "age" has incompatible type "str"; expected "int"  [typeddict-item]
+
 td0.py:18: error: TypedDict "User" has no key "emial"  [typeddict-item]
 td0.py:18: note: Did you mean "email"?
 ```
@@ -76,6 +78,7 @@ print(User.__mro__)
 
 ```
 $ python3 td1.py
+
 <class 'dict'>
 True
 {'name': 'alice', 'age': 30, 'email': None}
@@ -96,11 +99,13 @@ Read the last two lines together, because they say opposite-sounding things. `Us
 
 ```
 $ mypy td_iso.py
+
 td_iso.py:12: error: Cannot use isinstance() with TypedDict type  [misc]
 ```
 
 ```
 $ python3 td_iso.py
+
 TypeError: TypedDict does not support instance and class checks
 ```
 
@@ -137,13 +142,16 @@ Which matters most when the data arrives from outside:
 
 ```
 $ mypy td2.py
+
 Success: no issues found in 1 source file
 ```
 
 ```
 $ python3 td2.py
+
 loaded: {'name': 'alice', 'age': 'thirty', 'shoe_size': 9}
 keys: ['name', 'age', 'shoe_size']
+
 Traceback (most recent call last):
   File "td2.py", line 16, in <module>
     print(user["age"] + 1)
@@ -181,6 +189,7 @@ Real records have fields that are sometimes not there at all — not a key holdi
 
 ```
 $ mypy td3.py
+
 td3.py:11: error: Missing key "email" for TypedDict "User"  [typeddict-item]
 ```
 
@@ -196,12 +205,11 @@ The natural first attempt:
 
 ```
 $ mypy td4.py
+
 td4.py:7: error: Right hand side values are not supported in TypedDict  [misc]
 ```
 
-**A `TypedDict` cannot have defaults**, and it isn't an omission. There is nothing for a default to attach to: `User` never runs and never constructs anything, and the dictionary was built by a plain `{...}` literal with no involvement from `User` at all. A default needs something doing the constructing.
-
-(The file still *runs* — `= None` in a class body is ordinary Python. It's just meaningless as a declaration.)
+**A `TypedDict` cannot have defaults**, and it isn't an omission. There is nothing for a default to attach to: `User` never runs and never constructs anything, and the dictionary was built by a plain `{...}` literal with no involvement from `User` at all. **A default needs something doing the constructing**.
 
 ### `NotRequired`
 
@@ -225,6 +233,7 @@ The real mechanism marks the **key** optional rather than giving the value a def
 
 ```
 $ mypy td5.py
+
 td5.py:13: error: Missing key "age" for TypedDict "User"  [typeddict-item]
 ```
 
@@ -232,10 +241,10 @@ Lines 10–12 all pass: email present as `None`, absent, or present as a string.
 
 This is the two switches from `07-Unions-And-Optionality`, in a new setting:
 
-| | on a parameter | on a `TypedDict` key |
-|---|---|---|
-| may be omitted | a **default** | **`NotRequired`** |
-| may be `None` | **`\| None`** in the type | **`\| None`** in the type |
+|                | on a parameter           | on a `TypedDict` key     |
+| -------------- | ------------------------ | ------------------------ |
+| may be omitted | a **default**            | **`NotRequired`**        |
+| may be `None`  | **\| None ** in the type | **\| None ** in the type |
 
 - `email: str | None` — the key **must** be there; its value may be `None`.
 - `email: NotRequired[str]` — the key may be **absent**; if present it's a `str`.
@@ -260,6 +269,7 @@ Same independence, same trap: "optional field" means two different things and th
 
 ```
 $ mypy td6.py
+
 td6.py:11: error: Missing key "name" for TypedDict "Loose"  [typeddict-item]
 ```
 

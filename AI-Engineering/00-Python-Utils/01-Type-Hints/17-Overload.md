@@ -40,7 +40,7 @@ ov0.py:19: error: Item "AsyncIterator[str]" of "str | AsyncIterator[str]" has no
 
 Line 5's annotation is **honest** — the function really can return either. And line 17 did not ask for streaming, so a human reading it knows a `str` is coming back.
 
-mypy does not. Line 18 is the full union and line 19 is `18-Narrowing`'s `[union-attr]` all over again.
+mypy does not. Line 18 is the full union and line 19 is `07-Unions-And-Optionality`'s `[union-attr]` all over again.
 
 ### The workaround, and its price
 
@@ -196,7 +196,7 @@ why is the sky blue
 
 Three `def run` in one file, which is the part that looks wrong at first. They are not three functions:
 
-- **Lines 7 and 9** — the **overloads**. Bodies are `...`, exactly like the stub file in `22-Third-Party-Libraries`. Pure signature, and all a caller ever sees.
+- **Lines 7 and 9** — the **overloads**. Bodies are `...` — pure signature, and all a caller ever sees. It is the same shape `22-Third-Party-Libraries` gives a whole file of, when types for a library have to be supplied without any code behind them.
 - **Line 12** — the **implementation**. The only one that runs. It takes plain `bool` and returns the honest union, because at runtime it genuinely handles both.
 
 `Literal[False]` and `Literal[True]` do the work. `09-Literal-Final-ClassVar` gave `Literal` as *"this exact value, not merely this type"* — which is precisely the distinction `TypeVar` could not make. Now `stream=True` and `stream=False` are different **types**, so a different signature can be selected for each.

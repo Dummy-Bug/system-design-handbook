@@ -1,8 +1,5 @@
 #python #type-hints #typing #variance #python-utils
 
-
-`06-Abstract-Collection-Types` claimed that `Sequence[str]` accepts callers `list[str]` would reject, and justified it with tuples and generators. That was true and it was not the real reason. This is the real reason.
-
 ## A substitution that should obviously work
 
 ```python
@@ -29,8 +26,11 @@
 
 ```
 $ mypy var0.py
+
 var0.py:17: error: Argument 1 to "count" has incompatible type "list[HumanMessage]"; expected "list[Message]"  [arg-type]
+
 var0.py:17: note: "list" is invariant -- see https://mypy.readthedocs.io/en/stable/common_issues.html#variance
+
 var0.py:17: note: Consider using "Sequence" instead, which is covariant
 ```
 
@@ -45,6 +45,23 @@ mypy names it: **`list` is invariant.**
 `count` only calls `len`, which is harmless. But the checker isn't reading the body, it's reading the **type** — and `list[Message]` permits appending. Here is a different function with the identical signature:
 
 ```python
+ 1  class Message:
+ 2      def __init__(self, text: str) -> None:
+ 3          self.text = text
+ 4
+ 5
+ 6  class HumanMessage(Message):
+ 7      def __init__(self, text: str, user_id: str) -> None:
+ 8          super().__init__(text)
+ 9          self.user_id = user_id
+10
+11
+12  class AIMessage(Message):
+13      def __init__(self, text: str, model: str) -> None:
+14          super().__init__(text)
+15          self.model = model
+16
+17
 18  def add_reply(msgs: list[Message]) -> None:
 19      msgs.append(AIMessage("hello", "opus"))
 20
@@ -55,6 +72,8 @@ mypy names it: **`list` is invariant.**
 25  for m in human_msgs:
 26      print(m.user_id)
 ```
+
+A separate file, and the classes have grown. `var0.py`'s were empty — `class HumanMessage(Message): ...` — because nothing there needed a field. Here the crash *is* a missing field, so each subclass gets a real one: `user_id` on `HumanMessage`, `model` on `AIMessage`, and neither has the other's.
 
 `add_reply` is legal on its own terms: an `AIMessage` **is** a `Message`, so appending one to a `list[Message]` is fine.
 
@@ -116,8 +135,11 @@ Lines 17–21 try one combination each.
 
 ```
 $ mypy var3.py
+
 var3.py:17: error: ... "list[HumanMessage]"; expected "list[Message]"  [arg-type]
+
 var3.py:18: error: ... "list[Message]"; expected "list[HumanMessage]"  [arg-type]
+
 var3.py:21: error: ... "list[Message]"; expected "Sequence[HumanMessage]"  [arg-type]
 ```
 
@@ -214,6 +236,7 @@ Line 9 registers a callback; line 10 shows the only thing that will ever happen 
 
 ```
 $ mypy var4.py
+
 var4.py:20: error: Argument 1 to "on_human_message" has incompatible type "Callable[[AIMessage], None]"; expected "Callable[[HumanMessage], None]"  [arg-type]
 ```
 
@@ -257,6 +280,14 @@ Rules 1 and 3 are the same rule — **the thing you receive may be narrower than
 ### Both rules at once
 
 ```python
+ 1  from collections.abc import Callable
+ 2
+ 3
+ 4  class Message: ...
+ 5  class HumanMessage(Message): ...
+ 6  class AIMessage(Message): ...
+ 7
+ 8
  9  def sink(handler: Callable[[HumanMessage], Message]) -> None: ...
 10
 11
@@ -272,6 +303,7 @@ Rules 1 and 3 are the same rule — **the thing you receive may be narrower than
 
 ```
 $ mypy var5.py
+
 var5.py:19: error: Argument 1 to "sink" has incompatible type "Callable[[AIMessage], HumanMessage]"; expected "Callable[[HumanMessage], Message]"  [arg-type]
 ```
 

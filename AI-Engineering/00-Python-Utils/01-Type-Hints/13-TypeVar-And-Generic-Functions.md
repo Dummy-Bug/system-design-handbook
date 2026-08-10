@@ -1,10 +1,6 @@
 #python #type-hints #typing #typevar #generics #python-utils
 
 
-`12-Type-Aliases-And-NewType` was about giving the checker a name to remember. This one is about giving it a **placeholder** — a name that stands for a type it works out per call.
-
-You've already used one. In `10-Callable-And-ParamSpec`, the `R` in `[**P, R]` stood for "the return type of whatever function you were given". This rung is that idea on its own.
-
 ## A helper that loses everything it knew
 
 Take the first item off a list — the shape behind picking a tool, a candidate, a message:
@@ -36,6 +32,7 @@ Line 17 is correct: `t` is a string. Line 18 is a bug: `r` is a dict, and dicts 
 
 ```
 $ mypy tv0.py
+
 tv0.py:14: note: Revealed type is "Any"
 tv0.py:15: note: Revealed type is "Any"
 Success: no issues found in 1 source file
@@ -50,14 +47,30 @@ The diagnosis: `first` **does** have a relationship between input and output —
 ## One placeholder, mentioned twice
 
 ```python
-1  def first[T](items: list[T]) -> T:
-2      return items[0]
+ 1  def first[T](items: list[T]) -> T:
+ 2      return items[0]
+ 3
+ 4
+ 5  tool_names = ["search", "calculator", "summarize"]
+ 6  runs = [{"run_id": "r1"}, {"run_id": "r2"}]
+ 7
+ 8  t = first(tool_names)
+ 9  r = first(runs)
+10
+11  reveal_type(t)
+12  reveal_type(r)
+13
+14  print(t.upper())
+15  print(r.upper())
 ```
+
+Same file as before, with lines 1–2 replaced. The `from typing import Any` at the top is gone — there is nothing left to import.
 
 `T` is declared in brackets after the name, then used in two places. The line reads: *given a list of `T`, return a `T`* — whatever `T` turns out to be at each call site.
 
 ```
 $ mypy tv1.py
+
 tv1.py:11: note: Revealed type is "str"
 tv1.py:12: note: Revealed type is "dict[str, str]"
 tv1.py:15: error: "dict[str, str]" has no attribute "upper"  [attr-defined]
@@ -69,6 +82,7 @@ No explicit type argument is needed:
 
 ```
 $ python3 tv2.py
+
 SEARCH
 s
 ```
@@ -90,6 +104,7 @@ A helper that picks the highest-scoring item — the shape behind any ranking or
 
 ```
 $ mypy tv3.py
+
 tv3.py:2: error: Value of type variable "SupportsRichComparisonT" of "max" cannot be "T"  [type-var]
 ```
 
@@ -120,8 +135,10 @@ with `HumanMessage` and `AIMessage` both subclassing `Message`, and `user_id` ex
 
 ```
 $ mypy tv5.py
+
 tv5.py:26: note: Revealed type is "tv5.HumanMessage"
 tv5.py:27: note: Revealed type is "tv5.AIMessage"
+
 tv5.py:30: error: "AIMessage" has no attribute "user_id"  [attr-defined]
 tv5.py:32: error: Value of type variable "T" of "last" cannot be "str"  [type-var]
 ```
@@ -170,11 +187,13 @@ The bound goes on the declaration, not on each use. The alternative doesn't pars
 
 ```
 $ python3 tv6.py
+
 NameError: name 'T' is not defined
 ```
 
 ```
 $ mypy tv6.py
+
 tv6.py:4: error: Invalid type comment or annotation  [valid-type]
 tv6.py:4: error: Name "T" is not defined  [name-defined]
 ```

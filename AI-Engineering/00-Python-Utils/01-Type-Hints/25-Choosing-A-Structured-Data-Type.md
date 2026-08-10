@@ -23,9 +23,20 @@ Per-key types, typos caught, zero runtime cost. It's the right answer until you 
 Say the relevance threshold — `doc["score"] >= 0.7` — is now written in eleven places, and you want it on the record itself:
 
 ```python
+ 1  from typing import TypedDict
+ 2
+ 3
+ 4  class RetrievedDoc(TypedDict):
+ 5      url: str
+ 6      text: str
+ 7      score: float
+ 8
  9      def is_relevant(self) -> bool:
 10          return self["score"] >= 0.7
-...
+11
+12
+13  doc: RetrievedDoc = {"url": "u1", "text": "...", "score": 0.9}
+14  print(doc)
 15  print(doc.is_relevant())
 ```
 
@@ -136,6 +147,19 @@ The method on line 10 is untouched and works normally. It's an ordinary class; t
 ## What `@dataclass` still doesn't do
 
 ```python
+ 1  from dataclasses import dataclass
+ 2
+ 3
+ 4  @dataclass
+ 5  class RetrievedDoc:
+ 6      url: str
+ 7      text: str
+ 8      score: float
+ 9
+10      def is_relevant(self) -> bool:
+11          return self.score >= 0.7
+12
+13
 14  bad = RetrievedDoc("u1", "hello", "not a number")
 15  print("constructed:", bad)
 16  print("score is:", type(bad.score))
@@ -172,17 +196,31 @@ And note *where* it failed: line 17, not line 14. The bad value sat in the objec
 The same dataclass, fed from outside:
 
 ```python
-14  raw = '{"url": "u1", "text": "hello", "score": "0.9"}'
-15
-16  payload = json.loads(raw)
-17  doc = RetrievedDoc(**payload)
-18
-19  print("constructed:", doc)
-20  print("score type:", type(doc.score))
-21  print(doc.is_relevant())
+ 1  import json
+ 2  from dataclasses import dataclass
+ 3
+ 4
+ 5  @dataclass
+ 6  class RetrievedDoc:
+ 7      url: str
+ 8      text: str
+ 9      score: float
+10
+11      def is_relevant(self) -> bool:
+12          return self.score >= 0.7
+13
+14
+15  raw = '{"url": "u1", "text": "hello", "score": "0.9"}'
+16
+17  payload = json.loads(raw)
+18  doc = RetrievedDoc(**payload)
+19
+20  print("constructed:", doc)
+21  print("score type:", type(doc.score))
+22  print(doc.is_relevant())
 ```
 
-Line 14 is a response body, with `"score": "0.9"` as a string — exactly what a real API returns. Line 17 unpacks the dict into the constructor.
+Line 15 is a response body, with `"score": "0.9"` as a string — exactly what a real API returns. Line 18 unpacks the dict into the constructor.
 
 ```
 $ mypy sd4.py
@@ -191,6 +229,7 @@ Success: no issues found in 1 source file
 
 ```
 $ python3 sd4.py
+
 constructed: RetrievedDoc(url='u1', text='hello', score='0.9')
 score type: <class 'str'>
 Traceback (most recent call last):
@@ -235,6 +274,7 @@ Line 5 inherits from `BaseModel` instead of carrying `@dataclass`. Lines 6–11 
 
 ```
 $ python3 sd5.py
+
 constructed: url='u1' text='hello' score=0.9
 score type: <class 'float'>
 True
@@ -270,6 +310,19 @@ This is also the third time the same mechanism has appeared. `@dataclass` reads 
 Two things the dataclass can't do:
 
 ```python
+ 1  from dataclasses import dataclass
+ 2
+ 3
+ 4  @dataclass
+ 5  class RetrievedDoc:
+ 6      url: str
+ 7      text: str
+ 8      score: float
+ 9
+10      def is_relevant(self) -> bool:
+11          return self.score >= 0.7
+12
+13
 14  doc = RetrievedDoc("u1", "hello", 0.9)
 15
 16  doc.score = 999.0
@@ -289,7 +342,7 @@ Success: no issues found in 1 source file
 $ python3 sd6.py
 RetrievedDoc(url='u1', text='hello', score=999.0)
 Traceback (most recent call last):
-  File "sd6.py", line 16, in <module>
+  File "sd6.py", line 19, in <module>
     seen = {doc}
 TypeError: unhashable type: 'RetrievedDoc'
 ```
@@ -350,6 +403,17 @@ Lines 12–14 behave exactly as the dataclass did — readable repr, dot access,
 And it is a real tuple, which is the last thing it brings:
 
 ```python
+ 1  from typing import NamedTuple
+ 2
+ 3
+ 4  class RetrievedDoc(NamedTuple):
+ 5      url: str
+ 6      text: str
+ 7      score: float
+ 8
+ 9
+10  doc = RetrievedDoc("u1", "hello", 0.9)
+11
 12  url, text, score = doc
 13  print(url, text, score)
 14  print(doc[0])

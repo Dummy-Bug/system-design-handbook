@@ -241,6 +241,14 @@ tr4.py:6: note: Revealed type is "tr4.Agent"
 ### The real trap: the return type behind it
 
 ```python
+ 1  class Agent:
+ 2      def __init__(self, name: str) -> None:
+ 3          self.name = name
+ 4
+ 5      def clone(self) -> "Agent":
+ 6          return type(self)(self.name)
+ 7
+ 8
  9  class SearchAgent(Agent):
 10      async def search(self, q: str) -> str:
 11          return f"{self.name} searching {q}"
@@ -261,7 +269,7 @@ $ python3 tr5.py
 runtime class: <class '__main__.SearchAgent'>
 ```
 
-The object **is** a `SearchAgent` — line 7 is `type(self)(...)`, so `clone()` constructs whatever class it was called on. It genuinely has `.search`. mypy refuses the call anyway, because `-> "Agent"` promised less than the method delivers.
+The `reveal_type` from the previous file is gone, so `clone()` is two lines here. The object **is** a `SearchAgent` — line 6 is `type(self)(...)`, so `clone()` constructs whatever class it was called on. It genuinely has `.search`. mypy refuses the call anyway, because `-> "Agent"` promised less than the method delivers.
 
 > [!important] `self` needs no annotation, but a **return type of the class name is a real bug**. It hard-codes the class where the method was *written*, not the class it was *called on*, so every subclass silently degrades to the base type the moment it passes through such a method.
 

@@ -1,8 +1,5 @@
 #python #type-hints #typing #protocol #structural-typing #python-utils
 
-
-`13-TypeVar-And-Generic-Functions` ended on a loose end. Constraints — `T: (Candidate, ToolCall)` — were the tool for types with no common base class, and it closed by saying that reaching for them *because several unrelated classes share a method* is a signal for something else. This is that something else.
-
 ## A helper for three unrelated classes
 
 Reranking: given a list of things with scores, return the highest one.
@@ -40,6 +37,7 @@ None of the three inherits from anything. They were written by different people 
 
 ```
 $ mypy p0.py
+
 p0.py:24: error: Value of type variable "T" of "best" cannot be "RetrievedDoc"  [type-var]
 ```
 
@@ -86,6 +84,7 @@ There are two standard ways out, and both cost something.
 
 ```
 $ mypy p1.py
+
 p1.py:28: error: Value of type variable "T" of "best" cannot be "RetrievedDoc"  [type-var]
 ```
 
@@ -144,7 +143,9 @@ The bound is open-ended now — any future subclass of `Scored` qualifies withou
 
 ```
 $ mypy p2.py
+
 p2.py:37: error: Value of type variable "T" of "best" cannot be "Timer"  [type-var]
+
 p2.py:39: note: Revealed type is "p2.Candidate"
 p2.py:40: note: Revealed type is "p2.RetrievedDoc"
 ```
@@ -173,6 +174,9 @@ Structural typing is the type checker finally being able to express what Python 
 ## What counts as a match
 
 ```python
+ 1  from typing import Protocol
+ 2
+ 3
  4  class Scored(Protocol):
  5      score: float
  6
@@ -204,9 +208,13 @@ Structural typing is the type checker finally being able to express what Python 
 
 ```
 $ mypy p4.py
+
 p4.py:28: error: Argument 1 to "take" has incompatible type "Typo"; expected "Scored"  [arg-type]
+
 p4.py:29: error: Argument 1 to "take" has incompatible type "WrongType"; expected "Scored"  [arg-type]
+
 p4.py:29: note: Following member(s) of "WrongType" have conflicts:
+
 p4.py:29: note:     score: expected "float", got "str"
 ```
 
@@ -223,6 +231,19 @@ p4.py:29: note:     score: expected "float", got "str"
 `Scored` is written with `class`, so it's worth asking what it actually is at runtime.
 
 ```python
+ 1  from typing import Protocol
+ 2
+ 3
+ 4  class Scored(Protocol):
+ 5      score: float
+ 6
+ 7
+ 8  class RetrievedDoc:
+ 9      def __init__(self, url: str, score: float) -> None:
+10          self.url = url
+11          self.score = score
+12
+13
 14  print("type(Scored)   ->", type(Scored))
 15  print("Scored.__mro__ ->", Scored.__mro__)
 16
@@ -239,15 +260,21 @@ p4.py:29: note:     score: expected "float", got "str"
 
 ```
 $ mypy p5.py
+
 p5.py:18: error: Cannot instantiate protocol class "Scored"  [misc]
+
 p5.py:23: error: Only @runtime_checkable protocols can be used with instance and class checks  [misc]
 ```
 
 ```
 $ python3 p5.py
+
 type(Scored)   -> <class 'typing._ProtocolMeta'>
+
 Scored.__mro__ -> (<class '__main__.Scored'>, <class 'typing.Protocol'>, <class 'typing.Generic'>, <class 'object'>)
+
 Scored()       -> TypeError: Protocols cannot be instantiated
+
 isinstance     -> TypeError: Instance and class checks can only be used with @runtime_checkable protocols
 ```
 
@@ -301,6 +328,7 @@ A decorator that opts a protocol in to `isinstance`. It changes nothing about ty
 
 ```
 $ python3 p6.py
+
 True
 True
 False
@@ -362,7 +390,9 @@ Line 5 has no body — `...` is the entire method. Nothing is implemented in `Re
 
 ```
 $ mypy p7.py
+
 p7.py:35: error: Argument 1 to "answer" has incompatible type "TopKRetriever"; expected "Retriever"  [arg-type]
+
 p7.py:35: note: Following member(s) of "TopKRetriever" have conflicts:
 p7.py:35: note:     Expected:
 p7.py:35: note:         def search(self, query: str, k: int) -> list[str]
@@ -379,9 +409,32 @@ The payoff is line 33. `FakeRetriever` is a test double returning canned chunks,
 Line 34 was **accepted**, and `BM25Retriever` names its first parameter `text` rather than `query`. That's fine while the call is positional. Make it a keyword:
 
 ```python
-28  def answer(r: Retriever, q: str) -> str:
-29      return " ".join(r.search(query=q, k=3))
+ 1  from typing import Protocol
+ 2
+ 3
+ 4  class Retriever(Protocol):
+ 5      def search(self, query: str, k: int) -> list[str]: ...
+ 6
+ 7
+ 8  class ChromaRetriever:
+ 9      def search(self, query: str, k: int) -> list[str]:
+10          return ["chunk from chroma"]
+11
+12
+13  class BM25Retriever:
+14      def search(self, text: str, k: int) -> list[str]:
+15          return ["chunk from bm25"]
+16
+17
+18  def answer(r: Retriever, q: str) -> str:
+19      return " ".join(r.search(query=q, k=3))
+20
+21
+22  print(answer(ChromaRetriever(), "what is a checkpointer"))
+23  print(answer(BM25Retriever(), "what is a checkpointer"))
 ```
+
+`FakeRetriever` and `TopKRetriever` are dropped — the first has nothing left to show, the second was already rejected. Only the two that matter remain, which is why `answer` has moved to line 18.
 
 ```
 $ mypy p8.py
@@ -390,7 +443,9 @@ Success: no issues found in 1 source file
 
 ```
 $ python3 p8.py
+
 chunk from chroma
+
 Traceback (most recent call last):
   File "p8.py", line 23, in <module>
     print(answer(BM25Retriever(), "what is a checkpointer"))
@@ -435,9 +490,11 @@ If a protocol is only ever called positionally, declare that with `/`:
 
 ```
 $ python3 pa.py
+
 normal ok
 normal ok
 posonly ok
+
 posonly(query=...) -> TypeError: posonly() got some positional-only arguments passed as keyword arguments: 'query, k'
 ```
 
@@ -446,14 +503,38 @@ Ordinary Python syntax, nothing to do with typing: **everything left of the `/` 
 Put it in the protocol and the ambiguity is gone:
 
 ```python
- 5  def search(self, query: str, k: int, /) -> list[str]: ...
-...
+ 1  from typing import Protocol
+ 2
+ 3
+ 4  class Retriever(Protocol):
+ 5      def search(self, query: str, k: int, /) -> list[str]: ...
+ 6
+ 7
+ 8  class ChromaRetriever:
+ 9      def search(self, query: str, k: int) -> list[str]:
+10          return ["chunk from chroma"]
+11
+12
+13  class BM25Retriever:
+14      def search(self, text: str, k: int) -> list[str]:
+15          return ["chunk from bm25"]
+16
+17
+18  def answer(r: Retriever, q: str) -> str:
 19      return " ".join(r.search(query=q, k=3))
+20
+21
+22  print(answer(ChromaRetriever(), "what is a checkpointer"))
+23  print(answer(BM25Retriever(), "what is a checkpointer"))
 ```
+
+The same file as before with one `/` added on line 5, and nothing else touched.
 
 ```
 $ mypy p9.py
+
 p9.py:19: error: Unexpected keyword argument "query" for "search" of "Retriever"  [call-arg]
+
 p9.py:19: error: Unexpected keyword argument "k" for "search" of "Retriever"  [call-arg]
 ```
 
@@ -502,13 +583,17 @@ An **ABC** is an abstract base class. Line 5's `@abstractmethod` marks `search` 
 
 ```
 $ mypy pb.py
+
 pb.py:31: error: Argument 1 to "answer" has incompatible type "Unrelated"; expected "Retriever"  [arg-type]
+
 pb.py:32: error: Cannot instantiate abstract class "Broken" with abstract attribute "search"  [abstract]
 ```
 
 ```
 $ python3 pb.py
+
 chunk from chroma
+
 Traceback (most recent call last):
   File "pb.py", line 31, in <module>
     print(answer(Unrelated(), "q"))
@@ -528,6 +613,9 @@ The crash shows the rejection was *right*, not merely strict. `answer` calls `se
 A protocol may also carry a real body, and it means something different:
 
 ```python
+ 1  from typing import Protocol
+ 2
+ 3
  4  class Retriever(Protocol):
  5      def search(self, query: str, k: int) -> list[str]: ...
  6
@@ -549,6 +637,7 @@ A protocol may also carry a real body, and it means something different:
 
 ```
 $ mypy pc.py
+
 pc.py:20: error: Argument 1 to "answer" has incompatible type "Unrelated"; expected "Retriever"  [arg-type]
 pc.py:20: note: "Unrelated" is missing following "Retriever" protocol member:
 pc.py:20: note:     search_one
@@ -570,7 +659,8 @@ pc.py:20: note:     search_one
 
 The last row answers the question. **An ABC points from the implementer to the abstraction; a `Protocol` points from the consumer to it.**
 
-So: your own class hierarchy, where an incomplete implementation must be impossible → ABC. A boundary where the arriving things are third-party, test doubles, or otherwise not yours to change → `Protocol`.
+So: your own class hierarchy, where an incomplete implementation must be impossible → ABC.
+A boundary where the arriving things are third-party, test doubles, or otherwise not yours to change → `Protocol`.
 
 Which is the agent case exactly. `Retriever`, `LLMClient`, `Checkpointer` are protocols, because a vector-store client, a provider SDK, and your fake-for-tests are never going to inherit from anything you wrote.
 
@@ -590,16 +680,20 @@ One fact first, because the demo rests on it:
 
 ```
 $ mypy pd.py
+
 pd.py:7: error: Incompatible types in assignment (expression has type "float", variable has type "int")  [assignment]
 ```
 
-Only line 7. **`float` is a special case in the type system**: an `int` is accepted anywhere a `float` is wanted, despite `int` not being a subclass of `float`. Not the reverse.
+Only line 7. **`float` is a special case in the type system**: an `int` is accepted anywhere a `float` is wanted, **despite `int` not being a subclass of `float`**. Not the reverse.
 
 In `15-Variance`'s vocabulary: **`int` is narrower than `float`.**
 
 Now two protocols describing the same thing in different words:
 
 ```python
+ 1  from typing import Protocol
+ 2
+ 3
  4  class HasScoreAttr(Protocol):
  5      score: float
  6
@@ -626,6 +720,7 @@ Line 9's `@property` makes a method behave like a plain attribute — write `doc
 
 ```
 $ mypy p3.py
+
 p3.py:22: error: Argument 1 to "a" has incompatible type "Doc"; expected "HasScoreAttr"  [arg-type]
 p3.py:22: note: Following member(s) of "Doc" have conflicts:
 p3.py:22: note:     score: expected "float", got "int"

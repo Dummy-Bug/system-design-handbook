@@ -1,15 +1,15 @@
 #python #type-hints #typing #stubs #py-typed #python-utils
 
 
-`23-Escape-Hatches` ended on an unfinished job. An import mypy had no types for:
+Everything so far has been about annotating code you wrote. A real project is mostly code you didn't — and importing one library with no type information stops mypy at the front door:
 
 ```
-ig0.py:1: error: Cannot find implementation or library stub for module named "hrms_sdk"  [import-not-found]
+app.py:1: error: Cannot find implementation or library stub for module named "hrms_sdk"  [import-not-found]
 ```
 
-and the fallback — `# type: ignore` on that line — which worked by making the entire module `Any`, so everything reached through it went unchecked. That was named as the fallback, not the answer.
+There is a crude way to silence that: `# type: ignore` on the import line. It works by making the entire module `Any`, so everything reached through it goes unchecked — a fallback rather than an answer, and `23-Escape-Hatches` takes it apart properly.
 
-This is the answer. Where library types actually come from, and how to get real ones.
+This note is the answer. Where library types actually come from, and how to get real ones.
 
 ## mypy reads the library's source
 
@@ -133,11 +133,21 @@ The test needs a **properly installed package**, not a local file — the two be
 ```
 
 ```python
+ 1  import asyncio
+ 2
+ 3  from agentlib import fetch
+ 4
+ 5
  6  async def main() -> None:
  7      status = await fetch("http://x")
  8      reveal_type(status)
  9      print(status.totally_made_up)
+10
+11
+12  asyncio.run(main())
 ```
+
+The same `app.py` as before with `mylib` swapped for `agentlib` and one line added at 9.
 
 **With `src/agentlib/py.typed` present:**
 
@@ -188,6 +198,7 @@ $ mypy app.py                            ← default
 app.py:8: note: Revealed type is "Any"
 
 $ mypy --follow-untyped-imports app.py
+
 app.py:8: note: Revealed type is "int"
 app.py:9: error: "int" has no attribute "totally_made_up"  [attr-defined]
 ```

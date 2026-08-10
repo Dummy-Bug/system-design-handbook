@@ -1,7 +1,7 @@
 #python #type-hints #typing #self #inheritance #python-utils
 
 
-`26-Common-Traps` ended on a bug it deliberately left unfixed: a method annotated with its own class name degrades every subclass to the base type. This is the fix, and it is a single word.
+A method that builds a new object of its own class has to declare a return type, and the obvious choice is the name of the class it is written in. That choice is a bug: it hard-codes where the method was *written* rather than what it was *called on*, so every subclass silently degrades to the base type. The fix is a single word.
 
 There is exactly one idea here:
 
@@ -161,7 +161,7 @@ Three things, and only three:
 
 The two outputs also match exactly — mypy's three classes on the left, Python's on the right.
 
-> [!important] `Self` is the check-time twin of something already met in `26-Common-Traps`:
+> [!important] `Self` is the check-time twin of the `type(self)` sitting one line below it, on line 9:
 >
 > | | means |
 > |---|---|

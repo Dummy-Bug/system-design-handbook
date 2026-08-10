@@ -27,11 +27,13 @@ Lines 12 and 13 have them **swapped** — history fetched for a run id, status f
 
 ```
 $ mypy nt0.py
+
 Success: no issues found in 1 source file
 ```
 
 ```
 $ python3 nt0.py
+
 ['messages in run-xyz789']
 status of thread-abc123
 ```
@@ -73,8 +75,10 @@ The obvious move is to give each identifier its own name:
 
 ```
 $ mypy nt1.py
+
 nt1.py:16: note: Revealed type is "str"
 nt1.py:17: note: Revealed type is "str"
+
 Success: no issues found in 1 source file
 ```
 
@@ -111,7 +115,9 @@ Line 11 now *calls* `ThreadId(...)` rather than only annotating.
 
 ```
 $ mypy nt2.py
+
 nt2.py:14: error: Argument 1 to "get_history" has incompatible type "RunId"; expected "ThreadId"  [arg-type]
+
 nt2.py:15: error: Argument 1 to "get_history" has incompatible type "str"; expected "ThreadId"  [arg-type]
 ```
 
@@ -126,17 +132,23 @@ Line 16, passing the real `thread`, is fine.
 ### At runtime it is still a string
 
 ```python
-thread = ThreadId("thread-abc123")
-
-print(type(thread))
-print(isinstance(thread, str))
-print(thread.upper())
-print(thread + "-suffix")
-print(thread == "thread-abc123")
+ 1  from typing import NewType
+ 2
+ 3  ThreadId = NewType("ThreadId", str)
+ 4
+ 5
+ 6  thread = ThreadId("thread-abc123")
+ 7
+ 8  print(type(thread))
+ 9  print(isinstance(thread, str))
+10  print(thread.upper())
+11  print(thread + "-suffix")
+12  print(thread == "thread-abc123")
 ```
 
 ```
 $ python3 nt3.py
+
 <class 'str'>
 True
 THREAD-ABC123
@@ -146,7 +158,7 @@ True
 
 `type(thread)` is `str`. It has `.upper()`, it concatenates, and it compares equal to the plain string it was made from. **No object is created** — `ThreadId(...)` at runtime is essentially a function that returns its argument unchanged.
 
-Same pattern as every rung in this folder: the distinction exists for the checker and costs the running program nothing.
+Same pattern as every rung in this folder: **the distinction exists for the checker and costs the running program nothing**.
 
 | | `ThreadId = str` (alias) | `ThreadId = NewType("ThreadId", str)` |
 |---|---|---|
@@ -161,9 +173,21 @@ Same pattern as every rung in this folder: the distinction exists for the checke
 If a `ThreadId` were separate from `str` in both directions it would be unusable — you couldn't log it, slice it, or use it as a dict key without unwrapping.
 
 ```python
+ 1  from typing import NewType
+ 2
+ 3  ThreadId = NewType("ThreadId", str)
+ 4
+ 5
  6  def log_line(text: str) -> None:
  7      print(text)
-...
+ 8
+ 9
+10  def get_history(thread_id: ThreadId) -> list[str]:
+11      return [f"messages in {thread_id}"]
+12
+13
+14  thread = ThreadId("thread-abc123")
+15
 16  log_line(thread)          # ThreadId → str parameter
 17  log_line(thread.upper())
 18
@@ -173,6 +197,7 @@ If a `ThreadId` were separate from `str` in both directions it would be unusable
 
 ```
 $ mypy nt4.py
+
 nt4.py:20: error: Argument 1 to "get_history" has incompatible type "str"; expected "ThreadId"  [arg-type]
 ```
 

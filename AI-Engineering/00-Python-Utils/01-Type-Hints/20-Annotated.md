@@ -1,8 +1,5 @@
 #python #type-hints #typing #annotated #python-utils
 
-
-Every rung so far has been about saying *what type* a value is. This one is about attaching something to a type that isn't a type at all.
-
 ## A rule you can't write down
 
 An agent's run configuration:
@@ -41,8 +38,10 @@ Line 3 works, but only by **enumeration** — `Literal` lists exact values, and 
 
 ```
 $ mypy an0c.py
-an0c.py:1: error: Invalid type comment or annotation  [valid-type]
+an0c.py:4: error: Invalid type comment or annotation  [valid-type]
 ```
+
+(It also reports `Name "max_retries" already defined on line 3` — an artefact of putting both attempts in one file. Noise.)
 
 ```
 $ python3 an0c.py
@@ -184,6 +183,14 @@ And "a library reads the metadata" is a loop over a tuple:
 The only extra step for a real one is fetching that tuple off a function's annotations rather than a variable, and doing something more useful than printing:
 
 ```python
+ 1  from typing import Annotated, get_type_hints
+ 2
+ 3
+ 4  class Ge:
+ 5      def __init__(self, value: int) -> None:
+ 6          self.value = value
+ 7
+ 8
  9  def check(fn, **kwargs):
 10      hints = get_type_hints(fn, include_extras=True)
 11      for name, value in kwargs.items():
