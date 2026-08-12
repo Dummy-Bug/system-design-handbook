@@ -1,0 +1,104 @@
+# Durga Java lecture notes — working rules
+
+Turning Durga Sir's Core Java YouTube lectures into Obsidian notes under `DURGA/<NN>-<Topic>/`.
+Style reference: `~/Desktop/Camp/*.md`.
+
+## Rule 1 — Never drop anything from the transcript
+
+**Everything in the transcript goes into the notes. Nothing is omitted unless the user explicitly says to omit it.**
+
+This includes:
+
+- every worked example and program the tutor walks through, with its output
+- every analogy and story he tells — the school admission, the 70 mm screen, the kid asking to
+  restart his life cycle, the classroom student. These are not filler; they are how the concept is
+  taught and how it will be recalled in an interview.
+- every definition, dictated word for word as he gives it
+- every list, every "how many types", every case number
+
+**Outdated is not a reason to drop.** If something he says is wrong or has changed since the video
+was recorded, it still goes in, stated as taught — with a `[!warning]` callout beside it giving the
+current behaviour and the JDK version it was verified on. Never silently delete a stale fact, and
+never silently replace it with the modern one.
+
+Only the user decides what gets cut. If something seems not worth including, **ask** — do not decide
+unilaterally. (Precedent: he ordered the multithreading agenda file deleted, and separately told me
+to keep the multitasking definition, classroom example and process-vs-thread diagram. Those calls
+are his.)
+
+### The one standing exception: agendas and meta-framing
+
+Ruled twice (multithreading 2026-08-10, JVM part 1 2026-08-10). **Skip, without asking:**
+
+- the syllabus / agenda run-through at the start of a chapter — "first I will cover X, then Y, then
+  Z, this will take 10–15 hours"
+- meta-framing about the topic rather than the topic — "this is not programming", "you only need
+  the overview", "don't write this down", "very important for the interview room" as a standalone
+  aside
+
+This is about **course navigation**, not subject matter, and the note's own structure already says
+what it covers. Everything the moment he starts teaching is in scope again — including throwaway
+analogies and asides, which are exactly what must never be cut.
+
+Before claiming a chapter is complete, **read the transcript end to end** and check it against the
+notes. A keyword grep is not an audit — it misses exactly the stories and examples that matter.
+
+## Rule 2 — Read the companion PDF for the chapter
+
+`DURGA/pdfs/` holds Durga Sir's own written notes, one PDF per chapter:
+
+| PDF | Chapter |
+|---|---|
+| `01 JVMDurga.pdf` | JVM architecture |
+| `02 MultithreadingDurga.pdf` | Multithreading |
+| `03 MultiThreadingEnhancementsDurga.pdf` | Multithreading enhancements |
+| `04 CollectionsDurga.pdf` | Collections |
+| `05 ExceptionHandlingDurga.pdf` | Exception handling |
+| `06 Java.LangPackageDurga.pdf` | `java.lang` package |
+| `07 GenericDurga.pdf` | Generics |
+| `08 LambdaExpressionsDurga.pdf` | Lambda expressions |
+| `09 GarbageCollectionDurga.pdf` | Garbage collection |
+
+**Read the matching PDF before writing any note in that chapter.** It carries the exact definition
+wording and contains full programs with their outputs that the video only gestures at. It is a
+second source that must be merged with the transcript, not a fallback.
+
+No PDF text extractor is installed. A pure-Python `zlib` + regex pass over the FlateDecode streams
+works fine — do not install anything.
+
+## Rule 3 — Verify by running the code
+
+The videos are ~Java 6/7 era. JDK 25 is at `/usr/bin/java`; JDK sources are at
+`~/Library/Java/JavaVirtualMachines/openjdk-25.0.1/Contents/Home/lib/src.zip`.
+
+Compile and run the examples in the scratchpad and put the **measured** output in the notes, not the
+remembered one. Where reality has moved, add a `[!warning]` naming the JDK version checked.
+
+## Rule 4 — One file per transcript
+
+**One video = one transcript = one note file.** Do not split a video across several files.
+
+This is how he tracks which video he still has to transcribe: the file numbers line up with the
+videos, so a gap in the numbering is a gap in the source. Where a video's transcript is not
+available yet, **leave its number unused** rather than renumbering (e.g. `JVM-ARCHITECTURE/01-*` is
+reserved for the first JVM video).
+
+These files are deliberately long — 400–700 lines is normal and fine. **Splitting comes later**, once
+the whole topic is finished and he decides where the seams go. Do not pre-emptively thin them, and
+never trim content to hit a line count.
+
+## Rule 5 — File shape
+
+- Prose-first opening. Mermaid diagrams, comparison tables, `---` separators.
+- Obsidian callouts: `[!important]`, `[!info]`, `[!question]-` (collapsible), `[!warning]` for
+  anything outdated.
+- Numbered kebab-case filenames.
+- **H1 (`#`) marks a major topic within the video**; `##` and below are its sections. (Camp's
+  no-H1 convention assumed one topic per file; a per-video file usually holds several, and the H1s
+  are what make the Obsidian outline usable.)
+- **Keep code together with the analysis of its output.** He reads linearly and will not scroll back
+  and forth to match a program to the discussion of its results.
+
+## Rule 6 — Write only after confirmation
+
+Do not create or edit note files until the user has explicitly asked for it.

@@ -1,11 +1,9 @@
-The class loader subsystem is one module of the JVM, and everything in this note sits inside it.
 
 > **The class loader subsystem is responsible for the following three activities:**
 > 1. **Loading**
 > 2. **Linking** — verification, preparation, resolution
 > 3. **Initialization**
 
-Loading was the previous topic. This note picks up from what loading left behind, then walks the remaining two activities to the end.
 
 ```mermaid
 flowchart TB
@@ -20,131 +18,10 @@ flowchart TB
 
 ---
 
-## Recap — what loading left behind
+# Linking 
 
-> **Loading means reading class files and storing the corresponding binary data in the method area.**
+consists of three activities
 
-And it is worth knowing exactly *what* gets stored, because "the class data" is vague and this list is not:
-
-> **For each class file the JVM stores the following information in the method area:**
-> 1. Fully qualified name of the loaded class / interface / enum
-> 2. Fully qualified name of its immediate parent class
-> 3. Whether the `.class` file relates to a class, an interface, or an enum
-> 4. The modifiers information
-> 5. Variables / fields information
-> 6. Methods information
-> 7. Constant pool information — and so on
-
-Then one more thing happens, immediately:
-
-> **After loading the `.class` file, the JVM creates an object of type `class Class` to represent class-level binary information on the heap memory.**
-
-So every loaded class ends up represented **twice**, in two different memory areas, for two different audiences:
-
-```mermaid
-flowchart LR
-    subgraph MA["<b>Method Area</b> — for the JVM"]
-        M1["Student.class information"]
-        M2["Customer.class information"]
-    end
-    subgraph HP["<b>Heap Area</b> — for the programmer"]
-        H1["Class object for<br/>Student.class"]
-        H2["Class object for<br/>Customer.class"]
-    end
-    M1 --> H1
-    M2 --> H2
-    H1 --> U["<b>used by the programmer</b><br/>Student s = new Student();<br/>Class c = s.getClass();"]
-    H2 --> U
-```
-
-> **The `Class` object can be used by the programmer to get class-level information** — fully qualified name of the class, parent name, methods and variables information, and so on.
-
-### The program that makes the `Class` object concrete
-
-This is the example from the notes — a plain class with two private fields and two methods, interrogated at runtime through its `Class` object:
-
-```java
-import java.lang.reflect.*;
-
-class Student {
-    private String name;
-    private int rollNo;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setRollNo(int rollNo) {
-        this.rollNo = rollNo;
-    }
-}
-
-class Test1 {
-    public static void main(String[] args) {
-        Student s = new Student();
-        Class c = s.getClass();
-        System.out.println(c.getName());
-
-        Method[] m = c.getDeclaredMethods();
-        for (int i = 0; i < m.length; i++)
-            System.out.println(m[i]);
-
-        Field[] f = c.getDeclaredFields();
-        for (int i = 0; i < f.length; i++)
-            System.out.println(f[i]);
-    }
-}
-```
-
-Output, run on JDK 25:
-
-```
-Student
-public java.lang.String Student.getName()
-public void Student.setRollNo(int)
-private java.lang.String Student.name
-private int Student.rollNo
-```
-
-Read that against the seven-item list above and the connection is exact — the name, the methods, the fields, **including the `private` ones**, all read back out of the binary information that loading put in the method area.
-
-> [!important] **This is why `getClass()` exists at all.** You are not asking the object about itself; you are asking for the JVM's own record of the class, exposed as an ordinary heap object you can call methods on. Reflection, frameworks like Spring and Hibernate, JUnit finding your test methods, Jackson mapping JSON onto fields — all of it is this one mechanism.
-
-> [!info] **The order of `getDeclaredMethods()` is not specified.** The notes print `setRollNo` first, JDK 25 printed `getName` first. Neither is wrong — the JVM makes no guarantee about ordering, so never write code that depends on it.
-
-### One `Class` object per class, not per instance
-
-> **Note: For every loaded `.class` file only one `Class` object will be created, even though we are using the class multiple times in our application.**
-
-```java
-class Test2 {
-    public static void main(String[] args) {
-        Student s1 = new Student();
-        Student s2 = new Student();
-        Class c1 = s1.getClass();
-        Class c2 = s2.getClass();
-        System.out.println(c1 == c2);
-        System.out.println(c1);
-        System.out.println(Student.class == c1);
-    }
-}
-```
-
-Output:
-
-```
-true
-class Student
-true
-```
-
-Two `Student` objects, **one** `Class` object — and `Student.class` is that same object again. It follows directly from loading: the class file is read once, so there is one record of it, so there is one object representing that record.
-
----
-
-## Linking
-
-> **Linking consists of three activities:**
 > 1. **Verification**
 > 2. **Preparation**
 > 3. **Resolution**
@@ -456,3 +333,226 @@ flowchart TB
 That whole sequence is what the phrase **class loading** refers to, and the class loader subsystem is responsible for all of it — three activities, with linking holding three phases of its own.
 
 Next: **who** performs the loading. There is not one class loader but three, arranged in a hierarchy.
+
+---
+
+# Types of class loaders
+
+Everything so far has said "the class loader subsystem loads the class". There is no single loader doing that — and this is one of the most valuable topics for the interview room.
+
+> **Every class loader subsystem contains the following three class loaders:**
+> 1. **Bootstrap class loader** — also called **primordial** class loader
+> 2. **Extension class loader**
+> 3. **Application class loader** — also called **system** class loader
+
+They are arranged as a family, and each one has exactly one place it looks:
+
+```mermaid
+flowchart TB
+    B["<b>Bootstrap / Primordial</b><br/>loads from <b>bootstrap class path</b><br/><i>jdk / jre / lib / rt.jar</i>"]
+    B --> E["<b>Extension</b><br/>loads from <b>extension class path</b><br/><i>jdk / jre / lib / ext</i>"]
+    E --> A["<b>Application / System</b><br/>loads from <b>application class path</b><br/><i>the classpath environment variable</i>"]
+```
+
+The arrows are inheritance: extension is the child of bootstrap, application is the child of extension. **Each loader has its own search location, and never looks anywhere else.**
+
+---
+
+## Bootstrap class loader
+
+> **This class loader is responsible to load classes from the `jdk\jre\lib` folder.**
+>
+> **All core Java API classes are present in `rt.jar`, which is present in this location only. Hence all API classes (like `String`, `StringBuffer` etc.) will be loaded by the bootstrap class loader only.**
+
+`String`, `StringBuffer`, `Object`, every class you use without importing anything: all of them come out of one archive.
+
+```
+jdk / jre / lib / rt.jar        ← this whole location is the "bootstrap class path"
+```
+
+> **This location is called the bootstrap class path. That is, the bootstrap class loader is responsible to load classes from the bootstrap class path.**
+
+Two more properties, both of which get asked about:
+
+> **The bootstrap class loader is by default available with every JVM.**
+>
+> **It is implemented in native languages like C and C++, and not implemented in Java.**
+
+> [!important] **The second one is not trivia — it is a chicken-and-egg problem.** A class loader written in Java would itself be a class, which something would have to load. The chain has to terminate somewhere, and it terminates in the VM's own native code. That is also why, in Java, this loader has no object to show you: asking for it returns `null` — a point the example at the end of this section lands on directly.
+
+---
+
+## Extension class loader
+
+> **It is the child of the bootstrap class loader.**
+>
+> **This class loader is responsible to load classes from the extension class path. Location: `jdk\jre\lib\ext`**
+
+Reading that path out loud is the whole explanation of the name: **`lib` is library, `ext` is extension library.** Anything sitting in that directory — any `.jar`, any `.class` — is picked up by this loader.
+
+```
+jdk / jre / lib / ext / *.jar   ← this location is the "extension class path"
+```
+
+Unlike bootstrap, it *is* an ordinary Java class:
+
+> **This class loader is implemented in Java, and the corresponding `.class` file name is `sun.misc.Launcher$ExtClassLoader.class`.**
+
+Reading that name apart, piece by piece, is worth doing once: **`misc` is miscellaneous** — the old catch-all package for internal Sun classes — `Launcher` is the class, and `ExtClassLoader` is nested inside it.
+
+> [!info] **The `$` in that name means an inner class.** `Launcher` is the outer class, `ExtClassLoader` is nested inside it. A useful reflex generally: a `$` in a `.class` filename is always a nested or anonymous class.
+
+---
+
+## Application / system class loader
+
+> **It is the child of the extension class loader.**
+>
+> **This class loader is responsible to load classes from the application class path (the current working directory). It internally uses the environment variable `classpath`.**
+>
+> **The application class loader is implemented in Java, and the corresponding `.class` file name is `sun.misc.Launcher$AppClassLoader.class`.**
+
+This is the one that loads *your* classes. When you compile `Test.java` and run `java Test`, the class found on your classpath is found by this loader.
+
+| Loader | Searches | Implemented in | Class file |
+|---|---|---|---|
+| **Bootstrap** / primordial | bootstrap class path — `jdk/jre/lib/rt.jar` | C / C++ | *none — not a Java class* |
+| **Extension** | extension class path — `jdk/jre/lib/ext` | Java | `sun.misc.Launcher$ExtClassLoader.class` |
+| **Application** / system | application class path — the `classpath` environment variable | Java | `sun.misc.Launcher$AppClassLoader.class` |
+
+---
+
+## The program that shows which loader loaded what
+
+Three classes, one from each level, each asked who loaded it:
+
+```java
+class Test {
+    public static void main(String[] args) {
+        System.out.println(String.class.getClassLoader());
+        System.out.println(Student.class.getClassLoader());
+        System.out.println(Test.class.getClassLoader());
+    }
+}
+```
+
+> **Assume that `Student.class` is present in both the extension class path and the application class path, and `Test.class` is present only in the application class path.**
+
+Expected output, as taught:
+
+| Class | Loaded from | By | Output |
+|---|---|---|---|
+| `String` | bootstrap class path | bootstrap class loader | `null` |
+| `Student` | extension class path | extension class loader | `sun.misc.Launcher$ExtClassLoader@1234` |
+| `Test` | application class path | application class loader | `sun.misc.Launcher$AppClassLoader@3456` |
+
+Two things to take from that output.
+
+> **The bootstrap class loader is not a Java object. Hence we are getting `null` in the first case — but the extension class loader and application class loader are Java objects, and hence we get proper output in the remaining two cases.**
+
+The "proper output" is just the default `toString()` shape: **`ClassName@hexadecimal_string_of_hashcode`**.
+
+And the reason `Student` came from the extension path rather than the application path, when it was sitting in *both*:
+
+> **The class loader subsystem will give highest priority to the bootstrap class path, then the extension class path, followed by the application class path.**
+
+```mermaid
+flowchart LR
+    B["<b>1st priority</b><br/>Bootstrap class path"] --> E["<b>2nd priority</b><br/>Extension class path"] --> A["<b>3rd priority</b><br/>Application class path"]
+```
+
+> [!important] **That priority order is the reason you cannot hijack a core class.** Write your own `java.lang.String` and drop it in your working directory: the bootstrap class path is searched first, the real `String` is found there, and yours is never reached. The *mechanism* producing this order — parents being asked before children — is the **delegation hierarchy**, and it is the next topic.
+
+---
+
+## What has changed since this lecture — almost all of the above
+
+The **structure** in this section is still exactly right: three loaders, a parent-child chain, one search location each, priority top-down, bootstrap native and unreachable from Java. Every **name and path** in it is obsolete. Java 9 (2017) reorganised the JDK around modules, and all of the following was verified on the JDK 25 installed on this machine.
+
+> [!warning] **`rt.jar` no longer exists. Neither does the `jre` directory.**
+>
+> ```
+> $JAVA_HOME/lib/rt.jar   → No such file or directory
+> $JAVA_HOME/jre          → No such file or directory
+> ```
+>
+> The core API now ships as a single modular image, `$JAVA_HOME/lib/modules` (135 MB here), and `String` reports itself as belonging to `module java.base`. There is no separate JRE to point at any more.
+
+> [!warning] **The extension class loader is now the *platform* class loader, and the extension mechanism is gone entirely.**
+>
+> `jre/lib/ext` does not exist, and the `java.ext.dirs` system property reads `null`. Dropping a jar somewhere to have it silently loaded is no longer a thing the JDK does — it was removed precisely because it made deployments unpredictable. The loader that took its slot in the hierarchy is `getPlatformClassLoader()`, which serves the non-`java.base` platform modules.
+
+> [!warning] **`sun.misc.Launcher` is gone — the class names you would quote in an interview are different.**
+>
+> ```
+> Class.forName("sun.misc.Launcher")
+> -> java.lang.ClassNotFoundException: sun.misc.Launcher
+> ```
+>
+> | Lecture's name | JDK 9+ name |
+> |---|---|
+> | `sun.misc.Launcher$ExtClassLoader` | `jdk.internal.loader.ClassLoaders$PlatformClassLoader` |
+> | `sun.misc.Launcher$AppClassLoader` | `jdk.internal.loader.ClassLoaders$AppClassLoader` |
+
+### The same program, run today
+
+```java
+public class Test3 {
+    public static void main(String[] args) {
+        System.out.println("String  -> " + String.class.getClassLoader());
+        System.out.println("Student -> " + Student.class.getClassLoader());
+        System.out.println("Test3   -> " + Test3.class.getClassLoader());
+        System.out.println("String module : " + String.class.getModule());
+        System.out.println("java.ext.dirs : " + System.getProperty("java.ext.dirs"));
+    }
+}
+```
+
+Output on JDK 25:
+
+```
+String  -> null
+Student -> jdk.internal.loader.ClassLoaders$AppClassLoader@7a8c5397
+Test3   -> jdk.internal.loader.ClassLoaders$AppClassLoader@7a8c5397
+
+String module : module java.base
+java.ext.dirs : null
+```
+
+Compare it line by line with the table above:
+
+| | As taught | Today | Still true? |
+|---|---|---|---|
+| `String` | `null` | `null` | **yes** — bootstrap is still native, still has no Java object |
+| `Student` | `$ExtClassLoader@1234` | `$AppClassLoader@…` | the *extension path no longer exists*, so `Student` can only come from the classpath |
+| `Test` | `$AppClassLoader@3456` | `$AppClassLoader@…` | **yes**, modulo the package name |
+| `ClassName@hashcode` format | — | unchanged | **yes** |
+
+The `Student` line is the only real casualty, and only because there is nowhere left to put it: with `jre/lib/ext` gone, the scenario "the same class sits in both the extension and application class path" cannot be set up at all.
+
+> [!info] **The `classpath` environment variable does still work.** Running with `CLASSPATH=out java Test3` produced output identical to `java -cp out Test3` — so the lecture's "it internally uses environment variable class path" is still literally true, even though `-cp` is what everyone actually uses.
+
+### The hierarchy as it actually prints today
+
+```java
+ClassLoader cl = MyClass.class.getClassLoader();
+while (cl != null) { System.out.println(cl + "  [" + cl.getName() + "]"); cl = cl.getParent(); }
+```
+
+Output on JDK 25:
+
+```
+jdk.internal.loader.ClassLoaders$AppClassLoader@7a8c5397        [app]
+jdk.internal.loader.ClassLoaders$PlatformClassLoader@1dbd16a6   [platform]
+null    ← bootstrap: implemented in the VM, so there is no Java object to print
+
+String.class.getClassLoader()        = null          (loaded by bootstrap)
+ClassLoader.getSystemClassLoader()   = ...$AppClassLoader
+ClassLoader.getPlatformClassLoader() = ...$PlatformClassLoader
+```
+
+> [!important] **Read that output against the diagram at the top of this section and the shape is identical.** App → Platform → `null`. Three loaders, same order, same responsibilities; `null` for bootstrap is the direct consequence of it being native. **Learn the structure from the lecture and the names from here** — an interviewer asking "how many class loaders and what is the hierarchy" wants the structure, and quoting `PlatformClassLoader` instead of `ExtClassLoader` shows you have used a JDK built this decade.
+
+---
+
+Each loader knowing only its own location raises the obvious question: when your code needs `String`, which of the three actually goes and gets it — and what stops your own `java.lang.String` from being loaded instead? That is the **delegation hierarchy**, and it is next.
