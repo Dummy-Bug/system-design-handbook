@@ -33,7 +33,7 @@ flowchart TB
     UN --> R(["the program runs to the end<br/>on the <b>old</b> class, always"])
 ```
 
-> **After loading a `.class` file, if it is modified outside, then the default class loader won't load the updated version of the class file on the fly. Because the `.class` file is already there in the method area.**
+> After loading a `.class` file, if it is modified outside, then the default class loader **won't load the updated version** of the class file on the fly. Because the `.class` file is **already there in the method area**.
 
 The JVM never re-checks. It asks one question — *is it already loaded?* — and if the answer is yes, that is the end of the enquiry. The updated file may as well not exist.
 
@@ -147,9 +147,9 @@ State the goal on its own, before any mechanism — because the mechanism turns 
 
 One row differs. That is the entire requirement.
 
-> **We can resolve this problem by defining our own customized class loader. The main advantage of a customized class loader is that we can control the class loading mechanism based on our requirement.**
+> We can resolve this problem by **defining our own customized class loader**. The main advantage of a customized class loader is that we can **control the class loading mechanism** based on our requirement.
 >
-> **For example, we can load the class file separately every time, so that the updated version is available to our program.**
+> For example, we can **load the class file separately every time**, so that the updated version is available to our program.
 
 > [!important] **Read the last line carefully: *load the class file separately every time*.** Not *"re-check the one already loaded"* — **separately**. That word is doing more work than it looks, and the difference between those two readings is what the rest of this note is about. Hold on to it.
 
@@ -159,7 +159,7 @@ One row differs. That is the entire requirement.
 
 The rule that makes it possible:
 
-> **Every class loader in Java — whether default or customized — should be a child class of `java.lang.ClassLoader`, either directly or indirectly.**
+> Every class loader in Java — whether default or customized — should be a **child class of `java.lang.ClassLoader`**, either directly or indirectly.
 
 Which answers a question that gets asked on its own:
 

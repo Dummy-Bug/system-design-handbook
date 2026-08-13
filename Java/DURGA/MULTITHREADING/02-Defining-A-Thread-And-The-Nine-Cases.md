@@ -187,9 +187,9 @@ The first three are all about the same question: **who actually starts a thread,
 
 If several threads are ready to run, somebody has to pick. That somebody is the **thread scheduler**.
 
-> **The thread scheduler is the part of the JVM responsible for scheduling threads. If multiple threads are waiting to get a chance of execution, the order in which they execute is decided by the thread scheduler.**
+> The **thread scheduler** is the part of the JVM responsible for scheduling threads. If multiple threads are waiting to get a chance of execution, the **order in which they execute is decided by the thread scheduler**.
 >
-> **We cannot expect the exact algorithm the thread scheduler follows — it varies from JVM to JVM. Hence we cannot expect the thread execution order, and we cannot expect the exact output.**
+> We **cannot expect the exact algorithm** the thread scheduler follows — it varies from JVM to JVM. Hence we **cannot expect the thread execution order**, and we cannot expect the exact output.
 
 It might be first-come-first-served. It might be round robin. It might be shortest job first. You do not know, and you are not supposed to write code that depends on knowing.
 
@@ -239,8 +239,8 @@ When you write `t.start()`, the JVM looks for `start()` on `MyThread`, does not 
 
 So what if you just call `run()` yourself and skip the middleman?
 
-> **In the case of `t.start()`, a new thread is created, and that thread is responsible for executing `run()`.**
-> **In the case of `t.run()`, no new thread is created — `run()` is executed like a normal method call by the main thread.**
+> In the case of `t.start()`, a **new thread is created**, and that thread is responsible for executing `run()`.
+> In the case of `t.run()`, **no new thread is created** — `run()` is executed like a **normal method call** by the main thread.
 
 ```mermaid
 flowchart TB
@@ -300,7 +300,7 @@ A thread object is in exactly that position. `new MyThread()` puts the object in
 
 Every one of those is a formality you never write and never see. You write `t.start()` — one line — and the registration, the low-level setup, and the call into your job all happen behind it.
 
-> **Without executing `Thread`'s `start()` method, there is no chance of starting a new thread in Java. Due to this, `start()` is considered the heart of multithreading.**
+> Without executing `Thread`'s `start()` method, there is **no chance of starting a new thread** in Java. Due to this, `start()` is considered the **heart of multithreading**.
 
 > [!important] **`start()` is the best assistant a programmer has here.** Your responsibility is one thing only: define the job inside `run()`. Everything required to make that job into a real, scheduled thread is on the other side of a single method call. If it were not, every program that wanted a thread would have to reimplement it.
 
@@ -360,7 +360,7 @@ Two methods, same name, different parameter lists — textbook overloading. And 
 no-arg run method
 ```
 
-> **Overloading of `run()` is always possible, but `Thread`'s `start()` can only invoke the no-argument `run()`. The other overloaded methods have to be called explicitly, like a normal method call.**
+> Overloading of `run()` is **always possible**, but `Thread`'s `start()` can only invoke the **no-argument `run()`**. The other overloaded methods have to be called explicitly, like a normal method call.
 
 > [!info] **You have seen this shape before.** Overloading `main()` is legal too, and the JVM still only ever calls `main(String[])`. Same rule, different method: **the runtime has one signature it knows about, and your extra overloads are just ordinary methods that nobody calls for you.**
 
@@ -383,7 +383,7 @@ This compiles, and it starts a real thread. Trace the lookup: `t.start()` is not
 
 Output, verified: nothing at all.
 
-> **If we are not overriding `run()`, then `Thread`'s `run()` will be executed, which has an empty implementation — hence we won't get any output.**
+> If we are not overriding `run()`, then `Thread`'s `run()` will be executed, which has an **empty implementation** — hence we won't get any output.
 
 > [!important] **It is highly recommended to override `run()`. If you don't want to, don't use multithreading at all** — a thread with no job is a thread that does nothing, at the cost of creating a thread. You have paid for the machinery and defined no work for it to do.
 
@@ -436,7 +436,7 @@ main method [main]
 
 `run()` never executes. No thread is created. Both lines come from the main thread — which is why this output is identical on every run and every machine.
 
-> **If we override `start()`, our `start()` will be executed just like a normal method call, and no new thread will be created.**
+> If we override `start()`, our `start()` will be executed just like a **normal method call**, and **no new thread will be created**.
 
 > [!important] **It is not recommended to override `start()`. If you do, there is no multithreading left to speak of** — you have replaced the one method that makes a thread with a method that prints something.
 
@@ -526,7 +526,7 @@ Read it as one sentence: **you create it, you start it, the scheduler picks it, 
 
 The states are named *born* and *dead* for a reason, and the lecture leans on it deliberately — the line quoted at every funeral, that **everyone who is born will one day die**, is exactly the guarantee a thread gives you:
 
-> **Every thread that is born will, one day, enter the dead state.**
+> Every thread that is born will, one day, enter the **dead state**.
 
 The half of the saying nobody can promise for people — *and everyone who dies will be born again* — is the half Java flatly refuses. That refusal is Case 9, and the whole reason it gets a case of its own.
 
@@ -620,7 +620,7 @@ Exception in thread "main" java.lang.IllegalThreadStateException
         at Restart.main(Restart.java:7)
 ```
 
-> **After starting a thread, if we try to restart the same thread, we get a runtime exception: `IllegalThreadStateException`.**
+> After starting a thread, if we try to restart the same thread, we get a runtime exception: **`IllegalThreadStateException`**.
 
 Note that it **compiles fine**. There is nothing wrong with the syntax of calling `start()` twice; the object is simply not in a state where the call means anything. It fails at runtime, which is the only place the state is known.
 

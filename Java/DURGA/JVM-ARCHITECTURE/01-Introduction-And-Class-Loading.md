@@ -12,7 +12,7 @@ Put a calculator on the table and you can weigh it, measure it, describe its dim
 
 The same question about the JVM lands the same way: **what does a JVM weigh? What are its dimensions?** The question is meaningless, and that meaninglessness is the definition.
 
-> **A virtual machine is a software simulation of a machine which can perform operations like a physical machine.**
+> A virtual machine is a **software simulation of a machine** which can perform operations like a physical machine.
 
 ```mermaid
 flowchart LR
@@ -47,7 +47,7 @@ flowchart TB
 
 ### Hardware based / system based
 
-> **It provides several logical systems on the same computer with strong isolation from each other.**
+> It provides **several logical systems on the same computer** with **strong isolation** from each other.
 
 One physical machine. On top of it, several logical machines — one for user 1, one for user 2, one for user 3 — each behaving as an independent system, each isolated from the others. Every one of those users is ultimately talking to the same physical box.
 
@@ -71,7 +71,7 @@ flowchart TB
 
 And the reason anyone does this:
 
-> **The main advantage of hardware based virtual machines is the effective utilization of hardware resources.**
+> The main advantage of hardware based virtual machines is the **effective utilization of hardware resources**.
 
 Physically one machine; logically six. The hardware that would sit idle serving one user is shared across all of them.
 
@@ -79,7 +79,7 @@ Physically one machine; logically six. The hardware that would sit idle serving 
 
 ### Application based / process based
 
-> **These virtual machines act as runtime engines to run a particular programming language application.**
+> These virtual machines act as **runtime engines** to run a particular programming language application.
 
 One language, one engine that runs it:
 
@@ -99,7 +99,7 @@ Two facts, and they are the whole of its job description.
 
 > **JVM is the part of JRE.**
 >
-> **JVM is responsible to load and run Java applications.**
+> JVM is responsible to **load and run** Java applications.
 
 The JRE in turn sits inside the JDK, so the nesting runs JDK ⊃ JRE ⊃ JVM. And the responsibility is exactly two verbs:
 
@@ -144,7 +144,7 @@ flowchart LR
 
 **Those two things together are a runtime.**
 
-> **A runtime is what must already be present on a machine for a compiled program to run.**
+> A runtime is what must **already be present on a machine** for a compiled program to run.
 
 And it is not an abstraction — it is two directories you can look at:
 
@@ -337,7 +337,7 @@ The name says the job: **read `.class` files from the hard disk and load them in
 
 ## Loading
 
-> **Loading means reading class files and storing the corresponding binary data in the method area.**
+> Loading means **reading class files** and **storing the corresponding binary data in the method area**.
 
 Follow one file. You write `Test.java`, compile it, and `Test.class` appears on the hard disk — in some directory on `C:` or `D:`, wherever you were working. That is *outside* the JVM. The JVM's first job is to bring it *inside*:
 
@@ -400,7 +400,7 @@ Three details in that list repay attention.
 
 Loading does not stop at the method area. One more thing happens, immediately:
 
-> **After loading the `.class` file, immediately the JVM will create an object of the type `class Class` to represent class-level binary information on the heap memory.**
+> After loading the `.class` file, immediately the JVM will **create an object of the type `class Class`** to represent class-level binary information **on the heap memory**.
 
 So every loaded class ends up represented **twice**, in two memory areas, for two different audiences:
 
@@ -596,7 +596,7 @@ Output on JDK 25:
 true
 ```
 
-> **Note: for every loaded `.class` file only one `Class` object will be created, even though we are using the class multiple times in our application.**
+> Note: for every loaded `.class` file **only one `Class` object will be created**, even though we are using the class multiple times in our application.
 
 > [!important] **Read the two lines of output separately, because they are guaranteed differently.** The hash code number itself is **not something to memorise or depend on** — it is an identity hash code and varies from system to system. What is fixed, and what the demo is actually showing, is that **both printed values are identical** and that `c1 == c2` is `true`. Those two facts are the result; the number is incidental.
 >

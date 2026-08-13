@@ -1,6 +1,6 @@
 Two modules down. The class loader subsystem brought the class in; the memory areas gave it somewhere to live. The third module is the one that actually runs it.
 
-> **Execution engine is the central component of the JVM. It is responsible to execute Java class files.**
+> Execution engine is the **central component of the JVM**. It is responsible to **execute Java class files**.
 >
 > **Execution engine mainly contains 2 components:**
 > 1. **Interpreter**
@@ -12,7 +12,7 @@ Two modules down. The class loader subsystem brought the class in; the memory ar
 
 The distinction from your academics: **a compiler compiles the whole program at once; an interpreter works line by line.**
 
-> **The interpreter is responsible to read the bytecode and interpret (convert) it into machine code (native code), and execute that machine code line by line.**
+> The interpreter is responsible to read the bytecode and **interpret (convert) it into machine code** (native code), and execute that machine code **line by line**.
 
 Three activities, repeated for every line:
 
@@ -38,7 +38,7 @@ m1();     // and again
 
 The first call does the work you would expect. The second call does **exactly the same work over again** — the same hundred lines re-read, re-converted to machine code, and re-executed. Nothing was kept.
 
-> **The problem with the interpreter is that it interprets every time, even the same method invoked multiple times, which reduces performance of the system.**
+> The problem with the interpreter is that it **interprets every time**, even the same method invoked multiple times, which **reduces performance** of the system.
 
 The obvious objection is the right one: *why not convert it into machine code only once?*
 
@@ -48,17 +48,17 @@ This is what the **JIT compiler** exists to fix.
 
 # JIT compiler
 
-> **The main purpose of the JIT compiler is to improve performance.**
+> The main purpose of the JIT compiler is to **improve performance**.
 
 The mechanism is a counter per method.
 
-> **Internally the JIT compiler maintains a separate count for every method.**
->
-> **Whenever the JVM comes across any method call, first that method will be interpreted normally by the interpreter, and the JIT compiler increments the corresponding count variable. This process is continued for every method.**
->
-> **Once any method's count reaches the threshold value, the JIT compiler identifies that the method is a repeatedly used method — a HOT SPOT.**
->
-> **Immediately the JIT compiler compiles that method and generates the corresponding native code. Next time the JVM comes across that method call, the JVM directly uses the native code and executes it instead of interpreting once again — so the performance of the system is improved.**
+> Internally the JIT compiler maintains a **separate count for every method**.
+
+> Whenever the JVM comes across any method call, first that method will be **interpreted normally** by the interpreter, and the JIT compiler **increments the corresponding count variable**. This process is continued for every method.
+
+> Once any method's count reaches the **threshold value**, the JIT compiler identifies that the method is a repeatedly used method — a **HOT SPOT**.
+
+> Immediately the JIT compiler **compiles that method and generates the corresponding native code**. Next time the JVM comes across that method call, the JVM **directly uses the native code** and executes it instead of interpreting once again — so the performance of the system is improved.
 
 Walk one method through it:
 
@@ -80,12 +80,17 @@ flowchart TB
     COMP --> NAT(["every later call:<br/><b>run the native code directly</b>"])
 ```
 
-> **The threshold count value varies from JVM to JVM.**
+> The threshold count value **varies from JVM to JVM**.
+
+> [!warning] Coder Army — **where that native code lives: the code cache, not the method area**
+> A common way to put this is that JIT-compiled code is stored in the method area, alongside the bytecode it came from. On HotSpot it is not. Compiled methods go into a separate native-memory region called the **code cache**, sized with **`-XX:ReservedCodeCacheSize`**.
+>
+> Worth knowing because it fails in a way of its own: if the code cache fills up, the JIT **stops compiling entirely** and the JVM quietly drops back to interpreting. Nothing crashes and no exception is thrown — the application simply gets slower and stays slower, with only a `CodeCache is full. Compiler has been disabled.` line in the log to explain it.
 
 ## Two conclusions that get asked directly
 
-> 1. **The JVM interprets the total program line by line at least once.**
-> 2. **JIT compilation is applicable only for repeatedly invoked methods, but not for every method.**
+> 1. The JVM interprets the total program line by line **at least once**.
+> 2. JIT compilation is applicable **only for repeatedly invoked methods**, but not for every method.
 
 Both follow from the counter. A method has to be *called* before its count can rise, and it has to be *interpreted* on those early calls, because compilation has not happened yet. So nothing skips the interpreter entirely, and a method called once is never compiled at all.
 
@@ -93,13 +98,13 @@ Both follow from the counter. A method has to be *called* before its count can r
 
 ## Recompiling for better code
 
-> **Some advanced JIT compilers will re-compile the generated native code if the count reaches the threshold value a second time, so that more optimized machine code will be generated.**
+> Some advanced JIT compilers will **re-compile the generated native code** if the count reaches the threshold value a second time, so that **more optimized machine code** will be generated.
 
 A method that is merely hot gets compiled. A method that stays hot gets compiled **again**, harder — the second pass is worth spending more time on, because the evidence that this code matters is now stronger.
 
 ## Who spots the hot methods
 
-> **Profiler, which is part of the JIT compiler, is responsible to identify HOT SPOTS.**
+> **Profiler**, which is part of the JIT compiler, is responsible to identify **HOT SPOTS**.
 
 > [!info] **This is where the name "HotSpot JVM" comes from.** The standard JVM you are running is called HotSpot precisely because this is its defining trick: watch the program, find the hot spots, compile those. Worth making explicit, because "HotSpot" appears in every stack trace and error message you will ever read.
 
@@ -116,7 +121,7 @@ flowchart LR
 
 The three stages are the standard compiler pipeline — the same shape as any compiler course: an intermediate representation, an optimisation pass over it, then target code generation.
 
-> [!info] **The execution engine holds more than these two.** The **garbage collector** lives in the same area, and it gets a chapter of its own later in this course.
+> [!info] **The execution engine holds more than these two.** The **garbage collector** lives in the same area.
 
 ---
 
@@ -132,11 +137,11 @@ flowchart LR
     JNI <--> NML["<b>Native Method Libraries</b><br/><i>hold the native implementations</i>"]
 ```
 
-> **JNI acts as a mediator between Java method calls and the corresponding native libraries.**
->
-> **That is, JNI is responsible to provide information about native libraries to the JVM.**
->
-> **The native method library holds native libraries information.**
+> JNI acts as a **mediator** between Java method calls and the corresponding native libraries.
+
+> That is, JNI is responsible to **provide information about native libraries** to the JVM.
+
+> The native method library holds **native libraries information**.
 
 So the flow is: execution engine → JNI → native method library, and the information comes back the same way.
 

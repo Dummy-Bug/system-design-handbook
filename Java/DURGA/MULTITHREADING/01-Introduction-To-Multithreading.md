@@ -8,7 +8,7 @@ So the introduction is worth the time before any code appears.
 
 ## Multitasking
 
-> **Executing several tasks simultaneously is the concept of multitasking.**
+> Executing several tasks simultaneously is the concept of **multitasking**.
 
 That is the whole definition, and it is worth writing down in exactly those words. Everything in this chapter is a variation on it.
 
@@ -55,7 +55,7 @@ The rest of this note defines each one properly, because the pair of definitions
 
 Stated the way you would write it in an exam:
 
-> **Executing several tasks simultaneously, where each task is a separate independent process, is called process based multitasking.**
+> Executing several tasks simultaneously, where each task is a **separate independent process**, is called **process based multitasking**.
 
 The load-bearing word is **independent**. Not "unrelated in theme" — independent in the sense that task 2 does not need task 1 to have finished, or even to exist.
 
@@ -85,7 +85,7 @@ Hence: process based multitasking.
 
 Here is the part that decides whether the concept is any use to you.
 
-> **Process based multitasking is best suitable at OS level.**
+> Process based multitasking is best suitable **at OS level**.
 
 Picture the conversation that makes this concrete. A client comes to you with a requirement:
 
@@ -152,7 +152,7 @@ Same program. Same 10,000 lines. Same machine. The work now finishes in roughly 
 
 That is thread based multitasking, and here is the definition:
 
-> **Executing several tasks simultaneously, where each task is a separate independent part of the same program, is called thread based multitasking. And each independent part is called a thread.**
+> Executing several tasks simultaneously, where each task is a **separate independent part of the same program**, is called **thread based multitasking**. And each independent part is called a thread.
 
 > [!question]- The two halves are equal, so why isn't 10 hours cleanly halved?
 > Because splitting work is not free, and because nothing in a real program is perfectly independent. The two threads still share one CPU, one heap, one disk. They take turns being scheduled, they compete for memory bandwidth, and there is setup work at the start and joining-up at the end that did not exist in the single-flow version.
@@ -200,7 +200,7 @@ Beyond that, no difference you need to act on.
 
 Whether it is process based or thread based, multitasking exists for one reason.
 
-> **The main objective of multitasking is to reduce the response time of the system and to improve performance.**
+> The main objective of multitasking is to **reduce the response time** of the system and to **improve performance**.
 
 The mechanism behind that sentence is worth making concrete: **you do not want your processor sitting idle.**
 
@@ -421,7 +421,7 @@ Instead of three threads, this produced fifty or sixty of them, each searching o
 
 The rule the case study is really teaching:
 
-> **Wherever independent jobs exist in your application, identify them, and give each one its own thread.**
+> Wherever **independent jobs** exist in your application, identify them, and **give each one its own thread**.
 
 Everything else follows. Multiple threads run multiple jobs at once, total time falls, and performance improves — without changing a line of the logic that does the actual work.
 
@@ -444,7 +444,7 @@ The manpower version of the same arithmetic, which is how it usually gets explai
 
 One last point before the mechanics start, because it explains why this chapter is shorter than it would be in another language.
 
-> **When compared with older languages, developing multithreaded applications in Java is very easy, because Java provides in-built support for multithreading with a rich API.**
+> When compared with older languages, developing multithreaded applications in Java is very easy, because Java provides **in-built support for multithreading** with a rich API.
 
 The split is roughly:
 

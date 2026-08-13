@@ -1,6 +1,6 @@
 The method area and the heap are **per JVM** — one of each, shared by everything running inside. The remaining three memory areas break that pattern completely.
 
-> **For every thread, the JVM will create a separate runtime stack.**
+> For every thread, the JVM will create a **separate runtime stack**.
 
 Per **thread**, not per JVM. That single change of unit is what this note is about, and it carries a consequence the first two areas could not offer.
 
@@ -9,10 +9,10 @@ Per **thread**, not per JVM. That single change of unit is what this note is abo
 # Stack memory
 
 > - **For every thread, the JVM will create a separate runtime stack**, at the time of thread creation.
-> - **All method calls and the corresponding local variables and intermediate results will be stored in the stack.**
+> - All **method calls** and the corresponding **local variables** and intermediate results will be stored in the stack.
 > - **For every method call a separate entry is added to the stack**, and that entry is called a **stack frame** or **activation record**.
-> - **After completing that method call, the corresponding entry is removed from the stack.**
-> - **After completing all method calls, just before terminating the thread, the runtime stack is destroyed by the JVM.**
+> - After completing that method call, the corresponding **entry is removed** from the stack.
+> - After completing all method calls, just before terminating the thread, the **runtime stack is destroyed** by the JVM.
 
 ## Watching one build and unwind
 
@@ -48,7 +48,7 @@ The main thread calls `main`, so `main` goes on first. `main` calls `m1`, so `m1
 
 ## The property the other areas do not have
 
-> **The data stored in the stack can be accessed only by the corresponding thread, and it is not available to other threads. Hence this data is thread safe.**
+> The data stored in the stack can be accessed **only by the corresponding thread**, and it is not available to other threads. Hence this data is **thread safe**.
 
 ```mermaid
 flowchart TB
@@ -68,6 +68,13 @@ flowchart TB
 >
 > Line the three up and the pattern is complete: method area shared → not thread safe; heap shared → not thread safe; **stack not shared → thread safe**. Which is also the practical reason local variables are the safest place to keep anything in concurrent code.
 
+> [!info] Coder Army — **why local variables are not simply kept on the heap** like everything else
+> Every object the program creates goes on the heap, so it is fair to ask why locals get an area of their own.
+>
+> Three reasons, and all of them are about cost. Calling methods is the **most frequent thing a program does**, and a stack gives you push and pop in constant time — no searching for free space, no bookkeeping. Locals are **short-lived by definition**; the instant the method returns every one of them is dead, so releasing them is nothing more than moving the top-of-stack pointer down. And because of that, the **garbage collector never has to look at them at all** — nothing to mark, nothing to trace, no pause.
+>
+> Put locals on the heap instead and you would pay allocation cost on every single call, and hand the collector one more object to chase for something that was guaranteed dead the moment the method returned.
+
 ---
 
 ## Stack frame structure
@@ -81,22 +88,139 @@ Each entry on the stack — each frame — has three parts.
 
 ```mermaid
 flowchart TB
-    subgraph F["<b>one stack frame</b> (one method call)"]
+    subgraph F["<b>one stack frame</b> — created per method call, destroyed on return"]
         direction TB
-        LVA["<b>Local Variable Array</b><br/>parameters + local variables"]
-        OS["<b>Operand Stack</b><br/>the JVM's workspace"]
-        FD["<b>Frame Data</b><br/>constant pool refs + exception table"]
+        LVA["<b>1 · Local variable array</b><br/>parameters and local variables<br/><i>named · addressed by slot number · fixed size</i>"]
+        OS["<b>2 · Operand stack</b><br/>the workspace for calculations<br/><i>nameless · top only · fixed maximum depth</i>"]
+        FD["<b>3 · Frame data</b><br/>constant pool link · exception table<br/><i>metadata — never touched by normal arithmetic</i>"]
     end
 ```
+
+The first two hold **values**; the third holds **information about the method**. Both sizes on the first two are decided by the compiler before the program runs, which is what lets the JVM create a whole frame in one step.
 
 ---
 
 ### 1 · Local variable array
 
-> **It contains all parameters and local variables of the method.**
+> It contains all **parameters and local variables** of the method.
 > **Each slot in the array is of 4 bytes.**
 
-The sizing rules are the examinable part:
+Four facts cover this array. Everything else about it is detail you can derive.
+
+#### 1 — Locals and parameters get slots. Fields do not.
+
+This is the one that decides whether you have understood the area at all. Take a method that touches all four kinds of variable:
+
+```java
+class Frame {
+    static int counter;          // static variable
+    String name;                 // instance variable
+
+    void m1(int i) {             // parameter
+        int local = 5;           // local variable
+        counter++;
+        name = "x";
+    }
+}
+```
+
+`m1` uses all four, but only **two** of them get slots — `i` and `local`. `counter` and `name` are nowhere in the array, even though the method reads and writes both.
+
+The reason is lifetime. The local variable array is **created fresh on every call and thrown away when the call returns**. A static variable belongs to the class and a `name` belongs to an object; both outlive the call, so neither can live in something that short-lived. They are reached where they actually are — the static through the class, the instance variable through the object.
+
+| Variable | In the slot array? | Reached how |
+|---|---|---|
+| `counter` — static | **no** | through the class |
+| `name` — instance | **no** | through the object |
+| `i` — parameter | **yes** | slot 1 |
+| `local` — local | **yes** | slot 2 |
+
+> [!info] Coder Army — **"Java is pass-by-value" is just two slot arrays side by side**
+> ```java
+> public static void main(String[] args) {
+>     int a = 10;
+>     int result = add(a, 20);
+> }
+>
+> static int add(int x, int y) {
+>     return x + y;
+> }
+> ```
+>
+> While `add` is running there are two frames on the stack, each with an array of its own. Both methods are `static`, so neither has a `this` and both start at slot 0:
+>
+> | Frame | slot 0 | slot 1 | slot 2 |
+> |---|---|---|---|
+> | `add` | `x` = 10 | `y` = 20 | — |
+> | `main` | `args` | `a` = 10 | `result` |
+>
+> `a` and `x` both hold `10`, and they are **different slots in different arrays**. The call copied the value across; after that nothing connects them. Assign to `x` inside `add` and `a` is untouched — not because a rule forbids it, but because there is no path from one slot to the other.
+>
+> The same happens when you pass an object: what gets copied into the callee's slot is the **reference**. Two slots then point at one heap object, so changes to that object's fields are visible through both — which is where the endless "Java is pass-by-reference" argument comes from. It is not. The reference itself was passed by value.
+
+#### 2 — Slot 0 is `this`
+
+In an instance method or a constructor, the reference to the current object occupies slot 0, and parameters start at 1. Here is the method from above, unchanged:
+
+```java
+class Frame {
+    static int counter;
+    String name;
+
+    void m1(int i) {
+        int local = 5;
+        counter++;
+        name = "x";
+    }
+}
+```
+
+```
+   Slot  Name   Signature
+      0  this   LFrame;      ← the object the method was called on
+      1  i      I
+      2  local  I
+```
+
+That slot-0 reference is also **how the method reaches its own instance variables**. You wrote `name = "x"`, but the compiler compiles `this.name = "x"` — and if two `Frame` objects exist, the `this` in slot 0 is what says which object's `name` to write into.
+
+Now make the one-word change, `void` to `static void`:
+
+```java
+class Frame {
+    static int counter;
+    String name;
+
+    static void m1(int i) {
+        int local = 5;
+        counter++;
+        name = "x";
+    }
+}
+```
+
+Two things change, and the second is the interesting one.
+
+**Everything shifts down by one.** A static method is called on the class — `Frame.m1(7)` — with no object involved, so nothing goes in slot 0 and the first parameter takes it:
+
+```
+   Slot  Name   Signature
+      0  i      I           ← parameter now at 0, no `this`
+      1  local  I
+```
+
+**And the class no longer compiles.** Measured on JDK 25:
+
+```
+Frame.java:8: error: non-static variable name cannot be referenced from a static context
+        name = "x";
+        ^
+1 error
+```
+
+Which is the rule *"you cannot use an instance variable in a static method"* seen from the memory side. It is not an arbitrary restriction the compiler imposes — reaching `name` means going through an object, the object comes from slot 0, and in a static method **there is nothing in slot 0 to go through**. Note that `counter++` on the line above is untouched: a static variable belongs to the class, so no object is needed to reach it.
+
+#### 3 — `long` and `double` take two slots, everything else takes one
 
 | Type | Slots | Why |
 |---|---|---|
@@ -107,90 +231,169 @@ The sizing rules are the examinable part:
 
 The `byte`/`short`/`char` row is the one people get wrong. A `byte` is one byte and a `char` is two — but neither is *stored* at its natural size. Both are promoted to `int` first, and then take a full slot.
 
-Take this method:
+You can see all of it in the slot numbers. This method, verified on JDK 25, with a `long x` and an `int sum` added inside the body:
 
 ```java
 public void m1(int i, double d, Object o, byte b, float f) { … }
 ```
 
-Verified on JDK 25 with `javap -c -l`, adding a `long x` and an `int sum` inside the body:
-
 ```
-LocalVariableTable:
    Slot  Name   Signature
       0  this   LFrame;
       1  i      I            ← int, 1 slot
       2  d      D            ← double, slots 2 AND 3
-      4  o      LObject;     ← reference, 1 slot   (note: slot 3 was skipped)
+      4  o      LObject;     ← reference   (slot 3 was skipped)
       5  b      B            ← byte, 1 slot
       6  f      F            ← float, 1 slot
       7  x      J            ← long, slots 7 AND 8
-      9  sum    I            ← int          (note: slot 8 was skipped)
+      9  sum    I            ← int         (slot 8 was skipped)
 ```
 
-Every rule is visible in the slot numbers. `d` is at slot 2 and the next variable is at **4**, not 3 — the double consumed both. `x` is at 7 and the next is at **9**. The `byte` gets one whole slot like everything else.
+`d` sits at slot 2 and the next variable is at **4**, not 3 — the double consumed both. `x` is at 7 and the next is at **9**. The `byte` gets one whole slot like everything else.
 
-> [!info] **Slot 0 is `this`.** It is right there in the output and worth knowing: in an instance method, the reference to the current object occupies slot 0, and parameters start at 1. In a `static` method there is no `this`, and parameters start at slot 0.
+#### 4 — The size of the array is fixed at compile time
 
-> [!warning] **"Each slot is 4 bytes" is the specification's model, not the memory your machine uses.** The JVM specification defines slots as 32-bit units, which is what makes the *two consecutive slots for `long`/`double`* rule true, and that rule is what gets examined.
->
-> Physically, a 64-bit JVM does not lay out a 4-byte reference. References are 8 bytes, unless **compressed oops** is on — which it is by default for heaps under 32 GB, and which stores them as 4-byte offsets. So the number happens to come out right much of the time, for a completely different reason than the one given. Learn the slot model for the exam; do not use it to reason about actual memory consumption.
+The compiler works out how many slots the method needs and writes that number into the `.class` file. At runtime the JVM reads it, allocates exactly that many, and starts executing — it never works out scopes, never checks whether a variable is still needed, never resizes.
+
+The compiler also **reuses slots**, which is why the count is often lower than the number of variables you declared. Two methods, identical except for where the braces sit:
+
+```java
+class Scope {
+    void disjoint() {
+        { int a = 1; System.out.println(a); }
+        { int b = 2; System.out.println(b); }
+    }
+
+    void nested() {
+        int a = 1;
+        { int b = 2; System.out.println(b); }
+        System.out.println(a);
+    }
+}
+```
+
+In `disjoint()`, `a`'s block has ended before `b` is declared — no line of code can ever read `a` again, so its slot is free to reuse:
+
+```
+disjoint()                         locals = 2
+   Slot  Name   Signature
+      0  this   LScope;
+      1  a      I           ← alive for bytecodes 2–8
+      1  b      I           ← alive for bytecodes 11–17, SAME slot
+```
+
+In `nested()`, `a` is read again *after* the inner block, so it has to survive across `b`'s whole lifetime. The two overlap, and `b` is pushed to its own slot:
+
+```
+nested()                           locals = 3
+   Slot  Name   Signature
+      0  this   LScope;
+      1  a      I           ← alive across the inner block
+      2  b      I           ← forced into a new slot
+```
+
+Same two variables, same types, one more slot — decided entirely by whether their lifetimes overlap. Measured on JDK 25.
+
+> [!important] **This is the answer to "how does the JVM know how big a stack frame needs to be, before it runs the method?"** It does not work it out. The compiler already computed it and stamped it into the class file, so creating a frame is just *allocate this many slots and go*. That is a large part of why method calls are cheap, and why the JVM can hand every thread its own stack without thinking about it.
 
 ---
 
 ### 2 · Operand stack
 
-> **The JVM uses the operand stack as a workspace.**
-> **Some instructions push values onto the operand stack, and some instructions pop values from it, perform the required operations, and store the result back onto the operand stack.**
+> The JVM uses the operand stack as a **workspace**.
+> Some instructions **push** values onto the operand stack, and some instructions **pop** values from it, perform the required operations, and store the result back onto the operand stack.
 
-The analogy is a competitive exam — I-SET, M-SET, the SCJP exam itself. The invigilator will not let you bring so much as a sheet of paper in. But you still need to do rough work, so the question paper reserves the last two or three pages as **space for rough work**, or the test centre hands you an erasable pad and a pen. You do your intermediate scribbling there, and when the exam ends it is wiped.
 
-**The operand stack is that scratch pad.** A method needs somewhere to hold intermediate results while it computes, and this is it.
+The local variable array holds **declared** variables — one slot each, decided at compile time. But a calculation produces values that were never declared and have no name, and those have to live somewhere for the few instructions between being computed and being used.
 
-### Working through one calculation
+**The operand stack is that scratch space.** It has only two rules:
 
-The instruction sequence, which is close to real bytecode:
+- a value can be **pushed** on top
+- an operation takes the **top one or two values off**, and puts its answer back on top
+
+Nothing is addressed by position. There is no "slot 1" of the operand stack — every operation acts on whatever happens to be on top right now.
+
+Both examples below come from this class, compiled and disassembled on JDK 25:
+
+```java
+class Calc {
+    int add(int a, int b) {
+        int c = a + b;
+        return c;
+    }
+
+    int expr(int a, int b, int c, int d) {
+        return (a + b) * (c - d);
+    }
+}
+```
+
+#### The simple case — depth 2
 
 ```
-iload_0     ← push the value in slot 0
-iload_1     ← push the value in slot 1
-iadd        ← pop two, add them, push the result
-istore_2    ← pop the result, store it into slot 2
+int add(int, int);
+    stack=2, locals=4
+       0: iload_1        push a
+       1: iload_2        push b
+       2: iadd           take the top two off, push a+b
+       3: istore_3       take the top off, store it in slot 3 (c)
+       4: iload_3        push c back on
+       5: ireturn        return the top of the stack
 ```
 
-Local variable array starts with `100` in slot 0 and `90` in slot 1. Operand stack starts empty.
+With `a = 100` and `b = 90`, and remembering slot 0 is `this`:
 
-| Step | Local variable array | Operand stack |
+| after | Local variable array | Operand stack | depth |
+|---|---|---|---|
+| **start** | `[this, 100, 90, —]` | *empty* | 0 |
+| `iload_1` | `[this, 100, 90, —]` | `100` | 1 |
+| `iload_2` | `[this, 100, 90, —]` | `100, 90` | **2 ← peak** |
+| `iadd` | `[this, 100, 90, —]` | `190` | 1 |
+| `istore_3` | `[this, 100, 90, **190**]` | *empty* | 0 |
+| `iload_3` | `[this, 100, 90, 190]` | `190` | 1 |
+| `ireturn` | — | *empty* | 0 |
+
+The deepest it ever gets is **2**, when both operands are on the stack waiting for the `iadd` — which is exactly what `stack=2` says.
+
+The `istore_3` exists **only because you declared `c`**. That is the moment a nameless intermediate becomes a named variable and moves from the scratch space into a slot.
+
+#### The case that needs depth 3
+
+```
+int expr(int, int, int, int);
+    stack=3, locals=5
+       0: iload_1        push a
+       1: iload_2        push b
+       2: iadd
+       3: iload_3        push c
+       4: iload      4   push d
+       6: isub
+       7: imul
+       8: ireturn
+```
+
+| after | Operand stack | depth |
 |---|---|---|
-| **before starting** | `[100, 90, —]` | *empty* |
-| after `iload_0` | `[100, 90, —]` | `100` |
-| after `iload_1` | `[100, 90, —]` | `100, 90` |
-| after `iadd` | `[100, 90, —]` | `190` |
-| after `istore_2` | `[100, 90, **190**]` | *empty* |
+| `iload_1` | `a` | 1 |
+| `iload_2` | `a, b` | 2 |
+| `iadd` | `x`  *(= a+b)* | 1 |
+| `iload_3` | `x, c` | 2 |
+| `iload 4` | **`x, c, d`** | **3 ← peak** |
+| `isub` | `x, y`  *(= c−d)* | 2 |
+| `imul` | `z` | 1 |
+| `ireturn` | *empty* | 0 |
 
-```mermaid
-flowchart LR
-    A["<b>before</b><br/>stack: empty"] --> B["<b>iload_0</b><br/>stack: 100"]
-    B --> C["<b>iload_1</b><br/>stack: 100, 90"]
-    C --> D["<b>iadd</b><br/>stack: 190"]
-    D --> E["<b>istore_2</b><br/>stack: empty<br/>slot 2 = 190"]
-```
+**The peak is `x, c, d`** — and that is the part worth slowing down on. `x` is finished but cannot leave, because the multiply still needs it; meanwhile `c` and `d` have to be pushed one at a time to feed the subtraction. Three values coexist.
 
-Notice the shape: **the operand stack ends empty.** Values were pushed in, work was done, the result was moved back to the local variable array, and the scratch pad was wiped — exactly like the exam pad.
+Note what is *not* the peak: `x` and `y` and the result never exist together. `imul` removes both operands and replaces them with the answer, so depth goes 2 → 1 in a single step.
 
-This is real, not a teaching invention. Compiling `int c = a + b; return c;` and disassembling on JDK 25:
+And notice `expr` has **no `istore` at all**. Nothing is ever written back to a slot — you declared no variable for the intermediates, so each value goes straight from one operation into the next, and the final result is handed to the caller.
 
-```
-public int add(int, int);
-   0: iload_1
-   1: iload_2
-   2: iadd
-   3: istore_3
-   4: iload_3
-   5: ireturn
-```
+> [!important] **Both numbers on the `stack=`/`locals=` line are computed by the compiler and written into the class file.** `locals=5` sizes the local variable array; `stack=3` sizes the operand stack. Neither is worked out at runtime.
+>
+> So when the JVM calls a method it allocates the **whole frame in one step** — *"5 slots and a 3-deep scratch area"* — and then never grows, resizes, or checks anything again. That is why calls are cheap, and it is also why `StackOverflowError` arrives at a repeatable depth: every frame for a given method is exactly the same size, so a fixed stack divided by a fixed frame size gives the same limit every run.
 
-The same four instructions in the same order, differing only in slot numbers because slot 0 is `this`.
+> [!info] **The operand stack always ends empty.** Values are pushed in, work is done, the result is either stored to a slot or returned to the caller, and the scratch space is left clean for whatever comes next.
 
 > [!info] **This is why the JVM is called a *stack-based* virtual machine.** Most physical CPUs are register-based — instructions name the registers to operate on. JVM bytecode names almost nothing; it pushes operands onto a stack and applies operations to whatever is on top. That is what makes the bytecode portable: it does not have to know how many registers your processor has.
 
@@ -198,23 +401,121 @@ The same four instructions in the same order, differing only in slot numbers bec
 
 ### 3 · Frame data
 
-> **Frame data contains all symbolic references (constant pool) related to that method.**
-> **It also contains a reference to the exception table, which provides the corresponding catch block information in the case of exceptions.**
+> Frame data contains all **symbolic references (constant pool)** related to that method.
+> It also contains a reference to the **exception table**, which provides the corresponding catch block information in the case of exceptions.
 
-Two things, and both connect back to earlier material:
+Two things, and both connect back to earlier material.
 
-- **The symbolic references** are the constant pool entries this method uses — the same symbolic references the resolution phase turns into direct references. Each frame carries the ones its own method needs.
-- **The exception table** is how `catch` actually works. When an exception is thrown, the JVM consults this table to find which catch block, if any, covers the instruction that threw. `try`/`catch` is not a runtime search up the call stack for a matching type — it is a table lookup per frame, which is why an untaken `try` block costs essentially nothing.
+**The symbolic references** are the constant pool entries this method uses — the same symbolic references the resolution phase turns into direct references. Each frame carries the ones its own method needs.
+
+**The exception table** is how `catch` actually works, and it is worth seeing, because it is not what most people picture.
+
+#### What `try` compiles to
+
+Two methods doing the same division. One guards it, one does not:
+
+```java
+class Ex {
+    int plain(int a, int b) {
+        return a / b;
+    }
+
+    int guarded(int a, int b) {
+        try {
+            return a / b;
+        } catch (ArithmeticException e) {
+            return -1;
+        }
+    }
+}
+```
+
+Compiled on JDK 25:
+
+```
+int plain(int, int);
+   0: iload_1
+   1: iload_2
+   2: idiv
+   3: ireturn
+```
+
+```
+int guarded(int, int);
+   0: iload_1        ┐
+   1: iload_2        │  byte-for-byte identical to plain
+   2: idiv           │
+   3: ireturn        ┘
+   4: astore_3       ← the catch block, appended after
+   5: iconst_m1
+   6: ireturn
+
+Exception table:
+   from    to  target   type
+      0     3       4   Class java/lang/ArithmeticException
+```
+
+**Not one instruction was added inside the `try`.** The guarded division compiles to exactly the same four instructions as the unguarded one. The catch block is simply appended at offset 4, and normal execution runs straight past it to the `ireturn` at offset 3.
+
+> [!info] **The numbers down the left are byte offsets, not line numbers** — the address of each instruction inside the method's code, counting from 0. Most instructions are one byte, so they usually run 0, 1, 2, 3; one that carries an operand takes more, which is why `expr` above jumps from `4: iload 4` to `6: isub`. Offset 5 is not skipped, it is the second byte of the `iload`. These are exactly the addresses the **PC register** holds, in the next section.
+
+#### Reading the exception table
+
+The whole mechanism is that one row, and it reads as a sentence:
+
+> *"If an `ArithmeticException` is thrown by any instruction between offset **0** and **3**, jump to offset **4**."*
+
+`from` and `to` bound the protected region — that is the `try` block. `target` is where the handler starts — that is the `catch` block. `type` is the exception class the row applies to. Several `catch` clauses on one `try` produce several rows, checked in order.
+
+When an exception is actually thrown, the JVM scans this frame's table for a row matching both the offset and the type, and then does three things:
+
+1. **clears the operand stack**
+2. **pushes the exception object** onto it
+3. **sets the PC to `target`**
+
+Which explains the first instruction of the catch block, `astore_3` — *take the top of the stack and store it in slot 3*. And slot 3 is:
+
+```
+   Slot  Name   Signature
+      0  this   LEx;
+      1  a      I
+      2  b      I
+      3  e      Ljava/lang/ArithmeticException;    ← the catch parameter
+```
+
+So `astore_3` **is** the line `catch (ArithmeticException e)`, binding the thrown object to `e`. The catch parameter is an ordinary local variable in an ordinary slot, no different from any other.
+
+> [!important] **An untaken `try` block costs nothing at runtime.** Zero extra instructions, zero checks — the identical four instructions run whether or not the code is wrapped in `try`. The table is data stored beside the code, consulted only *after* something has already gone wrong. This is why wrapping code in `try` is free and **throwing** is the expensive part, and it is the reason exceptions must never be used for ordinary control flow.
+
+> [!info] Coder Army — **the third thing in frame data: the return address**
+> The list above names two. There is a third, and it is the one that makes returning from a method work at all: the frame records **where to resume in the caller**.
+>
+> The instinct is that this must be unnecessary. The stack is last-in-first-out, so when `m1`'s frame pops, `main`'s frame is sitting right underneath it — surely that is already enough to know where to go back to?
+>
+> It tells you **which method**. It does not tell you **which line**:
+>
+> ```java
+> public static void main(String[] args) {
+>     m1();                            // line 2
+>     System.out.println("hello");     // line 3
+>     m1();                            // line 4
+> }
+> ```
+>
+> Both calls push a frame on top of the same `main` frame, and both pop back into the same `main` frame. But the first has to resume at line 3 and the second at line 5. The stack's shape is **identical** in the two cases, so the shape cannot possibly be what carries the answer — the frame has to have written the address down.
+>
+> So on the pop, that recorded address is loaded into the **PC register**, which is the next section. That is the link between the two: frame data stores where to come back to, and the PC register is what actually goes there.
 
 Frame data is, in one phrase, *metadata* for the frame.
+
 
 ---
 
 # PC registers
 
-> - **For every thread, a separate PC register will be created at the time of thread creation.**
-> - **PC registers contain the address of the current executing instruction.**
-> - **Once instruction execution completes, automatically the PC register will be incremented to hold the address of the next instruction.**
+> - For every thread, a **separate PC register** will be created at the time of thread creation.
+> - PC registers contain the **address of the current executing instruction**.
+> - Once instruction execution completes, automatically the PC register will be **incremented to hold the address of the next instruction**.
 
 PC is **program counter** — the same idea from computer organisation, and for the same reason.
 
@@ -233,8 +534,8 @@ flowchart LR
 
 # Native method stacks
 
-> - **For every thread, the JVM will create a separate native method stack.**
-> - **All native method calls invoked by the thread will be stored in the corresponding native method stack.**
+> - For every thread, the JVM will create a **separate native method stack**.
+> - All **native method calls** invoked by the thread will be stored in the corresponding native method stack.
 
 Same story as the runtime stack, split by what kind of method is being called:
 
@@ -255,7 +556,7 @@ Beyond which stack the entry lands on, there is no difference in behaviour.
 
 This is the summary question, and the whole note has been building to it.
 
-> **Method area and heap area are for the JVM. Stack area, PC registers area and native method stack area are for the thread.**
+> Method area and heap area are **for the JVM**. Stack area, PC registers area and native method stack area are **for the thread**.
 
 | | Count |
 |---|---|
@@ -271,7 +572,7 @@ Ten threads in one JVM → one method area, one heap, and **ten** of each of the
 
 ## Where each kind of variable lives
 
-> **Static variables are stored in the method area, instance variables are stored in the heap area, and local variables are stored in the stack area.**
+> **Static** variables are stored in the method area, **instance** variables are stored in the heap area, and **local** variables are stored in the stack area.
 
 | Variable | Memory area | Because |
 |---|---|---|
