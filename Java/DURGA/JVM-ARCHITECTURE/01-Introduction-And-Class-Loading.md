@@ -28,7 +28,7 @@ flowchart LR
 
 ## Two types of virtual machine
 
-The split matters because only one half of it is a programmer's concern, and the lecture is explicit about which.
+The split matters because only one half of it is a programmer's concern.
 
 > **There are 2 types of virtual machines:**
 > 1. **Hardware based** or **system based** virtual machines
@@ -75,7 +75,7 @@ And the reason anyone does this:
 
 Physically one machine; logically six. The hardware that would sit idle serving one user is shared across all of them.
 
-> [!info] **This is not your job, and the lecture says so plainly.** Carving a machine into logical systems is administration, not programming. It is worth being able to define — it is half of a standard question — but you will not implement it. The second category is the one you work inside every day.
+> [!info] **This is not your job.** Carving a machine into logical systems is administration, not programming. It is worth being able to define — it is half of a standard question — but you will not implement it. The second category is the one you work inside every day.
 
 ### Application based / process based
 
@@ -359,9 +359,40 @@ flowchart LR
 > 6. Methods information
 > 7. Constant pool information — **and so on**
 
-> [!info] **Speaking, he adds an eighth: constructors information.** The written notes list the seven above; in the lecture he names *methods, variables, constructors, modifiers, constant pool*. Both are right — the "and so on" is doing real work, and constructors are certainly in there. It also matters for the demo below, where you can ask a class for its constructors just as easily as its methods.
+> [!info] **There is an eighth worth naming: constructors information.** The seven above are the standard list, but constructors are certainly in there too — the "and so on" is doing real work. It matters for the demo below, where you can ask a class for its constructors just as easily as its methods.
 
-Two details in that list repay attention. **Immediate** parent, not the whole ancestry — each class records only its direct superclass, and the chain is walked one link at a time. And *whether it is a class, an interface or an enum* is stored explicitly, because by the time you are looking at binary data in the method area, nothing about the shape of the file tells you which it was.
+Drawn out, the method area is not one undivided lump — it is **one block of data per loaded class**, and each block holds that same list of items:
+
+```mermaid
+flowchart TB
+    subgraph MA["<b>Method Area</b> — one per JVM"]
+        direction LR
+        subgraph SD["<b>Student</b> — its block of data"]
+            direction TB
+            N["<b>1</b> fully qualified name · <i>Student</i>"]
+            P["<b>2</b> immediate parent · <i>java.lang.Object</i>"]
+            K["<b>3</b> kind · class / interface / enum"]
+            MO["<b>4</b> modifiers · <i>public, final …</i>"]
+            F["<b>5</b> fields info · + the static variables"]
+            ME["<b>6</b> methods info · their bytecode, + constructors"]
+            CP["<b>7</b> <b>constant pool</b> · every name this class mentions"]
+        end
+        subgraph CD["<b>Customer</b> — its block"]
+            X["the same seven items,<br/>for Customer"]
+        end
+        subgraph OD["<b>String</b> — its block"]
+            Y["the same seven items,<br/>for String"]
+        end
+    end
+```
+
+Three details in that list repay attention.
+
+**"Immediate" parent, not the whole ancestry.** Each class records only its direct superclass, and the chain is walked one link at a time.
+
+**Class, interface or enum is stored explicitly.** By the time you are looking at binary data in the method area, nothing about the shape of the file tells you which it was.
+
+**The constant pool lives here too** — it is item 7, part of a class's block, not a separate memory area. Every class gets its own. This matters later: the resolution phase in note `02` works by rewriting entries inside these pools, and knowing they sit in the method area is what makes that phase make sense.
 
 ---
 
@@ -567,11 +598,11 @@ true
 
 > **Note: for every loaded `.class` file only one `Class` object will be created, even though we are using the class multiple times in our application.**
 
-> [!important] **Read the two lines of output separately, because they are guaranteed differently.** The hash code number itself is **not something to memorise or depend on** — it is an identity hash code, and the lecture is right that it varies from system to system. What is fixed, and what the demo is actually showing, is that **both printed values are identical** and that `c1 == c2` is `true`. Those two facts are the result; the number is incidental.
+> [!important] **Read the two lines of output separately, because they are guaranteed differently.** The hash code number itself is **not something to memorise or depend on** — it is an identity hash code and varies from system to system. What is fixed, and what the demo is actually showing, is that **both printed values are identical** and that `c1 == c2` is `true`. Those two facts are the result; the number is incidental.
 >
 > One measured caveat: running this twice on JDK 25 gave the *same* number both times. HotSpot's default identity-hash generator is a per-thread pseudo-random sequence, so a deterministic single-threaded program like this one tends to reproduce it. "Varies from system to system" holds; "varies every run" does not, at least not here — which is exactly the kind of thing that makes an incidental number look like a guarantee if you only ever run it on one machine.
 
-Or as the lecture puts it: *use the `Student` class ten times — how many `Class` objects get created? One.*
+Put as a question: *use the `Student` class ten times — how many `Class` objects get created?* **One.**
 
 ```mermaid
 flowchart TB

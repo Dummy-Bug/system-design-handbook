@@ -107,7 +107,7 @@ The sizing rules are the examinable part:
 
 The `byte`/`short`/`char` row is the one people get wrong. A `byte` is one byte and a `char` is two — but neither is *stored* at its natural size. Both are promoted to `int` first, and then take a full slot.
 
-Take the lecture's method:
+Take this method:
 
 ```java
 public void m1(int i, double d, Object o, byte b, float f) { … }
@@ -130,7 +130,7 @@ LocalVariableTable:
 
 Every rule is visible in the slot numbers. `d` is at slot 2 and the next variable is at **4**, not 3 — the double consumed both. `x` is at 7 and the next is at **9**. The `byte` gets one whole slot like everything else.
 
-> [!info] **Slot 0 is `this`.** Not mentioned in the lecture, but it is right there in the output and worth knowing: in an instance method, the reference to the current object occupies slot 0, and parameters start at 1. In a `static` method there is no `this`, and parameters start at slot 0.
+> [!info] **Slot 0 is `this`.** It is right there in the output and worth knowing: in an instance method, the reference to the current object occupies slot 0, and parameters start at 1. In a `static` method there is no `this`, and parameters start at slot 0.
 
 > [!warning] **"Each slot is 4 bytes" is the specification's model, not the memory your machine uses.** The JVM specification defines slots as 32-bit units, which is what makes the *two consecutive slots for `long`/`double`* rule true, and that rule is what gets examined.
 >
@@ -206,7 +206,7 @@ Two things, and both connect back to earlier material:
 - **The symbolic references** are the constant pool entries this method uses — the same symbolic references the resolution phase turns into direct references. Each frame carries the ones its own method needs.
 - **The exception table** is how `catch` actually works. When an exception is thrown, the JVM consults this table to find which catch block, if any, covers the instruction that threw. `try`/`catch` is not a runtime search up the call stack for a matching type — it is a table lookup per frame, which is why an untaken `try` block costs essentially nothing.
 
-Frame data is, in the lecture's own summary, *something like metadata* for the frame.
+Frame data is, in one phrase, *metadata* for the frame.
 
 ---
 
@@ -322,10 +322,20 @@ Read it as one rule and the diagram writes itself: **every object is on the heap
 
 ---
 
-## What has changed since this lecture
+## Two more things about the stack
 
-The five-area model is straight from the JVM specification and is unchanged. Two additions worth carrying.
+The five-area model above is straight from the JVM specification. Two further facts that the model implies but does not spell out — and both of them you will actually meet.
 
-> [!warning] **The stack has a size limit, and blowing it is a distinct error.** Not covered in the lecture, but it is the thing you will actually meet: infinite recursion pushes frames until the runtime stack cannot grow, and you get **`StackOverflowError`** — not `OutOfMemoryError`, which is the heap's failure. The stack size is set with **`-Xss`** (for example `-Xss512k`), completing the set alongside `-Xmx` and `-Xms` from the heap note.
+> [!warning] **The stack has a size limit, and blowing it is a distinct error.** Infinite recursion pushes frames until the runtime stack cannot grow, and you get **`StackOverflowError`** — *not* `OutOfMemoryError`, which is the heap's failure. Knowing which error names which area is half of diagnosing it.
+>
+> The stack size is set with **`-Xss`**, completing the set alongside `-Xmx` and `-Xms` from the heap note. Measured on JDK 25, recursing until it breaks:
+>
+> ```
+> default      : StackOverflowError at depth  44,550
+> -Xss512k     : StackOverflowError at depth   4,210
+> -Xss4m       : StackOverflowError at depth 162,189
+> ```
+>
+> Roughly linear in the stack size, which is exactly what "one frame per call, stacked" predicts. Note also that the depth is in the tens of thousands by default — deep recursion is fine; *unbounded* recursion is not.
 
-> [!warning] **Virtual threads (Java 21+) change what "one stack per thread" costs.** The rule still holds — every virtual thread has its own stack — but a virtual thread's stack lives on the **heap** as a resizable chunk rather than being a fixed OS-thread stack. That is precisely what makes millions of them affordable, where millions of platform threads would not be. The specification's model is intact; the implementation underneath it now has two very different shapes.
+> [!info] **Virtual threads change what "one stack per thread" costs.** The rule still holds — every virtual thread has its own stack — but a virtual thread's stack lives on the **heap** as a resizable chunk rather than being a fixed operating-system thread stack. That is precisely what makes millions of them affordable, where millions of platform threads would not be. The model is intact; the implementation underneath it now has two very different shapes.

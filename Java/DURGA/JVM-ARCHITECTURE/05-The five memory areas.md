@@ -1,3 +1,51 @@
+Whenever the JVM loads and runs a Java program, it needs memory to store several things like bytecode, objects, variables, etc. Total JVM memory is organized into the following categories:
+ 
+> 1. **Method area**
+> 2. **Heap area**
+> 3. **Stack memory**
+> 4. **PC registers**
+> 5. **Native method stacks**
+
+The motivation is plain if you take the JVM's two jobs literally: *load and run*. Loading needs somewhere to put class data. Running creates objects, which need somewhere to live; and calls methods, whose local variables need somewhere to live. Five areas, each answering one of those needs.
+
+---
+
+## Method area
+
+The first, and the one everything so far has already been using.
+
+> - **Method area will be created at the time of JVM start-up.**
+> - **It will be shared by all threads (global memory).**
+> - **This memory area need not be continuous.**
+> - **Total class-level binary information, including static variables, is stored in the method area.**
+> - **The runtime constant pool of a class lives here too.**
+
+**One method area per JVM** — not per thread, not per class. It is created when the JVM starts and shared by everything running inside it.
+
+```mermaid
+flowchart TB
+    subgraph JVM["<b>one JVM</b>"]
+        MA["<b>Method Area</b> — exactly one<br/>class data · static variables · constant pools"]
+    end
+    T1["thread 1"] --> MA
+    T2["thread 2"] --> MA
+    T3["thread n"] --> MA
+    MA --> NS(["shared by all threads →<br/><b>not thread safe</b>"])
+```
+
+Which leads directly to the consequence worth remembering:
+
+> [!important] **Method area data is not thread safe, and that follows from it being shared.** Multiple threads can reach it simultaneously, and nothing about the area itself prevents them colliding. This is not a defect — it is the same trade the multithreading chapter describes, where shared state is what makes synchronization necessary. It is also the reason a `static` variable is the classic thing to get wrong in concurrent code: every thread in the JVM is looking at the same one.
+
+> [!info] **"Need not be continuous" is easy to skip past.** The method area is not required to be one unbroken block of memory — it can be scattered, and grow in pieces. Nothing you write depends on this, but it is a stated property and it rules out reasoning about the method area as though it were an array.
+
+> [!warning] **"Method area" is the specification's word; a running JVM calls it Metaspace.** Restated here because this is where the area is formally introduced. Metaspace is **native memory**, outside the heap, and it grows on demand — `OutOfMemoryError: Metaspace` means *too many classes loaded*, and `-XX:MaxMetaspaceSize` caps it.
+>
+> One detail that contradicts the diagram most people draw: the **values** of static fields sit in the `Class` object on the **heap**, even though the specification places static variables in the method area. Method area owns the declaration; the heap holds the value — the same split as note `01`.
+
+---
+
+
 The method area holds class-level data. The second memory area holds the thing you actually spend your time thinking about — objects.
 
 > [!info] **From a programmer's point of view, the heap is the important one.** The method area is mostly the JVM's business. The heap is where everything you create lives, where `OutOfMemoryError` comes from, and the only one of the five areas you can inspect and resize from your own code — which is the second half of this note.
@@ -78,7 +126,7 @@ Once you have it, three methods:
 
 ## What the three numbers actually mean
 
-The names are close enough to be confusing, and the lecture separates them with a classroom.
+The names are close enough to be confusing. A classroom separates them cleanly.
 
 A room has **capacity for 500 people**. But you have only put out **100 chairs** so far — if those fill up, you will think about bringing more. Right now **60 people are sitting**, so **40 chairs are empty**.
 
@@ -102,7 +150,7 @@ And the fourth number, which has no method of its own because you compute it:
 
 The 60 people sitting down. Note it is measured against **total**, not max — you cannot have consumed memory that was never allocated.
 
-> [!important] **`totalMemory()` is not the total the heap can be.** It reads like it should be the maximum, and it is not — `maxMemory()` is. `totalMemory()` is what is allocated *at this moment*, and it grows towards `maxMemory()` as the program needs more. The lecture stumbles over this live and corrects itself: the concept is *initial memory*, but the method is named `totalMemory`.
+> [!important] **`totalMemory()` is not the total the heap can be.** It reads like it should be the maximum, and it is not — `maxMemory()` is. `totalMemory()` is what is allocated *at this moment*, and it grows towards `maxMemory()` as the program needs more. The concept is **initial memory**; the method is simply named `totalMemory`, and that mismatch is the whole trap.
 
 ## The program
 
@@ -122,7 +170,7 @@ class HeapDemo {
 
 Without the division you get raw **bytes** — numbers in the hundreds of millions, which nobody can read. `1 MB = 1024 × 1024 bytes`, so dividing by that gives megabytes.
 
-> [!info] **Use `double` rather than `long` for the divisor if you want the fractional part.** With `long` you get integer division and `0` for consumed memory; with `double` you see `0.36` and can tell the difference between "nothing" and "a little". The lecture switches from one to the other on screen to make exactly this point.
+> [!info] **Use `double` rather than `long` for the divisor if you want the fractional part.** With `long` you get integer division and `0` for consumed memory; with `double` you see `0.36` and can tell the difference between "nothing" and "a little".
 
 ## Measured, on JDK 25
 
@@ -133,11 +181,9 @@ Free Memory     : 254.95
 Consumed Memory : 3.04
 ```
 
-> [!warning] **The numbers in the lecture are unrecognisable today, and the reason is worth knowing.** He measures roughly **247 MB** max; the written notes go further and state *"the default heap size is 64"*. On this machine the default max heap is **4096 MB**.
+> [!important] **The default maximum heap is a fraction of the machine, not a fixed number.** A JVM takes roughly **1/4 of physical RAM** as its default `maxMemory()`. This machine has 16 GB, and a quarter of that is the 4096 MB above — which is why the figure will be different on yours.
 >
-> Nothing is broken — the **default changed from a fixed number to a fraction of the machine**. A modern JVM takes roughly **1/4 of physical RAM** as the default maximum heap. This machine has 16 GB; a quarter of that is 4 GB, which is exactly what came out.
->
-> So do not memorise any of these figures — not his and not mine. The lecture says it itself: *these numbers vary from system to system and time to time.* What is stable is the **relationship** — max ≥ total ≥ free — and that is what a question is really testing.
+> So do not memorise any of these numbers. They vary from system to system and run to run. What is stable is the **relationship** — `max ≥ total ≥ free` — and that is what a question is actually testing.
 
 ---
 
@@ -169,12 +215,12 @@ Verified on JDK 25 — and each flag moves exactly the number it should, leaving
 
 That table is the demonstration in one glance: `-Xmx` moves the max and nothing else; `-Xms` moves the total and nothing else; together they set both.
 
-> [!info] **You asked for 64 and got 66 — that is normal.** The lecture sees the same thing, reporting `61.875` after asking for 64 MB, and calls it "approximately". The JVM rounds heap sizes to alignment boundaries and to whole numbers of regions in the garbage collector, so the figure you get back is near what you asked for rather than exactly it. Ask for `512m` for the *maximum* and you do tend to get 512 exactly, as above — it is the initial size that gets nudged.
+> [!info] **You asked for 64 and got 66 — that is normal.** The JVM rounds heap sizes to alignment boundaries and to whole numbers of regions in the garbage collector, so the figure you get back is near what you asked for rather than exactly it. Ask for `512m` for the *maximum* and you do tend to get 512 exactly, as above — it is the initial size that gets nudged.
 
 > [!info] **`-X` means non-standard.** Every flag starting with `-X` is officially outside the Java specification and not guaranteed across JVM implementations. In practice `-Xmx` and `-Xms` are supported everywhere and are the two most-used flags in production Java — but that is convention, not a promise, and it is why they look different from ordinary options.
 
 > [!question]- Why would you ever set the minimum heap size *up*?
-> To stop the JVM growing the heap in steps while your application warms up. Each growth is work, and it happens under load at exactly the wrong moment. Setting `-Xms` equal to `-Xmx` is a common production pattern for long-running servers — the heap is allocated once at start-up, at full size, and never has to be resized again. The lecture presents the flag as "increase or decrease the heap"; this is the reason it is worth reaching for.
+> To stop the JVM growing the heap in steps while your application warms up. Each growth is work, and it happens under load at exactly the wrong moment. Setting `-Xms` equal to `-Xmx` is a common production pattern for long-running servers — the heap is allocated once at start-up, at full size, and never has to be resized again. That is the reason the flag is worth reaching for, beyond simply "increase or decrease the heap".
 
 ---
 

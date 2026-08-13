@@ -40,9 +40,9 @@ The first call does the work you would expect. The second call does **exactly th
 
 > **The problem with the interpreter is that it interprets every time, even the same method invoked multiple times, which reduces performance of the system.**
 
-The obvious objection is the right one, and the lecture asks it out loud: *why not convert it into machine code only once?*
+The obvious objection is the right one: *why not convert it into machine code only once?*
 
-> **To overcome this problem, SUN people introduced JIT compilers in the 1.1 version.**
+This is what the **JIT compiler** exists to fix.
 
 ---
 
@@ -101,7 +101,7 @@ A method that is merely hot gets compiled. A method that stays hot gets compiled
 
 > **Profiler, which is part of the JIT compiler, is responsible to identify HOT SPOTS.**
 
-> [!info] **This is where the name "HotSpot JVM" comes from.** The standard JVM you are running is called HotSpot precisely because this is its defining trick: watch the program, find the hot spots, compile those. The lecture mentions the JVM-with-JIT-ability being called HotSpot in passing — it is worth making explicit, because "HotSpot" appears in every stack trace and error message you will ever read.
+> [!info] **This is where the name "HotSpot JVM" comes from.** The standard JVM you are running is called HotSpot precisely because this is its defining trick: watch the program, find the hot spots, compile those. Worth making explicit, because "HotSpot" appears in every stack trace and error message you will ever read.
 
 ## Inside the JIT compiler
 
@@ -116,7 +116,7 @@ flowchart LR
 
 The three stages are the standard compiler pipeline — the same shape as any compiler course: an intermediate representation, an optimisation pass over it, then target code generation.
 
-> [!info] **The execution engine holds more than these two.** The lecture notes the **garbage collector** and the **security manager** as further components living in the same area. The garbage collector gets its own chapter; the security manager is the one that has since been removed from Java entirely (permanently disabled in Java 24, as flagged in the linking note).
+> [!info] **The execution engine holds more than these two.** The **garbage collector** lives in the same area, and it gets a chapter of its own later in this course.
 
 ---
 
@@ -144,11 +144,11 @@ So the flow is: execution engine → JNI → native method library, and the info
 
 ---
 
-# What has changed since this lecture
+# Tiered compilation — how it really runs
 
-The model — interpret first, count invocations, compile the hot ones — is exactly how HotSpot still works. What has changed is that there is no longer a *single* threshold or a *single* compiler.
+The model above — interpret first, count invocations, compile the hot ones — is exactly how HotSpot works. The one simplification is the counting: there is not a *single* threshold or a *single* compiler, but a ladder of both.
 
-> [!warning] **There are two JIT compilers, and a method is typically compiled twice.** Modern HotSpot runs **tiered compilation**, on by default (verified: `TieredCompilation = true` on JDK 25). Instead of one threshold, there is a ladder:
+> [!important] **There are two JIT compilers, and a hot method is typically compiled twice.** HotSpot runs **tiered compilation**, on by default (verified: `TieredCompilation = true` on JDK 25). Instead of one threshold, there is a ladder:
 >
 > | Tier | What runs it | Purpose |
 > |---|---|---|
@@ -174,9 +174,9 @@ The model — interpret first, count invocations, compile the hot ones — is ex
 >
 > The same method compiled at **level 3** (C1), then at **level 4** (C2), and then the level-3 version thrown away — *made not entrant* — because the better version had replaced it.
 >
-> That third line is the lecture's "advanced JIT compilers recompile for more optimized code" happening in front of you. It is not an exotic feature any more; it is the default.
+> That third line is "recompile the hot method for more optimised code" happening in front of you. It is not an exotic feature — it is the default path for anything that stays hot.
 
-> [!warning] **The lecture's threshold of "three calls" is illustrative, not real.** It is a fine number for a whiteboard. The real figures are in the hundreds to thousands, as measured above, and the lecture is right that they vary — between JVMs, between tiers, and with the flags in use. Never quote a specific number as *the* threshold.
+> [!warning] **The "three calls" threshold in the walkthrough above is illustrative, not real.** It is a fine number for a whiteboard. The real figures are in the hundreds to thousands, as measured above, and they vary — between JVMs, between tiers, and with the flags in use. Never quote a specific number as *the* threshold.
 
 > [!info] **The interpreter is not merely a slow fallback.** It also does the profiling that makes good compilation possible — recording which branches are taken, which types actually show up at a call site. C2 uses that to make optimisations a static compiler could never justify, such as inlining a virtual call because only one implementation has ever been seen. That is why "interpret first, then compile" beats "compile everything up front", and it is a large part of why a long-running JVM can match or beat statically compiled code.
 

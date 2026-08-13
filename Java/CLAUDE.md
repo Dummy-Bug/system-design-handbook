@@ -99,6 +99,32 @@ never trim content to hit a line count.
 - **Keep code together with the analysis of its output.** He reads linearly and will not scroll back
   and forth to match a program to the discussion of its results.
 
-## Rule 6 — Write only after confirmation
+## Rule 6 — Deep dives go in a collapsible callout
+
+Anything that is **mechanism, evidence or background rather than the thing being taught** goes in a
+collapsed callout, so he can read the note straight through and open the depth only when he wants it.
+
+```markdown
+> [!question]- **Deep dive — <what is inside>.** <one clause on why he might open it>
+> …the whole thing, every line prefixed with `>` …
+```
+
+- **`[!question]-`** for *why does it work this way* — mechanism, derivation, background.
+  **`[!example]-`** for *here is it happening* — a demo, a thing broken on purpose, measured output.
+  The trailing `-` is what makes it start collapsed. Without it the callout is always open.
+- **The title must say what is inside**, so he can decide without opening. Not "Deep dive"; rather
+  "Deep dive — why *these* five default values, and why the default `char` is not a space."
+- **The visible layer must stand alone.** Collapse it and the section still teaches the topic —
+  the must-know sentence stays outside, in the table or a short `[!important]`.
+- **Never nest a collapsible inside a collapsible.** Flatten inner callouts to `#####` sub-heads or
+  bold lead-ins.
+- **Never leave a heading outside pointing at collapsed content** — an `###` above a collapsed block
+  shows up in the Obsidian outline and leads nowhere. Put the heading inside, or drop it.
+
+What earns a deep dive: the bit-level reason behind a rule, a startup/ordering trace, a
+multi-step failure mechanism, a "two objections that make this sound impossible" walk-through.
+What does not: the definition, the rule itself, the summary table, anything he would be asked directly.
+
+## Rule 7 — Write only after confirmation
 
 Do not create or edit note files until the user has explicitly asked for it.
