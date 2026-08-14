@@ -160,13 +160,33 @@ telling him the command.
 
 ## Status
 
-**Three modules written**, through class 2 (2026-08-09):
+**Two folders written**, through class 3 (2026-08-13):
 
-- `01-Introduction-To-DevOps/` — 7 notes
-- `02-Linux-Fundamentals/` — 6 notes
-- `03-Linux-Filesystem-And-Deployment/` — 8 notes
+- `01-Introduction-To-DevOps/` — 8 notes
+- `Linux/` — 7 notes, 2,675 lines
+
+**Linux is finished.** Class 4 begins Git and GitHub, taught in depth — stash, cherry-pick, rebase vs merge
+were all named as targets.
 
 All mermaid, no images yet. Classes run **Wednesday and Saturday, 9:00 pm, 2–2½ hours**.
+
+> [!important] **`Linux/` is flat and unnumbered by design, and it is the pattern to follow from here.**
+>
+> It replaced three numbered folders (`02-Linux-Fundamentals`, `03-Linux-Filesystem-And-Deployment`,
+> `04-Users-Permissions-And-Processes`) totalling 19 small notes, merged on 2026-08-14 into 7 substantial
+> ones. **The user's standing preferences, learned here:**
+>
+> - **One folder per subject, not per class.** Three classes of Linux is one subject.
+> - **No `00-Syllabus.md` files.** He deleted them. Put currency checks and scope caveats inside the notes
+>   they belong to.
+> - **Merge rather than split.** A 500–700 line note is fine; a 60-line one is not. "500 is not that much
+>   to read."
+> - **Notes are numbered in CLASS ORDER, not learning order — until he says otherwise.** He needs to be
+>   able to map a note back to the recording it came from while he is still revising. Every note carries
+>   a `*Source: class N — date, recording parts X–Y.*` footer for exactly that reason. **Resequencing for
+>   pedagogy is a separate, later decision, and it is his to make** — do not pre-empt it.
+> - **When merging, remove duplication only.** Never compress an explanation to save space — breadth and
+>   depth must survive the merge intact.
 
 Running status, the per-part transcript table, the course-repo caveats and the **playback-speed
 rules** (recording at 2× destroys a transcript, and the usual density check misses it) live in
