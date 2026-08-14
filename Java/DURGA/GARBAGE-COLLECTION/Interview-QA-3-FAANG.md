@@ -1,10 +1,12 @@
-Interview questions on **garbage collection specifically**, as asked at FAANG and FAANG-adjacent companies for a backend role at 3–5 years.
+Question-only practice sheet for **garbage collection specifically** at FAANGM and adjacent top-tier companies for backend roles at 3–5 years. The FAANGM label is a company bucket, not proof that every listed prompt came from a FAANG interview.
 
 > [!important] **What changes at this tier.** Definitions are assumed. The time goes on **trade-offs, measurement and constraint**, and three things are scored: do you reason from first principles, do you attach **numbers** to claims, and do you volunteer *when not to do this*. "It depends" is the right opening only if the next sentence says **what it depends on**.
 >
 > They will also follow you down until you hit your limit, deliberately. Hitting it is fine. Bluffing past it is not — and GC is a topic where bluffing is unusually easy to detect, because the follow-up is always "what did you measure?"
 
 > [!info] **How the ordering was decided, honestly.** No public dataset exists, and this tier is the least documented of the three — published lists are mostly reconstruction. Judgement from sources surveyed in August 2026, weighted toward 2025–2026. Treat the bands as **approximate here**, more so than in the other two files.
+
+> [!note] **Company taxonomy and evidence boundary.** See the [interview company evidence map](../INTERVIEW-TIER-MAP.md). Publicis Sapient and Swiggy are included as adjacent product-company evidence, not as literal FAANGM. Documentation is used only for technical fact-checking.
 
 **Coverage markers:** ✅ covered · ⚠️ partial · ❌ gap.
 
@@ -16,7 +18,6 @@ Interview questions on **garbage collection specifically**, as asked at FAANG an
 
 - **Tests:** whether you connect the collector to user-visible latency, and whether you *rule things out* before acting.
 - **Notes:** ❌ **gap** — GC logs, pause distribution, correlating pause timestamps against the latency spikes.
-- **The move that scores:** you try to **disprove** it first. Periodic p99 spikes are as often a downstream timeout, a connection pool, or a scheduled job as they are a collector.
 
 ### 2. G1 versus ZGC — pick one for this service and justify it.
 
@@ -28,13 +29,11 @@ Interview questions on **garbage collection specifically**, as asked at FAANG an
 
 - **Tests:** GC knowledge applied to design under a hard constraint. The flagship question of this tier.
 - **Notes:** ❌ **gap** — bounded size versus soft references, eviction policy, and why `WeakHashMap` is almost never the right answer for a cache.
-- **The move that scores:** you bound it explicitly and say how you'd **size** the bound, rather than reaching for a reference type and hoping the collector saves you. Soft references defer the problem to the collector's discretion; that is not a capacity plan.
 
 ### 4. Allocation rate versus live set — which drives collection cost?
 
 - **Tests:** the sharpest single discriminator on this list.
 - **Notes:** ❌ **gap.**
-- **The answer:** young-collection cost tracks **what survives**, not what was allocated. A high-churn service with a small live set can be perfectly healthy; a low-churn service with a large live set can be in trouble.
 
 ### 5. Walk me from `new Foo()` to the object being reclaimed.
 
@@ -51,7 +50,6 @@ Interview questions on **garbage collection specifically**, as asked at FAANG an
 
 - **Tests:** rigour. The word *prove* is doing the work.
 - **Notes:** ❌ **gap.** Two heap dumps separated in time, compare retained sets, find what grows; or trend the live set after full collections across cycles.
-- **The move that scores:** you say what would **disprove** it too.
 
 ---
 
@@ -117,7 +115,6 @@ Interview questions on **garbage collection specifically**, as asked at FAANG an
 ### 19. What does the JVM guarantee about collector behaviour?
 
 - **Notes:** ✅ `06` — almost nothing, and the note lists the five questions with no guaranteed answer, then demonstrates the fifth (whether all eligible objects are destroyed) with five identical runs producing five different results.
-- **This is a strong answer** because it is a *measured* argument for "no guarantees" rather than an assertion.
 
 ### 20. String deduplication and compact strings — what are they?
 
@@ -140,6 +137,10 @@ At this tier the gap list is longer than the covered list, which is the honest r
 | 7 | **Heap sizing trade-offs** (Q18) | medium |
 | 8 | **String dedup / compact strings** (Q20) | low |
 
-> [!important] **What our notes *do* answer well here, and it is more than you'd expect.** Why finalization was removed (Q6) — argued from two measured programs, which is a genuinely strong answer. The once-only rule and its danger (Q13). Class loader leaks and Metaspace exhaustion (Q14). What `System.gc()` really does, verified in the JDK sources (Q15). Heap shrinking after collection (Q17). And the no-guarantees answer backed by measurement (Q19).
->
-> Six solid answers out of twenty. The other fourteen need the collector material that does not exist on disk yet.
+
+## Company-reported evidence
+
+- **Publicis Sapient:** the Java round explicitly covered G1, ZGC, heap structure, GC tuning, and stop-the-world events. [Report](https://leetcode.com/discuss/post/7509276/)
+- **Swiggy SDE-1:** the Java fundamentals round included JVM and garbage collection. [Report](https://leetcode.com/discuss/post/7642548/)
+
+These are adjacent product-company reports, not proof that the full question set is asked at a particular FAANGM company. The remaining advanced prompts are supplemental practice prompts.

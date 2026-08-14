@@ -1,8 +1,10 @@
-Interview questions on **exception handling**, as asked at FAANG and FAANG-adjacent companies for a backend role at 3–5 years.
+Question-only practice sheet for **exception handling** at FAANGM and adjacent top-tier companies for backend roles at 3–5 years. The FAANGM label is a company bucket, not proof that every listed prompt came from a FAANG interview.
 
 > [!important] **What changes at this tier.** Definitions are assumed. The interview moves to cost, failure semantics, API contracts, asynchronous boundaries, retry behavior, and what the system should do when recovery is not realistic.
 
 > [!info] **How the ordering was decided, honestly.** There is no public dataset of interview question frequency, and this tier is the least documented. This ordering is reconstructed from advanced Java interview themes surveyed in August 2026. Treat the **bands** as approximate here.
+
+> [!note] **Company taxonomy and evidence boundary.** See the [interview company evidence map](../INTERVIEW-TIER-MAP.md). Atlassian and Rippling are adjacent top-tier product companies; Razorpay is India top-tier product. Documentation is used only for technical fact-checking.
 
 **Coverage markers:** ✅ covered · ⚠️ partial · ❌ gap in our notes.
 
@@ -126,3 +128,9 @@ The current notes answer JVM exception mechanics, suppressed exceptions, class i
 - [Java Language Specification: Exceptions](https://docs.oracle.com/javase/specs/jls/se26/html/jls-11.html)
 - [Oracle: Try-with-resources](https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html)
 - [Oracle: Unchecked Exceptions](https://docs.oracle.com/javase/tutorial/essential/exceptions/runtime.html)
+
+## Company-reported evidence
+
+- **Atlassian P50:** an LLD interview report explicitly says exception handling was evaluated along with tests and corner cases. [Report](https://leetcode.com/discuss/interview-experience/6399521/Atlassian-P50-or-Jan-2025/)
+
+The runtime-cost, error-model, retry, and async prompts above are supplemental advanced prompts unless a named report is attached to the individual question.

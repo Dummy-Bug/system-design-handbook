@@ -1,8 +1,10 @@
-Interview questions on **garbage collection specifically**, as asked by mid-tier product companies for a backend role at 3–5 years.
+Question-only practice sheet for **garbage collection specifically** for product-company backend roles at 3–5 years. Company evidence and supplemental prompts are separated below; “mid-tier” is not treated as an official public ranking.
 
 > [!important] **What changes at this tier.** They have real traffic and somebody who has been paged for a GC pause. The bar moves from *what is it* to **explain the mechanism, then debug it**. Nearly every question here has a silent second half — *"and how would you find that?"* — and that is what is actually scored. This is also where the chapter's own boundary starts to hurt: Durga Sir teaches eligibility, requesting and finalization, and this tier asks mostly about the collector itself.
 
 > [!info] **How the ordering was decided, honestly.** No public dataset of question frequency exists. This is my judgement from sources surveyed in August 2026, weighted toward 2025–2026 material. Bands are reliable; order within a band is approximate.
+
+> [!note] **Evidence boundary.** See the [interview company evidence map](../INTERVIEW-TIER-MAP.md). Questions marked company-reported are tied to a named report; the rest are supplemental interview-bank prompts.
 
 **Coverage markers:** ✅ covered · ⚠️ partial · ❌ gap.
 
@@ -14,12 +16,10 @@ Interview questions on **garbage collection specifically**, as asked by mid-tier
 
 - **Tests:** the single most-asked GC question at this tier.
 - **Notes:** ❌ **gap**, and not a fixable one from this course — I searched the chapter PDF and there are zero hits for *generation*, *survivor*, *Eden*.
-- **The reasoning behind it:** most objects die young, so collecting a small young region cheaply and often beats scanning the whole heap. Objects that survive enough collections are promoted to the old generation.
 
 ### 2. Minor GC versus Major/Full GC — which one hurts?
 
 - **Notes:** ❌ **gap**, same source problem.
-- **The answer:** minor collections are frequent, cheap and touch only the young generation; a full collection touches everything and is where the multi-second pauses live.
 
 ### 3. Which garbage collector does your application use, and why?
 
@@ -31,7 +31,6 @@ Interview questions on **garbage collection specifically**, as asked by mid-tier
 
 - **Tests:** methodology. **Highest-value question in this file.**
 - **Notes:** ⚠️ `06` explains what a leak is; the **investigation is a gap** — enabling `-XX:+HeapDumpOnOutOfMemoryError`, capturing a dump from a live process, opening it in Eclipse MAT, reading the dominator tree.
-- **What separates a good answer:** you look for the **retaining path**, not the biggest object. The biggest object is usually innocent.
 
 ### 5. What is a stop-the-world pause?
 
@@ -59,7 +58,6 @@ Interview questions on **garbage collection specifically**, as asked by mid-tier
 ### 9. Can you force garbage collection?
 
 - **Notes:** ✅ `03` — request only. Plus `System.gc()` delegates to `Runtime.getRuntime().gc()`, **verified in the JDK 25 sources** in that note.
-- **The senior half of the answer:** you should not call it in production at all, and `-XX:+DisableExplicitGC` exists precisely so library code cannot.
 
 ---
 
@@ -113,12 +111,10 @@ Interview questions on **garbage collection specifically**, as asked by mid-tier
 ### 19. What algorithms do collectors use?
 
 - **Notes:** ⚠️ `06` names mark-and-sweep and correctly says it is vendor dependent. **Mark-compact and copying are a gap.**
-- **The shape of a good answer:** marking live objects is the shared foundation; what differs is what happens next — sweep leaves fragmentation, compact removes it at the cost of moving objects, copying is what young-generation collection actually uses.
 
 ### 20. Why does `freeMemory()` sometimes go *down* after a collection?
 
 - **Notes:** ✅ `03` — measured on JDK 25. G1 uncommits heap back to the OS, so `totalMemory()` shrinks and free shrinks with it, even though **used** memory fell.
-- **A genuinely good answer here is memorable**, because most candidates have never looked closely enough to have seen it.
 
 ### 21. What is `Cleaner` and how is it different from a finalizer?
 
@@ -148,3 +144,10 @@ Ranked by cost at this tier.
 | 10 | **Mark-compact and copying** (Q19), **`Cleaner` mechanics** (Q21) | mixed |
 
 > [!warning] **The pattern.** Our notes are strong on everything the *programmer* controls — eligibility, requesting, finalization, leaks — and near-empty on the *collector itself*. That is not a defect in the notes; it is the shape of the course. This tier asks about both roughly equally, so about half these questions are currently unanswerable from what is written.
+
+## Company-reported evidence
+
+- **Swiggy SDE-1:** the Java-focused fundamentals round included JVM and garbage collection. [Report](https://leetcode.com/discuss/post/7642548/)
+- **Walmart SWE III, 2.9 years:** the core-Java round explicitly asked about garbage collection. [Report](https://leetcode.com/discuss/post/6597820/walmart-swe-iii-interview-experience-ind-nvna/)
+
+The collector-selection, tooling, and production-debugging prompts beyond those reports are supplemental practice prompts.

@@ -1,8 +1,10 @@
-Interview questions on **exception handling**, as asked by small startups and early-stage product teams for a backend role at 3–5 years.
+Question-only practice sheet for **exception handling** for backend roles at 3–5 years. Company evidence and supplemental prompts are separated below; this file does not claim that every question was asked by a small startup.
 
 > [!important] **What a startup is actually testing with these.** Not obscure syntax. They want to know whether you will notice failures, preserve useful diagnostics, and avoid turning a real bug into a silent success.
 
 > [!info] **How the ordering was decided, honestly.** There is no public dataset of interview question frequency. This ordering is my judgement from the interview-prep sources surveyed in August 2026. Treat the **bands** as reliable and the **order inside a band** as approximate.
+
+> [!note] **Evidence boundary.** See the [interview company evidence map](../INTERVIEW-TIER-MAP.md). Questions marked company-reported are tied to a named report; the rest are supplemental interview-bank prompts.
 
 **Coverage markers** point at our own notes:
 
@@ -144,3 +146,10 @@ The existing notes answer the language fundamentals well. The main gaps are prev
 - [Java Language Specification: Exceptions](https://docs.oracle.com/javase/specs/jls/se26/html/jls-11.html)
 - [Oracle: The `throw` Statement](https://docs.oracle.com/javase/tutorial/essential/exceptions/throw.html)
 - [Oracle: The `throws` Clause](https://docs.oracle.com/javase/tutorial/essential/exceptions/declaring.html)
+
+## Company-reported evidence
+
+- **Oracle, 2 YOE:** a Java interview report lists exceptions, custom exceptions, and checked versus unchecked exceptions. [Report](https://www.geeksforgeeks.org/interview-experiences/oracle-interview-experience-2-years-experienced/)
+- **Atlassian P50:** an LLD interview report explicitly says exception handling was evaluated along with tests and corner cases. [Report](https://leetcode.com/discuss/interview-experience/6399521/Atlassian-P50-or-Jan-2025/)
+
+The remaining prompts are supplemental practice prompts unless a company report is attached to the individual question.

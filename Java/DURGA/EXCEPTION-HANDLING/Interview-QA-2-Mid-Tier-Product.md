@@ -1,8 +1,10 @@
-Interview questions on **exception handling**, as asked by mid-tier product companies for a backend role at 3–5 years.
+Question-only practice sheet for **exception handling** for product-company backend roles at 3–5 years. Company evidence and supplemental prompts are separated below; “mid-tier” is not treated as an official public ranking.
 
 > [!important] **What this tier is testing.** They have real traffic and real support incidents. The bar moves from *what does the keyword do?* to **where should an exception be handled, translated, logged, retried, or allowed to propagate across a service?**
 
 > [!info] **How the ordering was decided, honestly.** There is no public dataset of interview question frequency. This ordering is my judgement from the interview-prep sources surveyed in August 2026. Treat the **bands** as reliable and the **order inside a band** as approximate.
+
+> [!note] **Evidence boundary.** See the [interview company evidence map](../INTERVIEW-TIER-MAP.md). Questions marked company-reported are tied to a named report; the rest are supplemental interview-bank prompts.
 
 **Coverage markers:** ✅ covered · ⚠️ partial · ❌ gap in our notes.
 
@@ -160,3 +162,10 @@ The existing notes are strongest on propagation, `finally`, try-with-resources, 
 - [Java Language Specification: Exceptions](https://docs.oracle.com/javase/specs/jls/se26/html/jls-11.html)
 - [Oracle: The `try` Statement](https://docs.oracle.com/javase/tutorial/essential/exceptions/try.html)
 - [Oracle: Try-with-resources](https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html)
+
+## Company-reported evidence
+
+- **Atlassian P50:** an LLD interview report explicitly says exception handling was evaluated along with tests and corner cases. [Report](https://leetcode.com/discuss/interview-experience/6399521/Atlassian-P50-or-Jan-2025/)
+- **Oracle, 2 YOE:** a Java interview report lists exceptions, custom exceptions, and checked versus unchecked exceptions. [Report](https://www.geeksforgeeks.org/interview-experiences/oracle-interview-experience-2-years-experienced/)
+
+The service-boundary, retry, async, and observability prompts beyond those reports are supplemental practice prompts.

@@ -1,8 +1,10 @@
-Interview questions on **garbage collection specifically**, as asked by small startups and early-stage product teams for a backend role at 3–5 years.
+Question-only practice sheet for **garbage collection specifically** for backend roles at 3–5 years. Company evidence and supplemental prompts are separated below; this file does not claim that every question was asked by a small startup.
 
 > [!important] **What a startup is testing here.** They have no platform team and nobody who tunes JVMs. Every question below is a proxy for one worry: *will this person write code that fills the heap and take production down.* Plain, confident answers win. "I've never tuned a collector, but here's how I'd approach a leak" is perfectly acceptable at this tier — it is not at the other two.
 
 > [!info] **How the ordering was decided, honestly.** There is no public dataset of question frequency. This is my judgement from how often each recurs across the interview-prep sources surveyed in August 2026, weighted toward 2025–2026 material. Treat the **bands** as reliable, the order inside a band as approximate.
+
+> [!note] **Evidence boundary.** See the [interview company evidence map](../INTERVIEW-TIER-MAP.md). Questions marked company-reported are tied to a named report; the rest are supplemental interview-bank prompts.
 
 **Coverage markers:** ✅ covered in the note listed · ⚠️ partial · ❌ gap in our notes.
 
@@ -20,7 +22,6 @@ Interview questions on **garbage collection specifically**, as asked by small st
 
 - **Tests:** whether you understand reachability rather than reciting a phrase.
 - **Notes:** ✅ `02` — an object is eligible if and only if it has no references.
-- **The better answer:** *"can it be reached?"* rather than *"does it have a reference?"* — those diverge in the Island of Isolation case, which is worth a sentence if the conversation allows.
 
 ### 3. Can you force garbage collection? What does `System.gc()` do?
 
@@ -32,7 +33,6 @@ Interview questions on **garbage collection specifically**, as asked by small st
 
 - **Tests:** production exposure. **The most important question in this file** — the one they actually care about, and the only one where a story beats a definition.
 - **Notes:** ⚠️ `06` covers what a memory leak *is*; the **diagnosis workflow is a gap**.
-- **What they want:** you found what was retaining memory, rather than only raising `-Xmx`.
 
 ### 5. What is a memory leak in Java? Isn't that impossible with a garbage collector?
 
@@ -90,7 +90,6 @@ Interview questions on **garbage collection specifically**, as asked by small st
 ### 14. What algorithm does the garbage collector use?
 
 - **Notes:** ⚠️ `06` names mark-and-sweep and correctly says the algorithm is vendor dependent. **Modern collectors are a gap.**
-- **Safe answer at this tier:** mark and sweep as the foundation — mark what is reachable, sweep the rest — then say that real collectors are generational and the default has been G1 since Java 9.
 
 ### 15. Can you call `finalize()` yourself?
 
@@ -110,3 +109,9 @@ Interview questions on **garbage collection specifically**, as asked by small st
 | 2 | **Modern collectors** — that G1 is the default, roughly what it does | Q14; a sentence would do, and we don't have it |
 
 Only two, and the first one is the one to close. At startup level our GC notes are otherwise in good shape — 14 of 16 questions are answered by material already written.
+
+## Company-reported evidence
+
+- **Razorpay SDE-1:** the Java round asked what a memory leak is and how to resolve it. [Report](https://www.naukri.com/code360/interview-experiences/razorpay/razorpay-interview-experience-dec-2021-exp-0-2-years)
+
+The remaining collector, eligibility, and diagnosis prompts are supplemental practice prompts unless a named company report is attached to the individual question.
