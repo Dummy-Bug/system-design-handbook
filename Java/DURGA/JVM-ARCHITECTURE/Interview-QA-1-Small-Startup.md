@@ -42,7 +42,7 @@ Interview questions on **JVM architecture and memory**, as asked by small startu
 ### 5. Have you ever seen an `OutOfMemoryError`? What did you do about it?
 
 - **Tests:** whether you have operated a real service. **This is the single most important question in this file** — it is the one they actually care about, and the only one where a story beats a definition.
-- **Notes:** ⚠️ `05` has the leak-by-retention callout; the **diagnosis workflow is a gap**.
+- **Notes:** ⚠️ `05` has the leak-by-retention callout; the **diagnosis workflow is a gap**
 - **What they want to hear:** you looked at what was retaining memory rather than just raising `-Xmx`.
 
 ### 6. Is Java pass-by-value or pass-by-reference?
