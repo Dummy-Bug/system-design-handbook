@@ -1,157 +1,162 @@
-Interview questions on **exception handling specifically**, as asked by mid-tier product companies for a backend role at 3–5 years.
+Interview questions on **exception handling**, as asked by mid-tier product companies for a backend role at 3–5 years.
 
-> [!important] **What changes at this tier.** They have real traffic, a support rota, and somebody who has spent an evening reading a stack trace that turned out to be the wrong exception entirely. The bar moves from *what does the keyword do* to **what does your error handling look like across a service**. Almost every question has a silent second half — *"and what would that look like in a codebase you owned?"* — and that half is what is scored.
->
-> This is also where the chapter's boundary starts to show. Durga Sir teaches the language mechanism completely and teaches it well; **API-level error design is not in the course at all**, and it is roughly a third of what this tier asks.
+> [!important] **What this tier is testing.** They have real traffic and real support incidents. The bar moves from *what does the keyword do?* to **where should an exception be handled, translated, logged, retried, or allowed to propagate across a service?**
 
-> [!info] **How the ordering was decided, honestly.** No public dataset of question frequency exists. This is my judgement from sources surveyed in August 2026, weighted toward 2025–2026 material. Bands are reliable; order within a band is approximate.
+> [!info] **How the ordering was decided, honestly.** There is no public dataset of interview question frequency. This ordering is my judgement from the interview-prep sources surveyed in August 2026. Treat the **bands** as reliable and the **order inside a band** as approximate.
 
-**Coverage markers:** ✅ covered · ⚠️ partial · ❌ gap.
+**Coverage markers:** ✅ covered · ⚠️ partial · ❌ gap in our notes.
 
----
-
-# Band A — the core set
+# Band A — the core set, expect most of these
 
 ### 1. What happens if an exception is thrown inside a `finally` block?
 
-- **Tests:** the sharpest single question in this file, because it has a correct answer *and* a design consequence.
-- **Notes:** ✅ `06`, measured — the `finally` exception wins, and the original is **gone without trace**. The note's program raises three exceptions and exactly one is reported.
-- **Name it:** this is **exception masking**, and it is a real source of lost bugs. The failure you wanted to know about has been replaced by a failure in the cleanup code.
-- **Then close it:** try-with-resources fixes this by **suppressing and attaching** the close-time exception rather than replacing it, so both survive. `11` covers `getSuppressed()`.
+- **Tests:** exception masking and cleanup safety.
+- **Notes:** ✅ `06`.
 
-### 2. Explain exception propagation.
+### 2. Explain exception propagation through nested method calls.
 
-- **Tests:** whether you can trace control through the stack rather than recite the definition.
-- **Notes:** ✅ `02`'s seven steps and `11`'s propagation section, plus `06`'s **fourteen nested cases** — which is more depth than this question usually gets.
-- **The two rules to state:** a handler is searched for **innermost first**, and **every `finally` whose `try` was entered will run** on the way out, in order. Those two generate every case they can construct on a whiteboard.
+- **Tests:** stack unwinding and handler selection.
+- **Notes:** ✅ `02`, `06`, `11`.
 
-### 3. Wrapping versus propagating — when do you catch and when do you let it go?
+### 3. When should you catch an exception, and when should you let it propagate?
 
-- **Tests:** judgement. **The most important question in this file** and the one most likely to be asked as a discussion rather than a quiz.
-- **Notes:** ❌ **gap.** The course teaches the mechanism, never the strategy.
-- **The answer that scores:** catch at a layer that can actually *do* something — retry, fall back, translate for the caller. Everywhere else, let it rise. The failure mode they are probing for is a `try`/`catch` around every method, which turns a stack trace into a shrug.
-- **Chained follow-up:** *"How do you translate a `SQLException` into something your API can return?"* — which is Q4.
+- **Tests:** service-layer judgement.
+- **Notes:** ❌ gap — the notes teach mechanics, not strategy.
 
 ### 4. What is exception chaining, and why does it matter?
 
-- **Tests:** whether you preserve causes or destroy them.
-- **Notes:** ⚠️ `11` covers rethrowing; **`initCause`/`getCause` and the cause chain are a gap.**
-- **The answer:** wrap the low-level exception in a domain exception and pass the original as the **cause**, so the new type is meaningful to the caller and the original stack trace is still in the log. A `catch` that logs the message and throws a fresh exception with no cause is how the real failure disappears.
+- **Tests:** preserving the original cause while translating an error.
+- **Notes:** ⚠️ `11` covers rethrowing; cause-chain design is a gap.
 
-### 5. How do you design a custom exception hierarchy for a service?
+### 5. How would you design a custom exception hierarchy for a service?
 
-- **Notes:** ⚠️ `09` covers writing one exception; **designing a set of them is a gap.**
-- **The shape to describe:** one base exception for your domain, a small number of children that map onto *how the caller must respond* — not-found, invalid-input, conflict, downstream-unavailable — and unchecked by default. `09` has the argument for unchecked, which is the half we do cover.
-- **What they are listening for:** that your categories are chosen by **caller reaction**, not by which subsystem happened to fail.
+- **Tests:** categories based on caller action rather than implementation detail.
+- **Notes:** ⚠️ `09` covers one custom exception; hierarchy design is a gap.
 
-### 6. What does try-with-resources compile into? What order are resources closed in?
+### 6. What does try-with-resources compile into, and in what order are resources closed?
 
-- **Tests:** whether "syntactic sugar" means anything specific to you.
-- **Notes:** ✅ `11` for the construct and the five conclusions; ⚠️ **reverse close order is worth confirming** and is the half people miss.
-- **The answer:** it expands to a `try`/`finally` that closes each resource, in **reverse order of declaration** — the last one opened is closed first, which is what you want when a later resource was built from an earlier one.
+- **Tests:** desugaring, reverse close order, and suppressed exceptions.
+- **Notes:** ✅ `11`; close-order detail is partial.
 
-### 7. Why is `catch (Exception e)` bad practice?
+### 7. Why is `catch (Exception e)` often bad practice?
 
-- **Tests:** whether you can argue against something that *works*.
-- **Notes:** ⚠️ `04`'s ordering rules explain why it must come last; **the practice argument is a gap.**
-- **The answer:** it catches things you did not anticipate and had no plan for, including bugs, and turns them into whatever your generic handler does. It also catches `RuntimeException`s that indicate a broken program, not a failed operation.
-- **The precise version:** catching broadly is fine **at a boundary** — a request handler, a job runner — where the job is to turn any failure into a response and a log line. It is not fine three frames deep.
+- **Tests:** catching unexpected bugs versus handling a boundary failure.
+- **Notes:** ⚠️ `04` covers ordering; review practice is a gap.
 
-### 8. Multi-catch — what is the rule, and why is the variable implicitly final?
+### 8. What is multi-catch, and what restrictions apply to its alternatives?
 
-- **Notes:** ✅ `11` for the construct and the one rule; ⚠️ **the implicitly-final detail is thin.**
-- **The rule:** the alternatives must not be in a parent-child relationship. `catch (IOException | Exception e)` does not compile, for the same reason a parent-before-child ordering does not.
-- **Why the variable is effectively final:** the compiler cannot give it a single narrow type, so it types it as the nearest common supertype and forbids reassignment.
+- **Tests:** Java 7 syntax and parent/child exception relationships.
+- **Notes:** ✅ `11`.
 
 ### 9. How do you handle exceptions across a whole web service?
 
-- **Notes:** ❌ **gap** — this is a Spring question and the course predates the framing.
-- **What to say:** a centralised handler — `@RestControllerAdvice` with `@ExceptionHandler` methods — mapping domain exceptions to status codes and one consistent error-body shape, so controllers contain no error plumbing.
-- **Recency:** ⬆ if you can name **`ProblemDetail`** (the RFC 7807 error body, in Spring 6 / Boot 3) you are answering as of this year rather than 2019.
+- **Tests:** centralized handling and consistent API responses.
+- **Notes:** ❌ gap — Spring/global API handling is outside the notes.
 
-### 10. What are the exception-handling anti-patterns you watch for in review?
+### 10. What exception-handling anti-patterns do you look for in review?
 
-- **Notes:** ❌ **gap**, though `06`'s masking section is one of them arrived at from the other direction.
-- **The list worth having ready:** an empty `catch`; catching and returning `null`; logging and rethrowing the same exception at every layer, so one failure prints four times; using exceptions for ordinary control flow; and `catch (Exception e)` deep in the call stack.
+- **Tests:** production judgement.
+- **Notes:** ❌ gap — no dedicated review checklist.
 
----
+# Band B — very likely once the conversation goes deeper
 
-# Band B — mechanism, asked to find your ceiling
+### 11. Walk through a nested `try`/`catch`/`finally` control-flow example.
 
-### 11. Walk me through the control flow of a nested `try`-`catch`-`finally`.
-
-- **Notes:** ✅ **our strongest answer at this tier.** `06` traces all **fourteen** cases and flags four rows of the source table that cannot actually occur, verified by measurement.
-- **Do not recite the table.** State the two rules from Q2 and derive whichever case they name. That is what is being tested.
+- **Tests:** deriving behavior instead of memorizing isolated rules.
+- **Notes:** ✅ `06`.
 
 ### 12. What is a fully checked versus a partially checked exception?
 
-- **Tests:** unusual, and a genuine discriminator — most candidates have never heard the terms.
-- **Notes:** ✅ `03`, with measured compiler output.
-- **Why it is not trivia:** it is the rule behind a real compiler error. `catch (Exception e)` over an empty `try` compiles; `catch (IOException e)` over the same `try` does not, giving `exception IOException is never thrown in body of corresponding try statement`. Partially checked types are the ones that escape that check.
+- **Tests:** compiler exception analysis.
+- **Notes:** ✅ `03`.
 
-### 13. Which combinations of `try`/`catch`/`finally` compile?
+### 13. Which combinations of `try`, `catch`, and `finally` compile?
 
-- **Notes:** ✅ `06`, eight measured rows.
-- **The row that surprises people:** `try {} finally {} catch (…) {}` fails with `'catch' without 'try'` — because `finally` **closes** the construct, so the `catch` after it belongs to nothing.
+- **Tests:** syntax and compiler diagnostics.
+- **Notes:** ✅ `06`.
 
 ### 14. What happens to an exception thrown in a thread other than `main`?
 
-- **Notes:** ❌ **gap.** The chapter is single-threaded throughout.
-- **The answer:** it terminates that thread only; `main` carries on unaware. It reaches the thread's `UncaughtExceptionHandler`, which by default prints to `System.err` — so in a thread pool, a task that throws can vanish silently unless you are checking the `Future`.
-- **Why it is asked here:** it is the first place a mid-tier service gets bitten that a tutorial never covers.
+- **Tests:** thread boundaries and uncaught exception handling.
+- **Notes:** ❌ gap.
 
 ### 15. Can a constructor throw an exception? What happens to the object?
 
-- **Notes:** ❌ **gap.**
-- **The answer:** yes, and the object is never returned — the reference is never assigned, so it is unreachable and eligible for collection immediately. This is why a constructor that acquires a resource and then throws leaks it, and why acquisition belongs in a factory or a try-with-resources.
+- **Tests:** constructor failure and partial initialization.
+- **Notes:** ❌ gap.
 
-### 16. What is `ExceptionInInitializerError` and when have you seen it?
+### 16. What is `ExceptionInInitializerError`, and how can it lead to `NoClassDefFoundError`?
 
-- **Notes:** ✅ `10`, and the JVM chapter covers the class-initialisation half.
-- **The detail that lands:** the class is left in a **failed** state, so the *next* access gives you `NoClassDefFoundError` instead — a different exception for the same root cause, which is why the second one is so confusing in a log.
+- **Tests:** class initialization failure.
+- **Notes:** ✅ `10`; JVM class initialization notes are also relevant.
 
-### 17. Which compile-time errors can exception handling produce?
+### 17. What compile-time errors can exception handling produce?
 
-- **Notes:** ✅ `09` collects all **eight**, each measured.
-- **Why this is a good answer to have:** "which of these does not compile" is a common written-round format, and the eight cover essentially all of them.
+- **Tests:** written-round compiler reasoning.
+- **Notes:** ✅ `09`.
 
----
+### 18. What is the difference between `AutoCloseable` and `Closeable`?
 
-# Band C — the edge
-
-### 18. `AutoCloseable` versus `Closeable`?
-
-- **Notes:** ⚠️ `11` names `AutoCloseable` only.
-- **The answer:** `Closeable` predates it, is restricted to `IOException`, and is idempotent by contract. `AutoCloseable` is the general one try-with-resources actually requires, and its `close()` may throw anything.
+- **Tests:** resource API contracts.
+- **Notes:** ⚠️ `11` names `AutoCloseable`; the comparison is a gap.
 
 ### 19. Is an untaken `try` block expensive?
 
-- **Notes:** ✅ **JVM chapter `06`** — no. The guarded region is recorded in an **exception table** beside the bytecode, consulted only after a throw; guarded and unguarded code compile to identical instructions.
-- **Why this answer stands out:** most candidates guess. This is a mechanism you can describe, and it sets up the FAANG-tier question about what *is* expensive.
+- **Tests:** JVM exception-table mechanics.
+- **Notes:** ✅ JVM Architecture `06`.
 
-### 20. `StackOverflowError` versus `OutOfMemoryError`?
+### 20. Can `finally` swallow an exception?
 
-- **Notes:** ✅ `10` and the JVM chapter `06`, with measured recursion depths.
-- **The mapping:** one memory area each — the thread's stack, and the heap. Both are `Error`, so neither is yours to catch.
+- **Tests:** `return` and exception replacement behavior.
+- **Notes:** ✅ `05`, `06`.
 
-### 21. Can `finally` swallow an exception?
+# Band C — depth probes, asked when the interviewer is enjoying themselves
 
-- **Notes:** ✅ `05` and `06` between them — a `return` in `finally` discards an in-flight exception, and an exception in `finally` replaces it.
-- **The one-line summary worth memorising:** *`finally` overwrites whatever came before it* — its return value beats `try`'s, and its exception beats `try`'s.
+### 21. How should a service wrap a `SQLException` or downstream exception before exposing it to an API caller?
 
----
+- **Tests:** translation boundaries and cause preservation.
+- **Notes:** ❌ gap.
+
+### 22. How would you map domain exceptions to HTTP responses?
+
+- **Tests:** error contract design.
+- **Notes:** ❌ gap.
+
+### 23. How do exceptions propagate through `Future` and `CompletableFuture`?
+
+- **Tests:** asynchronous failure semantics.
+- **Notes:** ❌ gap.
+
+### 24. How would you prevent one failure from being logged four times across service layers?
+
+- **Tests:** logging ownership and observability.
+- **Notes:** ❌ gap.
+
+### 25. When is retrying an exception safe, and what must accompany the retry?
+
+- **Tests:** transient failure classification, idempotency, backoff, and jitter.
+- **Notes:** ❌ gap.
 
 # Gaps this file exposes
 
 | # | Missing | Priority |
 |---|---|---|
-| 1 | **Wrap-vs-propagate strategy and exception chaining** (Q3, Q4) | **highest** — the discussion question of this tier |
-| 2 | **Spring global handling** — `@RestControllerAdvice`, `ProblemDetail` (Q9) | highest, and the most recency-sensitive |
-| 3 | **Anti-patterns as a checklist** (Q7, Q10) | high |
-| 4 | **Designing an exception hierarchy for a service** (Q5) | high |
-| 5 | **Exceptions and threads** — `UncaughtExceptionHandler`, pools, `Future` (Q14) | medium |
-| 6 | **Constructors that throw** (Q15) | low |
+| 1 | Catch-versus-propagate strategy and exception chaining | **highest** — the core service-design discussion |
+| 2 | Global web-service error handling | highest for Spring backend roles |
+| 3 | Async exception propagation | high — common source of invisible failures |
+| 4 | Review anti-patterns and logging ownership | high — directly tied to production debugging |
+| 5 | Retry semantics and idempotency | medium to high for distributed services |
 
-> [!important] **What our notes answer unusually well here.** Exception masking with a measured three-exception program (Q1). Propagation, with fourteen nested cases and four errors in the source caught by measurement (Q2, Q11). Fully versus partially checked, which most candidates cannot define at all (Q12). The eight compile-time errors as a set (Q17). And the zero-cost `try` from the JVM chapter (Q19).
->
-> **Thirteen of twenty-one answered outright.** The six gaps are all on the same side of one line: the course teaches the *language*, and this tier also asks about the *system*.
+The existing notes are strongest on propagation, `finally`, try-with-resources, compiler rules, and nested control flow. The gaps are mostly service and concurrency concerns.
+
+## Interview-question sources
+
+- [Baeldung: Java Exceptions Interview Questions](https://www.baeldung.com/java-exceptions-interview-questions)
+- [Interview Kickstart: Java Exception Handling Interview Questions](https://interviewkickstart.com/blogs/interview-questions/java-exception-handling-interview-questions)
+- [Java Guides: Scenario-Based Java Exception Handling Interview Questions](https://www.youtube.com/watch?v=uWri9ALwjdg)
+
+## Technical fact-checking only
+
+- [Java Language Specification: Exceptions](https://docs.oracle.com/javase/specs/jls/se26/html/jls-11.html)
+- [Oracle: The `try` Statement](https://docs.oracle.com/javase/tutorial/essential/exceptions/try.html)
+- [Oracle: Try-with-resources](https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html)
