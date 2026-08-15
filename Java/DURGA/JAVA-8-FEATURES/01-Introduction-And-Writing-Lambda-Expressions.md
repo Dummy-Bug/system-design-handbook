@@ -134,14 +134,14 @@ false
 | 6 | **Stream API** |
 | 7 | **Date and Time API** |
 | 8 | **`Optional` class** |
-| 9 | **Nashorn** — the JavaScript engine |
+| 9 | **Nashorn** — the JavaScript engine *(since removed — see below)* |
 
 > [!info] **The `::` operator is not C++'s `::`.** In C++ the double colon is the **scope resolution
 > operator**. In Java 8 it means something completely different — **method reference** and
 > **constructor reference**. Same symbol, unrelated job.
 
-> [!warning] **Nashorn is gone.** It was deprecated in Java 11 and **removed in Java 15** (JEP 372).
-> Measured on JDK 25:
+> [!important] **Item 9 is the one that did not last: Nashorn was removed from the JDK in Java 15**
+> (JEP 372), having been deprecated in Java 11. Measured on JDK 25:
 > ```java
 > ScriptEngine e = new ScriptEngineManager().getEngineByName("nashorn");
 > System.out.println("nashorn engine: " + e);
@@ -149,21 +149,25 @@ false
 > ```
 > nashorn engine: null
 > ```
-> No exception — you just get `null` back, which is the confusing part. It survives outside the JDK as
-> a standalone artifact (`org.openjdk.nashorn:nashorn-core`), and GraalVM's JavaScript engine is the
-> mainstream replacement. Everything else in the list above is still there and still current.
+> **No exception — you just get `null` back**, which is the confusing part when old code stops working.
+> It survives outside the JDK as a standalone artifact (`org.openjdk.nashorn:nashorn-core`), and
+> GraalVM's JavaScript engine is the mainstream replacement. **The other eight are all still current.**
 
-> [!warning] **The version dates he gives, checked.** Java 7 — 28th July 2011 ✅. Java 8 — 18th March
-> 2014 ✅. **Java 9 — he and the PDF both say September 2016; it was actually 21st September 2017.**
-> Java 10 — March 2018 ✅, and it was the current release when this was recorded. Today the current
-> release is **Java 25**, and 8, 11, 17, 21 and 25 are the long-term-support versions.
+## The release dates worth having
 
-His aside about why a 2018 course is teaching a 2014 release is worth keeping, because the same
-argument still holds:
+| Version | Released |
+|---|---|
+| Java 7 | 28th July 2011 |
+| **Java 8** | **18th March 2014** |
+| Java 9 | 21st September 2017 |
+| Java 10 | March 2018 |
+| **Java 25** | the current release |
 
-> *"Very unfortunate — after Java 10, now we are talking about Java 8. But Java 8 is that much
-> important. The people have not still migrated to 9 and 10. Now the dependent technologies like Spring
-> are starting to use Java 8 features, and that is why a big boom came for Java 8."*
+**8, 11, 17, 21 and 25 are the long-term-support versions**, which is why Java 8 refuses to die and why
+this chapter still matters:
+
+> *"Java 8 is that much important. Now the dependent technologies like Spring are starting to use
+> Java 8 features, and that is why a big boom came for Java 8."*
 
 ---
 

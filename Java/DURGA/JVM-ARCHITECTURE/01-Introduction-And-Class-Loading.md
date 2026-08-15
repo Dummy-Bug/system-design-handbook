@@ -204,7 +204,7 @@ That is the same point the virtual machine table made earlier, from the other di
 
 ---
 
-> [!warning] **"JVM is part of the JRE, JRE is part of the JDK" is still the right answer — but the JRE is no longer a folder you can point at.** Java 9 removed the separate JRE directory from the JDK (JEP 220), and the standalone JRE download went with it. The **relationship is unchanged and still examinable**; only the folder that used to correspond to it has disappeared. The section below is what that means on disk.
+> [!important] **"JVM is part of the JRE, JRE is part of the JDK" is the right answer — but the JRE is not a folder you can point at.** Java 9 removed the separate JRE directory from the JDK (JEP 220), and the standalone JRE download went with it. The **relationship is unchanged and still examinable**; only the folder that used to correspond to it is gone. The section below is what that means on disk, and saying it correctly is what marks you as current.
 
 ## Where the JRE went
 
@@ -281,7 +281,7 @@ And its `bin/` holds **`java` and `keytool` — no `javac`**. It runs (`openjdk 
 | There is a `jre/` folder inside the JDK | ❌ gone since Java 9 |
 | You can download a JRE by itself | ❌ gone — build one with `jlink` |
 
-> [!important] **The definition is safe; the folder is not.** Answer the question as taught and it is correct. Go looking for the directory and it will not be there — and the reason it is not there (modules, and `jlink` building runtimes on demand) is itself a good thing to be able to explain.
+> [!important] **The definition is safe; the folder is not.** *"JVM is part of the JRE, JRE is part of the JDK"* is the correct answer. Go looking for the directory and it will not be there — and the reason it is not (modules, and `jlink` building runtimes on demand) is itself a good thing to be able to explain.
 
 ---
 
@@ -558,7 +558,7 @@ Rows 1–11 are the ones everybody names. Row 12 is the one nobody does.
 
 > [!info] **Three `wait` overloads, counted separately.** `wait()`, `wait(long)` and `wait(long, int)` are three distinct methods with three distinct signatures — which is why the tally reaches 11 and not 9. They come back in the multithreading chapter.
 
-> [!warning] **The count is still 12 and the reasoning is still exactly right — one name changed.** The private native method used to be `registerNatives`; on modern JDKs it is **`wait0`**, the native primitive that the three public `wait` overloads delegate to. So if you are asked "how many methods does `Object` have", the honest answer is still *"eleven that anyone uses, twelve declared"* — just don't name `registerNatives` as the twelfth on a current JDK.
+> [!important] **The twelfth method is `wait0`** — the private native primitive that the three public `wait` overloads delegate to. So if you are asked "how many methods does `Object` have", the honest answer is *"eleven that anyone uses, twelve declared"*. (Older JDKs had a different private helper in this slot, `registerNatives`, so older material names that one instead.)
 
 ---
 

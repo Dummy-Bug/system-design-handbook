@@ -177,10 +177,7 @@ And points 4 and 5 have a consequence worth stating: because the parent implemen
 enum you write is automatically serializable and comparable.** You get the ability to compare two
 enum constants for free.
 
-He checks this with `javap java.lang.Enum`, which on the 1.6 version showed
-`public abstract class java.lang.Enum extends java.lang.Object implements Comparable, Serializable`.
-
-Measured on JDK 25:
+Checked with `javap java.lang.Enum`. Measured on JDK 25:
 
 ```
 public abstract class java.lang.Enum<E extends java.lang.Enum<E>>
@@ -199,17 +196,15 @@ public abstract class java.lang.Enum<E extends java.lang.Enum<E>>
 }
 ```
 
-All five points hold. Three details differ from what he reads out:
+All five points hold. Two things in that signature are worth reading carefully:
 
-> [!warning] **Three drifts in that signature, none of which changes the five points.**
-> **1. A third interface, `Constable`,** was added in **Java 12** (`java.lang.constant.Constable`).
-> It supports the constant-folding machinery behind `invokedynamic`; it does not affect anything
-> taught here. The answer "`Serializable` and `Comparable`" is still correct and still complete for
-> the interview — just do not be surprised by the third name.
-> **2. `extends java.lang.Object` no longer appears** in `javap` output. Modern `javap` omits the
-> implicit superclass. `Enum` is still a direct child of `Object` — point 3 is unchanged.
-> **3. The class is generic** — `Enum<E extends Enum<E>>` — which it already was in Java 5; the 1.6
-> `javap` he ran simply printed the erased form. Verified on JDK 25.
+> [!info] **`Constable` is a third interface, and it is not one you need to name.**
+> `java.lang.constant.Constable` supports the constant-folding machinery behind `invokedynamic`. It
+> affects nothing taught here — **"`Serializable` and `Comparable`" is still the complete answer for
+> the interview** — so just do not be surprised by the third name in the listing.
+>
+> **`extends java.lang.Object` does not appear** in the output. `javap` omits the implicit superclass;
+> `Enum` is still a direct child of `Object`, so point 3 stands.
 
 > [!question]- **Deep dive — why `equals`, `hashCode` and `compareTo` are all declared `final` here.**
 > Open this if you want the reason enum identity is trustworthy in a way ordinary objects' is not.

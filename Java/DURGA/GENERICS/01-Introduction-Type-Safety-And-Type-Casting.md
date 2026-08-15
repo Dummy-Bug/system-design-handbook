@@ -138,8 +138,6 @@ To overcome both problems of collections, Sun introduced **generics in 1.5**.
 > **1.** To provide **type safety** to the collections.
 > **2.** To resolve **type casting** problems.
 
-> [!warning] **Two things in this note's code are dated, though nothing about the argument changes.** `new Integer(10)` — used throughout the original — has been **deprecated since Java 9** and warns on compilation; `Integer.valueOf(10)` is the replacement, and plain `10` autoboxes anyway. The compile-error wording has also drifted: the collection-retrieval error he dictates as *"incompatible types, found java.lang.Object, required java.lang.String"* now reads `incompatible types: Object cannot be converted to String`. Same error, same cause, tighter phrasing. Both verified on JDK 25.
-
 ---
 
 # What this part established

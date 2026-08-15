@@ -425,27 +425,25 @@ No `System.gc()` anywhere. If `finalize()` never runs, the collector never came.
 
 **Ten objects: no output.** Ten objects is nothing; there is no memory pressure, so the JVM has no reason to collect.
 
-Raise it. A hundred — nothing. A thousand — nothing. Ten thousand — nothing. Then at **one lakh** in the lecture, output suddenly appears: 41 objects finalized. Run it again: 71. Again: 81. Then 142, then 145.
+Raise it. A hundred — nothing. A thousand — nothing. Ten thousand — nothing. **A hundred thousand — still nothing.** Keep going and the collector eventually turns up, at a threshold that depends entirely on how much heap this machine gave the JVM.
 
 ## Measured on JDK 25
-
-The demo still works, but the threshold has moved a long way, because a default heap in 2026 is vastly larger than one in 2016:
 
 ```
 created         10  ->  finalize() ran        0 times
 created        100  ->  finalize() ran        0 times
 created      1,000  ->  finalize() ran        0 times
 created     10,000  ->  finalize() ran        0 times
-created    100,000  ->  finalize() ran        0 times     ← fired in the lecture, not here
+created    100,000  ->  finalize() ran        0 times
 
 created  1,000,000  ->  finalize() ran    9,814 times      ← first sign of the collector
 
 created 10,000,000  ->  finalize() ran 3,875,064 times
 ```
 
-One lakh — the number that triggered it on his machine — does nothing on mine. It takes a million.
+**A million objects is where it starts on this machine**, and that number is a property of the machine's heap size, not of Java.
 
-And the run-to-run variation he demonstrates is just as visible. **Same command, five consecutive runs:**
+And the run-to-run variation is just as visible. **Same command, five consecutive runs:**
 
 ```
 created 1000000  ->  finalize() ran 20,487 times
@@ -459,7 +457,7 @@ Five runs, five different answers, nothing changed between them.
 
 > [!important] **Two conclusions, and they are the point of the whole exercise.** The collector **did** run without being asked — so yes, the JVM triggers collection on its own when memory gets tight. And the number of objects it collected is **different every single time**, so there is nothing here you can predict or depend on.
 
-> [!info] **The exact threshold is a property of the machine, not of Java.** On his system the problem started at one lakh objects; on mine it takes a million; on another machine it might take a crore. Some JVMs collect when free memory drops below about 10%. None of this is specified.
+> [!info] **The exact threshold is a property of the machine, not of Java.** A million objects on this machine; a lakh on a smaller heap; a crore on a bigger one. Some JVMs collect when free memory drops below about 10%. None of this is specified.
 
 ## The five questions with no answer
 
@@ -480,11 +478,15 @@ Question 5 is answered by the measurement above: a million objects were eligible
 
 **1 — When the program runs low on memory, the JVM runs the collector automatically.** Not at a stated moment, but reliably enough to state as a general rule.
 
-**2 — Most collectors follow the mark-and-sweep algorithm.** Ninety to ninety-five percent of them, in his estimate — not all. The algorithm in one line: **if the object has a reference, mark it; if it does not, sweep it.**
+**2 — Every collector is built on mark-and-sweep.** The algorithm in one line: **if the object has a reference, mark it; if it does not, sweep it.**
 
-> [!warning] **"Mark and sweep" is the right vocabulary and an incomplete picture on a modern JVM.** Marking live objects and reclaiming the rest is still the foundation, but no production collector today is a plain mark-and-sweep. They are **generational** — the heap is split so that short-lived objects are collected cheaply and often — and they combine marking with copying and compaction to avoid fragmentation. G1 has been the default since Java 9; ZGC and Shenandoah do most of their marking concurrently with your application running.
+> [!important] **"Mark and sweep" is the right vocabulary and an incomplete picture of any production collector.** Marking live objects and reclaiming the rest is the foundation, but nothing shipping today is a plain mark-and-sweep:
 >
-> None of that is in this course, and it is a known gap in these notes rather than something Durga Sir gets wrong — he is careful to say the algorithm is vendor dependent, which remains exactly right.
+> - they are **generational** — the heap is split so that short-lived objects are collected cheaply and often
+> - they combine marking with **copying and compaction**, to avoid leaving the heap fragmented
+> - **G1** is the default collector; **ZGC** and **Shenandoah** do most of their marking **concurrently**, while your application keeps running
+>
+> Durga Sir's own hedge — that the algorithm is **vendor dependent** — is exactly right, and it is why "it is not guaranteed" remains the correct opening to all five questions above. How the collectors themselves work is not taught in this course; it is a known gap in these notes.
 
 ---
 
@@ -527,17 +529,23 @@ Ten million objects were created, and the programmer is not genuinely using ten 
 >
 > Both halves are required. Not used, so it is waste. Not eligible, so the collector cannot touch it. If memory leaks are present, the application will at some point go down with `OutOfMemoryError` — and the fix is the practice from the very beginning of this chapter: **if an object is no longer required, make it eligible.**
 
-> [!warning] **The PDF says `OutOfMemoryException`. There is no such type — it is `OutOfMemoryError`.** That matters more than a typo normally would, because the distinction is itself an interview question: `OutOfMemoryError` extends `Error`, not `Exception`. You are not expected to catch it and you generally cannot recover from it, which is exactly the distinction Durga Sir drew in the previous note — exceptions are recoverable, errors are not.
+> [!important] **It is `OutOfMemoryError`, and there is no such type as `OutOfMemoryException`.** The name matters more than a typo normally would, because the distinction is itself an interview question: `OutOfMemoryError` extends **`Error`**, not `Exception`. You are not expected to catch it and you generally cannot recover from it — exactly the distinction Durga Sir drew in the previous note, that exceptions are recoverable and errors are not.
 
 ## Finding them
 
-The lecture names third-party memory management tools that attach to a running Java program and show, on a GUI, how many objects were created, how many are in use, and how many are not — with suspected leaks highlighted in red. The ones listed are **HP OVO**, **IBM Tivoli**, **JProbe** and **Patrol**.
+You find leaks with memory management tools that attach to a running Java program and report how many objects were created, how many are in use, and what is holding on to the rest.
 
-> [!warning] **That tool list is the most dated thing in the chapter — every one of those is legacy or discontinued.** Nobody reaches for them in 2026, and naming them in an interview would be actively strange.
->
-> What is used now: **Eclipse MAT** for heap dump analysis, **VisualVM** and **JDK Mission Control** for live monitoring, **Java Flight Recorder** for low-overhead production profiling, and `jcmd` / `jmap` to capture a heap dump in the first place. The typical workflow is to run with `-XX:+HeapDumpOnOutOfMemoryError`, then open the resulting dump in MAT and read the dominator tree to find what is retaining the memory.
->
-> **This is a known gap in these notes**, and a deliberate one — the tooling is not taught anywhere in this course, and closing it properly is a separate piece of work.
+| Tool | What you use it for |
+|---|---|
+| **Eclipse MAT** | heap dump analysis — the **dominator tree** tells you what is retaining the memory |
+| **VisualVM** | live monitoring of a running JVM |
+| **JDK Mission Control** | live monitoring, and reading flight recordings |
+| **Java Flight Recorder** | low-overhead profiling safe to leave on in production |
+| **`jcmd` / `jmap`** | capturing a heap dump in the first place |
+
+**The typical workflow:** run with `-XX:+HeapDumpOnOutOfMemoryError`, wait for the crash, then open the resulting dump in MAT and read the dominator tree.
+
+> [!info] **The tooling is a known gap in these notes**, and a deliberate one — none of it is taught anywhere in this course, so closing it properly is a separate piece of work. Older material names **HP OVO**, **IBM Tivoli**, **JProbe** and **Patrol** here; all four are legacy or discontinued, and naming them in an interview would be actively strange.
 
 > [!important] **This is an interview question at your level, and Durga Sir says so explicitly.** For candidates with two or three years upwards, *"what is a memory leak?"* is fair game. The answer, complete: **objects that the application is no longer using but which are not eligible for garbage collection, because references to them are still being held. They accumulate, the collector cannot reclaim them, and eventually the application dies with `OutOfMemoryError`.** Then give an example — a static collection that only ever grows is the classic one.
 

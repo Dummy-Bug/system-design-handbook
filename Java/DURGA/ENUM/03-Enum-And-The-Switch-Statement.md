@@ -96,9 +96,17 @@ enum Beer {
     case KALYANI: System.out.println("buy one get one free"); break;
 ```
 
-> If we pass an enum type as argument to a switch statement, **every case label should be a valid
-> enum constant.** Otherwise we get a compile-time error:
-> **`unqualified enumeration constant name required`**.
+> If we pass an enum type as argument to a switch statement, **every case label must name a constant
+> of that enum.** Otherwise we get a compile-time error.
+
+Measured on JDK 25:
+
+```
+error: cannot find symbol
+            case KALYANI: …
+                 ^
+  symbol:   variable KALYANI
+```
 
 There are exactly **two ways** to fix it:
 
@@ -106,29 +114,9 @@ There are exactly **two ways** to fix it:
 2. **Add `KALYANI` to the enum** as a constant — then every case label is valid again and the code
    compiles.
 
-> [!warning] **Both the error message and the rule behind it have moved.** He notes himself that the
-> wording is version-dependent ("this is as per 1.6"). Measured on JDK 25 the same broken program
-> reports an ordinary symbol lookup failure instead:
-> ```
-> error: cannot find symbol
->             case KALYANI: …
->                  ^
->   symbol:   variable KALYANI
-> ```
-> The Java 8-era rendering of his message is still reachable — compiling the identical file with
-> `javac --release 8` gives:
-> ```
-> error: an enum switch case label must be the unqualified name of an enumeration constant
-> ```
-> The **requirement is unchanged**: the label must name a real constant of that enum. Only the
-> diagnostic differs. Verified on JDK 25.
+## The label may be qualified or unqualified
 
-## The word *unqualified* is no longer part of the rule
-
-The old message did two jobs. It said the label must be an enum constant — still true — and it said
-the name must be **unqualified**, meaning bare `KF` and never `Beer.KF`. That second half is gone.
-
-Measured on JDK 25, this compiles and runs, printing `it is a children's brand`:
+Both forms work. Measured on JDK 25, this compiles and runs, printing `it is a children's brand`:
 
 ```java
 switch (b) {
@@ -137,18 +125,14 @@ switch (b) {
 }
 ```
 
-Compile the very same file with `javac --release 8` and it is rejected:
-
-```
-error: an enum switch case label must be the unqualified name of an enumeration constant
-            case Beer.KF: …
-```
-
-> [!important] **So the modern rule is the shorter one: the case label must name a constant of that
-> enum — qualified or not.** Qualified labels were permitted as part of the pattern-matching work in
-> **Java 21**, where `case` labels had to be able to name types and constants generally. Older
-> material and exam papers assume the unqualified-only rule, so know both forms and know which
-> version each belongs to. Verified on JDK 25.
+> [!important] **Older material insists the name must be *unqualified* — bare `KF`, never `Beer.KF`.**
+> That was the rule through Java 20, and its error message said so:
+> ```
+> error: an enum switch case label must be the unqualified name of an enumeration constant
+> ```
+> **Java 21 lifted it**, as part of the pattern-matching work that required `case` labels to name types
+> and constants generally. Compile the same file with `javac --release 8` and you can still see the old
+> rejection, so recognise both forms and know which release each belongs to.
 
 ---
 
@@ -161,6 +145,6 @@ error: an enum switch case label must be the unqualified name of an enumeration 
 | Added in **1.7** | `String` |
 | Passing an enum to `switch` | ✅ from **1.5** onwards |
 | Every case label must be | a **valid enum constant** of that enum |
-| Otherwise | compile-time error — `unqualified enumeration constant name required` (as taught) |
+| Otherwise | compile-time error — `cannot find symbol` |
 | Two fixes | replace the label, or **add that constant to the enum** |
-| Qualified labels — `case Beer.KF:` | ❌ through Java 20, ✅ from **Java 21** |
+| Qualified labels — `case Beer.KF:` | ✅ legal — ❌ through Java 20 |

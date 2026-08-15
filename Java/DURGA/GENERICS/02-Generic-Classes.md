@@ -117,7 +117,7 @@ error: unexpected type
 
 The reason is the one from collections: **collections can hold only objects, never primitives.**
 
-> [!info] **`required: reference` is the phrase to notice.** The compiler is not saying `int` is unknown — it is saying it needs a *reference* type and got a value type. This exact wording is unchanged since the recording, verified on JDK 25.
+> [!info] **`required: reference` is the phrase to notice.** The compiler is not saying `int` is unknown — it is saying it needs a *reference* type and got a value type.
 
 ---
 
@@ -181,11 +181,10 @@ And now both fixes follow mechanically:
 
 > [!important] **This is the answer to "how do generics work internally?"** Not magic and not a runtime check — a **type parameter** substituted at compile time, which changes the signatures of the methods you are calling.
 
-> [!warning] **The compile error he quotes here no longer appears in this form.** In the Java 6/7 era, adding an `Integer` to an `ArrayList<String>` gave `cannot find symbol: method add(java.lang.Integer)` — which fit the story exactly, since after substitution no such method existed. Modern javac reports it as an argument mismatch instead:
+> [!info] **What the compiler actually says.** After substitution, `add` takes a `String`, so passing an `Integer` is an argument mismatch:
 > ```
 > error: incompatible types: Integer cannot be converted to String
 > ```
-> The **mechanism is unchanged** and so is the reasoning; only the diagnostic was reworded. Verified on JDK 25.
 
 ## The definition
 
@@ -276,12 +275,13 @@ Exactly the pattern `ArrayList<T>` uses for `add(T)` and `T get(int)`.
 
 > [!info] **`Gen<Integer> g1 = new Gen<Integer>(10)` relies on autoboxing.** The constructor needs an object and `10` is a primitive, so it becomes an `Integer` automatically — which is also why Conclusion 2 above is not a real restriction in practice.
 
-> [!warning] **You would not write the type twice today.** Since **Java 7** the diamond operator infers the right-hand side:
+> [!important] **In real code you write the type once, using the diamond operator:**
 > ```java
 > Gen<Integer> g1 = new Gen<>(10);
 > ArrayList<String> l = new ArrayList<>();
 > ```
-> Everything in this note behaves identically; the repetition is 2016 syntax, kept as taught. Verified on JDK 25.
+> The compiler infers the right-hand side from the left. Everything above behaves identically — the
+> long form is written out in full here only because it makes the substitution visible.
 
 ---
 

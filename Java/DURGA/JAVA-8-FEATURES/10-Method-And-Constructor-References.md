@@ -97,11 +97,8 @@ error: incompatible types: invalid method reference
     unexpected instance method m1() found in unbound lookup
 ```
 
-> [!warning] **The wording of that error has changed since the recording.** He gets
-> *"invalid method reference: non-static method m1() cannot be referenced from a static context"* in
-> 2018. **JDK 25 says `unexpected instance method m1() found in unbound lookup`** instead. Same error,
-> same cause, different phrasing — recognise it by `invalid method reference`, which both versions
-> share.
+> [!info] **Recognise this one by the first line, `invalid method reference`** — the second line
+> explaining *why* is worded differently across JDK versions, but the first is stable.
 
 ---
 

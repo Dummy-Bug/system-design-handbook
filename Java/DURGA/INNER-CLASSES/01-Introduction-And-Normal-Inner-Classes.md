@@ -264,27 +264,20 @@ direct, standalone class — it lives inside `Outer`. So the outer class name co
 $ java Outer
 ```
 
-Does `Outer` contain a `main` method? No. So running it fails.
-
-> As taught: **`NoSuchMethodError: main`.**
-
-And the same for the inner class, since it has no `main` either:
+Does `Outer` contain a `main` method? No. So running it fails. And the same for the inner class,
+since it has no `main` either:
 
 ```
 $ java Outer$Inner
 ```
 
-> [!warning] **The launcher no longer throws that error — it prints a message instead.** Measured on
-> JDK 25, both commands produce:
-> ```
-> Error: Main method not found in class Outer, please define the main method as:
->    public static void main(String[] args)
-> or a JavaFX application class must extend javafx.application.Application
-> ```
-> `NoSuchMethodError` was how the JVM reported this in the Java 6/7 era. The launcher has checked for
-> `main` up front and printed a readable diagnostic for many releases now. The **behaviour being
-> demonstrated is unchanged** — a class without `main` cannot be run — only the message. Verified on
-> JDK 25.
+Measured on JDK 25, both commands produce:
+
+```
+Error: Main method not found in class Outer, please define the main method as:
+   public static void main(String[] args)
+or a JavaFX application class must extend javafx.application.Application
+```
 
 ## Now add a main method to the outer class
 
@@ -329,45 +322,36 @@ class Outer {
 }
 ```
 
-Most people expect two class files and `java Outer$Inner` printing *inner class main method*. **As
-taught, the code does not even compile.**
+**This compiles, and it runs.** Measured on JDK 25:
 
-The argument runs from note 1 at the top of this file. Without existing an outer class object there
-is no chance of existing an inner class object. So **inner class code is not directly touchable** —
-you must create the outer object first, then the inner object, and only then can you reach anything
-inside `Inner`. That means an inner class **always talks about instance-level, object-related
-terminology**. And `static` is precisely the opposite: directly touchable, no object required.
+```
+$ javac O2.java
+$ java 'O2$Inner'
+inner class main method
+```
 
-> As taught: **inside an inner class we cannot declare any static members. Hence we cannot declare a
-> `main` method, and hence we cannot run an inner class directly from the command prompt.**
->
-> The compile-time error is **`inner classes cannot have static declarations`**.
+Two class files, and `java Outer$Inner` prints the message — so **an inner class may declare static
+members, may have a `main`, and may be run directly from the command prompt.**
 
-> [!warning] **This rule was removed in Java 16, and it removes the conclusion with it.** JEP 395
-> (records) also lifted the restriction on static members in inner classes. Measured on JDK 25, that
-> exact program **compiles and runs**:
-> ```
-> $ javac O2.java
-> $ java 'O2$Inner'
-> inner class main method
-> ```
-> So on a modern JDK you **can** declare static members in an inner class, you **can** give it a
-> `main`, and you **can** run an inner class directly from the command prompt — all three of his
-> "hence" conclusions are now false.
->
-> Compile the identical file with `javac --release 15` and the old rule comes back:
+> [!important] **Older material says all three of those are impossible, and you will meet it.**
+> Through **Java 15** an inner class could not declare static members at all, and the compiler said:
 > ```
 > error: Illegal static declaration in inner class O2.Inner
 >   modifier 'static' is only allowed in constant variable declarations
 > ```
-> The cutover is exact — measured across releases, `--release 15` rejects it and `--release 16`
-> accepts it. Verified on JDK 25.
-
-> [!info] **Even under the old rule, "any static member" was slightly too strong.** `static final`
-> **compile-time constants** were always permitted, which is what that second line of the old error
-> means by *constant variable declarations*. Measured under `--release 15`:
+> **Java 16 lifted the restriction** (JEP 395, the records JEP, carried it). The cutover is exact —
+> `javac --release 15` still rejects the program and `--release 16` accepts it.
 >
-> | Declaration inside the inner class | Under `--release 15` |
+> The reasoning behind the old rule is still the reasoning of this whole chapter, and it is why the
+> restriction existed: without an outer object there is no chance of an inner object, so **inner class
+> code is not directly touchable** and everything about an inner class is instance-level. `static` is
+> precisely the opposite — directly touchable, no object required.
+
+> [!info] **Even under the old rule, "no static members at all" was too strong.** `static final`
+> **compile-time constants** were always permitted — that is what the old error meant by *constant
+> variable declarations*:
+>
+> | Declaration inside the inner class | Through Java 15 |
 > |---|---|
 > | `static int x = 10;` | ❌ illegal |
 > | `static void m() {}` | ❌ illegal |
@@ -375,12 +359,12 @@ terminology**. And `static` is precisely the opposite: directly touchable, no ob
 > | `static final String s = "a";` | ✅ **allowed** |
 > | `static final Object o = null;` | ❌ illegal — not a constant expression |
 >
-> All five are legal on JDK 25. Verified on JDK 25.
+> All five are legal now.
 
-> [!important] **The underlying idea survives even though the rule did not.** An inner class instance
-> still holds a hidden reference to its enclosing instance, and you still cannot create one without
-> an outer object. What Java 16 changed is only whether *static* declarations are permitted alongside
-> that — not the has-a relationship the whole chapter is built on.
+> [!important] **What did *not* change is the idea the chapter is built on.** An inner class instance
+> still holds a hidden reference to its enclosing instance, and you still cannot create one without an
+> outer object. Java 16 changed only whether *static* declarations are permitted alongside that — not
+> the has-a relationship.
 
 ---
 
@@ -526,6 +510,6 @@ flowchart TB
 | A normal inner class is | a **named** class, **directly** inside a class, **without** `static` |
 | Class files generated | `Outer.class` and **`Outer$Inner.class`** |
 | A `$` in a class file name means | it is an **inner class** |
-| Static members inside an inner class | ❌ *as taught* — **legal since Java 16** |
+| Static members inside an inner class | ✅ **legal** — forbidden through Java 15 |
 | From the static area / outside | `Outer.Inner i = o.new Inner();` |
 | From the instance area | `Inner i = new Inner();` |

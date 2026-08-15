@@ -47,9 +47,11 @@ flowchart TB
     F --> X(["a new object is needed and<br/><b>there is no memory left</b><br/>the whole application goes down"])
 ```
 
-Because of that neglect, at some point the memory is full of nothing but useless objects. And then the program needs to create one more object, there is no room for it, and **the entire application crashes with a memory problem**. Running out of memory this way is a very common failure in C++ and the older languages.
+Because of that neglect, at some point the memory is full of nothing but useless objects. And then the program needs to create one more object, there is no room for it, and **the entire application crashes with a memory problem**. Running out of memory this way was a very common failure in C++ and the older languages, and it is the problem Java was designed against.
 
-> [!warning] **This is C++ as it was, and modern C++ has largely answered it.** RAII plus smart pointers — `std::unique_ptr` and `std::shared_ptr`, standard since C++11 — mean a well-written modern C++ program is rarely calling `delete` by hand at all; ownership is expressed in the type and destruction happens automatically at scope exit. The lecture's picture is accurate for the era Java was designed in, and it is still the right explanation of *why* Java went the way it did — but do not walk into an interview claiming C++ programmers still manage every object manually.
+> [!important] **Do not claim in an interview that C++ programmers still manage every object by hand.** C++ has largely answered this itself, with **RAII and smart pointers** — `std::unique_ptr` and `std::shared_ptr`. Ownership is expressed in the type and destruction happens automatically at scope exit, so a well-written modern C++ program is rarely calling `delete` directly at all.
+>
+> The picture above is accurate for **the era Java was designed in**, and it remains the right explanation of *why* Java went the way it did. It is not a fair description of C++ today.
 
 > [!info] **A small precision on the name.** `OutOfMemoryError` is a Java type. A C++ program exhausting the heap gets `std::bad_alloc` from `new`, or a null pointer back from `malloc`. The failure being described is real and identical in effect; the specific name belongs to Java.
 

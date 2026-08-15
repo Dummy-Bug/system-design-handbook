@@ -223,46 +223,52 @@ FO....65
 
 Methods are clearly allowed; `getPrice()` above is one and note `06`'s `main` was another.
 
-> As taught: **an enum can contain methods, but they should be concrete methods only. An abstract
-> method cannot be declared inside an enum.**
+> **An enum can contain an abstract method — if and only if EVERY constant supplies its own body.**
 
-His reasoning is two independent problems:
+Measured on JDK 25, this compiles and runs:
 
-> **Problem 1.** Every enum is **implicitly final**. But if a class contains even one abstract
-> method, that class compulsorily has to be declared **abstract**. `final` + `abstract` is an
-> illegal combination.
+```java
+enum Colour {
+    BLUE { public void info() { System.out.println("Universal colour"); } },
+    RED  { public void info() { System.out.println("Dangerous colour");  } };
+
+    public abstract void info();
+}
+```
+```
+Universal colour
+Dangerous colour
+```
+
+**Leave even one constant without a body and it fails:**
+
+```java
+enum Colour2 { BLUE, RED; public abstract void info(); }
+```
+```
+error: Colour2 is not abstract and does not override abstract method info() in Colour2
+```
+
+> [!question]- **Deep dive — two objections that make this look impossible, and how the syntax answers
+> both.** Worth opening, because the objections are the ones an interviewer will raise.
 >
-> **Problem 2.** If a method is abstract, where do you provide the implementation? **In the child
-> class.** And note `04` established that an enum cannot have a child class. So there is nowhere for
-> the implementation to go.
-
-> [!warning] **This is one of the few places where the lecture is simply wrong on modern Java — and
-> it was wrong at the time of recording too.** Abstract methods **are** permitted in an enum,
-> provided **every constant supplies its own body**. Measured on JDK 25, this compiles and runs:
-> ```java
-> enum Colour {
->     BLUE { public void info() { System.out.println("Universal colour"); } },
->     RED  { public void info() { System.out.println("Dangerous colour");  } };
+> **Objection 1.** Every enum is **implicitly final**. But a class containing even one abstract method
+> must itself be declared **abstract**, and `final` + `abstract` is an illegal combination. So how can
+> the enum hold an abstract method at all?
 >
->     public abstract void info();
-> }
-> ```
-> ```
-> Universal colour
-> Dangerous colour
-> ```
-> Remove the bodies and it fails, which is where his instinct was pointing:
-> ```java
-> enum Colour2 { BLUE, RED; public abstract void info(); }
-> ```
-> ```
-> error: Colour2 is not abstract and does not override abstract method info() in Colour2
-> ```
-> **So the real rule is:** an abstract method in an enum is legal **if and only if every constant
-> overrides it**. Both of his objections are answered by that syntax — the constant bodies *are* the
-> implementations, and they live in compiler-generated subclasses rather than in one you write.
-> Note `09` is exactly this mechanism, taught there with a concrete method rather than an abstract
-> one. Verified on JDK 25.
+> **Objection 2.** An abstract method's implementation goes **in the child class** — and note `04`
+> established that you cannot write a child class of an enum. So where does the body go?
+>
+> **The constant bodies answer both at once.** `BLUE { … }` is not decoration: the compiler generates
+> an **anonymous subclass** of `Colour` for that constant and puts the body in it. So there *is* a
+> child class for every constant — the compiler wrote it — and the enum class itself never needs to be
+> abstract, because no constant is left unimplemented.
+>
+> This is why the rule is *every* constant and not *some*: the moment one constant is left bare, it
+> would have to be an instance of the enum class itself, which really would need to be abstract.
+>
+> Note `09` is this same mechanism, taught there with a concrete method being overridden rather than an
+> abstract one being implemented.
 
 ---
 
@@ -281,4 +287,4 @@ His reasoning is two independent problems:
 | Passing values to the constructor | write the argument on the constant — **`KF(100)`** |
 | A constant written bare — `FO` | calls the **no-argument** constructor |
 | Methods inside an enum | ✅ allowed |
-| Abstract methods inside an enum | ❌ *as taught* — but ✅ if **every constant** supplies a body |
+| Abstract methods inside an enum | ✅ **if and only if every constant supplies a body** |

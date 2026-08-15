@@ -390,19 +390,21 @@ The summary table, and every row traces back to the association point.
 | | Normal / regular inner class | Static nested class |
 |---|---|---|
 | **1. Existence** | without an outer class object there is **no chance** of an inner class object — **strongly associated** | without an outer class object there **may** be a nested class object — **not strongly associated** |
-| **2. Static members** | ❌ cannot declare any | ✅ can declare them |
-| **3. `main` method** | ❌ cannot declare one, hence **cannot** be run from the command prompt | ✅ can declare one, hence **can** be run from the command prompt |
-| **4. Outer members reachable** | **both** static and non-static, directly | **only static** |
+| **2. Outer members reachable** | **both** static and non-static, directly | **only static** |
 
-> [!warning] **Rows 2 and 3 no longer distinguish the two on a modern JDK.** As note `01` records,
-> **Java 16 permitted static members in inner classes**, so a normal inner class can now hold statics
-> *and* a `main`, and can be run directly from the command prompt. Measured on JDK 25, `java
-> Outer$Inner` on an inner class carrying a `main` runs it.
+**Two rows, and they are the same fact seen from two sides.** A normal inner class always has an
+enclosing instance, so it can reach that instance's members. A static nested class has none, so it
+cannot.
+
+> [!important] **Older material gives four rows, and the extra two no longer separate the two
+> constructs.** They are *"a normal inner class cannot declare static members"* and *"a normal inner
+> class cannot declare `main`, and so cannot be run from the command prompt"*. Both were true through
+> Java 15; **Java 16 permitted static members in inner classes**, so a normal inner class can now hold
+> statics *and* a `main`. Measured on JDK 25, `java Outer$Inner` on an inner class carrying a `main`
+> runs it — see note `01`.
 >
-> **Rows 1 and 4 are untouched**, and they are the ones that matter — the association rule and the
-> access rule. If you are asked for the difference on a modern JDK, lead with those two. The table
-> above is still exactly right for the exam as it is written, and for any JDK up to 15. Verified on
-> JDK 25.
+> If you are asked for the difference, lead with the two rows above: **the association rule and the
+> access rule.**
 
 ---
 

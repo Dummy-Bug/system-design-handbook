@@ -427,13 +427,15 @@ x is now 888
 | Best choice when | you must handle **multiple methods** | the interface has a **single abstract method** |
 | At compile time | a separate `.class` file — `Outer$1.class` | **no** `.class` file — becomes a **private method** |
 
-> [!warning] **One row of the PDF's table needs a correction.** It says an anonymous inner class'
-> memory is *"allocated on demand whenever we are creating an object, resides in the permanent memory
-> of JVM (Method Area)."* **PermGen no longer exists** — it was removed in **Java 8** (JEP 122) and
-> replaced by **Metaspace**, which lives in native memory outside the heap. The class *metadata* goes
-> to Metaspace; the *object* goes on the heap, as any object does. The distinction the row is drawing
-> — that an anonymous inner class produces a loaded class while a lambda does not — is still true, but
-> "permanent memory" is the wrong name for where it lands on any modern JDK.
+> [!important] **Where each one actually lands in memory**, since this is the row people garble.
+> An anonymous inner class produces **a real loaded class**: its metadata goes into **Metaspace**
+> (native memory, outside the heap) and each instance goes on the **heap**, like any object. A lambda
+> produces **no class file at all** — the compiler emits a private method plus an `invokedynamic` call
+> site, and the implementation object is spun up at first execution.
+>
+> Older material calls the metadata destination *"the permanent memory of the JVM (PermGen)"*.
+> **PermGen was removed in Java 8** (JEP 122) and replaced by Metaspace; the distinction the row is
+> drawing is right, but that is the wrong name for the place.
 
 ---
 

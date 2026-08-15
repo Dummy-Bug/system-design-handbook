@@ -91,40 +91,33 @@ class Test {
 
 Measured on JDK 25 — prints `KF`, and produces two class files: `Test.class` and `Test$Beer.class`.
 
-**Inside a method** — this is the one that fails. A *class* declared inside a method is allowed, and
-such inner classes have a name: **method local inner classes**. But an enum inside a method is not:
+**Inside a method** — this works too. A *class* declared inside a method is allowed, and such inner
+classes have a name: **method local inner classes**. An enum inside a method is the same idea, and it
+is legal:
 
 ```java
-class Test {
+class A {
     public static void main(String[] args) {
-        enum Beer { KF, RC; }        // ✗ in the version being taught
+        enum Fish { STAR, GUPPY }
+        System.out.println(Fish.STAR);
     }
 }
 ```
 
-> As taught: the compile-time error is **`enum types must not be local`**.
+Measured on JDK 25 — compiles and prints `STAR`.
 
-> [!warning] **This rule was removed in Java 16 — local enums are now legal.** JEP 395 (records)
-> also lifted the restriction on local enums and local interfaces. Measured on JDK 25, this compiles
-> and runs, printing `STAR`:
-> ```java
-> class A {
->     public static void main(String[] args) {
->         enum Fish { STAR, GUPPY }
->         System.out.println(Fish.STAR);
->     }
-> }
-> ```
-> The rule as taught was correct through Java 15 and is still what older exam papers assume, so
-> recognise both. Verified on JDK 25.
+> [!important] **Older material says this is an error, and that is worth recognising.** Local enums
+> and local interfaces were forbidden until **Java 16** lifted the restriction (JEP 395, the records
+> JEP, carried it). Pre-16 the compiler said **`enum types must not be local`**, and exam papers
+> written against those releases still expect that answer.
 
-## The four combinations he tests
+## The four combinations
 
 | Code | Valid? | Why |
 |---|---|---|
 | `enum X {}` then `class Y {}` | ✅ | enum declared **outside** a class |
 | `class X { enum Y {} }` | ✅ | enum declared **inside** a class |
-| `class X { public void m1() { enum Y {} } }` | ❌ *as taught* | enum inside a **method** — but see the warning above |
+| `class X { public void m1() { enum Y {} } }` | ✅ | enum inside a **method** — a local enum |
 | `enum X { … }` alone at top level | ✅ | the ordinary case |
 
 ---
@@ -186,15 +179,10 @@ flowchart TB
 > final and abstract at once. Note `04` is this same fact used to explain why you cannot subclass an
 > enum.
 
-> [!warning] **`strictfp` is still accepted but is now meaningless.** Since **Java 17** all
-> floating-point expressions are evaluated strictly, so the keyword does nothing. Measured on JDK 25
-> it compiles with a warning:
-> ```
-> warning: [strictfp] as of release 17, all floating-point expressions are evaluated
-> strictly and 'strictfp' is not required
-> ```
-> It still counts as an "applicable modifier" for exam purposes — the count of 3 and 6 is unchanged.
-> Verified on JDK 25.
+> [!info] **`strictfp` is accepted but does nothing.** All floating-point expressions are evaluated
+> strictly by default, so the keyword is a no-op and `javac` warns that it *"is not required"* —
+> see `DECLARATIONS-AND-ACCESS-MODIFIERS/07`. It still **counts as an applicable modifier**, so the
+> totals of 3 and 6 are what to give.
 
 ---
 
@@ -205,8 +193,8 @@ flowchart TB
 | Declare with | the **`enum`** keyword |
 | Access a constant with | the **enum name** — every constant is `static` |
 | Printing a constant gives | its **name** — `toString()` returns it |
-| An enum may be declared | **outside** a class or **inside** a class |
-| An enum may **not** be declared | **inside a method** — `enum types must not be local` (through Java 15) |
+| An enum may be declared | **outside** a class, **inside** a class, or **inside a method** |
+| Local enums | ✅ legal — forbidden before Java 16, so older papers say otherwise |
 | Modifiers for an **outer** enum | `public`, *default*, `strictfp` — **3** |
 | Modifiers for an **inner** enum | those **plus** `private`, `protected`, `static` — **6** |
 | `final` on an enum | ❌ — it is already **implicitly final** |

@@ -99,7 +99,7 @@ at 34 characters     34
 after the 35th       70
 ```
 
-**Exactly as taught**, including that adding the 16th character does *not* trigger growth — only the 17th does.
+**Exactly as stated**, including that adding the 16th character does *not* trigger growth — only the 17th does.
 
 > [!info] **Why this internal detail is worth knowing.** He mentions having felt, in regular classes, that explaining this much internal behaviour was wasting students' time — until a student came back from an interview where he had been asked precisely this: the default initial capacity, and what happens internally when a `StringBuffer` fills up. He answered it and the interviewer was visibly impressed. Sometimes the internals are the question.
 
@@ -271,7 +271,7 @@ Measured on JDK 25:
 aishwary
 ```
 
-> [!warning] **He says the result is `aishwarya` while writing it out, and the measured answer is `aishwary`.** Counting `a-i-s-h-w-a-r-y` gives eight; the second `a` is the ninth character and is cut. A slip in the count, not in the concept — `setLength(8)` keeps exactly eight characters, as taught. Verified on JDK 25.
+> [!important] **Count it: `a-i-s-h-w-a-r-y` is eight characters.** The second `a` is the ninth and is cut, so the answer is `aishwary` and not `aishwarya`. `setLength(8)` keeps **exactly** eight — no rounding to a word boundary, no mercy.
 
 ## 11 · `public void ensureCapacity(int capacity)`
 

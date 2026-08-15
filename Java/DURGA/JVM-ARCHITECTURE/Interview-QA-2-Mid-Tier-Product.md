@@ -103,7 +103,7 @@ Interview questions on **JVM architecture and memory**, as asked by mid-tier pro
 
 ### 19. `finalize()` is deprecated. What replaced it?
 
-- **Notes:** ❌ **gap.** Durga's chapter teaches `finalize()` in four cases with no mention that it is deprecated for removal — this will need a `[!warning]` naming `Cleaner` and try-with-resources.
+- **Notes:** ✅ `GARBAGE-COLLECTION/04` and `JAVA-LANG-PACKAGE/04` — deprecated for removal, replaced by **try-with-resources** for scoped cleanup and **`java.lang.ref.Cleaner`** for the rest, with the resurrection and swallowed-exception cases measured.
 
 ### 20. What is `UnsupportedClassVersionError` and how do you fix it?
 

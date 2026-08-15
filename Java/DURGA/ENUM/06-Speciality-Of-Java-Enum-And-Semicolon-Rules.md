@@ -161,9 +161,9 @@ flowchart TB
     Q -->|"yes"| Y["<b>first line</b> = list of constants,<br/><b>ending with a semicolon</b><br/><i>a bare ; counts as an empty list</i>"]
 ```
 
-> [!info] **He notes the error text is version-dependent** — as-per-1.6 he reads out `semicolon
-> expected` and three errors at once. JDK 25 reports `',', '}', or ';' expected`. The rules
-> themselves are unchanged, and all nine rows above behave exactly as taught. Verified on JDK 25.
+> [!info] **The error text here is version-dependent, so do not memorise it.** JDK 25 reports
+> `',', '}', or ';' expected`; older releases said `semicolon expected`, often three times over. The
+> nine rows above are the thing to carry — they behave identically either way.
 
 ---
 

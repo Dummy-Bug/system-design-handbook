@@ -85,8 +85,6 @@ Index 30 does not exist — only 0 to 4 — so you get a runtime exception, `Str
 java.lang.StringIndexOutOfBoundsException: Index 30 out of bounds for length 5
 ```
 
-> [!warning] **The message text has changed since the recording.** In the Java 6/7 era this read `String index out of range: 30`. Modern JDKs give `Index 30 out of bounds for length 5`, which also tells you the length. The **exception type is unchanged**, so any question asking *which* exception is raised has the same answer. Verified on JDK 25.
-
 ## 2 · `public String concat(String str)`
 
 Joins another string on the end and **returns a new object** — remember that the original is never modified.
@@ -362,7 +360,7 @@ Measured on JDK 25:
 
 **Both are ten.** This exact shape appears in certification questions, and the expected wrong answer is 9.
 
-> [!warning] **`trim()` has a modern replacement, and the difference is not cosmetic.** `trim()` dates from Java 1.0 and removes any character **≤ U+0020** — which includes control characters that are not spaces at all. **`strip()`, added in Java 11**, removes whatever `Character.isWhitespace()` considers whitespace, which is the Unicode-aware answer.
+> [!warning] **Use `strip()`, not `trim()` — the difference is not cosmetic.** `trim()` dates from Java 1.0 and removes any character **≤ U+0020**, which sweeps up control characters that are not spaces at all while missing most real Unicode whitespace. **`strip()`** removes whatever `Character.isWhitespace()` considers whitespace, which is the Unicode-aware answer.
 >
 > Measured on JDK 25, wrapping `ab` in each character:
 >

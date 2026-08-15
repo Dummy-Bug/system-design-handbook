@@ -137,8 +137,8 @@ error: Unexpected @FunctionalInterface annotation
     multiple non-overriding abstract methods found in interface F3
 ```
 
-Both messages are unchanged since the recording — including the phrase **"non-overriding"**, which is
-the hinge of the whole inheritance section below.
+Note the phrase **"non-overriding"** in that second message — it is the hinge of the whole inheritance
+section below.
 
 ---
 

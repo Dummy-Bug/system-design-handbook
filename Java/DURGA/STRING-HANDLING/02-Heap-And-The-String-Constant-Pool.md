@@ -271,9 +271,9 @@ So by the time concatenation is considered, `s8` is no longer a variable at all;
 >
 > And **`final` turns a variable back into a constant**, which is why `s7` and `s9` differ by nothing but that one keyword and give opposite answers.
 
-> [!warning] **The mechanism behind runtime concatenation has changed since this was recorded, though every answer above is unaffected.** In the Java 6/7 era, `a + b` compiled into `StringBuilder` calls — `new StringBuilder().append(a).append(b).toString()` — and you could see it in `javap -c`. **Since Java 9 the compiler emits an `invokedynamic` instead**, letting `StringConcatFactory` build an optimised concatenation at first execution.
+> [!important] **If you decompile this expecting to find `StringBuilder`, you will not.** Runtime `a + b` compiles to a single **`invokedynamic`**, which hands the job to `StringConcatFactory` to build an optimised concatenation at first execution. Older JDKs emitted `new StringBuilder().append(a).append(b).toString()` instead, which is why so much material describes `+` that way.
 >
-> So if you decompile this program on a modern JDK expecting to find `StringBuilder`, you will not. **Compile-time constant folding is untouched** — `s5` and `s9` still resolve during compilation — and every `true`/`false` above is identical. Only the shape of the bytecode for the *runtime* cases moved. Verified on JDK 25.
+> **Nothing above depends on which one you get.** Compile-time constant folding is a separate mechanism — `s5` and `s9` still resolve during compilation — and every `true`/`false` in this note is the same either way. Verified on JDK 25.
 
 ---
 

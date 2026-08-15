@@ -72,7 +72,9 @@ Exception in thread "main" java.lang.StackOverflowError
 
 ### 4 · `NoClassDefFoundError`
 
-Child of **`Error`**, unchecked. Raised when the JVM cannot find a required `.class` file.
+Child of **`Error`**, unchecked. Raised when a class **was present at compile time** but its `.class` file is missing at runtime — the classic *"compiled fine, exploded on the server"* failure, usually a jar left off the runtime classpath.
+
+**The missing-main-class case is a different error.** Measured on JDK 25:
 
 ```
 $ java NoSuchClassAtAll
@@ -80,9 +82,7 @@ Error: Could not find or load main class NoSuchClassAtAll
 Caused by: java.lang.ClassNotFoundException: NoSuchClassAtAll
 ```
 
-> [!warning] **Measured behaviour differs from the lecture here.** The lecture says running `java Test` with no `Test.class` gives `NoClassDefFoundError`. On JDK 25 the launcher reports **`Could not find or load main class`, caused by `ClassNotFoundException`** — not `NoClassDefFoundError`.
->
-> Both types exist and both are real; the distinction is worth knowing because it is itself an interview question:
+> [!important] **`ClassNotFoundException` vs `NoClassDefFoundError` is itself an interview question**, and the two are easy to confuse because both mean *"a class is missing"*.
 >
 > | | `ClassNotFoundException` | `NoClassDefFoundError` |
 > |---|---|---|
@@ -90,7 +90,7 @@ Caused by: java.lang.ClassNotFoundException: NoSuchClassAtAll
 > | Raised when | an **explicit** lookup fails: `Class.forName("X")`, `loadClass` | the class was **present at compile time** but is missing at runtime |
 > | Typical cause | a name typed at runtime that does not exist | a jar missing from the runtime classpath |
 >
-> `NoClassDefFoundError` still very much happens — it is the classic "compiled fine, exploded on the server" failure. It just is not what the missing-main-class case produces any more.
+> The launcher looks its main class up **by name**, so a missing main class is the first case.
 
 ### 5 · `ClassCastException`
 

@@ -72,12 +72,12 @@ Twelve numbered statements, two `catch` blocks, two `finally` blocks. The except
 | **4** | **stmt-5** | **inner** `catch` matches | 1, 2, 3, 4, 7, **8**, 9, **11**, 12 | normal |
 | **5** | **stmt-5** | inner misses, **outer** matches | 1, 2, 3, 4, **8**, 10, **11**, 12 | normal |
 | **6** | **stmt-5** | neither matches | 1, 2, 3, 4, **8**, **11** | **abnormal** |
-| **7** | **stmt-7** (inner catch) | outer `catch` matches | 1, 2, 3, 4, 5, 6, **8**, 10, **11**, 12 | normal |
-| **8** | **stmt-7** (inner catch) | nothing matches | 1, 2, 3, 4, 5, 6, **8**, **11** | **abnormal** |
-| **9** | **stmt-8** (inner finally) | outer `catch` matches | 1, 2, 3, 4, 5, 6, 7, 10, **11**, 12 | normal |
-| **10** | **stmt-8** (inner finally) | nothing matches | 1, 2, 3, 4, 5, 6, 7, **11** | **abnormal** |
-| **11** | **stmt-9** | outer `catch` matches | 1, 2, 3, 4, 5, 6, 7, **8**, 10, **11**, 12 | normal |
-| **12** | **stmt-9** | nothing matches | 1, 2, 3, 4, 5, 6, 7, **8**, **11** | **abnormal** |
+| **7** | **stmt-7** (inner catch) | outer `catch` matches | 1, 2, 3, 4, **8**, 10, **11**, 12 | normal |
+| **8** | **stmt-7** (inner catch) | nothing matches | 1, 2, 3, 4, **8**, **11** | **abnormal** |
+| **9** | **stmt-8** (inner finally) | outer `catch` matches | 1, 2, 3, 4, 5, 6, 10, **11**, 12 | normal |
+| **10** | **stmt-8** (inner finally) | nothing matches | 1, 2, 3, 4, 5, 6, **11** | **abnormal** |
+| **11** | **stmt-9** | outer `catch` matches | 1, 2, 3, 4, 5, 6, **8**, 10, **11**, 12 | normal |
+| **12** | **stmt-9** | nothing matches | 1, 2, 3, 4, 5, 6, **8**, **11** | **abnormal** |
 | **13** | **stmt-10** (outer catch) | — | **11** runs, then it dies | **always abnormal** |
 | **14** | **stmt-11** or **stmt-12** | — | — | **always abnormal** |
 
@@ -104,13 +104,13 @@ Read it in five groups rather than fourteen rows.
 >
 > Everything in the table is those three rules applied to a different starting point. If you can state them, you can derive any row on the spot, which is what an interviewer is actually testing.
 
-> [!warning] **Four rows of the PDF's table list a statement that cannot have run, and measuring the cases is how you see it.**
+> [!important] **Two groups of rows are easy to get wrong, and the rules above are how you check them.**
 >
-> **Cases 7 and 8** list statements **5 and 6** as executed. They cannot be — the premise is that statement 7 ran, and statement 7 is the *inner catch*, which only runs when something in the inner `try` failed. Measured, cases 7 and 8 give `1 2 3 4 8 10 11 12` and `1 2 3 4 8 11`.
+> **Cases 7 and 8 cannot include statements 5 and 6.** The premise is that statement 7 ran — and statement 7 is the *inner catch*, which only runs when something in the inner `try` failed. If 5 and 6 had both completed there would have been no exception to catch. Measured: `1 2 3 4 8 10 11 12` and `1 2 3 4 8 11`.
 >
-> **Cases 9 to 12** list statement **7** as executed. It cannot be — the premise is that statements 4, 5 and 6 all completed, so the inner `catch` was never entered. Measured, case 11 gives `1 2 3 4 5 6 8 10 11 12`, with no 7.
+> **Cases 9 to 12 cannot include statement 7.** The premise is that statements 4, 5 and 6 all completed, so the inner `catch` was never entered at all. Measured, case 11 gives `1 2 3 4 5 6 8 10 11 12`.
 >
-> The listings are **schematic**: he is writing down every statement that appears textually above the failure point, not a path that a real run can take. **The other ten cases are exactly right**, and the three rules above are unaffected — so learn the rules, and treat those four rows as a slip in the source rather than something to memorise.
+> The trap in both is writing down every statement that appears *textually above* the failure point instead of the path a real run can take. Derive from the three rules and neither mistake is possible.
 
 And the two notes worth carrying:
 
@@ -152,7 +152,7 @@ Three exceptions were raised. **One is reported** — the `NullPointerException`
 >
 > Modern Java's answer is `try`-with-resources, where an exception from closing a resource is **suppressed and attached** to the primary exception rather than replacing it — so both survive. That is part 10.
 
-> [!info] **Notice the NPE message itself: `Cannot invoke "String.length()" because "<local3>" is null`.** That precision is **helpful NullPointerExceptions**, added in Java 14. In 2016 this line would have read only `java.lang.NullPointerException` with no explanation, and working out *which* thing was null was a manual exercise. It is on by default now, and it is one of the most useful debugging changes in modern Java.
+> [!info] **Notice the NPE message itself: `Cannot invoke "String.length()" because "<local3>" is null`.** That precision is **helpful NullPointerExceptions**, on by default. The message names the method you tried to call *and* the expression that was null — so a line with several possible culprits no longer needs a debugger to narrow down. Older JDKs printed a bare `java.lang.NullPointerException` with no explanation at all.
 
 ## Which combinations compile
 

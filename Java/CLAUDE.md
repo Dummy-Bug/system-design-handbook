@@ -16,10 +16,28 @@ This includes:
 - every definition, dictated word for word as he gives it
 - every list, every "how many types", every case number
 
-**Outdated is not a reason to drop.** If something he says is wrong or has changed since the video
-was recorded, it still goes in, stated as taught — with a `[!warning]` callout beside it giving the
-current behaviour and the JDK version it was verified on. Never silently delete a stale fact, and
-never silently replace it with the modern one.
+### Stale facts: state the current truth, never the old one (ruled 2026-08-15)
+
+**Reversed from the original rule.** The notes are read to *learn from*, and learning a fact then
+scrolling into a callout that invalidates it is double work — he has to learn it twice.
+
+**So: wherever the video is out of date or simply wrong, the main text states what is true today.**
+Not "he says 73, it is now 151" — just **"`String` has 151 methods"**. Not "as taught this fails, but
+Java 16 allows it" — just show it compiling. Tables, summary rows, code samples and error messages
+all carry the measured JDK 25 behaviour, with no `❌ as taught` / `✅ now` split columns.
+
+**The old behaviour still goes in, but demoted and reframed**, because he will meet it in exam papers
+and older material. Put it in an `[!important]` written as *"older material says X; that was true
+through Java N"* — a fact about the ecosystem, never a correction of the note above it. Keep it only
+where it is genuinely still encountered; drop it where the change was cosmetic (a reworded compiler
+message that nobody will be quizzed on).
+
+**`[!warning]` is now reserved for danger, not for currency.** *"Never call a wrapper constructor",*
+*"a `return` inside `finally` swallows exceptions"*, *"assertions are off unless you pass `-ea`"* —
+things that will bite. A version change is not a danger; use `[!important]` or `[!info]`.
+
+**Everything asserted as current must be run on JDK 25 first** (Rule 3). Restating a fact means owning
+it.
 
 Only the user decides what gets cut. If something seems not worth including, **ask** — do not decide
 unilaterally. (Precedent: he ordered the multithreading agenda file deleted, and separately told me

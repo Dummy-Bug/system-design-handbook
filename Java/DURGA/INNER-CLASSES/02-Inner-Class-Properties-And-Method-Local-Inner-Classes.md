@@ -21,13 +21,14 @@ class Outer {
 }
 ```
 
-Is this valid? **Most people say no**, because of `System.out.println(y)` — note `01` established
-that an inner class cannot have static members, so surely a static variable is out of bounds.
+Is this valid? **Most people hesitate at `System.out.println(y)`**, because an inner class is such a
+thoroughly instance-level thing — every one of them needs an enclosing object to exist at all — that
+reaching a *static* variable feels like it should be out of bounds.
 
-That is the trap, and the distinction is one word:
+It is not, and the distinction is one word:
 
-> **Declaring is different from accessing.** Inside an inner class we cannot **declare** static
-> members. It does not mean we cannot **access** them.
+> **Declaring is different from accessing.** Whatever rules govern what an inner class may **declare**,
+> they say nothing about what it may **access**.
 
 Measured on JDK 25:
 
@@ -148,10 +149,10 @@ The three that only an inner class gets are exactly the three that need an enclo
 meaningful — `private` and `protected` are about visibility *within* something, and `static` is the
 fourth category of inner class.
 
-> [!warning] **`strictfp` still counts but no longer does anything.** Since **Java 17** all
-> floating-point expressions are evaluated strictly, so the keyword is a no-op and compiling with it
-> produces a warning. It remains an "applicable modifier" for exam purposes — the counts of 5 and 8
-> are unchanged. Verified on JDK 25.
+> [!info] **`strictfp` counts but does nothing.** All floating-point expressions are evaluated
+> strictly by default, so the keyword is a no-op and `javac` warns that it *"is not required"* —
+> see `DECLARATIONS-AND-ACCESS-MODIFIERS/07`. It remains an **applicable modifier**, so the counts
+> of 5 and 8 are what to give.
 
 ---
 
@@ -361,6 +362,7 @@ He flags this as the most important point in the section.
 class Test {
     public void m1() {
         int x = 10;                    // local variable of m1
+        x = 11;                        // ← reassigned
 
         class Inner {
             public void m2() {
@@ -378,16 +380,23 @@ class Test {
 }
 ```
 
-> As taught: **from a method local inner class we cannot access local variables of the method in
-> which we declared that inner class.** The compiler is, in his words, a very decent person about it:
->
-> **`local variable x is accessed from within inner class; needs to be declared final`**
->
-> **If the local variable is declared `final`, then we can access it** — no problem at all.
+Measured on JDK 25:
+
+```
+error: local variables referenced from an inner class must be final or effectively final
+```
+
+> **From a method local inner class we cannot access a local variable of the enclosing method unless
+> that variable is `final` or effectively final** — meaning it is never reassigned after
+> initialisation. The compiler is, in his words, a very decent person about it: the message names the
+> fix.
+
+**Delete the `x = 11;` line and it compiles and prints `10`**, with no `final` keyword anywhere — `x`
+is then effectively final. That single line is the whole difference.
 
 ## Why — the memory argument
 
-This is the reasoning he says to dig into, and it is the best deep-dive material in the chapter.
+He flags this as the reasoning to dig into, and it is the best deep-dive material in the chapter.
 
 > [!question]- **Deep dive — why a non-final local variable cannot be reached, argued from stack and
 > heap.** Open this for the mechanism; the rule above is what gets asked, but this is what makes it
@@ -413,30 +422,18 @@ This is the reasoning he says to dig into, and it is the best deep-dive material
 >
 > That is the whole reason for the restriction.
 >
-> **Now the `final` case.** If `x` is `final`, fact 3 applies: at **compile time** `x` has already
-> been replaced by the literal `10`. So after `m1` completes and the stack frame is gone, `m2` calling
-> `System.out.println(x)` is really `System.out.println(10)` — **there is no dependency on the local
-> variable at all**, because the value was baked in before the program ever ran.
-
-> [!warning] **Since Java 8 the variable does not have to say `final` — it only has to *behave* like
-> it.** This is "effectively final", and it is why the rule looks broken on a modern JDK. Measured on
-> JDK 25, the program above — with a plain `int x = 10;`, no `final` — **compiles and runs**:
-> ```
-> 10
-> ```
-> The requirement has not been dropped, only relaxed: the variable must never be reassigned. Add one
-> line and it fails again:
-> ```java
-> int x = 10;
-> x = 11;              // now it is no longer effectively final
-> ```
-> ```
-> error: local variables referenced from an inner class must be final or effectively final
-> ```
-> **The mechanism in the deep dive is unchanged** — the value is still captured rather than shared,
-> which is exactly why reassignment is what breaks it. Only the ceremony of writing `final` went
-> away. Note the message itself names both cases, so it is easy to recognise. Verified on JDK 25;
-> `javac --release 8` gives the identical message.
+> **Now the case that works.** If `x` is never reassigned, fact 3 applies: the compiler can safely
+> **copy the value into the `Inner` object** when that object is constructed, because the value can
+> never change afterwards. So once `m1` completes and the stack frame is gone, `m2` calling
+> `System.out.println(x)` is reading its own captured copy — **there is no dependency on the stack
+> frame at all.**
+>
+> **This is why reassignment is the thing that breaks it.** If `x` could change after the capture, the
+> `Inner` object's copy and the method's variable would silently disagree, and there would be no
+> honest answer to *"which one does `m2` print?"*. Forbidding reassignment removes the question.
+>
+> Writing `final` was only ever ceremony confirming what the compiler can work out for itself — which
+> is exactly why the keyword stopped being required.
 
 ---
 
@@ -463,14 +460,19 @@ class Test {
 }
 ```
 
+**`k` is never reassigned in this program, so it is effectively final** — which is what makes all
+three answers work out the way they do. Measured on JDK 25 throughout.
+
 ## Question 1 — as written above
 
 | Variable | Accessible? | Why |
 |---|---|---|
 | `i` | ✅ | `m1` is an instance method, so instance members are reachable |
 | `j` | ✅ | static members are always reachable |
-| `k` | ❌ | a local variable that is **not final** |
-| `m` | ✅ | a local variable that **is** final |
+| `k` | ✅ | a local variable that is **effectively final** — never reassigned |
+| `m` | ✅ | a local variable that **is** `final` |
+
+**All four.**
 
 ## Question 2 — `m1` declared `static`
 
@@ -478,35 +480,33 @@ class Test {
 |---|---|---|
 | `i` | ❌ | **instance** variable, and we are now in a static context |
 | `j` | ✅ | static |
-| `k` | ❌ | not final |
+| `k` | ✅ | effectively final |
 | `m` | ✅ | final |
+
+**Only `i` fails**, and losing the enclosing instance is the single thing that changed.
 
 ## Question 3 — `m2` declared `static`
 
-This is the one he says most people get wrong by answering the variables at all.
+The one most people get wrong by answering the variables at all.
 
-> **Forget about accessing — the code will not compile**, because inside an inner class we cannot
-> declare static members.
+> **Forget about accessing — the code will not compile.**
 
-> [!warning] **All three answers have moved on JDK 25, and question 3 changed for a subtle reason.**
-> Measured on JDK 25:
->
-> | | As taught | JDK 25 |
-> |---|---|---|
-> | **Q1** | `i` ✅ `j` ✅ `k` ❌ `m` ✅ | **all four accessible** — `k` is effectively final |
-> | **Q2** | `i` ❌ `j` ✅ `k` ❌ `m` ✅ | only `i` fails — `k` is now fine |
-> | **Q3** | compile error — static not allowed in an inner class | **still a compile error, different cause** |
->
-> Question 3 is worth reading carefully. Since Java 16 a static method inside an inner class is
-> **legal**, so his stated reason no longer applies. But the code still fails, because a static method
-> cannot reach the enclosing instance or the captured locals. Measured:
-> ```
-> error: non-static variable i cannot be referenced from a static context
-> error: non-static variable k cannot be referenced from a static context
-> error: non-static variable m cannot be referenced from a static context
-> ```
-> Only `j` survives. **Same verdict, completely different reason** — and if the exam asks *why*, the
-> modern answer is the static-context rule, not the declaration rule. Verified on JDK 25.
+A static method inside an inner class is legal to *declare*, but it has no enclosing instance and no
+captured locals, so three of the four references fail outright:
+
+```
+error: non-static variable i cannot be referenced from a static context
+error: non-static variable k cannot be referenced from a static context
+error: non-static variable m cannot be referenced from a static context
+```
+
+**Only `j` survives** — and since the class does not compile, the honest answer to *"which variables
+are accessible"* is that the question does not arise.
+
+> [!important] **If the exam asks *why* question 3 fails, the answer is the static-context rule.**
+> Older material gives a different reason — that an inner class cannot declare static members at all —
+> which was true through Java 15 and stopped being true in Java 16 (see note `01`). The verdict is the
+> same either way; the reasoning is not.
 
 ---
 

@@ -146,30 +146,30 @@ Garbage collection is the one everybody names, but it is not alone. Daemon threa
 
 ---
 
-## What has changed since this lecture
+## Why `extends Thread` is the wrong default
 
-Everything above still compiles and behaves exactly as described — the cases were re-run on JDK 25 to confirm it. But **extending `Thread` has gone from "one of two ways" to "the way you should almost never pick"**, for reasons that did not exist when this was recorded.
+Everything above compiles and behaves exactly as described — the cases were re-run on JDK 25 to confirm it. But of the two ways to define a thread, **extending `Thread` is the one you should almost never pick**, and there are two reasons beyond the inheritance objection.
 
-> [!warning] **`Runnable` is a lambda now (Java 8+).** `Runnable` has a single method, so it is a functional interface, and the whole ceremony collapses to one line:
->
-> ```java
-> Thread t = new Thread(() -> System.out.println("child thread"));
-> t.start();
-> ```
->
-> No subclass, no override, no separate file. When the lecture compares the two approaches in the next section, weigh this in — the `Runnable` side got dramatically lighter after this was recorded.
+**1 — `Runnable` is a lambda.** It has a single abstract method, so it is a functional interface and the whole ceremony collapses to one line:
 
-> [!warning] **Extending `Thread` locks you out of virtual threads (Java 21+).** Virtual threads are the modern answer to "I need thousands of concurrent jobs", and they cannot be created by subclassing:
->
-> ```java
-> Thread v = Thread.ofVirtual().start(() -> System.out.println("virtual"));
-> ```
->
-> Verified on JDK 25: a `class MyThread extends Thread` instance reports `isVirtual() == false`, always — a subclass of `Thread` is a platform thread by construction. A virtual thread's class is `java.lang.VirtualThread`, and its default name is the **empty string** rather than `Thread-0`.
->
-> So the inheritance objection to extending `Thread` (you burn your one superclass slot) now has a second, sharper edge: you also give up the cheapest concurrency Java has.
+```java
+Thread t = new Thread(() -> System.out.println("child thread"));
+t.start();
+```
 
-> [!info] **Default names are unchanged.** `Thread.currentThread().getName()` in `main` is still `main`, and the first platform thread you create is still `Thread-0`. Both confirmed on JDK 25.
+No subclass, no override, no separate file.
+
+**2 — extending `Thread` locks you out of virtual threads.** Virtual threads are the answer to *"I need thousands of concurrent jobs"*, and they cannot be created by subclassing:
+
+```java
+Thread v = Thread.ofVirtual().start(() -> System.out.println("virtual"));
+```
+
+> [!important] **A subclass of `Thread` is a platform thread by construction.** Verified on JDK 25: a `class MyThread extends Thread` instance reports `isVirtual() == false`, always. A virtual thread's class is `java.lang.VirtualThread`, and its default name is the **empty string** rather than `Thread-0`.
+>
+> So the classic objection to extending `Thread` — that you burn your one superclass slot — now has a second and sharper edge: **you also give up the cheapest concurrency Java has.**
+
+> [!info] **Default names are as you would expect.** `Thread.currentThread().getName()` in `main` is `main`, and the first platform thread you create is `Thread-0`. Both confirmed on JDK 25.
 
 Learn the `extends Thread` form anyway — it is what gets asked, and it is what the nine cases below dissect.
 
@@ -221,13 +221,13 @@ For the `child thread` / `main thread` program, all of these are legal:
 
 **Any combination of the two lines is a possible output.** The only thing fixed is that each thread's own lines stay in its own order.
 
-> [!warning] **"The scheduler is part of the JVM" is no longer the whole story.** When this was recorded, the sentence was already a simplification, and today it is worth stating precisely:
+> [!important] **"The scheduler is part of the JVM" is a simplification — say it precisely and it is a better answer.**
 >
-> - **Platform threads** — everything in this chapter until virtual threads appear — are mapped **one-to-one onto operating system threads**. The scheduling decision is made by the **OS scheduler**, not by the JVM. This is why the behaviour changes when you change machines, not just when you change JVMs.
-> - Java *did* once schedule threads itself. Those were **green threads**, and they were dropped back in Java 1.3. (Durga's own agenda still lists "green thread" as a topic — that is how old this material's roots are.)
-> - **Virtual threads (Java 21+)** bring JVM-level scheduling back: many virtual threads are multiplexed onto a small pool of carrier threads by a scheduler inside the JVM.
+> - **Platform threads** — everything in this chapter until virtual threads appear — are mapped **one-to-one onto operating system threads**. The scheduling decision is made by the **OS scheduler**, one level below the JVM. This is why the behaviour changes when you change machines, not just when you change JVMs.
+> - Java *did* once schedule threads itself. Those were **green threads**, dropped in Java 1.3. (Durga's own agenda still lists "green thread" as a topic — that is how far back this material's roots go.)
+> - **Virtual threads** bring JVM-level scheduling back: many virtual threads are multiplexed onto a small pool of carrier threads by a scheduler inside the JVM.
 >
-> The examinable sentence is unchanged and the *consequence* is unchanged — you cannot predict the order. Just know that for ordinary threads the decision is being made one level below the JVM.
+> **The consequence is the same whichever scheduler is deciding — you cannot predict the order.**
 
 ---
 
@@ -304,7 +304,9 @@ Every one of those is a formality you never write and never see. You write `t.st
 
 > [!important] **`start()` is the best assistant a programmer has here.** Your responsibility is one thing only: define the job inside `run()`. Everything required to make that job into a real, scheduled thread is on the other side of a single method call. If it were not, every program that wanted a thread would have to reimplement it.
 
-> [!warning] **The "70,000 lines inside `start()`" is rhetoric — the real thing is smaller and more interesting.** Here is `Thread.start()` in full, from the JDK 25 sources shipped with the JDK on this machine:
+> [!example]- **Deep dive — what is actually inside `start()`, in full.** The "70,000 lines" is rhetoric; the real thing is nine lines and more interesting than the story.
+>
+> From the JDK 25 sources shipped with the JDK on this machine:
 >
 > ```java
 > public void start() {
@@ -383,11 +385,11 @@ This compiles, and it starts a real thread. Trace the lookup: `t.start()` is not
 
 Output, verified: nothing at all.
 
-> If we are not overriding `run()`, then `Thread`'s `run()` will be executed, which has an **empty implementation** — hence we won't get any output.
+> If we are not overriding `run()`, then `Thread`'s own `run()` will be executed — and with no target handed to the constructor it does **nothing**, hence no output.
 
 > [!important] **It is highly recommended to override `run()`. If you don't want to, don't use multithreading at all** — a thread with no job is a thread that does nothing, at the cost of creating a thread. You have paid for the machinery and defined no work for it to do.
 
-> [!warning] **"Empty implementation" is not quite what `Thread.run()` says today.** From the JDK 25 source:
+> [!important] **`Thread.run()` is not an empty method — it runs the `Runnable` you gave the constructor.** From the JDK 25 source:
 >
 > ```java
 > public void run() {
@@ -399,7 +401,7 @@ Output, verified: nothing at all.
 > }
 > ```
 >
-> It is not empty — it **runs the `Runnable` you handed to the constructor**, if you handed one over. It only *behaves* as empty in this case because `new MyThread()` passed no target. Which is exactly the mechanism that makes the `Runnable` approach work in the first place, so this is worth holding on to for the next video rather than filing under trivia.
+> It only *behaves* as empty here because `new MyThread()` passed no target, so `task` is null. **This is exactly the mechanism that makes the `Runnable` approach work** — hold on to it for the next video rather than filing it under trivia.
 
 ---
 
@@ -536,7 +538,7 @@ The half of the saying nobody can promise for people — *and everyone who dies 
 >
 > As the lecture puts it: a person does his job, but he also does extracurricular activities — sometimes he sleeps, sometimes he joins, sometimes he yields. Same person, same life, temporary detours.
 
-> [!warning] **Java has an actual state machine now, and it has six states, not four.** `Thread.State` (added in Java 5, readable via `t.getState()`) is what the JVM really tracks:
+> [!important] **Java tracks six states of its own, not four.** `Thread.State`, readable via `t.getState()`, is what the JVM actually records:
 >
 > | `Thread.State` | Maps to the diagram above |
 > |---|---|
@@ -561,7 +563,7 @@ The half of the saying nobody can promise for people — *and everyone who dies 
 >
 > Learn the four-state diagram — it is what gets asked, and it is the right mental model. But `getState()` is the version you can actually print, and it is a real debugging tool: a thread stuck at `BLOCKED` means someone else holds a lock; stuck at `WAITING` means it is expecting a signal that may never arrive.
 
-> [!warning] **Three life-cycle methods are effectively gone.** `Thread.stop()`, `suspend()` and `resume()` were deprecated for being unsafe, and since JDK 20 they no longer work at all — calling `t.stop()` on JDK 25 throws `UnsupportedOperationException` (verified). If older material offers them as ways to control a thread, ignore it; the modern answer is interruption and `volatile` flags.
+> [!warning] **`Thread.stop()`, `suspend()` and `resume()` do not work — never reach for them.** All three were deprecated for being unsafe, and they now throw `UnsupportedOperationException` when called (verified on JDK 25). Older material offers them as ways to control a thread; **the answer is interruption and `volatile` flags.**
 
 ---
 
