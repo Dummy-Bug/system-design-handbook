@@ -59,7 +59,7 @@ And by default, an instance is **mutable**, and assignment does **not** re-valid
 user.bio = 123  # a plain BaseModel accepts this silently by default
 ```
 
-That reassignment succeeds even though `bio` is typed as `str`, because Pydantic only validates on *construction* unless it's explicitly told otherwise (`validate_assignment` — covered in the model-configuration note). Worth remembering as a default, not a guarantee: changing a field after creation doesn't automatically re-check it.
+That reassignment succeeds even though `bio` is typed as `str`, because Pydantic only validates on *construction* unless it's explicitly told otherwise . Worth remembering as a default, not a guarantee: changing a field after creation doesn't automatically re-check it.
 
 ## Turning a model back into plain data
 

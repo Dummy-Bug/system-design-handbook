@@ -5,10 +5,10 @@ Constraints (the previous note) cover ranges and lengths. A step above that is v
 The core `pydantic` package is deliberately lean. A few of these special types need extra dependencies, installed via optional extras:
 
 ```bash
-pip install "pydantic[email]"
+uv add "pydantic[email]"
 ```
 
-(`uv add "pydantic[email]"` if using uv.) Without the extra installed, importing `EmailStr` raises an `ImportError` explaining exactly which package to add.
+(`"pip install "pydantic[email]"` if using pip.) Without the extra installed, importing `EmailStr` raises an `ImportError` explaining exactly which package to add.
 
 ## `EmailStr` — real email validation, zero regex written by hand
 

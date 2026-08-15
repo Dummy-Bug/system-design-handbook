@@ -17,7 +17,7 @@ class BlogPost(BaseModel):
 tags: list[str] = Field(default_factory=list)
 ```
 
-Why not just `tags: list[str] = []`? In plain Python classes, a mutable default (an empty list, dict, etc.) is a well-known trap — that single list object gets shared across every instance, because the default is evaluated once, at class-definition time, not once per instance. `dataclasses` refuses to let you write a mutable default directly for this exact reason and forces `default_factory` instead. Pydantic actually handles the plain-list case safely under the hood, but writing `default_factory=list` is still the pattern worth reaching for by habit, since it generalizes to cases where safety isn't automatic.
+Why not just `tags: list[str] = []`? In plain Python classes, a mutable default (an empty list, dict, etc.) is a well-known trap — **that single list object gets shared across every instance, because the default is evaluated once, at class-definition time, not once per instance**. `dataclasses` refuses to let you write a mutable default directly for this exact reason and forces `default_factory` instead. Pydantic actually handles the plain-list case safely under the hood, but writing `default_factory=list` is still the pattern worth reaching for by habit, since it generalizes to cases where safety isn't automatic.
 
 The generalization matters for defaults that need to be computed *fresh per instance*, like a creation timestamp:
 
@@ -65,11 +65,13 @@ Running this produces:
 ```
 2 validation errors for User
 username
-  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]
+  Input should be a valid string 
+  [type=string_type, input_value=None, input_type=NoneType]
 email
-  Input should be a valid string [type=string_type, input_value=123, input_type=int]
+  Input should be a valid string 
+  [type=string_type, input_value=123, input_type=int]
 ```
 
 Only two errors, not three. `uid="123"` — a numeric-looking **string** passed where an `int` is expected — gets silently converted to the integer `123` and passes. `username=None` and `email=123` do **not** get converted, because there's no unambiguous way to turn `None` or `123` into a string that Pydantic is willing to guess at.
 
-> [!important] The direction that gets coerced (string → number) and the direction that doesn't (number → string, `None` → anything) isn't arbitrary. Numeric data arriving as a string is extremely common — form fields, query parameters, JSON, anywhere text is the wire format — so silently accepting `"39"` for an `age: int` field removes friction from a case that's ubiquitous and safe. Going the other way — accepting an `int` where a `str` was declared — has no equivalent "this is obviously fine" case, so Pydantic doesn't guess. If this default coercion is ever the wrong behavior for a field, `strict=True` (per-field or model-wide) turns it off — covered in the model-configuration note.
+> [!important] The direction that gets coerced (string → number) and the direction that doesn't (number → string, `None` → anything) isn't arbitrary. Numeric data arriving as a string is extremely common — form fields, query parameters, JSON, anywhere text is the wire format — so silently accepting `"39"` for an `age: int` field removes friction from a case that's ubiquitous and safe. Going the other way — accepting an `int` where a `str` was declared — has no equivalent "this is obviously fine" case, so Pydantic doesn't guess. If this default coercion is ever the wrong behavior for a field, `strict=True` (per-field or model-wide) turns it off .

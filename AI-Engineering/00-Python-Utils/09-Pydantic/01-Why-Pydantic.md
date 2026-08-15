@@ -33,7 +33,7 @@ print(user2)
 
 Only one error shows up: `TypeError: Invalid email format`. The `age` problem exists too, but the function crashes on the first `raise` it hits and never gets far enough to check `age`. Whoever's calling this function fixes the email, reruns it, and *then* discovers the age problem — one round-trip at a time, for however many fields have issues.
 
-> [!important] This isn't a Pydantic quirk on the manual side — it's just how a chain of `if ... raise` statements behaves. Each `raise` stops execution immediately, so only the first failing check is ever seen. The real problem this exposes is that hand-written validation reports errors one at a time and requires this much boilerplate *per field* — multiply it by every field a real model has (and real models have far more than three), and the function becomes mostly validation code with the actual logic buried inside it.
+> [!important] It's just how a chain of `if ... raise` statements behaves. Each `raise` stops execution immediately, so only the first failing check is ever seen. The real problem this exposes is that hand-written validation reports errors one at a time and requires this much boilerplate *per field* — multiply it by every field a real model has (and real models have far more than three), and the function becomes mostly validation code with the actual logic buried inside it.
 
 ---
 
@@ -61,7 +61,6 @@ The type hints (`str`, `int`) aren't just documentation the way they'd be on a p
 
 **Both** problems are reported in a single error — `email` and `age` — with the exact reason for each. Nothing about the class definition mentions error handling; the three-line class *is* the whole validation logic, for every field, all at once.
 
-That's the sentence-length version of what the rest of these notes go into more depth on: less boilerplate per field, and every problem in the data surfaces together instead of one round-trip at a time.
 
 ---
 
@@ -73,4 +72,4 @@ Pydantic isn't a niche tool — once a codebase has real data flowing through it
 - **SQLModel** builds its table models on top of Pydantic.
 - Config loading (env vars, YAML/JSON settings files), data pipelines, and structured-output AI agents (PydanticAI and others) all lean on the same validate-on-construction idea.
 
-Version matters here: **Pydantic V2** (a near-total rewrite, with the core validation logic implemented in Rust) is what's covered throughout — noticeably faster than V1, and the version actually in wide use today. V1 code looks similar but uses different method names (`.dict()` instead of `.model_dump()`, for example) — a tell for which version an older tutorial is written against.
+We willn be using version : **Pydantic V2** 

@@ -25,11 +25,14 @@ User(uid=0, username="ab", email="c@d.com", age=12)
 ```
 3 validation errors for User
 uid
-  Input should be greater than 0 [type=greater_than, input_value=0, input_type=int]
+  Input should be greater than 0 
+  [type=greater_than, input_value=0, input_type=int]
 username
-  String should have at least 3 characters [type=string_too_short, input_value='ab', input_type=str]
+  String should have at least 3 characters 
+  [type=string_too_short, input_value='ab', input_type=str]
 age
-  Input should be greater than or equal to 13 [type=greater_than_equal, input_value=12, input_type=int]
+  Input should be greater than or equal to 13 
+  [type=greater_than_equal, input_value=12, input_type=int]
 ```
 
 Same behavior as the earlier type-only errors — every failing field shows up in one error, not three separate round-trips.

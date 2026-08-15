@@ -1,17 +1,9 @@
-# What enum is, and when to reach for it
-
-`enum` is a concept that arrived in the **1.5 version** of Java. The word is a shortcut for
-**enumeration**.
 
 > If you want to represent a **group of named constants**, then we should go for **enum**.
 
-That sentence is the whole definition, and it is the answer to give when somebody asks *what is
-enum* — a group of named constants.
-
 ## The example that makes it concrete
 
-Take month names. `JAN`, `FEB`, `MAR`, and so on down to `DEC` — twelve of them. What you want is to
-represent all twelve **under a single name**, `Month`. In Java that is:
+Take month names. `JAN`, `FEB`, `MAR`, and so on down to `DEC` — twelve of them. What you want is to represent all twelve **under a single name**, `Month`. 
 
 ```java
 enum Month {
