@@ -563,7 +563,7 @@ The half of the saying nobody can promise for people — *and everyone who dies 
 >
 > Learn the four-state diagram — it is what gets asked, and it is the right mental model. But `getState()` is the version you can actually print, and it is a real debugging tool: a thread stuck at `BLOCKED` means someone else holds a lock; stuck at `WAITING` means it is expecting a signal that may never arrive.
 
-> [!warning] **`Thread.stop()`, `suspend()` and `resume()` do not work — never reach for them.** All three were deprecated for being unsafe, and they now throw `UnsupportedOperationException` when called (verified on JDK 25). Older material offers them as ways to control a thread; **the answer is interruption and `volatile` flags.**
+> [!warning] **`Thread.stop()`, `suspend()` and `resume()` do not work — never reach for them.** All three were deprecated for being unsafe, and on JDK 25 they are gone in two different ways: **`stop()` still exists but throws `UnsupportedOperationException`**, while **`suspend()` and `resume()` were removed from the class outright in Java 23** — code calling them no longer compiles. Both verified. Older material offers them as ways to control a thread; **the answer is interruption and `volatile` flags.** Full detail in note `14`.
 
 ---
 

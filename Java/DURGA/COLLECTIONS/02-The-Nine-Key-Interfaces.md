@@ -1,14 +1,7 @@
-# The nine key interfaces
-
-The whole collection framework hangs off nine interfaces. Learn what each one is *for* — the one
-sentence that says when you would reach for it — and the rest of the chapter is filling in
-implementation classes underneath names you already understand.
 
 > **1.** `Collection` **2.** `List` **3.** `Set` **4.** `SortedSet` **5.** `NavigableSet`
 > **6.** `Queue` **7.** `Map` **8.** `SortedMap` **9.** `NavigableMap`
 
-He drills the list itself before explaining any of them, because *"how many key interfaces are there
-in the collection framework?"* is asked on its own. **Nine.**
 
 The split that organises all nine:
 
@@ -17,10 +10,8 @@ The split that organises all nine:
 | **Collection half** | a group of **individual objects** | `Collection`, `List`, `Set`, `SortedSet`, `NavigableSet`, `Queue` |
 | **Map half** | a group of objects as **key–value pairs** | `Map`, `SortedMap`, `NavigableMap` |
 
-> [!important] **`Map` is not a child of `Collection`.** *"Collection concept is the first half of the
-> movie, map concept is the second half."* They are both part of the collection **framework**, but
-> there is no inheritance between them — and he tells you to **underline** that, not strike it
-> through. Confirmed on JDK 25: `Collection.class.isAssignableFrom(Map.class)` → **`false`**.
+> [!important] **`Map` is not a child of `Collection`.** They are both part of the collection **framework**, but there is no inheritance between them
+
 
 ---
 
@@ -92,12 +83,7 @@ and the question is fully answered.
 
 # 2 · `List` (I)
 
-> **It is the child interface of `Collection`. If we want to represent a group of individual objects
-> as a single entity where duplicates are allowed and insertion order must be preserved, then we
-> should go for `List`.**
-
-**Insertion order preserved** means exactly what it says: the order you added them in is the order
-they sit in memory, and the order you get them back in.
+> **It is the child interface of `Collection`. If we want to represent a group of individual objects as a single entity where duplicates are allowed and insertion order must be preserved, then we should go for `List`.**
 
 ## The four implementation classes
 
@@ -185,8 +171,7 @@ Two differences, and they are the two properties that define each one:
 
 The PDF gives a second, shorter phrasing worth having as well:
 
-> **If we want to represent a group of "unique objects" according to some sorting order, then we
-> should go for `SortedSet`.**
+> **If we want to represent a group of "unique objects" according to some sorting order, then we should go for `SortedSet`.**
 
 ---
 
@@ -194,8 +179,7 @@ The PDF gives a second, shorter phrasing worth having as well:
 
 > **It is the child interface of `SortedSet`. It provides several methods for navigation purposes.**
 
-*"What is the previous element? What is the next element?"* — that is navigation, and it is what the
-name is telling you. **`NavigableSet` came in 1.6**, and `TreeSet` was re-engineered to implement it,
+*"What is the previous element? What is the next element?"* — that is navigation, **`NavigableSet` came in 1.6**, and `TreeSet` was re-engineered to implement it,
 exactly as `Vector` had been for `List`.
 
 ```mermaid
@@ -217,8 +201,7 @@ Confirmed on JDK 25: `NavigableSet.class.isAssignableFrom(TreeSet.class)` → `t
 > **prior to processing**, then we should go for the `Queue` concept.**
 
 > [!important] **"Prior to processing" is the phrase to memorise** — it is the wording from the Java
-> API itself, and it is what distinguishes `Queue` from every other collection. You are not storing
-> these objects to keep them. You are holding them **until each one's turn comes to be processed.**
+> API itself, and it is what distinguishes `Queue` from every other collection. You are not storing these objects to keep them. You are holding them **until each one's turn comes to be processed.**
 
 **Usually a queue follows first-in-first-out order**, but that is not a requirement:
 
@@ -283,11 +266,6 @@ blast to ten lakh mobile numbers.
 | Both key and value are | **objects** |
 | Duplicate **keys** | ❌ **not allowed** |
 | Duplicate **values** | ✅ **allowed** |
-
-> [!info] **Note which way round he puts the example, and why.** He starts with *name → roll number*,
-> then deliberately reverses it to *roll number → name*: **roll numbers do not repeat, names do.** The
-> non-duplicating thing has to be the key. It is a small demonstration of the rule being used rather
-> than recited.
 
 **Where you meet maps in real work:** parameter name → parameter value, attribute name → attribute
 value. *"In the servlets, form parameters, request attributes — all these things are internally
@@ -394,12 +372,11 @@ flowchart TB
 # The six legacy characters
 
 > **The following are legacy characters present in the collection framework:**
->
+
 > **1.** `Enumeration` (I)  **2.** `Dictionary` (AC)  **3.** `Vector` (C)
 > **4.** `Stack` (C)  **5.** `Hashtable` (C)  **6.** `Properties` (C)
 
-All six came in **1.0**, before the framework existed. *"Legacy means what — which is coming from old
-generation."*
+All six came in **1.0**, before the framework existed. *"Legacy means what — which is coming from old generation."*
 
 > [!info] **`(AC)` means abstract class.** *"AC means what — abstract class. Don't tell any other
 > definition, air conditioner or something, air cooler."*
@@ -417,105 +394,5 @@ generation."*
 > **`Properties` is the exception** — it is legacy by ancestry but still the standard way to read a
 > `.properties` file, and you will meet it in live code.
 
----
-
-# The version table
-
-Every "which version?" answer in one place, because he asks it after each interface.
-
-| Interface / class | Version |
-|---|---|
-| `Collection`, `List`, `Set`, `SortedSet`, `Map`, `SortedMap` | **1.2** |
-| `ArrayList`, `LinkedList`, `HashSet`, `TreeSet`, `HashMap`, `WeakHashMap`, `TreeMap` | **1.2** |
-| `LinkedHashSet`, `LinkedHashMap`, `IdentityHashMap` | **1.4** |
-| **`Queue`** and the whole queue concept | **1.5** |
-| **`NavigableSet`**, **`NavigableMap`**, `Deque` | **1.6** |
-| `Enumeration`, `Dictionary`, `Vector`, `Stack`, `Hashtable`, `Properties` | **1.0** — legacy |
-
-**The pattern behind the re-engineering questions:** whenever a class predates the interface it
-implements, the link was added later. `Vector`/`Stack` → `List` in 1.2; `TreeSet` → `NavigableSet` and
-`TreeMap` → `NavigableMap` in 1.6.
 
 ---
-
-# What is still to come
-
-He closes by naming the parts of the framework that are not interfaces, so you know the shape of the
-rest of the chapter:
-
-| | |
-|---|---|
-| **Sorting** | `Comparable` for **default natural sorting order**; `Comparator` for **customised sorting** |
-| **Cursors** | to get objects out one by one — `Enumeration`, `Iterator`, `ListIterator` |
-| **Utility classes** | `Collections` and `Arrays` |
-
----
-
-# The collection king
-
-> [!question]- **The story he ends on, and the reason it is not just a story.** A candidate's answer
-> that should have ended the interview, and why it did the opposite.
->
-> An MCA graduate — call him Ravi — with three years' experience, interviewing at a large services
-> company. Because he was a three-year candidate, the interviewer was a project manager rather than a
-> fresher, in a one-to-one technical round.
->
-> **First question:** *"Do you know the collections concept?"*
->
-> The expected answer is yes, or no, or *"basic idea is there"*. What Ravi said was:
->
-> > **"If you don't mind — I am the collection king."**
->
-> He had picked the phrase up from Durgasoft's own pamphlets and SMS campaigns: *"if you want to
-> become collection king, attend today's collections workshop."*
->
-> The interviewer took it badly, exactly as you would expect. **Second question:** *"I didn't get you.
-> Why did you use the word collection king?"*
->
-> > **"You can ask anything in collections, I can answer. And the king in that area is me."**
->
-> At this point the interviewer had had enough and was ready to end it. Instead — being senior — he
-> slid a **blank sheet of paper** across and said: *whatever you know about collections, write it on
-> this paper. Because you are the king.*
->
-> **Ravi drew the entire diagram in five to ten minutes.** Group of individual objects → `Collection`.
-> Duplicates allowed, insertion order preserved → `List`, and its four classes. No duplicates, no
-> insertion order → `Set`, and its classes. Sorting → `SortedSet`. Navigation → `NavigableSet` →
-> `TreeSet`. Prior to processing → `Queue` and its classes. Key–value pairs → `Map` and its classes.
-> Sorted by key → `SortedMap`. Navigation → `NavigableMap` → `TreeMap`. Legacy: `Hashtable`,
-> `Properties`, `Dictionary`. Versions against every one.
->
-> The interviewer asked **one further question** — *"have you done any research in this subject?"* —
-> and forwarded him with a strong technical recommendation. He got the job.
->
-> **The point is not the bravado.** It is that the entire chapter fits on one sheet of paper as a
-> single connected diagram, and that being able to produce it from the "when would you use this"
-> sentences is what separates knowing the framework from having memorised class names.
-
----
-
-# What this part established
-
-| | |
-|---|---|
-| How many key interfaces | **nine** |
-| The collection half | `Collection`, `List`, `Set`, `SortedSet`, `NavigableSet`, `Queue` — **individual objects** |
-| The map half | `Map`, `SortedMap`, `NavigableMap` — **key–value pairs** |
-| `Map` and `Collection` | **no relation** — underline it |
-| `Collection` | group of individual objects; holds the **most common methods**; **no concrete class implements it directly** |
-| The actual root | **`Iterable`** — `Collection` extends it |
-| **`Collection` vs `Collections`** | **interface** vs **utility class** in `java.util` |
-| `List` | duplicates **allowed**, insertion order **preserved** |
-| `List` classes | `ArrayList`, `LinkedList`, `Vector`, `Stack` |
-| `Set` | duplicates **not allowed**, insertion order **not preserved** |
-| `Set` classes | `HashSet`, `LinkedHashSet` |
-| `SortedSet` | unique objects **in a sorting order** |
-| `NavigableSet` | + **navigation** methods → `TreeSet` |
-| `Queue` | **prior to processing**; usually FIFO, priority order possible |
-| `Map` | key–value; **duplicate keys ❌, duplicate values ✅**; both are objects |
-| `SortedMap` | sorted **by key**, never by value |
-| `NavigableMap` | + navigation → `TreeMap` |
-| Why `Vector` implements a newer interface | **re-engineered in 1.2**; same story for `TreeSet`/`TreeMap` in 1.6 |
-| The six legacy characters | `Enumeration`, `Dictionary`, `Vector`, `Stack`, `Hashtable`, `Properties` |
-| The extra modern layer | **`SequencedCollection` / `SequencedSet` / `SequencedMap`** (Java 21) |
-| The one interface the nine omit | **`Deque`** — and `ArrayDeque` is what you should actually reach for |
