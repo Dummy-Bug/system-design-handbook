@@ -1,8 +1,8 @@
-`model_dump()` and `model_dump_json()` (introduced in the basics note) cover the simple case — dump everything, using the Python field names as-is. Real integration points rarely stay that simple: an external API might use different field names than the Python code does, some fields shouldn't be serialized at all, and incoming data might arrive as a JSON string rather than a Python dict.
+`model_dump()` and `model_dump_json()` cover the simple case — dump everything, using the Python field names as-is. Real integration points rarely stay that simple: an external API might use different field names than the Python code does, some fields shouldn't be serialized at all, and incoming data might arrive as a JSON string rather than a Python dict.
 
 ## Aliases — different names on the wire vs. in Python
 
-`id` is a poor Python attribute name — it shadows a Python built-in. The common fix is a differently-named Python field with an **alias** pointing at the external name:
+`id` is a poor Python attribute name — it shadows a Python built-in. The common fix is a differently-named Python field with an **alias** **pointing at the external name**:
 
 ```python
 from uuid import UUID, uuid4
@@ -14,7 +14,8 @@ class User(BaseModel):
     uid: UUID = Field(alias="id", default_factory=uuid4)
 ```
 
-With just `alias="id"` and no further configuration, the model would accept `id` on input but **reject** `uid` — the Python name stops working as an input key once an alias is declared, by default. `populate_by_name=True` in `model_config` restores the Python name as a valid input key *alongside* the alias, so both `User(id=...)` and `User(uid=...)` work:
+> With just `alias="id"` and no further configuration, the model would accept `id` on input but **reject** `uid` — **the Python name stops working as an input key once an alias is declared, by default**. 
+> `populate_by_name=True` in `model_config` restores the Python name as a valid input key *alongside* the alias, so both `User(id=...)` and `User(uid=...)` work:
 
 ```python
 user = User.model_validate({"id": "3bc4bf25-...", ...})
@@ -27,7 +28,7 @@ user.model_dump_json()          # {"uid": "3bc4bf25-...", ...}
 user.model_dump_json(by_alias=True)  # {"id": "3bc4bf25-...", ...}
 ```
 
-`by_alias=True` on the dump call switches output to the alias names too — the setting needed when the data is heading back out to whatever system expects `id` rather than `uid`, like a frontend or an external API.
+>`by_alias=True` on the dump call switches output to the alias names too — **the** **setting needed when the data is heading back out to whatever system expects** `id` rather than `uid`, like a frontend or an external API.
 
 ## `include` and `exclude` — controlling which fields serialize
 
@@ -43,7 +44,10 @@ The inverse — allow-listing instead of block-listing — uses `include`:
 user.model_dump(include={"username", "email"})
 ```
 
-`include` is the better choice when the safe set is small and known (send back only these two fields); `exclude` is better when almost everything should go out and only a specific field or two needs holding back. Both accept nested paths too, e.g. `exclude={"address": {"pin_code"}}` to drop just one field inside a nested model.
+> `include` is the better choice when the safe set is small and known (send back only these two fields); 
+> `exclude` is better when almost everything should go out and only a specific field or two needs holding back. 
+
+> Both accept nested paths too, e.g. `exclude={"address": {"pin_code"}}` to drop just one field inside a nested model.
 
 ## Loading from a JSON string directly
 

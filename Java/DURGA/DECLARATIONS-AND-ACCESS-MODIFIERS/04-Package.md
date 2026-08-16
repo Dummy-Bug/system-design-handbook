@@ -1,18 +1,9 @@
-# What a package is
-
-Start with the ordinary English word, not the programming one.
-
-> *"South India tour package, North India tour package, Europe tour package."* And in his own
-> business: Core Java + Advanced Java + Oracle are three related courses, so they are sold as the
-> **basic package**. Struts + Hibernate + Spring are three frameworks, so they are the **frameworks
-> package**. Core to web services, everything — the **complete package**.
 
 > **A package is a group of related things.**
 
 Translated into Java:
 
-> **A package is an encapsulation mechanism to group related classes and interfaces into a single
-> unit.**
+> **A package is an encapsulation mechanism to group related classes and interfaces into a single unit.**
 
 | Package | Groups |
 |---|---|
@@ -31,14 +22,11 @@ Translated into Java:
 ## 1. Resolving naming conflicts
 
 > [!info] **The analogy — chief ministers.** India has one CM for Telangana, one for Andhra Pradesh,
-> one for Tamil Nadu, one for Karnataka. *"Assume states are not there — then how many CMs are
-> possible?"* **One.** The states are what allow many.
+> one for Tamil Nadu, one for Karnataka. *"Assume states are not there — then how many CMs are possible?"* **One.** The states are what allow many.
 >
-> **Packages are the states.** One `Date` in `java.util`, another `Date` in `java.sql`. Take the
-> packages away and only one `Date` could exist in the whole language.
+> **Packages are the states.** One `Date` in `java.util`, another `Date` in `java.sql`. Take the packages away and only one `Date` could exist in the whole language.
 
-`java.util.Date` and `java.sql.Date` are unambiguous **because** of the package prefix. That uniqueness
-is what a package buys you first.
+`java.util.Date` and `java.sql.Date` are unambiguous **because** of the package prefix. That uniqueness is what a package buys you first.
 
 ## 2 and 3. Modularity and maintainability
 
@@ -51,8 +39,7 @@ com.xyz.order.delivery
 
 Together they are the **order module**; elsewhere there is a payment module, a transaction module.
 
-> **Modularity of the application is improved, and so is maintainability** — because *"instead of
-> keeping all the things in one clumsy place"*, you can point at the part you need to change.
+> **Modularity of the application is improved, and so is maintainability** — because *"instead of keeping all the things in one clumsy place"*, you can point at the part you need to change.
 
 ## 4. Security
 
@@ -71,22 +58,13 @@ Measured on JDK 25 — a default-access class in `packa`, used from `packb`:
 error: Hidden is not public in packa; cannot be accessed from outside package
 ```
 
-> *"Assume packages are not there — then how would you restrict an outside person from accessing this
-> one?"* Without packages there is no boundary to be inside or outside of, so there is nothing to
-> enforce.
-
 ---
 
 # The naming convention
 
-Packages exist for unique identification — so their names must be unique. What in the world is
-guaranteed unique?
+Packages exist for unique identification — so their names must be unique. What in the world is guaranteed unique?
 
-> *"Client name? Not unique — there is X Infosys, M Infosys, Y Infosys. Company name, service provider
-> name — names are not unique."*
-
-> **The internet domain name.** How many websites are named `gmail.com`? One. `yahoo.com`? One.
-> `durgasoft.com`? One. **Domain names are unique by nature** — so borrow that uniqueness.
+> **The internet domain name.** How many websites are named `gmail.com`? One. `yahoo.com`? One.`durgasoft.com`? One. **Domain names are unique by nature** — so borrow that uniqueness.
 
 > **The universally accepted naming convention for packages: use the internet domain name in reverse.**
 
@@ -103,9 +81,8 @@ Read it in pieces:
 | `housing` | the **sub-module** name |
 | `Account` | the **class** name |
 
-> *"If I saw this line anywhere — on a piece of paper on the road — I would know: this class relates to
-> icicibank, the loan module, housing loan. The remaining thing I'm not required to check."* The name
-> alone locates the code in the organisation.
+> *If I saw this line anywhere — on a piece of paper on the road — I would know: this class relates to icicibank, the loan module, housing loan. The remaining thing I'm not required to check.* 
+> The name alone locates the code in the organisation.
 
 ---
 
@@ -158,8 +135,7 @@ com/durgasoft/ocjp/Test.class
 | `-d` | **destination** to place generated `.class` files |
 | `.` | the **current working directory** |
 
-> **If the corresponding package structure is not already available, this command itself will create
-> it.** You do not have to make `com`, then `durgasoft`, then `ocjp` by hand.
+> **If the corresponding package structure is not already available, this command itself will create it.** You do not have to make `com`, then `durgasoft`, then `ocjp` by hand.
 
 ## Any directory can be the destination
 
@@ -225,8 +201,7 @@ package pack2;
 public class A { }
 ```
 
-> **In any Java source file there can be at most one package statement** — *at most one* meaning one or
-> zero. More than one is a compile-time error.
+> **In any Java source file there can be at most one package statement** — *at most one* meaning one or zero. More than one is a compile-time error.
 
 Measured on JDK 25:
 
@@ -236,9 +211,7 @@ package pack2;
 ^
 ```
 
-**Read why that is the message.** After a package statement the compiler expects an optional import,
-and then a **type declaration**. It finds another `package` instead, and reports what it *was* looking
-for. The list names every kind of type declaration there is — `record` included.
+**Read why that is the message.** After a package statement the compiler expects an optional import, and then a **type declaration**. It finds another `package` instead, and reports what it *was* looking for. The list names every kind of type declaration there is — `record` included.
 
 ---
 
@@ -251,8 +224,7 @@ package pack1;
 public class B { }
 ```
 
-> **In any Java program the first non-comment statement should be the package statement** (if there is
-> one). Comments may appear anywhere; the package statement must come before any import.
+> **In any Java program the first non-comment statement should be the package statement** (if there is one). Comments may appear anywhere
 
 Measured on JDK 25:
 
@@ -262,11 +234,12 @@ package pack1;
 ^
 ```
 
-> [!important] **The two mistakes give two different messages, so do not expect them to match.** Two
-> package statements gives `class, interface, enum, or record expected`; an import before a package
-> gives the longer `class, interface, annotation type, enum, record, method or field expected`. The
-> *cause* is the same in both — the compiler wanted a type declaration and got a `package` — but it was
-> at a different point in the file, so the set of things it would have accepted differs.
+> [!important] **The two mistakes give two different messages, so do not expect them to match.** 
+> Two package statements gives `class, interface, enum, or record expected`
+> 
+>  an import before a package gives the longer `class, interface, annotation type, enum, record, method or field expected`. 
+>  
+>  The *cause* is the same in both — the compiler wanted a type declaration and got a `package` — but it was at a different point in the file, so the set of things it would have accepted differs.
 
 ---
 

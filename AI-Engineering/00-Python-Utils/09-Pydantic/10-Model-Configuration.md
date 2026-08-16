@@ -17,7 +17,7 @@ class User(BaseModel):
 
 ## `strict` — turning off type coercion
 
-The type-coercion note showed Pydantic quietly converting `"39"` to `39` for an `int` field. That's convenient by default, but sometimes it's exactly the wrong behavior — a case where receiving the wrong type should be treated as an error, not silently patched over. `strict=True` disables coercion model-wide:
+The type-coercion note showed Pydantic quietly converting `"39"` to `39` for an `int` field. That's convenient by default, but sometimes it's exactly the wrong behavior — a case where receiving the wrong type should be treated as an error, not silently patched over. `strict=True` **disables coercion model-wide**:
 
 ```python
 model_config = ConfigDict(strict=True)
@@ -27,7 +27,7 @@ With `strict=True`, `User(age="39", ...)` now fails with `Input should be a vali
 
 ## `extra` — what happens to fields the model doesn't declare
 
-By default (`extra="ignore"`), data containing keys the model doesn't declare is accepted, and those extra keys are silently dropped. Two other modes change that:
+By default (`extra="ignore"`), data containing keys the model doesn't declare is accepted, and those **extra keys are silently dropped**. Two other modes change that:
 
 - **`extra="allow"`** — unknown keys are kept and attached to the instance rather than discarded. Useful for forward-compatibility (a producer adds a new field before the consumer's model is updated to expect it) or genuinely dynamic/plugin-style data.
 - **`extra="forbid"`** — unknown keys **raise a validation error**. Useful when unexpected fields usually mean a typo or a caller sending the wrong shape entirely, and silent acceptance would hide that bug.
@@ -49,7 +49,8 @@ model_config = ConfigDict(validate_assignment=True)
 user.email = "not-an-email"  # now raises ValidationError, instead of silently succeeding
 ```
 
-With this on, every later assignment goes through the same validation machinery construction does. The right call for any model that's expected to stay valid across its whole lifetime, not just at the moment it's built — a config object being adjusted at runtime, for instance.
+With this on, every later assignment goes through the same validation machinery construction does. 
+> The right call for any model that's **expected to stay valid across its whole lifetime**, not just at the moment it's built — **a config object being adjusted at runtime**, for instance.
 
 ## `frozen` — making instances immutable
 
@@ -59,7 +60,11 @@ model_config = ConfigDict(frozen=True)
 user.email = "new@example.com"  # raises: instance is frozen
 ```
 
-`frozen=True` blocks **all** assignment after construction — not "assignment that fails validation" (that's `validate_assignment`'s job) but assignment at all, even to a value that would otherwise be perfectly valid. The right fit for genuinely immutable data — configuration that shouldn't drift once loaded, a value object that represents a fixed fact rather than mutable state. As a side effect, Pydantic can also skip some internal bookkeeping for a model it knows can never change, which is a minor performance win layered on top of the correctness guarantee.
+`frozen=True` blocks **all** assignment after construction — not "assignment that fails validation" (that's `validate_assignment`'s job) but assignment at all, even to a value that would otherwise be perfectly valid. 
+
+> The right fit for genuinely immutable data — **configuration that shouldn't drift once loaded**, a value object that represents a fixed fact rather than mutable state. 
+
+> As a side effect, **Pydantic can also skip some internal bookkeeping** for a model it knows can never change, which is a **minor performance win** layered on top of the correctness guarantee.
 
 `frozen` and `validate_assignment` solve different problems and can't really substitute for each other: `frozen` says *nothing changes, ever*; `validate_assignment` says *changes are fine, but they have to stay valid*.
 

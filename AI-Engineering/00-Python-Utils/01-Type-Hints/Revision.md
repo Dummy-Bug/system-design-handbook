@@ -30,34 +30,34 @@ And the corollary that closes the folder: **at a trust boundary, a claim is not 
 
 One line per concept. Cover the right column and recite it from the left.
 
-| # | Concept | The claim in one line |
-|---|---|---|
-| 1 | What a hint is | Python checks types at the level of **operations**, never declarations — `add("a","b")` succeeds because joining strings is valid, not because Python is lax |
-| 2 | Why bother | The claim becomes **machine-readable**. A comment stores nothing; an annotation stores `int`, the real class |
-| 3 | Static checkers | A separate program reading code **at rest**. Its reach is exactly the reach of your annotations |
-| 4 | Where annotations live | A separate register on the object. **An annotation binds nothing** — a class body can declare a field the class doesn't have |
-| 5 | Built-in generics | Bare `list` is a claim about the box, not the contents. `tuple` types **positions**; everything else types a **typical element** |
-| 6 | Abstract collections | Annotate a parameter with the **weakest type the body needs**; return the most specific you have |
-| 7 | Unions & optionality | An annotation is a claim about **every** run. A default and `\| None` are two independent switches |
-| 8 | `Any` / `object` / `Never` | Both accept everything and are opposites about what you may then do. `Any` is **contagious** |
-| 9 | `Literal` / `Final` / `ClassVar` | Narrow what an annotation permits in directions the plain type can't express — which values, may it be reassigned, is it shared |
-| 10 | `Callable` / `ParamSpec` | A function's type is its **whole signature**. Arity is part of it |
-| 11 | `TypedDict` | Per-key types, which `dict[K,V]` structurally cannot express — and **nothing is created at runtime** |
-| 12 | Aliases & `NewType` | An alias **renames** a type; `NewType` **creates** one. Only the second keeps two things apart |
-| 13 | `TypeVar` | One unknown **mentioned twice**, which is how an output type gets tied to an input type |
-| 14 | Generic classes | The placeholder rides on the **object**, so a type supplied once at construction is remembered by every method |
-| 15 | Variance | Values you **receive** may be narrower; values you **accept** must be wider |
-| 16 | `Protocol` | A type defined by what an object **has**, not by what it declared itself to be |
-| 17 | `@overload` | For when the return type depends on **how** a function is called — enumerate, because Python has no conditional types |
-| 18 | Narrowing | The checker tracks types through branches, on forms **it can see** — so a factored-out check must state its result in the signature |
-| 19 | `Self` | The class a method was **called on**, not the one it was **written in** |
-| 20 | `Annotated` | `X` with a payload — invisible to checkers, available to any runtime library that asks |
-| 21 | Deferred evaluation | An annotation is evaluated **where it is written**, so it can only name what already exists |
-| 22 | Stubs & `py.typed` | A `.pyi` is read **instead of** the source; `py.typed` is **permission**, not types |
-| 23 | Escape hatches | Three ways to overrule the checker. **Not one of them checks anything** |
-| 24 | Gradual adoption | Keep the error list small enough to act on. Scope by module *and* by check — never one switch |
-| 25 | Choosing a data type | All five are declared identically; four questions decide, and the **boundary** question outranks the rest |
-| 26 | Common traps | Most typing traps are **Python's execution model showing through** |
+| #   | Concept                          | The claim in one line                                                                                                                                        |
+| --- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | What a hint is                   | Python checks types at the level of **operations**, never declarations — `add("a","b")` succeeds because joining strings is valid, not because Python is lax |
+| 2   | Why bother                       | The claim becomes **machine-readable**. A comment stores nothing; an annotation stores `int`, the real class                                                 |
+| 3   | Static checkers                  | A separate program reading code **at rest**. Its reach is exactly the reach of your annotations                                                              |
+| 4   | Where annotations live           | A separate register on the object. **An annotation binds nothing** — a class body can declare a field the class doesn't have                                 |
+| 5   | Built-in generics                | Bare `list` is a claim about the box, not the contents. `tuple` types **positions**; everything else types a **typical element**                             |
+| 6   | Abstract collections             | Annotate a parameter with the **weakest type the body needs**; return the most specific you have                                                             |
+| 7   | Unions & optionality             | An annotation is a claim about **every** run. A default and `\| None` are two independent switches                                                           |
+| 8   | `Any` / `object` / `Never`       | Both accept everything and are opposites about what you may then do. `Any` is **contagious**                                                                 |
+| 9   | `Literal` / `Final` / `ClassVar` | Narrow what an annotation permits in directions the plain type can't express — which values, may it be reassigned, is it shared                              |
+| 10  | `Callable` / `ParamSpec`         | A function's type is its **whole signature**. Arity is part of it                                                                                            |
+| 11  | `TypedDict`                      | Per-key types, which `dict[K,V]` structurally cannot express — and **nothing is created at runtime**                                                         |
+| 12  | Aliases & `NewType`              | An alias **renames** a type; `NewType` **creates** one. Only the second keeps two things apart                                                               |
+| 13  | `TypeVar`                        | One unknown **mentioned twice**, which is how an output type gets tied to an input type                                                                      |
+| 14  | Generic classes                  | The placeholder rides on the **object**, so a type supplied once at construction is remembered by every method                                               |
+| 15  | Variance                         | Values you **receive** may be narrower; values you **accept** must be wider                                                                                  |
+| 16  | `Protocol`                       | A type defined by what an object **has**, not by what it declared itself to be                                                                               |
+| 17  | `@overload`                      | For when the return type depends on **how** a function is called — enumerate, because Python has no conditional types                                        |
+| 18  | Narrowing                        | The checker tracks types through branches, on forms **it can see** — so a factored-out check must state its result in the signature                          |
+| 19  | `Self`                           | The class a method was **called on**, not the one it was **written in**                                                                                      |
+| 20  | `Annotated`                      | `X` with a payload — invisible to checkers, available to any runtime library that asks                                                                       |
+| 21  | Deferred evaluation              | An annotation is evaluated **where it is written**, so it can only name what already exists                                                                  |
+| 22  | Stubs & `py.typed`               | A `.pyi` is read **instead of** the source; `py.typed` is **permission**, not types                                                                          |
+| 23  | Escape hatches                   | Three ways to overrule the checker. **Not one of them checks anything**                                                                                      |
+| 24  | Gradual adoption                 | Keep the error list small enough to act on. Scope by module *and* by check — never one switch                                                                |
+| 25  | Choosing a data type             | All five are declared identically; four questions decide, and the **boundary** question outranks the rest                                                    |
+| 26  | Common traps                     | Most typing traps are **Python's execution model showing through**                                                                                           |
 
 ---
 

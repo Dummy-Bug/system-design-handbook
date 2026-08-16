@@ -22,9 +22,12 @@ class User(BaseModel):
         return self.follower_count >= 10000
 ```
 
-Two decorators stack here, and each does a different job: `@property` is plain Python — it turns the method into something accessed as `user.display_name`, no parentheses, computed fresh from the model's current field values every time it's read. `@computed_field` is the Pydantic-specific part on top — it tells Pydantic's serialization machinery *this property counts as a field too*, so it shows up in `model_dump()` and `model_dump_json()` output alongside every ordinary field, without the caller ever having supplied it.
+Two decorators stack here, and each does a different job:
+>`@property` is plain Python — it turns the method into something accessed as `user.display_name`, no parentheses, **computed fresh from the model's current field values every time it's read**. 
+>`@computed_field` is the Pydantic-specific part on top — it tells Pydantic's serialization machinery *this property counts as a field too*, so it shows up in `model_dump()` and `model_dump_json()` output alongside every ordinary field, without the caller ever having supplied it.
 
-> [!important] The method name becomes the field's name in output. A property named `calculate_bmi` shows up in the dumped dict as `"calculate_bmi"`, not `"bmi"` — there's no separate renaming step. Name the method exactly what the output field should be called.
+> [!important] The method name becomes the field's name in output. 
+> A property named `calculate_bmi` shows up in the dumped dict as `"calculate_bmi"`, not `"bmi"` — there's no separate renaming step. Name the method exactly what the output field should be called.
 
 Given `User(first_name="Corey", last_name="Schafer", username="coreyms", follower_count=500)`:
 
