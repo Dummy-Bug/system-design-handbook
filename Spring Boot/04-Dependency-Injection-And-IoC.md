@@ -110,14 +110,14 @@ Email notification sent
 
 **Look at what `OrderService` just did:** it created an `EmailService` object and called a method on it.
 
-> **Can we say `OrderService` is dependent on `EmailService`?** *"Until `EmailService` exists, we will not be able to call `placeOrder` at all"* — because `placeOrder` has to print, and then call `sendNotification` on an `EmailService` object.
+> **Can we say `OrderService` is dependent on `EmailService`?** Until `EmailService` exists, we will not be able to call `placeOrder` at all — because `placeOrder` has to print, and then call `sendNotification` on an `EmailService` object.
 
 | | |
 |---|---|
 | **A dependency is** | something a class needs in order to complete its work |
 | Here | **`OrderService` is dependent on `EmailService`** — `EmailService` acts as a **dependency** inside it |
 
-> [!info] **This is the same word as part `03`, one level down.** There, a **dependency** was a third-party JAR your project needed, declared in `pom.xml`. **Here it is one of your own classes needing another one.** *"It is exactly the same thing"* — your code cannot do its job without the other thing existing.
+> [!info] **This is the same word as part `03`, one level down.** There, a **dependency** was a third-party JAR your project needed, declared in `pom.xml`. **Here it is one of your own classes needing another one.** It is exactly the same thing — your code cannot do its job without the other thing existing.
 
 **And one line summarises the whole problem to come:**
 
@@ -136,11 +136,11 @@ Email notification sent
 
 ## The Delhi to Chandigarh analogy
 
-> *"Imagine I have to go from Delhi to Chandigarh. And I tell you — I have to go from Delhi to Chandigarh, at this exact time, in **this** bus, and the driver of the bus should be **this** person, and the bus should belong to **this** company."*
+> Imagine I have to go from Delhi to Chandigarh. And I tell you — I have to go from Delhi to Chandigarh, at this exact time, in **this** bus, and the driver of the bus should be **this** person, and the bus should belong to **this** company.
 
 **Specify all that and you are tightly coupled.** If that one bus is unavailable, you are stuck.
 
-> *"I only had to get to Chandigarh. It should not matter to me which bus I am going in. Fine, the time might matter. But which bus? Who the driver is? Which company?"*
+> I only had to get to Chandigarh. It should not matter to me which bus I am going in. Fine, the time might matter. But which bus? Who the driver is? Which company?
 
 **Loosely coupled thinking is one sentence: I need transportation.** Car, bus, train, cab — the person only cares about the service.
 
@@ -189,7 +189,7 @@ public class PopUpNotificationService {
 
 > **In Java, we should generally code to interfaces. We should talk to interfaces rather than to concrete classes.**
 
-**This is plain good design and has nothing to do with Spring** — *"but Spring's entire ideology is based on it."*
+**This is plain good design and has nothing to do with Spring** — but Spring's entire ideology is based on it.
 
 ## Organising the classes first
 
@@ -285,7 +285,7 @@ new PopUpNotificationService()   →  Order placed
 
 ## But the coupling did not go away
 
-> *"The tight coupling is still exactly the same. Yes — I changed the variable type to an interface. But the real object is still being created concretely, right here."*
+> The tight coupling is still exactly the same. Yes — I changed the variable type to an interface. But the real object is still being created concretely, right here.
 
 **The line that is still the problem:**
 
@@ -297,15 +297,15 @@ NotificationService notification = new EmailService();
 
 ---
 
-# The real problem is *where* the object is created
+# The real problem is where the object is created
 
 **Clear one doubt first:**
 
-> **Creating an object is not the problem. *Where* you create that object is the problem.**
+> **Creating an object is not the problem. Where you create that object is the problem.**
 
 **Ask what `OrderService`'s job should be: managing orders.** The methods that belong in it are `placeOrder`, `addOrder`, `deleteOrder` and the like.
 
-> *"But why am I creating a notification object here? Why am I creating my own dependency? **Why is this doing a factory's job?** Creating the notification should be somebody else's work, not its. Its work should be to **use** the notification."*
+> But why am I creating a notification object here? Why am I creating my own dependency? **Why is this doing a factory's job?** Creating the notification should be somebody else's work, not its. Its work should be to **use** the notification.
 
 ## Two SOLID principles fail
 
@@ -316,11 +316,11 @@ NotificationService notification = new EmailService();
 
 ## Dependency itself is not the problem
 
-**This has to be said clearly, because the fix is not "remove the dependency".**
+**This has to be said clearly, because the fix is not to remove the dependency.**
 
 > **One service depending on another is normal, and it happens constantly in our code.**
 
-**Right now the project is tiny — one interface, three implementations, `OrderService` and `Main`.** A real project has hundreds of Java files depending heavily on each other. *"Sometimes a hundred thousand Java files in a really major project"* — at which point you break it into microservices, which is a separate topic.
+**Right now the project is tiny — one interface, three implementations, `OrderService` and `Main`.** A real project has hundreds of Java files depending heavily on each other. Sometimes a hundred thousand Java files in a really major project — at which point you break it into microservices, which is a separate topic.
 
 **And dependencies form trees:**
 
@@ -331,7 +331,7 @@ flowchart LR
 
 > **Nobody has a problem with dependency. The problem is that you are creating the object of the thing you depend on, yourself.**
 
-**Plus one more:** `OrderService` is **business logic**, and *"creating an object is not business logic."*
+**Plus one more:** `OrderService` is **business logic**, and creating an object is not business logic.
 
 ---
 
@@ -417,15 +417,15 @@ flowchart LR
 | The one-liner | **Don't create your dependency — get your dependency** |
 | The other one-liner | **A class should ask what it needs, and not build everything itself** |
 
-**"From outside" means from anywhere.** Here it is `Main`, because we want every other class to stay independent and `Main` to act as the driver that manages everything.
+**From outside means from anywhere.** Here it is `Main`, because we want every other class to stay independent and `Main` to act as the driver that manages everything.
 
-> [!important] **Dependency injection is not a Spring concept.** *"Spring automates it. But dependency injection can exist independently"* — everything above is plain Java with no framework in the project.
+> [!important] **Dependency injection is not a Spring concept.** Spring automates it. But dependency injection can exist independently — everything above is plain Java with no framework in the project.
 
 ## `OrderService` no longer knows what it is sending
 
 **A quiet consequence worth noticing.**
 
-> *"`OrderService` does not even need to know which kind of notification is being sent to it. It will call `sendNotification` on whatever you send it."*
+> `OrderService` does not even need to know which kind of notification is being sent to it. It will call `sendNotification` on whatever you send it.
 
 **Because what it expects is a `NotificationService`, and an SMS is a notification, an email is a notification, a pop-up is a notification.** It has no interest in which concrete one you picked. Its only interest is its own logic.
 
@@ -448,7 +448,7 @@ flowchart LR
 
 **Now think about testing the old, tightly coupled version.** `OrderService` created `EmailService` itself, so to test `placeOrder` you would be forced to work with the real `EmailService`.
 
-> *"To test `placeOrder`, I have to actually send a notification — because the notification is directly tightly coupled to `EmailService`. **A real email goes out during my test.** That is a terrible technique."*
+> To test `placeOrder`, I have to actually send a notification — because the notification is directly tightly coupled to `EmailService`. **A real email goes out during my test.** That is a terrible technique.
 
 **With the dependency coming from outside, you hand it a fake instead:**
 
@@ -464,7 +464,7 @@ public class FakeEmailService implements NotificationService {
 }
 ```
 
-> *"We are not actually calling an email here. **Why would we spend our money actually sending an email?**"*
+> We are not actually calling an email here. **Why would we spend our money actually sending an email?**
 
 **Measured, injecting the fake and changing nothing else:**
 
@@ -574,7 +574,7 @@ Email notification sent
 >         at in.coderarmy.OrderService.placeOrder(OrderService.java:20)
 > ```
 >
-> **Note where it failed** — *after* `Order placed` had already printed. **A half-built object ran half the business logic before falling over.** With constructor injection this code does not compile, let alone run.
+> **Note where it failed** — after `Order placed` had already printed. **A half-built object ran half the business logic before falling over.** With constructor injection this code does not compile, let alone run.
 
 > [!example]- **Measured — the compiler-level reason constructor injection is preferred.** Worth opening for the one concrete thing you gain that no discussion of style can give you.
 >
@@ -616,15 +616,15 @@ Email notification sent
 
 **A third kind exists, straight onto the field.**
 
-> **It is not possible here.** *"Doing field injection is not possible if I am not using Spring."* Why that is so becomes clear once Spring is in the project — so it waits for a later part.
+> **It is not possible here.** Doing field injection is not possible if I am not using Spring. Why that is so becomes clear once Spring is in the project — so it waits for a later part.
 
 ---
 
 # Inversion of Control
 
-**Not a separate topic at all.** *"If you have understood dependency injection, then IoC is nothing."* Many people use the two terms interchangeably; they mean different things, but they are related.
+**Not a separate topic at all.** If you have understood dependency injection, then IoC is nothing. Many people use the two terms interchangeably; they mean different things, but they are related.
 
-**Start by asking what "control" means here.**
+**Start by asking what control means here.**
 
 ## The initial design
 
@@ -658,7 +658,7 @@ flowchart TB
 
 > **The control inverted. That is what Inversion of Control means.**
 
-**Earlier: the class created what it needed. Now: the class receives what it needs.** It is called *inversion* because the normal flow of control has been reversed.
+**Earlier: the class created what it needed. Now: the class receives what it needs.** It is called inversion because the normal flow of control has been reversed.
 
 ---
 
@@ -666,8 +666,8 @@ flowchart TB
 
 | | |
 |---|---|
-| **Inversion of Control** | an **idea**, a **principle** — *this is how it should be* |
-| **Dependency injection** | an **approach**, a **technique** — *this is how you achieve it* |
+| **Inversion of Control** | an **idea**, a **principle** — this is how it should be |
+| **Dependency injection** | an **approach**, a **technique** — this is how you achieve it |
 
 > **IoC is the idea. Dependency injection is one way to implement that idea.**
 
@@ -679,7 +679,7 @@ flowchart TB
 
 **Everything above works, and it is genuinely better than what came before.** But look at what `Main` is now doing: creating every object, wiring every dependency, configuring everything.
 
-> *"Although Main configures everything, this design is **still better** than every class going and creating its own dependency. That was the bad way. Main wiring it is better than that. **I know Main gets complicated.** And this is exactly where the Spring Framework comes in."*
+> Although Main configures everything, this design is **still better** than every class going and creating its own dependency. That was the bad way. Main wiring it is better than that. **I know Main gets complicated.** And this is exactly where the Spring Framework comes in.
 
 **A handful of services is fine. Now imagine `UserService`, `PaymentService`, and dozens more, each with its own dependencies** — `Main` becomes an enormous wiring diagram.
 
@@ -703,11 +703,11 @@ flowchart TB
 
 ## What the code will look like
 
-> *"When we write Spring code, you will see the `new` keyword very rarely. Almost negligibly."*
+> When we write Spring code, you will see the `new` keyword very rarely. Almost negligibly.
 
 **We want most objects to be managed by the Spring IoC container** — created for us, and wired to each other for us, without our writing either step.
 
-> [!info] **And it is not magic.** *"We will see how it works inside, how it creates all the objects, how it maintains the relationships itself."* Everything Spring does here is something `Main` was shown doing by hand in this part.
+> [!info] **And it is not magic.** We will see how it works inside, how it creates all the objects, how it maintains the relationships itself. Everything Spring does here is something `Main` was shown doing by hand in this part.
 
 ## Beans
 
@@ -734,7 +734,7 @@ flowchart TB
 | The original sin | **`OrderService` was creating its own dependency** |
 | Same word as part `03` | there a dependency was a **third-party JAR**; here it is **another of your classes** |
 | Two design philosophies | **tightly coupled** (hard to change) · **loosely coupled** (easier to change) |
-| The analogy | *"I must go by **this** bus, **this** driver, **this** company"* vs *"I need transportation"* |
+| The analogy | **this** bus, **this** driver, **this** company — vs — **I need transportation** |
 | **Tight coupling** means | one class directly depends on a **specific concrete class** |
 | A **concrete class** is | one that is not abstract — every method defined |
 | First fix | **code to an interface** — `NotificationService`, implemented by Email, SMS and Pop-up |

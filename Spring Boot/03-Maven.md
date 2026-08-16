@@ -82,7 +82,7 @@ Main.class
 
 **All of it packed into one package, called a JAR.** You share that one file; your friend integrates it into their application, and their job just got easy.
 
-> [!important] **A JAR always packages *compiled* code.** You compiled all of these first and then made a package of them. It is always the compiled code that gets packaged. The `.class` files go in, not the `.java` files.
+> [!important] **A JAR always packages compiled code.** You compiled all of these first and then made a package of them. It is always the compiled code that gets packaged. The `.class` files go in, not the `.java` files.
 
 ## Two reasons JAR files exist
 
@@ -104,7 +104,7 @@ flowchart LR
     J --> DB[("<b>MySQL</b>")]
 ```
 
-> **Whether you are sharing your own code or consuming somebody else's, a JAR file is what is moving.** Every third-party library your application depends on — you are using it *as a JAR file*.
+> **Whether you are sharing your own code or consuming somebody else's, a JAR file is what is moving.** Every third-party library your application depends on — you are using it as a JAR file.
 
 **This is true of every Spring Boot project too.** The Spring Boot dependency, the Spring MVC dependency — all JARs.
 
@@ -116,7 +116,7 @@ flowchart LR
 
 | | |
 |---|---|
-| **Library** | code that is **not runnable**. There may be no `main` method in it at all. It is packages and classes that *somebody else's* code can use. |
+| **Library** | code that is **not runnable**. There may be no `main` method in it at all. It is packages and classes that somebody else's code can use. |
 | **Application** | code that **actually runs** — it has a `main` method, and you can run the whole thing. |
 
 > A library means some classes are inside it. **You cannot run it independently**. But you can put a library inside an application.
@@ -181,7 +181,7 @@ flowchart TB
 
 ## If you built an application
 
-**Say it is a Spring Boot application.** It has your own code, plus a `Main.java` that is runnable, plus dependencies like `mysql-connector-j.jar`. Build a JAR of *that*, and you get something different:
+**Say it is a Spring Boot application.** It has your own code, plus a `Main.java` that is runnable, plus dependencies like `mysql-connector-j.jar`. Build a JAR of that, and you get something different:
 
 > **`my-application.jar` is an independent JAR. We call it an executable JAR.**
 
@@ -189,7 +189,7 @@ flowchart TB
 
 | | |
 |---|---|
-| **Library JAR** | **non-executable**. Your compiled code only. External library *details* live in the embedded pom, not the JARs themselves. |
+| **Library JAR** | **non-executable**. Your compiled code only. External library details live in the embedded pom, not the JARs themselves. |
 | **Application JAR** | **executable** — Spring Boot packages the application code **plus its dependencies**, so it runs as one complete file. Also called a **fat JAR**. |
 
 > [!example]- **Measured — the same contrast, on a real Spring Boot 4.0.7 build.** Worth opening once, because the size difference is the whole point and it is startling.
@@ -222,7 +222,7 @@ flowchart TB
 > snakeyaml-2.5.jar
 > ```
 >
-> **`tomcat-embed-core-11.0.22.jar` is the answer to part `02`'s open question.** *"Did we even install Tomcat?"* — no. It was shipped inside the JAR, and the version in that filename is exactly the `Apache Tomcat/11.0.22` that appeared in the startup log.
+> **`tomcat-embed-core-11.0.22.jar` is the answer to part `02`'s open question.** Did we even install Tomcat? — no. It was shipped inside the JAR, and the version in that filename is exactly the `Apache Tomcat/11.0.22` that appeared in the startup log.
 
 ---
 
@@ -237,7 +237,7 @@ flowchart TB
     C --> D["<b>JVM runs it</b>"]
 ```
 
-**Note the asymmetry:** the third-party JARs are *already* compiled code, so the compiler only ever compiles yours.
+**Note the asymmetry:** the third-party JARs are already compiled code, so the compiler only ever compiles yours.
 
 **Now the question at runtime.** Your code calls a class or a method that belongs to a third-party library. **How does the JVM know which method to call, and where it lives?**
 
@@ -267,7 +267,7 @@ flowchart TB
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **1 — Manual effort**                   | downloading hundreds of third-party libraries one by one                                                                                                                                                                                         |
 | **2 — Version mismatch**                | Today we use **Spring 7**, which works with **Spring Boot 4**. But if you use Spring 6, it will not work with Spring Boot 4. Download Spring 7 and pair it with Spring Boot 3, and the two do not line up. **You have to manage that yourself.** |
-| **3 — Transitive dependencies**         | you download one dependency, and **it depends on further dependencies**. You have to download those too — and you have to *know* what they are                                                                                                   |
+| **3 — Transitive dependencies**         | you download one dependency, and **it depends on further dependencies**. You have to download those too — and you have to know what they are                                                                                                   |
 | **4 — Nobody else knows what you used** | ship a library JAR to a friend, and they have no information about which JARs it needs                                                                                                                                                           |
 
 **Problem 4 is the ugliest one.** Without a tool, you would put a text file in the project listing every dependency: if you want to use my library, here is the list, download these. Then they download them — but which **versions**? So you list the versions too. **Now they are doing all your manual work again.**
@@ -278,7 +278,7 @@ flowchart TB
 
 And it goes further:
 
-> **"In fact, if your dependency further depends on other dependencies — transitive dependencies — I will download those too, automatically. You do not even need to tell me about them."**
+> **In fact, if your dependency further depends on other dependencies — transitive dependencies — I will download those too, automatically. You do not even need to tell me about them.**
 
 ---
 
@@ -309,16 +309,16 @@ And it goes further:
 
 **This principle has a name: convention over configuration.** Maven already assumes a standard project structure. Follow it, and you do not have to configure anything manually — Maven knows **where the source code is**, **where the tests are**, **where resources are**, and **where to put generated output**.
 
-> [!important] **This folder structure is Maven's, not Spring Boot's.** The `MavenDemo` project above has no Spring in it at all and still gets `src/main/java`, `src/main/resources`, `src/test/java` and `target/classes`. **Spring Boot is opinionated about entirely different things** — which is worth pinning down now, because both layers advertise themselves with the phrase *"convention over configuration"*.
+> [!important] **This folder structure is Maven's, not Spring Boot's.** The `MavenDemo` project above has no Spring in it at all and still gets `src/main/java`, `src/main/resources`, `src/test/java` and `target/classes`. **Spring Boot is opinionated about entirely different things** — which is worth pinning down now, because both layers advertise themselves with the phrase convention over configuration.
 
 > [!question]- **Deep dive — which conventions belong to Maven and which to Spring Boot.** Worth opening once, because the two get blamed for each other constantly and auto-configuration will assume you have them separated.
 >
-> **Maven decides *where files go*. Spring Boot decides *what they mean and what gets wired up because of them*.**
+> **Maven decides where files go. Spring Boot decides what they mean and what gets wired up because of them.**
 >
 > | Maven's conventions | Spring Boot's conventions |
 > |---|---|
-> | **`src/main/java`** is where source lives | **which beans exist**, inferred from what is on the classpath — *auto-configuration* |
-> | **`src/main/resources`** is where non-Java files live | **`application.properties`** — that *filename*, in that folder, meaning app config |
+> | **`src/main/java`** is where source lives | **which beans exist**, inferred from what is on the classpath — auto-configuration |
+> | **`src/main/resources`** is where non-Java files live | **`application.properties`** — that filename, in that folder, meaning app config |
 > | **`src/test/java`** is where tests live | **`static/`** and **`templates/`** meaning served content |
 > | **`target/classes`** is where bytecode goes | **port 8080**, embedded Tomcat, `@SpringBootApplication` scanning its own package downward |
 > | the JAR is **`artifactId-version.jar`** | **starter** dependencies, and versions chosen for you by the parent |
@@ -466,7 +466,7 @@ MavenDemo/
 > |---|---|
 > | **Project** | **Maven** |
 > | **Language** | **Java** |
-> | **Spring Boot** | **any 4.x with no suffix** — `4.0.7` or `4.1.0`. *"Do not use snapshots, because that is work in progress"* |
+> | **Spring Boot** | **any 4.x with no suffix** — `4.0.7` or `4.1.0`. Do not use snapshots, because that is work in progress |
 > | **Group / Artifact** | leave as `com.example` / `demo` |
 > | **Packaging** | **Jar** |
 > | **Configuration** | **Properties** |
@@ -635,7 +635,7 @@ Invalid content was found starting with element 'abc'
 <modelVersion>4.0.0</modelVersion>
 ```
 
-> [!important] This is the version of the *POM model*, not of Maven. Maven's own version can be anything. The POM's model version is **`4.0.0`**, and essentially every Maven project uses it.
+> [!important] This is the version of the POM model, not of Maven. Maven's own version can be anything. The POM's model version is **`4.0.0`**, and essentially every Maven project uses it.
 
 ## GAV — the three tags that identify your project
 
@@ -834,7 +834,7 @@ Invalid content was found starting with element 'abc'
 
 > **That is a transitive dependency.** You need the MySQL connector; the MySQL connector needs protobuf to run.
 
-**Add a second dependency — Hibernate — the same way** (`mvnrepository.com` → *hibernate* → **Hibernate ORM / hibernate-core** → a slightly older version, `7.3.6.Final`, even though only about 30 projects were using it — which is very few; the latest is still the one to avoid):
+**Add a second dependency — Hibernate — the same way** (`mvnrepository.com` → hibernate → **Hibernate ORM / hibernate-core** → a slightly older version, `7.3.6.Final`, even though only about 30 projects were using it — which is very few; the latest is still the one to avoid):
 
 ```xml
 <dependency>
@@ -952,7 +952,7 @@ Invalid content was found starting with element 'abc'
 > <finalName>MavenDemo-1.0-SNAPSHOT</finalName>
 > ```
 >
-> **That block is convention over configuration, written down.** `src/main/java`, `target/classes`and the JAR's name are not hard-coded into Maven — they are *defaults inherited from the super POM*, which is why overriding them is possible at all.
+> **That block is convention over configuration, written down.** `src/main/java`, `target/classes`and the JAR's name are not hard-coded into Maven — they are defaults inherited from the super POM, which is why overriding them is possible at all.
 >
 > **And the super POM is a real file you can find**, shipped inside Maven itself:
 >
@@ -1097,7 +1097,7 @@ mysql-connector-j-9.5.0.pom.sha1
 _remote.repositories
 ```
 
-> **The `.pom` sitting beside the `.jar` is the transitive-dependency machinery.** Maven downloads both — the JAR to put on the classpath, the POM to read *its* dependencies from, so it knows to go and fetch protobuf next.
+> **The `.pom` sitting beside the `.jar` is the transitive-dependency machinery.** Maven downloads both — the JAR to put on the classpath, the POM to read its dependencies from, so it knows to go and fetch protobuf next.
 
 ## The JAR's name is always the same shape
 
@@ -1155,7 +1155,7 @@ flowchart TB
 
 **The reload takes real time — it is downloading plugins and dependencies from the internet again** — and then everything is back, both in `External Libraries` and in `~/.m2/repository`.
 
-> **And this is a real repair technique, not just a demo.** A dependency in the local repository can end up **corrupt or incomplete** — a download failed halfway, the internet dropped, a partial JAR got saved, metadata went inconsistent. **Deleting that dependency's folder forces Maven to fetch it again**, which is why delete your `.m2` is such common advice. Deleting the *whole* repository works too, at the cost of re-downloading everything.
+> **And this is a real repair technique, not just a demo.** A dependency in the local repository can end up **corrupt or incomplete** — a download failed halfway, the internet dropped, a partial JAR got saved, metadata went inconsistent. **Deleting that dependency's folder forces Maven to fetch it again**, which is why delete your `.m2` is such common advice. Deleting the whole repository works too, at the cost of re-downloading everything.
 
 ## `settings.xml`
 
@@ -1255,7 +1255,7 @@ src/main/java  →  target/classes
 
 ### `deploy`
 
-**Uploads the artifact to a *remote* repository** — the company-wide one from the repositories section — so other teams can download and use your JAR.
+**Uploads the artifact to a remote repository** — the company-wide one from the repositories section — so other teams can download and use your JAR.
 
 > [!important] **Do not confuse `deploy` with pushing code to Git.** Git stores **source code**, and merging there is what sends code towards production. **A Maven remote repository stores built artifacts — JARs — so other projects can depend on them.**
 >  
@@ -1453,7 +1453,7 @@ $ mvn clean install
 | **Maven** is | a **project management tool** — independent of Spring |
 | Its four jobs | **folder structure · compile · build the JAR · download dependencies** |
 | Its principle | **convention over configuration** |
-| ⚠️ The folder structure is | **Maven's, not Spring Boot's** — Maven decides *where files go*, Boot decides *what they mean* |
+| ⚠️ The folder structure is | **Maven's, not Spring Boot's** — Maven decides where files go, Boot decides what they mean |
 | Where Maven comes from | **pre-installed in every IDE**; `brew install maven` / `choco install maven` for the terminal |
 | Why pick Maven over the IDE's build system | so **IntelliJ, Eclipse and NetBeans users share one build** |
 | Standard structure | **`src/main/java` · `src/main/resources` · `src/test/java` · `src/test/resources` · `target`** |
@@ -1465,7 +1465,7 @@ $ mvn clean install
 | The green Run button | uses **IntelliJ's** build system — but writes into the **same `target` layout** |
 | **POM** stands for | **Project Object Model** — Maven's most important file |
 | Every POM starts with | the **`<project>`** root tag |
-| The schema lines decide | **which tags are legal** — an invented tag gives *"Invalid content was found"* |
+| The schema lines decide | **which tags are legal** — an invented tag gives `Invalid content was found` |
 | **`<modelVersion>4.0.0`** | the version of the **POM model**, not of Maven |
 | **GAV** = | **groupId + artifactId + version** — the **Maven coordinates**, uniquely identifying a project |
 | `groupId` convention | your **domain, reversed** — `coderarmy.in` → `in.coderarmy` |
@@ -1473,7 +1473,7 @@ $ mvn clean install
 | **`SNAPSHOT`** | still in development — **not** a stable release |
 | **`<packaging>`** | **`jar`** (default) · **`war`** · **`pom`** for parent projects |
 | **`<properties>`** | key–value pairs; **your own keys are allowed** and read back with **`${key}`** |
-| ⚠️ Measured | `${...}` **in `<version>` builds but warns** — *"contains an expression but should be a constant"* |
+| ⚠️ Measured | `${...}` **in `<version>` builds but warns** — `contains an expression but should be a constant` |
 | **`<dependencies>`** | each dependency identified by its own **GAV** |
 | Where to find a dependency's GAV | **`mvnrepository.com`** — never memorised |
 | Which version to take | **not the newest** (bugs, untested) and **not very old** (mismatch) — a couple back |

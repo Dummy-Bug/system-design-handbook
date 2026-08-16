@@ -121,4 +121,6 @@ Related, outside this folder: `~/Desktop/wiki/Xarvis-Archaeology/` (code-verifie
 
 **Depth beats breadth for the differentiator.** Every source agrees evals are the sharpest senior/junior signal in 2026 loops, and "we didn't have time for evals" is the fastest seniority downgrade. Xarvis already exists — making it measurable is worth more than memorising a thousand answers.
 
+**One paragraph, one source line — never hard-wrap.** This vault renders a single newline as a line break, so a paragraph wrapped at ~100 columns reads with ragged breaks mid-sentence. List items, callout lines and blockquote lines follow the same rule; code fences, tables and mermaid blocks keep their own line structure. After any reflow, grep `[a-z][.,;][A-Za-z]` outside code blocks for joins that lost their space (`gets packaged.The`, `not inyour code`).
+
 **Correctness checks are one word** — "correct" or "incorrect", no explanation unless asked.

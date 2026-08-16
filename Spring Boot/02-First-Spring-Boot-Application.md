@@ -59,13 +59,13 @@ $ dig +short coderarmy.in A
 
 **Only after step 2 can the client make the actual call**, and the request it sends carries the IP, not the name.
 
-## `localhost` is the shortcut for "myself"
+## `localhost` is the shortcut for myself
 
 **When the client is your browser and the server is your own Spring Boot application on the same computer, no DNS lookup is needed.** The host becomes:
 
 | | |
 |---|---|
-| **`127.0.0.1`** | **a fixed IP** meaning *you are sending the request to yourself* |
+| **`127.0.0.1`** | **a fixed IP** meaning you are sending the request to yourself |
 | **`localhost`** | the word you can write instead |
 
 ---
@@ -206,7 +206,7 @@ flowchart LR
 | Gradle - Kotlin | |
 | **Maven** | **← used throughout this series**, the most popular |
 
-> **These are project management tools
+> **These are project management tools.**
 
 ## Language
 
@@ -218,7 +218,7 @@ flowchart LR
 |---|---|---|
 | **SNAPSHOT** | **work in progress** — not complete, not finalised | ❌ chance of bugs |
 | **RC** | **Release Candidate** — almost final, a candidate for release, **not actually released yet** | ❌ still a risk |
-| *(no suffix)* | **stable** | ✅ **take the latest stable** |
+| (no suffix) | **stable** | ✅ **take the latest stable** |
 
 **Measured against the live Initializr:**
 
@@ -633,7 +633,7 @@ $ curl http://localhost:9090/hello
 | Question                                       |                                                                                                                                                                              |
 | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Who started the Tomcat server?**             | You never wrote a line to start one                                                                                                                                          |
-| **Did we even install Tomcat?**                | **No — and yes.** We did not install it separately ourselves — it came with the Spring Web dependency, which said **"uses Apache Tomcat as the default embedded container"** |
+| **Did we even install Tomcat?**                | **No — and yes.** We did not install it separately ourselves — it came with the Spring Web dependency, which said it **uses Apache Tomcat as the default embedded container** |
 | **How did `/hello` map to `hello()`?**         | You never called that method from `main`                                                                                                                                     |
 | **What is `@RestController`?**                 |                                                                                                                                                                              |
 | **What is `@GetMapping`?**                     |                                                                                                                                                                              |
@@ -641,7 +641,7 @@ $ curl http://localhost:9090/hello
 | **What does `SpringApplication.run(...)` do?** | if we go inside this `run`, we will not understand a thing about what is happening inside.                                                                                   |
 |                                                |                                                                                                                                                                              |
 
-> [!important] **The mapping question is the sharpest one, because it contradicts what Java taught you.** Having studied Java, we just assume that our API only gets hit if we call something from `main`. **Nothing in `main` calls `hello()`. Yet it runs.
+> [!important] **The mapping question is the sharpest one, because it contradicts what Java taught you.** Having studied Java, we just assume that our API only gets hit if we call something from `main`. **Nothing in `main` calls `hello()`. Yet it runs.**
 > 
 > Something in the background is finding that method and wiring it to a URL — and that something is what the rest of the series is about.
 
@@ -655,7 +655,7 @@ $ curl http://localhost:9090/hello
 
 | | |
 |---|---|
-| **You end up there anyway** | explaining Spring Boot's annotations *is* explaining Spring MVC and Spring Core |
+| **You end up there anyway** | explaining Spring Boot's annotations is explaining Spring MVC and Spring Core |
 | **Debugging** | suppose you add `/bye`, restart, and nothing appears. **Without the internals you cannot go a single level down.** You would not know what the annotation does, what a controller is, or how the endpoint was ever reached |
 
 ---
@@ -696,7 +696,7 @@ $ curl http://localhost:9090/hello
 | Generated entry point | **`DemoApplication.java`** with **`@SpringBootApplication`** and **`SpringApplication.run(...)`** |
 | Measured startup | **Tomcat 11.0.22**, port **8080**, started in **0.794 s** |
 | The proof the server is up | **`Tomcat started on port 8080`** |
-| Before any endpoint exists | **Whitelabel Error Page** — *"no explicit mapping for /error"* |
+| Before any endpoint exists | **Whitelabel Error Page** — `no explicit mapping for /error` |
 | ⚠️ Measured | that same 404 returns **JSON** to `curl`/Postman and **HTML** to a browser |
 | A **controller** is | a **gateway** where you write API endpoints |
 | **`@RestController`** | marks the class as a controller |

@@ -117,6 +117,14 @@ never trim content to hit a line count.
 - **Keep code together with the analysis of its output.** He reads linearly and will not scroll back
   and forth to match a program to the discussion of its results.
 
+### Never hard-wrap a paragraph (ruled 2026-08-16)
+
+**This vault renders a single newline as a line break.** Obsidian's *Strict line breaks* setting is off, so a paragraph hard-wrapped at ~100 columns in the source shows up in reading view with ragged breaks mid-sentence — a break after "with", a break after "any of this".
+
+**Write one paragraph as one source line, however long it runs.** The same goes for list items, callout lines and blockquote lines — a `>` line is wrapped by the reader's window, never by you. Code fences, tables and mermaid blocks keep their own line structure and are never touched.
+
+**When reflowing a file that is already wrapped, watch the seam.** A join that loses its space produces `gets packaged.The`, `verifying,installing`, `not inyour code`. Grep `[a-z][.,;][A-Za-z]` outside code blocks afterwards, and prove the reflow changed nothing by comparing token streams with whitespace and `>` markers stripped before writing anything back.
+
 ## Rule 6 — Deep dives go in a collapsible callout
 
 Anything that is **mechanism, evidence or background rather than the thing being taught** goes in a

@@ -39,24 +39,33 @@ Before claiming a part is complete, **read the transcript end to end** against t
 
 ### Hindi quotes: translate into English (ruled 2026-08-16)
 
-**The notes are written entirely in English. Every quote is translated — never transliterated into
-Latin-script Hindi.**
+**The notes are written entirely in English. Every quote is translated — never transliterated into Latin-script Hindi.**
 
 ```markdown
-> *"A client can be anything at all."*
+> A client can be anything at all.
 ```
 
-**Not** `> *"Client toh koi bhi ho sakta hai."*` — that was the original convention and it was
-reversed. The notes are read to study from, and switching scripts mid-sentence makes them slower to
-read, not more authentic.
+**Not** `> Client toh koi bhi ho sakta hai.` — that was the original convention and it was reversed. The notes are read to study from, and switching scripts mid-sentence makes them slower to read, not more authentic.
 
-**Translate faithfully, keeping his register.** He is informal and direct, and the English should be
-too — *"you know that a server is nothing but a computer"*, not *"a server may be understood as a
-computing device"*. **Keep the rhetorical shape**: his questions stay questions, his asides stay
-asides, and the emphasis he puts on a word stays bold in the same place.
+**Translate faithfully, keeping his register.** He is informal and direct, and the English should be too — "you know that a server is nothing but a computer", not "a server may be understood as a computing device". **Keep the rhetorical shape**: his questions stay questions, his asides stay asides, and the emphasis he puts on a word stays bold in the same place.
 
-**Quotation marks still mean it is his sentence**, not a summary of his point. If you are compressing
-several sentences into one idea, that is prose — drop the quotes.
+**The blockquote is what marks it as his sentence** — no quotation marks, no italics. If you are compressing several sentences into one idea, that is prose — take it out of the blockquote.
+
+### No italics anywhere, and no quotation marks anywhere (ruled 2026-08-16)
+
+**Italics are not used in these notes at all.** Not for his quoted speech, not for emphasis on a single word. Emphasis is carried by **bold**, and a word that would have been italicised is simply left plain. `` `inline code` `` stays code.
+
+| Write this | Not this |
+|---|---|
+| `> A client can be anything at all.` | `> *"A client can be anything at all."*` |
+| `**Where you create the object is the problem.**` | `**Where you create the object is the problem.**` with `*where*` italicised inside the bold |
+| `an invented tag gives \`Invalid content was found\`` | `an invented tag gives *"Invalid content was found"*` |
+
+**A literal string from a log, an error or the screen goes in backticks**, not in quotation marks — it is a string, and backticks say so.
+
+**Quotation marks do not survive anywhere outside a code block or inline code.** Not around his speech, and not around a word being quoted in prose either — write `they assume client means browser`, not `they assume "client" means "browser"`.
+
+**Where a bare removal would read badly, reword rather than leave the quotes.** The phrase gets hyphenated into a compound — `the just-read-the-lines approach` — or the sentence takes the small word it needs — `the fix is not to remove the dependency`.
 
 ---
 
@@ -177,6 +186,14 @@ line count.
   and forth to match a program to the discussion of its results.
 - **Close every file with a `# What this part established` summary table** — one row per fact, in the
   order the note taught them. This is the revision surface.
+
+### Never hard-wrap a paragraph (ruled 2026-08-16)
+
+**This vault renders a single newline as a line break.** Obsidian's *Strict line breaks* setting is off, so a paragraph hard-wrapped at ~100 columns in the source shows up in reading view with ragged breaks mid-sentence — a break after "with", a break after "any of this".
+
+**Write one paragraph as one source line, however long it runs.** The same goes for list items, callout lines and blockquote lines — a `>` line is wrapped by the reader's window, never by you. Code fences, tables and mermaid blocks keep their own line structure and are never touched.
+
+**When reflowing a file that is already wrapped, watch the seam.** A join that loses its space produces `gets packaged.The`, `verifying,installing`, `not inyour code`. Grep `[a-z][.,;][A-Za-z]` outside code blocks afterwards, and prove the reflow changed nothing by comparing token streams with whitespace and `>` markers stripped before writing anything back.
 
 ---
 

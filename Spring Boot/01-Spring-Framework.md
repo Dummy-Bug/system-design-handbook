@@ -4,7 +4,7 @@
 
 You open a browser and type `www.amazon.com` — or `www.amazon.in` if you want the India server.
 
-> *"Somewhere there must be an Amazon server. And you know that a server is nothing but **a computer** where Amazon's application is hosted."*
+> Somewhere there must be an Amazon server. And you know that a server is nothing but **a computer** where Amazon's application is hosted.
 
 **That server takes your request, entertains it, and sends back a response.** The moment the response arrives, your browser paints it onto the page.
 
@@ -22,9 +22,9 @@ flowchart LR
 
 ## A client is anything that makes the request
 
-**This is the part people get wrong — they assume "client" means "browser" or "user".**
+**This is the part people get wrong — they assume client means browser or user.**
 
-> *"A client can be anything at all."*
+> A client can be anything at all.
 
 | | |
 |---|---|
@@ -34,15 +34,15 @@ flowchart LR
 | **Postman** | a tool for firing API calls at a backend by hand |
 | **Another server** | ← the one that surprises people |
 
-> [!important] **A server can itself be a client.** In a microservice architecture there are many servers, and one calls another. *"Some order service wants to talk to the payment service or the notification service — so it sends it an HTTP request."* **In that exchange the order service is the client.**
+> [!important] **A server can itself be a client.** In a microservice architecture there are many servers, and one calls another. Some order service wants to talk to the payment service or the notification service — so it sends it an HTTP request. **In that exchange the order service is the client.**
 > 
 > Client and server are **roles in one exchange**, not permanent identities.
 
 ## A server is anything that entertains the request
 
-**"Entertaining" a request means three things: receive it, process it, respond.**
+**Entertaining a request means three things: receive it, process it, respond.**
 
-**And "processing" hides a lot:**
+**And processing hides a lot:**
 
 | What the client wants | What the server does |
 |---|---|
@@ -60,11 +60,11 @@ flowchart LR
 
 **`HTTP` = Hyper Text Transfer Protocol.** The question is what that actually buys you.
 
-> *"When our client and our server interact with each other, the two of them need a **language** to interact in, they need a **format**."*
+> When our client and our server interact with each other, the two of them need a **language** to interact in, they need a **format**.
 
 **They cannot just throw bytes at each other and hope.** Something has to fix, in advance, what a request looks like and what a response looks like.
 
-> [!info] **"Protocol" just means a rule book of the internet.** It is the agreement both sides already know before they ever talk.
+> [!info] **Protocol just means a rule book of the internet.** It is the agreement both sides already know before they ever talk.
 
 **Four things HTTP specifies:**
 
@@ -72,7 +72,7 @@ flowchart LR
 |---|---|
 | **The structure of a request** | what a client is allowed to send, and in what order |
 | **The structure of a response** | what comes back |
-| **Which methods exist** | what *kind* of operation you are asking for |
+| **Which methods exist** | what kind of operation you are asking for |
 | **How data is sent** | encrypted or not |
 
 ## The methods
@@ -89,9 +89,9 @@ flowchart LR
 
 **By default, HTTP data is not encrypted.** Anyone positioned between client and server can read it.
 
-> *"That is why we switched from HTTP to HTTPS."*
+> That is why we switched from HTTP to HTTPS.
 
-**`HTTPS` is the same Hyper Text Transfer Protocol. The `S` is `Secured`.** Both the request going out and the response coming back are encrypted, *"so that nobody in the middle can listen in on it."*
+**`HTTPS` is the same Hyper Text Transfer Protocol. The `S` is `Secured`.** Both the request going out and the response coming back are encrypted, so that nobody in the middle can listen in on it.
 
 ---
 
@@ -123,7 +123,7 @@ Accept: application/json
 | Endpoint | **`/courses`** |
 | Full URL | **`www.coderarmy.in/courses`** |
 
-**`Accept: application/json` is a header**, and it says what format you are willing to receive back. Other headers carry authentication — *"who you are"* — so the server can identify you before it decides whether to answer.
+**`Accept: application/json` is a header**, and it says what format you are willing to receive back. Other headers carry authentication — who you are — so the server can identify you before it decides whether to answer.
 
 > [!important] **A `GET` has no body.** The body is for detailed information you want the server to store. **When you are only reading, there is nothing to send.**
 
@@ -142,7 +142,7 @@ Content-Type: application/json
 }
 ```
 
-**`Content-Type: application/json` is the mirror image of `Accept`.** `Accept` says *what I want back*; `Content-Type` says **what I am sending you right now**.
+**`Content-Type: application/json` is the mirror image of `Accept`.** `Accept` says what I want back; `Content-Type` says **what I am sending you right now**.
 
 > **The server sees a login request, reads the email and password out of the body, authenticates you against them, and — if they are correct — sends back a response.**
 
@@ -199,13 +199,13 @@ flowchart LR
     B -->|"runs inside"| C["<b>JVM</b><br/>a process in the OS"]
 ```
 
-**Bytecode is platform independent** — *write once, run anywhere* — and it does **not** run natively on the operating system. **It runs inside the JVM, and the JVM is itself just a process in the OS.**
+**Bytecode is platform independent** — write once, run anywhere — and it does **not** run natively on the operating system. **It runs inside the JVM, and the JVM is itself just a process in the OS.**
 
 ## The first missing piece — who calls the method?
 
 **Now look back at that endpoint.** You hit `www.coderarmy.in/courses` and something happens on the server. And if a Java application is running there, **you are interacting with Java code** — code that was also compiled to a `.class` file and is also running on some JVM.
 
-> *Java is an object oriented language. Everything inside Java is methods. So even if you are making an API call by hitting `/courses`, **somewhere inside, some method must be getting called.*
+> Java is an object oriented language. Everything inside Java is methods. So even if you are making an API call by hitting `/courses`, **somewhere inside, some method must be getting called.**
 
 ```java
 public class Main {
@@ -233,7 +233,7 @@ flowchart TB
     end
 ```
 
-> *"Take Instagram.com — at any time of day you hit Instagram, you will get a response. Instagram will always look active to you."*
+> Take Instagram.com — at any time of day you hit Instagram, you will get a response. Instagram will always look active to you.
 
 > **A website is not a program that runs once. A website is a program that stays up continuously.**
 
@@ -249,15 +249,15 @@ flowchart TB
 - send an HTTP response
 - read a URL, read headers, read a body
 
-> *Can we do all of these things using our core Java knowledge? **The answer is both yes and no.***
+> Can we do all of these things using our core Java knowledge? **The answer is both yes and no.**
 
 ---
 
-# The "yes" half — `java.net`
+# The yes half — `java.net`
 
 **The internet is a network, and Java has always been able to do networking.**
 
-> *This Java functionality has existed from the very beginning, ever since Java arrived.*
+> This Java functionality has existed from the very beginning, ever since Java arrived.
 
 Measured on JDK 25:
 
@@ -296,15 +296,15 @@ Measured on JDK 25:
 localhost resolves to: localhost/127.0.0.1
 ```
 
-> **`127.0.0.1` is your own machine's address.** *"If you want to send yourself a message or ping yourself, you can get there on this particular IP address, or by writing localhost."*
+> **`127.0.0.1` is your own machine's address.** If you want to send yourself a message or ping yourself, you can get there on this particular IP address, or by writing localhost.
 
 ---
 
-# The "no" half — what actually arrives
+# The no half — what actually arrives
 
 **Here is the problem, and it is worth seeing rather than being told.**
 
-> *"My Java code **does not understand** an HTTP request or the HTTP format. So to my Java code, what is this `GET`? What is `/courses`? What is this host? **It understands none of it.** To it, this is just a **stream of bytes**."*
+> My Java code **does not understand** an HTTP request or the HTTP format. So to my Java code, what is this `GET`? What is `/courses`? What is this host? **It understands none of it.** To it, this is just a **stream of bytes**.
 
 **The whole program is this:**
 
@@ -344,7 +344,7 @@ listening on 8080
 
 > [!important] **Read what that output is, and what it is not.** The request **is** all there — method, path, host, headers. **But to Java it is four `String`s.** There is no `request.getMethod()`, no `request.getHeader("Accept")`, no object of any kind. **`BufferedReader` gave you lines of text, and that is the entire extent of the JVM's understanding.**
 >
-> *"The JVM has no idea what this whole stream means. It can only read it as-is, in a **dumb way**."*
+> The JVM has no idea what this whole stream means. It can only read it as-is, in a **dumb way**.
 
 ## And the client gets nothing
 
@@ -362,13 +362,13 @@ curl: (7) Failed to connect to localhost port 8080 — Couldn't connect to serve
 
 > [!important] **Two failures in two lines, and they are exactly the two gaps.** The first request got **no response** because nothing built one. The second got **no server at all** because the program did its one job and exited — **the `start → run → stop → exit` flow, in a place that needs the website flow.**
 
-> [!info] **What you are reading in that output is HTTP/1.1, which is plain text with one field per line.** That is why a `BufferedReader` can show it to you at all. **HTTP/2 and HTTP/3 are binary and would print as unreadable bytes** — the "just read the lines" approach only ever worked for the text version of the protocol.
+> [!info] **What you are reading in that output is HTTP/1.1, which is plain text with one field per line.** That is why a `BufferedReader` can show it to you at all. **HTTP/2 and HTTP/3 are binary and would print as unreadable bytes** — the just-read-the-lines approach only ever worked for the text version of the protocol.
 
 ---
 
 # The manual burden
 
-**So you *can* build a web server on core Java. Here is the bill.**
+**So you can build a web server on core Java. Here is the bill.**
 
 | # | What you must write yourself |
 |---|---|
@@ -380,7 +380,7 @@ curl: (7) Failed to connect to localhost port 8080 — Couldn't connect to serve
 
 ## Why step 5 is not optional
 
-> *"Think about it — while you were doing all this work you had **only one thread, the main thread**, and it was busy doing all of it. If another request arrived at your server in the meantime, it would just **get stuck**."*
+> Think about it — while you were doing all this work you had **only one thread, the main thread**, and it was busy doing all of it. If another request arrived at your server in the meantime, it would just **get stuck**.
 
 **One thread parsing one request means every other user waits.** You have to create threads yourself so that requests are handled **concurrently**.
 
@@ -458,7 +458,7 @@ Content-Length: 21
 
 > [!warning] **`404 Not Found` returned as `200 OK`.** The status line is hardcoded, so every response — success, error, anything — claims success. **A client checking the status code would treat that error as a valid answer.**
 >
-> **This is the real argument against hand-rolling, and it is not "too much typing".** Thirty lines of hand-written protocol code already has a protocol bug in it, and nothing warned you. **The boilerplate is not just tedious — it is where the bugs live.**
+> **This is the real argument against hand-rolling, and it is not too much typing.** Thirty lines of hand-written protocol code already has a protocol bug in it, and nothing warned you. **The boilerplate is not just tedious — it is where the bugs live.**
 
 > [!question]- **Deep dive — everything the 30-line server still gets wrong.** Worth opening once, to see how much a framework is actually doing on your behalf.
 >
@@ -489,11 +489,11 @@ Content-Length: 21
 
 > A servlet is nothing but **a Java class that runs inside a servlet container.**
 
-**And the obvious objection:** *"But we were taught that in Java everything runs inside the JVM."*
+**And the obvious objection:** But we were taught that in Java everything runs inside the JVM.
 
 > **Correct — and the servlet container itself runs inside the JVM. The servlet runs inside the container.** Nothing about the JVM changed; a layer was added inside it.
 
-## The container is what you call "the server"
+## The container is what you call the server
 
 | Container    |                                                          |
 | ------------ | -------------------------------------------------------- |
@@ -618,7 +618,7 @@ flowchart TB
 
 **Without Spring Boot**, building a web application with Spring MVC means writing all of that configuration by hand. **Spring Boot removes that manual effort — and nothing else.**
 
-> [!important] **Which is exactly why "just learn Spring Boot" fails.** You can only change a configuration you understand, and understanding it means knowing Spring MVC, Spring Data, Spring AOP, Spring Security — **and Spring Core, which is identical under all of them.** It can never be the case that you have only studied Spring Boot and not studied all of this, because its core technology is the same."*
+> [!important] **Which is exactly why learning only Spring Boot fails.** You can only change a configuration you understand, and understanding it means knowing Spring MVC, Spring Data, Spring AOP, Spring Security — **and Spring Core, which is identical under all of them.** It can never be the case that you have only studied Spring Boot and not studied all of this, because its core technology is the same.
 
 ---
 

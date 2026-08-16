@@ -87,6 +87,14 @@ When deciding graduation, do NOT silently relax the rule — call out which ACs 
 - The pattern-labeled topic map and sealed queues are SPOILER files; never quote their pattern/set columns before a solve. Use a script that prints just the link column.
 - The LC title/slug itself hinting the pattern is inherent to the problem (like a real contest) — not something to hide.
 
+## Never hard-wrap a paragraph
+
+**This vault renders a single newline as a line break.** Obsidian's *Strict line breaks* setting is off, so a paragraph hard-wrapped at ~100 columns in the source shows up in reading view with ragged breaks mid-sentence — a break after "with", a break after "any of this".
+
+**Write one paragraph as one source line, however long it runs.** The same goes for list items, callout lines and blockquote lines — a `>` line is wrapped by the reader's window, never by you. Code fences, tables and mermaid blocks keep their own line structure and are never touched.
+
+**When reflowing a file that is already wrapped, watch the seam.** A join that loses its space produces `gets packaged.The`, `verifying,installing`, `not inyour code`. Grep `[a-z][.,;][A-Za-z]` outside code blocks afterwards, and prove the reflow changed nothing by comparing token streams with whitespace and `>` markers stripped before writing anything back.
+
 ## Code quality — quick reference
 
 Before any solution is logged as done, it must pass the standard in `extendedClaude.md`. The two enforced, non-negotiable artifacts (post in chat **before** any code):
