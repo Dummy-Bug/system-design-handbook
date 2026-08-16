@@ -160,13 +160,32 @@ telling him the command.
 
 ## Status
 
-**Two folders written**, through class 3 (2026-08-13):
+**Three folders written**, through class 4 (2026-08-16):
 
 - `01-Introduction-To-DevOps/` — 8 notes
-- `Linux/` — 7 notes, 2,675 lines
+- `Linux/` — 7 notes, 2,723 lines. **Done.**
+- `Git/` — 6 notes, 2,221 lines. **Class 4 complete** (5 parts, ~2h 6m).
+  `01` why Git exists + Git vs GitHub · `02` the local loop (`init`→`add`→`commit`→`log`) ·
+  `03` remotes (`push`, `clone`, `pull` vs `fetch`, tokens) · `04` content addressing + blobs ·
+  `05` tree and commit objects · `06` the index and the rest of `.git`.
+  Note `03` spans parts 2–3; part 5 produced two notes. Otherwise one note per part.
 
-**Linux is finished.** Class 4 begins Git and GitHub, taught in depth — stash, cherry-pick, rebase vs merge
-were all named as targets.
+> [!tip] **Hashes in the internals notes are real and reproducible — keep doing this.**
+> Object IDs in notes `04`–`06` were computed, not invented: `sha1("blob <len>\0<content>")` for blobs,
+> and the real binary tree format (`<mode> <name>\0<20-byte sha>`, entries sorted by name) for trees.
+> A reader can run `git hash-object` / `git ls-tree` and get the same strings, which is what makes
+> "same content → same ID" demonstrable instead of asserted.
+> **Commit IDs cannot be reproduced** — they hash the author and timestamp too, so those are marked
+> illustrative in the notes. Say so rather than implying otherwise.
+
+**Git is being taught well past developer level**, and the internals are the most interview-valuable
+material in the vault so far. Still to come, named at the end of class 4: **branches, merge, rebase,
+cherry-picking**, then monorepo vs polyrepo and Git Flow.
+
+> [!danger] **Class 4's recordings carry real credentials and PII — check before any frame grab.**
+> Part 2 shows the instructor's name and email in `git log` output and in `git config user.name`, plus
+> his GitHub username spoken aloud. **Part 3 is a live personal-access-token walkthrough with the token
+> on screen.** All of it was placeholdered on the way into the notes; none of it may be screenshotted.
 
 All mermaid, no images yet. Classes run **Wednesday and Saturday, 9:00 pm, 2–2½ hours**.
 
