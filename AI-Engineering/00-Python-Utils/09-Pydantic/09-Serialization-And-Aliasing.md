@@ -15,7 +15,7 @@ class User(BaseModel):
 ```
 
 > With just `alias="id"` and no further configuration, the model would accept `id` on input but **reject** `uid` — **the Python name stops working as an input key once an alias is declared, by default**. 
-> `populate_by_name=True` in `model_config` restores the Python name as a valid input key *alongside* the alias, so both `User(id=...)` and `User(uid=...)` work:
+> `populate_by_name=True` in `model_config` restores the Python name as a valid input key **alongside** the alias, so both `User(id=...)` and `User(uid=...)` work:
 
 ```python
 user = User.model_validate({"id": "3bc4bf25-...", ...})
@@ -32,7 +32,7 @@ user.model_dump_json(by_alias=True)  # {"id": "3bc4bf25-...", ...}
 
 ## `include` and `exclude` — controlling which fields serialize
 
-Sometimes a field genuinely shouldn't leave the process — even with `SecretStr` already masking a password's *value*, sometimes the key shouldn't appear in the output at all:
+Sometimes a field genuinely shouldn't leave the process — even with `SecretStr` already masking a password's **value**, sometimes the key shouldn't appear in the output at all:
 
 ```python
 user.model_dump(exclude={"password"})

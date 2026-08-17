@@ -34,7 +34,7 @@ The first two are not.
 4  max_retries: int > 0
 ```
 
-Line 3 works, but only by **enumeration** — `Literal` lists exact values, and "at least 1" is infinitely many. Line 4 is what you'd want to write:
+Line 3 works, but only by **enumeration** — `Literal` lists exact values, and **at least 1** is infinitely many. Line 4 is what you'd want to write:
 
 ```
 $ mypy an0c.py
@@ -52,7 +52,7 @@ TypeError: '>' not supported between instances of 'type' and 'int'
 
 Both object, and Python's reason is the instructive one. It's **not** a syntax error — the line parses. An annotation is an ordinary expression that gets **evaluated**, and evaluating `int > 0` means comparing the class `int` against the integer `0`, which nothing supports.
 
-So the annotation slot holds a type. "At least 1" is not a type, and there is nowhere else in the annotation to put it.
+So the annotation slot holds a type. **At least 1** is not a type, and there is nowhere else in the annotation to put it.
 
 ## Three places the rule could live
 
@@ -73,7 +73,7 @@ This one actually works, and it's worth being precise about why it's still wrong
 
 **It drifts.** Rename `max_retries`, delete a parameter, and the dict silently goes stale. Nothing ties the two together, so no tool can report that the correspondence broke.
 
-**It doesn't travel with the type.** From `04-Where-Annotations-Live`, annotations live on the function or class object itself, so they move with it — through imports, through subclassing, into anything that inspects the object. A dict off to one side has to be *found* separately. Hand your function to a library and it can read `__annotations__` and see `int`; it has no way to know your rules exist at all.
+**It doesn't travel with the type.** From `04-Where-Annotations-Live`, annotations live on the function or class object itself, so they move with it — through imports, through subclassing, into anything that inspects the object. A dict off to one side has to be **found** separately. Hand your function to a library and it can read `__annotations__` and see `int`; it has no way to know your rules exist at all.
 
 > [!important] The requirement that falls out: put the extra information **inside the annotation**, where anything reading the type will find it — without changing what the type is.
 
@@ -125,7 +125,7 @@ three ok
 {'max_retries': typing.Annotated[int, Ge(1)], 'note': typing.Annotated[str, 'anything at all', 42, ['even a list']], 'return': <class 'NoneType'>}
 ```
 
-**Line 19 — the wrapper isn't even mentioned.** mypy reports `max_retries: int`. To a type checker, `Annotated[int, anything]` simply *is* `int`.
+**Line 19 — the wrapper isn't even mentioned.** mypy reports `max_retries: int`. To a type checker, `Annotated[int, anything]` simply **is** `int`.
 
 Which decides lines 22 and 23. `-5` violates `Ge(1)` and is **not** flagged, because mypy never saw a constraint. `"three"` **is** flagged, because the type underneath is unchanged and still doing its job.
 
@@ -171,7 +171,7 @@ typing.Annotated[int, 'hello', 42]
 
 Nobody — unless somebody writes code to. `Ge` above is a class invented for this note; it means what its reader decides it means.
 
-And "a library reads the metadata" is a loop over a tuple:
+And **a library reads the metadata** is a loop over a tuple:
 
 ```python
 1  X = Annotated[int, "hello", 42]
@@ -229,7 +229,7 @@ Line 22 runs, line 23 raises. The constraint is enforced — by a plain function
 
 ## The form you'll actually write
 
-`Ge(1)` was a *rule*. The extras can equally be a **function**, and that's the form that turns up in agent state.
+`Ge(1)` was a **rule**. The extras can equally be a **function**, and that's the form that turns up in agent state.
 
 An agent's state is shared, and several steps update it. Each step returns only the keys it touched, and the runtime merges that into the running state:
 
@@ -255,8 +255,8 @@ $ python3 dm1.py
 > [!info] `**` inside a dict literal unpacks that dict's pairs into the one being built.
 >
 > ```python
-> a = {"x": 1, "y": 2}
-> b = {"y": 99, "z": 3}
+> a = {**x**: 1, **y**: 2}
+> b = {**y**: 99, **z**: 3}
 > ```
 > ```
 > $ python3 dm0.py
@@ -271,7 +271,7 @@ $ python3 dm1.py
 
 Now the observation that matters: **overwriting is exactly right for `step`.** You want 1 to supersede 0. It is only wrong for `messages`, where the two lists should have been joined.
 
-Two keys, one merge, two behaviours needed. So where does "join instead of overwrite" live?
+Two keys, one merge, two behaviours needed. So where does **join instead of overwrite** live?
 
 - **In the merge code** — `if key == "messages": …`. But that code is the framework's, generic across every agent, and has never heard of your keys. Adding a field to your own state would mean editing the framework.
 - **In a side dict** — ruled out at the top of this note. It drifts on a rename and it doesn't travel with the class.
@@ -288,7 +288,7 @@ Which is `Annotated`:
 6      step: int
 ```
 
-Line 5 reads: *a list of strings — and when two updates to this key meet, combine them with `operator.add`.* Line 6 carries no extra, so `step` keeps the default overwrite.
+Line 5 reads: **a list of strings — and when two updates to this key meet, combine them with `operator.add`.** Line 6 carries no extra, so `step` keeps the default overwrite.
 
 `operator.add(x, y)` is the `+` operator as a function:
 
@@ -300,7 +300,7 @@ $ python3 dm2.py
 
 Arithmetic on numbers; on lists, `+` **concatenates** — which is precisely what `messages` needs.
 
-> [!important] Nothing new about `Annotated` is involved. The extras are arbitrary objects and a function is an object. Earlier the extra was a `Ge(1)` *describing* a rule; here it's a function that *performs* one.
+> [!important] Nothing new about `Annotated` is involved. The extras are arbitrary objects and a function is an object. Earlier the extra was a `Ge(1)` **describing** a rule; here it's a function that **performs** one.
 >
 > The reason it has to go here is per-key behaviour: `messages` appends and `step` overwrites, so the instruction can't live in the shared merging code, and a side table would drift. **`Annotated` is how per-key behaviour gets attached to a type.**
 
@@ -322,7 +322,7 @@ You write the annotation. The framework writes the reader.
 
 Four things to carry:
 
-1. It exists because plenty of real requirements are not types. "At least 1" can't be a type; `Literal` can only enumerate, `NewType` has no slot for it, and an annotation is an evaluated expression so `int > 0` is a `TypeError`, not a constraint.
+1. It exists because plenty of real requirements are not types. **At least 1** can't be a type; `Literal` can only enumerate, `NewType` has no slot for it, and an annotation is an evaluated expression so `int > 0` is a `TypeError`, not a constraint.
 2. The alternative — keeping rules in a structure alongside — fails on two counts: it **drifts** when names change, and it **doesn't travel** with the object the way an annotation does.
-3. Type checkers see straight through it. `Annotated[int, Ge(1)]` reveals as `int`, so wrong *types* are still caught and violated *constraints* are not. `get_type_hints` strips the extras by default and returns them only for `include_extras=True`, which is why adding `Annotated` breaks nothing that already reads annotations.
+3. Type checkers see straight through it. `Annotated[int, Ge(1)]` reveals as `int`, so wrong **types** are still caught and violated **constraints** are not. `get_type_hints` strips the extras by default and returns them only for `include_extras=True`, which is why adding `Annotated` breaks nothing that already reads annotations.
 4. The extras are arbitrary objects, and nothing reads them unless someone wrote code to. A validating library recognises the constraint objects it defined itself; a graph runtime pulls a reducer function out of the same tuple. Same mechanism, different payload.

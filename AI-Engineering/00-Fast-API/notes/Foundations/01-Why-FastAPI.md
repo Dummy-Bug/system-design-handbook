@@ -19,7 +19,7 @@ Django hands you a great deal out of the box — an admin interface, a prescribe
 If you want a backend that speaks JSON to whatever client shows up, most of it is weight you carry and never use. And the opinions are not optional — you build Django's way or you fight it.
 
 > [!question]- I know Spring Boot but never touched Django — what does this actually mean in those terms?
-> Spring Boot's "batteries included" is **opt-in**. Add `spring-boot-starter-web` and you get a REST-capable app and nothing else. Want a database? Add `spring-boot-starter-data-jpa`. Want auth? Add `spring-boot-starter-security`. Each piece is a deliberate choice — and a project with only `starter-web` ends up close to what FastAPI gives you by default.
+> Spring Boot's **batteries included** is **opt-in**. Add `spring-boot-starter-web` and you get a REST-capable app and nothing else. Want a database? Add `spring-boot-starter-data-jpa`. Want auth? Add `spring-boot-starter-security`. Each piece is a deliberate choice — and a project with only `starter-web` ends up close to what FastAPI gives you by default.
 >
 > Django doesn't work that way. A fresh project switches several things on whether you asked for them or not:
 >
@@ -28,11 +28,11 @@ If you want a backend that speaks JSON to whatever client shows up, most of it i
 > | **Admin interface** | A full auto-generated CRUD dashboard — create/read/update/delete screens — built automatically from your database models. Nobody gets this for free in Spring Boot; you'd write it yourself or bolt on a separate tool. |
 > | **Templating engine** | Server-rendered HTML pages, because Django's original design assumption is that Django itself renders the webpage — not that some separate frontend calls it for JSON. |
 > | **A prescribed app structure** | `manage.py`, apps each with their own `models.py` / `views.py` / `urls.py` / `admin.py` — an actual folder shape Django generates and expects, not annotation-driven like `@RestController`. |
-> | **Django REST Framework** | A *separate* add-on library, not core Django — because plain Django is oriented around HTML pages, not JSON APIs. Wanting "backend that speaks JSON to React" already means installing something to bend Django toward that shape. |
+> | **Django REST Framework** | A **separate** add-on library, not core Django — because plain Django is oriented around HTML pages, not JSON APIs. Wanting **backend that speaks JSON to React** already means installing something to bend Django toward that shape. |
 >
-> Translated: "Django hands you a great deal out of the box" is like Spring Boot shipping `starter-web` + `spring-data-jpa` + Thymeleaf + an auto-generated admin CRUD dashboard for every `@Entity`, all switched on by default. "FastAPI gives you just the backend" is like starting a Spring Boot project with only `starter-web` — controllers in, JSON out, nothing else running.
+> Translated: **Django hands you a great deal out of the box** is like Spring Boot shipping `starter-web` + `spring-data-jpa` + Thymeleaf + an auto-generated admin CRUD dashboard for every `@Entity`, all switched on by default. **FastAPI gives you just the backend** is like starting a Spring Boot project with only `starter-web` — controllers in, JSON out, nothing else running.
 >
-> "You build Django's way or you fight it" is the real crux: Django's admin panel and ORM are tightly coupled to Django's own model classes and conventions, so stepping outside that shape means working against the grain — not simply skipping a starter the way Spring Boot allows.
+> **You build Django's way or you fight it** is the real crux: Django's admin panel and ORM are tightly coupled to Django's own model classes and conventions, so stepping outside that shape means working against the grain — not simply skipping a starter the way Spring Boot allows.
 
 ### FastAPI takes the opposite position
 
@@ -60,7 +60,7 @@ flowchart LR
     API --> DB[("Database")]
 ```
 
-The backend does not know or care what is on the other end. Swap React for a mobile app later and the backend is untouched. This is why "less bundled" is freedom rather than deprivation.
+The backend does not know or care what is on the other end. Swap React for a mobile app later and the backend is untouched. This is why **less bundled** is freedom rather than deprivation.
 
 ---
 
@@ -74,7 +74,7 @@ You can be a full backend developer with FastAPI alone.
 
 ---
 
-## "Fast" is conditional
+## Fast is conditional
 
 This is the claim everything else rests on, so it is worth stating precisely.
 
@@ -86,7 +86,7 @@ The framework is not what went wrong.
 
 The same feature, written two ways, can differ enormously in throughput. The only thing separating the two versions is whether the person writing it knew what was happening underneath.
 
-Which means learning the syntax is not the goal. Understanding *what the code is doing and why* is the goal, because that is the only thing that reliably produces the fast version.
+Which means learning the syntax is not the goal. Understanding **what the code is doing and why** is the goal, because that is the only thing that reliably produces the fast version.
 
 It also means FastAPI cannot be learned in isolation. It rests on other components, and those components are where the performance actually lives.
 
@@ -94,7 +94,7 @@ It also means FastAPI cannot be learned in isolation. It rests on other componen
 
 ## An AI product is still a backend
 
-Worth saying plainly, because "I'm building an LLM application" does not exempt you from ordinary backend work.
+Worth saying plainly, because **I'm building an LLM application** does not exempt you from ordinary backend work.
 
 Any chat product needs:
 

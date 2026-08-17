@@ -35,7 +35,7 @@ Success: no issues found in 1 source file
 
 Silence over code that provably crashes — the same false all-clear as before, arrived at a completely different way. **The annotation isn't missing. It's too coarse.**
 
-And the checker is right. `["90", "80", "70"]` *is* a list. You claimed the argument would be a list, a list is what arrived, and the claim was satisfied. It didn't fail to check; you gave it a weak question and it answered honestly.
+And the checker is right. `["90", "80", "70"]` **is** a list. You claimed the argument would be a list, a list is what arrived, and the claim was satisfied. It didn't fail to check; you gave it a weak question and it answered honestly.
 
 `list` rules out a string and an integer and stops there. Any list, holding anything, in any combination.
 
@@ -61,7 +61,7 @@ param.py:6: error: List item 2 has incompatible type "str"; expected "int"  [lis
 
 One error per element, pointing at the exact items, before anything ran.
 
-Square brackets after a container type give it a **parameter** — the type of what it holds. `list` is *"a list"*; `list[int]` is *"a list of integers"*. Same word, strictly stronger claim.
+Square brackets after a container type give it a **parameter** — the type of what it holds. `list` is **a list**; `list[int]` is **a list of integers**. Same word, strictly stronger claim.
 
 ## Four shapes
 
@@ -90,7 +90,7 @@ four.py:7: error: Incompatible types in assignment (expression has type "str", t
 four.py:8: error: Argument 1 to "add" of "set" has incompatible type "int"; expected "str"  [arg-type]
 ```
 
-Worth noticing what those errors are *about*. You annotated three variables. Nobody annotated `append` or `add` — yet both got checked, because once the checker knows `names` is a `list[str]`, it knows what `names.append` will accept. **One annotation reaches into every operation on that object**, which is the actual return on the brackets. A bare `list` leaves all of it unchecked.
+Worth noticing what those errors are **about**. You annotated three variables. Nobody annotated `append` or `add` — yet both got checked, because once the checker knows `names` is a `list[str]`, it knows what `names.append` will accept. **One annotation reaches into every operation on that object**, which is the actual return on the brackets. A bare `list` leaves all of it unchecked.
 
 `dict` is the only one of the four taking two things, and the order is fixed: **keys first, then values.** `dict[str, int]` is names-to-ages. `dict[int, str]` would be a different container entirely.
 
@@ -105,7 +105,7 @@ $ mypy dictarity.py
 dictarity.py:1: error: "dict" expects 2 type arguments, but 3 given  [type-arg]
 ```
 
-A dictionary has exactly two kinds of thing in it — keys and values — so there are exactly two slots to describe. It does not matter how many *entries* the dictionary has, and there is no way to describe individual keys separately here.
+A dictionary has exactly two kinds of thing in it — keys and values — so there are exactly two slots to describe. It does not matter how many **entries** the dictionary has, and there is no way to describe individual keys separately here.
 
 ## What a tuple actually is
 
@@ -183,7 +183,7 @@ So the brackets mean two different things depending on the container:
 | `dict[str, int]` | every key is a `str`, every value an `int` |
 | `tuple[str, int]` | **position 0** is a `str`, **position 1** is an `int`. Exactly two. |
 
-`list[str]` is *one type for all elements*. `tuple[str, int]` is *one type per position*, read left to right — a layout, not a description of a typical element.
+`list[str]` is **one type for all elements**. `tuple[str, int]` is **one type per position**, read left to right — a layout, not a description of a typical element.
 
 > [!important] **Length is part of a tuple's type, and of no other container's.** It isn't a separate rule bolted on; it falls out of naming a type per position. Name three, you've said there are three. `list[int]` has nothing to say about how many, and there is no way to make it say anything — which matches what the two containers are for.
 
@@ -212,13 +212,13 @@ Set them side by side, because they look like the same syntax and disagree compl
 - `list[int]` — any number of integers
 - `tuple[int]` — precisely one integer
 
-When you genuinely want "any number", there's separate syntax for it:
+When you genuinely want **any number**, there's separate syntax for it:
 
 ```python
 scores: tuple[int, ...] = (90, 80, 70, 60)
 ```
 
-The `...` is literal — three dots, typed as they appear. It reads *"an `int`, then any number more of them"*, and it makes no claim about length. That is the `list[int]` equivalent, and without it whatever you write is a fixed-length layout.
+The `...` is literal — three dots, typed as they appear. It reads **an `int`, then any number more of them**, and it makes no claim about length. That is the `list[int]` equivalent, and without it whatever you write is a fixed-length layout.
 
 ## Where the brackets run out
 
@@ -268,7 +268,7 @@ Found 2 errors in 1 file (checked 1 source file)
 
 Both complaints land on **line 7**, and neither of the other two lines is mentioned.
 
-**Line 7 — flagged, and it works.** It printed `ALICE`. But the annotation gave *one* type to *all* values, so the checker has no way to know that the `"name"` key in particular holds a string. It sees `str | int | None` and has to assume the worst, and neither `int` nor `None` has `.upper()`.
+**Line 7 — flagged, and it works.** It printed `ALICE`. But the annotation gave **one** type to **all** values, so the checker has no way to know that the `"name"` key in particular holds a string. It sees `str | int | None` and has to assume the worst, and neither `int` nor `None` has `.upper()`.
 
 **Line 9 — silent.** Putting `"thirty"` in the age is a real bug. It passes because `str` is in the union, and the union applies to every key equally.
 
@@ -288,7 +288,7 @@ None of that is a defect in `dict[K, V]`. It describes a mapping where **all val
 
 What `create_user` returns is a different thing wearing a dictionary's clothes. It's a **record**: a fixed set of keys, each holding its own type. Three fields, three types, and one slot to describe them all in.
 
-There is no bracket syntax for *"the `name` key holds a `str` and the `age` key holds an `int`"*. That needs a different tool — `TypedDict` — and that's a rung of its own.
+There is no bracket syntax for **the `name` key holds a `str` and the `age` key holds an `int`**. That needs a different tool — `TypedDict` — and that's a rung of its own.
 
 ## What this concept claims
 
@@ -298,6 +298,6 @@ Four things to carry:
 
 1. `list` accepts every list ever made. `list[int]` accepts one kind. The brackets are the entire difference, and they cost four characters.
 2. The parameter flows outward: annotate the variable and every method call on it becomes checkable, including methods you never wrote.
-3. `list`, `set` and `dict` describe a *typical* element — one type covering all of them, however many there are. `tuple` describes *positions*, left to right, which is why its length is fixed by the annotation.
+3. `list`, `set` and `dict` describe a **typical** element — one type covering all of them, however many there are. `tuple` describes **positions**, left to right, which is why its length is fixed by the annotation.
 4. `tuple[int]` is not the tuple version of `list[int]`. It means exactly one. `tuple[int, ...]` is the version you wanted.
-5. The brackets describe a *uniform* container. A record — fixed keys, each with its own type — is not one, and forcing it into `dict[K, V]` produces an annotation that flags working code and misses real bugs.
+5. The brackets describe a **uniform** container. A record — fixed keys, each with its own type — is not one, and forcing it into `dict[K, V]` produces an annotation that flags working code and misses real bugs.

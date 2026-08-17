@@ -15,7 +15,7 @@ Repeat for every retrieved document. Four documents, four scores.
 
 So if `k=4` returned two documents, you might get `D1 = 0.8` and `D2 = 0.5`. Those two numbers are all the verdict is derived from.
 
-> [!note] The lecture speaks these as bare digits — *"eight"*, *"five"*, *"nine"* — but the scale is **0 to 1** throughout, and the code confirms it. Read every spoken digit as a decimal: 8 is 0.8, 5 is 0.5.
+> [!note] The lecture speaks these as bare digits — **eight**, **five**, **nine** — but the scale is **0 to 1** throughout, and the code confirms it. Read every spoken digit as a decimal: 8 is 0.8, 5 is 0.5.
 
 ---
 
@@ -46,7 +46,7 @@ Work through the examples.
 
 > [!important] The two rules are deliberately asymmetric.
 >
-> **Correct** needs only *one* document to be strong. **Incorrect** needs *every* document to be weak. Both bars are hard to reach, which pushes borderline retrievals into the ambiguous bucket rather than letting them be confidently mislabelled either way.
+> **Correct** needs only **one** document to be strong. **Incorrect** needs **every** document to be weak. Both bars are hard to reach, which pushes borderline retrievals into the ambiguous bucket rather than letting them be confidently mislabelled either way.
 >
 > Ambiguous is not a leftover category. It is where the system deposits the cases it is not sure about, and [[07-The-Ambiguous-Path]] gives it a genuine strategy.
 
@@ -64,7 +64,7 @@ The verdict is **Correct** — D1 clears 0.7. But you do **not** use all three d
 
 So D1 (0.8) is used. D2 (0.4) is used. **D3 (0.2) is dropped**, even though the retrieval as a whole was judged correct.
 
-The verdict and the document set are two different outputs of the same step. The verdict decides which *path* the graph takes; the threshold decides which *documents* travel down it. A retrieval can be correct overall and still contain individual chunks that deserve to be thrown away.
+The verdict and the document set are two different outputs of the same step. The verdict decides which **path** the graph takes; the threshold decides which **documents** travel down it. A retrieval can be correct overall and still contain individual chunks that deserve to be thrown away.
 
 ```mermaid
 flowchart TD
@@ -93,7 +93,7 @@ class DocEvalScore(BaseModel):
     reason: str
 ```
 
-The `reason` is not used for routing. It exists so that when a verdict looks wrong you can see *why* a chunk got 0.5, rather than staring at a bare float. Worth copying — a scoring judge without an explanation field is very hard to debug.
+The `reason` is not used for routing. It exists so that when a verdict looks wrong you can see **why** a chunk got 0.5, rather than staring at a bare float. Worth copying — a scoring judge without an explanation field is very hard to debug.
 
 ### The prompt
 
@@ -114,9 +114,9 @@ doc_eval_prompt = ChatPromptTemplate.from_messages([
 doc_eval_chain = doc_eval_prompt | llm.with_structured_output(DocEvalScore)
 ```
 
-**"ONE retrieved chunk"** in capitals, and **"chunk *alone* is sufficient"** — both insist the chunk is judged in isolation, not as part of a set. That is what makes the scores independent enough to threshold.
+**ONE retrieved chunk** in capitals, and **chunk alone is sufficient** — both insist the chunk is judged in isolation, not as part of a set. That is what makes the scores independent enough to threshold.
 
-**"Be conservative with high scores"** is the calibration knob. Without it an LLM judge inflates, and since the *correct* verdict fires on a single score above 0.7, inflation would route almost everything down the correct path and quietly restore the original problem.
+**Be conservative with high scores** is the calibration knob. Without it an LLM judge inflates, and since the **correct** verdict fires on a single score above 0.7, inflation would route almost everything down the correct path and quietly restore the original problem.
 
 ### The evaluator node
 
@@ -220,11 +220,11 @@ flowchart TD
 
 The same three books, three queries chosen to land in three different buckets:
 
-**`Bias variance tradeoff`** → **CORRECT**. Reason: *at least one retrieved chunk scored > 0.7*. The topic is squarely covered by all three textbooks, so at least one chunk was always going to score high. Answer generated normally.
+**`Bias variance tradeoff`** → **CORRECT**. Reason: **at least one retrieved chunk scored > 0.7**. The topic is squarely covered by all three textbooks, so at least one chunk was always going to score high. Answer generated normally.
 
-**`AI news from last week`** → **INCORRECT**. Reason: *all retrieved chunks scored < 0.3*. Nothing in decades-old textbooks resembles recent news. At this stage the output is just the failure message — there is nowhere else to go yet.
+**`AI news from last week`** → **INCORRECT**. Reason: **all retrieved chunks scored < 0.3**. Nothing in decades-old textbooks resembles recent news. At this stage the output is just the failure message — there is nowhere else to go yet.
 
-**`What are attention mechanisms and why are they important in current models?`** → **AMBIGUOUS**. And this one was found by experimentation, not by luck. It is deliberately two questions bolted together: attention mechanisms are touched on in one of the books, while *why they matter in current models* is not covered anywhere. So no chunk clears 0.7, but not everything falls below 0.3. Reason: *mixed relevance signals*.
+**`What are attention mechanisms and why are they important in current models?`** → **AMBIGUOUS**. And this one was found by experimentation, not by luck. It is deliberately two questions bolted together: attention mechanisms are touched on in one of the books, while **why they matter in current models** is not covered anywhere. So no chunk clears 0.7, but not everything falls below 0.3. Reason: **mixed relevance signals**.
 
 > [!info] That third query is the useful one to remember. Ambiguity in practice is rarely a query the corpus half-understands — it is a query with **more than one part**, where the corpus covers some parts and not others. That is also why merging internal and external knowledge is the right correction for it.
 
@@ -234,9 +234,9 @@ The same three books, three queries chosen to land in three different buckets:
 
 **It guarantees** the system now has an explicit, inspectable judgement about retrieval quality — available as `verdict` and `reason` in state, before any answer is generated.
 
-**It does not guarantee** the judgement is right. It is an LLM scoring text against text, subject to every LLM-judge failure: inflation, sensitivity to phrasing, inconsistency across runs. The `reason` field and the "be conservative" instruction are mitigations, not fixes. And the thresholds are two magic numbers with no principled derivation — the paper does not supply them.
+**It does not guarantee** the judgement is right. It is an LLM scoring text against text, subject to every LLM-judge failure: inflation, sensitivity to phrasing, inconsistency across runs. The `reason` field and the **be conservative** instruction are mitigations, not fixes. And the thresholds are two magic numbers with no principled derivation — the paper does not supply them.
 
 ---
 
 > [!tip] Interview framing
-> "The retrieval evaluator scores each retrieved chunk against the question on a 0-to-1 relevance scale, then applies two thresholds. Correct means at least one chunk cleared the upper threshold — 0.7 here. Incorrect means no chunk cleared the lower one, 0.3. Everything else is ambiguous. Those rules are deliberately asymmetric: correct needs one strong chunk, incorrect needs every chunk to be weak, so borderline cases fall into ambiguous rather than being confidently mislabelled. There's a second rule that's easy to miss — even on the correct path, only chunks above the lower threshold are actually used for generation, so a retrieval can be judged correct and still have individual chunks discarded. The verdict routes the graph; the threshold picks the documents. The paper used the same fine-tuned T5-large as the refiner; implementations substitute an LLM with a structured output of score plus a short reason, and the reason field is what makes a bad verdict debuggable."
+> **The retrieval evaluator scores each retrieved chunk against the question on a 0-to-1 relevance scale, then applies two thresholds. Correct means at least one chunk cleared the upper threshold — 0.7 here. Incorrect means no chunk cleared the lower one, 0.3. Everything else is ambiguous. Those rules are deliberately asymmetric: correct needs one strong chunk, incorrect needs every chunk to be weak, so borderline cases fall into ambiguous rather than being confidently mislabelled. There's a second rule that's easy to miss — even on the correct path, only chunks above the lower threshold are actually used for generation, so a retrieval can be judged correct and still have individual chunks discarded. The verdict routes the graph; the threshold picks the documents. The paper used the same fine-tuned T5-large as the refiner; implementations substitute an LLM with a structured output of score plus a short reason, and the reason field is what makes a bad verdict debuggable.**

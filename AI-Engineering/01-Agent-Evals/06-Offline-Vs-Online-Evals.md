@@ -1,14 +1,14 @@
 Everything covered so far — the loop, the three grading methods, both reference types — has been **offline evaluation**: run before the system reaches a user. You already know it; it just hasn't been named.
 
-This note names it, gives it three concrete jobs, then shows the three things that go wrong *after* deployment that offline evaluation is **structurally incapable** of catching. That gap is what online evaluation fills.
+This note names it, gives it three concrete jobs, then shows the three things that go wrong **after** deployment that offline evaluation is **structurally incapable** of catching. That gap is what online evaluation fills.
 
-The one line to carry out of here: **offline eval tells you whether your application works *correctly*; online eval tells you whether it's running *normally*.** Those are different questions, and the second one is answerable without an answer key — which is the whole trick.
+The one line to carry out of here: **offline eval tells you whether your application works correctly; online eval tells you whether it's running normally.** Those are different questions, and the second one is answerable without an answer key — which is the whole trick.
 
 ---
 
 ## Offline evals — and their three jobs
 
-Any eval pipeline you run on your application **before deploying it** is an offline eval. The UPSC grader from note 04 was one: built, evaluated against a golden dataset, *then* shipped.
+Any eval pipeline you run on your application **before deploying it** is an offline eval. The UPSC grader from note 04 was one: built, evaluated against a golden dataset, **then** shipped.
 
 ![[AI-Engineering/01-Agent-Evals/Images/v6-01-Why-Offline-Evals.png]]
 
@@ -24,7 +24,7 @@ push code → CI triggers (e.g. GitHub Actions) → eval script runs → score
     score <  95%  →  notification: "evals failed" · rollback to previous version
 ```
 
-Not just testing before release — an *automated* decision about whether release happens at all.
+Not just testing before release — an **automated** decision about whether release happens at all.
 
 ### 2 · Version comparison
 
@@ -36,15 +36,15 @@ This generalises to any fork in the road: different prompts, different models, d
 
 ### 3 · Regression testing
 
-*"Test of change."* And the example is worth remembering because it's so ordinary.
+**Test of change.** And the example is worth remembering because it's so ordinary.
 
-You notice in production that the chatbot answers **coldly** about refunds. Reasonable fix: edit the system prompt — *"be very kind and polite."*
+You notice in production that the chatbot answers **coldly** about refunds. Reasonable fix: edit the system prompt — **be very kind and polite.**
 
-Now its personality is *too* soft. A student asks the cost of the Insider plan. The real answer is **₹19,500**. To sound agreeable, the bot says *"it's around ₹19,000."*
+Now its personality is **too** soft. A student asks the cost of the Insider plan. The real answer is **₹19,500**. To sound agreeable, the bot says **it's around ₹19,000.**
 
 > [!warning] You improved one thing and broke another. That's **regression** — and it is the characteristic failure mode of complex LLM systems. You go to raise performance in one place and it drops somewhere else.
 
-Offline evals catch it because your golden dataset deliberately contains **all case types** — refund questions, pricing questions, curriculum questions — so you get results *per category*. Refund handling was 90% before the prompt change; afterwards it should still be ~90%. If it's 80%, there's regression, and that change should not ship.
+Offline evals catch it because your golden dataset deliberately contains **all case types** — refund questions, pricing questions, curriculum questions — so you get results **per category**. Refund handling was 90% before the prompt change; afterwards it should still be ~90%. If it's 80%, there's regression, and that change should not ship.
 
 ---
 
@@ -54,7 +54,7 @@ Offline evals pass. You deploy. Three things now happen that your offline setup 
 
 ![[AI-Engineering/01-Agent-Evals/Images/v6-02-Post-Deployment-Risks.png]]
 
-**1 · Unanticipated inputs.** Offline you tested the 200-500 questions you *thought* users would ask. Production is open to the real world: questions mixing Hindi and English, ambiguous half-questions, **angry rants with a real question buried inside**, adversarial prompt-injection attempts, and edge-case scenarios you never considered. Production is an enormous superset of your test set.
+**1 · Unanticipated inputs.** Offline you tested the 200-500 questions you **thought** users would ask. Production is open to the real world: questions mixing Hindi and English, ambiguous half-questions, **angry rants with a real question buried inside**, adversarial prompt-injection attempts, and edge-case scenarios you never considered. Production is an enormous superset of your test set.
 
 **2 · Emergent / systemic failures** — problems that only exist **at scale, under load, over time**:
 
@@ -90,7 +90,7 @@ That constraint is also the defining feature: online evaluation is the kind that
 
 ![[AI-Engineering/01-Agent-Evals/Images/v6-03-Offline-Vs-Online-Table.png]]
 
-| | **Offline eval** *(before deployment)* | **Online eval** *(after deployment)* |
+| | **Offline eval** **(before deployment)** | **Online eval** **(after deployment)** |
 |---|---|---|
 | **Data** | Fixed, pre-collected dataset | Live production traffic |
 | **Answer key** | Known in advance | None — must estimate quality |
@@ -110,17 +110,17 @@ The cleanest way to feel the difference. Take the UPSC grader again.
 
 **Offline, we measured correctness.** Correctness had a precise definition: do the system's marks land close to the human's marks? Measured with MAE, and we drove it toward zero.
 
-**Online, can we measure correctness?** No. For the answer being graded *right now*, we don't have a human's marks. There's no golden dataset for this particular answer — nobody graded it before the system did. **The human perspective does not exist in production.**
+**Online, can we measure correctness?** No. For the answer being graded **right now**, we don't have a human's marks. There's no golden dataset for this particular answer — nobody graded it before the system did. **The human perspective does not exist in production.**
 
-So what *can* we check? Whether the system is behaving **normally**.
+So what **can** we check? Whether the system is behaving **normally**.
 
 ![[AI-Engineering/01-Agent-Evals/Images/v6-04-Distribution-Shift.png]]
 
 Store every total score, then plot the **distribution over a one-week window**. Last week: most students around 500, a good number around 700, few around 200. Do that for several weeks and the shape stabilises — that's your **baseline**.
 
-Then one week the distribution shifts: suddenly most scores cluster around **800**. You cannot say *"the system is wrong"* — but you can say *"something changed"*, and that's a trigger to go investigate.
+Then one week the distribution shifts: suddenly most scores cluster around **800**. You cannot say **the system is wrong** — but you can say **something changed**, and that's a trigger to go investigate.
 
-> [!note] A student raised the right objection: the shift might be legitimate — maybe unusually strong candidates showed up that week. True. Online evals don't *prove* incorrectness. They tell you something moved, and you go look. That is a much weaker claim than offline correctness, and it's still the difference between finding out today and finding out from a customer.
+> [!note] A student raised the right objection: the shift might be legitimate — maybe unusually strong candidates showed up that week. True. Online evals don't **prove** incorrectness. They tell you something moved, and you go look. That is a much weaker claim than offline correctness, and it's still the difference between finding out today and finding out from a customer.
 
 ### Two other ways to grade without an answer key
 
@@ -149,22 +149,22 @@ What goes in each record:
 | **Identity / threading** | `conversation_id`, `turn_id`, `user_id` / `session_id`, `timestamp` |
 | **Input** | raw user message, plus any preprocessing (normalised text, detected language/intent) |
 | **Retrieved context** | the chunks that were fetched |
-| **Output** | response text, `model_name` / `prompt_version` (needed for A/B testing and answering *"which version regressed?"*), tool calls, finish reason |
+| **Output** | response text, `model_name` / `prompt_version` (needed for A/B testing and answering **which version regressed?**), tool calls, finish reason |
 | **Operational telemetry** | `latency_ms` — ideally split into retrieval vs generation — `prompt_tokens`, `completion_tokens`, derived cost, error/status codes |
 | **Downstream user signals** | thumbs up/down, escalation to support, drop-off, rephrase, conversion |
 
 And **four engineering properties** that make the difference between logging that works and logging that hurts:
 
-- **Non-blocking** — logging must *never* add latency to the response. Fire to a queue, write in the background. Logging is itself an operation; done naively it becomes part of the user's wait.
+- **Non-blocking** — logging must **never** add latency to the response. Fire to a queue, write in the background. Logging is itself an operation; done naively it becomes part of the user's wait.
 - **Durable + queryable** — a warehouse or observability tool you can run analytical queries against, **not scattered text logs**. You will need to fetch this later; that's the whole point.
-- **Late-signal attachment** — signals arrive at *different times*: thumbs-down in seconds, escalation in an hour, conversion the next day. Someone may email support the day after the conversation. So records are **keyed on `conversation_id` and updated as signals arrive**.
+- **Late-signal attachment** — signals arrive at **different times**: thumbs-down in seconds, escalation in an hour, conversion the next day. Someone may email support the day after the conversation. So records are **keyed on `conversation_id` and updated as signals arrive**.
 - **PII handling** — scrub or tokenise emails, phone numbers, payment details. Apply retention limits and access control, so a teammate can't later extract personal data out of your observability tool. (**PII** = personally identifiable information — phone, card, date of birth, Aadhaar.)
 
 ### Step 2 — Two kinds of signal
 
 ![[AI-Engineering/01-Agent-Evals/Images/v6-06-Computed-Vs-Captured.png]]
 
-| **Captured** *(read directly from the trace)* | **Computed** *(produced by an evaluator)* |
+| **Captured** **(read directly from the trace)** | **Computed** **(produced by an evaluator)** |
 |---|---|
 | Thumbs up/down · escalation rate · abandonment / drop-off · rephrase rate · conversion · latency (p50/p95/p99) · cost per conversation · token usage · error rate | Faithfulness · answer relevance · correctness · hallucination · toxicity · bias & fairness · PII leakage / prompt injection · conciseness · task completion, satisfaction |
 
@@ -243,8 +243,8 @@ flowchart LR
 
 ## Reading a dashboard number
 
-A question worth having an answer to: *"faithfulness is 0.87, toxicity is 0, latency is 3s — is the bot good?"*
+A question worth having an answer to: **faithfulness is 0.87, toxicity is 0, latency is 3s — is the bot good?**
 
 **On its own, 0.87 means nothing.** Every quantity needs a **baseline**, and the baseline generally comes from your offline eval. If your offline baseline was 0.85, then 0.87 in production is good news. If it drops to 0.75 against that same 0.85 baseline, that's concerning — and that's what the alert threshold should have been set against.
 
-> [!tip] The same logic answers *"my offline score went 92% → 99%, is that good?"* — only if nothing else moved. In LLM systems, improving one quantity routinely drags another down. **A single improved number is not evidence of improvement; the whole eval suite holding or rising is.** That's regression testing again, and it's why you run a suite rather than a metric.
+> [!tip] The same logic answers **my offline score went 92% → 99%, is that good?** — only if nothing else moved. In LLM systems, improving one quantity routinely drags another down. **A single improved number is not evidence of improvement; the whole eval suite holding or rising is.** That's regression testing again, and it's why you run a suite rather than a metric.

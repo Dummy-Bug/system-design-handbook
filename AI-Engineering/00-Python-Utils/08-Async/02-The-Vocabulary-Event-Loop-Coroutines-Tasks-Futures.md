@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
 ## The event loop — the engine everything runs on
 
-Notice that `main()` is defined with `async def`, and at the bottom we don't just call it — we hand it to `asyncio.run()`. That's not optional. An asynchronous function can't run by itself; something has to *drive* it. That something is the **event loop**.
+Notice that `main()` is defined with `async def`, and at the bottom we don't just call it — we hand it to `asyncio.run()`. That's not optional. An asynchronous function can't run by itself; something has to **drive** it. That something is the **event loop**.
 
 > [!info] The event loop is the engine that runs and manages asynchronous functions. Think of it as a **scheduler**: it keeps track of all your tasks, and when a task suspends because it's waiting on something, control returns to the loop, which finds another task to start or resume.
 
@@ -47,17 +47,17 @@ No event loop running → no asynchronous code runs. Everything in asyncio lives
 
 Inside async code you'll see `await` everywhere. What it does:
 
-> [!info] When you `await` something, you're telling the event loop: *pause this function right here and take control back — go run someone else.* The function stays suspended until the thing it's awaiting completes.
+> [!info] When you `await` something, you're telling the event loop: **pause this function right here and take control back — go run someone else.** The function stays suspended until the thing it's awaiting completes.
 
-These pause points are exactly the "**voluntarily give up control**" moments of cooperative multitasking. And they're the entire mechanism of concurrency: every `await` is an opening for another task to run.
+These pause points are exactly the **voluntarily give up control** moments of cooperative multitasking. And they're the entire mechanism of concurrency: every `await` is an opening for another task to run.
 
 Two rules govern the keyword:
 
-**Rule 1 — you can only await an *awaitable*.** An awaitable is an object that implements a special `__await__` method under the hood. This is why you **cannot** `await time.sleep(1)`: synchronous libraries have no mechanism to work with the event loop — no way to yield control and resume later. That pause-and-resume behaviour has to be *coded in*. That's the entire reason `asyncio.sleep` exists as a separate function from `time.sleep`: same wait, but built to suspend cooperatively instead of blocking the thread.
+**Rule 1 — you can only await an awaitable.** An awaitable is an object that implements a special `__await__` method under the hood. This is why you **cannot** `await time.sleep(1)`: synchronous libraries have no mechanism to work with the event loop — no way to yield control and resume later. That pause-and-resume behaviour has to be **coded in**. That's the entire reason `asyncio.sleep` exists as a separate function from `time.sleep`: same wait, but built to suspend cooperatively instead of blocking the thread.
 
-**Rule 2 — you can only use `await` inside an `async def` function.** Remove the `async` from a function that contains an `await` and the linter flags it immediately: *"await should be used within an async function."* The two keywords come as a pair.
+**Rule 2 — you can only use `await` inside an `async def` function.** Remove the `async` from a function that contains an `await` and the linter flags it immediately: **await should be used within an async function.** The two keywords come as a pair.
 
-> [!important] This is why "just sprinkle async on it" doesn't work on an existing codebase. Every blocking call in the chain — every `time.sleep`, every synchronous HTTP client, every sync DB driver — is a place where the event loop *cannot* take control back. Async needs async-compatible libraries all the way down.
+> [!important] This is why **just sprinkle async on it** doesn't work on an existing codebase. Every blocking call in the chain — every `time.sleep`, every synchronous HTTP client, every sync DB driver — is a place where the event loop **cannot** take control back. Async needs async-compatible libraries all the way down.
 
 Python has exactly **three kinds of awaitable**: 
 * coroutines
@@ -70,7 +70,7 @@ Python has exactly **three kinds of awaitable**:
 
 A **coroutine function** is any function defined with `async def`. But there's a distinction hiding here that causes real bugs, so it gets its own callout:
 
-> [!important] **Coroutine function ≠ coroutine object.** The *function* is what you define with `async def`. The *object* is the awaitable you get back when you **call** that function. Calling a coroutine function does **not** run its body — it only creates the object.
+> [!important] **Coroutine function ≠ coroutine object.** The **function** is what you define with `async def`. The **object** is the awaitable you get back when you **call** that function. Calling a coroutine function does **not** run its body — it only creates the object.
 
 Watch what actually happens:
 
@@ -92,7 +92,7 @@ Coroutines are a bit like generators — functions that can suspend execution an
 
 One more behaviour, stated innocently here but responsible for the most common asyncio performance bug (the next note is built around it):
 
-> [!danger] When you await a coroutine object directly, it is **scheduled on the event loop and run to completion at the same time**. Schedule-and-immediately-finish — there is no window where it sits scheduled *waiting* while your code continues. Remember this line.
+> [!danger] When you await a coroutine object directly, it is **scheduled on the event loop and run to completion at the same time**. Schedule-and-immediately-finish — there is no window where it sits scheduled **waiting** while your code continues. Remember this line.
 
 ---
 
@@ -121,7 +121,7 @@ The crucial difference from a bare coroutine object:
 
 ## Futures — the low-level promise you'll almost never touch
 
-A **future** is a low-level object representing an *eventual result*. If you're coming from JavaScript, futures are Python's promises — a placeholder for a value that will exist later.
+A **future** is a low-level object representing an **eventual result**. If you're coming from JavaScript, futures are Python's promises — a placeholder for a value that will exist later.
 
 A future's job is to hold a state and a result. The state is one of:
 
@@ -141,7 +141,7 @@ print(future_result)
 # Future Result: Test
 ```
 
-But here's the thing — unlike JavaScript, in Python you almost **never work with futures directly**. You write coroutines; you schedule them as tasks; asyncio uses futures *under the hood* to track results. In fact **tasks are futures under the hood**, with extra logic bolted on to actually run the wrapped coroutine. You'd only touch raw futures writing low-level asyncio code — say, building an asyncio-compatible framework.
+But here's the thing — unlike JavaScript, in Python you almost **never work with futures directly**. You write coroutines; you schedule them as tasks; asyncio uses futures **under the hood** to track results. In fact **tasks are futures under the hood**, with extra logic bolted on to actually run the wrapped coroutine. You'd only touch raw futures writing low-level asyncio code — say, building an asyncio-compatible framework.
 
 ---
 
@@ -162,6 +162,6 @@ flowchart TD
 | **Task** | wrapped coroutine, schedulable independently | `create_task` to queue work — **this is how you get concurrency** |
 | **Future** | eventual-result placeholder | almost never directly; the machinery under tasks |
 
-> [!tip] Interview framing: "There are three awaitables. Coroutines are what `async def` gives you — calling one just builds an object; awaiting it schedules *and* runs it in one step. Tasks wrap coroutines with `create_task`, and their superpower is sitting scheduled on the loop before running — that's what makes concurrency possible. Futures are the promise-like primitive underneath; tasks are literally futures with run-logic added, so you almost never touch futures directly in application code."
+> [!tip] Interview framing: **There are three awaitables. Coroutines are what `async def` gives you — calling one just builds an object; awaiting it schedules and runs it in one step. Tasks wrap coroutines with `create_task`, and their superpower is sitting scheduled on the loop before running — that's what makes concurrency possible. Futures are the promise-like primitive underneath; tasks are literally futures with run-logic added, so you almost never touch futures directly in application code.**
 
-That difference between "await a coroutine: schedule + run in one step" and "create a task: schedule now, run later" sounds like a footnote. It is actually the difference between async code that gets **zero concurrency** and async code that works — proven with timings and animations next.
+That difference between **await a coroutine: schedule + run in one step** and **create a task: schedule now, run later** sounds like a footnote. It is actually the difference between async code that gets **zero concurrency** and async code that works — proven with timings and animations next.

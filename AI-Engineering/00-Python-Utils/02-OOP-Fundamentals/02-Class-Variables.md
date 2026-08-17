@@ -1,7 +1,7 @@
 #python #oop #classes #python-utils
 
 
-Every attribute in the last note lived on `self` — set inside `__init__`, different for every instance. That covers data that genuinely varies per employee: name, pay, email. Some data doesn't vary at all — it belongs to the *class*, not to any one instance of it.
+Every attribute in the last note lived on `self` — set inside `__init__`, different for every instance. That covers data that genuinely varies per employee: name, pay, email. Some data doesn't vary at all — it belongs to the **class**, not to any one instance of it.
 
 ## Hardcode it first, then see why that's wrong
 
@@ -25,7 +25,7 @@ emp_1.apply_raise()
 print(emp_1.pay)   # 52000
 ```
 
-It works. But `1.04` is now trapped inside `apply_raise`, invisible from anywhere else. Two real problems fall out of that: there's no way to *read* the current raise percentage (`emp_1.raise_amount` doesn't exist), and if the number ever changes, you're hunting through every method that happens to reference it — with no guarantee you'll find every copy.
+It works. But `1.04` is now trapped inside `apply_raise`, invisible from anywhere else. Two real problems fall out of that: there's no way to **read** the current raise percentage (`emp_1.raise_amount` doesn't exist), and if the number ever changes, you're hunting through every method that happens to reference it — with no guarantee you'll find every copy.
 
 ## Pulling it out as a class variable
 
@@ -84,7 +84,7 @@ flowchart TD
 
 ### What `__dict__` actually holds
 
-It's tempting to read `emp_1.__dict__` as "everything about this employee" — every attribute *and* every method. It isn't. It holds **only what this one instance personally owns**, which means the things assigned to `self` inside `__init__`, and nothing else:
+It's tempting to read `emp_1.__dict__` as **everything about this employee** — every attribute **and** every method. It isn't. It holds **only what this one instance personally owns**, which means the things assigned to `self` inside `__init__`, and nothing else:
 
 ```python
 print('full_name'    in emp_1.__dict__)   # False
@@ -109,7 +109,7 @@ print(emp_1.__dict__)
 # {'first': 'Corey', ..., 'nickname': 'Coz'}
 ```
 
-If what you actually want is *everything reachable through the instance* — its own attributes plus everything it inherits from the class — that's a different tool, `dir()`:
+If what you actually want is **everything reachable through the instance** — its own attributes plus everything it inherits from the class — that's a different tool, `dir()`:
 
 ```python
 print([n for n in dir(emp_1)
@@ -124,7 +124,7 @@ print([n for n in dir(emp_1)
 | `Employee.__dict__` | what the class owns: class variables and methods |
 | `dir(emp_1)` | every name reachable through it, wherever it lives |
 
-That first row is why `__dict__` is the right tool for this section specifically. `dir()` merges the two namespaces and so can never tell you *where* a name came from — but the whole question of shadowing, coming up next, is precisely a question about where a value lives.
+That first row is why `__dict__` is the right tool for this section specifically. `dir()` merges the two namespaces and so can never tell you **where** a name came from — but the whole question of shadowing, coming up next, is precisely a question about where a value lives.
 
 ## Setting it through the class vs. through an instance — these are not the same operation
 
@@ -133,7 +133,7 @@ Employee.raise_amount = 1.05
 print(emp_1.raise_amount, emp_2.raise_amount)   # 1.05 1.05
 ```
 
-Setting it on the class changes what *every* instance sees, because they were never storing their own copy — they were all falling through to the one shared value.
+Setting it on the class changes what **every** instance sees, because they were never storing their own copy — they were all falling through to the one shared value.
 
 ```python
 emp_1.raise_amount = 1.06
@@ -151,7 +151,7 @@ print(emp_1.__dict__)
 
 > [!important] Reading and writing through an instance are asymmetric. **Reading** `instance.attr` transparently falls through to the class if the instance doesn't have its own copy. **Writing** `instance.attr = value` never edits the class — it unconditionally creates or overwrites an attribute on that one instance, permanently breaking its connection to the shared value from then on.
 
-That asymmetry is exactly why `apply_raise` uses `self.raise_amount` rather than `Employee.raise_amount`: writing it as `self.` means a single instance's raise percentage *can* be overridden later (`emp_1.raise_amount = 1.10`) without disturbing anyone else, and — as a bonus this note only names, without covering — it also means a subclass can override the constant for every instance of *its* type. `Employee.raise_amount` inside the method would ignore both possibilities and always use the one shared number no matter what.
+That asymmetry is exactly why `apply_raise` uses `self.raise_amount` rather than `Employee.raise_amount`: writing it as `self.` means a single instance's raise percentage **can** be overridden later (`emp_1.raise_amount = 1.10`) without disturbing anyone else, and — as a bonus this note only names, without covering — it also means a subclass can override the constant for every instance of **its** type. `Employee.raise_amount` inside the method would ignore both possibilities and always use the one shared number no matter what.
 
 ## A class variable with no reason to ever be per-instance
 
@@ -181,6 +181,6 @@ emp_2 = Employee('Test', 'User', 60000)
 print(Employee.num_of_employees)   # 2
 ```
 
-`Employee.num_of_employees += 1` is written through the class name deliberately. Had it been `self.num_of_employees += 1`, the read side would still fall through to the class (finding `0`), but the *write* would create a fresh instance attribute — same shadowing trap as the raise example — and the class's true count would never move past `0` no matter how many employees were created.
+`Employee.num_of_employees += 1` is written through the class name deliberately. Had it been `self.num_of_employees += 1`, the read side would still fall through to the class (finding `0`), but the **write** would create a fresh instance attribute — same shadowing trap as the raise example — and the class's true count would never move past `0` no matter how many employees were created.
 
 > [!tip] The choice between `self.attr` and `ClassName.attr` inside a method isn't stylistic. It's a decision about whether this particular piece of data is allowed to vary per instance (`self.` — the raise) or must stay identical for the whole class no matter what any instance does (`ClassName.` — the count).

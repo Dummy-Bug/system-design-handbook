@@ -4,9 +4,9 @@
 
 18 concepts. **Generic** — the field, not Xarvis. Map afterwards.
 
-> Learn the full surface first, *then* decide what Xarvis can demonstrate. A syllabus derived from the codebase drops whatever the codebase doesn't exercise.
+> Learn the full surface first, **then** decide what Xarvis can demonstrate. A syllabus derived from the codebase drops whatever the codebase doesn't exercise.
 
-**Why this block matters most.** Every hiring source consulted names the same thing as the sharpest senior/junior discriminator, and it isn't building — it's measuring. *"Is there an actual eval framework here, or is it vibes-based?"* Error analysis is the highest-ROI activity in the entire field.
+**Why this block matters most.** Every hiring source consulted names the same thing as the sharpest senior/junior discriminator, and it isn't building — it's measuring. **Is there an actual eval framework here, or is it vibes-based?** Error analysis is the highest-ROI activity in the entire field.
 
 **Currency check (2026-07-30):** the bias taxonomy has grown to **five named biases** — position, verbosity, self-preference, **format**, and **calibration drift** — each with its own measurement and mitigation. 2026 guidance recommends a **minimum calibration set of ~500 cases** before trusting aggregate judge metrics, and **Cohen's kappa** as the inter-rater standard with **κ < 0.6 meaning the rubric itself is broken**, not the judge.
 
@@ -15,7 +15,7 @@
 ## A · Error analysis — do this before writing a single criterion
 
 **1. Why criteria-first is backwards**
-The dominant mistake: crafting elaborate eval criteria before looking at data. The failure modes you *imagine* are not the ones that occur. Consequence: your eval measures the wrong thing precisely and confidently.
+The dominant mistake: crafting elaborate eval criteria before looking at data. The failure modes you **imagine** are not the ones that occur. Consequence: your eval measures the wrong thing precisely and confidently.
 
 **2. Open coding**
 Read real traces one at a time and describe what went wrong in a plain sentence, with no taxonomy in hand. Why the absence of a schema is the point.
@@ -27,7 +27,7 @@ Grouping open codes into buckets. Naming buckets so they're mutually exclusive e
 Traces → open code → buckets → evals for the biggest buckets → ship a fix → new traces. Why this loop, not a bigger dataset, is what improves the product.
 
 **5. Sample size and saturation for error analysis**
-How many traces before the taxonomy stops changing. What to do when you have no traces at all — bootstrapping from a synthetic set and treating *its* failures as the first corpus.
+How many traces before the taxonomy stops changing. What to do when you have no traces at all — bootstrapping from a synthetic set and treating **its** failures as the first corpus.
 
 ## B · The judge
 
@@ -35,7 +35,7 @@ How many traces before the taxonomy stops changing. What to do when you have no 
 Model scores another model's output against a rubric, given input + output and optionally a reference or context. Where it beats code-graded assertions and where it's an expensive way to be wrong.
 
 **7. Pointwise vs pairwise**
-Absolute scoring vs "which of these two is better." Why pairwise is more reliable, and what you give up (no absolute threshold, harder to track over time).
+Absolute scoring vs **which of these two is better.** Why pairwise is more reliable, and what you give up (no absolute threshold, harder to track over time).
 
 **8. The five biases**
 **Position** (order of candidates changes the verdict) · **verbosity** (longer reads as better) · **self-preference** (a model favours its own family's output) · **format** (markdown, structure, and formatting artefacts sway the score) · **calibration drift** (the score distribution moves over time even with a fixed rubric). Each with its own detection method and mitigation.
@@ -98,7 +98,7 @@ Turning an error-analysis pass into: new eval cases, a regression suite, a rubri
 
 ## Xarvis mapping
 
-*Filled after learning.* **applicable** / **theory-only** / **parked**.
+**Filled after learning.** **applicable** / **theory-only** / **parked**.
 
 Going in: concepts 1-5 depend entirely on whether Xarvis retains production traces. If it does, this block becomes an afternoon with real data instead of a thought experiment — settle that question early. Concept 11 (two human raters) is awkward as a solo engineer; the honest version is rating twice, separated by days, and saying so.
 

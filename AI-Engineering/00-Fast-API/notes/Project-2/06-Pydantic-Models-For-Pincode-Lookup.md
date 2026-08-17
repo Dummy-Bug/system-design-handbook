@@ -22,7 +22,7 @@ class LocationResponse(BaseModel):
     district: str
 ```
 
-`PinCodeRequest` is the incoming shape — one field, validated by exactly the pattern from the previous note. `LocationResponse` is what comes back on a successful lookup: no validation logic of its own, since this data is coming *out* of the trusted `PINCODE_DATA` dictionary rather than arriving untrusted from a caller — there's nothing here that needs checking, only declaring.
+`PinCodeRequest` is the incoming shape — one field, validated by exactly the pattern from the previous note. `LocationResponse` is what comes back on a successful lookup: no validation logic of its own, since this data is coming **out** of the trusted `PINCODE_DB` dictionary rather than arriving untrusted from a caller — there's nothing here that needs checking, only declaring.
 
 ---
 
@@ -57,14 +57,14 @@ class BulkResponse(BaseModel):
 
 The 20-item cap in `BulkRequest`'s validator is an arbitrary limit, not derived from any real capacity constraint — picked the same way a lot of list/page-size limits get picked in practice, as a round number that feels reasonable rather than one backed by a specific measurement.
 
-`BulkResponse` is where the "some found, some not" reality of a bulk request actually gets represented:
+`BulkResponse` is where the **some found, some not** reality of a bulk request actually gets represented:
 
 | Field | What it holds |
 |---|---|
 | `status` | Defaults to `"success"` — the request as a whole succeeded, independent of whether every individual pin code was found |
-| `found` | Count of pin codes that matched something in `PINCODE_DATA` |
+| `found` | Count of pin codes that matched something in `PINCODE_DB` |
 | `not_found` | Count that didn't |
-| `results` | The actual `LocationResponse` data for every pin code that *was* found |
+| `results` | The actual `LocationResponse` data for every pin code that **was** found |
 | `missing` | The raw pin codes that weren't — so the caller knows exactly which ones to investigate, not just how many |
 
-This is the bulk equivalent of the single-lookup 404: rather than one bad pin code failing an entire batch request, the response separates what succeeded from what didn't and reports both, in full, in one response. A caller sending 20 pin codes where only 15 exist gets all 15 results *and* the exact 5 that came up empty, in the same call.
+This is the bulk equivalent of the single-lookup 404: rather than one bad pin code failing an entire batch request, the response separates what succeeded from what didn't and reports both, in full, in one response. A caller sending 20 pin codes where only 15 exist gets all 15 results **and** the exact 5 that came up empty, in the same call.

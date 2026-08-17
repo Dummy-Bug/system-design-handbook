@@ -1,7 +1,7 @@
 #python #type-hints #typing #dataclass #typeddict #python-utils
 
 
-`11-TypedDict` left a decision open: it works, it costs nothing at runtime, and it never validates anything. Several other ways exist to say "an object with these fields", and choosing between them is a real decision rather than a style preference.
+`11-TypedDict` left a decision open: it works, it costs nothing at runtime, and it never validates anything. Several other ways exist to say **an object with these fields**, and choosing between them is a real decision rather than a style preference.
 
 ## Where `TypedDict` stops
 
@@ -138,7 +138,7 @@ Three methods were generated, from the annotations, at class-creation time. Take
 
 **`__repr__`** is the method Python calls to turn an object into text; `print(a)` is really `print(a.__repr__())`. The plain class inherited `object`'s version, which knows only the class name and the address, because `object` has no idea what fields were added. `@dataclass` does know, so it wrote one that prints them.
 
-**`__eq__`** is the method Python calls for `==`; `a == b` runs `a.__eq__(b)`. `object`'s rule is *equal only if it is literally the same object*, hence `False` for two separate constructions. `@dataclass` wrote one that compares field values — `a.url == b.url and a.text == b.text and a.score == b.score` — hence `True`.
+**`__eq__`** is the method Python calls for `==`; `a == b` runs `a.__eq__(b)`. `object`'s rule is **equal only if it is literally the same object**, hence `False` for two separate constructions. `@dataclass` wrote one that compares field values — `a.url == b.url and a.text == b.text and a.score == b.score` — hence `True`.
 
 The method on line 10 is untouched and works normally. It's an ordinary class; the decorator only filled in what you would have typed.
 
@@ -187,7 +187,7 @@ mypy flags line 14. **Python constructs the object anyway** — `score='not a nu
 
 The generated `__init__` **assigns**. It read the annotation to learn each field's name and position; it never compares the value against it.
 
-And note *where* it failed: line 17, not line 14. The bad value sat in the object until something tried to use it — which in an agent means the crash surfaces in a scoring step, several hops from the retrieval call that produced it.
+And note **where** it failed: line 17, not line 14. The bad value sat in the object until something tried to use it — which in an agent means the crash surfaces in a scoring step, several hops from the retrieval call that produced it.
 
 > [!important] The gap only matters when there is no line 14 for mypy to check. Your own code didn't type that string — it arrived from `json.loads` on an API response, a tool call's arguments, or a config file. **The checker never saw it**, so a checked construction site is no protection at all.
 
@@ -303,7 +303,7 @@ It raises **at line 22**, naming the field, the reason, and the offending value.
 >
 > Same bad data, same eventual failure — the difference is **where you find out**. That's a placement argument, not a correctness one, and placement is the entire value: a stack trace pointing at the retrieval response beats one pointing at whichever scoring step happened to touch the field first.
 
-This is also the third time the same mechanism has appeared. `@dataclass` reads the annotations to *generate* code; a validating model reads them to *check values*; `Annotated` carries extra payload for either to read. The language enforces nothing in any of the three — concept 1, all the way down.
+This is also the third time the same mechanism has appeared. `@dataclass` reads the annotations to **generate** code; a validating model reads them to **check values**; `Annotated` carries extra payload for either to read. The language enforces nothing in any of the three — concept 1, all the way down.
 
 ## `NamedTuple` — immutable, and therefore usable as a key
 
@@ -351,7 +351,7 @@ TypeError: unhashable type: 'RetrievedDoc'
 
 **Line 19 fails** — `unhashable type`. Sets and dict keys need a hash, and a dataclass has none.
 
-> [!info] The reason follows from the generated `__eq__`. Python's rule is that anything defining a custom `__eq__` loses the default hash: two objects that compare equal must hash equal, and once equality means "same field values", a hash based on identity would violate that. Since the fields can be reassigned at any moment, there is no safe hash to generate — so none is generated.
+> [!info] The reason follows from the generated `__eq__`. Python's rule is that anything defining a custom `__eq__` loses the default hash: two objects that compare equal must hash equal, and once equality means **same field values**, a hash based on identity would violate that. Since the fields can be reassigned at any moment, there is no safe hash to generate — so none is generated.
 
 `NamedTuple` is the same three fields with both properties reversed:
 
@@ -453,11 +453,11 @@ Five options, and the decision is made on four questions.
 
 The short form: **`TypedDict` for dicts you already have, `@dataclass` for objects you create, `NamedTuple` when it must be hashable or frozen, a validating model for anything arriving from outside.**
 
-> [!info] Mechanics beyond the choice — `field(default_factory=...)`, `frozen=True`, `__post_init__`, `NamedTuple._replace`, and what a validating model does with nested models and custom validators — belong to their own folders. What's here is the part that gets asked as a *typing* question, because all five are declared the same way: annotations in a class body, read by something at runtime.
+> [!info] Mechanics beyond the choice — `field(default_factory=...)`, `frozen=True`, `__post_init__`, `NamedTuple._replace`, and what a validating model does with nested models and custom validators — belong to their own folders. What's here is the part that gets asked as a **typing** question, because all five are declared the same way: annotations in a class body, read by something at runtime.
 
 ## What this concept claims
 
-**All five ways to say "an object with these fields" are declared identically, and the choice between them is decided by four questions, not by taste.**
+**All five ways to say an object with these fields are declared identically, and the choice between them is decided by four questions, not by taste.**
 
 Four things to carry:
 

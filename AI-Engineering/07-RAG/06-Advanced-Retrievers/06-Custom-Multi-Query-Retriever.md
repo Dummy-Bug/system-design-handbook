@@ -43,11 +43,11 @@ prompt = ChatPromptTemplate.from_template(
 
 Read the middle sentence closely, because it is the whole design stated in one line:
 
-> *"By generating multiple perspectives on the user question, your goal is to help the user overcome some of the limitations of **distance-based similarity search**."*
+> **By generating multiple perspectives on the user question, your goal is to help the user overcome some of the limitations of distance-based similarity search.**
 
-The prompt **tells the model why it is doing this**. It isn't asked for synonyms or paraphrases — it's asked for *perspectives*, and told the reason is that a single point in space can only reach so far. That framing is what produces variants aimed at genuinely different regions instead of three ways of saying the same thing.
+The prompt **tells the model why it is doing this**. It isn't asked for synonyms or paraphrases — it's asked for **perspectives**, and told the reason is that a single point in space can only reach so far. That framing is what produces variants aimed at genuinely different regions instead of three ways of saying the same thing.
 
-> [!important] This is the line worth stealing for your own systems. A rephrasing prompt that just says *"rewrite this question three ways"* will give you three near-identical sentences, which retrieve the same chunks and buy you nothing. Explaining the *purpose* — coverage across a vector space — is what makes the variants diverge.
+> [!important] This is the line worth stealing for your own systems. A rephrasing prompt that just says **rewrite this question three ways** will give you three near-identical sentences, which retrieve the same chunks and buy you nothing. Explaining the **purpose** — coverage across a vector space — is what makes the variants diverge.
 
 ```python
 llm_structured_output = llm.with_structured_output(QueriesSchema)
@@ -99,7 +99,7 @@ Each variant runs a **separate** `base_retriever.invoke(q)` call. Even when two 
 
 What actually identifies a chunk is **its text**. Hence a `set` of `page_content` strings as the seen-marker, with the `Document` itself appended to a separate list.
 
-And the list matters as much as the set. A `set` alone would deduplicate but **destroy the ordering**, and ordering here is meaningful — documents from the first variant arrive first, and within each variant they arrive ranked by relevance. Keeping a parallel list preserves that, which is what the notebook's docstring means by *"deduplicate by page content preserving the first occurrence order."*
+And the list matters as much as the set. A `set` alone would deduplicate but **destroy the ordering**, and ordering here is meaningful — documents from the first variant arrive first, and within each variant they arrive ranked by relevance. Keeping a parallel list preserves that, which is what the notebook's docstring means by **deduplicate by page content preserving the first occurrence order.**
 
 > [!note] The first occurrence wins, so a chunk that ranked first for variant 1 keeps that position even if it also ranked third for variant 3. Given that most LLMs weight the start of a context window more heavily, the surviving order is not cosmetic.
 
@@ -130,7 +130,7 @@ flowchart TD
 
 ## What rebuilding bought you
 
-- **The prompt is editable.** Change 3 to 5, add few-shot examples of good perspective-splits for your domain, or instruct it to cover named aspects explicitly (*"one variant per product line"*).
+- **The prompt is editable.** Change 3 to 5, add few-shot examples of good perspective-splits for your domain, or instruct it to cover named aspects explicitly (**one variant per product line**).
 - **The dedup rule is yours.** `page_content` is the sensible default, but if your chunks carry a stable `id` in metadata, keying on that is cheaper and more robust to whitespace differences.
 - **You can inspect the variants.** `query_chain.invoke({"question": ...})` alone shows exactly what was generated — which is the first thing to check when multi-query fails to improve anything. Near-identical variants mean the prompt isn't pushing hard enough for different perspectives.
 - **No `langchain_classic` dependency.**
@@ -145,4 +145,4 @@ queries.append(query)          # keep the user's own phrasing in the union
 ---
 
 > [!tip] Interview framing
-> "The custom version is about thirty lines. A Pydantic schema with one field — a list of alternative questions — driven through `with_structured_output` so I reliably get a list rather than prose I'd have to parse. Then a `BaseRetriever` subclass that generates the variants, invokes the base retriever once per variant, and deduplicates the merged results. The detail that matters is the deduplication: each variant is a separate retrieval call, so the same chunk comes back as distinct Python objects — you have to dedupe on `page_content`, and keep a parallel list rather than just a set so you preserve first-occurrence order, since relevance ranking is encoded in the ordering. The other thing worth copying is the prompt: it tells the model *why* it's rephrasing — to overcome the limits of distance-based similarity search. Prompts that just say 'rewrite this three ways' produce near-identical variants that retrieve the same chunks, so the component does nothing."
+> **The custom version is about thirty lines. A Pydantic schema with one field — a list of alternative questions — driven through `with_structured_output` so I reliably get a list rather than prose I'd have to parse. Then a `BaseRetriever` subclass that generates the variants, invokes the base retriever once per variant, and deduplicates the merged results. The detail that matters is the deduplication: each variant is a separate retrieval call, so the same chunk comes back as distinct Python objects — you have to dedupe on `page_content`, and keep a parallel list rather than just a set so you preserve first-occurrence order, since relevance ranking is encoded in the ordering. The other thing worth copying is the prompt: it tells the model why it's rephrasing — to overcome the limits of distance-based similarity search. Prompts that just say 'rewrite this three ways' produce near-identical variants that retrieve the same chunks, so the component does nothing.**

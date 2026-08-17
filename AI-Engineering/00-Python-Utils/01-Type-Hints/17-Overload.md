@@ -93,7 +93,7 @@ Clean — and count the cost. **Lines 18-19 and 23-24 are four lines of dead cod
 
 ## Why `TypeVar` cannot fix it
 
-`13-TypeVar-And-Generic-Functions` handles *"the return type depends on the argument"* — `list[T] → T`, where `list[str]` in gives `str` out. It is the obvious thing to reach for.
+`13-TypeVar-And-Generic-Functions` handles **the return type depends on the argument** — `list[T] → T`, where `list[str]` in gives `str` out. It is the obvious thing to reach for.
 
 ```python
  1  import asyncio
@@ -128,9 +128,9 @@ ov2.py:15: note: Revealed type is "bool"
 
 And there is a second, deeper reason that rules `TypeVar` out even if that were solved. To express the answer you would need to write, in the return position:
 
-> *"if `T` is `Literal[True]` then `AsyncIterator[str]`, otherwise `str`"*
+> **if `T` is `Literal[True]` then `AsyncIterator[str]`, otherwise `str`**
 
-**Python's type system has no conditional types.** A `TypeVar` carries a type from input to output *unchanged*; it cannot **map** one type onto a different one.
+**Python's type system has no conditional types.** A `TypeVar` carries a type from input to output **unchanged**; it cannot **map** one type onto a different one.
 
 | | what it does | can it help here? |
 |---|---|---|
@@ -199,7 +199,7 @@ Three `def run` in one file, which is the part that looks wrong at first. They a
 - **Lines 7 and 9** — the **overloads**. Bodies are `...` — pure signature, and all a caller ever sees. It is the same shape `22-Third-Party-Libraries` gives a whole file of, when types for a library have to be supplied without any code behind them.
 - **Line 12** — the **implementation**. The only one that runs. It takes plain `bool` and returns the honest union, because at runtime it genuinely handles both.
 
-`Literal[False]` and `Literal[True]` do the work. `09-Literal-Final-ClassVar` gave `Literal` as *"this exact value, not merely this type"* — which is precisely the distinction `TypeVar` could not make. Now `stream=True` and `stream=False` are different **types**, so a different signature can be selected for each.
+`Literal[False]` and `Literal[True]` do the work. `09-Literal-Final-ClassVar` gave `Literal` as **this exact value, not merely this type** — which is precisely the distinction `TypeVar` could not make. Now `stream=True` and `stream=False` are different **types**, so a different signature can be selected for each.
 
 ## The cost: a value known only at runtime
 
@@ -281,7 +281,7 @@ $ pyright ov5.py
 
 **The premise is right.** `bool` and `Literal[True] | Literal[False]` are mutually assignable, and both checkers agree.
 
-What breaks is the *resolution algorithm*, not the type theory. Overload resolution is not asking *"do my variants between them cover this argument?"* — it must pick **exactly one variant**, because it must produce **exactly one return type**. And a plain `bool` is not assignable to either literal on its own:
+What breaks is the **resolution algorithm**, not the type theory. Overload resolution is not asking **do my variants between them cover this argument?** — it must pick **exactly one variant**, because it must produce **exactly one return type**. And a plain `bool` is not assignable to either literal on its own:
 
 ```python
 1  from typing import Literal
@@ -352,7 +352,7 @@ Same file, same line, opposite verdicts.
 
 Pyright does not stop when no single variant matches. It performs **argument type expansion**: split `bool` into `Literal[True] | Literal[False]`, resolve the call once per piece, and union the answers — producing `AsyncIterator[str] | str`. That is the objection above, implemented.
 
-> [!important] This is the **second verified mypy/pyright disagreement** in this folder, after `16-Protocol`'s parameter-name mismatch. Both belong to `03-Static-Type-Checkers`, and both make *"which checker are you running?"* a real question rather than pedantry.
+> [!important] This is the **second verified mypy/pyright disagreement** in this folder, after `16-Protocol`'s parameter-name mismatch. Both belong to `03-Static-Type-Checkers`, and both make **which checker are you running?** a real question rather than pedantry.
 
 ## The portable answer: a catch-all overload
 
@@ -421,12 +421,12 @@ This is the pattern real libraries use in their stubs: precise types for the com
 
 ## What this concept claims
 
-**`@overload` is for when the return type depends on *how* a function is called rather than on the types it is given — you enumerate the calling patterns instead of computing an answer.**
+**`@overload` is for when the return type depends on how a function is called rather than on the types it is given — you enumerate the calling patterns instead of computing an answer.**
 
 Five things to carry:
 
 1. A union return type is honest but charges every call site: each one must narrow, including the ones where the call itself already settles the question, producing runtime checks that can never fire.
 2. A `TypeVar` cannot do this job. It carries a type from input to output **unchanged** and cannot map one type onto a different one — Python has no conditional types — and separately, `stream=True` and `stream=False` are both `bool`, so there is nothing for it to distinguish.
-3. `Literal` is what creates the distinction, which is `09-Literal-Final-ClassVar` paying off: *this exact value*, not merely this type. It turns two calls that differ only in a **value** into two calls that differ in **type**.
+3. `Literal` is what creates the distinction, which is `09-Literal-Final-ClassVar` paying off: **this exact value**, not merely this type. It turns two calls that differ only in a **value** into two calls that differ in **type**.
 4. The `@overload`-decorated definitions are pure signature with `...` bodies — the same construct as a `.pyi` stub — and they are all a caller sees. The final, undecorated definition is the implementation: wide parameter types, union return, and the only one that ever runs.
 5. `bool` is assignable to `Literal[True] | Literal[False]` but **not** to either alone, and overload resolution must select exactly one variant. mypy therefore rejects a runtime `bool`; pyright expands the argument into its literals and unions the results. The portable fix is an explicit catch-all overload — placed **last**, since the first matching variant wins.

@@ -23,13 +23,13 @@ The second is the one that matters here. A chunk that is genuinely relevant can 
 
 ### The example
 
-Query: *What is gradient descent?*
+Query: **What is gradient descent?**
 
 The retrieved chunk `D1` reads roughly:
 
 > Gradient descent is an optimization algorithm used to minimize a loss function. It iteratively updates parameters in the direction of the negative gradient. **Neural networks are composed of layers of neurons with non-linear functions. Convolutional neural networks are particularly effective for image processing tasks.**
 
-The first half answers the question. The bolded half is about something else entirely — it arrived because the 900-character window happened to straddle a paragraph boundary. The chunk was correctly retrieved *and* is half noise.
+The first half answers the question. The bolded half is about something else entirely — it arrived because the 900-character window happened to straddle a paragraph boundary. The chunk was correctly retrieved **and** is half noise.
 
 That noise goes into the context window, costs tokens, and gives the generator material to wander into. Refinement removes it.
 
@@ -104,7 +104,7 @@ def decompose_to_sentences(text: str) -> List[str]:
 
 Collapse whitespace, split on sentence-ending punctuation followed by a space, and **drop anything under 20 characters**. That length filter is doing quiet work — PDF extraction produces fragments, page numbers and stray headings, and none of them are worth paying an LLM call to evaluate.
 
-The lookbehind `(?<=[.!?])` splits *after* the punctuation rather than consuming it, so the sentences come out with their full stops intact.
+The lookbehind `(?<=[.!?])` splits **after** the punctuation rather than consuming it, so the sentences come out with their full stops intact.
 
 ### Filtration is a structured-output chain
 
@@ -125,9 +125,9 @@ filter_chain = filter_prompt | llm.with_structured_output(KeepOrDrop)
 
 The schema is a single boolean, which is as narrow as a decision can be made. Three phrases in that prompt are load-bearing:
 
-- **"strict"** — the default failure mode of an LLM judge is generosity; almost any sentence *could* be argued relevant
-- **"directly helps answer the question"** — sets the bar at direct help, not topical adjacency
-- **"Use ONLY the sentence"** — judge the strip in isolation, don't reason about what the surrounding document probably said
+- **strict** — the default failure mode of an LLM judge is generosity; almost any sentence **could** be argued relevant
+- **directly helps answer the question** — sets the bar at direct help, not topical adjacency
+- **Use ONLY the sentence** — judge the strip in isolation, don't reason about what the surrounding document probably said
 
 > [!note] The paper scores each strip with a **confidence score** and thresholds it. The implementation asks for a **boolean** instead. Same decision, thresholded inside the model rather than outside it — simpler, but it means there is no knob to tune here later. The evaluator in the next note keeps the score.
 
@@ -188,9 +188,9 @@ That is the entire diff from traditional RAG: one node between the two that were
 
 ## What it does to the output
 
-Running *"Explain the bias–variance tradeoff"*, the answer is **almost the same** as before — slightly more point-wise in structure, because it is now built from a list of surviving sentences rather than flowing prose.
+Running **Explain the bias–variance tradeoff**, the answer is **almost the same** as before — slightly more point-wise in structure, because it is now built from a list of surviving sentences rather than flowing prose.
 
-The visible change is in the context. Four full 900-character chunks go in; what comes out as `refined_context` is a fraction of that. The lecture's framing is the right one to keep: *out of four documents, how much was actually useful? This much.*
+The visible change is in the context. Four full 900-character chunks go in; what comes out as `refined_context` is a fraction of that. The lecture's framing is the right one to keep: **out of four documents, how much was actually useful? This much.**
 
 ---
 
@@ -213,9 +213,9 @@ This is precisely why the paper reaches for a 770M fine-tuned T5 rather than an 
 
 **It guarantees** the generator sees only sentences that a model judged directly relevant — noise introduced by arbitrary chunk boundaries is stripped before generation.
 
-**It does not guarantee** the documents were the right ones. Refinement operates *inside* whatever retrieval returned; if retrieval was wrong, refinement produces a cleaner version of the wrong thing. Checking that is the next iteration's job.
+**It does not guarantee** the documents were the right ones. Refinement operates **inside** whatever retrieval returned; if retrieval was wrong, refinement produces a cleaner version of the wrong thing. Checking that is the next iteration's job.
 
 ---
 
 > [!tip] Interview framing
-> "Knowledge refinement exists because chunking is arbitrary — you split every 900 characters, so a chunk that's genuinely relevant often carries unrelated material that just happened to fall inside the same window. The paper's fix is decompose-then-recompose: break each document into strips of roughly a sentence, score each strip against the query, drop the ones that don't help, and glue the survivors back into a passage. The paper used a fine-tuned T5-large — 770M parameters, cheaper than an LLM and better at this specific task because it was fine-tuned for it — but the checkpoint was never released, so implementations substitute an LLM with structured output. The thing to notice about that substitution is cost: it's one model call per sentence, sequentially, and the paper's design assumed that call was nearly free."
+> **Knowledge refinement exists because chunking is arbitrary — you split every 900 characters, so a chunk that's genuinely relevant often carries unrelated material that just happened to fall inside the same window. The paper's fix is decompose-then-recompose: break each document into strips of roughly a sentence, score each strip against the query, drop the ones that don't help, and glue the survivors back into a passage. The paper used a fine-tuned T5-large — 770M parameters, cheaper than an LLM and better at this specific task because it was fine-tuned for it — but the checkpoint was never released, so implementations substitute an LLM with structured output. The thing to notice about that substitution is cost: it's one model call per sentence, sequentially, and the paper's design assumed that call was nearly free.**

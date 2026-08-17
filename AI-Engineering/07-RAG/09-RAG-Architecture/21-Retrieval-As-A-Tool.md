@@ -6,7 +6,7 @@ Properties four and five are **WHERE** and **HOW** — which source to retrieve 
 
 Start with why the source needs choosing at all.
 
-A vector store holds company-related documents. Ask *"what is the leave policy of the company"* and it is exactly the right place to look — the answer is in there.
+A vector store holds company-related documents. Ask **what is the leave policy of the company** and it is exactly the right place to look — the answer is in there.
 
 Now ask something the company documents do not cover. Run it against the same vector store and you still get four documents back, because a vector store asked for `k` always returns `k`. The context gets built, and it is not relevant.
 
@@ -73,7 +73,7 @@ You describe those parameters in the tool schema, the agent reads the schema, an
 >
 > Traditional RAG forces you to make that judgement once, in advance, for every query at the same time. Putting it in the tool schema means the judgement gets made **per query, by something that has read the query**.
 >
-> The same applies to `k`. A narrow factual question wants a small `k`; "give me an overview of everything the report says about X" wants a large one. One number cannot be right for both.
+> The same applies to `k`. A narrow factual question wants a small `k`; **give me an overview of everything the report says about X** wants a large one. One number cannot be right for both.
 
 And the whole chain stays concrete: schema → the agent fills in arguments → a tool call → a Python function runs → a list of documents comes back.
 
@@ -90,4 +90,4 @@ And the whole chain stays concrete: schema → the agent fills in arguments → 
 ---
 
 > [!tip] Interview framing
-> "Properties four and five — where to retrieve from and how — are both answered by making retrieval a tool. Each retriever gets defined as a tool and bound to the agent; the agent sees its list of available tools, picks based on the query, and the tool is just a Python function that returns a list of documents. That's different from Corrective RAG's web-search fallback, where the choice was a hand-written router and web search only happened after the corpus failed — here both sources are peers and the choice happens on the way in. The part I find most interesting is HOW. Retriever parameters — k, the metadata filter, MMR's fetch_k and lambda_mult — get declared in the tool schema, so the agent fills them in at tool-call time. lambda_mult is a judgement about whether a query wants diverse results or tightly relevant ones, and traditional RAG makes you fix that once for every query the system will ever see. Putting it in the schema means something that has actually read the query decides it."
+> **Properties four and five — where to retrieve from and how — are both answered by making retrieval a tool. Each retriever gets defined as a tool and bound to the agent; the agent sees its list of available tools, picks based on the query, and the tool is just a Python function that returns a list of documents. That's different from Corrective RAG's web-search fallback, where the choice was a hand-written router and web search only happened after the corpus failed — here both sources are peers and the choice happens on the way in. The part I find most interesting is HOW. Retriever parameters — k, the metadata filter, MMR's fetch_k and lambda_mult — get declared in the tool schema, so the agent fills them in at tool-call time. lambda_mult is a judgement about whether a query wants diverse results or tightly relevant ones, and traditional RAG makes you fix that once for every query the system will ever see. Putting it in the schema means something that has actually read the query decides it.**

@@ -1,4 +1,4 @@
-Everything up to this point configures individual *fields*. `model_config` configures the *whole model* — behaviors that apply uniformly across every field, set once via `ConfigDict`:
+Everything up to this point configures individual **fields**. `model_config` configures the **whole model** — behaviors that apply uniformly across every field, set once via `ConfigDict`:
 
 ```python
 from pydantic import BaseModel, ConfigDict
@@ -60,14 +60,14 @@ model_config = ConfigDict(frozen=True)
 user.email = "new@example.com"  # raises: instance is frozen
 ```
 
-`frozen=True` blocks **all** assignment after construction — not "assignment that fails validation" (that's `validate_assignment`'s job) but assignment at all, even to a value that would otherwise be perfectly valid. 
+`frozen=True` blocks **all** assignment after construction — not **assignment that fails validation** (that's `validate_assignment`'s job) but assignment at all, even to a value that would otherwise be perfectly valid. 
 
 > The right fit for genuinely immutable data — **configuration that shouldn't drift once loaded**, a value object that represents a fixed fact rather than mutable state. 
 
 > As a side effect, **Pydantic can also skip some internal bookkeeping** for a model it knows can never change, which is a **minor performance win** layered on top of the correctness guarantee.
 
-`frozen` and `validate_assignment` solve different problems and can't really substitute for each other: `frozen` says *nothing changes, ever*; `validate_assignment` says *changes are fine, but they have to stay valid*.
+`frozen` and `validate_assignment` solve different problems and can't really substitute for each other: `frozen` says **nothing changes, ever**; `validate_assignment` says **changes are fine, but they have to stay valid**.
 
 ---
 
-Between these four flags, `model_config` is where a model's overall *posture* toward its data gets decided — how forgiving it is about types (`strict`), about unknown fields (`extra`), and about being changed at all after creation (`validate_assignment`, `frozen`) — as distinct from what any single field is allowed to contain.
+Between these four flags, `model_config` is where a model's overall **posture** toward its data gets decided — how forgiving it is about types (`strict`), about unknown fields (`extra`), and about being changed at all after creation (`validate_assignment`, `frozen`) — as distinct from what any single field is allowed to contain.

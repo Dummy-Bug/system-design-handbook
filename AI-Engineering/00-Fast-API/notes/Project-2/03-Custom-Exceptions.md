@@ -43,6 +43,6 @@ async def invalid_pincode_handler(request: Request, exc: InvalidPinCodeError):
 
 The status codes match the flow planned in the client-briefing note exactly: `404` when the pin code was well-formed but not found in the data, `400` when it never should have reached a lookup at all. Both handlers return the same three keys — `error`, `message`, `pin_code` — a small deliberate consistency: whichever of the two failure modes a caller hits, the response has a predictable, identically-shaped body to parse.
 
-Both classes and both handlers live in one file, `exceptions.py` — the convention this whole pattern follows, keeping "what went wrong" and "how it becomes a response" next to each other rather than scattered across the app.
+Both classes and both handlers live in one file, `exceptions.py` — the convention this whole pattern follows, keeping **what went wrong** and **how it becomes a response** next to each other rather than scattered across the app.
 
 Neither handler is wired up yet. A `PinCodeNotFoundError` raised right now would still crash as an unhandled exception — the handler functions exist, but nothing has told FastAPI to route that exception type to them. That registration happens in `main.py`, next.

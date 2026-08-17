@@ -4,7 +4,7 @@
 
 15 concepts. **Generic** — the field, not Xarvis. Map afterwards.
 
-> Learn the full surface first, *then* decide what Xarvis can demonstrate. Deriving a syllabus from the codebase silently drops every concept the codebase happens not to exercise — and those are the ones interviewers ask about.
+> Learn the full surface first, **then** decide what Xarvis can demonstrate. Deriving a syllabus from the codebase silently drops every concept the codebase happens not to exercise — and those are the ones interviewers ask about.
 
 **Why this block sits second:** error analysis (Block 3) is trace-by-hand. You cannot bucket failures you cannot see. Everything downstream — cost attribution, latency budgets, judge inputs — reads from traces.
 
@@ -15,16 +15,16 @@
 ## A · Why logs aren't enough
 
 **1. What breaks when you debug an agent with logs**
-A log line is a point event; an agent failure is a *shape* — a path through nodes, tools, and retries. Why grep cannot answer "why did it pick that tool," and why the request/response pair is the wrong unit of observation.
+A log line is a point event; an agent failure is a **shape** — a path through nodes, tools, and retries. Why grep cannot answer **why did it pick that tool,** and why the request/response pair is the wrong unit of observation.
 
 **2. Traces, spans, and the trace tree**
 Span, parent/child, root span, trace ID, span ID, attributes, events, status. The one mental model everything else hangs off.
 
-**3. What a *good* agent trace looks like**
+**3. What a good agent trace looks like**
 One span per node, per model call, per tool call, per retrieval, per external API hop. What must be attached to each: model version, prompt version, token counts, latency, cost, cache hit/miss, error class.
 
 **4. Observability vs evals**
-Two different jobs that vendors sell as one product. Observability tells you what happened in production; evals tell you whether a change is safe to ship. Traces are the *raw material* for eval sets — that's the connection.
+Two different jobs that vendors sell as one product. Observability tells you what happened in production; evals tell you whether a change is safe to ship. Traces are the **raw material** for eval sets — that's the connection.
 
 ## B · The standard
 
@@ -32,7 +32,7 @@ Two different jobs that vendors sell as one product. Observability tells you wha
 The data model — traces, metrics, logs. SDK vs collector vs backend. Why a vendor-neutral wire format matters when you'll change observability vendors twice.
 
 **6. GenAI semantic conventions**
-Why an agreed attribute schema exists at all. The four coverage areas: **LLM client spans** (direct API calls), **agent spans** (multi-step workflows), **events** (prompt/completion content capture), **metrics** (aggregates). Current stability status and what "experimental" means for you.
+Why an agreed attribute schema exists at all. The four coverage areas: **LLM client spans** (direct API calls), **agent spans** (multi-step workflows), **events** (prompt/completion content capture), **metrics** (aggregates). Current stability status and what **experimental** means for you.
 
 **7. Agent spans and MCP conventions**
 The two newest additions, aimed at two concrete problems: black-box agent reasoning, and traces that break at the MCP boundary. What they standardise and why it matters for tool-calling systems.
@@ -49,7 +49,7 @@ Proxy (swap the base URL, instant logging, shallow) vs SDK (instrument the code,
 Six anchor the field in 2026: **LangSmith** (LangChain/LangGraph-native, near-zero setup inside that ecosystem, significant overhead outside it), **Langfuse** (open-source leader, genuinely self-hostable, no usage limits self-hosted), **Arize Phoenix** (ML-grade rigor, fully open-source, strongest bet if OTel compatibility is a hard requirement), **Braintrust** (best eval-gated CI/CD workflow), **Helicone** (drop-in proxy, simplest install), **Datadog / Honeycomb** (enterprise-default if you already live there).
 
 **11. Choosing one — the decision that isn't about features**
-Hosted vs self-hosted as a *data-residency* decision, not a convenience one. Vendor lock-in via proprietary span formats. The question that settles it: can this data legally leave your infrastructure?
+Hosted vs self-hosted as a **data-residency** decision, not a convenience one. Vendor lock-in via proprietary span formats. The question that settles it: can this data legally leave your infrastructure?
 
 ## D · What you attribute
 
@@ -91,9 +91,9 @@ Kinds of drift — input distribution, output distribution, tool-usage mix, cost
 
 ## Xarvis mapping
 
-*Filled after learning, not before.* Each concept lands in **applicable** / **theory-only** / **parked**.
+**Filled after learning, not before.** Each concept lands in **applicable** / **theory-only** / **parked**.
 
-Going in: Xarvis is unusually strong here — real traffic, real multi-step traces, and a genuine "the logs didn't tell us" story. Expect most of this block to be applicable. The known gap is retrieval spans (concept 3), since there is no retrieval to trace yet.
+Going in: Xarvis is unusually strong here — real traffic, real multi-step traces, and a genuine **the logs didn't tell us** story. Expect most of this block to be applicable. The known gap is retrieval spans (concept 3), since there is no retrieval to trace yet.
 
 ## Sources to verify against
 

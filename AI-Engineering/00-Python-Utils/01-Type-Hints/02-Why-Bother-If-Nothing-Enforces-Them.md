@@ -7,7 +7,7 @@ So the question has to be answered properly rather than waved away. **Why write 
 
 ## The comment challenge
 
-The easy answer is "documentation" — and it collapses immediately, because a comment does that too:
+The easy answer is **documentation** — and it collapses immediately, because a comment does that too:
 
 ```python
 1  # a and b are ints, returns an int
@@ -20,9 +20,9 @@ The easy answer is "documentation" — and it collapses immediately, because a c
 2      return a + b
 ```
 
-Both state the same thing in the same file. Neither is enforced — Python ignores the comment, and the previous note proved it ignores the annotation just as thoroughly. Both can be wrong and stay wrong forever. The comment is arguably friendlier, since it can say things like *"b must be positive"* that no annotation can express.
+Both state the same thing in the same file. Neither is enforced — Python ignores the comment, and the previous note proved it ignores the annotation just as thoroughly. Both can be wrong and stay wrong forever. The comment is arguably friendlier, since it can say things like **b must be positive** that no annotation can express.
 
-If "it documents the code" were the whole answer, the top version would win. So that isn't the answer.
+If **it documents the code** were the whole answer, the top version would win. So that isn't the answer.
 
 ## What one has that the other doesn't
 
@@ -73,14 +73,14 @@ Stored **where**, and **when**? On the function object, as an attribute named `_
 5  # {'a': <class 'int'>, 'b': <class 'int'>, 'return': <class 'int'>}
 ```
 
-Not when the function is *called* — when the `def` itself runs. Once, and every later call reuses the same dictionary rather than rebuilding it. The full derivation is in `01-What-A-Type-Hint-Is`; all that matters here is that the claim ends up somewhere a program can reach, which is exactly what the comment failed to do.
+Not when the function is **called** — when the `def` itself runs. Once, and every later call reuses the same dictionary rather than rebuilding it. The full derivation is in `01-What-A-Type-Hint-Is`; all that matters here is that the claim ends up somewhere a program can reach, which is exactly what the comment failed to do.
 
 > [!important] **A comment is prose. An annotation is grammar.**
 > A tool can find `a: int` reliably because its position and shape are part of the language: after the parameter name, after a colon, always. To get the same fact out of `# a and b are ints`, a program would have to read English and guess.
 >
 > One is a note in the margin. The other is an interface.
 
-That's the answer to "why bother". You are not writing for Python. **You are writing for the readers that do look** — and making the claim machine-findable is what makes them possible.
+That's the answer to **why bother**. You are not writing for Python. **You are writing for the readers that do look** — and making the claim machine-findable is what makes them possible.
 
 ## When can those readers act?
 
@@ -90,11 +90,11 @@ Different readers get their turn at different moments, and it's worth separating
 
 Typing `python main.py` is **two** steps, not one. Python first reads the whole file and turns it into instructions, and only then starts carrying them out. Preparing, then doing.
 
-That first step asks one question — *is this well-formed Python?* — and nothing more. It never checks that a name exists, and never looks at what your annotations mean.
+That first step asks one question — **is this well-formed Python?** — and nothing more. It never checks that a name exists, and never looks at what your annotations mean.
 
 Which is all this note needs, plus the consequence that follows from it: because the whole file is prepared before anything happens, **a file can be run without a single line of it ever executing.**
 
-> `00-How-Python-Runs-Code/01-Compile-Then-Execute` has the full treatment — the vocabulary (*compile*, *execute*, *interpret*, *run*), what each phase catches, and where the compiled bytecode goes.
+> `00-How-Python-Runs-Code/01-Compile-Then-Execute` has the full treatment — the vocabulary (**compile**, **execute**, **interpret**, **run**), what each phase catches, and where the compiled bytecode goes.
 
 ### Watching it happen
 
@@ -115,7 +115,7 @@ STEP 1: the module started running
 NameError: name 'does_not_exist' is not defined
 ```
 
-Note that STEP 1 *did* print. Python was content with the file as written, started running it, and only fell over on reaching the `def` and having to go find a thing called `does_not_exist`.
+Note that STEP 1 **did** print. Python was content with the file as written, started running it, and only fell over on reaching the `def` and having to go find a thing called `does_not_exist`.
 
 Contrast a file that is not valid Python at all:
 
@@ -144,7 +144,7 @@ This is the part that looks impossible at first. Your editor suggests completion
 
 It works because **the editor doesn't run your code. It reads it**, the same way you do — parsing the text in the buffer and building a picture of what's declared where.
 
-Here is a program doing exactly that to the file that *crashes when run*:
+Here is a program doing exactly that to the file that **crashes when run**:
 
 ```
 $ python3 read_annotations.py
@@ -236,6 +236,6 @@ Which is the timing from earlier in this note, applied: one function object, one
 
 **Annotations are worth writing because they are machine-readable, not because they are enforced.**
 
-The enforcement question and the value question are separate, and conflating them is what makes "Python doesn't check them, so why bother?" feel like a checkmate. It isn't one. Python not checking them is precisely what leaves them available as a common format that three other kinds of tool can build on.
+The enforcement question and the value question are separate, and conflating them is what makes **Python doesn't check them, so why bother?** feel like a checkmate. It isn't one. Python not checking them is precisely what leaves them available as a common format that three other kinds of tool can build on.
 
-The trap in the other direction is equally real: because annotations enable checking, it's easy to slide into believing they *are* checking. They are not. Something has to read them, and whether anything is reading them in your project is a question about your setup — not something the syntax grants you.
+The trap in the other direction is equally real: because annotations enable checking, it's easy to slide into believing they **are** checking. They are not. Something has to read them, and whether anything is reading them in your project is a question about your setup — not something the syntax grants you.

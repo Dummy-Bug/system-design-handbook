@@ -17,8 +17,8 @@ Go back to what traditional RAG lacks, from [[16-Why-Agentic-RAG]]. Two things: 
 
 The four questions are those two failures taken seriously.
 
-- **IF, WHERE and HOW** are all forms of *control over retrieval* — control over whether it happens, control over the source, control over the mechanics.
-- **WHEN** is *order*.
+- **IF, WHERE and HOW** are all forms of **control over retrieval** — control over whether it happens, control over the source, control over the mechanics.
+- **WHEN** is **order**.
 
 That is the whole mapping. There is no fifth question because there was no third failure.
 
@@ -60,7 +60,7 @@ It uses the agent's **orchestration** capability together with its cognitive cap
 
 ![[AI-Engineering/07-RAG/09-RAG-Architecture/Images/08-When-Orchestration.png]]
 
-> *Get me the current temperature of Delhi, and if it is hot, then recommend me three trains from Mumbai to Delhi.*
+> **Get me the current temperature of Delhi, and if it is hot, then recommend me three trains from Mumbai to Delhi.**
 
 Two retrievals are needed, from two different sources. Train information is in the database — the vector store. Current temperature is not; that needs a web search.
 
@@ -79,7 +79,7 @@ Run those in the other order and the query cannot be answered correctly. You wou
 
 > [!important] The principle stated plainly: **whether to do a step is one question; when to do it is a different question, and it also makes an impact.**
 >
-> This is genuinely new. Corrective RAG and Self-RAG both make decisions, but neither ever reorders anything — CRAG's graph is acyclic and fixed, and Self-RAG's loops revisit steps in the same order. Ordering as a decision is what "agentic" buys that reflection alone does not.
+> This is genuinely new. Corrective RAG and Self-RAG both make decisions, but neither ever reorders anything — CRAG's graph is acyclic and fixed, and Self-RAG's loops revisit steps in the same order. Ordering as a decision is what **agentic** buys that reflection alone does not.
 
 ---
 
@@ -92,4 +92,4 @@ Run those in the other order and the query cannot be answered correctly. You wou
 ---
 
 > [!tip] Interview framing
-> "Agentic RAG comes down to four questions the agent answers per query: IF — retrieve or not; WHERE — from which source; HOW — with what retrieval settings; and WHEN — in what order. The reason it's exactly four is that traditional RAG has exactly two structural failures: no control over retrieval, and a fixed order. IF, WHERE and HOW are all control over retrieval; WHEN is order. The one I'd dwell on is WHEN, because it's the only one with no equivalent in Corrective RAG or Self-RAG — both of those make decisions but neither ever reorders anything. The example that makes it concrete is 'get the current temperature of Delhi, and if it's hot recommend three trains from Mumbai to Delhi' — temperature needs a web search, trains are in the vector store, and the second retrieval is conditional on the first result, so running them in the wrong order doesn't just degrade the answer, it makes the query unanswerable."
+> **Agentic RAG comes down to four questions the agent answers per query: IF — retrieve or not; WHERE — from which source; HOW — with what retrieval settings; and WHEN — in what order. The reason it's exactly four is that traditional RAG has exactly two structural failures: no control over retrieval, and a fixed order. IF, WHERE and HOW are all control over retrieval; WHEN is order. The one I'd dwell on is WHEN, because it's the only one with no equivalent in Corrective RAG or Self-RAG — both of those make decisions but neither ever reorders anything. The example that makes it concrete is 'get the current temperature of Delhi, and if it's hot recommend three trains from Mumbai to Delhi' — temperature needs a web search, trains are in the vector store, and the second retrieval is conditional on the first result, so running them in the wrong order doesn't just degrade the answer, it makes the query unanswerable.**

@@ -65,9 +65,9 @@ Two failures, and the second is the structural one.
 
 **Line 3** — `T` was declared on `add`, so it does not exist in `__init__`. A method-level declaration is scoped to that method.
 
-**Line 8** — `get[T]` declares a fresh `T` and promises to return it, but its only argument is `i: int`. There is nothing in the call to work `T` out from, and mypy says so: *a function returning a TypeVar should receive at least one argument containing the same TypeVar*.
+**Line 8** — `get[T]` declares a fresh `T` and promises to return it, but its only argument is `i: int`. There is nothing in the call to work `T` out from, and mypy says so: **a function returning a TypeVar should receive at least one argument containing the same TypeVar**.
 
-> [!important] That's the difference from a generic *function*. `first(tool_names)` resolved `T` from the argument at that call. `get(0)` carries no such information — **the type was decided when the store was created, not when `get` was called.** So the placeholder has to belong to the object and survive across every method call on it.
+> [!important] That's the difference from a generic **function**. `first(tool_names)` resolved `T` from the argument at that call. `get(0)` carries no such information — **the type was decided when the store was created, not when `get` was called.** So the placeholder has to belong to the object and survive across every method call on it.
 
 ## Declaring it on the class
 
@@ -240,7 +240,7 @@ gc6.py:18: error: Incompatible types in assignment (expression has type "Store[i
 
 **Line 11** — `a` really did become `Store[str]`, so `add(42)` is an error. The annotation wasn't accepted and forgotten.
 
-**Line 13** — an explicit type argument that disagrees is an error, not an override. The left side doesn't *force* anything; it states a requirement the right side has to satisfy. Bare `Store()` satisfies any `Store[X]` precisely because it is asking to be told.
+**Line 13** — an explicit type argument that disagrees is an error, not an override. The left side doesn't **force** anything; it states a requirement the right side has to satisfy. Bare `Store()` satisfies any `Store[X]` precisely because it is asking to be told.
 
 **Line 16** — the same inference works from a return annotation. Anywhere the expected type is known, a bare constructor call takes it.
 

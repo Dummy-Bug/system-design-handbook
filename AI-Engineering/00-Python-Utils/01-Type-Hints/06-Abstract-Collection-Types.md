@@ -51,7 +51,7 @@ shout.py:9: error: Argument 1 to "shout" has incompatible type "Generator[str, N
 
 This is the mirror image of where the previous note ended. There, an over-loose annotation flagged the one correct line and missed both real bugs. Here an over-tight one flags three correct lines when there are no bugs at all.
 
-And the checker is right both times. It is enforcing the claim it was given. `list[str]` means *a list* — a tuple is not a list, a set is not a list, a generator is not a list. Nothing about the errors is wrong; the claim was.
+And the checker is right both times. It is enforcing the claim it was given. `list[str]` means **a list** — a tuple is not a list, a set is not a list, a generator is not a list. Nothing about the errors is wrong; the claim was.
 
 ## What the body actually needs
 
@@ -63,7 +63,7 @@ And the checker is right both times. It is enforcing the claim it was given. `li
 
 Read the two lines and ignore what you happen to call it with. The function loops over `names`, and calls `.upper()` on whatever comes out.
 
-That's the entire requirement: **something you can loop over, yielding strings.** It never indexes, never takes a length, never sorts, never asks whether the order is stable. "Being a list" was never part of the job.
+That's the entire requirement: **something you can loop over, yielding strings.** It never indexes, never takes a length, never sorts, never asks whether the order is stable. **Being a list** was never part of the job.
 
 ## Saying the requirement instead
 
@@ -89,7 +89,7 @@ $ mypy shout2.py
 Success: no issues found in 1 source file
 ```
 
-Six callers, one annotation, nothing to report. `Iterable[str]` says *"anything that can be looped over, producing strings"* — which is what the body asked for, stated exactly.
+Six callers, one annotation, nothing to report. `Iterable[str]` says **anything that can be looped over, producing strings** — which is what the body asked for, stated exactly.
 
 Two of those callers are new, and both are worth looking at.
 
@@ -114,7 +114,7 @@ Z
 
 Nothing about the import is magic. It brings in a name to write after the colon, and — as concept 1 established — the interpreter files it away and moves on. `shout` behaves identically with the annotation deleted.
 
-## "Weakest" is a floor, not a race
+## Weakest is a floor, not a race
 
 Different body, same annotation. This one indexes instead of looping:
 
@@ -172,11 +172,11 @@ The word is ordinary Python vocabulary, not a typing invention. The built-in seq
 
 Read the three failures against that definition:
 
-**`set` → `TypeError: 'set' object is not subscriptable`.** A set has no positions. It records what is in it, not where anything sits, so "the first one" doesn't mean anything.
+**`set` → `TypeError: 'set' object is not subscriptable`.** A set has no positions. It records what is in it, not where anything sits, so **the first one** doesn't mean anything.
 
 **`generator` → `TypeError: 'generator' object is not subscriptable`.** A generator produces items one at a time, forward only. The second item doesn't exist yet while you hold the first, and the first is gone once you move past it — there is nothing to index into.
 
-**`dict` → `KeyError: 0`**, and the *different* error is the interesting part. A dict **is** subscriptable; `d["alice"]` works. But the thing in brackets is a **key**, not a position. `d[0]` went looking for a key called `0` and didn't find one. Nothing in a dict is addressed by position.
+**`dict` → `KeyError: 0`**, and the **different** error is the interesting part. A dict **is** subscriptable; `d["alice"]` works. But the thing in brackets is a **key**, not a position. `d[0]` went looking for a key called `0` and didn't find one. Nothing in a dict is addressed by position.
 
 ### Saying it
 
@@ -335,7 +335,7 @@ Everything so far has been about parameters. Now a function that builds somethin
 5      return ["alice", "bob", "carol"]
 ```
 
-By the rule so far this looks right — `Iterable[str]` is the weakest true statement, and it *is* true. Watch what it does to the caller:
+By the rule so far this looks right — `Iterable[str]` is the weakest true statement, and it **is** true. Watch what it does to the caller:
 
 ```python
  8  a = load_names()
@@ -364,14 +364,14 @@ alice
 
 **It is a list.** It indexes, it has a length, it appends — the run proves all three. The annotation threw that away and left the caller holding the least capable description you could have written. Change the return to `list[str]` and every line is fine.
 
-The same reasoning applies to autocomplete: an editor offers what the *annotation* permits, 
+The same reasoning applies to autocomplete: an editor offers what the **annotation** permits, 
 so `-> Iterable[str]` suggests one method on a value that really supports thirty.
 
 > [!important] **Accept abstract, return concrete.**
 > The rule doesn't reverse — the audience does.
-> - **Parameter — weak is generous.** You're describing what you'll *accept*, so a looser type lets more callers in.
+> - **Parameter — weak is generous.** You're describing what you'll **accept**, so a looser type lets more callers in.
 > 
-> - **Return — weak is stingy.** You're describing what they *get*, so a looser type hands back less than you built.
+> - **Return — weak is stingy.** You're describing what they **get**, so a looser type hands back less than you built.
 >
 > Both are the same instinct — say the true thing that serves the other side — pointed in opposite directions.
 
@@ -384,6 +384,6 @@ so `-> Iterable[str]` suggests one method on a value that really supports thirty
 Four things to carry:
 
 1. The right annotation comes from **reading the body**, not from what you currently pass in. Ask what operations the parameter is actually subjected to.
-2. Over-tight and over-loose fail differently and both are worth recognising. Over-loose flags correct code *and* misses bugs. Over-tight rejects callers that would have worked perfectly — a checker reporting failure on a program that runs.
+2. Over-tight and over-loose fail differently and both are worth recognising. Over-loose flags correct code **and** misses bugs. Over-tight rejects callers that would have worked perfectly — a checker reporting failure on a program that runs.
 3. The abstract types form a ladder of promises: loop it, then read it by position or key, then change it. Pick the rung the body stands on. In practice the third rung is `list` and `dict`, so it doesn't need its abstract name.
 4. On the way out, the reasoning inverts. `-> Iterable[str]` is honest and useless; `-> list[str]` is what the caller needed.

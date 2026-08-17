@@ -82,7 +82,7 @@ print([(x, y) for x in s for y in s])
 
 Two pairs. The same comprehension over a plain list of those words gives nine.
 
-> [!important] **A sentence is a collection, not a stream.** The previous note's rule applies exactly here: return `self` from `__iter__` when the object represents a one-time flow of data — a socket, a cursor, a file being consumed. A sentence is a fixed thing you might reasonably want to read twice, count the words in, or loop over inside another loop. Making it its own iterator means the object *is used up* by the first `for` loop, which is not a property any reader would expect from something called `Sentence`.
+> [!important] **A sentence is a collection, not a stream.** The previous note's rule applies exactly here: return `self` from `__iter__` when the object represents a one-time flow of data — a socket, a cursor, a file being consumed. A sentence is a fixed thing you might reasonably want to read twice, count the words in, or loop over inside another loop. Making it its own iterator means the object **is used up** by the first `for` loop, which is not a property any reader would expect from something called `Sentence`.
 
 ## The class, done properly
 
@@ -152,7 +152,7 @@ for word in sentence('This is a test'):
 
 `__iter__`, `__next__`, the position, and the `StopIteration` are all supplied for you. Compare that against the ten-line class and the reason generators get reached for first is not subtle.
 
-The one thing to stay aware of: a generator *is* its own iterator, so it has the single-use property the broken class had.
+The one thing to stay aware of: a generator **is** its own iterator, so it has the single-use property the broken class had.
 
 ```python
 g = sentence('This is a test')
@@ -160,13 +160,13 @@ print([w for w in g])   # ['This', 'is', 'a', 'test']
 print([w for w in g])   # []
 ```
 
-The difference is that this is honest about what it is. `sentence(...)` names a *process*, and calling it again is free:
+The difference is that this is honest about what it is. `sentence(...)` names a **process**, and calling it again is free:
 
 ```python
 print(list(sentence('This is a test')))
 ```
 
-Whereas `Sentence(...)` names a *thing*, and a thing that empties itself when read is a surprise.
+Whereas `Sentence(...)` names a **thing**, and a thing that empties itself when read is a surprise.
 
 ## One detail in `split()`
 
@@ -192,7 +192,7 @@ print(padded.split(' '))
 # ['', '', 'hello', 'world', '', '']
 ```
 
-The no-argument form splits on *runs* of any whitespace — spaces, tabs, newlines — and discards leading and trailing ones. Passing `' '` explicitly splits on each single space, producing empty strings between consecutive spaces. For splitting text into words, the no-argument form is almost always the one you want.
+The no-argument form splits on **runs** of any whitespace — spaces, tabs, newlines — and discards leading and trailing ones. Passing `' '` explicitly splits on each single space, producing empty strings between consecutive spaces. For splitting text into words, the no-argument form is almost always the one you want.
 
 ## The four versions
 

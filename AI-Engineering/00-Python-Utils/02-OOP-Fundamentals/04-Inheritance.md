@@ -138,7 +138,7 @@ print(dev_1.email)      # Corey.Schafer@company.com
 print(dev_1.prog_lang)  # Python
 ```
 
-`super()` means "the next class up the resolution order". So `super().__init__(first, last, pay)` calls `Employee.__init__` with this same instance, which sets `first`, `last`, `pay` and `email` on it — and only then does the subclass add the one attribute it actually cares about.
+`super()` means **the next class up the resolution order**. So `super().__init__(first, last, pay)` calls `Employee.__init__` with this same instance, which sets `first`, `last`, `pay` and `email` on it — and only then does the subclass add the one attribute it actually cares about.
 
 ```mermaid
 flowchart TD
@@ -238,7 +238,7 @@ Two details in that `__init__` are deliberate, and both are easy to get wrong.
 > ```
 > Bob supervises someone he was never given. `None` as the default plus a fresh `[]` inside the body is the fix, because the body runs on every call. The same trap applies to dicts and sets, and to any function — this isn't specific to classes.
 
-> [!tip] `list(employees)` rather than a bare `employees` is the second detail. Assigning the argument directly stores *the caller's own list*, so `add_employee` would reach out and modify a list the caller still holds:
+> [!tip] `list(employees)` rather than a bare `employees` is the second detail. Assigning the argument directly stores **the caller's own list**, so `add_employee` would reach out and modify a list the caller still holds:
 > ```python
 > team = [dev_1]
 > mgr = Manager('Sue', 'Smith', 90000, team)
@@ -275,7 +275,7 @@ flowchart TD
     D -.->|"no relationship"| M
 ```
 
-Read those two functions as "is this name anywhere in the chain above?" — which is exactly the question the attribute lookup at the top of this note is answering every time you touch an attribute.
+Read those two functions as **is this name anywhere in the chain above?** — which is exactly the question the attribute lookup at the top of this note is answering every time you touch an attribute.
 
 ## Why this matters beyond employees
 

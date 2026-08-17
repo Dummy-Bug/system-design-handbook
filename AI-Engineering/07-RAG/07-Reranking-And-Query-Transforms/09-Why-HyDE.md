@@ -23,7 +23,7 @@ No. And that is the entire problem, because of what sits on each side of the com
 
 You are asking a similarity metric to compare a fragment against an essay and tell you which essays are relevant. The lecture's phrase for it is **apples to oranges**.
 
-> [!important] This is not the same complaint as multi-query's. Multi-query says *"the user picked unlucky words, so try other words."* HyDE says *"even with perfect words, a two-line question and a two-hundred-word passage have structurally different embeddings."* Rephrasing does not fix an asymmetry of **form**.
+> [!important] This is not the same complaint as multi-query's. Multi-query says **the user picked unlucky words, so try other words.** HyDE says **even with perfect words, a two-line question and a two-hundred-word passage have structurally different embeddings.** Rephrasing does not fix an asymmetry of **form**.
 
 ---
 
@@ -35,7 +35,7 @@ Those clusters exist because of **similarity of semantic meaning**. Documents th
 
 Now send in the query vector. Being short and sparse, its semantic meaning does not closely resemble any of the detailed documents — so it does not land inside the relevant cluster. It lands in **a completely different area**, in a region of its own.
 
-> [!note] The lecture's analogy is worth keeping: it is like trying to group **a toddler into a group of teenagers**. The toddler is a person, the teenagers are people, but grouping by size puts the toddler somewhere else entirely. A query is *about* the same subject as the documents, but it does not *look* like them, and the embedding space groups by looking-alike.
+> [!note] The lecture's analogy is worth keeping: it is like trying to group **a toddler into a group of teenagers**. The toddler is a person, the teenagers are people, but grouping by size puts the toddler somewhere else entirely. A query is **about** the same subject as the documents, but it does not **look** like them, and the embedding space groups by looking-alike.
 
 ### And that is where the retrieval goes wrong
 
@@ -43,7 +43,7 @@ Sitting outside every cluster, the query vector is often roughly equidistant fro
 
 ![[AI-Engineering/07-RAG/07-Reranking-And-Query-Transforms/Images/23-NLU-NLG-Hypothetical-Doc.png]]
 
-So the `k` nearest neighbours get drawn from a *mixture* of clusters. A few from the cluster you wanted, a few from an adjacent one that happens to sit nearby. The result is written plainly on the board: **quality ↓, accuracy ↓**.
+So the `k` nearest neighbours get drawn from a **mixture** of clusters. A few from the cluster you wanted, a few from an adjacent one that happens to sit nearby. The result is written plainly on the board: **quality ↓, accuracy ↓**.
 
 ```mermaid
 flowchart TD
@@ -71,4 +71,4 @@ The user cannot give you that; they do not know what your documents look like. B
 ---
 
 > [!tip] Interview framing
-> "HyDE addresses a different failure from multi-query. Multi-query assumes the user chose unlucky words and tries other words. HyDE points out that a query and a document are structurally different objects — the query is one or two lines and underspecified, the documents are long and detailed — so their embeddings have different shapes regardless of word choice. Geometrically, documents cluster by semantic similarity, and a short query vector doesn't land inside the relevant cluster; it sits outside all of them, roughly equidistant from several, so the top-k gets drawn from a mixture of clusters and accuracy drops. The fix has to make the thing you search with resemble a document rather than a question."
+> **HyDE addresses a different failure from multi-query. Multi-query assumes the user chose unlucky words and tries other words. HyDE points out that a query and a document are structurally different objects — the query is one or two lines and underspecified, the documents are long and detailed — so their embeddings have different shapes regardless of word choice. Geometrically, documents cluster by semantic similarity, and a short query vector doesn't land inside the relevant cluster; it sits outside all of them, roughly equidistant from several, so the top-k gets drawn from a mixture of clusters and accuracy drops. The fix has to make the thing you search with resemble a document rather than a question.**

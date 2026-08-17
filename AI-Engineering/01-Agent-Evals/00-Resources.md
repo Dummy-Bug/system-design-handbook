@@ -12,14 +12,14 @@
 
 The instinct is: write 50 golden questions → run them → see what fails. The people who do this professionally say that's backwards.
 
-> *"Many teams make the mistake of crafting elaborate eval criteria without first looking at the data."* — Hamel Husain
+> **Many teams make the mistake of crafting elaborate eval criteria without first looking at the data.** — Hamel Husain
 
-The actual loop is **error analysis first**: look at real traces → open-code what went wrong in plain sentences → group those into buckets (axial coding) → *then* build evals for the biggest buckets. The dataset grows out of observed failure, not out of imagination.
+The actual loop is **error analysis first**: look at real traces → open-code what went wrong in plain sentences → group those into buckets (axial coding) → **then** build evals for the biggest buckets. The dataset grows out of observed failure, not out of imagination.
 
 **So Block 1 has two entry points depending on one fact:**
 
-- **If Xarvis has production conversation logs** → start with error analysis on ~50 real traces. The golden set is then *derived*, and it targets failures that actually happen.
-- **If it doesn't** → bootstrap a synthetic golden set across the tool surface, run it, and treat *its* failures as your first error-analysis corpus. Same loop, seeded differently.
+- **If Xarvis has production conversation logs** → start with error analysis on ~50 real traces. The golden set is then **derived**, and it targets failures that actually happen.
+- **If it doesn't** → bootstrap a synthetic golden set across the tool surface, run it, and treat **its** failures as your first error-analysis corpus. Same loop, seeded differently.
 
 Either way the flywheel is the same. Knowing why the first version is better is itself an interview answer.
 
@@ -28,19 +28,19 @@ Either way the flywheel is the same. Knowing why the first version is better is 
 ## Primary sources — highest depth per minute
 
 **1. Corpus crash course** — `/tmp/ai-eng-corpus/AI-Engineer-Interview-Questions/07-evaluation-and-observability/README.md`
-Fifteen sections and it is almost exactly this block's syllabus: *Evals are the moat · The eval taxonomy · Building an eval set · LLM-as-judge properly · pass@k · Application-specific evals · Regression testing and CI · Guardrail vs quality metrics · Online evaluation · Error analysis: the highest-ROI activity · The maturity path.* Read the whole thing before anything else.
+Fifteen sections and it is almost exactly this block's syllabus: **Evals are the moat · The eval taxonomy · Building an eval set · LLM-as-judge properly · pass@k · Application-specific evals · Regression testing and CI · Guardrail vs quality metrics · Online evaluation · Error analysis: the highest-ROI activity · The maturity path.** Read the whole thing before anything else.
 
-**2. Corpus worked answers** — same folder, `questions.md`. Answer each out loud *before* opening the collapsible answer.
+**2. Corpus worked answers** — same folder, `questions.md`. Answer each out loud **before** opening the collapsible answer.
 
 | Q | Topic |
 |---|---|
-| Q1 | Why "evals are the moat" — evals as the core engineering artifact |
+| Q1 | Why **evals are the moat** — evals as the core engineering artifact |
 | Q2 | The taxonomy of evaluation methods, and when to use each |
 | Q3 | Code-graded assertions, and where they break down |
 | Q4 | **Building evals from scratch — how many examples, and where they come from** |
 | Q6 | **pass@k — why the naive computation is wrong and what the fix is** |
 | Q7 | Guardrail metrics vs quality metrics |
-| Q11 | *"Your eval reports 82% pass on 100 examples. What does that number not tell you?"* |
+| Q11 | **Your eval reports 82% pass on 100 examples. What does that number not tell you?** |
 | Q12 | Why you version an eval dataset, and what belongs in the version |
 
 **3. Agent-specific** — `06-agents-and-tool-use/questions.md`. These three are the actual core of this block:
@@ -53,7 +53,7 @@ Fifteen sections and it is almost exactly this block's syllabus: *Evals are the 
 - [Your AI Product Needs Evals](https://hamel.dev/blog/posts/evals/) — the foundational post
 - [Evals, error analysis, and better prompts](https://www.lennysnewsletter.com/p/evals-error-analysis-and-better-prompts) — the systematic method, interview format
 - [How to Build an AI Evals Dataset from Scratch](https://www.decodingai.com/p/build-an-ai-evals-dataset-with-error-analysis) — the error-analysis-first flywheel, concretely
-- His Maven course *AI Evals for Engineers & PMs* exists and is well regarded. **Don't buy it now** — your own rule: no new course purchase until the active one has shipped an artifact.
+- His Maven course **AI Evals for Engineers & PMs** exists and is well regarded. **Don't buy it now** — your own rule: no new course purchase until the active one has shipped an artifact.
 
 **5. [A pragmatic guide to LLM evals for devs](https://newsletter.pragmaticengineer.com/p/evals)** — Pragmatic Engineer. Engineer-framed rather than PM-framed; good counterweight.
 
@@ -75,11 +75,11 @@ Fifteen sections and it is almost exactly this block's syllabus: *Evals are the 
 
 **`/tmp/ai-eng-corpus/AI-Engineer-Interview-Questions/12-coding-challenges/12_eval_metrics.py`** — numpy + stdlib only, implement then run. Three pieces:
 
-1. `pass_at_k(n, c, k)` — the unbiased estimator from Chen et al. 2021 (the Codex paper), in the numerically stable product form `1 - Π(1 - k/i)` rather than materialising binomials. The notes explain *why* the naive estimator is biased for `k < n`, and that `C(2000,1000) ≈ 2e600` overflows float64.
+1. `pass_at_k(n, c, k)` — the unbiased estimator from Chen et al. 2021 (the Codex paper), in the numerically stable product form `1 - Π(1 - k/i)` rather than materialising binomials. The notes explain **why** the naive estimator is biased for `k < n`, and that `C(2000,1000) ≈ 2e600` overflows float64.
 2. SQuAD-style `normalize_answer` / `exact_match` / `token_f1`.
 3. A minimal pairwise LLM-judge harness **with position swap** — which is the standard mitigation for judge position bias, so this doubles as Block 3 prep.
 
-Do this one by hand. It's the difference between saying "pass@k" and understanding it.
+Do this one by hand. It's the difference between saying **pass@k** and understanding it.
 
 ---
 
@@ -121,8 +121,8 @@ A note isn't finished when it's written — it's finished when the matching Xarv
 - [ ] `01`–`08` written
 - [ ] `12_eval_metrics.py` implemented from the docstring alone and passing
 - [ ] **A1** — golden set exists (~50 cases: one per registered tool, multi-tool chains, access-control denials, ambiguous-name HITL cases, out-of-scope questions, PARTIAL-result cases)
-- [ ] **A2** — trajectory eval running → *tool-selection accuracy %*, *param-extraction accuracy %*
-- [ ] **A3** — access-control eval running → *enforcement rate %*
+- [ ] **A2** — trajectory eval running → **tool-selection accuracy %**, **param-extraction accuracy %**
+- [ ] **A3** — access-control eval running → **enforcement rate %**
 - [ ] Three numbers recorded, with the date and the commit they were measured at
 
-> Expect A3 to crash on the first run. `orchestration/employee/nodes/access_denied.py:12` calls `json.loads(last.content)` with no try/except, so any non-JSON tool content takes the node down. Finding that *is* a result — write it down as your first error-analysis entry.
+> Expect A3 to crash on the first run. `orchestration/employee/nodes/access_denied.py:12` calls `json.loads(last.content)` with no try/except, so any non-JSON tool content takes the node down. Finding that **is** a result — write it down as your first error-analysis entry.

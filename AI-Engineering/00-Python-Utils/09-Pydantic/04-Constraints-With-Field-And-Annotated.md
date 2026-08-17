@@ -1,4 +1,4 @@
-A type hint alone only checks *what kind* of value arrived — that an age is an integer, say. It says nothing about whether `-5` or `9000` is a sensible age. Constraints are the layer above type checking: rules about the *range or shape* of an otherwise correctly-typed value.
+A type hint alone only checks **what kind** of value arrived — that an age is an integer, say. It says nothing about whether `-5` or `9000` is a sensible age. Constraints are the layer above type checking: rules about the **range or shape** of an otherwise correctly-typed value.
 
 ## The `Annotated` + `Field` pattern
 

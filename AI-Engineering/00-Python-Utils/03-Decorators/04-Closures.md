@@ -17,7 +17,7 @@ def outer():
 
 `inner` doesn't take any parameters, and it doesn't define `message` either — it just reaches out and uses a variable that belongs to `outer`. That's called a **free variable**: not local to the function using it, not global, just borrowed from whatever function it's sitting inside.
 
-Run `outer()` and it prints `hi`, which isn't surprising yet — `inner` is called *while `outer` is still running*, so `message` is right there.
+Run `outer()` and it prints `hi`, which isn't surprising yet — `inner` is called **while `outer` is still running**, so `message` is right there.
 
 ## Returning without calling
 
@@ -85,7 +85,7 @@ flowchart LR
 
 ## Where this earns its keep
 
-A closure that only prints a fixed string is a demo. Here's a version that does something worth wanting: wrap *any* function so every call to it gets logged.
+A closure that only prints a fixed string is a demo. Here's a version that does something worth wanting: wrap **any** function so every call to it gets logged.
 
 ```python
 def logger(func):
@@ -114,7 +114,7 @@ sub_logger(10, 5)
 # 5
 ```
 
-`log_func` closes over `func` — the specific function `logger` was called with — the same way `inner` closed over `message`. `add_logger` and `sub_logger` are two separate closures, each permanently wired to a different function, and each can be called any number of times afterward as if it *were* that function, just with logging attached.
+`log_func` closes over `func` — the specific function `logger` was called with — the same way `inner` closed over `message`. `add_logger` and `sub_logger` are two separate closures, each permanently wired to a different function, and each can be called any number of times afterward as if it **were** that function, just with logging attached.
 
 ### What `*args` actually promised
 
@@ -132,11 +132,11 @@ TypeError: add() takes 2 positional
 arguments but 3 were given
 ```
 
-Read the order of those two outputs — the log line printed, *then* it crashed. Walk the wrapper line by line and you can see why:
+Read the order of those two outputs — the log line printed, **then** it crashed. Walk the wrapper line by line and you can see why:
 
-1. `log_func(*args)` accepts the call without complaint. `*args` means *collect however many positional arguments arrive into a tuple*, so there is no count to violate. `args` becomes `(3, 3, 3)`.
+1. `log_func(*args)` accepts the call without complaint. `*args` means **collect however many positional arguments arrive into a tuple**, so there is no count to violate. `args` becomes `(3, 3, 3)`.
 2. The first `print` runs on that tuple. Nothing has touched `add` yet, so nothing can go wrong.
-3. The second line is `print(func(*args))`. Python has to evaluate the argument before it can call `print`, so it attempts `add(3, 3, 3)` — and *that* is what raises. The `print` around it never runs.
+3. The second line is `print(func(*args))`. Python has to evaluate the argument before it can call `print`, so it attempts `add(3, 3, 3)` — and **that** is what raises. The `print` around it never runs.
 
 ```mermaid
 flowchart TD
@@ -148,10 +148,10 @@ flowchart TD
 ```
 
 > [!warning] **The wrapper is more permissive than the thing it wraps.**
-> `log_func(*args)` accepts any number of positional arguments and relays them onward. It validates nothing — `add` is what decides whether the call was legal. So the wrapper doesn't *make* bad calls work; it just delays the complaint until the inner call happens.
+> `log_func(*args)` accepts any number of positional arguments and relays them onward. It validates nothing — `add` is what decides whether the call was legal. So the wrapper doesn't **make** bad calls work; it just delays the complaint until the inner call happens.
 
 And note this wrapper only used `*args`, so it covers positional arguments alone — `add_logger(x=3, y=3)` still fails at the wrapper itself with `got an unexpected keyword argument 'x'`. Adding `**kwargs` alongside it is what makes a wrapper able to catch genuinely any call.
 
-That delay has a cost worth naming now, because it comes back later. After `add_logger = logger(add)`, the name `add_logger` no longer advertises `(x, y)` to anyone inspecting it — your editor's autocomplete, `help()`, and a type checker all see `(*args)` instead. The arity check moved from *before you run it* to *at runtime, halfway through*. Two tools later in this folder exist to claw that back: `functools.wraps` restores what `help()` and other runtime introspection see, and `ParamSpec` restores what the type checker sees.
+That delay has a cost worth naming now, because it comes back later. After `add_logger = logger(add)`, the name `add_logger` no longer advertises `(x, y)` to anyone inspecting it — your editor's autocomplete, `help()`, and a type checker all see `(*args)` instead. The arity check moved from **before you run it** to **at runtime, halfway through**. Two tools later in this folder exist to claw that back: `functools.wraps` restores what `help()` and other runtime introspection see, and `ParamSpec` restores what the type checker sees.
 
 > [!tip] This is exactly the shape a decorator wraps in nicer syntax. `logger(add)` — take a function, return a new function that does something extra around a call to the original — is the entire mechanism; `@logger` above `def add` is just a shorter way to write `add = logger(add)`.

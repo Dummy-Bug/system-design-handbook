@@ -1,4 +1,4 @@
-The text loader was one class, because plain text has one way to be read. PDFs are different — and the difference shows up immediately in LangChain's catalogue: **there isn't *a* PDF loader, there's a whole family of them.** The reason is the parser underneath. PDF is a notoriously messy format — text, images, tables, fonts, layouts all packed together — and different parsers attack it with **different unique advantages**: some are fast, some can parse the images, some give you far more detailed metadata. So the real skill isn't "the PDF loader API"; it's knowing **which PDF loader to reach for**.
+The text loader was one class, because plain text has one way to be read. PDFs are different — and the difference shows up immediately in LangChain's catalogue: **there isn't a PDF loader, there's a whole family of them.** The reason is the parser underneath. PDF is a notoriously messy format — text, images, tables, fonts, layouts all packed together — and different parsers attack it with **different unique advantages**: some are fast, some can parse the images, some give you far more detailed metadata. So the real skill isn't **the PDF loader API**; it's knowing **which PDF loader to reach for**.
 
 This note works through three of them — **PyPDF**, **PDFMiner**, and **PDFPlumber** — on a document chosen to stress-test all three:
 
@@ -12,7 +12,7 @@ file_path = Path("../knowledge-source/attention_is_all_you_need.pdf")
 file_path.exists()   # True
 ```
 
-*Attention Is All You Need* — the Transformer paper itself: 15 pages, and crucially it contains **figures** (the famous architecture diagram) and **tables** (results tables). Plain text, image text, tabular data — one file, all three challenges.
+**Attention Is All You Need** — the Transformer paper itself: 15 pages, and crucially it contains **figures** (the famous architecture diagram) and **tables** (results tables). Plain text, image text, tabular data — one file, all three challenges.
 
 ---
 
@@ -29,7 +29,7 @@ len(documents)   # 15
 
 Two things to unpack.
 
-**The `mode` parameter.** This tells the loader *how* to load the document: `'page'` loads it **page by page** — every page becomes its own Document object — while `'single'` loads the entire PDF as **one** Document. Page mode is what we want (and it's PyPDF's default): 15 pages in, 15 documents out, and the page instantly becomes the natural unit of retrieval.
+**The `mode` parameter.** This tells the loader **how** to load the document: `'page'` loads it **page by page** — every page becomes its own Document object — while `'single'` loads the entire PDF as **one** Document. Page mode is what we want (and it's PyPDF's default): 15 pages in, 15 documents out, and the page instantly becomes the natural unit of retrieval.
 
 **The metadata got serious.** Compare this to the text loader's lonely `source` key:
 
@@ -40,7 +40,7 @@ pp(documents[0].metadata)
 #  'total_pages': 15, 'page': 0, 'page_label': '1'}
 ```
 
-Producer, creator, creation date, the source path, the total page count, and *this document's* position in the file. A PDF simply knows more about itself than a text file does, and the loader passes all of it through — this is the metadata that later powers source attribution ("that answer came from page 3 of the Attention paper").
+Producer, creator, creation date, the source path, the total page count, and **this document's** position in the file. A PDF simply knows more about itself than a text file does, and the loader passes all of it through — this is the metadata that later powers source attribution (**that answer came from page 3 of the Attention paper**).
 
 > [!important] Note the off-by-one hiding in plain sight: **`page` is a 0-based index, `page_label` is the human-readable page number** — so the document with `page: 1` carries `page_label: '2'`. When you filter by page later, be sure which one you're using.
 
@@ -50,7 +50,7 @@ Printing `documents[1].page_content` dumps the full text of page 2 — the extra
 
 ## The image problem — where PyPDF hits its ceiling
 
-Look closely at the paper, though: page 3 contains the architecture **figure** — and the words inside that figure (*Softmax*, *Feed Forward*, *Add & Norm*...) live in an *image*, not in the PDF's text layer. A plain text extraction never sees them.
+Look closely at the paper, though: page 3 contains the architecture **figure** — and the words inside that figure (**Softmax**, **Feed Forward**, **Add & Norm**...) live in an **image**, not in the PDF's text layer. A plain text extraction never sees them.
 
 Reading text out of an image is **OCR** — optical character recognition — and LangChain wires it in through an **images parser**:
 
@@ -78,13 +78,13 @@ print(page_with_image.page_content[-700:])
 
 ...and the image text **isn't there**. The PDF's ordinary text is all present, but nothing from the figure. This is the honest lesson of the section:
 
-> [!danger] PyPDF *documents* the image-extraction functionality, but in practice it doesn't work properly — the figures' text never made it into the output. If you need data out of images inside a PDF, you need a more advanced loader. That's not a bug in your code; it's the parser's ceiling — and the reason the PDF loader family exists at all.
+> [!danger] PyPDF **documents** the image-extraction functionality, but in practice it doesn't work properly — the figures' text never made it into the output. If you need data out of images inside a PDF, you need a more advanced loader. That's not a bug in your code; it's the parser's ceiling — and the reason the PDF loader family exists at all.
 
 ---
 
 ## PDFMinerLoader — the advanced one: images and tables
 
-PDFMiner's feature list is exactly what we're missing: it supports lazy loading, and it can extract **images** *and* **tables**. Same construction, same parameters:
+PDFMiner's feature list is exactly what we're missing: it supports lazy loading, and it can extract **images** **and** **tables**. Same construction, same parameters:
 
 ```python
 from langchain_community.document_loaders import PDFMinerLoader
@@ -115,13 +115,13 @@ And this time it's all there — the architecture diagram's labels, extracted fr
 Feed Forward  ..." />
 ```
 
-The figure's text — *Output Probabilities, Softmax, Linear, Add & Norm, Feed Forward* — is now part of `page_content`, which means it's embeddable and retrievable like any other text. A query about "softmax layers in the Transformer architecture" can now actually reach this page.
+The figure's text — **Output Probabilities, Softmax, Linear, Add & Norm, Feed Forward** — is now part of `page_content`, which means it's embeddable and retrievable like any other text. A query about **softmax layers in the Transformer architecture** can now actually reach this page.
 
 ### Why `images_inner_format="html-img"`?
 
 Notice the OCR text arrived wrapped in an HTML `<img>` tag. That's the `images_inner_format` parameter: it controls the wrapper that marks image-extracted text inside the output. The alternative is `"markdown-img"`, which wraps the same text in Markdown image syntax instead — run it and the output looks different only in the wrapping.
 
-The lecture's recommendation: **prefer HTML.** The reasoning is sharp: a PDF's ordinary text can easily contain characters that *look like* Markdown syntax (asterisks, brackets, dashes — they occur naturally in prose), but ordinary PDF text never contains HTML tags. So an HTML wrapper lets you **unambiguously tell image-extracted text apart** from the surrounding real text; a Markdown wrapper can blur into the document.
+The lecture's recommendation: **prefer HTML.** The reasoning is sharp: a PDF's ordinary text can easily contain characters that **look like** Markdown syntax (asterisks, brackets, dashes — they occur naturally in prose), but ordinary PDF text never contains HTML tags. So an HTML wrapper lets you **unambiguously tell image-extracted text apart** from the surrounding real text; a Markdown wrapper can blur into the document.
 
 ### Tables too
 
@@ -179,6 +179,6 @@ Its text extraction is solid, but its distinguishing edge is in that last line: 
 | Metadata | standard PDF fields | standard | **most detailed** |
 | Default `mode` | `page` | `single` — set `page` yourself | per-page |
 
-> [!tip] The interview-ready framing: "PDF loading isn't one problem, it's three — text, images, tables — and LangChain's PDF loaders are parsers with different specialties. PyPDF for plain text page-by-page; PDFMiner when figures and tables must become retrievable text via OCR; PDFPlumber when I want the richest metadata. Load page-wise, and mind that `page` is 0-indexed while `page_label` is the printed number."
+> [!tip] The interview-ready framing: **PDF loading isn't one problem, it's three — text, images, tables — and LangChain's PDF loaders are parsers with different specialties. PyPDF for plain text page-by-page; PDFMiner when figures and tables must become retrievable text via OCR; PDFPlumber when I want the richest metadata. Load page-wise, and mind that `page` is 0-indexed while `page_label` is the printed number.**
 
 ---

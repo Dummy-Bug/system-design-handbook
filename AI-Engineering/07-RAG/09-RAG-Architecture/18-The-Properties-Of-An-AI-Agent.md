@@ -38,9 +38,9 @@ Those steps depend on the input query. A different query produces a different pl
 
 If planning is writing the to-do list, reasoning is the thinking that happens **inside each item on it**.
 
-For every step in the series, the agent applies thinking to how that particular step should be carried out. Planning decides *what* the steps are; reasoning decides *how* each one goes.
+For every step in the series, the agent applies thinking to how that particular step should be carried out. Planning decides **what** the steps are; reasoning decides **how** each one goes.
 
-> [!important] Planning and reasoning get used interchangeably in casual writing and they are not the same thing. One operates across steps, the other within a step. The lecture keeps them separate deliberately, and the distinction matters when you are debugging: a pipeline that picked the wrong *sequence* has a planning problem; one that picked the right sequence and executed a step badly has a reasoning problem.
+> [!important] Planning and reasoning get used interchangeably in casual writing and they are not the same thing. One operates across steps, the other within a step. The lecture keeps them separate deliberately, and the distinction matters when you are debugging: a pipeline that picked the wrong **sequence** has a planning problem; one that picked the right sequence and executed a step badly has a reasoning problem.
 
 ---
 
@@ -56,7 +56,7 @@ For every step in the series, the agent applies thinking to how that particular 
 
 ## The loop
 
-Properties are static descriptions. What the agent actually *does*, repeatedly, is a three-stage loop — and every step it takes passes through all three.
+Properties are static descriptions. What the agent actually **does**, repeatedly, is a three-stage loop — and every step it takes passes through all three.
 
 ![[AI-Engineering/07-RAG/09-RAG-Architecture/Images/02-Reason-Act-Observe.png]]
 
@@ -68,7 +68,7 @@ flowchart LR
     O --> E([exit])
 ```
 
-1. **Reasoning / thinking** — decision making *for this step*. What needs doing here?
+1. **Reasoning / thinking** — decision making **for this step**. What needs doing here?
 2. **Action** — the actual implementation. This produces a **result**.
 3. **Observation** — observe what the action produced.
 
@@ -86,11 +86,11 @@ After observing, the agent either goes round again or leaves the loop.
 
 **It guarantees** a name for each behaviour you will see later — so that when the pipeline rewrites a query or reorders two retrievals, you can say which property produced it.
 
-**It does not guarantee** the properties are actually present in any given implementation. "Adaptability: robust and error-free" is an aspiration, and the graceful-fallback work in [[23-The-Good-To-Have-Properties]] exists precisely because it does not come for free.
+**It does not guarantee** the properties are actually present in any given implementation. **Adaptability: robust and error-free** is an aspiration, and the graceful-fallback work in [[23-The-Good-To-Have-Properties]] exists precisely because it does not come for free.
 
 **Every loop iteration costs.** Reason, act, observe is at minimum one model call per step, and the agent decides how many steps there are.
 
 ---
 
 > [!tip] Interview framing
-> "Five properties: autonomy, planning, reasoning, orchestration, adaptability. The two I'd separate carefully are planning and reasoning, because people use them interchangeably — planning is deciding what the series of steps is, essentially building a to-do list before doing anything, and reasoning is the thinking applied within each individual step. Orchestration sits on top of both and decides which option to take and when. Operationally the agent runs a reason-act-observe loop: it thinks about the step, implements it, observes the result, then either loops or exits. The contrast with traditional RAG is the useful part — traditional RAG is fire-and-forget, no intervention possible partway and no verification of intermediate results, whereas an agent is in active mode at every step and can respond to what it sees."
+> **Five properties: autonomy, planning, reasoning, orchestration, adaptability. The two I'd separate carefully are planning and reasoning, because people use them interchangeably — planning is deciding what the series of steps is, essentially building a to-do list before doing anything, and reasoning is the thinking applied within each individual step. Orchestration sits on top of both and decides which option to take and when. Operationally the agent runs a reason-act-observe loop: it thinks about the step, implements it, observes the result, then either loops or exits. The contrast with traditional RAG is the useful part — traditional RAG is fire-and-forget, no intervention possible partway and no verification of intermediate results, whereas an agent is in active mode at every step and can respond to what it sees.**

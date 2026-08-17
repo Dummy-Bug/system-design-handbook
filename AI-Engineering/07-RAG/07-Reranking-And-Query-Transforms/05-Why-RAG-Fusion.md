@@ -45,7 +45,7 @@ That disagreement is information. Which document keeps showing up near the top a
 
 Multi-query answers none of that. It takes the union, removes duplicates, and returns a set. **Rank is not considered at all** — a document that ranked first in all three runs is treated exactly like one that scraped in at position 3 of a single run.
 
-> [!warning] Deduplication is a *set* operation, and sets have no order. The moment you deduplicate you have three ranked lists collapsing into one unordered pile, and every signal encoded in the positions is gone. The documents are right; the ordering is now arbitrary.
+> [!warning] Deduplication is a **set** operation, and sets have no order. The moment you deduplicate you have three ranked lists collapsing into one unordered pile, and every signal encoded in the positions is gone. The documents are right; the ordering is now arbitrary.
 
 ---
 
@@ -65,11 +65,11 @@ flowchart LR
     F --> C["final re-ranked context"]
 ```
 
-**Multi-query + RRF = RAG Fusion.** The first half is identical to what you already know. The second half replaces *"deduplicate and hope"* with *"fuse using the rank information you already paid to compute."*
+**Multi-query + RRF = RAG Fusion.** The first half is identical to what you already know. The second half replaces **deduplicate and hope** with **fuse using the rank information you already paid to compute.**
 
-> [!note] The name is literal. You **fuse** the results of several retrievals, and you fuse them **on rank** — reciprocal rank. Hence *Reciprocal Rank Fusion*, and hence *RAG Fusion* for the pipeline built around it.
+> [!note] The name is literal. You **fuse** the results of several retrievals, and you fuse them **on rank** — reciprocal rank. Hence **Reciprocal Rank Fusion**, and hence **RAG Fusion** for the pipeline built around it.
 
 ---
 
 > [!tip] Interview framing
-> "RAG Fusion starts from the observation that retrieval quality is hostage to how the user phrased their question — and the user has no idea what's in your index, so you can't expect good phrasing. Multi-query already addresses that by having an LLM rewrite the query into several alternatives and retrieving with each. But multi-query finishes by deduplicating the union, and that throws away the ranks: each retrieval run came back ordered by similarity, the orderings disagree because the phrasings differ, and that disagreement tells you which documents are robustly relevant versus which matched one phrasing by luck. RAG Fusion keeps the rephrasing step and replaces deduplication with Reciprocal Rank Fusion, which merges the ranked lists using rank position rather than discarding it."
+> **RAG Fusion starts from the observation that retrieval quality is hostage to how the user phrased their question — and the user has no idea what's in your index, so you can't expect good phrasing. Multi-query already addresses that by having an LLM rewrite the query into several alternatives and retrieving with each. But multi-query finishes by deduplicating the union, and that throws away the ranks: each retrieval run came back ordered by similarity, the orderings disagree because the phrasings differ, and that disagreement tells you which documents are robustly relevant versus which matched one phrasing by luck. RAG Fusion keeps the rephrasing step and replaces deduplication with Reciprocal Rank Fusion, which merges the ranked lists using rank position rather than discarding it.**

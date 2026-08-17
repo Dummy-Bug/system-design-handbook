@@ -23,7 +23,7 @@ A **type hint** is that knowledge, written down. A colon after a parameter, an a
 2      return a + b
 ```
 
-Read it as a sentence: *takes two ints, gives back an int.* Nothing else about the function changed.
+Read it as a sentence: **takes two ints, gives back an int.** Nothing else about the function changed.
 
 Variables can carry one too, though it's rarely worth it when the value is sitting right there:
 
@@ -52,7 +52,7 @@ helloworld
 
 No error. No warning. It ran to completion and produced an answer.
 
-That result is worth sitting with, because the natural conclusion from it is wrong. The tempting explanation is *"Python is relaxed about types."* It isn't. Watch:
+That result is worth sitting with, because the natural conclusion from it is wrong. The tempting explanation is **Python is relaxed about types.** It isn't. Watch:
 
 ```python
 add("hello", "world")   # 'helloworld'
@@ -83,7 +83,7 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'
 The identical error, from a file containing no annotation anywhere. The hint contributed nothing to it — removing the hint changed nothing, because Python never looked at it in the first place.
 
 > [!important] **Python checks types at the level of operations, not declarations.**
-> When it reaches `a + b`, the question it asks is *"can these two objects, the ones I am actually holding, be added?"* Two strings — yes, join them. An int and a string — no, raise. It never asks *"what did somebody write after the colon on line 1?"*
+> When it reaches `a + b`, the question it asks is **can these two objects, the ones I am actually holding, be added?** Two strings — yes, join them. An int and a string — no, raise. It never asks **what did somebody write after the colon on line 1?**
 >
 > So `add("hello", "world")` succeeds not because Python is lax, but because **that operation is genuinely valid**. Joining two strings is a perfectly good thing to do. The annotation being wrong is irrelevant to a question nobody asked.
 
@@ -109,7 +109,7 @@ get_name(["name"])      # TypeError: list indices must be integers
                         #            or slices, not str
 ```
 
-The second is the telling one. A list *was* passed where `dict` was annotated — and the complaint that came back was not "**you promised me a dict**." It was "you can't index a list with a string." Python hit the real operation, found it invalid for the real object, and reported ***that*.**
+The second is the telling one. A list **was** passed where `dict` was annotated — and the complaint that came back was not **you promised me a dict.** It was **you can't index a list with a string.** Python hit the real operation, found it invalid for the real object, and reported ***that*.**
 
 ## So where does the hint go?
 
@@ -122,7 +122,7 @@ print(get_name.__annotations__)
 # {'user': <class 'dict'>, 'return': <class 'str'>}
 ```
 
-Printed *after* the call that returned an `int` from a `-> str` function. **The hints were never removed. They were filed and left unread.**
+Printed **after** the call that returned an `int` from a `-> str` function. **The hints were never removed. They were filed and left unread.**
 
 And Python does no vetting on the way in. Whatever you write after the colon is evaluated and stored, whether or not it is a type at all:
 
@@ -139,8 +139,8 @@ And Python does no vetting on the way in. Whatever you write after the colon is 
 Three things that are not types, all filed without comment, and the function runs normally. Write 
 `x: 2 + 2` and the dictionary holds `4`.
 
-> [!warning] **"Kept and ignored" is not the same as "removed", and the difference is load-bearing.** 
-> If annotations really were discarded, nothing could read them once the program is running — no runtime validation, no framework reading a function's signature to work out what to hand it. They survive in full precisely so that other tools can pick them up. Nothing *has* to; Python itself doesn't.
+> [!warning] **Kept and ignored is not the same as removed, and the difference is load-bearing.** 
+> If annotations really were discarded, nothing could read them once the program is running — no runtime validation, no framework reading a function's signature to work out what to hand it. They survive in full precisely so that other tools can pick them up. Nothing **has** to; Python itself doesn't.
 
 One consequence, since `def` is an instruction that runs rather than a declaration read ahead:
 
@@ -157,6 +157,6 @@ Until `outer()` is called, that inner `def` never **executes** — so no functio
 
 **A type hint is a claim you wrote down, not a constraint the language enforces.**
 
-Everything else in this folder follows from that one sentence. A hint that is never checked is worth writing anyway — but *why* it's worth writing is a separate question with a real answer, and it needs asking rather than assuming.
+Everything else in this folder follows from that one sentence. A hint that is never checked is worth writing anyway — but **why** it's worth writing is a separate question with a real answer, and it needs asking rather than assuming.
 
-The failure mode to guard against is the quiet assumption that writing `age: int` has made something safe. It has made something *legible*. Whether anything is checking is a question about your tooling, and the answer is not automatically yes.
+The failure mode to guard against is the quiet assumption that writing `age: int` has made something safe. It has made something **legible**. Whether anything is checking is a question about your tooling, and the answer is not automatically yes.

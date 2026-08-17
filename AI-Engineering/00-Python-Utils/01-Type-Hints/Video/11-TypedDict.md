@@ -21,9 +21,9 @@ The age was converted to a string somewhere in the middle — the sort of thing 
 Success: no issues found in 1 source file
 ```
 
-Nothing caught. And the annotation isn't wrong: it says *every value is a string, a number, or nothing*, and a string satisfies that. The type is being obeyed exactly as written.
+Nothing caught. And the annotation isn't wrong: it says **every value is a string, a number, or nothing**, and a string satisfies that. The type is being obeyed exactly as written.
 
-The problem is what it can express. `dict[K, V]` describes a mapping where **all values are alike** — a phone book, a word-count, a cache. A user record is not that. Its values are deliberately different from each other, and the one guarantee you want — *the thing under `'age'` is a number* — is the one guarantee this syntax has no way to state.
+The problem is what it can express. `dict[K, V]` describes a mapping where **all values are alike** — a phone book, a word-count, a cache. A user record is not that. Its values are deliberately different from each other, and the one guarantee you want — **the thing under `'age'` is a number** — is the one guarantee this syntax has no way to state.
 
 ## Typing each key separately
 
@@ -48,7 +48,7 @@ error: Incompatible types (expression has type "str",
 TypedDict item "age" has type "int | None")  [typeddict-item]
 ```
 
-Caught, and the message names the key. The difference is not that `TypedDict` is stricter in general — it's that it can finally say *which* key holds *what*, so the checker has a specific claim to test the value against.
+Caught, and the message names the key. The difference is not that `TypedDict` is stricter in general — it's that it can finally say **which** key holds **what**, so the checker has a specific claim to test the value against.
 
 ## It really is a dictionary
 
@@ -65,7 +65,7 @@ print(u['first_name'])          # Corey
 
 At runtime it is **an ordinary dict**. No class is created, no instance, no methods, no validation. `User(...)` builds a plain dictionary and hands it back; `type(u)` says `dict` because that is genuinely all it is. You subscript it with `u['age']`, not `u.age`.
 
-So the `class` block is a *description*, read by the checker and ignored by everything else. Which also means:
+So the `class` block is a **description**, read by the checker and ignored by everything else. Which also means:
 
 > [!warning] `TypedDict` cannot check anything at runtime. Data arriving from an API, a JSON file, or a request body will happily be the wrong shape and nothing will notice — `TypedDict` only constrains code the checker can see. For data crossing into your program from outside, you need something that inspects values while running.
 

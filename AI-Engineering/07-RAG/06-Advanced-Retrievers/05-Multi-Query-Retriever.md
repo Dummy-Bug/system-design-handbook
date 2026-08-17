@@ -20,15 +20,15 @@ Say you're building a RAG chatbot that acts as a **medical consultant** for smal
 
 A user arrives and asks:
 
-> **"How can I boost my health?"**
+> **How can I boost my health?**
 
 This is a perfectly reasonable question and a **completely generic** one. And here is why it retrieves poorly.
 
-**Good embedding models are specific.** That is the property you normally want — a strong model picks up the fine distinctions in a document and stores them in its vector. So documents about physical fitness land in one neighbourhood, documents about mental wellbeing land in a *different* neighbourhood, and immunity documents in a third. The better your embedding model, the further apart those regions are.
+**Good embedding models are specific.** That is the property you normally want — a strong model picks up the fine distinctions in a document and stores them in its vector. So documents about physical fitness land in one neighbourhood, documents about mental wellbeing land in a **different** neighbourhood, and immunity documents in a third. The better your embedding model, the further apart those regions are.
 
-Now embed *"How can I boost my health?"* That vector lands somewhere. Wherever it lands, `k=3` returns the three nearest chunks — which will overwhelmingly come from **one** of those regions.
+Now embed **How can I boost my health?** That vector lands somewhere. Wherever it lands, `k=3` returns the three nearest chunks — which will overwhelmingly come from **one** of those regions.
 
-> [!warning] The user asked about health. They will get an answer about physical fitness, or about mental health, or about immunity — but not all three. The retrieval isn't wrong; every chunk it returned is genuinely relevant. It is **incomplete**, and incompleteness is invisible in the output. Nothing in the response says *"there were two other areas I didn't look at."*
+> [!warning] The user asked about health. They will get an answer about physical fitness, or about mental health, or about immunity — but not all three. The retrieval isn't wrong; every chunk it returned is genuinely relevant. It is **incomplete**, and incompleteness is invisible in the output. Nothing in the response says **there were two other areas I didn't look at.**
 
 This is a **coverage** problem, and no amount of tuning fixes it. Raising `k` pulls in more neighbours of the same point, which mostly means more physical-health chunks. MMR diversifies within the candidate pool, but the pool was drawn from one neighbourhood to begin with.
 
@@ -36,7 +36,7 @@ This is a **coverage** problem, and no amount of tuning fixes it. Raising `k` pu
 
 ## Rephrase one query into several
 
-The fix follows directly. If one vague query lands in one place, then write **several specific queries** that deliberately land in *different* places.
+The fix follows directly. If one vague query lands in one place, then write **several specific queries** that deliberately land in **different** places.
 
 ![[AI-Engineering/07-RAG/06-Advanced-Retrievers/Images/10-Rephrase-Into-Specific-Queries.png]]
 
@@ -44,13 +44,13 @@ Take the generic input and rephrase it into three specific ones, each aimed at a
 
 | # | Rephrased query | Aims at |
 |---|---|---|
-| 1 | *"How can I boost my physical health?"* | physical health |
-| 2 | *"How can I keep my mental health in check?"* | mental health |
-| 3 | *"How to boost my immunity and stay fit?"* | immunity |
+| 1 | **How can I boost my physical health?** | physical health |
+| 2 | **How can I keep my mental health in check?** | mental health |
+| 3 | **How to boost my immunity and stay fit?** | immunity |
 
 Run the retriever **once per query**. With `k=3` that is **9 results instead of 3** — and, more importantly, nine results drawn from three different regions rather than three from one.
 
-The lecture's phrasing for the goal is exact: *"I am increasing my coverage."*
+The lecture's phrasing for the goal is exact: **I am increasing my coverage.**
 
 ### Then merge and deduplicate
 
@@ -73,11 +73,11 @@ Chunk 3 was retrieved by all three variants; it appears **once**. Without this s
 
 ![[AI-Engineering/07-RAG/06-Advanced-Retrievers/Images/11-Multi-Query-Retrieval-Flow.png]]
 
-The lecture's second example makes the shape clearer, because the aspects are less obvious than *physical / mental / immunity*. Original query: **"How does RAG reduce hallucinations?"** The rephraser produces:
+The lecture's second example makes the shape clearer, because the aspects are less obvious than **physical / mental / immunity**. Original query: **How does RAG reduce hallucinations?** The rephraser produces:
 
-- *"RAG grounding in LLMs"*
-- *"Retrieval to reduce errors"*
-- *"Factual accuracy with retrieval"*
+- **RAG grounding in LLMs**
+- **Retrieval to reduce errors**
+- **Factual accuracy with retrieval**
 
 Three genuinely different angles on one question, each of which will match different chunks.
 
@@ -96,7 +96,7 @@ flowchart TD
 
 **N defaults to 3** and is configurable. The prompt driving the rephrasing is also replaceable — which is what the companion note does.
 
-> [!important] Notice what multi-query does **not** touch. It never changes the retriever, the embeddings, the index, or the similarity metric. It runs the *same* retriever several times on *different inputs* and unions the results. That is the entire idea, and it's why it composes with anything — your base retriever can be similarity, MMR, hybrid, or self-query.
+> [!important] Notice what multi-query does **not** touch. It never changes the retriever, the embeddings, the index, or the similarity metric. It runs the **same** retriever several times on **different inputs** and unions the results. That is the entire idea, and it's why it composes with anything — your base retriever can be similarity, MMR, hybrid, or self-query.
 
 ---
 
@@ -131,7 +131,7 @@ embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 llm = ChatOpenAI(model="gpt-5-mini", temperature=0.3)
 ```
 
-> [!note] **`temperature=0.3`, not `0`.** The self-query retriever used `temperature=0`, because it was generating a *filter* — a fact about the query, where any variation is a bug. Here the model is generating **alternative phrasings**, and the entire point is that they differ from one another. A little randomness is doing useful work. That contrast is worth remembering: match the temperature to whether you want one right answer or several different ones.
+> [!note] **`temperature=0.3`, not `0`.** The self-query retriever used `temperature=0`, because it was generating a **filter** — a fact about the query, where any variation is a bug. Here the model is generating **alternative phrasings**, and the entire point is that they differ from one another. A little randomness is doing useful work. That contrast is worth remembering: match the temperature to whether you want one right answer or several different ones.
 
 The corpus is six documents spanning **biotechnology, cybersecurity, neuroscience, renewable energy, robotics and genetic engineering** — deliberately spread out, so a broad query has several plausible directions to go:
 
@@ -153,7 +153,7 @@ A retriever to run, and a model to rephrase with. Everything else is defaults.
 
 ### The result
 
-Query: **"How are modern technologies improving human health?"** — broad, spanning several of those six domains.
+Query: **How are modern technologies improving human health?** — broad, spanning several of those six domains.
 
 | Retriever | Unique documents |
 |---|---|
@@ -185,9 +185,9 @@ Four retrievers, four different failures — worth keeping straight:
 | Self-query | the constraint is **not in the embeddings** | before retrieval, on the filter |
 | **Multi-query** | one vague query reaches **one region only** | before retrieval, on the query text |
 
-Self-query and multi-query both put an LLM in front of retrieval, but they extract different things from the sentence — a *filter* versus *more sentences*. They are not alternatives, and stacking them is reasonable: rephrase into variants, then let each variant carry its own metadata filter.
+Self-query and multi-query both put an LLM in front of retrieval, but they extract different things from the sentence — a **filter** versus **more sentences**. They are not alternatives, and stacking them is reasonable: rephrase into variants, then let each variant carry its own metadata filter.
 
 ---
 
 > [!tip] Interview framing
-> "Multi-query fixes a coverage problem. A vague question — 'how can I boost my health' — embeds to a single vector, so it lands in one region of the space and `k` nearest neighbours all come from that one region. If the knowledge base covers physical health, mental health and immunity, the user gets one of the three and nothing signals that the other two were never looked at. Good embedding models make this *worse*, because they separate those regions more cleanly. The fix is to have an LLM rephrase the query into N alternative phrasings — three by default — aimed at different aspects, run the same base retriever once per variant, then take the set union and deduplicate, since the variants overlap. In our demo it took unique documents from three to six on the same index. The cost is an LLM call plus N vector searches per question, so latency and context consumption both rise, and I'd usually set `include_original=True` so the user's own phrasing stays in the union — there's no guarantee the rephrasings beat it."
+> **Multi-query fixes a coverage problem. A vague question — 'how can I boost my health' — embeds to a single vector, so it lands in one region of the space and `k` nearest neighbours all come from that one region. If the knowledge base covers physical health, mental health and immunity, the user gets one of the three and nothing signals that the other two were never looked at. Good embedding models make this worse, because they separate those regions more cleanly. The fix is to have an LLM rephrase the query into N alternative phrasings — three by default — aimed at different aspects, run the same base retriever once per variant, then take the set union and deduplicate, since the variants overlap. In our demo it took unique documents from three to six on the same index. The cost is an LLM call plus N vector searches per question, so latency and context consumption both rise, and I'd usually set `include_original=True` so the user's own phrasing stays in the union — there's no guarantee the rephrasings beat it.**

@@ -57,13 +57,13 @@ These are Self-RAG's two questions, from [[12-Grounding-And-The-Support-Levels]]
 
 The lecture adds a twist worth catching: **you can define these checks as tools too**. A `grounded` tool and a `useful` tool, bound to the agent, called automatically when it wants to verify its own output.
 
-> [!important] That generalises further than it first looks. Once verification is a tool rather than a node, the agent decides *whether to verify at all* — cheap on a query it is confident about, thorough on one it is not.
+> [!important] That generalises further than it first looks. Once verification is a tool rather than a node, the agent decides **whether to verify at all** — cheap on a query it is confident about, thorough on one it is not.
 >
 > It also means the two checks stay independent. [[14-Is-The-Answer-Useful]] made the case for why grounded and useful must be judged separately: an answer can quote the documents perfectly and never address the question. Two tools keep that separation structurally.
 
 And if the response is not up to the mark, the agent is not limited to fixing the response. It can go back into **previous steps of the pipeline**, change them, and run the whole thing again.
 
-> [!info] That is the strongest statement of what "dynamic" means in this architecture. Self-RAG's outer loop in [[15-The-Retrieval-Rewrite-Loop]] could go back to retrieval with a rewritten query — one specific repair, wired in advance. Here a failed verification can reach back to *any* earlier decision: the source, the parameters, the decomposition, the order.
+> [!info] That is the strongest statement of what **dynamic** means in this architecture. Self-RAG's outer loop in [[15-The-Retrieval-Rewrite-Loop]] could go back to retrieval with a rewritten query — one specific repair, wired in advance. Here a failed verification can reach back to **any** earlier decision: the source, the parameters, the decomposition, the order.
 
 ---
 
@@ -90,11 +90,11 @@ Two of the four questions from [[19-The-Four-Questions]] are visible in this tab
 
 **It guarantees** three independent chances to catch a bad run: at the retrieval call, at the documents, and at the answer.
 
-**It does not guarantee** any of the three verdicts is right, and the last one is the most expensive to get wrong — a false "not grounded" sends the pipeline back through steps it already did correctly.
+**It does not guarantee** any of the three verdicts is right, and the last one is the most expensive to get wrong — a false **not grounded** sends the pipeline back through steps it already did correctly.
 
 **Cost:** on top of the three query-stage calls, this adds a relevance judgement per document plus two verification calls, before counting anything a retry or a re-run repeats.
 
 ---
 
 > [!tip] Interview framing
-> "The last three must-haves are all forms of not trusting what you just got. Six is retries, which here means switching to a different source when one fails or returns nothing — distinct from Self-RAG's retries, which re-ran the same source with a rewritten query. Seven is a relevance check on the retrieved documents, taking the query plus the documents and asking whether they're sufficient, with the option to transform, score or refine rather than just accept or reject — that's Corrective RAG's evaluator reused. Eight is verifying the response on two independent axes, grounded and useful, which is Self-RAG reused. The neat detail is that both verification checks can themselves be defined as tools, so the agent decides whether to verify at all. And if verification fails, the agent isn't limited to fixing the answer — it can go back and change any earlier step, the source, the parameters, the decomposition, and run again. That's the strongest form of 'dynamic' in the whole architecture."
+> **The last three must-haves are all forms of not trusting what you just got. Six is retries, which here means switching to a different source when one fails or returns nothing — distinct from Self-RAG's retries, which re-ran the same source with a rewritten query. Seven is a relevance check on the retrieved documents, taking the query plus the documents and asking whether they're sufficient, with the option to transform, score or refine rather than just accept or reject — that's Corrective RAG's evaluator reused. Eight is verifying the response on two independent axes, grounded and useful, which is Self-RAG reused. The neat detail is that both verification checks can themselves be defined as tools, so the agent decides whether to verify at all. And if verification fails, the agent isn't limited to fixing the answer — it can go back and change any earlier step, the source, the parameters, the decomposition, and run again. That's the strongest form of 'dynamic' in the whole architecture.**

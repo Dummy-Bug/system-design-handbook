@@ -28,7 +28,7 @@ def get_menu(
 Two genuinely different paths through one function, controlled entirely by whether `category` was supplied:
 
 - **No `category`** — the `if category:` block is skipped entirely, and the whole `MENU_ITEMS` list comes back as-is.
-- **`category` supplied** — a list comprehension filters `MENU_ITEMS` down to matching entries, comparing `.lower()` on both sides so `chai`, `Chai`, and `CHAI` all match the same category. If nothing matches, that's a `404` via `HTTPException`, not an empty success response — an empty `items: []` with a `200` would silently look like "this category legitimately has zero items," when what actually happened is the category doesn't exist at all.
+- **`category` supplied** — a list comprehension filters `MENU_ITEMS` down to matching entries, comparing `.lower()` on both sides so `chai`, `Chai`, and `CHAI` all match the same category. If nothing matches, that's a `404` via `HTTPException`, not an empty success response — an empty `items: []` with a `200` would silently look like **this category legitimately has zero items,** when what actually happened is the category doesn't exist at all.
 
 Both return paths build a `MenuResponse` — same shape either way, exactly the consistency that model was built for.
 

@@ -1,6 +1,6 @@
 > **One LLM-based application has several LLM evals.**
 
-That's the claim this note proves. Not "here are more evals you could write" — but *why a single eval pipeline is structurally incapable of telling you your application works.* There are two independent reasons, and the first one is demonstrated with a counterexample worth sitting with, because it's genuinely surprising the first time.
+That's the claim this note proves. Not **here are more evals you could write** — but **why a single eval pipeline is structurally incapable of telling you your application works.** There are two independent reasons, and the first one is demonstrated with a counterexample worth sitting with, because it's genuinely surprising the first time.
 
 By the end you'll have two taxonomies: **where** a system can fail (three levels), and **what kind** of failure it is (three risk categories). Together they tell you how many evals you need and where to put them.
 
@@ -10,7 +10,7 @@ By the end you'll have two taxonomies: **where** a system can fail (three levels
 
 ![[AI-Engineering/01-Agent-Evals/Images/v4-01-RAG-Architecture.png]]
 
-Standard shape, and you know it already. A query arrives at the **retriever**. The retriever uses it to fetch relevant documents from a **vector database**. Then the query *and* the retrieved documents both go to the **generator** — an LLM — which produces an answer grounded in that context.
+Standard shape, and you know it already. A query arrives at the **retriever**. The retriever uses it to fetch relevant documents from a **vector database**. Then the query **and** the retrieved documents both go to the **generator** — an LLM — which produces an answer grounded in that context.
 
 ## Reason 1 — a system has multiple failure points
 
@@ -28,11 +28,11 @@ Both have to work for the application to work. So you write one eval pipeline pe
 
 ### What faithfulness actually means
 
-Concretely. The question is *"What is the duration of the machine learning course?"* and the retrieved document says **3 weeks**.
+Concretely. The question is **What is the duration of the machine learning course?** and the retrieved document says **3 weeks**.
 
-A faithful answer is: *"The machine learning course duration is three weeks."* Nothing else.
+A faithful answer is: **The machine learning course duration is three weeks.** Nothing else.
 
-An unfaithful answer adds things that were never in the context — *"It is a great course"*, or *"you can also purchase the Python course, whose duration is four weeks."* Those may even be true. They are still failures, because the answer must be **grounded in the context** and nothing but the context.
+An unfaithful answer adds things that were never in the context — **It is a great course**, or **you can also purchase the Python course, whose duration is four weeks.** Those may even be true. They are still failures, because the answer must be **grounded in the context** and nothing but the context.
 
 ---
 
@@ -46,7 +46,7 @@ Now the interesting part. Suppose both evals are green — the retriever is prov
 
 Walk through what actually happens.
 
-The user asks: *"What is the duration of the machine learning course?"* The retriever is configured with **k = 5** — meaning it returns the five most relevant documents from the vector database.
+The user asks: **What is the duration of the machine learning course?** The retriever is configured with **k = 5** — meaning it returns the five most relevant documents from the vector database.
 
 What comes back:
 
@@ -58,19 +58,19 @@ d4  →  some random thing
 d5  →  "the duration of the ML course is 8 weeks"     ← the actual answer
 ```
 
-**Did the retriever do its job?** Yes. Genuinely yes. You gave it a budget of five documents and told it to bring back the right answer within that budget — and it did. The lecture's analogy is exact: *I'll give you five attempts and you need to crack the exam once in five. It cracked it.* By its own contract, the retriever succeeded. (Assume there's no reranker in the system yet — that's the point.)
+**Did the retriever do its job?** Yes. Genuinely yes. You gave it a budget of five documents and told it to bring back the right answer within that budget — and it did. The lecture's analogy is exact: **I'll give you five attempts and you need to crack the exam once in five. It cracked it.** By its own contract, the retriever succeeded. (Assume there's no reranker in the system yet — that's the point.)
 
 Now all five documents plus the question go to the generator. And the generator behaves the way generators behave: **it weights the earlier documents more heavily.** Either because that's the natural bias of position in the context, or because your system prompt explicitly told it to prioritise higher-ranked documents.
 
-So it looks at d1-d4, finds a duration figure in d2 — *6 weeks* — and answers:
+So it looks at d1-d4, finds a duration figure in d2 — **6 weeks** — and answers:
 
-> "The duration of the ML course is **6 weeks**."
+> **The duration of the ML course is 6 weeks.**
 
 Which is wrong.
 
 **But did the generator do its job?** Also yes. It was instructed to answer from the higher-priority documents, and it did exactly that. It did **not** hallucinate — the number 6 came from the context it was handed, not from thin air. It followed its instructions diligently. Its only sin was **combining the wrong pieces**.
 
-> [!important] The retriever was independently fine. The generator was independently fine. **And the pipeline still broke.** Component-level evals cannot catch this, because at the component level there is nothing to catch — both components satisfied their contracts. The failure lives in the *interaction*.
+> [!important] The retriever was independently fine. The generator was independently fine. **And the pipeline still broke.** Component-level evals cannot catch this, because at the component level there is nothing to catch — both components satisfied their contracts. The failure lives in the **interaction**.
 
 ### Which means you need a workflow-level eval
 
@@ -78,9 +78,9 @@ Which is wrong.
 
 A third eval, whose target is the **retriever + generator combination**. That eval flags this error — and better, it points at the fix.
 
-The diagnosis: the best document was **last in priority order**. So you add a **reranker** — a component whose job is to reorder retrieved results by relevance to the query. It lifts `d5` to the top and pushes `d1-d4` down. Now the generator's position bias works *for* you instead of against you, and the pipeline starts answering correctly.
+The diagnosis: the best document was **last in priority order**. So you add a **reranker** — a component whose job is to reorder retrieved results by relevance to the query. It lifts `d5` to the top and pushes `d1-d4` down. Now the generator's position bias works **for** you instead of against you, and the pipeline starts answering correctly.
 
-### And then: does *that* guarantee it works?
+### And then: does that guarantee it works?
 
 Three evals now — retriever, generator, workflow — all green. Is the application shippable?
 
@@ -99,7 +99,7 @@ That walkthrough generalises into three levels. Any LLM application can fail at 
 **Component level** — any single piece can fail on its own terms:
 prompt · retriever · reranker · query rewriter · embedding model · vector database · output parser · tool selector · memory · guardrails
 
-**Workflow level** — the components are individually fine but their *interaction* is broken:
+**Workflow level** — the components are individually fine but their **interaction** is broken:
 RAG workflow · agent workflow · multi-turn conversation workflow · structured-output workflow · document-extraction workflow
 
 **Application level** — everything works and the system is still not shippable:
@@ -124,7 +124,7 @@ flowchart TD
     W --> A
 ```
 
-> [!warning] Each level is **blind to the level above it.** Green at the component level says nothing about the workflow. Green at the workflow level says nothing about latency or cost. This is why "we have evals" is not a meaningful statement — the question is always *at which level.*
+> [!warning] Each level is **blind to the level above it.** Green at the component level says nothing about the workflow. Green at the workflow level says nothing about latency or cost. This is why **we have evals** is not a meaningful statement — the question is always **at which level.**
 
 ---
 
@@ -134,7 +134,7 @@ The second, independent reason you need many evals: **each failure point has mor
 
 Three quick illustrations, one per level:
 
-- **Application level** — the answer should be correct and helpful. It should *also* be **safe**. It is not acceptable for the chatbot to hand you another user's phone number and email address, however correct the rest of the answer was.
+- **Application level** — the answer should be correct and helpful. It should **also** be **safe**. It is not acceptable for the chatbot to hand you another user's phone number and email address, however correct the rest of the answer was.
 - **Workflow level** — faithfulness is one aspect. **Cost** is another: the retriever-plus-generator flow shouldn't cost more than some threshold per answer.
 - **Component level** — the retriever's job is fetching relevant documents. But its **latency** matters too. Fetching perfectly while taking five or ten seconds is still a broken component.
 
@@ -146,9 +146,9 @@ They group into three:
 
 | Category | The question it asks |
 |---|---|
-| **Application quality** | *"Is the answer any good?"* — does the app do its actual job well: correct, relevant, complete answers to what the user asked. The core "does it work" question. |
-| **Safety** | *"Could the answer cause harm?"* — does the app avoid hurting anyone or exposing anything it shouldn't. **Not** about whether the answer is good; about whether it's harmful. |
-| **Operational** | *"Is it fast, cheap, and reliable enough to run?"* — is the app practical to operate at scale. **Not** about what the answer says; about the system delivering it. |
+| **Application quality** | **Is the answer any good?** — does the app do its actual job well: correct, relevant, complete answers to what the user asked. The core **does it work** question. |
+| **Safety** | **Could the answer cause harm?** — does the app avoid hurting anyone or exposing anything it shouldn't. **Not** about whether the answer is good; about whether it's harmful. |
+| **Operational** | **Is it fast, cheap, and reliable enough to run?** — is the app practical to operate at scale. **Not** about what the answer says; about the system delivering it. |
 
 > [!tip] The clean way to hold the three apart: **quality is about the content of the answer, safety is about the harm the answer could do, and operational is about the system producing it.**
 
@@ -226,5 +226,5 @@ Two independent multipliers. **Levels** — component, workflow, application. **
 
 Two things worth carrying forward as interview answers, because both are counterintuitive and both are cheap to state:
 
-- *"Component-level green doesn't imply workflow-level green."* The d5-at-the-bottom example is the shortest proof of it, and it names its own fix — a reranker.
-- *"Quality, safety, and operational are three different questions about the same output."* Most people only evaluate the first.
+- **Component-level green doesn't imply workflow-level green.** The d5-at-the-bottom example is the shortest proof of it, and it names its own fix — a reranker.
+- **Quality, safety, and operational are three different questions about the same output.** Most people only evaluate the first.

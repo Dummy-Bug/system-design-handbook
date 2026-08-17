@@ -23,7 +23,7 @@ async def main():
     return [result1, result2]
 ```
 
-Note what you *can't* write: `await time.sleep(param)` is simply an error — `time.sleep` isn't awaitable, it was never coded to suspend itself and yield to a loop (the exact point from the vocabulary note). But nothing stops you from *calling* it inside a coroutine. The function still compiles, the tasks still get created and scheduled, everything *looks* like the working example. Run it:
+Note what you **can't** write: `await time.sleep(param)` is simply an error — `time.sleep` isn't awaitable, it was never coded to suspend itself and yield to a loop (the exact point from the vocabulary note). But nothing stops you from **calling** it inside a coroutine. The function still compiles, the tasks still get created and scheduled, everything **looks** like the working example. Run it:
 
 ```
 Do something with 1...
@@ -36,7 +36,7 @@ Task 2 fully completed
 Finished in 3.01 seconds
 ```
 
-**Three seconds — concurrency is gone.** And it's worse than the bare-await trap: look at the first two lines. In every working example both `Do something with...` lines appeared together at the start. Here `Do something with 2...` doesn't appear until task 1 is *completely finished*. The tasks didn't even overlap their starts.
+**Three seconds — concurrency is gone.** And it's worse than the bare-await trap: look at the first two lines. In every working example both `Do something with...` lines appeared together at the start. Here `Do something with 2...` doesn't appear until task 1 is **completely finished**. The tasks didn't even overlap their starts.
 
 ---
 
@@ -46,13 +46,13 @@ Walk the animation. Main suspends on `await task1`; the loop runs `fetch_data(1)
 
 ![[AI-Engineering/00-Python-Utils/08-Async/Images/09-Time-Sleep-Blocks-The-Event-Loop.png]]
 
-Read that frame carefully — it's the whole failure in one image. The blocking sleep is ticking in Background I/O with the annotation spelled out: *"time.sleep() blocks the entire event loop — no other tasks can run during this time!"* The running task still says **Running** (it never suspended), and the other task sits **Ready** — ready, waiting, and completely starved. The event loop can't run it. The event loop can't run *anything*. Control only returns when the blocking call finishes on its own.
+Read that frame carefully — it's the whole failure in one image. The blocking sleep is ticking in Background I/O with the annotation spelled out: **time.sleep() blocks the entire event loop — no other tasks can run during this time!** The running task still says **Running** (it never suspended), and the other task sits **Ready** — ready, waiting, and completely starved. The event loop can't run it. The event loop can't run **anything**. Control only returns when the blocking call finishes on its own.
 
-When the sleep completes there's nothing to "wake up" — no timer-fires-and-notifies dance, because we never registered one. The synchronous code just continues to the next line, finishes task 1, and only *then* does the loop get control and start task 2 — which promptly blocks the thread again for two more seconds. Sequential execution, `1 + 2 = 3` seconds, with async syntax decorating every line.
+When the sleep completes there's nothing to **wake up** — no timer-fires-and-notifies dance, because we never registered one. The synchronous code just continues to the next line, finishes task 1, and only **then** does the loop get control and start task 2 — which promptly blocks the thread again for two more seconds. Sequential execution, `1 + 2 = 3` seconds, with async syntax decorating every line.
 
-> [!danger] One blocking call anywhere in a task freezes **every** task on the loop. Cooperative multitasking has no referee: the loop cannot interrupt a running task, so a task that doesn't voluntarily suspend holds the entire single thread hostage. This is the "one greedy cook stops the whole McDonald's" failure from the first note, realised in code.
+> [!danger] One blocking call anywhere in a task freezes **every** task on the loop. Cooperative multitasking has no referee: the loop cannot interrupt a running task, so a task that doesn't voluntarily suspend holds the entire single thread hostage. This is the **one greedy cook stops the whole McDonald's** failure from the first note, realised in code.
 
-A small aside the animation walkthrough surfaced: after task 1 completes, *both* main and task 2 are ready — and the loop picks **task 2**, not main, because task 2 entered the ready queue first (FIFO, as in the previous note). Corey's own advice applies: don't obsess over that ordering; the lesson is only that readiness order, not await order, decides what runs.
+A small aside the animation walkthrough surfaced: after task 1 completes, **both** main and task 2 are ready — and the loop picks **task 2**, not main, because task 2 entered the ready queue first (FIFO, as in the previous note). Corey's own advice applies: don't obsess over that ordering; the lesson is only that readiness order, not await order, decides what runs.
 
 ---
 
@@ -68,6 +68,6 @@ Nobody ships `time.sleep` to production. But this failure is exactly what happen
 
 **What this example guarantees you'll remember:** blocking code inside a coroutine doesn't error, doesn't warn, and doesn't crash — it silently serialises your entire application. The only symptoms are timing (3s instead of 2s) and starts that don't overlap. Profile for it; you won't see it in the code's shape.
 
-> [!tip] Interview framing: "The event loop is single-threaded and cooperative, so a blocking call inside a coroutine — `time.sleep`, `requests.get`, a sync DB driver — never yields, and every other task starves until it returns. The code still runs, just with zero concurrency, which makes it a silent performance bug. The fix is async-native libraries for anything that waits — asyncio.sleep, httpx, async drivers. And if a blocking library has no async alternative, you push it off the loop into a thread or process pool."
+> [!tip] Interview framing: **The event loop is single-threaded and cooperative, so a blocking call inside a coroutine — `time.sleep`, `requests.get`, a sync DB driver — never yields, and every other task starves until it returns. The code still runs, just with zero concurrency, which makes it a silent performance bug. The fix is async-native libraries for anything that waits — asyncio.sleep, httpx, async drivers. And if a blocking library has no async alternative, you push it off the loop into a thread or process pool.**
 
-That last escape hatch — *what if the blocking library is the only option?* — is precisely the next example: `asyncio.to_thread` and `run_in_executor`.
+That last escape hatch — **what if the blocking library is the only option?** — is precisely the next example: `asyncio.to_thread` and `run_in_executor`.

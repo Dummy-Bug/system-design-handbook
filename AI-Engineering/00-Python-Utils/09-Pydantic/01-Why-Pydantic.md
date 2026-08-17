@@ -1,6 +1,6 @@
 Python has no static typing. A variable declared to hold a string can just as easily hold an integer, a list, or `None` later on, and nothing in the language stops that. For a script that's a non-issue. For a function that inserts data into a database, it's a real problem: nothing enforces that a `username` is actually a string or an `age` is actually a number before that data lands in storage.
 
-**Pydantic** is a Python library that closes this gap — it validates data *at runtime*, using the type hints you already write, and raises a clear error the moment something doesn't match.
+**Pydantic** is a Python library that closes this gap — it validates data **at runtime**, using the type hints you already write, and raises a clear error the moment something doesn't match.
 
 ---
 
@@ -31,9 +31,9 @@ print(user2)
 
 ![[AI-Engineering/00-Python-Utils/09-Pydantic/Images/00-manual-validation-single-error.png]]
 
-Only one error shows up: `TypeError: Invalid email format`. The `age` problem exists too, but the function crashes on the first `raise` it hits and never gets far enough to check `age`. Whoever's calling this function fixes the email, reruns it, and *then* discovers the age problem — one round-trip at a time, for however many fields have issues.
+Only one error shows up: `TypeError: Invalid email format`. The `age` problem exists too, but the function crashes on the first `raise` it hits and never gets far enough to check `age`. Whoever's calling this function fixes the email, reruns it, and **then** discovers the age problem — one round-trip at a time, for however many fields have issues.
 
-> [!important] It's just how a chain of `if ... raise` statements behaves. Each `raise` stops execution immediately, so only the first failing check is ever seen. The real problem this exposes is that hand-written validation reports errors one at a time and requires this much boilerplate *per field* — multiply it by every field a real model has (and real models have far more than three), and the function becomes mostly validation code with the actual logic buried inside it.
+> [!important] It's just how a chain of `if ... raise` statements behaves. Each `raise` stops execution immediately, so only the first failing check is ever seen. The real problem this exposes is that hand-written validation reports errors one at a time and requires this much boilerplate **per field** — multiply it by every field a real model has (and real models have far more than three), and the function becomes mostly validation code with the actual logic buried inside it.
 
 ---
 
@@ -59,7 +59,7 @@ The type hints (`str`, `int`) aren't just documentation the way they'd be on a p
 
 ![[AI-Engineering/00-Python-Utils/09-Pydantic/Images/01-pydantic-multiple-validation-errors.png]]
 
-**Both** problems are reported in a single error — `email` and `age` — with the exact reason for each. Nothing about the class definition mentions error handling; the three-line class *is* the whole validation logic, for every field, all at once.
+**Both** problems are reported in a single error — `email` and `age` — with the exact reason for each. Nothing about the class definition mentions error handling; the three-line class **is** the whole validation logic, for every field, all at once.
 
 
 ---

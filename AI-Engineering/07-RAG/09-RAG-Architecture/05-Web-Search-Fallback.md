@@ -1,10 +1,10 @@
-The evaluator can now say *incorrect*. So far that verdict does nothing except print a failure message and stop. This iteration gives it somewhere to go.
+The evaluator can now say **incorrect**. So far that verdict does nothing except print a failure message and stop. This iteration gives it somewhere to go.
 
 The principle is worth stating before the mechanism:
 
 > Even when the retrieved documents cannot answer the question, we do not want to send the user away empty-handed. We want to show them the right result — **even if we have to go to the web to find it.**
 
-That is what makes the system robust rather than merely honest. Traditional RAG at its best says *"I don't know."* CRAG treats "I don't know from my corpus" as a reason to look elsewhere.
+That is what makes the system robust rather than merely honest. Traditional RAG at its best says **I don't know.** CRAG treats **I don't know from my corpus** as a reason to look elsewhere.
 
 ---
 
@@ -40,7 +40,7 @@ Once you see that both paths end in the same refinement, the graph shape follows
 | **Correct** | retrieve → evaluate → **refine → generate** |
 | **Incorrect** | retrieve → evaluate → web search → **refine → generate** |
 
-The `refine` and `generate` nodes are shared. There is no need for a second refinement implementation and a second generation implementation for the web branch — the two paths differ only in *which documents* reach `refine`, and state can carry that difference.
+The `refine` and `generate` nodes are shared. There is no need for a second refinement implementation and a second generation implementation for the web branch — the two paths differ only in **which documents** reach `refine`, and state can carry that difference.
 
 ```mermaid
 flowchart TD
@@ -140,7 +140,7 @@ The ambiguous branch still terminates in a placeholder. It gets built in [[07-Th
 
 ## The query that used to fail
 
-> *AI news from the last month*
+> **AI news from the last month**
 
 **Verdict: INCORRECT** — as before, no chunk in three ML textbooks scores above 0.3 on a question about last month.
 
@@ -152,7 +152,7 @@ Same question, same corpus, same verdict — different outcome, because the verd
 
 ## What this actually bought
 
-> [!important] The system now has **two knowledge sources and a rule for choosing between them**. That is the real structural change, and it is bigger than "we added web search".
+> [!important] The system now has **two knowledge sources and a rule for choosing between them**. That is the real structural change, and it is bigger than **we added web search**.
 >
 > Traditional RAG has exactly one place to look and no way to know it looked in the wrong place. CRAG has a corpus, an external source, and an evaluator that decides which one the question belongs to.
 
@@ -162,13 +162,13 @@ Same question, same corpus, same verdict — different outcome, because the verd
 
 **It guarantees** that a query the corpus cannot answer still produces a grounded answer rather than a dead end — grounded in web results, refined the same way corpus documents are.
 
-**It does not guarantee** the web result is any better. It inherits everything wrong with web search: stale pages, SEO spam, contradictory sources, and no notion of authority. The refinement pass filters for *relevance*, not for *truth*.
+**It does not guarantee** the web result is any better. It inherits everything wrong with web search: stale pages, SEO spam, contradictory sources, and no notion of authority. The refinement pass filters for **relevance**, not for **truth**.
 
-And it does not distinguish between "the corpus doesn't cover this" and "the corpus covers it but retrieval missed it". Both look like `INCORRECT`, and both get sent to the web — so a retrieval bug quietly turns into a web search instead of surfacing as a bug.
+And it does not distinguish between **the corpus doesn't cover this** and **the corpus covers it but retrieval missed it**. Both look like `INCORRECT`, and both get sent to the web — so a retrieval bug quietly turns into a web search instead of surfacing as a bug.
 
-> [!warning] There is also a silent assumption in this iteration, flagged in the code's own comment: **web search does not fail.** There is no fallback node on this branch. If Tavily errors or returns nothing, `web_docs` is empty, refinement produces an empty context, and the generator falls back on *"I don't know"* — which is survivable, but it is not the same as handling the failure.
+> [!warning] There is also a silent assumption in this iteration, flagged in the code's own comment: **web search does not fail.** There is no fallback node on this branch. If Tavily errors or returns nothing, `web_docs` is empty, refinement produces an empty context, and the generator falls back on **I don't know** — which is survivable, but it is not the same as handling the failure.
 
 ---
 
 > [!tip] Interview framing
-> "When the evaluator returns incorrect, CRAG doesn't stop — it goes to an external knowledge source, web search via Tavily in this implementation. The non-obvious part is that web results get the *same* knowledge-refinement treatment as corpus chunks: decompose into strips, filter against the query, recompose. The paper is explicit about that, and it's what lets you reuse the refine and generate nodes rather than writing a parallel branch. The only change to `refine` is three lines reading the verdict out of state to decide whether it works on `good_docs` or `web_docs`. The structural point is that the system now has two knowledge sources and a rule for choosing between them. The caveat is that the evaluator can't tell 'the corpus doesn't cover this' from 'retrieval missed it' — both look incorrect, so a retrieval bug silently becomes a web search."
+> **When the evaluator returns incorrect, CRAG doesn't stop — it goes to an external knowledge source, web search via Tavily in this implementation. The non-obvious part is that web results get the same knowledge-refinement treatment as corpus chunks: decompose into strips, filter against the query, recompose. The paper is explicit about that, and it's what lets you reuse the refine and generate nodes rather than writing a parallel branch. The only change to `refine` is three lines reading the verdict out of state to decide whether it works on `good_docs` or `web_docs`. The structural point is that the system now has two knowledge sources and a rule for choosing between them. The caveat is that the evaluator can't tell 'the corpus doesn't cover this' from 'retrieval missed it' — both look incorrect, so a retrieval bug silently becomes a web search.**

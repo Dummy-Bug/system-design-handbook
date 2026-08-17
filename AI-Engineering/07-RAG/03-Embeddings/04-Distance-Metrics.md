@@ -1,4 +1,4 @@
-Retrieval came down to one unfinished word: "grab the query's **nearest** chunks." Nearest by what measure? A point in 512-dimensional space can be "close" to another in more than one sense, and the sense you pick changes what gets retrieved. There are three metrics you'll meet constantly: **Euclidean distance**, **cosine similarity**, and **dot product**.
+Retrieval came down to one unfinished word: **grab the query's nearest chunks.** Nearest by what measure? A point in 512-dimensional space can be **close** to another in more than one sense, and the sense you pick changes what gets retrieved. There are three metrics you'll meet constantly: **Euclidean distance**, **cosine similarity**, and **dot product**.
 
 ---
 
@@ -24,17 +24,17 @@ d = √( (2 − 3)² + (4 − 2)² )
 
 So A and B are `2.23` apart. And the reading is: **the lower the distance, the more similar the vectors.** Two chunks whose points are a short straight line apart mean nearly the same thing; a large distance means they're unrelated.
 
-> [!info] Euclidean distance = straight-line distance between two points. Range is `0` (identical) upward, with no upper bound. **Smaller = more similar.** It's the everyday notion of "how far apart," extended from 2-D to however many dimensions your embeddings have.
+> [!info] Euclidean distance = straight-line distance between two points. Range is `0` (identical) upward, with no upper bound. **Smaller = more similar.** It's the everyday notion of **how far apart,** extended from 2-D to however many dimensions your embeddings have.
 
 ### Where Euclidean distance breaks — the curse of dimensionality
 
-It has a real weakness, and it's the reason RAG rarely leans on it: **it is sensitive to the number of dimensions.** To see why, look again at the formula — it sums a squared difference from *every* dimension:
+It has a real weakness, and it's the reason RAG rarely leans on it: **it is sensitive to the number of dimensions.** To see why, look again at the formula — it sums a squared difference from **every** dimension:
 
 ```
 d = √( (x₁−y₁)² + (x₂−y₂)² + … + (xₙ−yₙ)² )
 ```
 
-For any given pair of chunks, only a **handful** of dimensions carry the real signal — the meaning that actually makes them similar or different. Every other dimension holds a tiny, near-random difference — **noise**. And Euclidean adds *all* of it under the root, signal and noise together. With few dimensions the signal ones dominate the sum. With hundreds of dimensions the sum is swamped by hundreds of accumulated tiny noise terms — and that accumulated noise is roughly **the same for every pair of points**, so all distances drift toward one middle value and near stops looking different from far.
+For any given pair of chunks, only a **handful** of dimensions carry the real signal — the meaning that actually makes them similar or different. Every other dimension holds a tiny, near-random difference — **noise**. And Euclidean adds **all** of it under the root, signal and noise together. With few dimensions the signal ones dominate the sum. With hundreds of dimensions the sum is swamped by hundreds of accumulated tiny noise terms — and that accumulated noise is roughly **the same for every pair of points**, so all distances drift toward one middle value and near stops looking different from far.
 
 Make it concrete. Take two chunks that are genuinely **similar** — they agree on the one meaningful dimension and differ only by a tiny ±0.1 jitter on all the others — and two that are genuinely **different** — a full `1.0` apart on the meaningful dimension, plus the same ±0.1 jitter everywhere else.
 
@@ -49,15 +49,15 @@ In 500 dimensions (now 499 noise dimensions, each ±0.1):
   different  →  √(1.0² + 4.99) = √5.99 = 2.45   → different is only ×1.1 farther ❌
 ```
 
-The `1.0` of real signal got **drowned by 2.23 of accumulated noise.** In 2-D the different pair stood out at ten times the distance; in 500-D it's a rounding error away from the similar pair — `2.23` vs `2.45`. Euclidean can no longer tell "same topic" from "different topic."
+The `1.0` of real signal got **drowned by 2.23 of accumulated noise.** In 2-D the different pair stood out at ten times the distance; in 500-D it's a rounding error away from the similar pair — `2.23` vs `2.45`. Euclidean can no longer tell **same topic** from **different topic.**
 
 That was one hand-picked example. Simulate it honestly — scatter random points and measure the **contrast**, `(farthest − nearest) / nearest`, as dimensions grow — and the same collapse appears every time:
 
 ![[AI-Engineering/07-RAG/03-Embeddings/Images/06-Curse-Of-Dimensionality.png]]
 
-Panel A is the example above; panel B is the general law. At 2 dimensions the farthest point is ~42× the nearest — enormous contrast. By **512 dimensions the contrast is 0.15** — the farthest chunk is only about 1.15× as far as the nearest. "Nearest neighbour" has almost stopped meaning anything.
+Panel A is the example above; panel B is the general law. At 2 dimensions the farthest point is ~42× the nearest — enormous contrast. By **512 dimensions the contrast is 0.15** — the farthest chunk is only about 1.15× as far as the nearest. **Nearest neighbour** has almost stopped meaning anything.
 
-> [!danger] The more dimensions, the less Euclidean distance can be trusted — this is the **curse of dimensionality**. Because the metric sums a squared difference from every dimension, hundreds of noise dimensions pile up and push all distances toward the same value (distance *concentration*), so near and far become indistinguishable. Embedding models routinely output hundreds or thousands of dimensions, exactly where this bites. Rule of thumb: Euclidean is fine for **low-dimensional** vectors, poor for the **high-dimensional** vectors embeddings actually produce.
+> [!danger] The more dimensions, the less Euclidean distance can be trusted — this is the **curse of dimensionality**. Because the metric sums a squared difference from every dimension, hundreds of noise dimensions pile up and push all distances toward the same value (distance **concentration**), so near and far become indistinguishable. Embedding models routinely output hundreds or thousands of dimensions, exactly where this bites. Rule of thumb: Euclidean is fine for **low-dimensional** vectors, poor for the **high-dimensional** vectors embeddings actually produce.
 
 **Why cosine escapes it:** cosine measures the **angle/direction**, not the summed length. Those hundreds of tiny noise jitters largely cancel out in direction and get normalized away with magnitude — so the direction still points at the signal even when the raw length is buried in noise. That robustness is the opening cosine similarity walks through next.
 
@@ -81,11 +81,11 @@ angle 180°  →  score  −1   →  opposite       (complementary)
 
 ### The property that makes it win: magnitude doesn't matter
 
-Here is the crucial bit. Cosine cares **only about direction, not magnitude** (length). Suppose the similarity between A and B is `0.7`. Now take a vector C that points in the exact same direction as B but is much longer or shorter — a different magnitude. The cosine similarity between A and C is *still* `0.7`, because the angle hasn't changed. **The length of the vector is simply invisible to the metric.**
+Here is the crucial bit. Cosine cares **only about direction, not magnitude** (length). Suppose the similarity between A and B is `0.7`. Now take a vector C that points in the exact same direction as B but is much longer or shorter — a different magnitude. The cosine similarity between A and C is **still** `0.7`, because the angle hasn't changed. **The length of the vector is simply invisible to the metric.**
 
 That is exactly the immunity Euclidean distance lacked. Because cosine ignores magnitude, it also shrugs off the dimensionality blow-up that made Euclidean unreliable — it keeps working cleanly for the high-dimensional vectors embedding models produce. Bounded, direction-based, magnitude-proof: that combination is why cosine similarity is the default similarity metric in RAG.
 
-> [!tip] Interview framing: "Cosine similarity scores the *angle* between two embedding vectors on a bounded −1-to-1 scale, so it's immune to vector magnitude and to the high-dimensionality that wrecks Euclidean distance. Two chunks about the same topic point the same way regardless of length, so they score near +1. That robustness is why it's the RAG default."
+> [!tip] Interview framing: **Cosine similarity scores the angle between two embedding vectors on a bounded −1-to-1 scale, so it's immune to vector magnitude and to the high-dimensionality that wrecks Euclidean distance. Two chunks about the same topic point the same way regardless of length, so they score near +1. That robustness is why it's the RAG default.**
 
 ---
 
@@ -100,7 +100,7 @@ e.g.  A = [2, 3, 5]   B = [2, 6, 2]
       A · B = (2·2) + (3·6) + (5·2) = 4 + 18 + 10 = 32
 ```
 
-Unlike cosine, the dot product is **unbounded** — the result can be any value, and it *is* affected by magnitude: make a vector longer and its dot products grow. On its own that makes it harder to interpret than a tidy −1-to-1 score. But there's an elegant relationship that ties it back to cosine — and to see it, we need two small building blocks first: **magnitude** and **normalization**.
+Unlike cosine, the dot product is **unbounded** — the result can be any value, and it **is** affected by magnitude: make a vector longer and its dot products grow. On its own that makes it harder to interpret than a tidy −1-to-1 score. But there's an elegant relationship that ties it back to cosine — and to see it, we need two small building blocks first: **magnitude** and **normalization**.
 
 ### Building block 1 — magnitude `‖A‖` is just the arrow's length
 
@@ -124,7 +124,7 @@ normalized A  =  [3/5, 4/5]  =  [0.6, 0.8]
 check the new length:  √(0.6² + 0.8²) = √(0.36 + 0.64) = √1 = 1  ✅
 ```
 
-Same direction as before, now length 1. A length-1 vector is called a **unit vector**. The one-line intuition: *keep the arrow's direction, throw away its length.*
+Same direction as before, now length 1. A length-1 vector is called a **unit vector**. The one-line intuition: **keep the arrow's direction, throw away its length.**
 
 ### The relationship — cosine is a dot product with the lengths divided out
 
@@ -136,7 +136,7 @@ cosine similarity(A, B) =        A · B
                               ‖A‖ · ‖B‖
 ```
 
-That division is the whole point: dividing out `‖A‖` and `‖B‖` **removes the lengths**, leaving only direction — which is exactly why cosine "ignores magnitude." Now watch what happens if the vectors are **already normalized** (both lengths 1): the denominator becomes `1 × 1 = 1`, and dividing by 1 does nothing:
+That division is the whole point: dividing out `‖A‖` and `‖B‖` **removes the lengths**, leaving only direction — which is exactly why cosine **ignores magnitude.** Now watch what happens if the vectors are **already normalized** (both lengths 1): the denominator becomes `1 × 1 = 1`, and dividing by 1 does nothing:
 
 ```
 with normalized vectors:   cosine(A, B) =  A · B  =  A · B
@@ -159,9 +159,9 @@ Normalize first, then just take the dot product:
   Â · B̂ = (0.6·0.8) + (0.8·0.6) = 0.48 + 0.48 = 0.96      ← identical answer ✅
 ```
 
-### Why that makes dot product *faster*
+### Why that makes dot product faster
 
-Both routes give `0.96`, so why prefer the dot product? It comes down to **when** you pay for the expensive operations — the square roots and the division. Computing **cosine** for one comparison forces the machine, *every single time*, to: take the dot product, **plus** compute `‖A‖` (square, sum, **square root**), **plus** compute `‖B‖` (square, sum, **another square root**), **plus** one **division**. The dot product route on pre-normalized vectors does only the first step.
+Both routes give `0.96`, so why prefer the dot product? It comes down to **when** you pay for the expensive operations — the square roots and the division. Computing **cosine** for one comparison forces the machine, **every single time**, to: take the dot product, **plus** compute `‖A‖` (square, sum, **square root**), **plus** compute `‖B‖` (square, sum, **another square root**), **plus** one **division**. The dot product route on pre-normalized vectors does only the first step.
 
 Now scale it to a real query against **10 million chunks**:
 
@@ -172,7 +172,7 @@ Dot product only:   10,000,000 × ( dot product )        ← if vectors are alre
 
 If you **normalize every chunk once, up front** — when you store it — then all those square roots and divisions are already baked in, and every one of the 10 million query-time comparisons collapses to a plain dot product (multiply and add). You've deleted **10 million square roots and 10 million divisions** from the hot path.
 
-> [!important] Normalize once at storage → then dot product **is** cosine similarity, without redoing the length maths on every comparison. Because `‖A‖ · ‖B‖ = 1` for unit vectors, the two metrics give the *same* ranking (`0.96` either way), but the dot product skips the square roots and division on every one of millions of comparisons. That's why vector databases normalize embeddings up front and use plain dot product internally — cosine's meaning at dot product's speed.
+> [!important] Normalize once at storage → then dot product **is** cosine similarity, without redoing the length maths on every comparison. Because `‖A‖ · ‖B‖ = 1` for unit vectors, the two metrics give the **same** ranking (`0.96` either way), but the dot product skips the square roots and division on every one of millions of comparisons. That's why vector databases normalize embeddings up front and use plain dot product internally — cosine's meaning at dot product's speed.
 
 ---
 

@@ -1,7 +1,7 @@
 #python #decorators #args-kwargs #python-utils
 
 
-Passing a function around is settled. Before going further, there's one piece of plumbing to get out of the way — the thing that eventually lets a single wrapper stand in front of *any* function, whatever arguments it takes. It only makes sense once the two ways of passing an argument are clear, so start there.
+Passing a function around is settled. Before going further, there's one piece of plumbing to get out of the way — the thing that eventually lets a single wrapper stand in front of **any** function, whatever arguments it takes. It only makes sense once the two ways of passing an argument are clear, so start there.
 
 ## Positional and keyword arguments
 
@@ -12,7 +12,7 @@ def describe(name, age, city):
     print(f"{name} | {age} | {city}")
 ```
 
-Nothing there marks a parameter as "positional" or "keyword". Those words describe **how the caller passes the value**, not how the function was written.
+Nothing there marks a parameter as **positional** or **keyword**. Those words describe **how the caller passes the value**, not how the function was written.
 
 ### Positional — matched by order
 
@@ -59,16 +59,16 @@ The reason is mechanical rather than stylistic. Positional matching works by cou
 
 > [!warning] Two error messages worth recognising, because both read oddly the first time.
 > ```python
-> describe("Tom", 22, "Pune", name="Jerry")
+> describe(**Tom**, 22, **Pune**, name=**Jerry**)
 > # TypeError: describe() got multiple values for argument 'name'
 > ```
 > `"Tom"` already filled `name` by position; `name="Jerry"` then tried to fill it again.
 > ```python
-> describe("Tom", 22)
+> describe(**Tom**, 22)
 > # TypeError: describe() missing 1 required positional
 > # argument: 'city'
 > ```
-> Python says "positional argument" even though `city` could have been passed by keyword. It means *this parameter can be filled positionally*, not *you were required to use position*.
+> Python says **positional argument** even though `city` could have been passed by keyword. It means **this parameter can be filled positionally**, not **you were required to use position**.
 
 ## `*args` — collect the leftover positional arguments
 
@@ -85,7 +85,7 @@ greet("Tom", "Jerry")
 TypeError: greet() takes 1 positional argument but 2 were given
 ```
 
-That's fine when you know what you'll be called with, and useless when you're writing something that must accept calls meant for *another* function. A `*` in the definition sweeps up however many positional arguments arrive:
+That's fine when you know what you'll be called with, and useless when you're writing something that must accept calls meant for **another** function. A `*` in the definition sweeps up however many positional arguments arrive:
 
 ```python
 def show(*args):
@@ -149,7 +149,7 @@ flowchart TD
     K --> D["→ kwargs = {'x': 10, 'y': 20}"]
 ```
 
-## The same symbols also *unpack*
+## The same symbols also unpack
 
 This is the half that confuses people, and the half decorators depend on. At a **call site**, `*` and `**` do the reverse — they take a collection apart into separate arguments:
 

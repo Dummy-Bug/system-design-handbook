@@ -35,16 +35,16 @@ def get_average_rating(play_name: str, session: Session = Depends(get_session)):
 
 ---
 
-## Selecting *expressions* instead of a *model* changes what comes back
+## Selecting expressions instead of a model changes what comes back
 
 ```python
 result = session.exec(query).first()
 average_rating, total_reviews = result
 ```
 
-Every earlier query in this project selected a whole model — `select(ReviewTable)` — and `session.exec(...)` handed back actual `ReviewTable` instances. This query selects two computed *expressions* instead of a model class, and that changes the shape of what comes back:
+Every earlier query in this project selected a whole model — `select(ReviewTable)` — and `session.exec(...)` handed back actual `ReviewTable` instances. This query selects two computed **expressions** instead of a model class, and that changes the shape of what comes back:
 
-> [!important] `session.exec(select(func.avg(...), func.count(...))).first()` returns a **`Row`** object — a plain tuple-like container holding one value per selected expression, in order. It is not a `ReviewTable`, and it has no `.rating` or `.id` attributes to access. That's exactly why the very next line unpacks it positionally — `average_rating, total_reviews = result` — the same way any two-element tuple would be unpacked. Selecting a model gives model instances back; selecting a set of expressions gives a `Row` of values back. Both go through the identical `session.exec(...)` call — the shape of what's *selected* is what determines the shape of what comes *out*.
+> [!important] `session.exec(select(func.avg(...), func.count(...))).first()` returns a **`Row`** object — a plain tuple-like container holding one value per selected expression, in order. It is not a `ReviewTable`, and it has no `.rating` or `.id` attributes to access. That's exactly why the very next line unpacks it positionally — `average_rating, total_reviews = result` — the same way any two-element tuple would be unpacked. Selecting a model gives model instances back; selecting a set of expressions gives a `Row` of values back. Both go through the identical `session.exec(...)` call — the shape of what's **selected** is what determines the shape of what comes **out**.
 
 **`.first()` instead of `.all()`** — this query is only ever going to produce exactly one row (one average, one count, for the whole matching set), so `.first()` fetches that single row directly rather than wrapping it in a list that would only ever hold one element.
 
@@ -57,6 +57,6 @@ if total_reviews == 0:
     raise HTTPException(status_code=404, detail=f"No reviews found for {play_name}")
 ```
 
-`AVG()` and `COUNT()` don't fail or error when nothing matches — `COUNT` correctly reports `0`, and `AVG` reports `None` (averaging zero numbers is undefined). So this check is genuinely necessary: without it, a play with no reviews at all would return `{"average_rating": None, "total_reviews": 0}` as if that were a valid, successful result, rather than clearly signaling "this play has nothing to average yet."
+`AVG()` and `COUNT()` don't fail or error when nothing matches — `COUNT` correctly reports `0`, and `AVG` reports `None` (averaging zero numbers is undefined). So this check is genuinely necessary: without it, a play with no reviews at all would return `{"average_rating": None, "total_reviews": 0}` as if that were a valid, successful result, rather than clearly signaling **this play has nothing to average yet.**
 
 `round(average_rating, 2)` in the success path is just presentation — capping the average to two decimal places rather than returning whatever floating-point precision SQLite happens to compute.

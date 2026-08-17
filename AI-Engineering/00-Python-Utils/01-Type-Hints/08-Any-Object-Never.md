@@ -1,6 +1,6 @@
 #python #type-hints #typing #any #python-utils
 
-## Two ways to say "anything"
+## Two ways to say anything
 
 ```python
  1  from typing import Any
@@ -56,15 +56,15 @@ AttributeError: 'int' object has no attribute 'upper'
 | `Any` | anything | **anything** — every operation allowed |
 | `object` | anything | **almost nothing** — only what every value supports |
 
-**`object` is the top of the hierarchy.** Every value in Python is one, `None` included. So it accepts everything honestly, and then permits only the operations *every* value supports — `str()`, `repr()`, `==`, `hash()`. Not `.upper()`, because integers exist. It forces you to narrow before doing anything, which is why line 9 is an error and a correct one.
+**`object` is the top of the hierarchy.** Every value in Python is one, `None` included. So it accepts everything honestly, and then permits only the operations **every** value supports — `str()`, `repr()`, `==`, `hash()`. Not `.upper()`, because integers exist. It forces you to narrow before doing anything, which is why line 9 is an error and a correct one.
 
-**`Any` is not a type at all — it's a switch.** It says *stop checking this*. Every operation is permitted because none is examined: `x.upper()`, `x + 1`, `x[0]`, `x.fly_to_the_moon()` — all fine, all unexamined.
+**`Any` is not a type at all — it's a switch.** It says **stop checking this**. Every operation is permitted because none is examined: `x.upper()`, `x + 1`, `x[0]`, `x.fly_to_the_moon()` — all fine, all unexamined.
 
 > [!important] **Reaching for `Any` is a decision to stop type-checking a region of code, not a description of the data.** `object` describes the data. `Any` describes your intention to stop looking.
 
 ## What the error on line 9 actually says
 
-It's easy to read `"object" has no attribute "upper"` as *this line is broken*. It isn't. Delete the call that crashed and run the rest:
+It's easy to read `"object" has no attribute "upper"` as **this line is broken**. It isn't. Delete the call that crashed and run the rest:
 
 ```python
  1  from typing import Any
@@ -102,16 +102,16 @@ Two `HELLO`s. The first is line 12; **the second is line 13, which ran straight 
 
 So the message means:
 
-> **"You promised `x` could be any object, and this line is not safe for every object."**
+> **You promised `x` could be any object, and this line is not safe for every object.**
 
-It's about the gap between what you claimed to accept and what you then did with it — reported once, at the definition, without a single caller existing. Line 9 works for strings and fails for integers, and since the annotation said "any object", both are in scope.
+It's about the gap between what you claimed to accept and what you then did with it — reported once, at the definition, without a single caller existing. Line 9 works for strings and fails for integers, and since the annotation said **any object**, both are in scope.
 
 Which sharpens the contrast:
 
 - **Line 9 (`object`)** — flagged once at the definition. You then narrow (`if isinstance(x, str):`) or change the annotation. Both fixes are honest.
 - **Line 5 (`Any`)** — never flagged, for any caller, ever. Identical statement, identical risk, silence.
 
-> [!warning] None of this is a *compile-time* error. Compiling asks only *is this well-formed Python?*, and both files compile perfectly. mypy is a separate program you choose to run, reading the text — not a phase of running your file. Skip it, and line 9's error does not exist as far as your program is concerned.
+> [!warning] None of this is a **compile-time** error. Compiling asks only **is this well-formed Python?**, and both files compile perfectly. mypy is a separate program you choose to run, reading the text — not a phase of running your file. Skip it, and line 9's error does not exist as far as your program is concerned.
 >
 > | | when it happens | what it checks |
 > |---|---|---|
@@ -202,7 +202,7 @@ The mechanism is mechanical:
 
 **Every operation on an `Any` produces another `Any`.** There is no step where the checker recovers. One `Any` at the top of a chain switches off checking for everything downstream — across function boundaries, through variables nobody annotated — and reports `Success` the whole way.
 
-> [!warning] That's the real cost, and why `Any` is not merely "permissive". `object` is permissive and **contained** — it stops you at the point of use. `Any` is permissive and **contagious** — it removes checking from code you never wrote it on.
+> [!warning] That's the real cost, and why `Any` is not merely **permissive**. `object` is permissive and **contained** — it stops you at the point of use. `Any` is permissive and **contagious** — it removes checking from code you never wrote it on.
 
 You can watch it happen with `reveal_type`, which asks mypy what it believes a value is:
 
@@ -308,9 +308,9 @@ Incompatible return value type (got "int | None", expected "int")  [return-value
 
 **With `-> Never`:** the checker knows `crash` never returns at all. Line 11 is therefore the end of that branch — control cannot get from there to line 12. The only way to reach `return port` is the path where `port is None` was false, and on that path `port` is an `int`. That's narrowing, working through a function call.
 
-> [!important] `-> None` means *"it returns, and the value is nothing."* `-> Never` means *"it does not return."* Two completely different claims, and only the second lets the checker eliminate a branch.
+> [!important] `-> None` means **it returns, and the value is nothing.** `-> Never` means **it does not return.** Two completely different claims, and only the second lets the checker eliminate a branch.
 
-`Never` has no values. You cannot make one, no variable can hold one, no function can successfully return one — which sounds useless until you notice that "no value can exist here" is a statement with real content: **this cannot happen.**
+`Never` has no values. You cannot make one, no variable can hold one, no function can successfully return one — which sounds useless until you notice that **no value can exist here** is a statement with real content: **this cannot happen.**
 
 ### It changes nothing at runtime
 
@@ -355,7 +355,7 @@ The exception propagates normally — **three frames**: line 17 called `get_port
 
 And the run confirms the checker's reasoning. Line 16, port present: line 12 printed and line 13 returned `8080`. Line 17, port missing: **line 12 did not print.** Control left at line 11 and never came back.
 
-So `Never` is a *true description of behaviour the code already had*. The function always raises, therefore it never returns, therefore anything after a call to it is unreachable. Without the annotation the checker was assuming `crash` might return normally, which was simply false.
+So `Never` is a **true description of behaviour the code already had**. The function always raises, therefore it never returns, therefore anything after a call to it is unreachable. Without the annotation the checker was assuming `crash` might return normally, which was simply false.
 
 ### And it's verified, not trusted
 
@@ -385,5 +385,5 @@ Four things to carry:
 1. `object` describes the data — everything is one, and you may only do what every value supports, so it forces you to narrow. `Any` describes your intention to stop checking, and permits every operation because it examines none.
 2. `Any` is **contagious**. Every operation on an `Any` yields another `Any`, so a single one at the top of a chain silently disables checking for everything downstream, and the checker reports success throughout.
 3. `Any` at a real boundary is correct — JSON, config, network. The discipline is **typing the boundary**: convert it to a real type at the point of entry so it cannot spread inward.
-4. `-> None` and `-> Never` are different claims. "Returns nothing" versus "does not return" — and only the second lets the checker rule a branch out.
+4. `-> None` and `-> Never` are different claims. **Returns nothing** versus **does not return** — and only the second lets the checker rule a branch out.
 

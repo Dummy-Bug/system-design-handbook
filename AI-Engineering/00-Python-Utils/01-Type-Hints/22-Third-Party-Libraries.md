@@ -74,7 +74,7 @@ mypy says `str`. Python returns an `int`.
 >
 > The `.py` is what runs. The `.pyi` is what gets type-checked. Nothing enforces that the two agree; they were made to disagree above purely to show which one wins.
 
-This is what *"Library stubs not installed"* means in a mypy error. Translated: **nobody has given me a `.pyi` file for this library.**
+This is what **Library stubs not installed** means in a mypy error. Translated: **nobody has given me a `.pyi` file for this library.**
 
 ## Why they exist: source you cannot edit
 
@@ -109,7 +109,7 @@ Same untouched `mylib.py` in both runs. The types came **entirely from the stub*
 
 That is the reason stubs exist, and it is a practical one rather than a technical one: you depend on a library, it has no annotations, and you cannot add them — it is not your code. A `.pyi` lets types be supplied **from outside the library, by someone who is not its author.**
 
-`types-requests` is exactly that: a separate package on PyPI, maintained by different people from `requests`, containing nothing but `.pyi` files. It is why mypy's error suggests installing a *second* package rather than telling you to go fix the first one.
+`types-requests` is exactly that: a separate package on PyPI, maintained by different people from `requests`, containing nothing but `.pyi` files. It is why mypy's error suggests installing a **second** package rather than telling you to go fix the first one.
 
 ## Two ways a library ends up typed
 
@@ -118,13 +118,13 @@ That is the reason stubs exist, and it is a practical one rather than a technica
 | **stub package** | outsiders | a separate package — `types-requests`, `types-redis` |
 | **`py.typed`** | the library's own authors | inline, in the real `.py` files |
 
-A modern library annotates its own source, so it needs no stub. It only needs to *announce* that its annotations are meant for you to rely on — and that announcement is an empty file called **`py.typed`**, one per package, at the package root. Zero bytes; its presence is the whole message.
+A modern library annotates its own source, so it needs no stub. It only needs to **announce** that its annotations are meant for you to rely on — and that announcement is an empty file called **`py.typed`**, one per package, at the package root. Zero bytes; its presence is the whole message.
 
 ## What mypy does with a library's body
 
 Two questions fall out of that, and both are worth answering by experiment rather than assertion: does mypy read the whole function or only the signature, and is an empty file really the entire switch?
 
-The test needs a **properly installed package**, not a local file — the two behave differently, which is itself the answer to the first question. `agentlib` is a real built-and-installed package whose one function is annotated *and* contains a deliberate error:
+The test needs a **properly installed package**, not a local file — the two behave differently, which is itself the answer to the first question. `agentlib` is a real built-and-installed package whose one function is annotated **and** contains a deliberate error:
 
 ```python
 1  async def fetch(url: str) -> int:
@@ -166,7 +166,7 @@ app.py:8: note: Revealed type is "Any"
 
 ### Whose errors are your problem
 
-Note what is *missing* from the first run: line 2 of `agentlib` is plainly wrong, and mypy never mentions it. Run the identical code as a local file in the project instead and it does:
+Note what is **missing** from the first run: line 2 of `agentlib` is plainly wrong, and mypy never mentions it. Run the identical code as a local file in the project instead and it does:
 
 ```
 mylib.py:2: error: Incompatible types in assignment (expression has type "str", variable has type "int")  [assignment]
@@ -191,7 +191,7 @@ The second run is the one to remember. Deleting **zero bytes** turned the same i
 
 `agentlib` with `py.typed` deleted is a real and common situation: the library **is** annotated, you can open the file and read `-> int` with your own eyes, and mypy hands you `Any`.
 
-The obvious wish — *read them anyway* — is a supported flag:
+The obvious wish — **read them anyway** — is a supported flag:
 
 ```
 $ mypy app.py                            ← default
@@ -264,7 +264,7 @@ app.py:8: note: Revealed type is "int"
 app.py:9: error: "int" has no attribute "totally_made_up"  [attr-defined]
 ```
 
-`int`, and the bug caught, from a library containing no type information at all. `mypy_path` means only *"also look in here for `.pyi` files."*
+`int`, and the bug caught, from a library containing no type information at all. `mypy_path` means only **also look in here for `.pyi` files.**
 
 ### The trap: a stub is all-or-nothing
 
@@ -293,7 +293,7 @@ This follows from the rule established at the top of the note — when a `.pyi` 
 
 > [!warning] **A stub is the complete truth about that module, as far as the checker is concerned. Anything you leave out does not exist.**
 >
-> That flips how writing one feels. It looks like *"annotate the bits I care about"*; it is really *"declare the module's entire public surface, or lose the parts you skipped."* Stub the one function you need from a large library and you have just deleted the other four hundred.
+> That flips how writing one feels. It looks like **annotate the bits I care about**; it is really **declare the module's entire public surface, or lose the parts you skipped.** Stub the one function you need from a large library and you have just deleted the other four hundred.
 
 ## The option to reach for first
 
@@ -312,7 +312,7 @@ async def shutdown() -> None:
     await close()
 ```
 
-One module of your own that imports the untyped library, absorbs the `Any` **in exactly one place**, and re-exports it behind signatures you wrote. Every other file imports *your* module and is fully checked.
+One module of your own that imports the untyped library, absorbs the `Any` **in exactly one place**, and re-exports it behind signatures you wrote. Every other file imports **your** module and is fully checked.
 
 No stub to keep in sync as the library changes, no risk of deleting four hundred functions you never declared, and the untyped surface of the whole project is one file you can point at in review.
 
@@ -333,7 +333,7 @@ No stub to keep in sync as the library changes, no risk of deleting four hundred
 
 Five things to carry:
 
-1. mypy learns a library's types by **reading that library**. There are two ways it is allowed to: a `.pyi` **stub** — a types-only file, signatures with `...` bodies, read *instead of* the source — or a **`py.typed`** marker granting permission to trust the source's own annotations. One route from outside the library, one from inside.
+1. mypy learns a library's types by **reading that library**. There are two ways it is allowed to: a `.pyi` **stub** — a types-only file, signatures with `...` bodies, read **instead of** the source — or a **`py.typed`** marker granting permission to trust the source's own annotations. One route from outside the library, one from inside.
 2. `py.typed` contains nothing. Deleting zero bytes turns a fully annotated, installed package from `int` into `Any`. It is not the types — it is **permission to use the types that were already there**.
 3. mypy reads an installed dependency's whole body but **reports no errors inside it**; for a local project file it reports them. Your dependencies' internal mistakes are not your build's problem.
 4. When a library is annotated but unmarked, `follow_untyped_imports` scoped to that module gets you the real types. Scoped per-module in config, never as a global flag — a global one trusts every untyped dependency you have.

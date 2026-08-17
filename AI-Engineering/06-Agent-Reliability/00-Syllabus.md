@@ -4,7 +4,7 @@
 
 17 concepts. **Generic** — the field, not Xarvis. Map afterwards.
 
-> Learn the full surface first, *then* decide what Xarvis can demonstrate. Xarvis is a short-horizon agent (2-4 steps), so the long-horizon half of this block will land as theory — and that half is exactly what 2026 interviews probe.
+> Learn the full surface first, **then** decide what Xarvis can demonstrate. Xarvis is a short-horizon agent (2-4 steps), so the long-horizon half of this block will land as theory — and that half is exactly what 2026 interviews probe.
 
 **Currency check (2026-07-30) — this is the fastest-moving block.** The consensus finding is blunt: **token accumulation is the primary failure mode of long-horizon agents**, and it hits frontier models as hard as small ones. A model scoring **98.1 on a clean single-prompt eval drops to 64.1** when the same information is distributed across a multi-turn agent run. Two more numbers worth memorising: agent success rates begin declining after roughly **35 minutes of human-time-equivalent work**, and **doubling task duration quadruples the failure rate** rather than doubling it. Checkpointing every step cuts wasted processing by **60%+** on multi-step workflows.
 
@@ -15,7 +15,7 @@ The organising framework that emerged in 2026 is **write / select / compress / i
 ## A · Why agents fail
 
 **1. The reliability arithmetic**
-Per-step success compounds multiplicatively: `p^n`. 0.95 per step over 20 steps ≈ 0.36 end to end. Why "the model got better" doesn't rescue a long chain, and why this single equation dictates architecture.
+Per-step success compounds multiplicatively: `p^n`. 0.95 per step over 20 steps ≈ 0.36 end to end. Why **the model got better** doesn't rescue a long chain, and why this single equation dictates architecture.
 
 **2. Workflow vs agent — and when not to build one**
 An agent directs its own loop; a workflow is a fixed sequence with a model as one step. The default should be the workflow. Agent maximalism as the most common design failure.
@@ -71,7 +71,7 @@ Orchestrator-worker and supervisor patterns. Handoffs vs orchestration. Where mu
 ## E · Verification
 
 **17. Reproducibility and post-hoc debugging**
-"A customer says the agent did something wrong three days ago." Can you reproduce it? Deterministic replay harnesses, trace-based reconstruction, and what must be captured at runtime for the answer to be yes. Defining SLOs for an agent when every span returns 200 and latency looks fine.
+**A customer says the agent did something wrong three days ago.** Can you reproduce it? Deterministic replay harnesses, trace-based reconstruction, and what must be captured at runtime for the answer to be yes. Defining SLOs for an agent when every span returns 200 and latency looks fine.
 
 ---
 
@@ -92,12 +92,12 @@ Orchestrator-worker and supervisor patterns. Handoffs vs orchestration. Where mu
 |---|---|
 | Trajectory evals, pass@k vs pass^k as reliability metrics | Block 1 |
 | Tracing plumbing, span design | Block 2 |
-| Cascading failure as a *security* concern (`ASI08`) | Block 4 |
-| Token budgets as a *cost* lever | Block 5 |
+| Cascading failure as a **security** concern (`ASI08`) | Block 4 |
+| Token budgets as a **cost** lever | Block 5 |
 
 ## Xarvis mapping
 
-*Filled after learning.* **applicable** / **theory-only** / **parked**.
+**Filled after learning.** **applicable** / **theory-only** / **parked**.
 
 Going in — this is the block where Xarvis is strongest on paper and least measured in practice:
 
@@ -113,5 +113,5 @@ Going in — this is the block where Xarvis is strongest on paper and least meas
 - [Long-horizon agent goal persistence and multi-day tasks](https://zylos.ai/research/2026-05-15-long-horizon-agent-goal-persistence/)
 - [Compaction as Epistemic Failure](https://arxiv.org/html/2607.13071) — agents fabricating confirmed results from killed processes
 - [Beyond the Leaderboard: tool-use, planning, and reasoning failures in LLM agents](https://arxiv.org/pdf/2607.05775)
-- Anthropic — *Building Effective Agents* (the workflows-before-agents argument)
+- Anthropic — **Building Effective Agents** (the workflows-before-agents argument)
 - Corpus: `06-agents-and-tool-use/` Q1-Q3, Q14-Q22, Q29, Q38, Q43-Q50, Q53 · `08-inference-and-production/` Q39-Q40

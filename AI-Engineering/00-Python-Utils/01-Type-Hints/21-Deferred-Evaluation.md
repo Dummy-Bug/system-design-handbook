@@ -31,7 +31,7 @@ NameError: name 'Agent' is not defined
 
 Two things stand out.
 
-**The direction is reversed.** Everywhere else in this folder, mypy complains about code Python runs happily. Here mypy is content and Python refuses. The checker reads the source as text and has no trouble seeing that `Agent` is the class being defined; the interpreter has to actually *have* it.
+**The direction is reversed.** Everywhere else in this folder, mypy complains about code Python runs happily. Here mypy is content and Python refuses. The checker reads the source as text and has no trouble seeing that `Agent` is the class being defined; the interpreter has to actually **have** it.
 
 **And line 9 never ran.** This is not a bug that surfaces when the method is called — the module will not import.
 
@@ -66,7 +66,7 @@ $ python3 fw1.py
 5. after the class statement, Agent = <class '__main__.Agent'>
 ```
 
-Those `print` calls sit inside a class body and they **ran**. A `class` statement is not a declaration the way it is in Java — Python *executes* the body, top to bottom, like any other block.
+Those `print` calls sit inside a class body and they **ran**. A `class` statement is not a declaration the way it is in Java — Python **executes** the body, top to bottom, like any other block.
 
 The order is the entire answer:
 
@@ -77,7 +77,7 @@ The order is the entire answer:
 
 Line 7 happens at step 2. The name does not exist until step 4.
 
-> [!important] `async def spawn_child(self) -> Agent:` is a line **in the class body**, so it runs at step 2. The method is being *defined*, not called — and building the function object means evaluating its annotations right there, which sends Python looking for a name that is still two steps from existing.
+> [!important] `async def spawn_child(self) -> Agent:` is a line **in the class body**, so it runs at step 2. The method is being **defined**, not called — and building the function object means evaluating its annotations right there, which sends Python looking for a name that is still two steps from existing.
 >
 > Nothing about this is special to classes referring to themselves. It is the general rule: **an annotation is evaluated where it is written, so it can only name what exists at that moment.**
 
@@ -119,9 +119,9 @@ mypy, which reads the file as text and never runs it, sees the string and looks 
 
 > [!important] This is the pattern for the entire concept: **the checker needs a name it can resolve; the interpreter needs an expression it can evaluate.** A quoted annotation gives each of them exactly what it needs.
 
-Line 9 — `return Agent(...)`, unquoted — is fine, because it runs when the method is *called*, long after step 4. Only the annotation was early.
+Line 9 — `return Agent(...)`, unquoted — is fine, because it runs when the method is **called**, long after step 4. Only the annotation was early.
 
-And quoting is safe for a reason established all the way back in concept 1: **annotations are never enforced**, so the runtime *value* of one is irrelevant to behaviour. Degrading it to a string costs nothing. The function returns a real `Agent` regardless of what its annotation says.
+And quoting is safe for a reason established all the way back in concept 1: **annotations are never enforced**, so the runtime **value** of one is irrelevant to behaviour. Degrading it to a string costs nothing. The function returns a real `Agent` regardless of what its annotation says.
 
 ## Turning it off for the whole file
 
@@ -156,7 +156,7 @@ __init__   : {'name': 'str', 'return': 'None'}
 
 **Line 10 has no quotes and it works.**
 
-The last two output lines say why. `'Agent'`, `'str'`, `'None'` — every one a string, none of them quoted in the source. That import tells Python: *do not evaluate annotations in this file; keep the source text.* It is the quoting trick applied automatically to everything, including annotations that never needed it.
+The last two output lines say why. `'Agent'`, `'str'`, `'None'` — every one a string, none of them quoted in the source. That import tells Python: **do not evaluate annotations in this file; keep the source text.** It is the quoting trick applied automatically to everything, including annotations that never needed it.
 
 | | what Python stores | needs the name to exist? |
 |---|---|---|
@@ -166,7 +166,7 @@ The last two output lines say why. `'Agent'`, `'str'`, `'None'` — every one a 
 
 Quoting is surgical; the import is blanket. In a file where several classes reference each other, the blanket version is what you want — ordering stops being something you think about.
 
-### What "evaluate" actually means
+### What evaluate actually means
 
 Worth making concrete, because the whole concept turns on it. **Evaluate = run the expression and produce a value.** Here the annotation is a function call, so it can be watched:
 
@@ -204,16 +204,16 @@ Worth making concrete, because the whole concept turns on it. **Evaluate = run t
 3. stored annotation: {'x': 'make_type()', 'return': 'None'}
 ```
 
-- **Evaluated** — Python *ran* `make_type()`. The print fired. What is stored is `<class 'int'>`, the **result**.
+- **Evaluated** — Python **ran** `make_type()`. The print fired. What is stored is `<class 'int'>`, the **result**.
 - **Not evaluated** — the print never fired. What is stored is `'make_type()'`, the **source text**, characters and all.
 
-Note the timing in the first run: the print lands between "1" and "2", *before* `handle` is ever called. Defining a function evaluates its annotations immediately — the same step-2 problem the `Agent` class had, in a plain function.
+Note the timing in the first run: the print lands between **1** and **2**, **before** `handle` is ever called. Defining a function evaluates its annotations immediately — the same step-2 problem the `Agent` class had, in a plain function.
 
 ## What the future import costs
 
 It is not switched on by default, and the reason is `20-Annotated`'s whole premise: **some libraries read annotations at runtime.** Pydantic builds validators by looking at yours.
 
-Under `from __future__ import annotations` those annotations are strings. Pydantic needs the actual class object; it cannot build a validator out of six characters of text. So it has to turn `'Agent'` back into `Agent` — find what that name meant *in the module where it was written*. That is what `typing.get_type_hints()` does, and why it needs the function's globals: it re-evaluates the string, later, in the right place.
+Under `from __future__ import annotations` those annotations are strings. Pydantic needs the actual class object; it cannot build a validator out of six characters of text. So it has to turn `'Agent'` back into `Agent` — find what that name meant **in the module where it was written**. That is what `typing.get_type_hints()` does, and why it needs the function's globals: it re-evaluates the string, later, in the right place.
 
 Which leaves both designs flawed:
 
@@ -272,7 +272,7 @@ $ python3 main.py
 ImportError: cannot import name 'AgentState' from 'state'
 ```
 
-Same reversal — mypy content, Python dead — and the same *kind* of cause, timing:
+Same reversal — mypy content, Python dead — and the same **kind** of cause, timing:
 
 1. `main.py` starts importing `state`
 2. `state.py` line 1 → go and import `tools`
@@ -294,7 +294,7 @@ ImportError: cannot import name 'AgentState' from 'state'
 
 Still dead — and note **which line**. Line 3, the `import` statement itself, not an annotation.
 
-That is the gap. The future import changed what happens to the *annotations*, but `from state import AgentState` is a plain statement that runs regardless, and it is the thing that deadlocks. The annotations were made not to need `AgentState`, and then it was imported anyway.
+That is the gap. The future import changed what happens to the **annotations**, but `from state import AgentState` is a plain statement that runs regardless, and it is the thing that deadlocks. The annotations were made not to need `AgentState`, and then it was imported anyway.
 
 There are two separate problems here:
 
@@ -307,7 +307,7 @@ Neither fix addresses the other's problem.
 
 ### `TYPE_CHECKING` — one name, two truths
 
-Look at *why* each import is there. `state.py` imports `Tool` only to write `tool: Tool`; `tools.py` imports `AgentState` only to write `state: AgentState`. Neither module ever calls the other's code — `record()` uses `tool.name`, `run()` uses `state.record()`, both reached through arguments handed in at runtime.
+Look at **why** each import is there. `state.py` imports `Tool` only to write `tool: Tool`; `tools.py` imports `AgentState` only to write `state: AgentState`. Neither module ever calls the other's code — `record()` uses `tool.name`, `run()` uses `state.record()`, both reached through arguments handed in at runtime.
 
 So the requirement is precise: **the import must run for mypy and not run for Python.**
 
@@ -355,7 +355,7 @@ False
 
 > [!important] **Both halves are load-bearing.**
 >
-> Remove `if TYPE_CHECKING:` and Python deadlocks on the import. Remove line 1 and Python crashes on the *annotation* instead — `Tool` was never imported, so evaluating `tool: Tool` finds nothing.
+> Remove `if TYPE_CHECKING:` and Python deadlocks on the import. Remove line 1 and Python crashes on the **annotation** instead — `Tool` was never imported, so evaluating `tool: Tool` finds nothing.
 >
 > `TYPE_CHECKING` removes the import; the future import (or quotes) makes the annotation survive its absence. Neither works alone.
 
@@ -367,6 +367,6 @@ Five things to carry:
 
 1. A `class` statement is **executed**, not declared. Its body runs top to bottom, and the class name is bound only after the body finishes — which is why a method annotated `-> Agent` inside `class Agent` raises `NameError` at import time, before anything is ever called.
 2. The failure direction is the reverse of everything else in this folder: **mypy passes, Python crashes.** The checker reads the file as text and has no ordering problem; the interpreter has to actually possess the object.
-3. Quoting an annotation replaces a name lookup with a string literal, which needs nothing to exist. `from __future__ import annotations` applies that to every annotation in the file. Both are safe because annotations are never enforced (concept 1), so the stored *value* of one has no effect on behaviour.
+3. Quoting an annotation replaces a name lookup with a string literal, which needs nothing to exist. `from __future__ import annotations` applies that to every annotation in the file. Both are safe because annotations are never enforced (concept 1), so the stored **value** of one has no effect on behaviour.
 4. The cost of the future import is that runtime readers — Pydantic, anything built on `20-Annotated` — receive strings and must re-resolve them with `typing.get_type_hints()`, which needs the defining module's globals. Both designs are flawed; 3.14's PEP 649/749 lazy evaluation is the attempt to have both.
 5. Circular imports are two problems wearing one error message. `if TYPE_CHECKING:` stops the import running at runtime — it is a plain constant that is `False` in Python and hard-coded `True` in checkers — and the future import or quotes keep the annotation valid once the name is gone. Applying only one of the two leaves you with a crash on the other line.

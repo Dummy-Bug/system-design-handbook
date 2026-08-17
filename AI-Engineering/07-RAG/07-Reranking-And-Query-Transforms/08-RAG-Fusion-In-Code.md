@@ -5,9 +5,9 @@ The class is built to fuse in **two different ways**.
 ![[AI-Engineering/07-RAG/07-Reranking-And-Query-Transforms/Images/20-Two-Ways-To-Fuse.png]]
 
 - **① Query → rephrased sub-queries.** One retriever, several queries. This is RAG Fusion as described so far.
-- **② Ensemble retriever.** Several *retrievers*, one query. LangChain's `EnsembleRetriever` runs them in parallel and merges — and **it already fuses with RRF internally**.
+- **② Ensemble retriever.** Several **retrievers**, one query. LangChain's `EnsembleRetriever` runs them in parallel and merges — and **it already fuses with RRF internally**.
 
-Same fusion idea, two different things being fused: several *queries* against one retriever, or one *query* against several retrievers.
+Same fusion idea, two different things being fused: several **queries** against one retriever, or one **query** against several retrievers.
 
 ---
 
@@ -33,7 +33,7 @@ if not logger.handlers:
     logger.addHandler(_file_handler)
 ```
 
-> [!info] The logging is not decoration. RAG Fusion is a multi-stage process whose output is several steps removed from its input — when three documents come back you cannot tell by looking whether the sub-queries were sensible, which run retrieved what, or how the scores accumulated. The log records the generated sub-queries, the documents retrieved per sub-query, and the final RRF scores, which makes *"why did I get these three?"* an answerable question.
+> [!info] The logging is not decoration. RAG Fusion is a multi-stage process whose output is several steps removed from its input — when three documents come back you cannot tell by looking whether the sub-queries were sensible, which run retrieved what, or how the scores accumulated. The log records the generated sub-queries, the documents retrieved per sub-query, and the final RRF scores, which makes **why did I get these three?** an answerable question.
 
 Sub-queries are requested as structured output, so a list comes back rather than prose to parse:
 
@@ -190,7 +190,7 @@ response = generation_chain.invoke({"context": context, "question": query})
 
 ### The ensemble variant
 
-The second notebook keeps everything above and swaps the retrieval half — two retrievers over the *same* store, differing in search strategy:
+The second notebook keeps everything above and swaps the retrieval half — two retrievers over the **same** store, differing in search strategy:
 
 ```python
 similarity_retriever = vectorstore.as_retriever(
@@ -210,9 +210,9 @@ rag_fusion = RAGFusion.from_retrievers(
 
 No LLM call, no rephrasing — and per the branch above, no hand-written RRF either. `EnsembleRetriever` runs both retrievers in parallel and fuses their rankings with its own RRF.
 
-> [!note] This pairing is a sensible one rather than an arbitrary demo. Plain similarity returns the closest matches, which tend to resemble each other; **MMR** deliberately trades some closeness for diversity. Fusing them means a document must be either very close *or* usefully different to survive — and one that is both will appear in both lists and win on consistency.
+> [!note] This pairing is a sensible one rather than an arbitrary demo. Plain similarity returns the closest matches, which tend to resemble each other; **MMR** deliberately trades some closeness for diversity. Fusing them means a document must be either very close **or** usefully different to survive — and one that is both will appear in both lists and win on consistency.
 
 ---
 
 > [!tip] Interview framing
-> "There's no built-in RAG Fusion retriever, so it's a hand-rolled class. The core is about fifteen lines: for each retrieval run, enumerate the documents from rank 1, compute `1/(rank+60)`, and accumulate into a dict keyed on `page_content` holding a `(score, document)` tuple — keyed on the text because each run is a separate retrieval call, so the same chunk comes back as different Python objects and identity comparison would never match. Then sort by accumulated score descending. The class exposes two constructors and they behave differently in a way that's easy to misread: `from_llm` generates sub-queries and runs the hand-written RRF, while `from_retrievers` wraps a LangChain `EnsembleRetriever` and never touches that method, because `EnsembleRetriever` already does RRF internally. So the same class fuses across queries or across retrievers, using two different RRF implementations depending on how you constructed it. The demo also logs the generated sub-queries, per-run retrievals and final scores, which is what makes the output debuggable at all."
+> **There's no built-in RAG Fusion retriever, so it's a hand-rolled class. The core is about fifteen lines: for each retrieval run, enumerate the documents from rank 1, compute `1/(rank+60)`, and accumulate into a dict keyed on `page_content` holding a `(score, document)` tuple — keyed on the text because each run is a separate retrieval call, so the same chunk comes back as different Python objects and identity comparison would never match. Then sort by accumulated score descending. The class exposes two constructors and they behave differently in a way that's easy to misread: `from_llm` generates sub-queries and runs the hand-written RRF, while `from_retrievers` wraps a LangChain `EnsembleRetriever` and never touches that method, because `EnsembleRetriever` already does RRF internally. So the same class fuses across queries or across retrievers, using two different RRF implementations depending on how you constructed it. The demo also logs the generated sub-queries, per-run retrievals and final scores, which is what makes the output debuggable at all.**

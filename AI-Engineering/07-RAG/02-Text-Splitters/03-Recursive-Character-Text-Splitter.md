@@ -26,11 +26,11 @@ The algorithm, in plain words:
 1. **Split by the top separator** (`"\n\n"`) — the text falls apart into paragraphs.
 2. **Measure each piece** against `chunk_size`.
 3. A piece that **fits** → keep it as a chunk. Done — no further cutting.
-4. A piece that's **too big** → recursively split *that piece* with the **next** separator down (`"\n"` — lines), and repeat the measurement.
+4. A piece that's **too big** → recursively split **that piece** with the **next** separator down (`"\n"` — lines), and repeat the measurement.
 5. Still too big at the line level → split by spaces into words. (And in theory, characters after that.)
 6. **Merge small neighbours back together.** After the recursive splitting, adjacent small pieces are re-combined — as long as the combination stays within `chunk_size` — so the final chunks approach the optimal length instead of arriving as confetti.
 
-That last step is what makes the output usable: the recursion cuts *down* until pieces fit, then the merge builds *up* until chunks are as full as the limit allows.
+That last step is what makes the output usable: the recursion cuts **down** until pieces fit, then the merge builds **up** until chunks are as full as the limit allows.
 
 ```mermaid
 flowchart TD
@@ -83,9 +83,9 @@ splitter.split_text(text)
 #  'We are', 'Learning', 'about RAG']
 ```
 
-Ten chunks, none over 10 characters, and — look closely — **not one broken word anywhere**. The plain character splitter with `separator=""` would have produced `Hi how are`, ` you\nMy na`, `me is Rahu`… slicing `name` and `Rahul` mid-word. The recursive splitter, forced into an impossibly small budget, degraded *gracefully*: whole words, packed as tightly as the limit allowed.
+Ten chunks, none over 10 characters, and — look closely — **not one broken word anywhere**. The plain character splitter with `separator=""` would have produced `Hi how are`, ` you\nMy na`, `me is Rahu`… slicing `name` and `Rahul` mid-word. The recursive splitter, forced into an impossibly small budget, degraded **gracefully**: whole words, packed as tightly as the limit allowed.
 
-> [!info] That is the recursive splitter's core promise: it always cuts at the **most meaningful boundary that still fits**. Paragraphs if possible, sentences if not, words as the last practical resort. `chunk_size` is respected *and* meaning is respected — the two things the plain character splitter couldn't do at the same time.
+> [!info] That is the recursive splitter's core promise: it always cuts at the **most meaningful boundary that still fits**. Paragraphs if possible, sentences if not, words as the last practical resort. `chunk_size` is respected **and** meaning is respected — the two things the plain character splitter couldn't do at the same time.
 
 ---
 
@@ -131,9 +131,9 @@ Chunk 4 (49 chars):  Models like GPT and BERT have set new benchmarks.
 ...
 ```
 
-Read chunk 2: it's the *complete* machine learning paragraph — both sentences, one topic, one clean unit of meaning. Where a paragraph didn't fit in 150 characters (the NLP one is three sentences), the splitter dropped one level and cut between sentences — chunk 4 is the GPT/BERT sentence standing alone, whole. No chunk merges the end of one topic with the start of the next, which is exactly the school-textbook failure (physics chapter's last page welded to chemistry's first) that sank the character splitter.
+Read chunk 2: it's the **complete** machine learning paragraph — both sentences, one topic, one clean unit of meaning. Where a paragraph didn't fit in 150 characters (the NLP one is three sentences), the splitter dropped one level and cut between sentences — chunk 4 is the GPT/BERT sentence standing alone, whole. No chunk merges the end of one topic with the start of the next, which is exactly the school-textbook failure (physics chapter's last page welded to chemistry's first) that sank the character splitter.
 
-The chunk sizes are no longer uniform — 74, 141, 133, 49… — and that's the honest trade: the recursive splitter treats `chunk_size` as a ceiling and lets *structure* decide the actual cut, so sizes vary with the shape of the text. You trade the character splitter's predictable sizes for semantically whole chunks. For retrieval, that trade is almost always worth it: an embedding of "the complete ML paragraph" matches an ML query far better than an embedding of "half the ML paragraph plus the first NLP sentence."
+The chunk sizes are no longer uniform — 74, 141, 133, 49… — and that's the honest trade: the recursive splitter treats `chunk_size` as a ceiling and lets **structure** decide the actual cut, so sizes vary with the shape of the text. You trade the character splitter's predictable sizes for semantically whole chunks. For retrieval, that trade is almost always worth it: an embedding of **the complete ML paragraph** matches an ML query far better than an embedding of **half the ML paragraph plus the first NLP sentence.**
 
 ---
 
@@ -165,6 +165,6 @@ Pull the threads together:
 - **It preserves the document's natural structure.** The paragraph → sentence → word hierarchy that the author put into the text is the same hierarchy the splitter uses to take it apart.
 - **`chunk_size` is still respected** — unlike the character splitter with a paragraph separator, there's always a next level to fall back to, so no chunk silently blows past the limit.
 
-> [!tip] Interview framing: "For plain text I default to `RecursiveCharacterTextSplitter`. It tries a hierarchy of separators — paragraphs, then lines, then words — recursively re-splitting anything that exceeds `chunk_size` and merging small pieces back up toward the limit. That gives me chunks that are both bounded in size *and* aligned with the text's semantic structure, which is exactly what the embeddings downstream need."
+> [!tip] Interview framing: **For plain text I default to `RecursiveCharacterTextSplitter`. It tries a hierarchy of separators — paragraphs, then lines, then words — recursively re-splitting anything that exceeds `chunk_size` and merging small pieces back up toward the limit. That gives me chunks that are both bounded in size and aligned with the text's semantic structure, which is exactly what the embeddings downstream need.**
 
-One boundary remains, though. This splitter understands the structure of *prose* — paragraphs and sentences. But a knowledge source can also contain **Python files, Markdown documents, JSON** — formats whose structure isn't made of paragraphs at all. A function definition, a Markdown heading, a nested JSON object each need their own notion of "a meaningful boundary" — and that's where the document-structure-based splitters come in.
+One boundary remains, though. This splitter understands the structure of **prose** — paragraphs and sentences. But a knowledge source can also contain **Python files, Markdown documents, JSON** — formats whose structure isn't made of paragraphs at all. A function definition, a Markdown heading, a nested JSON object each need their own notion of **a meaningful boundary** — and that's where the document-structure-based splitters come in.

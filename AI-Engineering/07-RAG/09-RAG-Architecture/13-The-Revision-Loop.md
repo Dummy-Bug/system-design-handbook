@@ -19,7 +19,7 @@ flowchart TD
 
 ## The loop needs a brake
 
-A loop that repairs an answer until a judge is satisfied can fail to terminate. The reviser might never produce something the judge calls fully supported — particularly on a question the documents genuinely cannot answer, where there is nothing to revise *toward*.
+A loop that repairs an answer until a judge is satisfied can fail to terminate. The reviser might never produce something the judge calls fully supported — particularly on a question the documents genuinely cannot answer, where there is nothing to revise **toward**.
 
 So a counter:
 
@@ -35,7 +35,7 @@ Every pass through the reviser increments it. Past the limit, the loop exits reg
 
 ## The reviser
 
-The prompt is worth reading in full, because it is much more aggressive than "remove unsupported claims":
+The prompt is worth reading in full, because it is much more aggressive than **remove unsupported claims**:
 
 ```python
 revise_prompt = ChatPromptTemplate.from_messages([
@@ -66,15 +66,15 @@ def revise_answer(state: State):
     }
 ```
 
-This does not ask for a *better paraphrase*. It demands a **quote-only answer** — a bullet list of direct quotes from the context, with no words of the model's own except the dashes.
+This does not ask for a **better paraphrase**. It demands a **quote-only answer** — a bullet list of direct quotes from the context, with no words of the model's own except the dashes.
 
 > [!important] That is a deliberate over-correction, and the reasoning behind it is sound.
 >
-> [[12-Grounding-And-The-Support-Levels]] established that the failure being fixed is **interpretation** — the model adding "generous", "culture", "supports professional development". You cannot reliably instruct a model to interpret *less*; that is a matter of degree, and degrees drift.
+> [[12-Grounding-And-The-Support-Levels]] established that the failure being fixed is **interpretation** — the model adding **generous**, **culture**, **supports professional development**. You cannot reliably instruct a model to interpret **less**; that is a matter of degree, and degrees drift.
 >
-> But you can remove the opportunity entirely. If the output may contain nothing but verbatim quotes, there is no room for an adjective to appear. The revision problem is converted from *"be less interpretive"* — unenforceable — into *"copy these sentences"* — mechanical.
+> But you can remove the opportunity entirely. If the output may contain nothing but verbatim quotes, there is no room for an adjective to appear. The revision problem is converted from **be less interpretive** — unenforceable — into **copy these sentences** — mechanical.
 
-**"Do NOT say 'context', 'not mentioned', 'does not mention', 'not provided'"** is the second guard. Without it, a reviser handed an answer it cannot support falls back on meta-commentary — *"the context does not mention a free trial"* — which is a sentence about the retrieval process rather than an answer, and would then be judged for grounding on its own terms. The prompt closes that exit.
+**Do NOT say 'context', 'not mentioned', 'does not mention', 'not provided'** is the second guard. Without it, a reviser handed an answer it cannot support falls back on meta-commentary — **the context does not mention a free trial** — which is a sentence about the retrieval process rather than an answer, and would then be judged for grounding on its own terms. The prompt closes that exit.
 
 Note also that both the **question** and the **current answer** are passed in, not just the context. The reviser needs to know what was being asked (so it quotes relevant sentences) and what the previous attempt claimed (so it knows what to strip).
 
@@ -102,7 +102,7 @@ def accept_answer(state: State):
     return {}       # keep the answer as-is
 ```
 
-An empty node. It exists to give the "success" branch a name in the graph rather than to do work.
+An empty node. It exists to give the **success** branch a name in the graph rather than to do work.
 
 ---
 
@@ -137,7 +137,7 @@ LangGraph caps how many steps a run may take, and the default is low enough that
 
 The lecture re-runs the question that came back **partially supported** in the previous iteration:
 
-> *Describe NexaAI's company culture.*
+> **Describe NexaAI's company culture.**
 
 Now:
 
@@ -149,9 +149,9 @@ One pass through the reviser converted partially supported into fully supported.
 
 > [!note] Look at the shape of that result and be clear-eyed about the trade. The answer got **shorter and more literal**. It became a list of quoted policy lines rather than a paragraph describing a culture.
 >
-> That is more truthful and less pleasant to read. The system now refuses to synthesise — but synthesis was part of what the user asked for when they said "describe the culture". Strict grounding and helpful prose are in genuine tension here, and this design resolves it hard toward grounding.
+> That is more truthful and less pleasant to read. The system now refuses to synthesise — but synthesis was part of what the user asked for when they said **describe the culture**. Strict grounding and helpful prose are in genuine tension here, and this design resolves it hard toward grounding.
 >
-> Which sets up exactly the next question: *the answer is now perfectly grounded, but does it still answer what was asked?*
+> Which sets up exactly the next question: **the answer is now perfectly grounded, but does it still answer what was asked?**
 
 ---
 
@@ -168,4 +168,4 @@ One pass through the reviser converted partially supported into fully supported.
 ---
 
 > [!tip] Interview framing
-> "When the grounding check comes back partially or unsupported, the answer goes to a reviser and then loops back for re-checking. The prompt is the interesting bit — it doesn't ask for a more careful paraphrase, it demands a quote-only answer: bullet points of direct quotes from the context, no words of the model's own. That's deliberate over-correction. The failure you're fixing is interpretation, and you can't reliably instruct a model to interpret less because that's a matter of degree; but you can forbid it from writing any words at all, which is mechanical. There's a max-retries counter so the loop terminates, and separately you have to raise LangGraph's recursion_limit, since this is the first cyclic graph in the build. The honest trade-off is that the repaired answer comes back shorter and more literal — grounding wins over readability — which is exactly why a usefulness check has to come next."
+> **When the grounding check comes back partially or unsupported, the answer goes to a reviser and then loops back for re-checking. The prompt is the interesting bit — it doesn't ask for a more careful paraphrase, it demands a quote-only answer: bullet points of direct quotes from the context, no words of the model's own. That's deliberate over-correction. The failure you're fixing is interpretation, and you can't reliably instruct a model to interpret less because that's a matter of degree; but you can forbid it from writing any words at all, which is mechanical. There's a max-retries counter so the loop terminates, and separately you have to raise LangGraph's recursion_limit, since this is the first cyclic graph in the build. The honest trade-off is that the repaired answer comes back shorter and more literal — grounding wins over readability — which is exactly why a usefulness check has to come next.**

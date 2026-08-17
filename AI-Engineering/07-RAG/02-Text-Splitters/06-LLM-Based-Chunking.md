@@ -1,6 +1,6 @@
-Semantic chunking ended on a diagnosis: judging "where the topic changes" by pairwise cosine similarity of adjacent sentences is *local and mechanical* — it compares neighbours, it never reads the document. But there is a tool whose entire pre-training was about reading documents. An LLM has natural language understanding baked into it from the massive text it trained on; it understands hidden semantic meaning, and it recognises **topic boundaries** — where one subject ends and another begins — the way a human editor does.
+Semantic chunking ended on a diagnosis: judging **where the topic changes** by pairwise cosine similarity of adjacent sentences is **local and mechanical** — it compares neighbours, it never reads the document. But there is a tool whose entire pre-training was about reading documents. An LLM has natural language understanding baked into it from the massive text it trained on; it understands hidden semantic meaning, and it recognises **topic boundaries** — where one subject ends and another begins — the way a human editor does.
 
-So the final chunking strategy is almost cheeky in its simplicity: **hand the whole text to an LLM and ask it to do the splitting.** The LLM analyzes the document and decides the optimal chunk boundaries based on its semantic understanding. No separators, no thresholds, no embeddings-per-sentence — the model that will eventually *answer* from your chunks is the same kind of model now *making* them.
+So the final chunking strategy is almost cheeky in its simplicity: **hand the whole text to an LLM and ask it to do the splitting.** The LLM analyzes the document and decides the optimal chunk boundaries based on its semantic understanding. No separators, no thresholds, no embeddings-per-sentence — the model that will eventually **answer** from your chunks is the same kind of model now **making** them.
 
 ---
 
@@ -8,7 +8,7 @@ So the final chunking strategy is almost cheeky in its simplicity: **hand the wh
 
 There's no `LLMChunker` class to import — you assemble it yourself from pieces you already know: a chat model, a prompt, and structured output. That last part is the trick worth studying.
 
-**Step 1 — define the output shape with Pydantic.** If you just ask an LLM to "split this text", you get back one big string you'd have to parse. Instead you declare, as Python classes, exactly the structure you want:
+**Step 1 — define the output shape with Pydantic.** If you just ask an LLM to **split this text**, you get back one big string you'd have to parse. Instead you declare, as Python classes, exactly the structure you want:
 
 ```python
 from pydantic import BaseModel
@@ -47,7 +47,7 @@ prompt = ChatPromptTemplate(messages=[
 ], input_variables=["text"])
 ```
 
-Read the system prompt closely — two instructions are load-bearing. *"Do not change the existing text"*: an LLM is a text generator; without this it may paraphrase your document while chunking it, and a chunk that's a paraphrase is a corrupted source. *"Generate a 1-2 line summary"*: this is a capability **no other splitter has** — because the chunker actually understands the text, it can produce metadata about it for free.
+Read the system prompt closely — two instructions are load-bearing. **Do not change the existing text**: an LLM is a text generator; without this it may paraphrase your document while chunking it, and a chunk that's a paraphrase is a corrupted source. **Generate a 1-2 line summary**: this is a capability **no other splitter has** — because the chunker actually understands the text, it can produce metadata about it for free.
 
 **Step 4 — chain and run.**
 
@@ -94,7 +94,7 @@ flowchart LR
 **What it doesn't guarantee:**
 
 - **Cost.** Every document you chunk is a full LLM call over its entire text. The character splitter is a string operation; this is paid inference on your whole corpus. At ingestion scale, that bill is real.
-- **Scale.** The document must fit in the LLM's **context window** — the same hard input limit from the why-RAG story. A 1,000-page handbook cannot be handed over in one call. LLM chunking fits *small* documents; ironically, the huge documents that most need good chunking are the ones it can't swallow whole.
+- **Scale.** The document must fit in the LLM's **context window** — the same hard input limit from the why-RAG story. A 1,000-page handbook cannot be handed over in one call. LLM chunking fits **small** documents; ironically, the huge documents that most need good chunking are the ones it can't swallow whole.
 - **Speed.** An LLM round-trip per document is orders of magnitude slower than any local splitter. Ingesting a big corpus this way turns minutes into hours.
 
 > [!important] So the sweet spot is narrow but real: **small-but-complex text** — documents short enough for one call, whose topic structure is too subtle for formatting-based rules. For bulk ingestion, the recursive splitter remains the workhorse; LLM chunking is the premium tool you point at the documents that deserve it.
@@ -113,6 +113,6 @@ Module 2's chunking story, end to end:
 | `SemanticChunker` | embedding similarity dips | embedding calls | topic-drift text, experimental |
 | LLM-based chunking | genuine understanding | LLM call per doc | small, complex, high-value docs |
 
-> [!tip] Interview framing: "There's a spectrum: formatting-based splitters (character, recursive, structure-aware) are free and fast but never read the text; semantic chunking reads it shallowly through embeddings; LLM-based chunking reads it properly — you prompt a model to split at natural topic boundaries without changing the text, returned as structured output, and you even get per-chunk summaries for free. Its limits are cost, latency, and the context window, so I'd reserve it for small high-value documents and default to recursive splitting for bulk ingestion."
+> [!tip] Interview framing: **There's a spectrum: formatting-based splitters (character, recursive, structure-aware) are free and fast but never read the text; semantic chunking reads it shallowly through embeddings; LLM-based chunking reads it properly — you prompt a model to split at natural topic boundaries without changing the text, returned as structured output, and you even get per-chunk summaries for free. Its limits are cost, latency, and the context window, so I'd reserve it for small high-value documents and default to recursive splitting for bulk ingestion.**
 
 With loading and splitting done, the pipeline's next stage is the one every splitter kept gesturing at: turning chunks into those meaning-carrying vectors — embedding models, what they are, how they work, and the proprietary-vs-open-source choice between them.

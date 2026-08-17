@@ -8,11 +8,11 @@
 
 **Where this sits.** Three folders share this territory and the split is deliberate:
 
-- **07 · Concurrency Models** owns the *constraint and the alternatives* — the GIL, threads, processes, pools, and the decision framework for picking a model at all.
-- **08 · Async** (this folder) owns the *runtime mechanics* — how the loop schedules, what a Task is, how cancellation is delivered, how work is coordinated inside one loop.
-- **06 · Errors** owns the *failure-handling patterns* built on top — `ExceptionGroup`, `except*`, retries, circuit breakers.
+- **07 · Concurrency Models** owns the **constraint and the alternatives** — the GIL, threads, processes, pools, and the decision framework for picking a model at all.
+- **08 · Async** (this folder) owns the **runtime mechanics** — how the loop schedules, what a Task is, how cancellation is delivered, how work is coordinated inside one loop.
+- **06 · Errors** owns the **failure-handling patterns** built on top — `ExceptionGroup`, `except*`, retries, circuit breakers.
 
-So `TaskGroup` appears in both 06 and 08 on purpose: **here** it is "how does it schedule and cancel", **there** it is "what do I catch". Async *iteration* — `async for`, async generators, streaming — belongs to **04**, which claimed it as its Section D.
+So `TaskGroup` appears in both 06 and 08 on purpose: **here** it is **how does it schedule and cancel**, **there** it is **what do I catch**. Async **iteration** — `async for`, async generators, streaming — belongs to **04**, which claimed it as its Section D.
 
 **Currency check (2026-08-05):** this machine runs Python 3.13.3; 3.14 is current stable. Version lines that matter and should be re-verified before relying on them: **`asyncio.TaskGroup`** and **`asyncio.timeout()`** are 3.11+; **`asyncio.to_thread`** is 3.9+; the low-level `get_event_loop`/`new_event_loop` idioms are long-deprecated in favour of `asyncio.run` and **`asyncio.Runner`** (3.11+). The live one to check: **eager task factories** (3.12+) and any 3.14 changes to task scheduling or to the default behaviour of `asyncio.run`. Also confirm the current state of **free-threaded builds interacting with asyncio**, which is where 07's currency question spills into this folder.
 
@@ -21,27 +21,27 @@ So `TaskGroup` appears in both 06 and 08 on purpose: **here** it is "how does it
 ## A · The runtime
 
 **1. The event loop**
-One thread, one queue of ready callbacks, running them one at a time forever. Everything else in this folder is a way of putting something on that queue or taking it off. The framing that makes the rest land: the loop is not doing your work in parallel — it is filling the gaps *between* your waits.
+One thread, one queue of ready callbacks, running them one at a time forever. Everything else in this folder is a way of putting something on that queue or taking it off. The framing that makes the rest land: the loop is not doing your work in parallel — it is filling the gaps **between** your waits.
 
 **2. `asyncio.run` and the loop lifecycle**
 Who creates the loop, who closes it, and what happens to tasks still pending when it shuts down. Why you almost never call `get_event_loop()` yourself any more, why `asyncio.run` cannot be called from inside a running loop, and what `asyncio.Runner` (3.11+) adds when one loop must span several entry points.
 
 **3. Coroutine function vs coroutine object**
-`async def f` defines a coroutine *function*; calling it returns a coroutine *object* and **runs none of the body**. The single most common beginner surprise, and structurally the same distinction as `square` vs `square(5)` from folder 03 — the parentheses build a thing, they don't run it.
+`async def f` defines a coroutine **function**; calling it returns a coroutine **object** and **runs none of the body**. The single most common beginner surprise, and structurally the same distinction as `square` vs `square(5)` from folder 03 — the parentheses build a thing, they don't run it.
 
 **4. The three awaitables**
 Coroutine, Task, Future — what each one is, which one the loop actually schedules, and why a Future is the low-level primitive you rarely write by hand but constantly receive.
 
 **5. What `await` actually does**
-Marks a point where this function may *suspend and hand the thread back*. Not "wait here" in the blocking sense — "I have nothing to do until this resolves, run someone else". A function with no `await` in its body never yields, no matter how many `async` keywords it carries.
+Marks a point where this function may **suspend and hand the thread back**. Not **wait here** in the blocking sense — **I have nothing to do until this resolves, run someone else**. A function with no `await` in its body never yields, no matter how many `async` keywords it carries.
 
 ## B · Scheduling and ordering
 
 **6. `await` vs `create_task` — the bare-await trap**
-Awaiting a coroutine directly means *scheduled and run to completion in one step*: three one-second calls take three seconds and look perfectly asynchronous while doing so. `create_task` is what puts work on the loop *without* waiting for it. This is the difference between async code and concurrent code.
+Awaiting a coroutine directly means **scheduled and run to completion in one step**: three one-second calls take three seconds and look perfectly asynchronous while doing so. `create_task` is what puts work on the loop **without** waiting for it. This is the difference between async code and concurrent code.
 
 **7. `await` guarantees completion, not execution order**
-Awaiting task B before task A does not make B run first — the loop decides ordering, and the await only says "don't continue past this line until it's done". The design lesson underneath: don't try to micromanage the scheduler.
+Awaiting task B before task A does not make B run first — the loop decides ordering, and the await only says **don't continue past this line until it's done**. The design lesson underneath: don't try to micromanage the scheduler.
 
 **8. `gather` and `TaskGroup`**
 Running a batch and collecting results. The real difference between them is not syntax but **failure semantics** — what happens to the other twenty tasks when one raises, and what a partially-completed batch leaves behind.
@@ -55,24 +55,24 @@ Results in completion order rather than submission order, waiting on a subset, a
 ## C · Not blocking the loop
 
 **11. Blocking the event loop**
-One synchronous call inside one coroutine freezes *every* task in the process, because a task that never suspends never hands the thread back. `time.sleep` is the teaching example; in real code it's a sync database driver, a `requests` call, `json.loads` on a 40 MB payload, or a CPU-bound loop.
+One synchronous call inside one coroutine freezes **every** task in the process, because a task that never suspends never hands the thread back. `time.sleep` is the teaching example; in real code it's a sync database driver, a `requests` call, `json.loads` on a 40 MB payload, or a CPU-bound loop.
 
 **12. Escape hatches — `to_thread` and `run_in_executor`**
-When the blocking call can't be removed, move it off the loop's thread and await *that*. Threads for I/O-bound blocking, a process pool for CPU-bound work — the sizing and the pool mechanics themselves belong to 07.
+When the blocking call can't be removed, move it off the loop's thread and await **that**. Threads for I/O-bound blocking, a process pool for CPU-bound work — the sizing and the pool mechanics themselves belong to 07.
 
 **13. Detecting a blocked loop**
-The part usually skipped: `asyncio` debug mode, the slow-callback warning threshold, and why a service that "gets slower under load for no reason" is usually one blocking call away from an explanation. Without this concept, 11 and 12 are advice you can't act on because you can't tell whether the problem is present.
+The part usually skipped: `asyncio` debug mode, the slow-callback warning threshold, and why a service that **gets slower under load for no reason** is usually one blocking call away from an explanation. Without this concept, 11 and 12 are advice you can't act on because you can't tell whether the problem is present.
 
 ## D · Coordinating work inside one loop
 
 **14. `asyncio.Queue` — producer/consumer and backpressure**
-The async mirror of `queue.Queue`. A *bounded* queue is the simplest real backpressure mechanism there is: when the consumer falls behind, `put` suspends and the producer slows down on its own. The alternative — an unbounded queue — is a memory leak with good manners.
+The async mirror of `queue.Queue`. A **bounded** queue is the simplest real backpressure mechanism there is: when the consumer falls behind, `put` suspends and the producer slows down on its own. The alternative — an unbounded queue — is a memory leak with good manners.
 
 **15. `Semaphore`, `Lock`, and `Event`**
 Limiting concurrency rather than maximising it. Firing 5,000 requests at a provider concurrently is trivial and will get you rate-limited; a `Semaphore(20)` is the one-line fix. `Lock` for the surprisingly-real case of shared mutable state between tasks, `Event` for one task signalling many.
 
 **16. Cancellation mechanics**
-How cancellation is actually delivered — `CancelledError` raised *at the next await point*, not immediately — and what that implies. `task.cancel()`, why cleanup belongs in `finally`, why swallowing `CancelledError` breaks shutdown, and `asyncio.shield` for the work that must survive. What to *catch* is 06's; how it's *delivered* is here.
+How cancellation is actually delivered — `CancelledError` raised **at the next await point**, not immediately — and what that implies. `task.cancel()`, why cleanup belongs in `finally`, why swallowing `CancelledError` breaks shutdown, and `asyncio.shield` for the work that must survive. What to **catch** is 06's; how it's **delivered** is here.
 
 **17. Timeouts**
 `asyncio.timeout()` (3.11+) as a context manager and `wait_for` as the older call, what gets cancelled when the deadline passes, and the design question that outlives the syntax: which layer owns the deadline when a request spans three services.
@@ -86,7 +86,7 @@ The trap worth its own concept: FastAPI runs a plain `def` handler in a threadpo
 Real services are mixed. Which client libraries have async versions, what a sync SDK inside an async service costs, and the honest middle path — wrapping in `to_thread` and bounding the pool — versus rewriting.
 
 **20. Debugging and observing async code**
-Reading a traceback that crosses an await boundary, `asyncio.all_tasks()` for "what is this process actually doing", task names, and why a stuck async service usually looks idle from the outside. The bridge to `02-Observability`.
+Reading a traceback that crosses an await boundary, `asyncio.all_tasks()` for **what is this process actually doing**, task names, and why a stuck async service usually looks idle from the outside. The bridge to `02-Observability`.
 
 ---
 
@@ -119,7 +119,7 @@ The seven existing notes were numbered in **writing order**, before this syllabu
 
 `01-Why-Async-What-Concurrency-Means` maps to no concept here by design — it is the I/O-bound vs CPU-bound and cooperative-multitasking framing, which belongs to **07** and was written here first.
 
-**11 of 20 written.** The nine gaps are not evenly spread: sections A and B are nearly complete, and everything in D is missing. That is the useful finding — the notes cover *making things run concurrently* and cover none of *keeping that under control*, which is the half that appears in production incidents and in interviews.
+**11 of 20 written.** The nine gaps are not evenly spread: sections A and B are nearly complete, and everything in D is missing. That is the useful finding — the notes cover **making things run concurrently** and cover none of **keeping that under control**, which is the half that appears in production incidents and in interviews.
 
 ## Deferred
 
@@ -138,10 +138,10 @@ The seven existing notes were numbered in **writing order**, before this syllabu
 
 ## Interview hooks
 
-Sarvam names **async Python** in the Stage 2 screen ("async Python execution models") and again in Week 9 — *"`asyncio` internals, task groups, backpressure handling, process pools for CPU-bound work"*, plus rate limiting and connection pooling. Backpressure is concept 14 and currently unwritten. The three questions that recur: *"you made everything `async` and it got no faster — why?"* (concept 6), *"how do you stop one slow call from taking down the service?"* (16, 17), and *"how would you limit concurrent calls to a provider?"* (15).
+Sarvam names **async Python** in the Stage 2 screen (**async Python execution models**) and again in Week 9 — **`asyncio` internals, task groups, backpressure handling, process pools for CPU-bound work**, plus rate limiting and connection pooling. Backpressure is concept 14 and currently unwritten. The three questions that recur: **you made everything `async` and it got no faster — why?** (concept 6), **how do you stop one slow call from taking down the service?** (16, 17), and **how would you limit concurrent calls to a provider?** (15).
 
 ## Sources to verify against
 
-- [`asyncio` — standard library docs](https://docs.python.org/3/library/asyncio.html), particularly the *Developing with asyncio* page for concept 13
+- [`asyncio` — standard library docs](https://docs.python.org/3/library/asyncio.html), particularly the **Developing with asyncio** page for concept 13
 - [PEP 492 — `async`/`await` syntax](https://peps.python.org/pep-0492/) · [PEP 3156 — the asyncio module](https://peps.python.org/pep-3156/)
-- FastAPI's *async* concurrency page, for concept 18 — it is the clearest statement of the threadpool-vs-loop split
+- FastAPI's **async** concurrency page, for concept 18 — it is the clearest statement of the threadpool-vs-loop split

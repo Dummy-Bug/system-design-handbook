@@ -1,4 +1,4 @@
-Every retriever so far has taken your question, turned the whole thing into one vector, and gone looking for chunks whose meaning sits nearby. That works because the question and the documents are both *about* something, and "aboutness" is exactly what an embedding captures.
+Every retriever so far has taken your question, turned the whole thing into one vector, and gone looking for chunks whose meaning sits nearby. That works because the question and the documents are both **about** something, and **aboutness** is exactly what an embedding captures.
 
 This note is about the class of question where that quietly stops working — not because retrieval is weak, but because part of what you asked was never a matter of meaning at all.
 
@@ -28,18 +28,18 @@ But look at what a product row actually contains. There's a description — the 
 
 Now a customer asks:
 
-> **"Recommend 5 laptops with price under 60K and having a bigger screen."**
+> **Recommend 5 laptops with price under 60K and having a bigger screen.**
 
 Read that sentence again and notice it is doing **two different jobs at once**:
 
-- *"laptops… bigger screen"* — this is about **meaning**. It describes the kind of thing wanted.
-- *"price under 60K"* — this is **not** about meaning. It is a numeric constraint. Either a product's price is below 60,000 or it isn't. There is no "sort of under 60K."
+- **laptops… bigger screen** — this is about **meaning**. It describes the kind of thing wanted.
+- **price under 60K** — this is **not** about meaning. It is a numeric constraint. Either a product's price is below 60,000 or it isn't. There is no **sort of under 60K.**
 
 The sentence looks like free-flowing text. It is really a **structured query wearing natural language as a disguise**.
 
 ---
 
-## Why similarity search cannot honour "under 60K"
+## Why similarity search cannot honour under 60K
 
 Here is the part worth being precise about, because it's the whole reason this retriever exists.
 
@@ -49,7 +49,7 @@ When each product document was indexed, **only its `page_content` went through t
 
 So the vectors in your store contain no notion of price. Not a weak notion. None.
 
-Which means when the query vector goes hunting for neighbours, the number 60,000 has nowhere to land. At best the phrase *"price under 60K"* nudges the query vector slightly toward documents whose descriptions happen to *talk about* being affordable — which is a completely different thing from costing less than sixty thousand rupees.
+Which means when the query vector goes hunting for neighbours, the number 60,000 has nowhere to land. At best the phrase **price under 60K** nudges the query vector slightly toward documents whose descriptions happen to **talk about** being affordable — which is a completely different thing from costing less than sixty thousand rupees.
 
 > [!warning] A constraint cannot be satisfied by similarity. 
 > Similarity is a matter of degree; 
@@ -79,17 +79,17 @@ Then you run one operation that uses both:
 similarity_search(query, filter)
 ```
 
-The semantic part decides *what* you're looking for. The filter decides *which documents are even eligible*. Same 100 documents, but now the constraint is enforced by the store — exactly, as a yes-or-no test — while meaning is still matched by the embedding.
+The semantic part decides **what** you're looking for. The filter decides **which documents are even eligible**. Same 100 documents, but now the constraint is enforced by the store — exactly, as a yes-or-no test — while meaning is still matched by the embedding.
 
-### Why it's called *self*-query
+### Why it's called self-query
 
-The name confuses people, so take it apart. The retriever isn't querying itself. It is performing a **transformation on its own query** before using it — it rewrites the input it was handed rather than passing it straight through. The transformation happens on itself, hence *self*.
+The name confuses people, so take it apart. The retriever isn't querying itself. It is performing a **transformation on its own query** before using it — it rewrites the input it was handed rather than passing it straight through. The transformation happens on itself, hence **self**.
 
 ---
 
 ## The transformation needs a language model
 
-Splitting *"Recommend 5 laptops with price under 60K and having a bigger screen"* into a semantic string and a numeric filter is a language-understanding problem. Code can't do it — there's no pattern to match, because the same constraint can be phrased a hundred ways (*under 60K*, *below sixty thousand*, *cheaper than 60,000*, *not more than 60k*).
+Splitting **Recommend 5 laptops with price under 60K and having a bigger screen** into a semantic string and a numeric filter is a language-understanding problem. Code can't do it — there's no pattern to match, because the same constraint can be phrased a hundred ways (**under 60K**, **below sixty thousand**, **cheaper than 60,000**, **not more than 60k**).
 
 So this retriever puts an **LLM inside the retrieval path**:
 
@@ -97,19 +97,19 @@ So this retriever puts an **LLM inside the retrieval path**:
 
 The query goes to the LLM, which decomposes it into:
 
-1. **Semantic part** → *"Recommendations for laptops"*
+1. **Semantic part** → **Recommendations for laptops**
 2. **Metadata part** → a filter, built from **operators** (also called **comparators**) — `$and`, `$gt`, `$lt`, and friends
 
 > [!important] This is the first retriever in the course where an LLM sits **inside retrieval**, not after it.
 >  Everything up to now — similarity, MMR, BM25, ensemble, parent-document — was pure maths over vectors and text. 
 >  
->  Contextual compression introduced an LLM but only *after* the documents came back. 
+>  Contextual compression introduced an LLM but only **after** the documents came back. 
 >  
->  Self-query puts one *before* the search runs, and that changes the cost and failure profile of the whole component.
+>  Self-query puts one **before** the search runs, and that changes the cost and failure profile of the whole component.
 
 ### What the LLM produces
 
-Concretely, for the query *"Action movies from the 1990s rated above 7"*:
+Concretely, for the query **Action movies from the 1990s rated above 7**:
 
 ![[AI-Engineering/07-RAG/06-Advanced-Retrievers/Images/08-Structured-Query-Output.png]]
 
@@ -126,7 +126,7 @@ filter = {
 }
 ```
 
-Look at what the model did with *"the 1990s"* — it became **two** filters, `year >= 1990` **and** `year <= 1999`. A decade is a range, and the model had to know that to express it. That single detail is the clearest picture of what "structured query" means here: the English was compressed; the filter is explicit.
+Look at what the model did with **the 1990s** — it became **two** filters, `year >= 1990` **and** `year <= 1999`. A decade is a range, and the model had to know that to express it. That single detail is the clearest picture of what **structured query** means here: the English was compressed; the filter is explicit.
 
 ---
 
@@ -134,9 +134,9 @@ Look at what the model did with *"the 1990s"* — it became **two** filters, `ye
 
 The model cannot invent your schema. It has to be told what fields exist and what the documents are, and both are arguments you supply.
 
-**1. The metadata schema — `AttributeInfo`.** One entry per filterable field: its name, a description, and its type. The description matters more than it looks: it is what lets the model map *"how good is it"* onto the field called `rating`.
+**1. The metadata schema — `AttributeInfo`.** One entry per filterable field: its name, a description, and its type. The description matters more than it looks: it is what lets the model map **how good is it** onto the field called `rating`.
 
-**2. A description of the content.** What the `page_content` of a document actually is. This tells the model what the *semantic* half should look like — without it, it doesn't know whether it's searching plot summaries, product descriptions, or support tickets.
+**2. A description of the content.** What the `page_content` of a document actually is. This tells the model what the **semantic** half should look like — without it, it doesn't know whether it's searching plot summaries, product descriptions, or support tickets.
 
 ---
 
@@ -181,7 +181,7 @@ llm = ChatOpenAI(model="gpt-5", temperature=0)
 
 > [!note] `SelfQueryRetriever` comes from `langchain_classic` — the same deprecation family as `EnsembleRetriever` and the contextual-compression pieces. Support for that module is ending around Dec 2026, which is exactly why the companion note builds this from scratch.
 
-`temperature=0` is not decoration here. The LLM is generating a filter that decides which documents are *eligible*. You want that deterministic.
+`temperature=0` is not decoration here. The LLM is generating a filter that decides which documents are **eligible**. You want that deterministic.
 
 ### The documents
 
@@ -229,7 +229,7 @@ metadata_field_info = [
 document_content_description = "Brief plot descriptions of movies"
 ```
 
-Notice the `genre` description **lists the allowed values**. That's deliberate — it lets the model map *"space movies"* onto `genre = "sci-fi"` instead of inventing a genre that doesn't exist in your data.
+Notice the `genre` description **lists the allowed values**. That's deliberate — it lets the model map **space movies** onto `genre = "sci-fi"` instead of inventing a genre that doesn't exist in your data.
 
 ### Building the retriever
 
@@ -244,7 +244,7 @@ retriever = SelfQueryRetriever.from_llm(
 )
 ```
 
-`enable_limit=True` turns on one more extraction: the model may also pull a **count** out of the sentence. Say *"recommend 2 movies"* and it sets `k=2` for you — the query controls how many documents come back.
+`enable_limit=True` turns on one more extraction: the model may also pull a **count** out of the sentence. Say **recommend 2 movies** and it sets `k=2` for you — the query controls how many documents come back.
 
 ---
 
@@ -260,7 +260,7 @@ Interstellar    (2014)
 The Matrix      (1999)
 ```
 
-Two of the three are wrong, and they're wrong in the way that matters. **Sunshine is from 2007. The Matrix is from 1999.** The query said *after 2010*.
+Two of the three are wrong, and they're wrong in the way that matters. **Sunshine is from 2007. The Matrix is from 1999.** The query said **after 2010**.
 
 They came back because they're all genuinely, semantically science fiction — the embedding did its job perfectly. The year was simply invisible to it. This is not a tuning problem; no value of `k`, no threshold, no reranker fixes it, because the information required to exclude those films was never in the vectors.
 
@@ -275,9 +275,9 @@ Inception     (2010)
 Interstellar  (2014)
 ```
 
-**Exactly two**, both sci-fi, both after 2000. Three separate things were extracted from that one sentence: the semantic part (*sci-fi movies*), a filter (`year > 2000`), and a limit (`2`).
+**Exactly two**, both sci-fi, both after 2000. Three separate things were extracted from that one sentence: the semantic part (**sci-fi movies**), a filter (`year > 2000`), and a limit (`2`).
 
-### It also knows when *not* to filter
+### It also knows when not to filter
 
 ```python
 retriever.invoke(
@@ -306,7 +306,7 @@ Interstellar    (2014)
 The Dark Knight (2008)
 ```
 
-All three Nolan films, nothing else. Here the *semantic* half is nearly empty — the question is almost entirely a metadata lookup, and the filter does the real work. The same component handles a pure-meaning query and a pure-lookup query.
+All three Nolan films, nothing else. Here the **semantic** half is nearly empty — the question is almost entirely a metadata lookup, and the filter does the real work. The same component handles a pure-meaning query and a pure-lookup query.
 
 ---
 
@@ -324,4 +324,4 @@ This retriever is not free, and the costs are structural rather than incidental.
 ---
 
 > [!tip] Interview framing
-> "A self-query retriever handles queries that mix semantics with hard constraints — *'sci-fi movies released after 2010'*. Plain similarity search can't honour the year, because only `page_content` gets embedded; metadata is stored alongside but never enters the vector, so a numeric constraint has nothing to match against. In our movie set, a vanilla retriever answered 'after 2010' with Sunshine from 2007 and The Matrix from 1999 — both correctly sci-fi, both wrong. Self-query puts an LLM in front of retrieval to decompose the natural-language query into a semantic string plus a structured metadata filter, then a store-specific translator rewrites that filter into Chroma's or Pinecone's dialect and it runs as `similarity_search(query, filter)`. You give it an `AttributeInfo` schema per field and a description of what the documents are. The trade is a language-model call on the critical path of every query, and a new failure mode — a mis-parsed filter returns the wrong set or nothing at all, which is a louder failure than merely ranking poorly."
+> **A self-query retriever handles queries that mix semantics with hard constraints — 'sci-fi movies released after 2010'. Plain similarity search can't honour the year, because only `page_content` gets embedded; metadata is stored alongside but never enters the vector, so a numeric constraint has nothing to match against. In our movie set, a vanilla retriever answered 'after 2010' with Sunshine from 2007 and The Matrix from 1999 — both correctly sci-fi, both wrong. Self-query puts an LLM in front of retrieval to decompose the natural-language query into a semantic string plus a structured metadata filter, then a store-specific translator rewrites that filter into Chroma's or Pinecone's dialect and it runs as `similarity_search(query, filter)`. You give it an `AttributeInfo` schema per field and a description of what the documents are. The trade is a language-model call on the critical path of every query, and a new failure mode — a mis-parsed filter returns the wrong set or nothing at all, which is a louder failure than merely ranking poorly.**

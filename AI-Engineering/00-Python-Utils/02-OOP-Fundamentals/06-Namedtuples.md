@@ -12,7 +12,7 @@ color = (55, 155, 255)
 print(color[0])   # 55
 ```
 
-Correct, and unreadable. `color[0]` says nothing about what index zero *is*, and the tuple itself doesn't say whether these are RGB values, HSL values, or something else entirely. Come back in three months — or hand the file to someone else — and the only way to find out is to hunt for wherever the tuple was built.
+Correct, and unreadable. `color[0]` says nothing about what index zero **is**, and the tuple itself doesn't say whether these are RGB values, HSL values, or something else entirely. Come back in three months — or hand the file to someone else — and the only way to find out is to hunt for wherever the tuple was built.
 
 ## The dictionary attempt
 
@@ -78,7 +78,7 @@ Color(red=55, green=155, blue=255)
 
 ## It really is a tuple
 
-Not "tuple-like" — a subclass of `tuple`, so everything that works on tuples works here:
+Not **tuple-like** — a subclass of `tuple`, so everything that works on tuples works here:
 
 ```python
 r, g, b = color        # unpacking
@@ -96,7 +96,7 @@ color[0] = 0
 # support item assignment
 ```
 
-> [!warning] **Immutable does not mean "safe to use as a lookup key without thinking".** A named tuple hashes and compares **by value, ignoring its type** — so it is equal to a plain tuple with the same contents, and to a *different* named tuple class with the same contents:
+> [!warning] **Immutable does not mean safe to use as a lookup key without thinking.** A named tuple hashes and compares **by value, ignoring its type** — so it is equal to a plain tuple with the same contents, and to a **different** named tuple class with the same contents:
 > ```python
 > Color(55, 155, 255) == (55, 155, 255)     # True
 >
@@ -122,7 +122,7 @@ print(color._asdict())
 # {'red': 55, 'green': 155, 'blue': 255}
 ```
 
-`_replace` is the one that matters most in practice. Since the value can't be modified, "changing" a field means building a new one — and `_replace` does that without retyping the fields you're keeping:
+`_replace` is the one that matters most in practice. Since the value can't be modified, **changing** a field means building a new one — and `_replace` does that without retyping the fields you're keeping:
 
 ```python
 darker = color._replace(red=0)

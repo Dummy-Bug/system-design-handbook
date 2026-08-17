@@ -4,7 +4,7 @@
 
 15 concepts. **Generic** — how text works in Python, ahead of any tokenizer.
 
-> The most Sarvam-specific folder here, and the one with the least overlap with anything else in this vault. Their Week 2 asks, verbatim, for "text normalization utilities handling Unicode NFC/NFD and **Indic grapheme cluster boundaries**" — and token fertility on Devanagari is a number they publish and compete on (1.4–2.1 tokens/word vs 3.0–4.0+ for generic tokenizers). None of that is reachable without this layer.
+> The most Sarvam-specific folder here, and the one with the least overlap with anything else in this vault. Their Week 2 asks, verbatim, for **text normalization utilities handling Unicode NFC/NFD and Indic grapheme cluster boundaries** — and token fertility on Devanagari is a number they publish and compete on (1.4–2.1 tokens/word vs 3.0–4.0+ for generic tokenizers). None of that is reachable without this layer.
 
 **Why this sits last:** it depends on nothing above it and nothing above it depends on it. Order it anywhere — it's placed at the end because it's the most specialised, not the least important.
 
@@ -26,19 +26,19 @@ Reading a file with the wrong assumed encoding, mojibake, BOMs, and `utf-8-sig`.
 **4. Code points, and what UTF-8 actually does**
 Variable-width encoding: ASCII in one byte, most Latin/Greek/Cyrillic in two, **Devanagari and most Indic scripts in three**. This byte-count asymmetry is the root of the token-fertility gap and worth understanding numerically, not vaguely.
 
-## B · Why "one character" is not one thing
+## B · Why one character is not one thing
 
 **5. Code point ≠ character ≠ grapheme**
 The three-level distinction. A user-perceived character (a grapheme cluster) can span several code points — and `len()` counts code points, so `len()` is not the number of characters a reader sees.
 
 **6. Grapheme clusters**
-Combining marks, and specifically **Indic consonant clusters**: a consonant plus virama plus consonant plus vowel sign is *one* perceived character across multiple code points. Splitting or truncating naively lands mid-cluster and corrupts the text. Sarvam names this requirement explicitly.
+Combining marks, and specifically **Indic consonant clusters**: a consonant plus virama plus consonant plus vowel sign is **one** perceived character across multiple code points. Splitting or truncating naively lands mid-cluster and corrupts the text. Sarvam names this requirement explicitly.
 
 **7. Grapheme-aware operations in practice**
-The stdlib gives you no grapheme iteration; the `regex` package's `\X` and dedicated segmentation libraries do. What "truncate this string to 100 characters" should actually mean.
+The stdlib gives you no grapheme iteration; the `regex` package's `\X` and dedicated segmentation libraries do. What **truncate this string to 100 characters** should actually mean.
 
 **8. `unicodedata`**
-`category()`, `name()`, `combining()`, `normalize()`. The stdlib's window into what a code point actually *is* — the tool for writing a script-aware normaliser.
+`category()`, `name()`, `combining()`, `normalize()`. The stdlib's window into what a code point actually **is** — the tool for writing a script-aware normaliser.
 
 ## C · Normalisation
 
@@ -82,7 +82,7 @@ Nowhere. This is genuinely new surface — and it's the folder that maps most di
 
 ## Interview hooks
 
-*"Why does the same sentence cost twice as many tokens in Hindi as in English?"* — concepts 4, 13, 14 in sequence, and it's a question their own published numbers invite. The follow-up, *"how would you measure that?"*, is concept 14. Sarvam's Stage 2 screen names "subword tokenization mechanics (how BPE handles Indic morphology)" directly.
+**Why does the same sentence cost twice as many tokens in Hindi as in English?** — concepts 4, 13, 14 in sequence, and it's a question their own published numbers invite. The follow-up, **how would you measure that?**, is concept 14. Sarvam's Stage 2 screen names **subword tokenization mechanics (how BPE handles Indic morphology)** directly.
 
 ## Sources to verify against
 

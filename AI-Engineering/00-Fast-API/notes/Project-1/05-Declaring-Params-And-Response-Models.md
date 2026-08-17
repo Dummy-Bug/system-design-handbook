@@ -19,10 +19,10 @@ def get_menu(
 Reading this apart:
 
 - **`category: str | None`** — the type annotation says this parameter, if present, is a string; `| None` says it's allowed to be absent.
-- **`Query(default=None, ...)`** — `Query` is how a query parameter's *metadata* gets attached: its default value, and a `description` that shows up directly in the auto-generated docs. `default=None` means the route works fine with no `?category=...` at all.
+- **`Query(default=None, ...)`** — `Query` is how a query parameter's **metadata** gets attached: its default value, and a `description` that shows up directly in the auto-generated docs. `default=None` means the route works fine with no `?category=...` at all.
 - **FastAPI does the matching itself.** No manual dictionary lookup, no `request.query_params.get("category")` — the value (or `None`, if absent) just shows up as `category` inside the function, already extracted.
 
-The trade FastAPI is making here: instead of one line reading a raw dict, the *declaration itself* becomes the documentation, the default, and the validation, all in one place — which is exactly why it shows up correctly in `/docs` without anything extra being written for it.
+The trade FastAPI is making here: instead of one line reading a raw dict, the **declaration itself** becomes the documentation, the default, and the validation, all in one place — which is exactly why it shows up correctly in `/docs` without anything extra being written for it.
 
 ---
 
@@ -36,7 +36,7 @@ def get_item(item_id: int):
     ...
 ```
 
-Everything arriving over HTTP is text — there's no such thing as "an integer" on the wire, only the characters `"4"`. But because `item_id` is annotated `int`, **FastAPI converts it automatically** before the function ever sees it. Request `/menu/4`, and `item_id` arrives inside the function as the actual integer `4`, not the string `"4"`.
+Everything arriving over HTTP is text — there's no such thing as **an integer** on the wire, only the characters `"4"`. But because `item_id` is annotated `int`, **FastAPI converts it automatically** before the function ever sees it. Request `/menu/4`, and `item_id` arrives inside the function as the actual integer `4`, not the string `"4"`.
 
 > [!important] The variable name in the function signature must match the `{placeholder}` name in the decorator **exactly** — `item_id` in both places, not `item_id` in one and `itemId` in the other. There's no autocomplete warning if they drift apart; a mismatch there just means the parameter never gets filled in correctly.
 
@@ -56,7 +56,7 @@ def get_menu(...):
 
 `response_model` tells FastAPI: whatever this function returns, validate it against `MenuResponse`'s shape before sending it out, and use that shape to generate the docs for this route's response.
 
-> [!important] This is genuinely easy to conflate with **dependency injection** — both involve a parameter that the route seems to "depend on" — but they are two unrelated mechanisms. Dependency injection is specifically the `Depends(...)` pattern from the request-lifecycle note: something resolved *before* the function runs, at stage 4, usually to hand the function something it needs (a DB session, an authenticated user). `response_model` operates at the opposite end entirely — stage 7, **response validation**, after the function has already returned. Nothing about `response_model` is "injected" into the function; the function never even sees it as a parameter. Worth keeping these two firmly separate, since they solve different problems at different points in the pipeline.
+> [!important] This is genuinely easy to conflate with **dependency injection** — both involve a parameter that the route seems to **depend on** — but they are two unrelated mechanisms. Dependency injection is specifically the `Depends(...)` pattern from the request-lifecycle note: something resolved **before** the function runs, at stage 4, usually to hand the function something it needs (a DB session, an authenticated user). `response_model` operates at the opposite end entirely — stage 7, **response validation**, after the function has already returned. Nothing about `response_model` is **injected** into the function; the function never even sees it as a parameter. Worth keeping these two firmly separate, since they solve different problems at different points in the pipeline.
 
 ---
 

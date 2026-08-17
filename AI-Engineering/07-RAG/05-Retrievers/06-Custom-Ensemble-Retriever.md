@@ -1,4 +1,4 @@
-The previous note ended on a warning: the built-in `EnsembleRetriever` that powers hybrid search lives in `langchain_classic`, a module whose support is scheduled to end (around December 2026). Relying on a component that's being deprecated is risky for anything long-lived. The fix is to **build the ensemble retriever yourself** — and the payoff isn't just future-proofing. Writing it by hand forces the Reciprocal Rank Fusion that was a black box in the last note out into the open, so you finally see *exactly* how two ranked lists get merged into one.
+The previous note ended on a warning: the built-in `EnsembleRetriever` that powers hybrid search lives in `langchain_classic`, a module whose support is scheduled to end (around December 2026). Relying on a component that's being deprecated is risky for anything long-lived. The fix is to **build the ensemble retriever yourself** — and the payoff isn't just future-proofing. Writing it by hand forces the Reciprocal Rank Fusion that was a black box in the last note out into the open, so you finally see **exactly** how two ranked lists get merged into one.
 
 ---
 
@@ -23,8 +23,8 @@ score(d) = Σ over retrievers i of  [ weight_i × ( 1 / (rank_i(d) + rrf_k) ) ]
 Three things to read out of that formula:
 
 - **It uses rank, not raw score.** `rank_i(d)` is where retriever `i` placed the document (0 for the top hit, 1 for the next, …). This is what lets you fuse a BM25 keyword score and a cosine distance that were never on the same scale — you throw the raw scores away and keep only the ordering.
-- **`rrf_k` is a smoothing constant** (default **60**). It sits in the denominator to *dampen* the advantage of the very top ranks. Without it, rank 0 would score `1/0` and dominate everything; with `rrf_k = 60`, rank 0 scores `1/60` and rank 1 scores `1/61` — close together, so lower-ranked results still meaningfully contribute instead of being crushed by the leader.
-- **A document in multiple lists accumulates.** Because the score *sums* across retrievers, a document both retrievers returned gets two contributions and rises to the top. Agreement is rewarded. A document not returned by a given retriever simply contributes 0 for that one.
+- **`rrf_k` is a smoothing constant** (default **60**). It sits in the denominator to **dampen** the advantage of the very top ranks. Without it, rank 0 would score `1/0` and dominate everything; with `rrf_k = 60`, rank 0 scores `1/60` and rank 1 scores `1/61` — close together, so lower-ranked results still meaningfully contribute instead of being crushed by the leader.
+- **A document in multiple lists accumulates.** Because the score **sums** across retrievers, a document both retrievers returned gets two contributions and rises to the top. Agreement is rewarded. A document not returned by a given retriever simply contributes 0 for that one.
 
 ---
 
@@ -72,7 +72,7 @@ class MyEnsembleRetriever(BaseRetriever):
         return [doc for _, doc in sorted_docs]
 ```
 
-Walk the three steps. First it calls `.invoke(query)` on each sub-retriever, gathering their ranked lists — this is why the sub-retrievers can be *anything* with an `.invoke`, dense or sparse. Second, it loops every list with `enumerate`, so `rank` is the 0-indexed position, computes `weight × 1/(rank + rrf_k)`, and folds it into a dictionary keyed by the document's text: if the document was already scored by another retriever, the new contribution is **added** to the old (that's the "reward agreement" step); otherwise it's stored fresh. Third, it sorts by the accumulated score, descending, and returns the documents. That dictionary-keyed-by-`page_content` is how a document appearing in both lists gets merged into a single entry rather than duplicated.
+Walk the three steps. First it calls `.invoke(query)` on each sub-retriever, gathering their ranked lists — this is why the sub-retrievers can be **anything** with an `.invoke`, dense or sparse. Second, it loops every list with `enumerate`, so `rank` is the 0-indexed position, computes `weight × 1/(rank + rrf_k)`, and folds it into a dictionary keyed by the document's text: if the document was already scored by another retriever, the new contribution is **added** to the old (that's the **reward agreement** step); otherwise it's stored fresh. Third, it sorts by the accumulated score, descending, and returns the documents. That dictionary-keyed-by-`page_content` is how a document appearing in both lists gets merged into a single entry rather than duplicated.
 
 Instantiate it exactly like the built-in — a list of retrievers, matching weights, and the RRF constant:
 
@@ -99,7 +99,7 @@ Run the vaccine query from the last note through it — same dense retriever (`k
   [5] programming: REST APIs communicate over HTTP...
 ```
 
-Now that you have the formula, you can see *why* that's the order. Score each document by hand (`rrf_k = 60`):
+Now that you have the formula, you can see **why** that's the order. Score each document by hand (`rrf_k = 60`):
 
 ```
 Dense list (weight 0.8):            BM25 list (weight 0.2):
@@ -116,7 +116,7 @@ Fused (sum across lists):
   REST APIs      0.2/61                    = 0.00328                          → #5
 ```
 
-The "Vaccines" document wins outright because it's the *only* document both retrievers returned, so RRF adds both contributions — fusion rewarding agreement, made concrete. The three immune-system documents follow in the order the dense retriever ranked them, their `0.8` weight keeping them well clear of anything BM25-only. And "REST APIs," which only the low-weighted BM25 retriever surfaced, lands dead last. Every position in that list is a direct consequence of the one-line RRF score.
+The **Vaccines** document wins outright because it's the **only** document both retrievers returned, so RRF adds both contributions — fusion rewarding agreement, made concrete. The three immune-system documents follow in the order the dense retriever ranked them, their `0.8` weight keeping them well clear of anything BM25-only. And **REST APIs,** which only the low-weighted BM25 retriever surfaced, lands dead last. Every position in that list is a direct consequence of the one-line RRF score.
 
 ---
 
@@ -128,4 +128,4 @@ The "Vaccines" document wins outright because it's the *only* document both retr
 > - A drop-in **`BaseRetriever` subclass** — because it inherits the base class, it has the standard `.invoke()` interface and composes into a pipeline exactly like any built-in retriever.
 
 > [!tip] Interview framing
-> "The built-in `EnsembleRetriever` is in the deprecated `langchain_classic` module, so for anything long-lived you subclass `BaseRetriever` and implement `_get_relevant_documents` yourself. Inside, you invoke each sub-retriever, then fuse their ranked lists with Reciprocal Rank Fusion: each document scores `weight × 1/(rank + rrf_k)` summed over the retrievers that returned it, keyed by document text so a document in both lists accumulates and rises. `rrf_k` defaults to 60 and dampens the top ranks so lower results still count. It reproduces the built-in's output but you own and control every line — and writing it is the clearest way to actually understand RRF."
+> **The built-in `EnsembleRetriever` is in the deprecated `langchain_classic` module, so for anything long-lived you subclass `BaseRetriever` and implement `_get_relevant_documents` yourself. Inside, you invoke each sub-retriever, then fuse their ranked lists with Reciprocal Rank Fusion: each document scores `weight × 1/(rank + rrf_k)` summed over the retrievers that returned it, keyed by document text so a document in both lists accumulates and rises. `rrf_k` defaults to 60 and dampens the top ranks so lower results still count. It reproduces the built-in's output but you own and control every line — and writing it is the clearest way to actually understand RRF.**

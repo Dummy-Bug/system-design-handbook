@@ -73,7 +73,7 @@ mypy names it: **`list` is invariant.**
 26      print(m.user_id)
 ```
 
-A separate file, and the classes have grown. `var0.py`'s were empty — `class HumanMessage(Message): ...` — because nothing there needed a field. Here the crash *is* a missing field, so each subclass gets a real one: `user_id` on `HumanMessage`, `model` on `AIMessage`, and neither has the other's.
+A separate file, and the classes have grown. `var0.py`'s were empty — `class HumanMessage(Message): ...` — because nothing there needed a field. Here the crash **is** a missing field, so each subclass gets a real one: `user_id` on `HumanMessage`, `model` on `AIMessage`, and neither has the other's.
 
 `add_reply` is legal on its own terms: an `AIMessage` **is** a `Message`, so appending one to a `list[Message]` is fine.
 
@@ -97,7 +97,7 @@ AttributeError: 'AIMessage' object has no attribute 'user_id'
 
 > [!important] **`list[HumanMessage]` is not a `list[Message]` because a `list[Message]` can be written to.** Allowing it would let any function holding that parameter drop an `AIMessage` into your list of human messages — while doing nothing wrong, since an `AIMessage` really is a `Message`.
 >
-> Nothing in the signature distinguishes *"I will read this"* from *"I will replace its contents"*, so the checker assumes the worst. Same reasoning as unions in `07-Unions-And-Optionality`.
+> Nothing in the signature distinguishes **I will read this** from **I will replace its contents**, so the checker assumes the worst. Same reasoning as unions in `07-Unions-And-Optionality`.
 
 ## All four combinations
 
@@ -143,7 +143,7 @@ var3.py:18: error: ... "list[Message]"; expected "list[HumanMessage]"  [arg-type
 var3.py:21: error: ... "list[Message]"; expected "Sequence[HumanMessage]"  [arg-type]
 ```
 
-Rows are what you *have*, columns are what the function *wants*:
+Rows are what you **have**, columns are what the function **wants**:
 
 | have ↓ / wants → | `list[Message]` | `list[HumanMessage]` | `Sequence[Message]` | `Sequence[HumanMessage]` |
 |---|---|---|---|---|
@@ -164,7 +164,7 @@ The parameter is a `list[HumanMessage]`, so the function may **read** and expect
 
 **The danger is reading** — the exact mirror image.
 
-> So `list` is unsafe in **both** directions for **two different reasons**. That is what *invariant* means: `list[X]` matches `list[X]` and nothing else, ever.
+> So `list` is unsafe in **both** directions for **two different reasons**. That is what **invariant** means: `list[X]` matches `list[X]` and nothing else, ever.
 
 ### Line 20 — `Sequence[Sub]` into a `Sequence[Base]` parameter · **accepted**
 
@@ -189,7 +189,7 @@ Line 20 and line 21 side by side:
 
 **Reading is safe in exactly one direction: sub to base.** That's the same direction ordinary values follow — `one_message(HumanMessage())` worked in the very first demo — which is why covariance feels natural. It's the normal subclass rule surviving the trip through a container.
 
-**Writing runs the other way.** Anything that can put values *in* accepts a `Base`, and a `Base` is precisely what must not end up in a container of `Sub`.
+**Writing runs the other way.** Anything that can put values **in** accepts a `Base`, and a `Base` is precisely what must not end up in a container of `Sub`.
 
 So:
 
@@ -248,9 +248,9 @@ var4.py:20: error: Argument 1 to "on_human_message" has incompatible type "Calla
 - **`handle_human(m: HumanMessage)`** — receives exactly what it asked for. ✓
 - **`handle_ai(m: AIMessage)`** — receives a `HumanMessage`. Its parameter says `AIMessage`, and a `HumanMessage` is not one. It would reach for `.model` and crash. ✗
 
-> [!important] **A callback may accept *more* than it will be given, never less.** `handle_any` handles every `Message`, so it certainly handles the `HumanMessage` about to arrive. `handle_ai` handles less than will arrive.
+> [!important] **A callback may accept more than it will be given, never less.** `handle_any` handles every `Message`, so it certainly handles the `HumanMessage` about to arrive. `handle_ai` handles less than will arrive.
 
-That's **contravariance**: in the *parameter* position, substitution runs the opposite way — the base class is accepted where the subclass was expected.
+That's **contravariance**: in the **parameter** position, substitution runs the opposite way — the base class is accepted where the subclass was expected.
 
 It is the same read/write rule seen from the other end. A function's parameter is a place values get **written into**, and writing was always the direction that ran backwards.
 
@@ -258,22 +258,22 @@ It is the same read/write rule seen from the other end. A function's parameter i
 
 Two words, defined once:
 
-- **Wider** — covers more kinds of thing. `Message` is wider than `HumanMessage`: every human message is a message, *and* so are AI messages, *and* so are plain ones.
+- **Wider** — covers more kinds of thing. `Message` is wider than `HumanMessage`: every human message is a message, **and** so are AI messages, **and** so are plain ones.
 - **Narrower** — covers fewer kinds, and therefore guarantees more attributes. `HumanMessage` is narrower, and it's the only one with `.user_id`.
 
-The base class is always the wider one. Each rule is phrased identically — *you have this; can you pass it where that is wanted?*
+The base class is always the wider one. Each rule is phrased identically — **you have this; can you pass it where that is wanted?**
 
 **1. A read-only container: you may pass a narrower one.**
 You have `Sequence[HumanMessage]`; the function wants `Sequence[Message]`. **Yes.**
-*Why:* it will read and get a `HumanMessage`. It expected a `Message`. A `HumanMessage` is one.
+**Why:** it will read and get a `HumanMessage`. It expected a `Message`. A `HumanMessage` is one.
 
 **2. A function's parameter: you may pass one that accepts a wider type.**
 You have `Callable[[Message], None]`; the function wants `Callable[[HumanMessage], None]`. **Yes.**
-*Why:* it will be called with a `HumanMessage`. Yours accepts any `Message`, so it copes.
+**Why:** it will be called with a `HumanMessage`. Yours accepts any `Message`, so it copes.
 
 **3. A function's return: you may pass one that returns a narrower type.**
 You have `Callable[..., HumanMessage]`; the function wants `Callable[..., Message]`. **Yes.**
-*Why:* the caller will use the result as a `Message`. You handed back a `HumanMessage`, which is one.
+**Why:** the caller will use the result as a `Message`. You handed back a `HumanMessage`, which is one.
 
 Rules 1 and 3 are the same rule — **the thing you receive may be narrower than promised.** Rule 2 is its mirror — **the thing you accept may be wider than promised.**
 

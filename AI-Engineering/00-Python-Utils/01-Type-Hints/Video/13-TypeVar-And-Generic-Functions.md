@@ -34,7 +34,7 @@ There's a second, quieter cost. Because the signature promises a `User`, the edi
 
 ## Too wide
 
-The obvious escape is to say "anything":
+The obvious escape is to say **anything**:
 
 ```python
 from typing import Any
@@ -50,7 +50,7 @@ reveal_type(random_choice(emails))
 # Revealed type is "Any"
 ```
 
-`Any` means *stop checking here*. The caller passed a list of strings and got back something the checker knows nothing about — no error if it's used as a number, no error if a method is called that doesn't exist. And because the unknown value flows onward into whatever it's assigned to, the blindness spreads outward from this one call.
+`Any` means **stop checking here**. The caller passed a list of strings and got back something the checker knows nothing about — no error if it's used as a number, no error if a method is called that doesn't exist. And because the unknown value flows onward into whatever it's assigned to, the blindness spreads outward from this one call.
 
 The editor goes quiet too. Same variable, same dot, nothing offered:
 
@@ -58,9 +58,9 @@ The editor goes quiet too. Same variable, same dot, nothing offered:
 
 This is the trade people miss when they reach for `Any` to make an error go away. The error goes away because **the checker stopped having opinions**, and the help it was giving you stops with it.
 
-Both attempts fail for the same reason. The real rule is not *"takes users"* and not *"takes anything"* — it is **"whatever type is in the list, that's the type that comes out"**. Neither annotation can express a relationship between the input and the output.
+Both attempts fail for the same reason. The real rule is not **takes users** and not **takes anything** — it is **whatever type is in the list, that's the type that comes out**. Neither annotation can express a relationship between the input and the output.
 
-## Saying "the same type"
+## Saying the same type
 
 ```python
 def random_choice[T](items: list[T]) -> T:
@@ -86,7 +86,7 @@ and on a string:
 
 `fav_color` / `first_name` / `last_name` in the first, `center` / `count` / `encode` / `endswith` / `find` in the second. Nothing about `random_choice` changed between them — the placeholder resolved to whatever the caller passed in, and both call sites got the real type back.
 
-> [!important] The contrast in one line. `Any` says **"I don't know what this is"** and stops. A type variable says **"I don't know what this is yet, but it's the same thing on both sides"** and keeps checking. That difference is why `Any` is a last resort and a type variable is the normal answer for anything that passes values through.
+> [!important] The contrast in one line. `Any` says **I don't know what this is** and stops. A type variable says **I don't know what this is yet, but it's the same thing on both sides** and keeps checking. That difference is why `Any` is a last resort and a type variable is the normal answer for anything that passes values through.
 
 Nothing changes at runtime — the placeholder is recorded and otherwise ignored:
 
@@ -115,6 +115,6 @@ Identical meaning. Worth being able to read, since it's what most existing code 
 
 Anything that passes values through without inspecting them, which is a larger category than it first sounds: a cache wrapper, a retry helper, `first()` / `last()` / `pluck()`, a function that unwraps a result, a decorator returning the function it was given.
 
-The tell is a function whose body never looks at *what* the value is. If the code only moves a value from one place to another, the signature should say so — and a type variable is how it says so without lying in either direction.
+The tell is a function whose body never looks at **what** the value is. If the code only moves a value from one place to another, the signature should say so — and a type variable is how it says so without lying in either direction.
 
-> [!tip] A useful sanity check on any signature you write: **if `Any` appears in it, ask what you actually meant.** Sometimes you genuinely don't know and can't — unvalidated JSON, a plugin interface. Far more often you meant "the same type as that other one", and a type variable will say it precisely while keeping every downstream check alive.
+> [!tip] A useful sanity check on any signature you write: **if `Any` appears in it, ask what you actually meant.** Sometimes you genuinely don't know and can't — unvalidated JSON, a plugin interface. Far more often you meant **the same type as that other one**, and a type variable will say it precisely while keeping every downstream check alive.

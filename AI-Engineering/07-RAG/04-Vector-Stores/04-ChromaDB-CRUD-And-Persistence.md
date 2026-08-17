@@ -86,7 +86,7 @@ vector_store = Chroma(
 
 Three arguments, each doing exactly what the earlier notes set up. `collection_name` names the group of vectors. `embedding_function=embeddings` hands Chroma the embedding model — from now on, whenever you give Chroma raw text, it will call this model to turn that text into a vector for you. And `persist_directory` is the on-disk home. The store is now live and empty, waiting for documents.
 
-> [!important] The **`embedding_function`** is the key wiring: you hand Chroma the embedding model *once*, and thereafter you pass it plain text — Chroma embeds it internally. 
+> [!important] The **`embedding_function`** is the key wiring: you hand Chroma the embedding model **once**, and thereafter you pass it plain text — Chroma embeds it internally. 
 > 
 > You never call `embed_documents` yourself here; the store does it. The `persist_directory` makes it survive across sessions.
 
@@ -161,7 +161,7 @@ selected_ids = document_ids[-3:]
 selected_documents = vector_store.get_by_ids(selected_ids)
 ```
 
-`get()` reads everything (or filters); `get_by_ids()` targets exact records. Neither runs a similarity search — they're direct lookups, the "R" in CRUD.
+`get()` reads everything (or filters); `get_by_ids()` targets exact records. Neither runs a similarity search — they're direct lookups, the **R** in CRUD.
 
 ---
 
@@ -177,16 +177,16 @@ search_results = vector_store.similarity_search(query, k=3)
 
 Notice you pass **plain text**, not a vector. Chroma embeds the query for you (again via the `embedding_function`), then runs the nearest-neighbour search — using HNSW under the hood, exactly the indexing from note 03 — and returns the `k=3` most semantically similar `Document` objects. For this query, the RAG-topic documents come back on top, because their meaning is closest to the question, even though the question shares few exact words with them. That's semantic search doing its job.
 
-Often you want to know *how* close each match was, not just the ranking. `similarity_search_with_score` returns each document paired with a **distance score**:
+Often you want to know **how** close each match was, not just the ranking. `similarity_search_with_score` returns each document paired with a **distance score**:
 
 ```python
 vector_store.similarity_search_with_score(query=query, k=4)
 ```
 
-Each result comes back as `(Document, score)`. The score is a distance, so **lower means more similar** — the nearest neighbour has the smallest score. This is what you'd use to set a relevance threshold (e.g. "ignore anything with a distance above X") rather than blindly taking the top `k`.
+Each result comes back as `(Document, score)`. The score is a distance, so **lower means more similar** — the nearest neighbour has the smallest score. This is what you'd use to set a relevance threshold (e.g. **ignore anything with a distance above X**) rather than blindly taking the top `k`.
 
 > [!important] `similarity_search(query, k=n)` takes **plain text** — Chroma embeds it internally and returns the `k` nearest `Document`s by meaning (HNSW under the hood). 
-> `similarity_search_with_score(query, k=n)` additionally returns a **distance score** per result, where *lower = closer*. Use the plain version for "give me the top k"; use the scored version when you need a relevance cutoff.
+> `similarity_search_with_score(query, k=n)` additionally returns a **distance score** per result, where **lower = closer**. Use the plain version for **give me the top k**; use the scored version when you need a relevance cutoff.
 
 ---
 
@@ -239,7 +239,7 @@ print(f"Remaining document count: {len(remaining_ids)}")
 The count drops from ten to eight, and checking the deleted IDs against `remaining_ids` confirms they're gone. That completes the full **CRUD** set: **C**reate (`add_documents`), **R**ead (`get` / `get_by_ids` / `similarity_search`), **U**pdate (`update_documents`), **D**elete (`delete`).
 
 
-> [!tip] Interview framing: "In code, ChromaDB via LangChain gives you a vector store with full CRUD. 
+> [!tip] Interview framing: In code, ChromaDB via LangChain gives you a vector store with full CRUD. 
 > 
 > You create it with a collection name, an embedding function, and a persist directory; 
 > 
@@ -249,5 +249,5 @@ The count drops from ten to eight, and checking the deleted IDs against `remaini
 > 
 > `update_documents` / `delete` operate by id. 
 > 
-> The key production detail is the **persist directory** — reopen the same directory and collection in a new process and all vectors load from disk with no re-embedding, which is exactly why you use a vector store instead of an in-memory list."
+> The key production detail is the **persist directory** — reopen the same directory and collection in a new process and all vectors load from disk with no re-embedding, which is exactly why you use a vector store instead of an in-memory list.
 

@@ -47,7 +47,7 @@ Where fixtures live, how they're found, and directory-scoped overriding.
 `tmp_path`, `monkeypatch`, `capsys`, `caplog`. `monkeypatch` in particular for env vars and attribute patching, scoped so it undoes itself.
 
 **11. Factory and parametrised fixtures**
-Fixtures that return a *maker* function; fixtures parametrised so every dependent test runs once per variant.
+Fixtures that return a **maker** function; fixtures parametrised so every dependent test runs once per variant.
 
 ## C · Parametrisation — the eval-harness primitive
 
@@ -63,7 +63,7 @@ Keeping cases in JSON/YAML/CSV rather than inline, so a non-engineer can extend 
 ## D · Isolation and the outside world
 
 **15. Mocking and patching**
-`unittest.mock`, `monkeypatch`, `MagicMock`, `AsyncMock`. Patching *where it's looked up*, not where it's defined — the single most common mistake.
+`unittest.mock`, `monkeypatch`, `MagicMock`, `AsyncMock`. Patching **where it's looked up**, not where it's defined — the single most common mistake.
 
 **16. Testing code that calls an LLM**
 The genuinely hard case, and where testing and evals diverge: deterministic tests mock the model; evals actually call it and score the output. Recorded fixtures/cassettes as the middle ground. Knowing which of the three a given check should be is the judgement being tested.
@@ -89,11 +89,11 @@ The genuinely hard case, and where testing and evals diverge: deterministic test
 
 ## Where this already shows up
 
-Nowhere yet — and that's the finding. `00-Fast-API` has no tests; the Xarvis audit records "11 test files, sparse coverage, no integration tests." This folder is the prerequisite for closing the single largest gap identified in both the AI-engineering plan and the Sarvam assessment.
+Nowhere yet — and that's the finding. `00-Fast-API` has no tests; the Xarvis audit records **11 test files, sparse coverage, no integration tests.** This folder is the prerequisite for closing the single largest gap identified in both the AI-engineering plan and the Sarvam assessment.
 
 ## Interview hooks
 
-*"How do you test an agent?"* is the whole game here, and the strong answer separates the deterministic layer (tool wiring, schema compliance, error paths — real unit tests with mocks) from the non-deterministic layer (answer quality, trajectory correctness — evals with a judge). Sarvam's §4 names "automated evaluation harnesses" and Week 7 names CI regression-catching directly; capstone requirements say "real test coverage."
+**How do you test an agent?** is the whole game here, and the strong answer separates the deterministic layer (tool wiring, schema compliance, error paths — real unit tests with mocks) from the non-deterministic layer (answer quality, trajectory correctness — evals with a judge). Sarvam's §4 names **automated evaluation harnesses** and Week 7 names CI regression-catching directly; capstone requirements say **real test coverage.**
 
 ## Sources to verify against
 

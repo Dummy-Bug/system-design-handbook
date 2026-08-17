@@ -67,7 +67,7 @@ print(next(i_nums))   # StopIteration
 
 ## What a `for` loop actually does
 
-Put those pieces together and the loop stops being magic. It calls `iter()` on whatever you gave it, then calls `next()` repeatedly until `StopIteration` shows up, which it catches and treats as "done":
+Put those pieces together and the loop stops being magic. It calls `iter()` on whatever you gave it, then calls `next()` repeatedly until `StopIteration` shows up, which it catches and treats as **done**:
 
 ```python
 i_nums = iter(nums)
@@ -108,9 +108,9 @@ b = iter(nums)
 print(next(a), next(a), next(b))   # 1 2 1
 ```
 
-`b` started from the beginning while `a` was halfway through, because they're separate objects with separate state. The list holds the data; each iterator holds one *position* in it.
+`b` started from the beginning while `a` was halfway through, because they're separate objects with separate state. The list holds the data; each iterator holds one **position** in it.
 
-A generator collapses the two roles into one object — it *is* its own iterator — which is exactly why the last note's warning applies:
+A generator collapses the two roles into one object — it **is** its own iterator — which is exactly why the last note's warning applies:
 
 ```python
 g = my_range(1, 5)
@@ -211,9 +211,9 @@ print([(a, b) for a in nums for b in nums])
 # all nine pairs
 ```
 
-`MyRange` is now iterable and *not* an iterator; `MyRangeIterator` is both. That's the same split lists use, and it's what re-iterability actually requires.
+`MyRange` is now iterable and **not** an iterator; `MyRangeIterator` is both. That's the same split lists use, and it's what re-iterability actually requires.
 
-> [!important] **The decision is a design choice, not an oversight — but it has to be deliberate.** Return `self` when the thing genuinely represents a one-time stream: a network response, a cursor over rows, a file being consumed. Return a fresh iterator when it represents a *collection* that happens to be loopable. Getting this wrong produces silently short results rather than errors, as the nested loop above shows.
+> [!important] **The decision is a design choice, not an oversight — but it has to be deliberate.** Return `self` when the thing genuinely represents a one-time stream: a network response, a cursor over rows, a file being consumed. Return a fresh iterator when it represents a **collection** that happens to be loopable. Getting this wrong produces silently short results rather than errors, as the nested loop above shows.
 
 ## The generator version
 
@@ -241,7 +241,7 @@ print([n for n in g])   # [1, 2, 3, 4]
 print([n for n in g])   # []
 ```
 
-The practical difference is that calling `my_range(1, 5)` again is trivially cheap and gives a fresh one — which is why "call the generator function twice" was the advice in the last note.
+The practical difference is that calling `my_range(1, 5)` again is trivially cheap and gives a fresh one — which is why **call the generator function twice** was the advice in the last note.
 
 ## Iterators don't have to end
 
@@ -260,7 +260,7 @@ c = count_from(1)
 print(next(c), next(c), next(c))   # 1 2 3
 ```
 
-This is safe *only* because values are produced on demand. The consumer decides when to stop — with `break`:
+This is safe **only** because values are produced on demand. The consumer decides when to stop — with `break`:
 
 ```python
 for n in count_from(100):
@@ -278,7 +278,7 @@ print(list(islice(count_from(1), 10)))
 # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 ```
 
-> [!warning] Anything that consumes an iterator *fully* will hang forever on an infinite one — `list()`, `sum()`, `max()`, `sorted()`, `len(list(...))`. There is no error and no timeout; the process simply grows until it is killed. An infinite iterator and an eager consumer are never compatible.
+> [!warning] Anything that consumes an iterator **fully** will hang forever on an infinite one — `list()`, `sum()`, `max()`, `sorted()`, `len(list(...))`. There is no error and no timeout; the process simply grows until it is killed. An infinite iterator and an eager consumer are never compatible.
 
 This is where laziness stops being an optimisation and becomes the only option. A sequence with no end can't be a list at any price, and neither can one that merely exceeds available memory — but either can be looped over one value at a time, indefinitely, in constant space.
 

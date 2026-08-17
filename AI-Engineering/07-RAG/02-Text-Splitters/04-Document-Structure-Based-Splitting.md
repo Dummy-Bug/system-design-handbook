@@ -1,12 +1,12 @@
 The recursive splitter closed the story for prose: paragraphs, then lines, then words — the hierarchy written language naturally has. But a knowledge source is rarely just prose. The moment your loaders start pulling in **Python files, Markdown docs, JSON APIs**, the paragraph hierarchy stops describing the text. A Python file has no paragraphs — it has functions and classes. A Markdown file's real structure is its headings. A JSON object nests dictionaries inside dictionaries. Split those with `["\n\n", "\n", " ", ""]` and you'll slice a function in half or weld two unrelated JSON records together.
 
-The fix is not a new algorithm. It's the same recursive strategy with a different **separator hierarchy — one that matches the document's own structure**. That's all "document-structure-based splitting" means.
+The fix is not a new algorithm. It's the same recursive strategy with a different **separator hierarchy — one that matches the document's own structure**. That's all **document-structure-based splitting** means.
 
 ---
 
 ## Splitting code — the `Language` enum
 
-Take a real Python file: imports at the top, two standalone functions (`calculate_mean`, `calculate_median`), a `StatisticalAnalyzer` class with three methods, and a `main()` function. The meaningful boundaries here are obvious to any programmer: **a chunk should be a function or a class**, not "700 characters starting wherever."
+Take a real Python file: imports at the top, two standalone functions (`calculate_mean`, `calculate_median`), a `StatisticalAnalyzer` class with three methods, and a `main()` function. The meaningful boundaries here are obvious to any programmer: **a chunk should be a function or a class**, not **700 characters starting wherever.**
 
 LangChain ships this as a classmethod on the splitter you already know:
 
@@ -34,7 +34,7 @@ python_splitter.get_separators_for_language(Language.JS)
 #  '\n\n', '\n', ' ', '']
 ```
 
-Read the Python list top-down and it's a programmer's priority order: cut at `class` definitions first, then top-level `def`s, then indented methods, and only then fall back to the familiar paragraphs → lines → words → characters tail. Same recursion, same merge-back-up step — only the notion of "a meaningful boundary" changed.
+Read the Python list top-down and it's a programmer's priority order: cut at `class` definitions first, then top-level `def`s, then indented methods, and only then fall back to the familiar paragraphs → lines → words → characters tail. Same recursion, same merge-back-up step — only the notion of **a meaningful boundary** changed.
 
 Run it on the statistics file with `chunk_size=700` and four chunks come back:
 
@@ -47,7 +47,7 @@ Chunk 4 (158 chars): def main(): ... the complete main function
 
 Chunk 1 is a coherent unit — the two standalone helper functions, whole, with their imports. Chunk 4 is the entire `main()` function, untouched. That's the promise delivered: cuts land on code boundaries.
 
-> [!important] But look honestly at chunk 3 — a lonely 58-character `return` line. The class was 733 characters, too big for the 700 budget, so the splitter had to cut *inside* it, and the cut fell mid-method. Language-aware splitting makes good boundaries far more likely; it does not make bad ones impossible. When a single class outgrows `chunk_size`, something has to give — your two levers are a bigger `chunk_size` or accepting an occasional orphan line (which `chunk_overlap` then papers over, since the next chunk re-carries context).
+> [!important] But look honestly at chunk 3 — a lonely 58-character `return` line. The class was 733 characters, too big for the 700 budget, so the splitter had to cut **inside** it, and the cut fell mid-method. Language-aware splitting makes good boundaries far more likely; it does not make bad ones impossible. When a single class outgrows `chunk_size`, something has to give — your two levers are a bigger `chunk_size` or accepting an occasional orphan line (which `chunk_overlap` then papers over, since the next chunk re-carries context).
 
 ---
 
@@ -66,7 +66,7 @@ python_splitter.get_separators_for_language(Language.MARKDOWN)
 
 Headings of any level first (`#{1,6}` is a regex — one to six hashes), then fenced code blocks, then horizontal rules, then the usual prose tail. You get size-bounded chunks that prefer to break at headings. Output: plain strings, like every other `split_text`.
 
-**Option 2 — `MarkdownHeaderTextSplitter`.** This one doesn't think in `chunk_size` at all — it thinks in **sections**, and it remembers *where each section sits in the outline*:
+**Option 2 — `MarkdownHeaderTextSplitter`.** This one doesn't think in `chunk_size` at all — it thinks in **sections**, and it remembers **where each section sits in the outline**:
 
 ```python
 from langchain_text_splitters import MarkdownHeaderTextSplitter
@@ -103,7 +103,7 @@ markdown_chunks[2].page_content
 # - Support vector machines
 ```
 
-> [!info] That metadata is a breadcrumb trail. When retrieval later surfaces this chunk, you don't just know it says "labeled training data" — you know it lives under *AI Overview → Machine Learning → Supervised Learning*. The chunk carries its own table-of-contents position, which the LLM can use for context and your system can use for filtering.
+> [!info] That metadata is a breadcrumb trail. When retrieval later surfaces this chunk, you don't just know it says **labeled training data** — you know it lives under **AI Overview → Machine Learning → Supervised Learning**. The chunk carries its own table-of-contents position, which the LLM can use for context and your system can use for filtering.
 
 > [!danger] Watch the return-type inconsistency: every other splitter's `split_text` gives `list[str]`, but `MarkdownHeaderTextSplitter.split_text` gives `list[Document]` — because strings have nowhere to put the header metadata. Forgetting this is a classic source of type errors in a pipeline.
 
@@ -136,7 +136,7 @@ Chunk 3 (82 chars):  {"metadata": {"founded": 2020, "headquarters": "San Francis
 
 Every chunk is **valid, parseable JSON** — keys with their values, brackets balanced. No chunk ends mid-string.
 
-> [!important] But chunk 1 is 635 characters against a `max_chunk_size` of 200 — a 3× breach. Why? The splitter descends into *dictionaries*, but it treats a **list** as a single value it won't tear apart — and the entire `departments` list is one value. Same lesson as the character splitter's oversized-paragraph warning and the Python splitter's oversized class: **every structure-respecting splitter treats your size limit as "best effort within the structure."** When an atomic unit of structure is bigger than the budget, structure wins and the limit is exceeded.
+> [!important] But chunk 1 is 635 characters against a `max_chunk_size` of 200 — a 3× breach. Why? The splitter descends into **dictionaries**, but it treats a **list** as a single value it won't tear apart — and the entire `departments` list is one value. Same lesson as the character splitter's oversized-paragraph warning and the Python splitter's oversized class: **every structure-respecting splitter treats your size limit as best effort within the structure.** When an atomic unit of structure is bigger than the budget, structure wins and the limit is exceeded.
 
 ---
 
@@ -154,8 +154,8 @@ flowchart LR
     E --> I["RecursiveJsonSplitter<br/>outer keys → nested dicts"]
 ```
 
-One idea, four costumes: **let the document's own structure supply the separator hierarchy.** The recursion and the merge-up step never change; only the definition of "a meaningful place to cut" does.
+One idea, four costumes: **let the document's own structure supply the separator hierarchy.** The recursion and the merge-up step never change; only the definition of **a meaningful place to cut** does.
 
-> [!tip] Interview framing: "For structured formats I don't invent a splitter — I reuse the recursive strategy with format-aware separators. `from_language` gives me class/function boundaries for code, `MarkdownHeaderTextSplitter` gives me one chunk per section *with the heading trail as metadata*, and `RecursiveJsonSplitter` descends the nesting so every chunk stays parseable. The common trap to mention: all of them treat `chunk_size` as best-effort — an oversized class, section, or list will still exceed it, because breaking the structure would be worse."
+> [!tip] Interview framing: **For structured formats I don't invent a splitter — I reuse the recursive strategy with format-aware separators. `from_language` gives me class/function boundaries for code, `MarkdownHeaderTextSplitter` gives me one chunk per section with the heading trail as metadata, and `RecursiveJsonSplitter` descends the nesting so every chunk stays parseable. The common trap to mention: all of them treat `chunk_size` as best-effort — an oversized class, section, or list will still exceed it, because breaking the structure would be worse.**
 
-All the splitters so far — character, recursive, structure-based — share one blind spot, though: they cut where the *formatting* changes, never where the *meaning* changes. A document that drifts from machine learning into cooking recipes inside one long paragraph will sail through every splitter above as a single chunk. Splitting on meaning itself needs a fundamentally different ingredient.
+All the splitters so far — character, recursive, structure-based — share one blind spot, though: they cut where the **formatting** changes, never where the **meaning** changes. A document that drifts from machine learning into cooking recipes inside one long paragraph will sail through every splitter above as a single chunk. Splitting on meaning itself needs a fundamentally different ingredient.

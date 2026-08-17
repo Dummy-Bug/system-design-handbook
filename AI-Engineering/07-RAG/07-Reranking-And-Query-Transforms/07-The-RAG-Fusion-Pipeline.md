@@ -27,7 +27,7 @@ flowchart TD
     C --> A["LLM generates answer"]
 ```
 
-> [!important] Two distinct `k` values live in this diagram and confusing them is easy. The **retrieval `k`** is how many documents *each run* returns — widen it and RRF has more evidence to fuse. The **final `k`** is how many survive fusion into the context. They are independent knobs: you might retrieve 4 per run across 3 runs (up to 12 distinct documents) and keep only 3.
+> [!important] Two distinct `k` values live in this diagram and confusing them is easy. The **retrieval `k`** is how many documents **each run** returns — widen it and RRF has more evidence to fuse. The **final `k`** is how many survive fusion into the context. They are independent knobs: you might retrieve 4 per run across 3 runs (up to 12 distinct documents) and keep only 3.
 
 ---
 
@@ -45,7 +45,7 @@ flowchart TD
 
 ## What it costs
 
-**① An extra LLM API call.** Every query now requires a generation step *before* retrieval can even start, purely to produce the rephrasings.
+**① An extra LLM API call.** Every query now requires a generation step **before** retrieval can even start, purely to produce the rephrasings.
 
 **② Latency.** That LLM call sits on the critical path, and behind it come **N retrieval runs instead of one**. The user waits for all of it.
 
@@ -57,7 +57,7 @@ flowchart TD
 
 ## Where it sits among the things that fix retrieval
 
-Three techniques in this module all end with "better documents in the context", and they are easy to blur together. They intervene at different points and fix different failures:
+Three techniques in this module all end with **better documents in the context**, and they are easy to blur together. They intervene at different points and fix different failures:
 
 | Technique | What it fixes | How it decides the final order |
 |---|---|---|
@@ -65,14 +65,14 @@ Three techniques in this module all end with "better documents in the context", 
 | **RAG Fusion** | same, **plus** the lost rank information | **RRF** — consensus across runs, using ranks only |
 | **Cross-encoder reranking** | similarity scores are approximate because embeddings are lossy | a model that reads query and document **together** |
 
-The sharpest distinction is between the last two, because both are called "re-ranking":
+The sharpest distinction is between the last two, because both are called **re-ranking**:
 
 - **RRF re-ranks using rank agreement.** It never looks at the documents. It is free, instant, and knows nothing about content — it only counts and positions.
 - **A cross-encoder re-ranks using content.** It reads each query-document pair with a transformer and produces a genuine relevance judgement. It costs a model pass per document.
 
-They are not alternatives. RRF fuses *several lists into one*; a cross-encoder scores *one list properly*. Stacking them is coherent — fuse your retrieval runs with RRF, then send the fused shortlist through a cross-encoder — and that is what a serious pipeline tends to look like.
+They are not alternatives. RRF fuses **several lists into one**; a cross-encoder scores **one list properly**. Stacking them is coherent — fuse your retrieval runs with RRF, then send the fused shortlist through a cross-encoder — and that is what a serious pipeline tends to look like.
 
 ---
 
 > [!tip] Interview framing
-> "The pipeline is: user query → LLM rewrites it into N alternatives → N independent retrieval runs, each returning its own ranked list → RRF merges those lists into one ordering → top-k becomes the context → generation. The advantages are that RRF is trivially simple, needs no model or training, and is fully explainable — you can hand-check why a document ranked where it did. The costs are an extra LLM call before retrieval, N retrievals instead of one, and both latency and per-query spend, all paid unconditionally because the pipeline can't tell a well-phrased query from a badly-phrased one. The distinction I'd want to draw is against cross-encoder reranking: RRF re-ranks on rank agreement and never reads the documents, while a cross-encoder re-ranks on content and costs a model pass per document. They compose rather than compete — fuse the runs with RRF, then rerank the fused shortlist with a cross-encoder."
+> **The pipeline is: user query → LLM rewrites it into N alternatives → N independent retrieval runs, each returning its own ranked list → RRF merges those lists into one ordering → top-k becomes the context → generation. The advantages are that RRF is trivially simple, needs no model or training, and is fully explainable — you can hand-check why a document ranked where it did. The costs are an extra LLM call before retrieval, N retrievals instead of one, and both latency and per-query spend, all paid unconditionally because the pipeline can't tell a well-phrased query from a badly-phrased one. The distinction I'd want to draw is against cross-encoder reranking: RRF re-ranks on rank agreement and never reads the documents, while a cross-encoder re-ranks on content and costs a model pass per document. They compose rather than compete — fuse the runs with RRF, then rerank the fused shortlist with a cross-encoder.**

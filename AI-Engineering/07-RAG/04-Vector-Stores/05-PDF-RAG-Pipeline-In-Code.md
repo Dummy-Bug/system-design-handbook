@@ -161,12 +161,12 @@ Every component you learned in isolation is doing its one job in a chain: the lo
 **What this pipeline gives you:**
 
 - A **real document** turned into a persistent, searchable semantic index, entirely from local components.
-- **Meaning-based retrieval** — a plain-text query returns the passages that are *about* it, not just ones sharing keywords.
+- **Meaning-based retrieval** — a plain-text query returns the passages that are **about** it, not just ones sharing keywords.
 - **Source attribution** — metadata (page, source) rides with every chunk, so retrieved answers can point back to where they came from.
 - **Persistence** — built with a `persist_directory`, so the index is embed-once and reusable across sessions.
 
 **What it doesn't yet do:**
 
-- **It isn't the full RAG answer.** The store *retrieves* relevant chunks; it doesn't generate a response. Feeding those chunks to an LLM to compose an answer is the generation step still ahead.
+- **It isn't the full RAG answer.** The store **retrieves** relevant chunks; it doesn't generate a response. Feeding those chunks to an LLM to compose an answer is the generation step still ahead.
 - **It isn't the polished retriever.** `similarity_search` is the raw search; the **retriever** component (next in the course) wraps it with the niceties — how many to fetch, metadata filtering, re-ranking, and a standard interface the rest of a LangChain pipeline plugs into.
 

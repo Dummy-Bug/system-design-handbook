@@ -53,7 +53,7 @@ td0.py:18: error: TypedDict "User" has no key "emial"  [typeddict-item]
 td0.py:18: note: Did you mean "email"?
 ```
 
-**Line 16 is silent.** `user["name"].upper()` is correct code and no longer produces a complaint, because `"name"` is known to hold a `str` specifically rather than "one of three things".
+**Line 16 is silent.** `user["name"].upper()` is correct code and no longer produces a complaint, because `"name"` is known to hold a `str` specifically rather than **one of three things**.
 
 **Line 17 is caught** — `"age"` expects an `int`.
 
@@ -91,7 +91,7 @@ The `class User(TypedDict)` syntax is a **description the checker reads**. Nothi
 
 Read the last two lines together, because they say opposite-sounding things. `User.__mro__` proves the class genuinely exists and genuinely inherits from `dict` — and yet `type(user)` is `dict`, not `User`. Both are true: **the class is a construction-time convenience, and it never stamps itself on the object it builds.** You go in through `User`, you come out holding a plain dictionary that has no memory of it.
 
-### Which is why you can never ask "is this a `User`?"
+### Which is why you can never ask is this a `User`?
 
 ```python
 12  print(isinstance(user, User))
@@ -109,13 +109,13 @@ $ python3 td_iso.py
 TypeError: TypedDict does not support instance and class checks
 ```
 
-Refused twice — by the checker *and* by Python itself, which is unusual; normally the checker objects to things Python would happily run.
+Refused twice — by the checker **and** by Python itself, which is unusual; normally the checker objects to things Python would happily run.
 
-The reason is the paragraph above. There is no mark on the object to look for. Two dictionaries with identical contents are indistinguishable, so the question has no answer to give. And `isinstance(user, dict)` — which *is* legal — returns `True` for every dictionary ever made, so it tells you nothing.
+The reason is the paragraph above. There is no mark on the object to look for. Two dictionaries with identical contents are indistinguishable, so the question has no answer to give. And `isinstance(user, dict)` — which **is** legal — returns `True` for every dictionary ever made, so it tells you nothing.
 
 > [!important] A `TypedDict` is the one shape you cannot test for at runtime. Checking it properly would mean walking every key and every value, which is not what `isinstance` does — it follows `__mro__`, and `__mro__` has nothing to follow here.
 >
-> This is the gap that `23-Escape-Hatches` exists to fill: when you *know* a dict is a `User` and no check can prove it, `cast` is how you say so.
+> This is the gap that `23-Escape-Hatches` exists to fill: when you **know** a dict is a `User` and no check can prove it, `cast` is how you say so.
 
 ## It describes a shape; it never enforces one
 
@@ -193,7 +193,7 @@ $ mypy td3.py
 td3.py:11: error: Missing key "email" for TypedDict "User"  [typeddict-item]
 ```
 
-`b` is rejected — and read the error: **`Missing key`**, not "wrong value". `str | None` made the *value* nullable and said nothing about whether the key has to exist.
+`b` is rejected — and read the error: **`Missing key`**, not **wrong value**. `str | None` made the **value** nullable and said nothing about whether the key has to exist.
 
 ### There are no defaults
 
@@ -250,11 +250,11 @@ This is the two switches from `07-Unions-And-Optionality`, in a new setting:
 - `email: NotRequired[str]` — the key may be **absent**; if present it's a `str`.
 - `email: NotRequired[str | None]` — both.
 
-Same independence, same trap: "optional field" means two different things and the declaration has to say which.
+Same independence, same trap: **optional field** means two different things and the declaration has to say which.
 
 ### The older spelling
 
-`total=False` makes *every* key optional at once, and `Required[...]` marks the exceptions:
+`total=False` makes **every** key optional at once, and `Required[...]` marks the exceptions:
 
 ```python
  4  class Loose(TypedDict, total=False):

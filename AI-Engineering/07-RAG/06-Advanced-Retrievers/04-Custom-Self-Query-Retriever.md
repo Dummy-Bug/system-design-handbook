@@ -19,7 +19,7 @@ The built-in does all four. We'll do them one at a time.
 
 ## Job 1 — describing the output you want
 
-The parse step has an awkward property: you're asking a language model for something that is *not* language. You want a data structure, with the right field names and the right types, every single time.
+The parse step has an awkward property: you're asking a language model for something that is **not** language. You want a data structure, with the right field names and the right types, every single time.
 
 Describing it in the prompt and hoping is not good enough. So define the shape as **Pydantic models** and make the model fill them in.
 
@@ -38,10 +38,10 @@ class MetadataFilter(BaseModel):
 | field | operator | value | means |
 |---|---|---|---|
 | `year` | `gte` | `2005` | released in 2005 or later |
-| `title` | `eq` | `Inception` | the title is exactly *Inception* |
+| `title` | `eq` | `Inception` | the title is exactly **Inception** |
 | `rating` | `gt` | `7` | rated above 7 |
 
-`operator` defaults to `eq`, because equality is what most constraints turn out to be — *"directed by Nolan"*, *"in the comedy genre"*. The model only has to say something when it's *not* equality.
+`operator` defaults to `eq`, because equality is what most constraints turn out to be — **directed by Nolan**, **in the comedy genre**. The model only has to say something when it's **not** equality.
 
 Then the outer shape:
 
@@ -58,7 +58,7 @@ class SelfQuerySchema(BaseModel):
 
 Two fields, mirroring the decomposition exactly: the semantic half, and a **list** of filters — a list because one sentence can carry several constraints, and `Optional` with `default=None` because plenty of queries carry none at all.
 
-> [!important] Those `description=` strings are not documentation. They are shipped to the model as part of the schema, and they are what it reads to decide what goes where. *"None if no filters apply"* is the line that stops the model from inventing a filter for every query. A vague description here produces a vague parser.
+> [!important] Those `description=` strings are not documentation. They are shipped to the model as part of the schema, and they are what it reads to decide what goes where. **None if no filters apply** is the line that stops the model from inventing a filter for every query. A vague description here produces a vague parser.
 
 ---
 
@@ -77,7 +77,7 @@ Only add filters when the user explicitly specifies metadata constraints."""
 
 This is the thing the built-in wouldn't let you touch, and it's carrying the schema by hand — every field with its type, and the operator list.
 
-The last line does the real work: **"Only add filters when the user explicitly specifies metadata constraints."** Without it you get a parser that manufactures constraints out of thin air, turning *"movies about dreams"* into some guess at a genre filter and quietly excluding most of your corpus.
+The last line does the real work: **Only add filters when the user explicitly specifies metadata constraints.** Without it you get a parser that manufactures constraints out of thin air, turning **movies about dreams** into some guess at a genre filter and quietly excluding most of your corpus.
 
 ```python
 prompt = ChatPromptTemplate.from_messages([
@@ -91,7 +91,7 @@ query_chain = prompt | structured_llm
 
 `with_structured_output(SelfQuerySchema)` is the piece that makes this reliable. Rather than returning text you then have to parse, the model is constrained to return something that validates against the schema — and you get a `SelfQuerySchema` **object** back, not a string that looks like one.
 
-So for *"What are some sci-fi movies released on and after year 2005?"* the chain returns:
+So for **What are some sci-fi movies released on and after year 2005?** the chain returns:
 
 ```python
 SelfQuerySchema(
@@ -202,10 +202,10 @@ flowchart TD
 
 ## What you gained by rebuilding it
 
-- **The prompt is yours.** You can add few-shot examples, teach it domain vocabulary (*"'recent' means the last two years"*), or tighten the rule about when not to filter. The built-in gives you none of that.
+- **The prompt is yours.** You can add few-shot examples, teach it domain vocabulary (**'recent' means the last two years**), or tighten the rule about when not to filter. The built-in gives you none of that.
 - **The schema is yours.** Want a `limit` field, or `$or` support, or case-insensitive matching? Add it to the Pydantic model and mention it in the prompt.
 - **No dependency on `langchain_classic`.** Everything here is `langchain_core` plus Pydantic plus your store.
-- **You can see the parse.** `query_chain.invoke({"query": ...})` on its own prints exactly what the model decided — which is the only practical way to debug "why did my retriever return nothing?" The answer is nearly always a filter you didn't expect.
+- **You can see the parse.** `query_chain.invoke({"query": ...})` on its own prints exactly what the model decided — which is the only practical way to debug **why did my retriever return nothing?** The answer is nearly always a filter you didn't expect.
 
 What you lose is the built-in's ready-made translators for every supported store, and `enable_limit`. Both are a few lines to add back.
 
@@ -214,4 +214,4 @@ What you lose is the built-in's ready-made translators for every supported store
 ---
 
 > [!tip] Interview framing
-> "I rebuilt the self-query retriever from parts rather than using LangChain's, partly because it lives in `langchain_classic` which is being retired, and partly because the built-in hides the prompt. It's four jobs: parse, translate, search, conform. Parsing is a Pydantic schema — a `MetadataFilter` of field, value, operator, and an outer object holding the semantic query plus an optional list of filters — driven through `with_structured_output`, so the model returns a validated object rather than text I have to parse. Translation converts our generic operators into the store's dialect, and it has to branch on filter count because Chroma takes a bare condition for one and an explicit `$and` for several. Then `similarity_search(semantic_query, filter=...)`, wrapped in a `BaseRetriever` subclass so it still composes with everything else. The main lesson was that the field descriptions in the schema are load-bearing — 'None if no filters apply' is what stops it hallucinating a constraint on every query."
+> **I rebuilt the self-query retriever from parts rather than using LangChain's, partly because it lives in `langchain_classic` which is being retired, and partly because the built-in hides the prompt. It's four jobs: parse, translate, search, conform. Parsing is a Pydantic schema — a `MetadataFilter` of field, value, operator, and an outer object holding the semantic query plus an optional list of filters — driven through `with_structured_output`, so the model returns a validated object rather than text I have to parse. Translation converts our generic operators into the store's dialect, and it has to branch on filter count because Chroma takes a bare condition for one and an explicit `$and` for several. Then `similarity_search(semantic_query, filter=...)`, wrapped in a `BaseRetriever` subclass so it still composes with everything else. The main lesson was that the field descriptions in the schema are load-bearing — 'None if no filters apply' is what stops it hallucinating a constraint on every query.**

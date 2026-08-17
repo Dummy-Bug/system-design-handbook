@@ -25,7 +25,7 @@ for n in nums:
 
 Now you need the cubes. You write the same loop again with `cube` in the middle. Then lengths, then uppercase, then a rating-normaliser. Five loops, identical except for one call in the centre.
 
-The thing that varies is a *function*. And functions are objects. So pass it in:
+The thing that varies is a **function**. And functions are objects. So pass it in:
 
 ```python
 def my_map(func, values):
@@ -39,7 +39,7 @@ my_map(square, [1, 2, 3, 4, 5])    # [1, 4, 9, 16, 25]
 my_map(cube,   [1, 2, 3, 4, 5])    # [1, 8, 27, 64, 125]
 ```
 
-Look at where the parentheses are and are not. `square` is passed bare — `my_map(square(), ...)` would run it immediately with no argument and crash. The call happens once, inside the loop, on the parameter name `func`. The caller supplies *what to do*; `my_map` owns *when and how often to do it*.
+Look at where the parentheses are and are not. `square` is passed bare — `my_map(square(), ...)` would run it immediately with no argument and crash. The call happens once, inside the loop, on the parameter name `func`. The caller supplies **what to do**; `my_map` owns **when and how often to do it**.
 
 ```mermaid
 flowchart LR

@@ -37,7 +37,7 @@ retriever = vector_store.as_retriever(search_kwargs={"k": 4})
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 ```
 
-`chunk_size=600` here, against CRAG's 900. The lecture says this was found by experimentation — these documents are short policy pages rather than textbook prose, so smaller chunks retrieved better. Worth copying the *habit*, not the number.
+`chunk_size=600` here, against CRAG's 900. The lecture says this was found by experimentation — these documents are short policy pages rather than textbook prose, so smaller chunks retrieved better. Worth copying the **habit**, not the number.
 
 ---
 
@@ -87,9 +87,9 @@ def decide_retrieval(state: State):
     return {"need_retrieval": decision.should_retrieve}
 ```
 
-The guidelines draw the line in a specific place: **specific facts and citations → retrieve; general explanations, definitions and reasoning → don't.** That is exactly the *"what is a paid leave"* versus *"how many paid leaves do we get"* split from [[09-The-Four-Reflection-Questions]] — one is a definition, the other is a company fact.
+The guidelines draw the line in a specific place: **specific facts and citations → retrieve; general explanations, definitions and reasoning → don't.** That is exactly the **what is a paid leave** versus **how many paid leaves do we get** split from [[09-The-Four-Reflection-Questions]] — one is a definition, the other is a company fact.
 
-> [!important] The last guideline is the one to notice: **"If unsure, choose True."**
+> [!important] The last guideline is the one to notice: **If unsure, choose True.**
 >
 > The two errors are not symmetric. Retrieving unnecessarily costs a little latency and some hedging — the problem this whole node exists to reduce. Failing to retrieve when you needed to means answering a company-specific question from parametric knowledge, which is a **confident, plausible, wrong answer**. Cheap failure versus expensive failure, so the tie-break goes to the cheap one.
 >
@@ -116,7 +116,7 @@ def generate_direct(state: State):
     return {"answer": out.content}
 ```
 
-Two things this prompt is doing. **"Do NOT assume access to external documents"** stops the model producing text like *"according to the provided policy…"* when there is no policy in front of it. And the escape hatch gives it somewhere to go if the router was wrong — a second line of defence behind the "if unsure, choose True" bias.
+Two things this prompt is doing. **Do NOT assume access to external documents** stops the model producing text like **according to the provided policy…** when there is no policy in front of it. And the escape hatch gives it somewhere to go if the router was wrong — a second line of defence behind the **if unsure, choose True** bias.
 
 ---
 
@@ -159,7 +159,7 @@ g.add_edge("retrieve", END)      # temporary END for the retrieval path
 - `answer` → a real answer, produced from parametric knowledge
 - `docs` → **empty**, because retrieval never ran
 
-That second run is problem 1 from [[08-Why-Self-RAG]] solved. In traditional RAG, "what is machine learning" would have triggered a vector search against three company PDFs, retrieved four chunks about leave policies and pricing tiers, and forced the model to answer a general question from irrelevant company documents. Here it simply doesn't retrieve.
+That second run is problem 1 from [[08-Why-Self-RAG]] solved. In traditional RAG, **what is machine learning** would have triggered a vector search against three company PDFs, retrieved four chunks about leave policies and pricing tiers, and forced the model to answer a general question from irrelevant company documents. Here it simply doesn't retrieve.
 
 ---
 
@@ -167,11 +167,11 @@ That second run is problem 1 from [[08-Why-Self-RAG]] solved. In traditional RAG
 
 **It guarantees** that questions the corpus cannot help with skip retrieval entirely — no wasted search, no irrelevant context diluting the prompt.
 
-**It does not guarantee** the routing decision is right. It is one LLM call with no evidence beyond the question text, made *before* seeing any documents. A question phrased generically but actually company-specific will route wrong. The "if unsure, choose True" bias mitigates that; it does not remove it.
+**It does not guarantee** the routing decision is right. It is one LLM call with no evidence beyond the question text, made **before** seeing any documents. A question phrased generically but actually company-specific will route wrong. The **if unsure, choose True** bias mitigates that; it does not remove it.
 
 **And it introduces a new cost:** an extra LLM call on the front of every single query, including the ones that were always going to retrieve. This node pays for itself only if a meaningful share of your traffic genuinely doesn't need the corpus.
 
 ---
 
 > [!tip] Interview framing
-> "The first reflection point is a router that decides whether to retrieve at all, before any search happens. It's a structured-output call returning a single boolean, with guidelines that split on specific-facts-and-citations versus general-explanations-and-definitions. The design detail worth calling out is the tie-break: 'if unsure, choose True.' The two errors aren't symmetric — retrieving unnecessarily costs latency and a bit of hedging, while failing to retrieve on a company-specific question gives you a confident wrong answer from parametric knowledge. So you bias the router toward the failure that degrades gracefully. The honest cost is that this adds an LLM call to the front of every query, so it only pays for itself if a real share of your traffic doesn't need the corpus."
+> **The first reflection point is a router that decides whether to retrieve at all, before any search happens. It's a structured-output call returning a single boolean, with guidelines that split on specific-facts-and-citations versus general-explanations-and-definitions. The design detail worth calling out is the tie-break: 'if unsure, choose True.' The two errors aren't symmetric — retrieving unnecessarily costs latency and a bit of hedging, while failing to retrieve on a company-specific question gives you a confident wrong answer from parametric knowledge. So you bias the router toward the failure that degrades gracefully. The honest cost is that this adds an LLM call to the front of every query, so it only pays for itself if a real share of your traffic doesn't need the corpus.**

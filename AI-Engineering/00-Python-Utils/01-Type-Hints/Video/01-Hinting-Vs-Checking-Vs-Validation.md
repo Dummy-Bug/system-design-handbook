@@ -4,8 +4,8 @@
 Three terms that get used as if they meant the same thing, and don't. They all involve types, but they happen at different times, are performed by different things, and one of them is not enforcement at all.
 
 - **Type hinting** — writing down what you expect. Happens as you type. Enforces nothing.
-- **Type checking** — a separate tool reading those hints and complaining, *before* the code runs.
-- **Data validation** — code that actually inspects values *while* running, and can stop the program.
+- **Type checking** — a separate tool reading those hints and complaining, **before** the code runs.
+- **Data validation** — code that actually inspects values **while** running, and can stop the program.
 
 Getting these straight is worth doing once, because almost every confusion about Pydantic and FastAPI traces back to blurring the first and third.
 
@@ -60,7 +60,7 @@ The payoff is real but indirect: the function documents itself, and your editor 
 
 ### Where the hints go
 
-The hints aren't discarded. They're stored — and knowing exactly *where* is what makes the next two sections make sense.
+The hints aren't discarded. They're stored — and knowing exactly **where** is what makes the next two sections make sense.
 
 Start with the fact underneath: **a function is an object.** `def` doesn't create some special interpreter construct; it builds a value sitting in memory, the same way `[1, 2]` does, and points a name at it. Because it's an ordinary object, things can be attached to it:
 
@@ -85,7 +85,7 @@ Parameter names become the keys; the return annotation gets the special key `'re
 
 ### What `<class 'str'>` actually is
 
-Not a description of the parameter, and not the word "str". It is **the `str` class itself** — the same object you call when you write `str(38)`:
+Not a description of the parameter, and not the word **str**. It is **the `str` class itself** — the same object you call when you write `str(38)`:
 
 ```python
 a = create_user.__annotations__
@@ -127,7 +127,7 @@ d   e   f       c   r   e   a   t   e   _   u   s   e   r   (
 f   i   r   s   t   _   n   a   m   e   :       s   t   r   )
 ```
 
-No dictionary, no `<class 'str'>` — a colon, a space, and three letters. The dict is *manufactured* from those letters when the `def` line executes, and discarded when the process exits. Run the same file three times and you get three different dictionaries at three different addresses in memory.
+No dictionary, no `<class 'str'>` — a colon, a space, and three letters. The dict is **manufactured** from those letters when the `def` line executes, and discarded when the process exits. Run the same file three times and you get three different dictionaries at three different addresses in memory.
 
 And `def` genuinely is an instruction that runs, not a declaration the interpreter reads ahead:
 
@@ -140,7 +140,7 @@ def outer():
 
 Until `outer()` is actually called, that inner `def` never executes — so no function object is created and no annotations dictionary is created, even though the annotation sits there in the source in plain sight.
 
-So: annotations are **metadata**, meaning data *about* your code rather than data your code uses. `__annotations__` is where that metadata lives at runtime. It is not, as it's tempting to assume, the one channel every tool reads — the next section is a tool that never touches it.
+So: annotations are **metadata**, meaning data **about** your code rather than data your code uses. `__annotations__` is where that metadata lives at runtime. It is not, as it's tempting to assume, the one channel every tool reads — the next section is a tool that never touches it.
 
 ## 2. Type checking
 
@@ -210,7 +210,7 @@ create_user('John', 'Smith', 'thirty-eight')
 
 Which parameter failed, what was expected, what actually arrived, and a machine-readable error code — none of it hand-written.
 
-> [!info] **Validation is not the same as type-matching, and Pydantic's default behaviour makes that obvious.** The string `'38'` is *accepted* and converted:
+> [!info] **Validation is not the same as type-matching, and Pydantic's default behaviour makes that obvious.** The string `'38'` is **accepted** and converted:
 > ```python
 > user = create_user('John', 'Smith', '38')
 > print(type(user['age']).__name__)   # int
@@ -229,7 +229,7 @@ Which parameter failed, what was expected, what actually arrived, and a machine-
 > # [type=int_type, input_value='38', input_type=str]
 > ```
 
-Validation also reaches past types entirely, into values. `-5` is a perfectly good `int`, so a type checker has no complaint about it and never will — but whether it's a plausible *age* is a question about the value, and only answerable once a value exists. Ranges, formats, non-empty strings: that whole category belongs to validation alone, and how it's expressed is `09-Pydantic`'s subject.
+Validation also reaches past types entirely, into values. `-5` is a perfectly good `int`, so a type checker has no complaint about it and never will — but whether it's a plausible **age** is a question about the value, and only answerable once a value exists. Ranges, formats, non-empty strings: that whole category belongs to validation alone, and how it's expressed is `09-Pydantic`'s subject.
 
 > [!warning] `@validate_call` validates **arguments**, not the return value, despite the `-> dict` annotation sitting right there:
 > ```python

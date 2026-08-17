@@ -1,7 +1,7 @@
 
 Take X — the site formerly called Twitter.
 
-You can reach it from a phone app or from a browser. Two completely different interfaces. But neither of them *is* X. Both are just windows onto the same thing sitting behind them: **the X server**.
+You can reach it from a phone app or from a browser. Two completely different interfaces. But neither of them **is** X. Both are just windows onto the same thing sitting behind them: **the X server**.
 
 ```mermaid
 flowchart LR
@@ -62,7 +62,7 @@ So the backend, stated plainly: it stores your information, processes your infor
 
 ## The kinds of request you can send
 
-A client does not just "send a request" — it declares what *kind* of request it is sending. The common ones:
+A client does not just **send a request** — it declares what **kind** of request it is sending. The common ones:
 
 | Method | Intent |
 |---|---|
@@ -92,13 +92,15 @@ For every request, the server is responsible for answering. And the answer has t
 
 **Part one — the status code.** A number saying what happened. This is the **HTTP response code**.
 
-Say the request was "create an account." Two things can happen: it worked, or it did not. The status code is how the server says which.
+Say the request was **create an account.** Two things can happen: it worked, or it did not. The status code is how the server says which.
 
 | Code | Meaning | Whose fault |
 |---|---|---|
 | **200** | Success — everything went fine | — |
-| **404** | Not found | Client error |
-| **500** | Server not responding | Server error |
+| **404** | Not found — no such thing at that address | Client error |
+| **500** | Internal server error — the server tried and something broke inside it | Server error |
+
+A `500` is worth reading carefully, because the obvious guess is wrong. It does **not** mean the server is down or unreachable: the server received the request, ran your code, hit an unhandled exception, and deliberately answered with a `500` to say so. A server that is genuinely not responding produces no status code at all — the connection just fails, or a proxy in front of it answers with a `502` or `504` on its behalf.
 
 You do not need to memorise the full list. Knowing the shape of it is enough — the 200s mean success, the 400s mean the client asked for something wrong, the 500s mean the server broke.
 
@@ -108,7 +110,7 @@ We are learning the **server**. Not the web frontend, not the mobile app.
 
 Which raises an immediate practical problem.
 
-The server only ever responds — it never initiates. It sits there waiting for requests. But if we are not building a web page or a mobile app, then nothing exists to *send* those requests. We would write a backend and have no way to run it.
+The server only ever responds — it never initiates. It sits there waiting for requests. But if we are not building a web page or a mobile app, then nothing exists to **send** those requests. We would write a backend and have no way to run it.
 
 ```mermaid
 flowchart LR
@@ -128,7 +130,7 @@ You point it at your server, choose a method, attach some data, and fire. Exactl
 | **Requestly** | Popular currently. |
 | **Web Request Kit** | Built in Rust. Fast, not bloated, no login required. `webrequestkit.com` |
 | **Thunder Client** | Editor-integrated. |
-| **curl** | Command line. Perfectly valid — you just need *something*. |
+| **curl** | Command line. Perfectly valid — you just need **something**. |
 
 They all work the same way and their interfaces closely resemble each other, so the choice barely matters. Pick one.
 

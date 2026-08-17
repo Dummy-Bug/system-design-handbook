@@ -41,15 +41,15 @@ def from_llm(cls, llm: Runnable, retriever: BaseRetriever):
     return cls(llm_chain=llm_chain, retriever=retriever)
 ```
 
-Read what that prompt is actually fighting against. A chat model's default behaviour is to **answer you** — *"Great question! Transformers use attention to…"*. That output would be shaped like a chat reply, and a chat reply does not resemble a corpus document, which defeats the entire mechanism.
+Read what that prompt is actually fighting against. A chat model's default behaviour is to **answer you** — **Great question! Transformers use attention to…**. That output would be shaped like a chat reply, and a chat reply does not resemble a corpus document, which defeats the entire mechanism.
 
 So the prompt insists on the opposite, three times over:
 
-- *"as if it were a real, authoritative passage retrieved from a knowledge base"* — **the target register**
-- *"not a response to the user, but a self-contained piece of text"* — **not a reply**
-- *"Do not include phrases like 'Based on your query' or 'Here is a document'"* — **no conversational scaffolding**
+- **as if it were a real, authoritative passage retrieved from a knowledge base** — **the target register**
+- **not a response to the user, but a self-contained piece of text** — **not a reply**
+- **Do not include phrases like 'Based on your query' or 'Here is a document'** — **no conversational scaffolding**
 
-> [!important] Every one of those clauses exists to make the output *look like the corpus*. This is the one place where prompt wording directly determines retrieval quality — a chatty hypothetical document embeds like a chat message and lands nowhere useful.
+> [!important] Every one of those clauses exists to make the output **look like the corpus**. This is the one place where prompt wording directly determines retrieval quality — a chatty hypothetical document embeds like a chat message and lands nowhere useful.
 
 ---
 
@@ -80,7 +80,7 @@ class CustomHypotheticalDocumentEmbedder:
 
 Notice `_get_relevant_documents` takes `hypothetical_document`, not `query`. The original query never reaches the retriever at all.
 
-> [!note] The logging matters more here than usual. The hypothetical document is invisible in normal operation — it is generated, used as a probe, and discarded. When HyDE returns bad documents, the first question is always *"what did it actually search with?"*, and without the log you cannot answer it. `logger.info` on the generated document is the debugging hook for the whole technique.
+> [!note] The logging matters more here than usual. The hypothetical document is invisible in normal operation — it is generated, used as a probe, and discarded. When HyDE returns bad documents, the first question is always **what did it actually search with?**, and without the log you cannot answer it. `logger.info` on the generated document is the debugging hook for the whole technique.
 
 ---
 
@@ -114,7 +114,7 @@ hyde_retriever = CustomHypotheticalDocumentEmbedder.from_llm(
 
 This split is worth copying. **`temperature=0` for the hypothetical document** — creativity is turned all the way down, because this text is a search probe and you want it stable and conventional; a creative probe is an unpredictable probe, and re-running the same query should retrieve the same documents. **`temperature=0.5` for the final answer**, where some fluency is welcome.
 
-> [!info] Compare with multi-query, which used `temperature=0.3` precisely *because* it wanted its rephrasings to differ from one another. Same knob, opposite reasoning: multi-query wants variety across several probes, HyDE wants one reliable probe. Match the temperature to whether variation is the feature or the bug.
+> [!info] Compare with multi-query, which used `temperature=0.3` precisely **because** it wanted its rephrasings to differ from one another. Same knob, opposite reasoning: multi-query wants variety across several probes, HyDE wants one reliable probe. Match the temperature to whether variation is the feature or the bug.
 
 ### The query and what it generates
 
@@ -126,11 +126,11 @@ retrieved_docs = hyde_retriever.invoke(query)
 
 The hypothetical document the LLM produced — recovered from the log — reads in part:
 
-> *"…compute attention weights and then form a weighted sum of token representations. This is done in multiple parallel heads, which is called multi-head attention, where each head learns different attention patterns. The heads' outputs are concatenated and linearly projected to produce the final token representation. This parallel attention mechanism enables efficient training on long sequences."*
+> **…compute attention weights and then form a weighted sum of token representations. This is done in multiple parallel heads, which is called multi-head attention, where each head learns different attention patterns. The heads' outputs are concatenated and linearly projected to produce the final token representation. This parallel attention mechanism enables efficient training on long sequences.**
 
 Now compare that against the corpus it is about to search:
 
-> *"Multi-head attention allows the model to jointly attend to information from different representation subspaces… The outputs of all heads are concatenated and linearly projected to produce the final representation."*
+> **Multi-head attention allows the model to jointly attend to information from different representation subspaces… The outputs of all heads are concatenated and linearly projected to produce the final representation.**
 
 The generated passage and the real document are **near-paraphrases of each other** — same vocabulary, same length, same register. That is precisely the resemblance HyDE is engineering, and it is why the probe lands in the AI cluster rather than drifting toward Physics or Tech.
 
@@ -168,4 +168,4 @@ flowchart TD
 ---
 
 > [!tip] Interview framing
-> "The class is about sixty lines and `invoke` is three: generate a hypothetical document from the query, then call the retriever with that document instead of the query — the original query never reaches the retriever. Most of the code is the prompt, and the prompt is the component: it has to stop the model replying conversationally, because a chat-style answer embeds like a chat message rather than like a corpus document. So it explicitly asks for an authoritative knowledge-base passage, self-contained, with no 'here is a document' scaffolding. I'd also point at the two-LLM split — `temperature=0` for the hypothetical document because it's a search probe and you want the same query to retrieve the same things, `temperature=0.5` for the final answer. That's the opposite of multi-query, which deliberately raises temperature so its rephrasings diverge. And logging the generated document isn't optional: it's invisible at runtime, so when retrieval goes wrong the only way to diagnose it is to see what you actually searched with."
+> **The class is about sixty lines and `invoke` is three: generate a hypothetical document from the query, then call the retriever with that document instead of the query — the original query never reaches the retriever. Most of the code is the prompt, and the prompt is the component: it has to stop the model replying conversationally, because a chat-style answer embeds like a chat message rather than like a corpus document. So it explicitly asks for an authoritative knowledge-base passage, self-contained, with no 'here is a document' scaffolding. I'd also point at the two-LLM split — `temperature=0` for the hypothetical document because it's a search probe and you want the same query to retrieve the same things, `temperature=0.5` for the final answer. That's the opposite of multi-query, which deliberately raises temperature so its rephrasings diverge. And logging the generated document isn't optional: it's invisible at runtime, so when retrieval goes wrong the only way to diagnose it is to see what you actually searched with.**

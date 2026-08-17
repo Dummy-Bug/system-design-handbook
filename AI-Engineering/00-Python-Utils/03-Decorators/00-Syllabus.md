@@ -4,7 +4,7 @@
 
 14 concepts. **Generic** — the language mechanism, not the specific decorators any framework ships.
 
-> Every framework in this vault is decorator-driven — `@app.get`, `@field_validator`, `@computed_field`, `@pytest.fixture`, `@asynccontextmanager`. All of them have been *used* and none explained. The goal here is that a decorator stops being magic syntax and becomes a function you could have written.
+> Every framework in this vault is decorator-driven — `@app.get`, `@field_validator`, `@computed_field`, `@pytest.fixture`, `@asynccontextmanager`. All of them have been **used** and none explained. The goal here is that a decorator stops being magic syntax and becomes a function you could have written.
 
 **Why this sits third:** it needs functions-as-objects and closures (covered here from scratch), and it needs `@classmethod`/`@property` from folder 02 as worked examples of decorators that do something genuinely non-obvious.
 
@@ -32,7 +32,7 @@ Functions that take or return functions. A decorator is just this, with syntax.
 `def deco(func): def wrapper(*args, **kwargs): ...; return wrapper`. The `*args, **kwargs` pass-through and why it's non-negotiable for a general-purpose decorator.
 
 **6. `functools.wraps` — the one you must not forget**
-Without it, the decorated function's `__name__`, `__doc__`, and `__module__` are silently replaced by the wrapper's. Breaks introspection, debuggers, and anything that reads metadata off functions — *including framework machinery that inspects your handlers.*
+Without it, the decorated function's `__name__`, `__doc__`, and `__module__` are silently replaced by the wrapper's. Breaks introspection, debuggers, and anything that reads metadata off functions — **including framework machinery that inspects your handlers.**
 
 **7. Decorators that take arguments**
 The three-level nest (`deco(arg)` returns the real decorator). Why `@retry(times=3)` needs one more layer than `@retry`.
@@ -41,7 +41,7 @@ The three-level nest (`deco(arg)` returns the real decorator). Why `@retry(times
 Implementing `__call__` instead of nesting. When holding state across calls makes a class the cleaner shape.
 
 **9. Stacking decorators**
-Bottom-up application order, and how that explains why `@computed_field` sits *above* `@property` rather than below it — a concrete case already sitting in the Pydantic notes.
+Bottom-up application order, and how that explains why `@computed_field` sits **above** `@property` rather than below it — a concrete case already sitting in the Pydantic notes.
 
 **10. Decorating methods, and decorating classes**
 The extra wrinkle when `self` is in play; and decorators applied to a whole class.
@@ -60,7 +60,7 @@ Two decorators that do something structurally surprising — one turns a generat
 ## D · Doing it properly
 
 **14. Typing a decorator**
-`ParamSpec` + `TypeVar` so the checker still sees the original signature through the wrapper. The practical fallback when it gets ugly, and why `functools.wraps` fixes runtime introspection but *not* static types.
+`ParamSpec` + `TypeVar` so the checker still sees the original signature through the wrapper. The practical fallback when it gets ugly, and why `functools.wraps` fixes runtime introspection but **not** static types.
 
 ---
 
@@ -79,7 +79,7 @@ Two decorators that do something structurally surprising — one turns a generat
 
 ## Interview hooks
 
-"Write a decorator that retries a function three times with backoff" is a standard screen question, and it exercises closures, `*args/**kwargs`, `wraps`, and decorator-with-arguments in one go. Sarvam's Week 9 names circuit breakers and rate limiting — both idiomatically decorators.
+**Write a decorator that retries a function three times with backoff** is a standard screen question, and it exercises closures, `*args/**kwargs`, `wraps`, and decorator-with-arguments in one go. Sarvam's Week 9 names circuit breakers and rate limiting — both idiomatically decorators.
 
 ## Sources to verify against
 

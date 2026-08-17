@@ -1,7 +1,7 @@
 #python #type-hints #typing #self #inheritance #python-utils
 
 
-A method that builds a new object of its own class has to declare a return type, and the obvious choice is the name of the class it is written in. That choice is a bug: it hard-codes where the method was *written* rather than what it was *called on*, so every subclass silently degrades to the base type. The fix is a single word.
+A method that builds a new object of its own class has to declare a return type, and the obvious choice is the name of the class it is written in. That choice is a bug: it hard-codes where the method was **written** rather than what it was **called on**, so every subclass silently degrades to the base type. The fix is a single word.
 
 There is exactly one idea here:
 
@@ -265,7 +265,7 @@ Four things to carry:
 
 1. Annotating a method with its **own class name** hard-codes where the method was written. Any subclass then degrades to the base type the moment a value passes through that method, and its own attributes become unreachable on an object that genuinely has them.
 2. Overriding the method in each subclass works and is legal — `15-Variance` permits an override to return a **narrower** type — but it duplicates the body, must be repeated in every subclass forever, and breaks again at the next level down, because each override merely relocates the hard-coded name.
-3. `Self` is the check-time counterpart of `type(self)`. One is what the object *is* at runtime; the other is what the checker calls it. With both in agreement, one method in the base class serves every depth of subclass.
+3. `Self` is the check-time counterpart of `type(self)`. One is what the object **is** at runtime; the other is what the checker calls it. With both in agreement, one method in the base class serves every depth of subclass.
 4. It matters most where values flow back out of methods — alternative constructors, `clone`-style copies, and fluent chains. In a chain the damage compounds: a single base-class method annotated with the base class name flattens everything downstream of it.
 
-> [!info] Not covered here, and worth picking up when it comes up: `Self` is also valid in a `@classmethod` (`def from_file(cls, path: str) -> Self`), where there is no `self` at all — it then means *the class the method was called on*, which is what makes alternative constructors inherit correctly.
+> [!info] Not covered here, and worth picking up when it comes up: `Self` is also valid in a `@classmethod` (`def from_file(cls, path: str) -> Self`), where there is no `self` at all — it then means **the class the method was called on**, which is what makes alternative constructors inherit correctly.

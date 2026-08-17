@@ -31,7 +31,7 @@ AttributeError: type object 'Employee' has no attribute 'name'
 
 > [!info] Not `None`, not an empty slot — **`name` does not exist on the class at all.**
 
-The reason is one you can read straight off the source. `= 30` is an assignment; `: str` is not. An assignment creates something. An annotation is a claim *about* a name, and writing a claim about a name has never been the same as binding it.
+The reason is one you can read straight off the source. `= 30` is an assignment; `: str` is not. An assignment creates something. An annotation is a claim **about** a name, and writing a claim about a name has never been the same as binding it.
 
 ## Two independent registers
 
@@ -64,7 +64,7 @@ API_KEY: str
 
 Same behaviour — the module's `__annotations__` records it, and no variable is created.
 
-> [!important] **`__annotations__` is a separate register sitting alongside the thing it describes**, not a property of the attributes themselves. That's why it can describe a field the class doesn't have. Far from being a defect, this is what makes a class body usable as a *declaration of shape* — you write down what the fields are and what they hold, without having to give any of them a value.
+> [!important] **`__annotations__` is a separate register sitting alongside the thing it describes**, not a property of the attributes themselves. That's why it can describe a field the class doesn't have. Far from being a defect, this is what makes a class body usable as a **declaration of shape** — you write down what the fields are and what they hold, without having to give any of them a value.
 
 ## When the type doesn't exist yet
 
@@ -83,7 +83,7 @@ $ python3 node.py
 NameError: name 'Node' is not defined
 ```
 
-The class body runs top to bottom *before* Python finishes building the class. **On line 3, `Node` is still under construction — the name isn't bound yet**, so the lookup fails and the class is never created.
+The class body runs top to bottom **before** Python finishes building the class. **On line 3, `Node` is still under construction — the name isn't bound yet**, so the lookup fails and the class is never created.
 
 The fix is quotes:
 
@@ -159,7 +159,7 @@ $ python3 resolve.py
 NameError: name 'abc' is not defined
 ```
 
-The complaint has moved. `NeverDefined` resolved perfectly well — it yielded `"abc"`, and **a string in a type position means "a name to look up"**, so resolution went round again looking for `abc`. Resolution is recursive: it chases strings until it lands on something that isn't one.
+The complaint has moved. `NeverDefined` resolved perfectly well — it yielded `"abc"`, and **a string in a type position means a name to look up**, so resolution went round again looking for `abc`. Resolution is recursive: it chases strings until it lands on something that isn't one.
 
 Give the name a class and it stops after one hop:
 
@@ -191,7 +191,7 @@ $ python3 resolve.py
 
 **No error.** It resolved to the number `42` and handed it back without comment. `42` is not a class, not a type, and meaningless as an annotation — and nothing in the pipeline cared.
 
-> [!warning] `get_type_hints()` answers one question: **"can I find what these names refer to?"** It chases strings until it hits a non-string, then stops.
+> [!warning] `get_type_hints()` answers one question: **can I find what these names refer to?** It chases strings until it hits a non-string, then stops.
 >  Whether the result makes any sense as a type is a question nobody here is asking. The only tool that would object reads the source text and never runs any of this.
 
 ## What this concept claims

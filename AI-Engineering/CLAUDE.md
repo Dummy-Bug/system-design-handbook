@@ -10,10 +10,10 @@ Interview preparation for **backend + agentic-AI roles**. Notes, question banks,
 
 | | |
 |---|---|
-| **Band** | ~30 LPA (from 10 LPA). Decided 2026-07-29 — *not* 40-50; that's a different, elite-DSA grind. |
+| **Band** | ~30 LPA (from 10 LPA). Decided 2026-07-29 — **not** 40-50; that's a different, elite-DSA grind. |
 | **Timeline** | Interview-ready by **Jan 2027**. ~5 months from now. |
 | **Experience** | 2.6 YOE full-time (Repute Network, Jul 2023 intern → Jan 2024 SWE). B.Tech 2020, UoH AI/ML diploma 2021-22. |
-| **Lane** | **Backend engineer who owns the AI layer** — not "AI Engineer" competing with ML backgrounds. Java/Spring + Python/FastAPI + LangGraph. Less crowded, well paid, matches the actual resume. |
+| **Lane** | **Backend engineer who owns the AI layer** — not **AI Engineer** competing with ML backgrounds. Java/Spring + Python/FastAPI + LangGraph. Less crowded, well paid, matches the actual resume. |
 | **Screening risk** | 2020 grad, first SWE role Jul 2023. Needs a deliberate narrative, not a knowledge fix. |
 
 Live opportunities as of 2026-07-29: **none** (Salesforce and WealthQ both closed). Prep is not blocking any active loop.
@@ -38,8 +38,8 @@ Audited against the code on 2026-07-29. Per the resume surface-area rule, each o
 
 | Resume / skills claim | Code reality |
 |---|---|
-| "TTL-based **Redis** cache" | Cache is **DynamoDB** (`DynamoEmployeeDomainCache`, per-domain TTLs: Personal 600s, Work 600s, EmployeeList 1000s) or in-memory locally. Redis appears only as `langgraph-checkpoint-redis` in requirements + a `NotImplementedError` stub + "maybe later" architecture docs. |
-| "**multi-agent** AI platform" | Three agents that never talk to each other; role-based HTTP routing picks one. Multiple agents ≠ multi-agent system. This is the "honest A2A framing" already flagged in the roadmap. |
+| **TTL-based Redis cache** | Cache is **DynamoDB** (`DynamoEmployeeDomainCache`, per-domain TTLs: Personal 600s, Work 600s, EmployeeList 1000s) or in-memory locally. Redis appears only as `langgraph-checkpoint-redis` in requirements + a `NotImplementedError` stub + **maybe later** architecture docs. |
+| **multi-agent AI platform** | Three agents that never talk to each other; role-based HTTP routing picks one. Multiple agents ≠ multi-agent system. This is the **honest A2A framing** already flagged in the roadmap. |
 | **LangSmith** (skills) | One mention in the entire repo. No tracing instrumentation, no Langfuse. |
 | **RAG** (skills) | Zero RAG in Xarvis — it is pure tool-calling over HRMS REST. RAG knowledge is notes + CampusX + AlgoCamp, not shipped. |
 | **MCP** (skills) | Zero MCP in Xarvis. MCP was a separate fastmcp test harness built to isolate a failing LangChain agent — a real, defensible story, but it does not power Xarvis. |
@@ -47,10 +47,10 @@ Audited against the code on 2026-07-29. Per the resume surface-area rule, each o
 
 ### Known gaps (these are the work, not the shame)
 
-- **No evals.** 11 test files, "sparse coverage; no integration tests." No golden set, no LLM-judge, no RAGAS, no error analysis.
+- **No evals.** 11 test files, **sparse coverage; no integration tests.** No golden set, no LLM-judge, no RAGAS, no error analysis.
 - **No observability.** No tracing, no cost attribution, no latency breakdown by stage.
 - **No numbers anywhere** — no cost/conversation, no p95, no tool-call success rate. The resume's AI bullets are all mechanism nouns while the older verification-platform bullets have 25K→300K, 27%→80%, 60%→85%.
-- **Guard + planner are built and disconnected.** `orchestration/employee/guard/` and `planner/` implement a deterministic fast-path; the graph bypasses both. Dead code — but a strong story *if* framed as "built, measured, didn't ship, here's why."
+- **Guard + planner are built and disconnected.** `orchestration/employee/guard/` and `planner/` implement a deterministic fast-path; the graph bypasses both. Dead code — but a strong story **if** framed as **built, measured, didn't ship, here's why.**
 - **Rate-limit key hardcoded** (`middleware/rate_limit.py:18` returns `"EMPLOYEE:1153"`) → the 10 req/min cap is shared globally across every user.
 
 ---
@@ -99,9 +99,9 @@ Each syllabus carries a **currency check** dated at time of writing; re-verify v
 (OWASP lists, OTel GenAI conventions, MCP spec, provider caching mechanics) before relying on them.
 ```
 
-`07-RAG/` is numbered late because its *remaining* work sits at block 7, not because it's unstarted — it's the most complete folder here. Notes use Obsidian embeds with absolute vault paths (`![[AI-Engineering/07-RAG/…/Images/…]]`), so **any future folder rename must rewrite those links too.**
+`07-RAG/` is numbered late because its **remaining** work sits at block 7, not because it's unstarted — it's the most complete folder here. Notes use Obsidian embeds with absolute vault paths (`![[AI-Engineering/07-RAG/…/Images/…]]`), so **any future folder rename must rewrite those links too.**
 
-**The active plan lives in `xarvis-additions.md` → "The learning order."** Nine blocks, each `learn the thing → add it to Xarvis → keep the number`. Blocks 1-6 (~8.5 wks) take Tier 1 to ~70% on the existing production agent; blocks 7-9 (~6 wks) build the public retrieval product that covers what Xarvis structurally can't. Start at Block 1 / item A1.
+**The active plan lives in `xarvis-additions.md` → The learning order.** Nine blocks, each `learn the thing → add it to Xarvis → keep the number`. Blocks 1-6 (~8.5 wks) take Tier 1 to ~70% on the existing production agent; blocks 7-9 (~6 wks) build the public retrieval product that covers what Xarvis structurally can't. Start at Block 1 / item A1.
 
 Related, outside this folder: `~/Desktop/wiki/Xarvis-Archaeology/` (code-verified resume-defense docs), `~/Desktop/wiki/Interview-Prep/` (DSA pattern transcripts).
 
@@ -115,12 +115,12 @@ Related, outside this folder: `~/Desktop/wiki/Xarvis-Archaeology/` (code-verifie
 
 **One concept at a time, problem before solution.** Motivate a tool by showing the simpler thing suffices on the easy case, then breaking it on a harder one. Justify with scale numbers, not adjectives.
 
-**Plain English in notes.** No jargon before it's introduced — "assistant" not "graph", "fixed list of emails" not "allowlist".
+**Plain English in notes.** No jargon before it's introduced — **assistant** not **graph**, **fixed list of emails** not **allowlist**.
 
 **Coverage lists are accounting, not skill.** A big checked-off question bank tracks coverage; it does not produce interview performance. Keep it out of the head during a drill — same lesson the DSA track already paid for.
 
-**Depth beats breadth for the differentiator.** Every source agrees evals are the sharpest senior/junior signal in 2026 loops, and "we didn't have time for evals" is the fastest seniority downgrade. Xarvis already exists — making it measurable is worth more than memorising a thousand answers.
+**Depth beats breadth for the differentiator.** Every source agrees evals are the sharpest senior/junior signal in 2026 loops, and **we didn't have time for evals** is the fastest seniority downgrade. Xarvis already exists — making it measurable is worth more than memorising a thousand answers.
 
 **One paragraph, one source line — never hard-wrap.** This vault renders a single newline as a line break, so a paragraph wrapped at ~100 columns reads with ragged breaks mid-sentence. List items, callout lines and blockquote lines follow the same rule; code fences, tables and mermaid blocks keep their own line structure. After any reflow, grep `[a-z][.,;][A-Za-z]` outside code blocks for joins that lost their space (`gets packaged.The`, `not inyour code`).
 
-**Correctness checks are one word** — "correct" or "incorrect", no explanation unless asked.
+**Correctness checks are one word** — **correct** or **incorrect**, no explanation unless asked.

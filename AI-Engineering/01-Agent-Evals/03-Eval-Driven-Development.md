@@ -10,7 +10,7 @@ What they actually want is narrow: read each email, and **classify it** into one
 
 Nobody needs to sit there reading mail and tagging teams. That's the whole product.
 
-And the system to do it is about as small as an LLM application gets: **one LLM, one prompt.** The prompt says something like *you are a customer agent who reads an email and decides where it should be routed.* Email goes in, a label comes out.
+And the system to do it is about as small as an LLM application gets: **one LLM, one prompt.** The prompt says something like **you are a customer agent who reads an email and decides where it should be routed.** Email goes in, a label comes out.
 
 ![[AI-Engineering/01-Agent-Evals/Images/v3-02-The-System-Under-Test.png]]
 
@@ -26,16 +26,16 @@ No. First you evaluate it. Here's how.
 
 Two things, and it's worth keeping them separate:
 
-- **Target** — *what* are you evaluating? Here: the whole system, the entire workflow. (It could equally have been one component inside a bigger system.)
+- **Target** — **what** are you evaluating? Here: the whole system, the entire workflow. (It could equally have been one component inside a bigger system.)
 - **Task** — what is the evaluation actually checking? Here: it's a **classification task**. Does the system put each email in the right bucket?
 
 ## Step 2 — Define a success criteria
 
-Now: how would you *know* the system works?
+Now: how would you **know** the system works?
 
 For a classification task the answer is straightforward — the success criterion is correct classification, and the metric is **accuracy**. Send it 100 queries; if 90 land in the right bucket, the system is 90% accurate.
 
-This is where "clear criteria" from the previous note stops being abstract. You have now written down what good means, in a form a machine can check.
+This is where **clear criteria** from the previous note stops being abstract. You have now written down what good means, in a form a machine can check.
 
 ## Step 3 — Build a dataset
 
@@ -45,9 +45,9 @@ Two columns: the input message, and the label you have decided is correct.
 
 | Input message | Expected label |
 |---|---|
-| "My card was charged twice" | billing |
-| "The app crashes on login" | technical |
-| "What are your hours?" | general |
+| **My card was charged twice** | billing |
+| **The app crashes on login** | technical |
+| **What are your hours?** | general |
 
 Three rows is a slide. In reality you build **50 to 500 rows**.
 
@@ -64,9 +64,9 @@ Now: **who does the grading?** Three options —
 * a **human**, or
 * ***another LLM**.
 
-First, be clear on what "running the evaluation" mechanically is. You push the golden dataset through your system. For every row, the system emits a label. Now you have two columns side by side — what you said was correct, and what the system actually produced — and you compute how often they agree.
+First, be clear on what **running the evaluation** mechanically is. You push the golden dataset through your system. For every row, the system emits a label. Now you have two columns side by side — what you said was correct, and what the system actually produced — and you compute how often they agree.
 
-For *this* system, the answer is obvious: **automated.** Why would you pay a human to check whether `billing == billing`? Why bring in an LLM? A few lines of Python compare two strings and print an accuracy score.
+For **this** system, the answer is obvious: **automated.** Why would you pay a human to check whether `billing == billing`? Why bring in an LLM? A few lines of Python compare two strings and print an accuracy score.
 
 ### Now break it
 
@@ -80,11 +80,11 @@ A human can obviously do it — but a human is **expensive**, and evaluation is 
 
 Which is exactly where the third option earns its place:
 
-> [!important] **LLM-as-judge is the middle option, and it exists because the cheap option broke.** Automated grading is better whenever it's possible — it's free, instant, and perfectly consistent. You reach for an LLM judge only when the thing being graded is open-ended enough that code can't grade it and volume is too high for humans. Knowing *why* you're using a judge is what stops you using one where a string comparison would do.
+> [!important] **LLM-as-judge is the middle option, and it exists because the cheap option broke.** Automated grading is better whenever it's possible — it's free, instant, and perfectly consistent. You reach for an LLM judge only when the thing being graded is open-ended enough that code can't grade it and volume is too high for humans. Knowing **why** you're using a judge is what stops you using one where a string comparison would do.
 
 ### Where we are
 
-Worth restating the whole configuration in one line, because this *is* the eval:
+Worth restating the whole configuration in one line, because this **is** the eval:
 
 **Target** = the system · **Task** = classify correctly · **Criteria** = classification · **Metric** = accuracy · **Dataset** = 50-100 labelled real emails · **Method** = automated.
 
@@ -100,11 +100,11 @@ Your Python code computes the score. Say it comes back **80%** — 80 of 100 cor
 
 ## Step 7 — Analyse the results
 
-A score alone changes nothing. The question is *where* it's going wrong, and what you can actually change about it.
+A score alone changes nothing. The question is **where** it's going wrong, and what you can actually change about it.
 
 In a system this small there are only two levers:
 
-- **The system prompt.** Perhaps it's worded such that the model keeps conflating *billing* and *technical* — the boundary between them was never made explicit.
+- **The system prompt.** Perhaps it's worded such that the model keeps conflating **billing** and **technical** — the boundary between them was never made explicit.
 - **The model.** Perhaps you picked a small open-weights model with too few parameters and it simply can't do the task reliably.
 
 That's genuinely it. A one-LLM-one-prompt system doesn't have much surface to fix — which is itself informative, because a real system has far more, and knowing which knob to reach for is the skill.
@@ -113,7 +113,7 @@ That's genuinely it. A one-LLM-one-prompt system doesn't have much surface to fi
 
 ![[AI-Engineering/01-Agent-Evals/Images/v3-06-Workflow-Bottom.png]]
 
-Look closely at the "Improve the model" box in that flowchart: **"model" is struck out and replaced with "system."** That correction is made live in the lecture, and it's the same point the previous note made about the smartphone — the model is one component. What you improve is the *system*: the prompt, the retriever, the chunking, the orchestration, the guardrails, and sometimes the model.
+Look closely at the **Improve the model** box in that flowchart: **model is struck out and replaced with system.** That correction is made live in the lecture, and it's the same point the previous note made about the smartphone — the model is one component. What you improve is the **system**: the prompt, the retriever, the chunking, the orchestration, the guardrails, and sometimes the model.
 
 ## Step 9 — Iterate
 
@@ -123,7 +123,7 @@ Re-trigger the evaluation. And here is where **repeatability** stops being a nic
 - Manager wants more → swap in a bigger LLM → re-run on the **same** dataset → **95%**.
 - Manager is satisfied → stop.
 
-> [!important] You can only make the claim *"90 → 95, so this change helped"* because the dataset did not move. Change the system and the test set at the same time and the comparison is meaningless — you've measured two things at once and learned neither. This is the single most common way eval work gets wasted.
+> [!important] You can only make the claim **90 → 95, so this change helped** because the dataset did not move. Change the system and the test set at the same time and the comparison is meaningless — you've measured two things at once and learned neither. This is the single most common way eval work gets wasted.
 
 ## Step 10 — Deploy
 
@@ -139,17 +139,17 @@ The specific failure to expect: your system scored 95% **on your test set**. The
 
 This is the step that turns the whole thing into a flywheel.
 
-A mail comes in that should have been *billing*, and the system labels it *technical*. You take **that specific instance** — the actual email content — and add it to your golden dataset. Then you restart the loop.
+A mail comes in that should have been **billing**, and the system labels it **technical**. You take **that specific instance** — the actual email content — and add it to your golden dataset. Then you restart the loop.
 
 Do that continuously and the golden dataset gets **richer over time**. Every real-world failure becomes a permanent test. The system is now being improved against a set that keeps getting harder in exactly the ways reality is hard.
 
 ### But who decides an output was wrong?
 
-Worth answering properly, because "monitor for failures" sounds automatic and isn't. The mechanism is a **process with a human in it**:
+Worth answering properly, because **monitor for failures** sounds automatic and isn't. The mechanism is a **process with a human in it**:
 
-A customer emails a billing problem. It gets misrouted to the technical team. The technical team follows up, and the customer says *I don't need you, I need billing.* At that point the technical team **flags the case** as misrouted — and that flag is what puts the example into the dataset.
+A customer emails a billing problem. It gets misrouted to the technical team. The technical team follows up, and the customer says **I don't need you, I need billing.** At that point the technical team **flags the case** as misrouted — and that flag is what puts the example into the dataset.
 
-> [!note] "Monitoring" is not only dashboards and metrics. It includes a deliberate path for whoever is downstream of a bad output to mark it as bad. If nobody can flag it, you will not learn about it.
+> [!note] **Monitoring** is not only dashboards and metrics. It includes a deliberate path for whoever is downstream of a bad output to mark it as bad. If nobody can flag it, you will not learn about it.
 
 ---
 
@@ -192,7 +192,7 @@ Take a RAG application. In practice you'd be running several evals against it at
 - a separate one for the **whole RAG workflow** end to end
 - a separate one for **system latency**
 
-> [!important] Don't think *"my application has an eval."* Think *"my application has an **eval suite** — one eval per thing I care about."* Each has its own target, its own criteria, its own dataset, and possibly its own grading method. This is why the next note is about needing multiple eval pipelines rather than one.
+> [!important] Don't think **my application has an eval.** Think **my application has an eval suite — one eval per thing I care about.** Each has its own target, its own criteria, its own dataset, and possibly its own grading method. This is why the next note is about needing multiple eval pipelines rather than one.
 
 ---
 
@@ -200,10 +200,10 @@ Take a RAG application. In practice you'd be running several evals against it at
 
 If you come from software, this loop should feel familiar, and the resemblance is useful up to a point.
 
-**It holds here:** you write the test before you trust the code. The test *is* the specification — the golden dataset is a written statement of what correct behaviour means. Red-green-refactor becomes measure-improve-re-measure. And the suite is your regression net: it's what stops a prompt change from silently breaking something that used to work.
+**It holds here:** you write the test before you trust the code. The test **is** the specification — the golden dataset is a written statement of what correct behaviour means. Red-green-refactor becomes measure-improve-re-measure. And the suite is your regression net: it's what stops a prompt change from silently breaking something that used to work.
 
 **It breaks here, and the difference matters:**
 
-- A unit test is **binary**. An eval produces a **score over a distribution**. You never get "green" — you get 95%, and then a judgement call about whether 95% is shippable for this product. That judgement is yours, not the test's.
+- A unit test is **binary**. An eval produces a **score over a distribution**. You never get **green** — you get 95%, and then a judgement call about whether 95% is shippable for this product. That judgement is yours, not the test's.
 - Unit tests are usually written once. The **golden dataset is a living artefact** that grows every time production finds a new failure. Step 12 has no equivalent in ordinary TDD.
-- A failing unit test tells you exactly which line broke. A dropped eval score tells you only that *something* got worse — locating it is the separate skill covered later under error analysis.
+- A failing unit test tells you exactly which line broke. A dropped eval score tells you only that **something** got worse — locating it is the separate skill covered later under error analysis.

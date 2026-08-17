@@ -28,11 +28,11 @@ Line 6 works, line 7 dies. `"carol"` isn't in the dictionary, `.get` returned `N
 
 ## What it means for an annotation to be true
 
-Before the fix, the question the error raises: is `-> str` a true annotation? It *is* a `str` most of the time.
+Before the fix, the question the error raises: is `-> str` a true annotation? It **is** a `str` most of the time.
 
 No — and the reason matters more than the answer.
 
-> [!important] **An annotation is a claim about every possible run, not the typical one.** `-> str` says *"whenever this function returns, the thing coming back is a `str`."*
+> [!important] **An annotation is a claim about every possible run, not the typical one.** `-> str` says **whenever this function returns, the thing coming back is a `str`.**
 >  Not usually, not when the key exists. One path returning something else makes the claim false, however rare that path is. There's no partial credit: either a checker can rely on the claim or it can't.
 
 Worth contrasting with Java, because Java has the opposite behaviour and it's the more familiar one:
@@ -61,11 +61,11 @@ find1.py:3: error:
 Incompatible return value type (got "str | None", expected "str")  [return-value]
 ```
 
-Notice **where**. Line 3 — the `return` statement — not line 7 where it crashes, and not the call sites at all. It caught the *lie*, and the lie is visible without any caller existing.
+Notice **where**. Line 3 — the `return` statement — not line 7 where it crashes, and not the call sites at all. It caught the **lie**, and the lie is visible without any caller existing.
 
 Notice also `got "str | None"`. Nobody wrote that. mypy ships descriptions of the built-ins, which is how it already knows what `dict.get` gives back — it worked out the honest type by itself, and it's the exact type you're about to write.
 
-## Saying "or"
+## Saying or
 
 ```python
 1  def find_email(name: str) -> str | None:
@@ -77,7 +77,7 @@ Notice also `got "str | None"`. Nobody wrote that. mypy ships descriptions of th
 7  print(find_email("carol").upper())
 ```
 
-The pipe reads as **or**: *"a `str`, or `None`."* That's a **union** — a type made of several types, where a value is one of them.
+The pipe reads as **or**: **a `str`, or `None`.** That's a **union** — a type made of several types, where a value is one of them.
 
 ```
 $ mypy find2.py
@@ -164,7 +164,7 @@ All three still work and all three appear in real codebases, so you need to read
 
 ## Optional does not mean optional
 
-`Optional` is a badly chosen name, and it causes a specific, extremely common confusion: **"optional" meaning *the caller may omit it* is not the same as "optional" meaning *the value may be `None`*.**
+`Optional` is a badly chosen name, and it causes a specific, extremely common confusion: **optional meaning the caller may omit it is not the same as optional meaning the value may be `None`.**
 
 Four functions, all legal, all different:
 
@@ -211,14 +211,14 @@ four.py:12: error: Missing positional argument "name" in call to "y"  [call-arg]
 | `name: str `\| None = None` | fine            | fine                         |
 
 > [!important] **Two independent switches.**
-> - **A default** decides whether the caller may *omit* the argument. It has nothing to do with types.
-> - **`| None`** decides whether `None` is an *allowed value*. It has nothing to do with defaults.
+> - **A default** decides whether the caller may **omit** the argument. It has nothing to do with types.
+> - **`| None`** decides whether `None` is an **allowed value**. It has nothing to do with defaults.
 >
 > Four combinations, each meaning something different, and each one you will need.
 
-The row people never think of is the third. **`name: str | None` with no default** means the caller *must* pass an argument, and `None` is a legitimate thing to pass. `y()` is an error; `y(None)` is fine.
+The row people never think of is the third. **`name: str | None` with no default** means the caller **must** pass an argument, and `None` is a legitimate thing to pass. `y()` is an error; `y(None)` is fine.
 
-That's a genuinely useful signature — *"tell me explicitly, even if the answer is nothing"* — and it's invisible the moment you collapse the two switches into one word. A field that must be stated but may be empty is not the same as a field you can forget about, and only one of the four rows says each.
+That's a genuinely useful signature — **tell me explicitly, even if the answer is nothing** — and it's invisible the moment you collapse the two switches into one word. A field that must be stated but may be empty is not the same as a field you can forget about, and only one of the four rows says each.
 
 ## The trap that falls out
 
@@ -243,15 +243,15 @@ Very common, and wrong on its face: the annotation says `str` and the default on
 2      print(name)
 ```
 
-The note about *implicit Optional* is history worth knowing. Older mypy silently rewrote `str = None` into `str | None = None` for you. That guessing was removed precisely because it erased the difference between the second and fourth rows of the grid — the reader could no longer tell whether `None` was a meaningful value or just a placeholder default.
+The note about **implicit Optional** is history worth knowing. Older mypy silently rewrote `str = None` into `str | None = None` for you. That guessing was removed precisely because it erased the difference between the second and fourth rows of the grid — the reader could no longer tell whether `None` was a meaningful value or just a placeholder default.
 
 ## What this concept claims
 
-**A union says a value is one of several types, and `X | None` is the union you will write most — because "this might not be there" is the commonest thing a real function has to express.**
+**A union says a value is one of several types, and `X | None` is the union you will write most — because this might not be there is the commonest thing a real function has to express.**
 
 Four things to carry:
 
-1. An annotation is a claim about **every** run. "True except when the key is missing" is false, and a checker treats it as false.
+1. An annotation is a claim about **every** run. **True except when the key is missing** is false, and a checker treats it as false.
 2. `None` is its own type in Python, not a member of every other type as in Java. A function that may return `None` genuinely returns two types and has to say so.
 3. Once a value is a union, the checker assumes the worst member — and **narrowing** is how you get out of it. An `if` that eliminates a case is information the checker reads.
 4. **A default and `| None` are independent switches.** One controls whether the argument may be omitted, the other whether `None` is a legal value. All four combinations exist and mean different things.

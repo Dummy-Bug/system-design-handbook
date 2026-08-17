@@ -31,14 +31,14 @@ Hitting `/orders` returns the list. Hitting `/order/status` returns a completely
 
 ## The full journey of a single request
 
-What looks, from the outside, like "I hit a URL and got JSON back" is actually nine distinct stages. Worth slowing down on this once, because every stage after this note gets built by writing code that plugs into one specific link in this chain.
+What looks, from the outside, like **I hit a URL and got JSON back** is actually nine distinct stages. Worth slowing down on this once, because every stage after this note gets built by writing code that plugs into one specific link in this chain.
 
 ```mermaid
 flowchart TB
     C["Client"] -->|"1 — HTTP request, raw bytes"| U1["uvicorn<br/><i>the ASGI server</i>"]
-    U1 -->|"parsed ASGI request"| ST["2 — Starlette<br/><i>route matching</i>"]
-    ST --> MW1["3 — Middleware<br/><i>CORS, auth, logging — optional</i>"]
-    MW1 --> DI["4 — Dependency resolution<br/><i>DB sessions, auth, etc.</i>"]
+    U1 -->|"parsed ASGI request"| MW1["2 — Middleware<br/><i>CORS, auth, logging — optional</i>"]
+    MW1 --> ST["3 — Starlette<br/><i>route matching</i>"]
+    ST --> DI["4 — Dependency resolution<br/><i>DB sessions, auth, etc.</i>"]
     DI --> PV1["5 — Pydantic<br/><i>validates the REQUEST</i>"]
     PV1 --> FN["6 — Your function"]
     FN --> PV2["7 — Pydantic<br/><i>validates the RESPONSE</i>"]
@@ -49,15 +49,20 @@ flowchart TB
 
 ### 1 — The request arrives as raw bytes
 
-A client sends an HTTP request — GET, POST, whatever the method. It's received first by **uvicorn**, the ASGI server. At this point it is not JSON, not a Python object, not anything structured — just **raw bytes** coming in over a socket.
+A client sends an HTTP request — GET, POST, whatever the method. It's received first by **uvicorn**, the ASGI server. At this point **it is not JSON**, not a Python object, not anything structured — just **raw bytes** coming in over a socket.
 
-### 2 — Starlette matches the route
+Before handing anything onward, uvicorn **parses** those raw bytes — the HTTP method, path, and headers — into a structured dictionary called the **ASGI** **scope**. That parsed scope, not the raw bytes, is what everything downstream works with.
 
-Before handing anything onward, uvicorn **parses** those raw bytes — the HTTP method, path, and headers — into a structured dictionary called the ASGI **scope**. That parsed scope, not the raw bytes, is what gets handed to **Starlette**. Starlette's job here is **route matching**: look at `scope["path"]`, and work out which function is supposed to handle it. This is the actual answer to "how did it know `/order/status` should run `get_order_status`?" — Starlette read the already-parsed path, matched it against the routes registered via `@app.get(...)` decorators, and picked the right one.
+### 2 — Middleware (optional)
 
-### 3 — Middleware (optional)
+The request does **not** go straight to route matching from here. It passes through **middleware** first — code that runs on every request before anything else looks at it. Typical jobs for a middleware layer: checking CORS (is this request coming from an allowed origin/port), authentication, logging. Not every app has middleware configured, but when it exists, this is where it sits.
 
-The request does **not** go straight to the function from here. It can pass through **middleware** first — code that runs on every request before it reaches your handler. Typical jobs for a middleware layer: checking CORS (is this request coming from an allowed origin/port), authentication, logging. Not every app has middleware configured, but when it exists, this is where it sits.
+> [!important] Middleware runs **before** the route is matched, not after. The middleware layer wraps the router — so a middleware sees the request while FastAPI still has no idea which function will handle it, or whether any function will at all. 
+> A request for a path that no route defines still passes through every middleware on its way to the 404. That ordering is exactly what makes middleware the right place for anything that must apply to the **whole application without exception** — logging every request including the ones that miss, rejecting a bad origin before any handler is chosen, timing the full request. Anything that needs to know **which** route was picked belongs at stage 4 as a dependency, not here.
+
+### 3 — Starlette matches the route
+
+Now the route gets chosen. Starlette's job here is **route matching**: look at `scope["path"]`, and work out which function is supposed to handle it. This is the actual answer to **how did it know `/order/status` should run `get_order_status`?** — Starlette read the already-parsed path, matched it against the routes registered via `@app.get(...)` decorators, and picked the right one.
 
 ### 4 — Dependency resolution
 
@@ -67,7 +72,7 @@ Still not the function. Next comes **dependency injection** — or more precisel
 
 ### 5 — Pydantic validates the request
 
-Only now does data validation happen. Whatever shape the request is expected to be — an email and a password, say, not an email and something else, not a username instead — **Pydantic** checks that the incoming data actually matches. This is separate from and later than the routing step; matching the URL and validating the payload are two different jobs done by two different components.
+Only now does data validation happen. Whatever shape the request is expected to be — an email and a password, say, not an email and something else, not a username instead — **Pydantic** checks that the incoming data actually matches. This is separate from and later than the routing step; **matching the URL and validating the payload are two different jobs done by two different components**.
 
 ### 6 — Your function finally runs
 
@@ -79,7 +84,7 @@ Once your function returns, the trip back out starts — and it goes through Pyd
 
 ### 8 — Middleware, response side (optional)
 
-Response-side middleware can run here — further transforming the response, security checks, whatever the app needs. Same mechanism as stage 3, just on the way out instead of the way in.
+Response-side middleware can run here — further transforming the response, security checks, whatever the app needs. This is not a second, separate piece of code: it is the **same** middleware from stage 2, resuming after the part of it that awaited the rest of the app. **A middleware is one function wrapped around everything inside it, so it necessarily gets a turn on the way in and a turn on the way out** — which is what makes it the natural place to time a request or attach a header to every response.
 
 ### 9 — uvicorn sends it back
 
@@ -88,11 +93,11 @@ Finally, the response goes to uvicorn, and uvicorn is what actually sends the HT
 By this point the response is still a structured Python object — a status code, headers, a body — not yet anything resembling HTTP. **uvicorn serializes it back into raw bytes**: the status line (`HTTP/1.1 200 OK`), the header lines, a blank line, then the body, and writes exactly that onto the socket. This is the mirror image of stage 1, in reverse.
 
 ```
-Client → raw bytes → uvicorn parses → structured request  → Starlette / dependencies / Pydantic / your function
+Client → raw bytes → uvicorn parses → structured request  → middleware / Starlette / dependencies / Pydantic / your function
 your function → structured response → uvicorn serializes → raw bytes → Client
 ```
 
-> [!note] uvicorn is the only piece in this entire chain that ever touches a literal socket or raw bytes, on either end. Everything between stage 1 and stage 9 — routing, middleware, dependency resolution, both Pydantic passes, your function — works purely with parsed Python objects, and never needs to know what HTTP looks like on the wire.
+> [!note] uvicorn is the only piece in this entire chain that ever touches a literal socket or raw bytes, on either end. Everything between stage 1 and stage 9 — middleware, routing, dependency resolution, both Pydantic passes, your function — works purely with parsed Python objects, and never needs to know what HTTP looks like on the wire.
 
 ---
 
@@ -117,14 +122,14 @@ flowchart LR
 | Stage | How much control you have |
 |---|---|
 | uvicorn (receiving / sending) | Essentially none — this is the ASGI server doing its job |
-| Starlette route matching | Indirect — you shape it by how you write your `@app.get(...)` paths, but the matching mechanism itself isn't yours to touch |
 | Middleware | Full — entirely optional, entirely written by you when present |
+| Starlette route matching | Indirect — you shape it by how you write your `@app.get(...)` paths, but the matching mechanism itself isn't yours to touch |
 | Dependency resolution | Full — you declare what a route depends on |
 | Pydantic validation (both directions) | Full, though mostly automatic — driven by your type hints unless you customize it |
 | Your function | Completely yours |
 
 > [!question]- Why does validation happen twice — once for the request, once for the response? Isn't the response just whatever the function returns?
-> Because "whatever the function returns" is not automatically guaranteed to be **correct or safe to send**.
+> Because **whatever the function returns** is not automatically guaranteed to be **correct or safe to send**.
 >
 > The request-side validation exists to protect your function — by the time your code runs, the data has already been confirmed to match the expected shape, so the function doesn't need defensive checks scattered through it.
 >

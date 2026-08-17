@@ -4,7 +4,7 @@
 
 12 concepts. **Generic** — the protocol, not any one library's managers.
 
-> Smaller than its neighbours, and that's correct — this is a narrow protocol with wide reach. The reason it earns a folder rather than a paragraph is that **its async variant is load-bearing for everything else in this vault**: FastAPI lifespan, database sessions, HTTP client lifetimes, and every "acquire a connection, guarantee release" pattern in a concurrent service.
+> Smaller than its neighbours, and that's correct — this is a narrow protocol with wide reach. The reason it earns a folder rather than a paragraph is that **its async variant is load-bearing for everything else in this vault**: FastAPI lifespan, database sessions, HTTP client lifetimes, and every **acquire a connection, guarantee release** pattern in a concurrent service.
 
 **Why this sits fifth:** `@contextmanager` converts a generator into a context manager, so folder 04 has to come first. After that, this is a short folder.
 
@@ -32,7 +32,7 @@ The explicit version, so the decorator version reads as a shortcut.
 One `yield`, splitting setup from teardown. Everything before `yield` is `__enter__`; everything after is `__exit__`. **This is the exact shape of FastAPI's `get_session` dependency** — already used in those notes, explainable only now that folders 03 and 04 exist.
 
 **6. `try/finally` around the `yield`**
-Why teardown code sitting bare after `yield` does *not* run if the body raises, and what the correct form looks like. The single most common bug in hand-written context managers.
+Why teardown code sitting bare after `yield` does **not** run if the body raises, and what the correct form looks like. The single most common bug in hand-written context managers.
 
 **7. Multiple context managers**
 Nesting, comma-separated form, and the 3.10+ parenthesised multi-line form.
@@ -51,7 +51,7 @@ What runs when a task is cancelled mid-body, and why this is the subtle failure 
 ## D · The toolkit
 
 **11. `contextlib` helpers**
-`suppress`, `closing`, `aclosing`, `redirect_stdout`, `nullcontext`. `nullcontext` in particular for the "conditionally use a context manager" case that otherwise duplicates a code block.
+`suppress`, `closing`, `aclosing`, `redirect_stdout`, `nullcontext`. `nullcontext` in particular for the **conditionally use a context manager** case that otherwise duplicates a code block.
 
 **12. `ExitStack` / `AsyncExitStack`**
 Composing a dynamic, unknown-at-write-time number of context managers. The escape hatch when nesting won't do — e.g. opening N connections determined at runtime.
@@ -74,7 +74,7 @@ Composing a dynamic, unknown-at-write-time number of context managers. The escap
 
 ## Interview hooks
 
-*"How would you guarantee a database connection is returned to the pool even if the handler raises?"* — a context manager, and being able to say why `try/finally` inside the generator is required rather than optional. Sarvam's §3 names connection pooling directly.
+**How would you guarantee a database connection is returned to the pool even if the handler raises?** — a context manager, and being able to say why `try/finally` inside the generator is required rather than optional. Sarvam's §3 names connection pooling directly.
 
 ## Sources to verify against
 

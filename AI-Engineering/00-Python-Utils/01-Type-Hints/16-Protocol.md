@@ -41,7 +41,7 @@ $ mypy p0.py
 p0.py:24: error: Value of type variable "T" of "best" cannot be "RetrievedDoc"  [type-var]
 ```
 
-Line 24 is rejected, and the rejection is *correct by the rules* — a tuple of constraints means "exactly one of these", and `RetrievedDoc` isn't one of them. Having a `.score` doesn't qualify it.
+Line 24 is rejected, and the rejection is **correct by the rules** — a tuple of constraints means **exactly one of these**, and `RetrievedDoc` isn't one of them. Having a `.score` doesn't qualify it.
 
 It's also useless. Run that line and it works fine; `max` reads `.score` and never asks what class the object is. The annotation is refusing something the program does correctly.
 
@@ -88,13 +88,13 @@ $ mypy p1.py
 p1.py:28: error: Value of type variable "T" of "best" cannot be "RetrievedDoc"  [type-var]
 ```
 
-The bound is open-ended now — any future subclass of `Scored` qualifies without touching `best`. That fixes the *closed list* problem and does nothing for `RetrievedDoc`, because qualifying still requires the words `(Scored)` to be typed **in `RetrievedDoc`'s own file**. Say it came from a retrieval library you installed. That file isn't yours.
+The bound is open-ended now — any future subclass of `Scored` qualifies without touching `best`. That fixes the **closed list** problem and does nothing for `RetrievedDoc`, because qualifying still requires the words `(Scored)` to be typed **in `RetrievedDoc`'s own file**. Say it came from a retrieval library you installed. That file isn't yours.
 
 **Wrap it.** `class ScoredDoc(Scored)` holding a `RetrievedDoc` inside. This works, and the cost is a different object: every list gets wrapped on the way in, and anything that needs `.url` back unwraps on the way out. A class whose entire job is to satisfy a type checker.
 
 > [!important] Both escapes are the same idea — **nominal typing**. The relationship exists only because somebody declared it by name. Java's `implements Scored` is the same thing: a phrase written inside the implementing class, so a class you can't edit can never implement your interface.
 >
-> What `best` actually needs is neither. It needs *anything that has a `.score`* — a description of a shape, not a list of approved names.
+> What `best` actually needs is neither. It needs **anything that has a `.score`** — a description of a shape, not a list of approved names.
 
 ## Describing a shape
 
@@ -169,7 +169,7 @@ Which is the difference between **nominal** typing and **structural** typing. No
 
 ### The duck-typing connection
 
-Structural typing is the type checker finally being able to express what Python has always done at runtime. `max(items, key=lambda c: c.score)` never asked what class anything was; it asked for `.score` and got one. "If it walks like a duck" — a protocol is that sentence written down where a checker can read it.
+Structural typing is the type checker finally being able to express what Python has always done at runtime. `max(items, key=lambda c: c.score)` never asked what class anything was; it asked for `.score` and got one. **If it walks like a duck** — a protocol is that sentence written down where a checker can read it.
 
 ## What counts as a match
 
@@ -280,15 +280,15 @@ isinstance     -> TypeError: Instance and class checks can only be used with @ru
 
 Both tools object, which is unusual — most of this folder is one or the other.
 
-**It is a genuine class object.** It has an `__mro__`, it sits in `object`'s hierarchy. So it is *not* checker-only in the way `Literal` was.
+**It is a genuine class object.** It has an `__mro__`, it sits in `object`'s hierarchy. So it is **not** checker-only in the way `Literal` was.
 
 **But you can't instantiate it.** `Protocols cannot be instantiated`, raised at runtime, not merely flagged. It describes a shape; there's nothing to make an instance of.
 
 **And `isinstance` refuses to answer.** That's the important one, and the reason is visible in the `__mro__` line.
 
-> [!info] `__mro__` — "method resolution order" — is the list of classes Python walks, in order, when looking something up on an object. You saw it in `11-TypedDict`, where `User.__mro__` coming back as `(User, dict, object)` was the proof a `TypedDict` really is a plain `dict`.
+> [!info] `__mro__` — **method resolution order** — is the list of classes Python walks, in order, when looking something up on an object. You saw it in `11-TypedDict`, where `User.__mro__` coming back as `(User, dict, object)` was the proof a `TypedDict` really is a plain `dict`.
 >
-> It's the complete record of what a class inherits from, which makes it exactly where `isinstance` looks: `isinstance(x, Message)` is essentially *is `Message` in `type(x).__mro__`?*
+> It's the complete record of what a class inherits from, which makes it exactly where `isinstance` looks: `isinstance(x, Message)` is essentially **is `Message` in `type(x).__mro__`?**
 
 `RetrievedDoc.__mro__` is `(RetrievedDoc, object)`. `Scored` is not in it and never will be — the class doesn't inherit from it, nothing was registered, and the entire match happened inside mypy. So `isinstance` has no record to consult, and raises rather than returning a wrong answer.
 
@@ -604,7 +604,7 @@ AttributeError: 'Unrelated' object has no attribute 'search_one'
 
 **Line 31 rejected.** An ABC is a base class, so it's nominal like any other — `Unrelated` didn't inherit, so it isn't a `Retriever` however identical its `search` is. The same failure as the base-class attempt earlier in this note, and the entire reason `Protocol` exists.
 
-The crash shows the rejection was *right*, not merely strict. `answer` calls `search_one`, which `Unrelated` has never heard of. Matching `search` was never enough.
+The crash shows the rejection was **right**, not merely strict. `answer` calls `search_one`, which `Unrelated` has never heard of. Matching `search` was never enough.
 
 **Line 32 objected to twice** — flagged by mypy, and `TypeError` from Python at instantiation if you ignore the checker. That's the ABC's distinctive power: **an incomplete implementation cannot come into existence**, with no checker in the loop.
 
@@ -643,7 +643,7 @@ pc.py:20: note: "Unrelated" is missing following "Retriever" protocol member:
 pc.py:20: note:     search_one
 ```
 
-`Unrelated` is rejected for *not having `search_one`* — the very method the protocol implements on line 8.
+`Unrelated` is rejected for **not having `search_one`** — the very method the protocol implements on line 8.
 
 > [!important] Nothing hands `search_one` to a class that merely matches. `Unrelated` doesn't inherit from `Retriever`, so implementing a method inside a protocol only adds **one more member the class has to have**. The body is inherited exclusively by a class that explicitly writes `class X(Retriever)`.
 >
@@ -716,7 +716,7 @@ Now two protocols describing the same thing in different words:
 23  b(Doc())
 ```
 
-Line 9's `@property` makes a method behave like a plain attribute — write `doc.score`, no parentheses, and the method runs. What matters here is that as written there is no way to *assign* to it: it is **read-only**. Line 5 is not — `x.score = 4.5` would be legal.
+Line 9's `@property` makes a method behave like a plain attribute — write `doc.score`, no parentheses, and the method runs. What matters here is that as written there is no way to **assign** to it: it is **read-only**. Line 5 is not — `x.score = 4.5` would be legal.
 
 ```
 $ mypy p3.py
@@ -734,9 +734,9 @@ p3.py:22: note:     score: expected "float", got "int"
 
 > [!important] A protocol member declared as a plain attribute is **invariant**; one declared read-only with `@property` is **covariant**. The same rule as `list` versus `Sequence`, for the same reason — a mutable thing must be safe in both directions, a read-only thing only in one.
 >
-> The practical consequence: **if your protocol only reads a value, declare it read-only.** `score: float` silently demands an exact `float` from every implementer; the property form accepts anything readable as one. That is `06-Abstract-Collection-Types`'s "annotate the weakest type the body needs", applied to a protocol's members.
+> The practical consequence: **if your protocol only reads a value, declare it read-only.** `score: float` silently demands an exact `float` from every implementer; the property form accepts anything readable as one. That is `06-Abstract-Collection-Types`'s **annotate the weakest type the body needs**, applied to a protocol's members.
 
-`Protocol` needs nothing from variance in order to be *used*. But its member-compatibility rules **are** variance rules, so without that vocabulary the result above is a mystery to be memorised rather than a consequence.
+`Protocol` needs nothing from variance in order to be **used**. But its member-compatibility rules **are** variance rules, so without that vocabulary the result above is a mystery to be memorised rather than a consequence.
 
 ## What this concept claims
 
@@ -746,7 +746,7 @@ Five things to carry:
 
 1. **Nominal versus structural.** A base class or an ABC requires the implementer to name your abstraction in their own file, which is impossible for a class you don't own — a fact no amount of open-endedness in the bound fixes. A protocol asks only whether the members are present, so the library never has to have heard of you.
 2. **It is a minimum, matched from scratch.** Every listed member must exist with a compatible type; extras are ignored; a near-miss name is a total miss. Nothing is registered anywhere — the checker re-reads the class definition at each place the question arises.
-3. **At runtime it is a class that can't be used as one.** It cannot be instantiated, and `isinstance` refuses to answer because the relationship exists in no `__mro__`. `@runtime_checkable` lets it answer by checking that the *names* exist, which is strictly weaker than the static check and will say `True` for an object of entirely the wrong type.
+3. **At runtime it is a class that can't be used as one.** It cannot be instantiated, and `isinstance` refuses to answer because the relationship exists in no `__mro__`. `@runtime_checkable` lets it answer by checking that the **names** exist, which is strictly weaker than the static check and will say `True` for an object of entirely the wrong type.
 4. **`Protocol` versus ABC is a question of direction.** An ABC points from the implementer to the abstraction, enforces at runtime, and hands down shared implementation for free. A protocol points from the consumer to the abstraction, enforces only at check time, and treats an implemented method as one more requirement. Own the hierarchy → ABC; describing a boundary things arrive at → protocol.
 5. **Member variance follows the same rule as containers.** A writable attribute is invariant, a read-only `@property` is covariant — so a protocol that only reads should say so, or it demands exactness it never needed.
 

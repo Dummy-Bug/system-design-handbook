@@ -1,4 +1,4 @@
-Two architectures in this folder have already fixed real problems with traditional RAG. Corrective RAG checked the documents before generating; Self-RAG checked the answer afterwards. Both made the pipeline better without changing what it fundamentally *is*.
+Two architectures in this folder have already fixed real problems with traditional RAG. Corrective RAG checked the documents before generating; Self-RAG checked the answer afterwards. Both made the pipeline better without changing what it fundamentally **is**.
 
 This note is about what remains — and it starts by being fair to the thing being replaced.
 
@@ -21,13 +21,13 @@ Every architecture in this folder gives up some of both. That trade should be vi
 
 That is worse than merely wasteful, because of the prompt that traditional RAG uses:
 
-> *Answer the question using only the context below.*
+> **Answer the question using only the context below.**
 
 The model **knows** the answer. The prompt forbids it from using what it knows. So it is forced to answer out of a context that was never relevant to the question in the first place.
 
 **It is a dumb pipeline.** The whole flow runs in one fixed sequence, and you cannot change that sequence. Sometimes a query needs rewriting before retrieval. Sometimes a complex query needs breaking into parts, each retrieved separately. Traditional RAG has nowhere to put either. The flow is what it is, for every query, forever.
 
-> [!important] "Dumb" here is a precise claim, not an insult. It means the sequence of steps is **fixed at build time** rather than decided at query time. A pipeline that always does A → B → C is dumb even if A, B and C are each individually sophisticated.
+> [!important] **Dumb** here is a precise claim, not an insult. It means the sequence of steps is **fixed at build time** rather than decided at query time. A pipeline that always does A → B → C is dumb even if A, B and C are each individually sophisticated.
 
 **It never checks its own work.** The response is generated and returned without anything verifying it.
 
@@ -39,7 +39,7 @@ Two words on that page carry the whole lecture: **control** and **order**. Every
 
 ## What CRAG and Self-RAG already took back
 
-Both earlier architectures bought back a piece of *control*, and neither touched *order*.
+Both earlier architectures bought back a piece of **control**, and neither touched **order**.
 
 | | What it added | Which problem |
 |---|---|---|
@@ -80,4 +80,4 @@ An LLM answers a question you hand it. An agent decides what to do. Give that di
 ---
 
 > [!tip] Interview framing
-> "Traditional RAG has two structural problems: no control over whether retrieval happens, and a fixed order of steps. It retrieves for every query, including ones the model could answer directly — and because the prompt says 'answer only from this context', the model is actively prevented from using what it already knows. Corrective RAG and Self-RAG each buy back some control, one over the retrieved documents and one over the generated answer, but neither touches the ordering, and in both the branching logic is hand-written by the developer. Agentic RAG changes what's driving the pipeline: an agent decides, per query, whether to retrieve, from where, how, and in what order. It doesn't replace CRAG or Self-RAG — it reuses both as capabilities an agent can invoke. The honest cost is that you give up exactly what made traditional RAG attractive: it's no longer simple, and it's no longer fast."
+> **Traditional RAG has two structural problems: no control over whether retrieval happens, and a fixed order of steps. It retrieves for every query, including ones the model could answer directly — and because the prompt says 'answer only from this context', the model is actively prevented from using what it already knows. Corrective RAG and Self-RAG each buy back some control, one over the retrieved documents and one over the generated answer, but neither touches the ordering, and in both the branching logic is hand-written by the developer. Agentic RAG changes what's driving the pipeline: an agent decides, per query, whether to retrieve, from where, how, and in what order. It doesn't replace CRAG or Self-RAG — it reuses both as capabilities an agent can invoke. The honest cost is that you give up exactly what made traditional RAG attractive: it's no longer simple, and it's no longer fast.**

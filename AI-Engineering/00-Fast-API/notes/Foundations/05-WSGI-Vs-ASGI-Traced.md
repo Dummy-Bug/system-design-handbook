@@ -4,26 +4,35 @@ Setup for all four traces: the DB round-trip takes 100ms. Two requests arrive cl
 
 ---
 
-## Flask's default dev server — one process, one thread
+## One WSGI worker, single-threaded
 
-No threading, no extra workers. Just `flask run`.
+The baseline: one process, one thread, no extra workers.
+
+> [!warning] This is **not** what a plain `flask run` gives you. Flask's development server has been **threaded by default since Flask 1.0**, so `flask run` overlaps these two requests and finishes in ~100ms — it behaves like the `gthread` trace further down, not like this one. Reaching the serial trace below deliberately takes `flask run --without-threads`. The trace is still the right place to start, because it is the mechanism every other model here gets measured against; it just isn't a default anyone hits by accident.
 
 ```
 t=0ms    Request A arrives. Worker thread starts executing the view function.
+
 t=0ms    Thread calls db.query(id=1) — a BLOCKING call.
+
 t=0-100ms   Thread does nothing. Not "working slowly" — nothing. It cannot
             look at Request B, cannot start anything else. It is parked,
             waiting for bytes to arrive on the DB socket.
+            
 t=100ms  DB responds. Thread resumes, builds "Hello Elon Musk", sends it.
+
 t=100ms  ONLY NOW does the thread become free to look at Request B.
+
 t=100ms  Worker picks up B, calls db.query(id=2).
+
 t=100-200ms  Same blocking wait.
+
 t=200ms  Response B sent.
 ```
 
 **Total: 200ms, fully serial.** Request B's user waits 100ms before their request is even looked at — not because the DB is busy, but because the one thread available was idle on A's call and had no way to switch to B during that idle time.
 
-> [!important] This is the literal meaning of "one request per worker." The worker isn't the CPU — the CPU is doing nothing during that 100ms too. The worker is a thread, and a blocking call doesn't return control to anything else until it finishes.
+> [!important] This is the literal meaning of **one request per worker.** The worker isn't the CPU — the CPU is doing nothing during that 100ms too. The worker is a thread, and a blocking call doesn't return control to anything else until it finishes.
 
 ---
 
@@ -33,15 +42,18 @@ Gunicorn's default `sync` worker class forks **separate OS processes**, each a f
 
 ```
 t=0ms    Request A → OS routes it to Worker Process 1
+
 t=0ms    Request B → OS routes it to Worker Process 2
+
 t=0-100ms   Both processes independently blocked on their own DB call,
             AT THE SAME TIME — genuine parallelism now
+            
 t=100ms  Both respond, roughly together
 ```
 
 **Total: ~100ms for both.** Real overlap, because A and B are on separate processes, each free to sit idle without blocking the other.
 
-The concurrency ceiling is now the worker count. A 5th simultaneous request queues until one of the 4 finishes its DB call — even though all 4 workers are doing nothing but waiting at that exact moment. Scaling this to 1,000 concurrent slow requests means something close to 1,000 worker processes: 1,000 fully loaded Python interpreters, real memory and real OS scheduling overhead, even though 999 of them are idle on I/O at any instant.
+The **concurrency ceiling is now the worker count**. A 5th simultaneous request queues until one of the 4 finishes its DB call — **even though all 4 workers are doing nothing but waiting at that exact moment**. Scaling this to 1,000 concurrent slow requests means something close to 1,000 worker processes: 1,000 fully loaded Python interpreters, real memory and real OS scheduling overhead, even though 999 of them are idle on I/O at any instant.
 
 ---
 
@@ -56,11 +68,11 @@ Process 1
                                  also releases it while waiting
 ```
 
-**Why this works despite Python's GIL:** the Global Interpreter Lock means only one thread in a process executes Python bytecode at any instant — no real parallel *computation* within one process. But **a blocking I/O call releases the GIL while it waits.** So Thread 1, parked inside `db.query()`, has let go of the GIL; Thread 2 is free to start its own query in the meantime. Both can be genuinely waiting on their own DB calls simultaneously, in one process.
+**Why this works despite Python's GIL:** the **Global Interpreter Lock** means only one thread in a **process** executes Python **bytecode** at any instant — no real parallel **computation** within one process. But **a blocking I/O call releases the GIL while it waits.** So Thread 1, parked inside `db.query()`, has let go of the GIL; Thread 2 is free to start its own query in the meantime. Both can be genuinely waiting on their own DB calls simultaneously, in one process.
 
-This buys the same kind of overlap as more processes, but cheaper — threads share one loaded copy of the app instead of each process duplicating it.
+This buys the same kind of overlap as more processes, but cheaper — **threads share one loaded copy of the app instead of each process duplicating it**.
 
-**The limit:** if the work were CPU-bound instead of I/O-bound — resizing an image rather than waiting on a DB — the GIL would prevent the overlap. Only one thread could actually be computing at a time; separate processes would be required for real parallelism.
+**The limit:** if the work were CPU-bound instead of I/O-bound — resizing an image rather than waiting on a DB — the GIL would prevent the overlap. Only one thread could actually be computing at a time; **separate processes would be required for real parallelism**.
 
 ---
 
@@ -70,23 +82,32 @@ Requires an **async** DB driver — `asyncpg` for Postgres, `motor` for Mongo �
 
 ```
 t=0ms    Request A arrives. Event loop starts running the coroutine for A.
+
 t=0ms    Coroutine hits: await db.query(id=1)
+
 t=0ms    This does NOT block the thread. It registers "wake me when the DB
-         socket has data" with the OS, then hands control back to the event loop.
+         socket has data" with the OS, then hands control back to the event   
+         loop.
+         
 t=0ms    Event loop is free — it picks up Request B, starts its coroutine.
+
 t=0ms    Coroutine B hits: await db.query(id=2). Same thing — yields control back.
+
 t=0ms    Both DB queries are now in flight AT THE SAME TIME, on one thread.
+
 t=100ms  DB responds to both around the same time. The OS tells the event
          loop both sockets are ready.
+         
 t=100ms  Event loop resumes coroutine A exactly where it left off, sends its response.
+
 t=100ms  Event loop resumes coroutine B, sends its response too.
 ```
 
-**Total: ~100ms for both — on a single thread.** No extra processes, no extra threads. The 100ms of "waiting for the DB" was never idle time: the moment A started waiting, the same thread used the gap to go start B.
+**Total: ~100ms for both — on a single thread.** No extra processes, no extra threads. The 100ms of **waiting for the DB** was never idle time: the moment A started waiting, the same thread used the gap to go start B.
 
 This is **cooperative multitasking**: a coroutine voluntarily gives up the thread the instant it has nothing to do but wait, and the event loop uses that gap to advance someone else. Nobody was ever blocked; the DB was busy, the thread never was.
 
-> [!important] The landmine. This only works if the DB call is genuinely non-blocking. Write `async def` but call a *synchronous* driver like `psycopg2` inside it, and that call does not yield — it freezes the thread exactly like Flask's dev server did. Worse, actually: since one thread runs the *entire* event loop, that single blocking call stalls every other request in the whole app, not just its own. Code that looks async but isn't turns a fast framework into something slower than plain Flask — the concrete case behind the "moving parts you never see" warning.
+> [!important] The landmine. This only works if the DB call is genuinely non-blocking. Write `async def` but call a **synchronous** driver like `psycopg2` inside it, and that call does not yield — it freezes the thread exactly like the single-threaded WSGI worker did. Worse, actually: since one thread runs the **entire** event loop, that single blocking call stalls every other request in the whole app, not just its own. Code that looks async but isn't turns a fast framework into something slower than plain Flask — the concrete case behind the **moving parts you never see** warning.
 
 ---
 
@@ -96,11 +117,13 @@ This is **cooperative multitasking**: a coroutine voluntarily gives up the threa
 
 ```
 Process 1's event loop: juggling however many requests land on it, concurrently
+
 Process 2's event loop: juggling its own set, concurrently
+
 Process 3, Process 4: same
 ```
 
-The concurrency ceiling isn't "4 requests" the way it was for 4 sync WSGI processes — it's **4 processes, each capable of holding many requests in flight at once.** If one event loop comfortably juggles ~200 concurrent I/O-bound requests, 4 workers gets you toward 800 on the same hardware that gave sync WSGI a ceiling of 4.
+The concurrency ceiling isn't **4 requests** the way it was for 4 sync WSGI processes — it's **4 processes, each capable of holding many requests in flight at once.** If one event loop comfortably juggles ~200 concurrent I/O-bound requests, 4 workers gets you toward 800 on the same hardware that gave sync WSGI a ceiling of 4.
 
 ---
 
@@ -110,16 +133,18 @@ Flask-with-threads and FastAPI-async both overlap I/O waits within a single proc
 
 **1. Cost per unit of concurrency.**
 
-An OS thread is a real, heavy object — the OS allocates it its own stack (typically 1-8MB), and the kernel has to context-switch between threads, an actual kernel-level operation with real cost.
+An OS thread is a real, heavy object — the OS reserves it its own stack (commonly 512KB–8MB depending on the platform), and the kernel has to context-switch between threads, an actual kernel-level operation with real cost.
 
 A coroutine is a **user-space object** — a few kilobytes, no OS involvement, no kernel context switch. Nothing preempts it; it hands control back voluntarily at `await`.
 
 | | Cost for 1,000 concurrent requests |
 |---|---|
-| Flask + OS threads | ≈ 1,000 threads ≈ several GB of stack alone |
-| FastAPI + coroutines | ≈ 1,000 coroutines ≈ a few MB total |
+| Flask + OS threads | ≈ 1,000 threads, several GB of **reserved address space**, plus 1,000 kernel-scheduled entities |
+| FastAPI + coroutines | ≈ 1,000 coroutines ≈ a few MB, all invisible to the kernel |
 
-At tens of concurrent requests this barely registers. At thousands, it's the entire reason ASGI exists — not that async code computes faster, but that each unit of *waiting* costs almost nothing.
+> [!note] Be careful with that GB figure, because it is the one an interviewer will push on. A thread's stack is **reserved address space**, not memory actually consumed — pages get committed only as they're touched, so a thread that never recurses deeply costs tens of KB of real RAM, not 8MB. The honest version of the cost argument isn't **threads eat all your RAM**; it's that every thread is an object the **kernel** has to know about and schedule, while a coroutine is invisible to the kernel entirely. Scheduling and context-switch overhead is what stops scaling at thousands of threads, well before memory does.
+
+At tens of concurrent requests this barely registers. At thousands, it's the entire reason ASGI exists — not that async code computes faster, but that each unit of **waiting** costs almost nothing.
 
 **2. When control can switch.**
 

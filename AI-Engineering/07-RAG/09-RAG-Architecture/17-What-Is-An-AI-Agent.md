@@ -6,7 +6,7 @@ Start with what an LLM is on its own.
 
 **An AI agent is a larger system in which an LLM is one part.** The LLM is not the agent. It is a sub-component of something bigger, and it does not act alone inside it.
 
-> [!important] This distinction is the one people skip, and it is the reason "agent" gets used to mean nothing. If the LLM is the whole system, you have an LLM. If the LLM is a piece inside a system that also holds state and can act on the world, you have an agent.
+> [!important] This distinction is the one people skip, and it is the reason **agent** gets used to mean nothing. If the LLM is the whole system, you have an LLM. If the LLM is a piece inside a system that also holds state and can act on the world, you have an agent.
 
 ---
 
@@ -45,7 +45,7 @@ Two properties of the LLM itself get used constantly in an agentic RAG pipeline,
 - **NLU — natural language understanding.** Used to understand the user, work out the **intent** behind a query, and make decisions from it. Every decision the pipeline makes about an incoming query runs on this.
 - **NLG — natural language generation.** Used to produce the response.
 
-> [!info] Worth noticing that these two sit at opposite ends of the pipeline. NLU is what the agent applies to the *query* before anything happens; NLG is what produces the *answer* at the end. The same model provides both, but they are doing different jobs, and most of what makes a pipeline "agentic" is happening on the NLU side.
+> [!info] Worth noticing that these two sit at opposite ends of the pipeline. NLU is what the agent applies to the **query** before anything happens; NLG is what produces the **answer** at the end. The same model provides both, but they are doing different jobs, and most of what makes a pipeline **agentic** is happening on the NLU side.
 
 ---
 
@@ -79,7 +79,7 @@ And retrieval is a task like any other. So you give the agent a retrieval tool, 
 
 > [!important] That sentence is the hinge of this entire module. In traditional RAG, in Corrective RAG and in Self-RAG, retrieval is a **step in the graph** — a node that always sits in the same place. Making retrieval a **tool** turns it into something the agent may call, may call several times, may call with different arguments, or may not call at all.
 >
-> Nothing else in agentic RAG makes sense until that shift is clear. The four questions in [[19-The-Four-Questions]] are all questions an agent can only ask *because* retrieval became a tool.
+> Nothing else in agentic RAG makes sense until that shift is clear. The four questions in [[19-The-Four-Questions]] are all questions an agent can only ask **because** retrieval became a tool.
 
 ---
 
@@ -94,4 +94,4 @@ And retrieval is a task like any other. So you give the agent a retrieval tool, 
 ---
 
 > [!tip] Interview framing
-> "The distinction I'd start with is that an LLM is a standalone system — prompt in, response out, complete by itself — whereas an agent is a larger system where the LLM is a sub-component. Three parts: a brain, which is the LLM and supplies reasoning, planning and orchestration; memory, backed by a database, which holds not just persisted facts but the whole conversational history including previously retrieved documents; and tools, which are Python functions the agent can call. The formula is LLM plus tools equals agent. For RAG specifically, the load-bearing move is making retrieval a tool rather than a fixed node in the graph — that single change is what lets the agent decide whether to retrieve, from which source, with which parameters, and how many times. Everything else in agentic RAG follows from it."
+> **The distinction I'd start with is that an LLM is a standalone system — prompt in, response out, complete by itself — whereas an agent is a larger system where the LLM is a sub-component. Three parts: a brain, which is the LLM and supplies reasoning, planning and orchestration; memory, backed by a database, which holds not just persisted facts but the whole conversational history including previously retrieved documents; and tools, which are Python functions the agent can call. The formula is LLM plus tools equals agent. For RAG specifically, the load-bearing move is making retrieval a tool rather than a fixed node in the graph — that single change is what lets the agent decide whether to retrieve, from which source, with which parameters, and how many times. Everything else in agentic RAG follows from it.**

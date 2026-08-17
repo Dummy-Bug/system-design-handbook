@@ -6,7 +6,7 @@ $$\text{RRF score}(d) = \sum_{r} \frac{1}{\text{rank}_r(d) + k_c}$$
 
 Sum over every retrieval run `r`. `rank` is the document's position in that run's list, counting from 1. `k_c` is a constant, conventionally **60**.
 
-> [!important] **The original similarity score is discarded entirely.** Not down-weighted — discarded. A document that scraped in at rank 1 with a cosine similarity of 0.51 contributes exactly the same as one that hit rank 1 with 0.99. RRF only ever asks *"where did it come?"*, never *"by how much?"*. That is a deliberate design choice, and the reason is that scores from different retrieval runs (or different retrievers entirely) are not comparable to one another, whereas ranks always are.
+> [!important] **The original similarity score is discarded entirely.** Not down-weighted — discarded. A document that scraped in at rank 1 with a cosine similarity of 0.51 contributes exactly the same as one that hit rank 1 with 0.99. RRF only ever asks **where did it come?**, never **by how much?**. That is a deliberate design choice, and the reason is that scores from different retrieval runs (or different retrievers entirely) are not comparable to one another, whereas ranks always are.
 
 ---
 
@@ -52,7 +52,7 @@ $$\frac{1}{1+60} + \frac{1}{3+60} = 0.016393 + 0.015873 = \mathbf{0.032266}$$
 | Doc 4 | 0.016129 | 1 of 3 |
 | Doc 5 | 0.016129 | 1 of 3 |
 
-**Doc 2 wins decisively** — not because it was ever spectacularly similar, but because it turned up in *every* run. Doc 4 and Doc 5 sit at the bottom despite both having ranked 2nd, because they each showed up only once.
+**Doc 2 wins decisively** — not because it was ever spectacularly similar, but because it turned up in **every** run. Doc 4 and Doc 5 sit at the bottom despite both having ranked 2nd, because they each showed up only once.
 
 ---
 
@@ -60,11 +60,11 @@ $$\frac{1}{1+60} + \frac{1}{3+60} = 0.016393 + 0.015873 = \mathbf{0.032266}$$
 
 The property being rewarded is **consistency**.
 
-A document that appears across multiple retrieval runs is a document that matched *several different phrasings* of the same question. That means it covers most — or all — of the information the user was circling around, rather than happening to match one particular wording.
+A document that appears across multiple retrieval runs is a document that matched **several different phrasings** of the same question. That means it covers most — or all — of the information the user was circling around, rather than happening to match one particular wording.
 
 Conversely, a document that ranks first in one run and is absent from the others is a **one-off**. It matched a single phrasing, possibly a quirk of that phrasing, and RRF treats it as the outlier it probably is.
 
-> [!info] **Why summation gets you this for free.** Each additional appearance adds roughly `1/61`-ish to the total. Each *improvement in rank within* a run adds almost nothing — the difference between rank 1 and rank 3 is `0.016393 − 0.015873 = 0.00052`, about **thirty times smaller** than the gain from appearing one more time. So the sum is dominated by *how many times* a document appears, not *where* it appears.
+> [!info] **Why summation gets you this for free.** Each additional appearance adds roughly `1/61`-ish to the total. Each **improvement in rank within** a run adds almost nothing — the difference between rank 1 and rank 3 is `0.016393 − 0.015873 = 0.00052`, about **thirty times smaller** than the gain from appearing one more time. So the sum is dominated by **how many times** a document appears, not **where** it appears.
 
 ### Rank still matters — just barely
 
@@ -105,4 +105,4 @@ So the constant is a **damping factor**, and it is a dial:
 ---
 
 > [!tip] Interview framing
-> "RRF scores each document as the sum over retrieval runs of `1/(rank + k)`, with `k` conventionally 60, and it uses *only* rank — the underlying similarity scores are thrown away, because scores from different retrievers aren't comparable while ranks always are. The effect of the constant is what matters: `1/61` through `1/65` are all within about a thousandth of each other, so moving up a rank barely changes the score, while appearing in one more retrieval run adds a whole extra `~0.016`. So the sum is dominated by consistency — how many phrasings retrieved this document — and rank only breaks ties. In the lecture's example a document appearing in all three runs scored 0.0489 versus about 0.032 for documents in two runs, and two documents that each ranked 2nd but appeared only once came last. The constant is the dial: raise it and you approach pure vote-counting, drop it to 1 and rank-1 finishes start dominating again. The caveat is that consensus is a proxy for relevance — if the rephrasings share a blind spot, RRF promotes their shared mistake."
+> **RRF scores each document as the sum over retrieval runs of `1/(rank + k)`, with `k` conventionally 60, and it uses only rank — the underlying similarity scores are thrown away, because scores from different retrievers aren't comparable while ranks always are. The effect of the constant is what matters: `1/61` through `1/65` are all within about a thousandth of each other, so moving up a rank barely changes the score, while appearing in one more retrieval run adds a whole extra `~0.016`. So the sum is dominated by consistency — how many phrasings retrieved this document — and rank only breaks ties. In the lecture's example a document appearing in all three runs scored 0.0489 versus about 0.032 for documents in two runs, and two documents that each ranked 2nd but appeared only once came last. The constant is the dial: raise it and you approach pure vote-counting, drop it to 1 and rank-1 finishes start dominating again. The caveat is that consensus is a proxy for relevance — if the rephrasings share a blind spot, RRF promotes their shared mistake.**

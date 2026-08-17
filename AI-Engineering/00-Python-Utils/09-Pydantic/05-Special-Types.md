@@ -1,4 +1,4 @@
-Constraints (the previous note) cover ranges and lengths. A step above that is validation with real *domain* knowledge baked in — is this actually a well-formed email address, a valid URL, a value that should never appear in a log. Writing that from scratch means regular expressions and edge cases that are easy to get subtly wrong. Pydantic ships ready-made types for the common cases instead.
+Constraints (the previous note) cover ranges and lengths. A step above that is validation with real **domain** knowledge baked in — is this actually a well-formed email address, a valid URL, a value that should never appear in a log. Writing that from scratch means regular expressions and edge cases that are easy to get subtly wrong. Pydantic ships ready-made types for the common cases instead.
 
 ## Installing the extras
 
@@ -72,7 +72,7 @@ class User(BaseModel):
     uid: UUID = Field(default_factory=uuid4)
 ```
 
-Paired with `default_factory` (previous note), this gives every new instance a fresh, unique ID with zero caller involvement — genuinely the common case for a primary identifier, since the *caller* creating a new user almost never has an ID to hand it themselves.
+Paired with `default_factory` (previous note), this gives every new instance a fresh, unique ID with zero caller involvement — genuinely the common case for a primary identifier, since the **caller** creating a new user almost never has an ID to hand it themselves.
 
 ---
 

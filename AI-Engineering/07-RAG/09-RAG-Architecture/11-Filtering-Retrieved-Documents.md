@@ -56,13 +56,13 @@ def is_relevant(state: State):
     return {"relevant_docs": relevant_docs}
 ```
 
-A loop, one call per document, a boolean each time. Same shape as CRAG's evaluator in [[04-Retrieval-Evaluation]] — but note the difference in what comes back. CRAG returns a **score** and thresholds it; Self-RAG returns a **boolean** and keeps or drops. Self-RAG has no notion of "somewhat relevant", because it has no ambiguous branch to send such a document down.
+A loop, one call per document, a boolean each time. Same shape as CRAG's evaluator in [[04-Retrieval-Evaluation]] — but note the difference in what comes back. CRAG returns a **score** and thresholds it; Self-RAG returns a **boolean** and keeps or drops. Self-RAG has no notion of **somewhat relevant**, because it has no ambiguous branch to send such a document down.
 
 ### What it does to the CEO question
 
 `Who is the CEO of NexaAI?` retrieves **four** documents. After filtering, **one** survives — the chunk that actually names the CEO.
 
-The other three were about the company but not about its leadership. The lecture's phrasing is the useful one: they are **semantically close but not relevant to answering the question**. Vector search brought them because they discuss NexaAI; the filter drops them because they don't discuss *who runs it*.
+The other three were about the company but not about its leadership. The lecture's phrasing is the useful one: they are **semantically close but not relevant to answering the question**. Vector search brought them because they discuss NexaAI; the filter drops them because they don't discuss **who runs it**.
 
 That is problem 2 from [[08-Why-Self-RAG]] being addressed — noise filtered before it can distort generation.
 
@@ -169,7 +169,7 @@ Nearly identical to CRAG's web node in [[05-Web-Search-Fallback]], with one addi
 
 > [!note] **This is not part of the Self-RAG architecture.** The lecture ships it as a separate notebook and explicitly says it will not be wired into the main build — it is shown as a possibility, which is why the placeholder node is there rather than a direct edge.
 >
-> The structural observation is still worth having: because the relevance filter is a *node* and not a step buried inside another function, a completely different document source can be plugged in ahead of it and everything downstream keeps working. That reuse is the same property that let CRAG share one `refine` node across three verdicts.
+> The structural observation is still worth having: because the relevance filter is a **node** and not a step buried inside another function, a completely different document source can be plugged in ahead of it and everything downstream keeps working. That reuse is the same property that let CRAG share one `refine` node across three verdicts.
 
 ---
 
@@ -177,7 +177,7 @@ Nearly identical to CRAG's web node in [[05-Web-Search-Fallback]], with one addi
 
 **`Who is the CEO of NexaAI?`** → four retrieved, one relevant, and an answer naming the CEO.
 
-**`What is the refund policy of NexaAI?`** → the documents cover pricing but say nothing about refunds. No document passes the filter, so the flow takes the second branch and returns **"No relevant document found."**
+**`What is the refund policy of NexaAI?`** → the documents cover pricing but say nothing about refunds. No document passes the filter, so the flow takes the second branch and returns **No relevant document found.**
 
 That second one is the honest failure traditional RAG could not produce. Given four pricing chunks and an instruction to answer from them, an ordinary pipeline would have manufactured a refund policy out of billing terms.
 
@@ -194,4 +194,4 @@ That second one is the honest failure traditional RAG could not produce. Given f
 ---
 
 > [!tip] Interview framing
-> "After retrieval, each document is judged individually for relevance and only the survivors reach generation. On 'who is the CEO', four chunks come back and one survives — the rest are semantically close, because they're all about the company, but they don't address who runs it. That's the distinction vector search can't make and this filter can. Unlike CRAG's evaluator this returns a boolean rather than a score, because Self-RAG has no ambiguous branch to route a partial match down. If nothing is relevant the flow returns an explicit 'no relevant document found' instead of inventing an answer — which is what happens on a refund-policy question against pricing docs. There's also a deliberately empty node on that branch, and the reason is that it's a swap-in point for web search, feeding results back through the *same* relevance filter."
+> **After retrieval, each document is judged individually for relevance and only the survivors reach generation. On 'who is the CEO', four chunks come back and one survives — the rest are semantically close, because they're all about the company, but they don't address who runs it. That's the distinction vector search can't make and this filter can. Unlike CRAG's evaluator this returns a boolean rather than a score, because Self-RAG has no ambiguous branch to route a partial match down. If nothing is relevant the flow returns an explicit 'no relevant document found' instead of inventing an answer — which is what happens on a refund-policy question against pricing docs. There's also a deliberately empty node on that branch, and the reason is that it's a swap-in point for web search, feeding results back through the same relevance filter.**

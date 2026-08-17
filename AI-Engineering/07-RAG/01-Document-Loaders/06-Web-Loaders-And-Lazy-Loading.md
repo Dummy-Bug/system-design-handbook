@@ -1,4 +1,4 @@
-Every loader so far assumed the same thing: the knowledge source is a **local file** — something sitting on your disk. But that's not always true. Plenty of real knowledge lives as **web pages**: documentation sites, product pages, wikis. No file to point a path at — just a URL. LangChain covers this with two loaders, and along the way we'll meet a distinction that applies to *every* loader: `load()` versus `lazy_load()`.
+Every loader so far assumed the same thing: the knowledge source is a **local file** — something sitting on your disk. But that's not always true. Plenty of real knowledge lives as **web pages**: documentation sites, product pages, wikis. No file to point a path at — just a URL. LangChain covers this with two loaders, and along the way we'll meet a distinction that applies to **every** loader: `load()` versus `lazy_load()`.
 
 ---
 
@@ -39,7 +39,7 @@ Notice the URL pattern, because it sets up the next idea: all three are **childr
 
 ---
 
-## RecursiveUrlLoader — a page *and* everything it links to
+## RecursiveUrlLoader — a page and everything it links to
 
 What if you want that entire documentation section? The base page, plus every child page it links to? With `WebBaseLoader` you'd have to collect every child URL yourself and pass the whole list — you can't do it independently. For this, LangChain has a specialized loader: the **`RecursiveUrlLoader`**.
 
@@ -68,7 +68,7 @@ for i in range(10):
 
 The first document is the base page itself — the document-loaders index — with `content_type: text/html`, `charset: utf-8`, the page title, and the language. Then come the child links it found: the source-code page, Azure AI Data, Ollama, LakeFS, Markdown, even a `sitemap.xml` and the site's Twitter link — every page reachable one hop from the base, each as a Document with `page_content` (the full HTML text content) and its own metadata.
 
-> [!info] `max_depth` is the recursion leash. Depth 2 means "the base page plus pages it links to." Raise it and the crawler follows links-of-links — the document count (and load time) grows fast.
+> [!info] `max_depth` is the recursion leash. Depth 2 means **the base page plus pages it links to.** Raise it and the crawler follows links-of-links — the document count (and load time) grows fast.
 
 ---
 
@@ -76,7 +76,7 @@ The first document is the base page itself — the document-loaders index — wi
 
 Loading those 222 documents surfaced two problems worth taking seriously:
 
-1. **It took ~6 minutes.** And `load()` is all-or-nothing — you stare at a blocked cell for six minutes before you can touch even the *first* document.
+1. **It took ~6 minutes.** And `load()` is all-or-nothing — you stare at a blocked cell for six minutes before you can touch even the **first** document.
 2. **Everything landed in memory at once.** `load()` returns a **list** of Documents — all 222 page contents plus metadata, held in memory simultaneously, whether you need them all right now or not.
 
 For 222 documents that's tolerable. Scale the same pattern to thousands of pages and it's neither fast to start nor kind to memory.
@@ -89,7 +89,7 @@ documents_lazy_load
 # <generator object ...>
 ```
 
-No list — a **generator object**. (A generator is a function that uses `yield` instead of `return`: rather than computing everything and handing it back at once, it produces values **one at a time**, each time the loop asks for the next one.) Nothing has been fetched yet; each document is loaded into memory *only when the iteration reaches it*:
+No list — a **generator object**. (A generator is a function that uses `yield` instead of `return`: rather than computing everything and handing it back at once, it produces values **one at a time**, each time the loop asks for the next one.) Nothing has been fetched yet; each document is loaded into memory **only when the iteration reaches it**:
 
 ```python
 counter = 0
@@ -107,14 +107,14 @@ for document in documents_lazy_load:
     pp(document.metadata)
 ```
 
-This runs **immediately** — no six-minute wait, because nothing is loaded up front. Documents arrive one by one, get processed one at a time, and only ever one sits in memory. The stop condition even means pages 21–222 are *never fetched at all*.
+This runs **immediately** — no six-minute wait, because nothing is loaded up front. Documents arrive one by one, get processed one at a time, and only ever one sits in memory. The stop condition even means pages 21–222 are **never fetched at all**.
 
 ```
 load()      →  [doc1, doc2, ... doc222]     all at once: 6-min wait, all in memory
 lazy_load() →  generator                    one at a time: starts instantly, one in memory
 ```
 
-> [!important] The difference in one line: **`load()` loads every document object into memory at once and returns a list; `lazy_load()` returns a generator, and you loop through it, loading documents into memory one by one.** Same documents either way — the difference is *when* they're materialised. For a handful of files, `load()` is fine. For big crawls or bulk ingestion, `lazy_load()` saves memory and lets processing start on document 1 while document 222 hasn't even been fetched.
+> [!important] The difference in one line: **`load()` loads every document object into memory at once and returns a list; `lazy_load()` returns a generator, and you loop through it, loading documents into memory one by one.** Same documents either way — the difference is **when** they're materialised. For a handful of files, `load()` is fine. For big crawls or bulk ingestion, `lazy_load()` saves memory and lets processing start on document 1 while document 222 hasn't even been fetched.
 
 ---
 

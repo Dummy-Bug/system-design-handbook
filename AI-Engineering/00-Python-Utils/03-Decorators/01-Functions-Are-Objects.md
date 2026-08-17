@@ -18,12 +18,12 @@ a = square(5)   # a is 25
 b = square      # b is the function itself
 ```
 
-The first line says *run this function and keep the answer*. The second says *keep the function*.
+The first line says **run this function and keep the answer**. The second says **keep the function**.
 
 This is the single most common point of confusion, so it's worth being blunt about the mechanism:
 
-> [!important] **The parentheses are the "run it" operator.**
-> `square` is the thing. `square(5)` is *the result of running the thing*. They are as different as a recipe and a cake.
+> [!important] **The parentheses are the run it operator.**
+> `square` is the thing. `square(5)` is **the result of running the thing**. They are as different as a recipe and a cake.
 
 Print them and Python tells you outright:
 
@@ -41,7 +41,7 @@ b = square
 print(b(5))   # 25
 ```
 
-`b` is not "a variable pretending to be a function". `b` and `square` are two names pointing at one object.
+`b` is not **a variable pretending to be a function**. `b` and `square` are two names pointing at one object.
 
 ```mermaid
 flowchart LR
@@ -50,7 +50,7 @@ flowchart LR
 ```
 
 > [!warning] **The half-way mistake.**
-> When people are told to drop the parentheses, they often drop only the *argument*: `b = square()`. That still calls the function — now with no arguments — and usually raises `TypeError: square() missing 1 required positional argument`. The parentheses are what triggers the call; emptying them does not disarm them.
+> When people are told to drop the parentheses, they often drop only the **argument**: `b = square()`. That still calls the function — now with no arguments — and usually raises `TypeError: square() missing 1 required positional argument`. The parentheses are what triggers the call; emptying them does not disarm them.
 
 ---
 
@@ -73,13 +73,13 @@ That `__name__` attribute is not a curiosity — it is the reason `functools.wra
 
 ---
 
-## Why "first-class"
+## Why first-class
 
-The formal definition is about the *language*, not about any one function:
+The formal definition is about the **language**, not about any one function:
 
 > [!info] A language has **first-class functions** when its functions support every operation its other values support — principally: **assigned to a variable**, **passed as an argument**, and **returned from a function**.
 >
-> So "first-class function" is a statement about **Python**, not a special category of function you can write. Every Python function is first-class; there is no second-class kind — which is why the phrase sounds odd the first time you meet it. It only exists as a term because some languages *don't* have this, and in those you have to work around it. Python doesn't, so in practice the term's only job here is to name the three operations above.
+> So **first-class function** is a statement about **Python**, not a special category of function you can write. Every Python function is first-class; there is no second-class kind — which is why the phrase sounds odd the first time you meet it. It only exists as a term because some languages **don't** have this, and in those you have to work around it. Python doesn't, so in practice the term's only job here is to name the three operations above.
 
 Assignment is what this note covered. Passing a function in and returning one out are the other two operations — together they're the definition of a **higher-order function**, and a decorator is nothing but a higher-order function with nicer syntax.
 
@@ -117,11 +117,11 @@ def handle(kind, payload):
     return HANDLERS[kind](payload)     # look it up, then call it
 ```
 
-Note the two steps hiding in `HANDLERS[kind](payload)`: `HANDLERS[kind]` *fetches a function object*, and the trailing `(payload)` *runs it*. Same distinction as `square` vs `square(5)`, one line apart.
+Note the two steps hiding in `HANDLERS[kind](payload)`: `HANDLERS[kind]` **fetches a function object**, and the trailing `(payload)` **runs it**. Same distinction as `square` vs `square(5)`, one line apart.
 
 The dict version does not just look tidier. Adding a handler is now adding a row of data, not editing control flow — which is exactly how every agent framework maintains a tool registry, and how a router maps a path to a view.
 
-> [!tip] `match`/`case` is often described as "Python's switch statement", which makes it sound like the replacement for this pattern. It isn't. Its branches are written out in the source at each `case` line, so you can't hand it a dict assembled at runtime and have it call whichever function is stored under a matching key — the thing that makes the registry above extensible. `match`/`case` solves a different problem: readable branching on a value's *shape*, like unpacking a tuple or checking a class.
+> [!tip] `match`/`case` is often described as **Python's switch statement**, which makes it sound like the replacement for this pattern. It isn't. Its branches are written out in the source at each `case` line, so you can't hand it a dict assembled at runtime and have it call whichever function is stored under a matching key — the thing that makes the registry above extensible. `match`/`case` solves a different problem: readable branching on a value's **shape**, like unpacking a tuple or checking a class.
 
 ---
 
@@ -153,4 +153,4 @@ session: Session = Depends(get_session)
 Same shape. FastAPI is given **the function** `get_session` and calls it per request. Writing `Depends(get_session())` would call it now, at import, and hand `Depends` a generator object instead of the recipe for making one.
 
 > [!tip] **The reading habit worth building.**
-> Whenever a function name appears without parentheses, ask: *who is going to call this, and when?* The answer is always "someone else, later". That deferral is the entire point — and it is the mechanism underneath callbacks, dependency injection, event handlers, retries, and decorators.
+> Whenever a function name appears without parentheses, ask: **who is going to call this, and when?** The answer is always **someone else, later**. That deferral is the entire point — and it is the mechanism underneath callbacks, dependency injection, event handlers, retries, and decorators.

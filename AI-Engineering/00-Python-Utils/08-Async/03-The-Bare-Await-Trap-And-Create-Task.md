@@ -1,4 +1,4 @@
-The vocabulary note ended on a warning: awaiting a coroutine directly means *scheduled and run to completion in one step*, while a task can *sit scheduled and wait its turn*. This note is that warning played out in code — the same little program written three ways, with real timings: **3.00 seconds, 3.00 seconds, 2.00 seconds**. The middle one is the trap: it uses `async`/`await` everywhere, it looks asynchronous, and it gets **zero concurrency**.
+The vocabulary note ended on a warning: awaiting a coroutine directly means **scheduled and run to completion in one step**, while a task can **sit scheduled and wait its turn**. This note is that warning played out in code — the same little program written three ways, with real timings: **3.00 seconds, 3.00 seconds, 2.00 seconds**. The middle one is the trap: it uses `async`/`await` everywhere, it looks asynchronous, and it gets **zero concurrency**.
 
 All three versions share the same shape: a `fetch_data(param)` function that pretends to be a slow call by sleeping for `param` seconds, called once with `1` and once with `2`. The theoretical floor is obvious — if both waits overlap, total time should be `max(1, 2) = 2` seconds. If they don't, it's `1 + 2 = 3`.
 
@@ -42,7 +42,7 @@ Fetch 2 fully completed
 Finished in 3.00 seconds
 ```
 
-In the animation, the Event Loop column stays **empty for the whole run** — and look at where the program spends its life: parked on the `time.sleep` line while a blocking sleep runs in Background I/O. The Python thread does *nothing* for that entire second — it just stands there holding the sleep:
+In the animation, the Event Loop column stays **empty for the whole run** — and look at where the program spends its life: parked on the `time.sleep` line while a blocking sleep runs in Background I/O. The Python thread does **nothing** for that entire second — it just stands there holding the sleep:
 
 ![[AI-Engineering/00-Python-Utils/08-Async/Images/02-Sync-Blocking-Sleep.png]]
 
@@ -95,7 +95,7 @@ Finished in 3.00 seconds
 
 > [!danger] The misconception: people assume `task1 = fetch_data(1)` creates a task and schedules it running in the background. It doesn't. Calling a coroutine function only **creates the coroutine object** — nothing is scheduled, nothing runs. The variable name `task1` in this code is a lie.
 
-So where does the time actually go? Follow the animation. When `await task1` executes, two things happen *at once*: the coroutine finally gets scheduled on the loop, and `main()` suspends until it finishes:
+So where does the time actually go? Follow the animation. When `await task1` executes, two things happen **at once**: the coroutine finally gets scheduled on the loop, and `main()` suspends until it finishes:
 
 ![[AI-Engineering/00-Python-Utils/08-Async/Images/03-Await-Schedules-And-Suspends.png]]
 
@@ -105,9 +105,9 @@ So where does the time actually go? Follow the animation. When `await task1` exe
 
 **One timer.** `main()` is suspended waiting on `fetch_data(1)`; `fetch_data(1)` is suspended waiting on its sleep; and `fetch_data(2)` is nowhere — it doesn't exist on the loop yet, because nothing scheduled it. The event loop scans for ready tasks and finds none. It has all this idle waiting time and **no other task to spend it on**.
 
-Only after the timer fires does `fetch_data(1)` resume and complete; only then does `main()` wake, print, and reach `await task2` — which *now* schedules the second coroutine and runs *it* to completion, second timer, second sequential wait. One task at a time, every time: `1 + 2 = 3` seconds. The same performance as the synchronous version, with extra machinery.
+Only after the timer fires does `fetch_data(1)` resume and complete; only then does `main()` wake, print, and reach `await task2` — which **now** schedules the second coroutine and runs **it** to completion, second timer, second sequential wait. One task at a time, every time: `1 + 2 = 3` seconds. The same performance as the synchronous version, with extra machinery.
 
-> [!important] Awaiting coroutine objects directly serialises them: each one is scheduled *and driven to completion* inside its own `await`, so at any moment the loop only ever knows about one piece of work. Concurrency requires work to be **queued before you start waiting** — and that's exactly what this code never does.
+> [!important] Awaiting coroutine objects directly serialises them: each one is scheduled **and driven to completion** inside its own `await`, so at any moment the loop only ever knows about one piece of work. Concurrency requires work to be **queued before you start waiting** — and that's exactly what this code never does.
 
 ---
 
@@ -142,21 +142,21 @@ Finished in 2.00 seconds
 
 Read the first two lines of that output: **both fetches started before either finished.** And the clock: **2.00 seconds — `max(1, 2)`,** the time of the longest single wait. That's concurrency.
 
-The animation shows why. `create_task` **schedules immediately, without suspending anything** — after the two `create_task` lines, `main()` is *still running* and both `fetch_data` tasks sit on the loop as Ready. This is the state Version 2 could never reach — work queued up *before* any waiting begins:
+The animation shows why. `create_task` **schedules immediately, without suspending anything** — after the two `create_task` lines, `main()` is **still running** and both `fetch_data` tasks sit on the loop as Ready. This is the state Version 2 could never reach — work queued up **before** any waiting begins:
 
 ![[AI-Engineering/00-Python-Utils/08-Async/Images/05-Create-Task-Both-Ready-Main-Running.png]]
 
-Now `await task1` suspends `main()`, and the loop goes looking for ready work. It finds `fetch_data(1)`, runs it to its sleep, suspends it — **and keeps looking**. This time there's more in the queue: it finds `fetch_data(2)`, runs it to *its* sleep, suspends it too. The frame below is the payoff — the money shot of the whole video:
+Now `await task1` suspends `main()`, and the loop goes looking for ready work. It finds `fetch_data(1)`, runs it to its sleep, suspends it — **and keeps looking**. This time there's more in the queue: it finds `fetch_data(2)`, runs it to **its** sleep, suspends it too. The frame below is the payoff — the money shot of the whole video:
 
 ![[AI-Engineering/00-Python-Utils/08-Async/Images/06-Both-Timers-Running-Concurrency.png]]
 
-**Two timers in Background I/O, ticking at the same time.** Every coroutine is suspended; the loop is idle; both waits overlap. The 1-second and 2-second sleeps are being served *simultaneously* on a single thread.
+**Two timers in Background I/O, ticking at the same time.** Every coroutine is suspended; the loop is idle; both waits overlap. The 1-second and 2-second sleeps are being served **simultaneously** on a single thread.
 
-From here it unwinds by wake-ups: the 1-second timer fires first, `fetch_data(1)` resumes, prints, returns, completes — while the 2-second timer is *still running in the background*:
+From here it unwinds by wake-ups: the 1-second timer fires first, `fetch_data(1)` resumes, prints, returns, completes — while the 2-second timer is **still running in the background**:
 
 ![[AI-Engineering/00-Python-Utils/08-Async/Images/07-Task1-Complete-Timer2-Still-Running.png]]
 
-Task 1's completion wakes `main()` (it was awaiting exactly that), which prints and moves to `await task2` — where there's nothing to do but wait for the second timer, most of which has *already elapsed*. Timer fires, `fetch_data(2)` completes, `main()` finishes. Total wall time: the longest wait, not the sum.
+Task 1's completion wakes `main()` (it was awaiting exactly that), which prints and moves to `await task2` — where there's nothing to do but wait for the second timer, most of which has **already elapsed**. Timer fires, `fetch_data(2)` completes, `main()` finishes. Total wall time: the longest wait, not the sum.
 
 ---
 
@@ -172,6 +172,6 @@ flowchart TD
 
 **What Version 3 guarantees:** all scheduled waits overlap; total time collapses to the longest individual wait; work starts the moment the loop first gets control — even before you await anything.
 
-**What it doesn't guarantee:** speedups without waits (this program was *pure* waiting — real code interleaves compute, which still runs one-at-a-time), and no protection if something inside a task blocks synchronously — a stray `time.sleep` instead of `asyncio.sleep` would hold the whole single thread hostage, timers or no timers.
+**What it doesn't guarantee:** speedups without waits (this program was **pure** waiting — real code interleaves compute, which still runs one-at-a-time), and no protection if something inside a task blocks synchronously — a stray `time.sleep` instead of `asyncio.sleep` would hold the whole single thread hostage, timers or no timers.
 
-> [!tip] Interview framing: "The classic asyncio mistake is awaiting coroutines directly — `await fetch()` schedules and runs each call to completion inside the await, so calls serialise and you get sync performance with async syntax. The fix is to schedule first, await after: `create_task` puts work on the loop *without* suspending, so when the first task hits its I/O wait, the loop already has the next task queued and the waits overlap. Two fetches of 1s and 2s: 3 seconds awaited directly, 2 seconds — max, not sum — as tasks."
+> [!tip] Interview framing: **The classic asyncio mistake is awaiting coroutines directly — `await fetch()` schedules and runs each call to completion inside the await, so calls serialise and you get sync performance with async syntax. The fix is to schedule first, await after: `create_task` puts work on the loop without suspending, so when the first task hits its I/O wait, the loop already has the next task queued and the waits overlap. Two fetches of 1s and 2s: 3 seconds awaited directly, 2 seconds — max, not sum — as tasks.**

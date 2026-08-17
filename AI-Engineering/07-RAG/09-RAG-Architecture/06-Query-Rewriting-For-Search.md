@@ -6,8 +6,8 @@ The example from the paper:
 
 | | |
 |---|---|
-| **Original query `x`** | *Who was the screenwriter for Death of a Batman?* |
-| **Rewritten query** | *Death of a Batman screenwriter wikipedia* |
+| **Original query `x`** | **Who was the screenwriter for Death of a Batman?** |
+| **Rewritten query** | **Death of a Batman screenwriter wikipedia** |
 
 Nothing was added that wasn't implied. The sentence was compressed into keywords and given a destination hint.
 
@@ -21,7 +21,7 @@ Your vector store wants a query that carries semantic meaning; a full natural-la
 
 User questions tend to arrive in a form that suits neither especially well. The lecture's example:
 
-> *LLM and recent developments*
+> **LLM and recent developments**
 
 and lists what is wrong with a query like that as a search input:
 
@@ -30,7 +30,7 @@ and lists what is wrong with a query like that as a search input:
 - **missing keywords**
 - **missing time constraints**
 
-That last one is the sharpest. *"Recent"* means nothing to a search index. *"Last 30 days"* means something.
+That last one is the sharpest. **Recent** means nothing to a search index. **Last 30 days** means something.
 
 > [!important] The framing worth keeping: **a query optimised for one retrieval system is not optimised for another.** The user's phrasing was never tuned for either — the rewrite exists because the incorrect path changes retrieval systems mid-pipeline, and nobody adjusted the query when it did.
 
@@ -81,10 +81,10 @@ def rewrite_query_node(state: State) -> State:
 
 Each rule earns its place:
 
-- **"composed of keywords"** — the target form, stated first
-- **"6–14 words"** — a hard length bound, because an unconstrained LLM will happily produce another full sentence
+- **composed of keywords** — the target form, stated first
+- **6–14 words** — a hard length bound, because an unconstrained LLM will happily produce another full sentence
 - **the recency rule** — the one substantive transformation, converting an implied time constraint into an explicit one
-- **"Do NOT answer the question"** — the necessary guard. Hand a chat model a question and its default behaviour is to answer it. Without this line you get an essay where you wanted a search string.
+- **Do NOT answer the question** — the necessary guard. Hand a chat model a question and its default behaviour is to answer it. Without this line you get an essay where you wanted a search string.
 
 ### Tavily switches inputs
 
@@ -133,13 +133,13 @@ flowchart TD
 
 ## What it produced
 
-> *Recent AI news*
+> **Recent AI news**
 
 A very user-shaped query — barely any information in it, someone who just wants an answer quickly. Sent to Tavily as-is, the results would be mediocre.
 
 Inspecting `res["web_query"]` after the run:
 
-> *recent AI news last 30 days*
+> **recent AI news last 30 days**
 
 The model recognised that the query implied a time window and made it explicit. **That constraint was not in the original query.** It was inferred, and it is the kind of thing that measurably changes what a search index returns.
 
@@ -151,7 +151,7 @@ The lecture does not oversell this. In the instructor's own experimentation, que
 
 It is implemented anyway for two reasons: the paper's authors pressed for it as a worthwhile improvement to include in the architecture, and the goal of the exercise is to stay close to the original paper. It is also cheap — one LLM call, on a path that is already going to make a network round-trip.
 
-> [!note] That is a useful posture to be able to describe. Not every component of a published architecture carries its weight in every deployment. Knowing *which* parts of a paper you reproduced faithfully, which ones you measured and found marginal, and which ones you dropped is a stronger position than either blind fidelity or silent omission.
+> [!note] That is a useful posture to be able to describe. Not every component of a published architecture carries its weight in every deployment. Knowing **which** parts of a paper you reproduced faithfully, which ones you measured and found marginal, and which ones you dropped is a stronger position than either blind fidelity or silent omission.
 
 ---
 
@@ -164,4 +164,4 @@ It is implemented anyway for two reasons: the paper's authors pressed for it as 
 ---
 
 > [!tip] Interview framing
-> "On the incorrect path, CRAG rewrites the query before searching the web. The reason is that you've switched retrieval systems mid-pipeline: a vector store wants semantic meaning, a search engine wants keywords, and the user's phrasing was tuned for neither. The paper's example turns 'who was the screenwriter for Death of a Batman' into 'Death of a Batman screenwriter wikipedia'. In code it's one LLM call with a tight prompt — keywords, 6 to 14 words, convert implied recency into an explicit window like 'last 30 days', and explicitly don't answer the question, because a chat model's default is to answer. It turned 'recent AI news' into 'recent AI news last 30 days'. I'd be honest that this is the weakest component: in the instructor's own testing it rarely changed much, and it's a lossy compression of the question, so a nuance can be dropped. It's in there because the paper pressed for it and it's cheap on a path that's already making a network call."
+> **On the incorrect path, CRAG rewrites the query before searching the web. The reason is that you've switched retrieval systems mid-pipeline: a vector store wants semantic meaning, a search engine wants keywords, and the user's phrasing was tuned for neither. The paper's example turns 'who was the screenwriter for Death of a Batman' into 'Death of a Batman screenwriter wikipedia'. In code it's one LLM call with a tight prompt — keywords, 6 to 14 words, convert implied recency into an explicit window like 'last 30 days', and explicitly don't answer the question, because a chat model's default is to answer. It turned 'recent AI news' into 'recent AI news last 30 days'. I'd be honest that this is the weakest component: in the instructor's own testing it rarely changed much, and it's a lossy compression of the question, so a nuance can be dropped. It's in there because the paper pressed for it and it's cheap on a path that's already making a network call.**

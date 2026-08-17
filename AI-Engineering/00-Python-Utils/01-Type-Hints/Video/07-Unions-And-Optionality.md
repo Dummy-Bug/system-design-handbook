@@ -1,7 +1,7 @@
 #python #type-hints #typing #unions #python-utils
 
 
-A parameter that may be a number or may be missing needs a way to say "either". The syntax is one character, and the confusion around it is worth clearing once because the word *optional* is used for two different ideas.
+A parameter that may be a number or may be missing needs a way to say **either**. The syntax is one character, and the confusion around it is worth clearing once because the word **optional** is used for two different ideas.
 
 ## The problem, as a checker sees it
 
@@ -21,16 +21,16 @@ its default to no_implicit_optional=True
 
 The complaint is exact: you said this is an `int`, then supplied a default that isn't one. `None` is not a number — it's a separate value of a separate type — so the annotation and the default contradict each other on line one.
 
-## Saying "either"
+## Saying either
 
-A pipe means *or*:
+A pipe means **or**:
 
 ```python
 def create_user(first_name: str, age: int | None = None) -> dict:
     ...
 ```
 
-Read it as "an `int`, or `None`". The contradiction is gone because the annotation now admits the default it was given.
+Read it as **an `int`, or `None`**. The contradiction is gone because the annotation now admits the default it was given.
 
 This composes anywhere a type goes, and with as many members as you like:
 
@@ -44,7 +44,7 @@ items: list[int | str]
 
 ## The trap the name causes
 
-**"Optional" gets used for two unrelated ideas**, and mixing them up produces bugs a checker will happily let through.
+**Optional gets used for two unrelated ideas**, and mixing them up produces bugs a checker will happily let through.
 
 | What you mean | How you say it |
 |---|---|
@@ -70,11 +70,11 @@ c()
 error: Missing positional argument "age" in call to "c"  [call-arg]
 ```
 
-You made the *value* nullable without making the *argument* skippable. `Optional[int]` reads like it should have covered both. It covers neither on its own — only `= None` makes it skippable.
+You made the **value** nullable without making the **argument** skippable. `Optional[int]` reads like it should have covered both. It covers neither on its own — only `= None` makes it skippable.
 
 ## What a union costs you afterwards
 
-Saying "either" moves the work rather than removing it. The checker now holds you to *both* possibilities:
+Saying **either** moves the work rather than removing it. The checker now holds you to **both** possibilities:
 
 ```python
 def a(age: int | None = None) -> None:

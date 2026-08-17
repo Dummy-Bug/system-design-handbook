@@ -40,7 +40,7 @@ Make `email` a method too, exactly like `full_name`:
 
 Correct now — and it breaks every line of code anyone has already written. `emp_1.email` becomes `emp_1.email()`, everywhere, in code you don't control. A fix that forces a change on every caller isn't much of a fix.
 
-What's wanted is to compute it like a method while *accessing* it like an attribute.
+What's wanted is to compute it like a method while **accessing** it like an attribute.
 
 ## `@property`
 
@@ -203,7 +203,7 @@ The last line is the good part: `__init__` writes `self.pay = pay`, which goes t
 > ```
 > RecursionError: maximum recursion depth exceeded
 > ```
-> `self.pay` inside the getter is not "the stored value" — it's the very property being defined, so it re-enters itself until the stack runs out. Storing under `_pay` breaks the cycle, and the leading underscore is the usual signal for "internal; use the property instead". You can see the real storage in the instance dict:
+> `self.pay` inside the getter is not **the stored value** — it's the very property being defined, so it re-enters itself until the stack runs out. Storing under `_pay` breaks the cycle, and the leading underscore is the usual signal for **internal; use the property instead**. You can see the real storage in the instance dict:
 > ```python
 > print(e.__dict__)   # {'_pay': 60000}
 > ```

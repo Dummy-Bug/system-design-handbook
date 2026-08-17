@@ -40,8 +40,8 @@ def lookup_pincode(code: str):
     return PINCODE_DB[code]
 ```
 
-> [!important] Worth being precise about *why* this manual check exists here, since it's easy to assume it's redundant with the `field_validator` already written. **It isn't.** 
-> `PinCodeRequest`'s field validator only runs when a request body is validated against that model — and this route has no request body at all. `code: str` is a plain path parameter, exactly like `item_id: int` in the previous project: FastAPI extracts it and hands it over as-is, with no Pydantic model involved anywhere in that path. Nothing here has checked its shape before this line does. The manual `len(code) != 6` check isn't belt-and-suspenders caution — for this specific route, it's the *only* validation that exists.
+> [!important] Worth being precise about **why** this manual check exists here, since it's easy to assume it's redundant with the `field_validator` already written. **It isn't.** 
+> `PinCodeRequest`'s field validator only runs when a request body is validated against that model — and this route has no request body at all. `code: str` is a plain path parameter, exactly like `item_id: int` in the previous project: FastAPI extracts it and hands it over as-is, with no Pydantic model involved anywhere in that path. Nothing here has checked its shape before this line does. The manual `len(code) != 6` check isn't belt-and-suspenders caution — for this specific route, it's the **only** validation that exists.
 
 The rest follows the same shape as `/menu/{item_id}` from the previous project: check the input is well-formed first (raising `InvalidPinCodeError` if not), then check it actually exists in the data (raising `PinCodeNotFoundError` if not), then return the match. `PINCODE_DB[code]` returns a plain dict — `response_model=LocationResponse` handles validating and shaping that dict into the declared response, the same conversion seen with `MenuResponse` in project 1.
 
@@ -90,14 +90,14 @@ def bulk_lookup(request: BulkRequest):
     }
 ```
 
-`request: BulkRequest` is the first route in this course accepting a full **request body** rather than reading individual values off the URL. Declaring the parameter's type as `BulkRequest` is what tells FastAPI to parse the incoming JSON body against that model — `BulkRequest`'s own field validator (the 20-item cap, the empty-list check, the per-item 6-digit check) runs automatically the moment this route is hit, before a single line of `bulk_lookup`'s own body executes. Unlike the path-parameter route above, the validation genuinely has already happened here — this is the actual case the earlier assumption of "already checked by Pydantic" is true for.
+`request: BulkRequest` is the first route in this course accepting a full **request body** rather than reading individual values off the URL. Declaring the parameter's type as `BulkRequest` is what tells FastAPI to parse the incoming JSON body against that model — `BulkRequest`'s own field validator (the 20-item cap, the empty-list check, the per-item 6-digit check) runs automatically the moment this route is hit, before a single line of `bulk_lookup`'s own body executes. Unlike the path-parameter route above, the validation genuinely has already happened here — this is the actual case the earlier assumption of **already checked by Pydantic** is true for.
 
 Two small lists (`results`, `missing`) get built by looping once over `request.pin_codes`, and the function returns a **plain dict**, not a constructed `BulkResponse(...)` object — `response_model=BulkResponse` validates and converts that dict on the way out, the same mechanism as the single-lookup route above.
 
 > [!important] **A route accepting a request body must be declared `@app.post(...)`, not `@app.get(...)`.** 
 > The underlying reason traces back to the HTTP verbs note: 
 > 
-> `GET` is semantically a *read*, and isn't meant to carry a request body at all — clients and servers don't reliably support one. 
+> `GET` is semantically a **read**, and isn't meant to carry a request body at all — clients and servers don't reliably support one. 
 > 
 > `POST` is the verb that expects a body. Getting this backwards doesn't fail loudly with an obvious message; it just quietly doesn't work the way it looks like it should.
 

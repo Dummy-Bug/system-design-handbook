@@ -36,7 +36,7 @@ print(my_nums)
 # <generator object square_numbers at 0x1027c2a80>
 ```
 
-No squares have been computed. The loop hasn't started. What came back is an object that *knows how to* produce those values, waiting to be asked.
+No squares have been computed. The loop hasn't started. What came back is an object that **knows how to** produce those values, waiting to be asked.
 
 ## Asking for values
 
@@ -62,7 +62,7 @@ print(next(my_nums))
 StopIteration
 ```
 
-That exception isn't a failure. It's the agreed signal for "this is exhausted", and it's how every consumer knows when to stop.
+That exception isn't a failure. It's the agreed signal for **this is exhausted**, and it's how every consumer knows when to stop.
 
 ```mermaid
 flowchart TD
@@ -98,7 +98,7 @@ resumed
 2
 ```
 
-`'body started'` prints *after* `'created'` — the body genuinely had not begun when the generator object was made.
+`'body started'` prints **after** `'created'` — the body genuinely had not begun when the generator object was made.
 
 ## Looping
 
@@ -207,7 +207,7 @@ The third one is the problem.
 > print([n for n in g])   # [1, 4, 9]
 > print([n for n in g])   # []   ← no error
 > ```
-> A list would give the same values both times. This is the single most common source of "why is my generator empty the second time?", and it gets genuinely dangerous when consumers are separated in the code:
+> A list would give the same values both times. This is the single most common source of **why is my generator empty the second time?**, and it gets genuinely dangerous when consumers are separated in the code:
 > ```python
 > g = square_numbers([1, 2, 3, 4, 5])
 >

@@ -1,11 +1,11 @@
 #python #decorators #python-utils
 
 
-A closure remembers a *value*. Swap that value for a *function* and you have a decorator — that single substitution is the whole idea.
+A closure remembers a **value**. Swap that value for a **function** and you have a decorator — that single substitution is the whole idea.
 
 > [!info] A **decorator** is a function that takes another function as an argument, adds some functionality, and returns another function — **without changing the source code of the function it was given**.
 
-That last clause is the point. The original function is never edited, never touched. Something is wrapped *around* it.
+That last clause is the point. The original function is never edited, never touched. Something is wrapped **around** it.
 
 ## From closure to decorator
 
@@ -61,7 +61,7 @@ flowchart LR
 
 ## Now make it earn its place
 
-So far the wrapper adds nothing — it just forwards. The reason to have it at all is that you can put anything you like *around* that forwarded call:
+So far the wrapper adds nothing — it just forwards. The reason to have it at all is that you can put anything you like **around** that forwarded call:
 
 ```python
 def decorator_function(original_function):
@@ -104,7 +104,7 @@ There is no new mechanism here. `@decorator_function` sitting above `def display
 display = decorator_function(display)
 ```
 
-Take the function you just defined, pass it through the decorator, and rebind the *same name* to whatever comes back. From that line onward, the name `display` refers to the wrapper, not to the function you wrote.
+Take the function you just defined, pass it through the decorator, and rebind the **same name** to whatever comes back. From that line onward, the name `display` refers to the wrapper, not to the function you wrote.
 
 > [!important] `@decorator` above `def f` is nothing but `f = decorator(f)`, run immediately after the `def`. Write it out longhand once and the syntax stops being magic — it's an assignment with a nicer face.
 
@@ -136,7 +136,7 @@ takes 0 positional arguments but 2 were given
 
 Read whose name is in that error: **`wrapper_function`**, not `display_info`. That's the tell. After decoration, the name `display_info` points at the wrapper — so `display_info("John", 25)` is really `wrapper_function("John", 25)`, and `wrapper_function` was defined to take nothing at all. The call dies at the door; the original function is never reached.
 
-The `<locals>` in the middle of that path is worth recognising too — it means the failing function was defined *inside* another function, which is a strong hint you are looking at a decorator's wrapper rather than anything you called directly.
+The `<locals>` in the middle of that path is worth recognising too — it means the failing function was defined **inside** another function, which is a strong hint you are looking at a decorator's wrapper rather than anything you called directly.
 
 ```mermaid
 flowchart TD
@@ -159,8 +159,8 @@ def decorator_function(original_function):
 
 Two changes, both required, and they do opposite jobs:
 
-- `*args, **kwargs` in the **definition** *collects* — any positional arguments become the tuple `args`, any keyword arguments become the dict `kwargs`.
-- `*args, **kwargs` in the **call** *unpacks* — the tuple and dict are spread back out into individual arguments for the original function.
+- `*args, **kwargs` in the **definition** **collects** — any positional arguments become the tuple `args`, any keyword arguments become the dict `kwargs`.
+- `*args, **kwargs` in the **call** **unpacks** — the tuple and dict are spread back out into individual arguments for the original function.
 
 Collect on the way in, unpack on the way out. Now one decorator serves both functions:
 
@@ -198,7 +198,7 @@ The names `args` and `kwargs` carry no meaning to Python — only the `*` and `*
 
 ## The same thing built from a class
 
-A decorator has to be *callable* — that's the only real requirement. Functions are callable, but so is any object whose class defines `__call__`. So a class works just as well:
+A decorator has to be **callable** — that's the only real requirement. Functions are callable, but so is any object whose class defines `__call__`. So a class works just as well:
 
 ```python
 class DecoratorClass:
@@ -219,7 +219,7 @@ The two halves map directly onto the function version:
 | closure variable `original_function` | `self.original_function` | stores it |
 | `wrapper_function(*args, **kwargs)` | `__call__(self, *args, **kwargs)` | runs on every call |
 
-Where the function version *closed over* `original_function`, the class version *attaches it to the instance* as `self.original_function`. Different storage, same idea: hold onto the function so it can be called later.
+Where the function version **closed over** `original_function`, the class version **attaches it to the instance** as `self.original_function`. Different storage, same idea: hold onto the function so it can be called later.
 
 Usage is identical:
 
@@ -236,7 +236,7 @@ call method ran before display_info
 display_info ran with (John, 25)
 ```
 
-`@DecoratorClass` still means `display_info = DecoratorClass(display_info)` — that call now builds an *instance* rather than returning a nested function, and calling that instance triggers `__call__`.
+`@DecoratorClass` still means `display_info = DecoratorClass(display_info)` — that call now builds an **instance** rather than returning a nested function, and calling that instance triggers `__call__`.
 
 Function decorators are far more common in practice, and the rest of this folder uses them. Classes become the better shape when the decorator needs to **hold state across calls** — a counter, a cache, a circuit breaker's failure tally — where an instance attribute is more natural than a closure variable.
 

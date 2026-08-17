@@ -65,7 +65,7 @@ Follow an ambiguous query through:
 
 So `refine` has both sets available, and the merge happens there — not in a dedicated node.
 
-> [!important] The ambiguous case did not need its own path because **the work it requires had already been done on the paths that exist.** `good_docs` is computed by the evaluator for every verdict; the web branch computes `web_docs`. Merging is a choice about *which state keys to read*, and that choice lives naturally in the node that consumes documents.
+> [!important] The ambiguous case did not need its own path because **the work it requires had already been done on the paths that exist.** `good_docs` is computed by the evaluator for every verdict; the web branch computes `web_docs`. Merging is a choice about **which state keys to read**, and that choice lives naturally in the node that consumes documents.
 >
 > This is the general lesson about graph state, and it transfers well beyond CRAG: **state persists across nodes, so branches that need a combination of earlier results often collapse into a single path plus a conditional read.** Three visual branches became two real ones with no loss of behaviour.
 
@@ -138,13 +138,13 @@ The `ambiguous` node is gone. So is `fail`.
 
 ## Running it
 
-> *Batch normalization vs layer normalization*
+> **Batch normalization vs layer normalization**
 
 Chosen because of what is and isn't in the three textbooks: **batch normalization is covered; layer normalization is not.** A textbook case of a two-part question that the corpus half-answers.
 
 **Verdict: AMBIGUOUS.** Both `good_docs` (the batch-norm chunks) and `web_docs` (the layer-norm material) feed the refiner, and the answer is built from the merged context.
 
-> [!warning] The printed `reason` string on that run is worded wrong, and the lecture calls it out. It reads *"No chunk scored > 0.7, but not all were < 0.3"* — which is the code's f-string, and it is easy to misread as *"all were above 0.3"*. The actual criterion is just the fall-through: **nothing above 0.7, and not everything below 0.3.** Some documents may well sit below the lower threshold; they were dropped by the `good_docs` filter and never reach generation.
+> [!warning] The printed `reason` string on that run is worded wrong, and the lecture calls it out. It reads **No chunk scored > 0.7, but not all were < 0.3** — which is the code's f-string, and it is easy to misread as **all were above 0.3**. The actual criterion is just the fall-through: **nothing above 0.7, and not everything below 0.3.** Some documents may well sit below the lower threshold; they were dropped by the `good_docs` filter and never reach generation.
 
 ---
 
@@ -164,7 +164,7 @@ Retrieval happens. Evaluation happens. Three cases are produced and all three ar
 
 Worth stating plainly, because it is the first thing a good interviewer will probe:
 
-- **T5-large was not used**, for the retrieval evaluator or the strip filter. The fine-tuned checkpoint was never released, so `gpt-4o-mini` stands in for both. The paper's claim — that a 770M fine-tuned model is cheaper *and* better at these two narrow tasks — goes untested here.
+- **T5-large was not used**, for the retrieval evaluator or the strip filter. The fine-tuned checkpoint was never released, so `gpt-4o-mini` stands in for both. The paper's claim — that a 770M fine-tuned model is cheaper **and** better at these two narrow tasks — goes untested here.
 - **The strip filter returns a boolean**, where the paper scores each strip and thresholds it.
 - **The thresholds (0.7 / 0.3) are invented.** The paper does not state what it used.
 - **Refinement operates on the joined context**, not per-document as the paper describes. Same strips, different loop.
@@ -173,9 +173,9 @@ Worth stating plainly, because it is the first thing a good interviewer will pro
 
 ## What kind of system this is
 
-> [!info] Notice what is *not* here: nothing loops, and nothing decides at runtime what to do next. The evaluator emits one of three labels and a hand-written router maps each label to a fixed sequence of nodes. The control flow was designed in advance and cannot vary.
+> [!info] Notice what is **not** here: nothing loops, and nothing decides at runtime what to do next. The evaluator emits one of three labels and a hand-written router maps each label to a fixed sequence of nodes. The control flow was designed in advance and cannot vary.
 >
-> That is worth naming, because CRAG is usually filed under "agentic RAG" and it is the least agentic thing in that category. It is a classifier plus a decision tree. **Agentic RAG proper** — where an LLM holds the controller role and decides at runtime whether to retrieve, how many times, and when to stop — is a different design, covered separately. CRAG's fixed control flow is a feature, not a limitation: it is inspectable, testable, and its cost is bounded.
+> That is worth naming, because CRAG is usually filed under **agentic RAG** and it is the least agentic thing in that category. It is a classifier plus a decision tree. **Agentic RAG proper** — where an LLM holds the controller role and decides at runtime whether to retrieve, how many times, and when to stop — is a different design, covered separately. CRAG's fixed control flow is a feature, not a limitation: it is inspectable, testable, and its cost is bounded.
 
 ---
 
@@ -190,4 +190,4 @@ Worth stating plainly, because it is the first thing a good interviewer will pro
 ---
 
 > [!tip] Interview framing
-> "The ambiguous case means no chunk was strong enough to answer on its own, but they're not all weak enough to discard — usually a multi-part question where the corpus covers some parts. The correction is to use both: keep the chunks that cleared the lower threshold and also run the web search, then merge. The implementation detail I'd highlight is that they *deleted* the ambiguous branch rather than building it. The graph has two routes — correct, and everything else — because `good_docs` is populated by the evaluator regardless of verdict, so by the time an ambiguous query reaches the refine node after web search, both document sets are already sitting in state. The merge is a three-way conditional inside `refine`, not a node. That's the general lesson about graph state: branches that need a combination of earlier results usually collapse into one path plus a conditional read. I'd also be upfront about the cost — an evaluator call per document plus a filter call per sentence means dozens of sequential LLM calls per query, and the paper only got away with that because it used a fine-tuned 770M T5 for both."
+> **The ambiguous case means no chunk was strong enough to answer on its own, but they're not all weak enough to discard — usually a multi-part question where the corpus covers some parts. The correction is to use both: keep the chunks that cleared the lower threshold and also run the web search, then merge. The implementation detail I'd highlight is that they deleted the ambiguous branch rather than building it. The graph has two routes — correct, and everything else — because `good_docs` is populated by the evaluator regardless of verdict, so by the time an ambiguous query reaches the refine node after web search, both document sets are already sitting in state. The merge is a three-way conditional inside `refine`, not a node. That's the general lesson about graph state: branches that need a combination of earlier results usually collapse into one path plus a conditional read. I'd also be upfront about the cost — an evaluator call per document plus a filter call per sentence means dozens of sequential LLM calls per query, and the paper only got away with that because it used a fine-tuned 770M T5 for both.**

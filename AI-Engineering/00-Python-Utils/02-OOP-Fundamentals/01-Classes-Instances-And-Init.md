@@ -1,7 +1,7 @@
 #python #oop #classes #python-utils
 
 
-A function bundles logic. A class bundles logic *and* data that belong together — so instead of separate variables and functions that all secretly refer to "one employee," you get a single thing that carries its own data and its own actions. The data on a class is called an **attribute**; a function that belongs to a class is called a **method**.
+A function bundles logic. A class bundles logic **and** data that belong together — so instead of separate variables and functions that all secretly refer to **one employee,** you get a single thing that carries its own data and its own actions. The data on a class is called an **attribute**; a function that belongs to a class is called a **method**.
 
 ## A class is a blueprint, not a thing
 
@@ -12,7 +12,7 @@ class Employee:
     pass
 ```
 
-`pass` is Python's "nothing goes here yet" — a class or function body can't be empty syntactically, so `pass` fills it.
+`pass` is Python's **nothing goes here yet** — a class or function body can't be empty syntactically, so `pass` fills it.
 
 Each time you call the class, you get a distinct object called an **instance**:
 
@@ -24,7 +24,7 @@ print(emp_1)   # <__main__.Employee object at 0x102c6dd30>
 print(emp_2)   # <__main__.Employee object at 0x102c1b250>
 ```
 
-Different addresses — two separate objects, both built from the same blueprint. This is the distinction worth being precise about early: `Employee` is the class; `emp_1` and `emp_2` are instances *of* that class.
+Different addresses — two separate objects, both built from the same blueprint. This is the distinction worth being precise about early: `Employee` is the class; `emp_1` and `emp_2` are instances **of** that class.
 
 ## The manual way — and why it doesn't scale
 
@@ -75,7 +75,7 @@ Same result as the manual version, but the four assignments now live in **one pl
 
 1. creates a new, empty instance,
 2. calls `__init__` on it, automatically passing that new instance in as the **first** argument,
-3. and only then lines up `'Corey'`, `'Schafer'`, `50000` against the *remaining* parameters.
+3. and only then lines up `'Corey'`, `'Schafer'`, `50000` against the **remaining** parameters.
 
 That automatically-supplied first argument is conventionally named `self` — nothing forces the name, but every Python codebase you'll ever read uses it, so deviating buys you nothing but confusion.
 
@@ -87,11 +87,11 @@ flowchart LR
     S --> R["emp_1, now fully populated,<br/>is handed back"]
 ```
 
-So `self.first = first` inside `__init__` is doing exactly what `emp_1.first = 'Corey'` did by hand earlier — `self` *is* the instance being built, under a generic name, because `__init__` is written once and has to work for every future instance, not just `emp_1`.
+So `self.first = first` inside `__init__` is doing exactly what `emp_1.first = 'Corey'` did by hand earlier — `self` **is** the instance being built, under a generic name, because `__init__` is written once and has to work for every future instance, not just `emp_1`.
 
 ## Methods — attributes are data, methods are actions
 
-An attribute answers "what does this employee *have*." A method answers "what can this employee *do*." Add one to compute the full name instead of writing the same string-join everywhere it's needed:
+An attribute answers **what does this employee have.** A method answers **what can this employee do.** Add one to compute the full name instead of writing the same string-join everywhere it's needed:
 
 ```python
 class Employee:
@@ -111,8 +111,8 @@ print(emp_1.full_name())   # Corey Schafer
 
 Two things stand out immediately once you compare this to `__init__`:
 
-- **Every method takes `self` as its first parameter**, the same automatic instance-passing as before. Inside `full_name`, `self.first` and `self.last` mean *this particular employee's* first and last name — which is exactly why the method works correctly no matter which instance calls it.
-- **The parentheses are load-bearing.** `emp_1.full_name` (no parentheses) is the method itself — Python shows it as `<bound method Employee.full_name of <...>>`, the same "this is an object, not a result" distinction that runs through everything before decorators in this vault. `emp_1.full_name()` is the call, and only the call produces the string.
+- **Every method takes `self` as its first parameter**, the same automatic instance-passing as before. Inside `full_name`, `self.first` and `self.last` mean **this particular employee's** first and last name — which is exactly why the method works correctly no matter which instance calls it.
+- **The parentheses are load-bearing.** `emp_1.full_name` (no parentheses) is the method itself — Python shows it as `<bound method Employee.full_name of <...>>`, the same **this is an object, not a result** distinction that runs through everything before decorators in this vault. `emp_1.full_name()` is the call, and only the call produces the string.
 
 ### The mistake this section exists to prevent
 
@@ -132,7 +132,7 @@ TypeError: Employee.full_name() takes 0 positional
 arguments but 1 was given
 ```
 
-That error is genuinely confusing on first read — the call *looks* like it passes nothing. But it doesn't pass nothing: calling a method **through an instance** (`emp_1.full_name()`) always sends `emp_1` in as the first argument, whether or not the method's definition asked for it. The method here declared zero parameters, and one arrived anyway. Put `self` back and the mismatch disappears.
+That error is genuinely confusing on first read — the call **looks** like it passes nothing. But it doesn't pass nothing: calling a method **through an instance** (`emp_1.full_name()`) always sends `emp_1` in as the first argument, whether or not the method's definition asked for it. The method here declared zero parameters, and one arrived anyway. Put `self` back and the mismatch disappears.
 
 ## What `instance.method()` is actually short for
 
@@ -142,7 +142,7 @@ That error is genuinely confusing on first read — the call *looks* like it pas
 Employee.full_name(emp_1)   # Corey Schafer — identical result
 ```
 
-These two calls are not merely similar — the first is *syntactic sugar* for the second. `emp_1.full_name()` is Python automatically rewriting itself into `Employee.full_name(emp_1)` at call time: find `full_name` on the class, and pass the instance you called it from as `self`. Calling through the class only feels different because you're doing manually what `.method()` syntax does invisibly.
+These two calls are not merely similar — the first is **syntactic sugar** for the second. `emp_1.full_name()` is Python automatically rewriting itself into `Employee.full_name(emp_1)` at call time: find `full_name` on the class, and pass the instance you called it from as `self`. Calling through the class only feels different because you're doing manually what `.method()` syntax does invisibly.
 
 ```mermaid
 flowchart LR
@@ -150,4 +150,4 @@ flowchart LR
     B --> C["self = emp_1<br/>inside full_name"]
 ```
 
-This detail earns its place here — not because you'll write `Employee.full_name(emp_1)` in real code, but because inheritance later depends on knowing that a method call is always, underneath, *the class's function, with the instance supplied as the first argument*.
+This detail earns its place here — not because you'll write `Employee.full_name(emp_1)` in real code, but because inheritance later depends on knowing that a method call is always, underneath, **the class's function, with the instance supplied as the first argument**.

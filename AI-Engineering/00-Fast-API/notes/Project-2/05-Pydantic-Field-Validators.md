@@ -1,4 +1,4 @@
-A plain type annotation (`pin_code: str`) validates *shape* — is this a string at all — but says nothing about *content*. "Exactly 6 characters, all digits" isn't something a type hint alone can express. That's what a **field validator** is for.
+A plain type annotation (`pin_code: str`) validates **shape** — is this a string at all — but says nothing about **content**. **Exactly 6 characters, all digits** isn't something a type hint alone can express. That's what a **field validator** is for.
 
 ---
 
@@ -22,7 +22,7 @@ class Request(BaseModel):
 Piece by piece:
 
 - **`@field_validator("code")`** — a decorator naming exactly which field this validator runs against. The string has to match the field name on the class.
-- **`@classmethod` stacked underneath it** — field validators are written as class methods, not instance methods, because they run *during* construction of the object, before there's a fully-built instance to call a normal method on.
+- **`@classmethod` stacked underneath it** — field validators are written as class methods, not instance methods, because they run **during** construction of the object, before there's a fully-built instance to call a normal method on.
 - **The method signature is `(cls, value)`** — `cls` is the class itself (standard for any classmethod), `value` is whatever was passed in for that field, prior to this validator running.
 - **Custom logic goes in the body**, checking whatever the plain type annotation couldn't express on its own.
 - **Failure is signaled by `raise ValueError(...)`** — not a custom exception, not `HTTPException`. Pydantic specifically watches for `ValueError` (along with `TypeError` and `AssertionError`) raised inside a validator, and converts it automatically into its own structured validation-error format. This is the same mechanism already responsible for the automatic `422` response whenever incoming request data fails to match a model's shape — a field validator's `ValueError` plugs into that exact pipeline, rather than requiring anything to be written by hand to produce the error response.
@@ -35,12 +35,12 @@ Piece by piece:
 
 `self` is not magic — it's just the first argument of an instance method, filled in automatically with **whatever object the method was called on**. `obj.some_method()` is really shorthand for `SomeClass.some_method(obj)`: Python hands the object in as the first argument. For that to work at all, `obj` has to already exist as a real thing sitting in memory.
 
-A field validator runs at the exact moment Pydantic is still deciding whether raw incoming data is even allowed to *become* an attribute on a real object. When `validate_code` runs, there is no `self.code` to check yet — that's literally the question being answered. Pydantic validates the incoming values first, and only assembles the actual model instance once everything has passed. There is often no instance at all yet, not even a partially-built one.
+A field validator runs at the exact moment Pydantic is still deciding whether raw incoming data is even allowed to **become** an attribute on a real object. When `validate_code` runs, there is no `self.code` to check yet — that's literally the question being answered. Pydantic validates the incoming values first, and only assembles the actual model instance once everything has passed. There is often no instance at all yet, not even a partially-built one.
 
 > [!question]- A concrete image: filling out a form vs. holding an ID card
-> An instance method is something you can only do **with an ID card already in hand** — `self` is the ID card, already issued, already real. A field validator runs at the stage where you're still filling out the *application form*. The office reviewing your form isn't checking your ID card's photo, because you don't have one yet — that's what's being decided. What the office *does* have, reliably, the whole time, is their **rulebook** — the class itself, which existed the moment the code defining the class was loaded, long before this particular piece of data ever showed up. `cls` is a reference to that rulebook, not to your not-yet-issued ID.
+> An instance method is something you can only do **with an ID card already in hand** — `self` is the ID card, already issued, already real. A field validator runs at the stage where you're still filling out the **application form**. The office reviewing your form isn't checking your ID card's photo, because you don't have one yet — that's what's being decided. What the office **does** have, reliably, the whole time, is their **rulebook** — the class itself, which existed the moment the code defining the class was loaded, long before this particular piece of data ever showed up. `cls` is a reference to that rulebook, not to your not-yet-issued ID.
 
-**Why `cls` at all, if it usually goes unused?** `@classmethod` isn't a Pydantic invention — it's a general Python mechanism, and Pydantic just requires validators to follow its contract. Under the hood, `@classmethod` works through a descriptor protocol: when the method is looked up, Python automatically supplies the *class* as the first argument, no matter when or how it's called — a class object exists the moment its `class` block finishes executing, independent of any particular instance's lifecycle. So `cls` is guaranteed to be valid at validation time in a way `self` fundamentally cannot be.
+**Why `cls` at all, if it usually goes unused?** `@classmethod` isn't a Pydantic invention — it's a general Python mechanism, and Pydantic just requires validators to follow its contract. Under the hood, `@classmethod` works through a descriptor protocol: when the method is looked up, Python automatically supplies the **class** as the first argument, no matter when or how it's called — a class object exists the moment its `class` block finishes executing, independent of any particular instance's lifecycle. So `cls` is guaranteed to be valid at validation time in a way `self` fundamentally cannot be.
 
 `cls` going unused most of the time doesn't make it pointless — it exists for when it's needed: calling another classmethod on the same class, referencing a class-level constant, or — especially relevant under inheritance — resolving to whichever **subclass** actually gets used, rather than hardcoding the base class's name. If this class were subclassed later, `cls` inside an inherited validator would correctly refer to the subclass; a hardcoded class name never could.
 
@@ -75,7 +75,7 @@ Three separate checks, any one of which can fail the whole request: empty list, 
 
 ## The limit of `field_validator`: it only ever sees one field
 
-`@field_validator("code")` receives *exactly* the data submitted for `code` — nothing about any other field on the same model is reachable through its normal parameters. That's a real limitation, not an oversight: the string passed to the decorator is what determines which field's data gets handed in, and there is no way to name two fields at once.
+`@field_validator("code")` receives **exactly** the data submitted for `code` — nothing about any other field on the same model is reachable through its normal parameters. That's a real limitation, not an oversight: the string passed to the decorator is what determines which field's data gets handed in, and there is no way to name two fields at once.
 
 If logic genuinely needs to compare two fields against each other — say, a `name` field constraining what a `pin_code` field is allowed to be — there are two real tools for it:
 
@@ -97,7 +97,7 @@ class Something(BaseModel):
         return value
 ```
 
-`info.data` is a dict of whatever fields were **already validated before this one** — which is why `name` has to be declared *above* `pin_code` in the class for this to work at all. Fields validate top-to-bottom; a field can only see the ones that came before it, never ones declared after.
+`info.data` is a dict of whatever fields were **already validated before this one** — which is why `name` has to be declared **above** `pin_code` in the class for this to work at all. Fields validate top-to-bottom; a field can only see the ones that came before it, never ones declared after.
 
 **Option 2 — `@model_validator`, the more common tool for genuine cross-field checks:**
 

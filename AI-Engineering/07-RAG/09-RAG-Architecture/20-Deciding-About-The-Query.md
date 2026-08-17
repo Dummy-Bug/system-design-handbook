@@ -29,7 +29,7 @@ This is the **IF** from [[19-The-Four-Questions]], and it is the same question S
 
 ## 2. Is the query ambiguous?
 
-If retrieval *is* needed, the next check is whether the query is **ambiguous** — whether it could carry more than one meaning.
+If retrieval **is** needed, the next check is whether the query is **ambiguous** — whether it could carry more than one meaning.
 
 If it can, the agent **rewrites or rephrases** it, so that what gets sent to retrieval is a query with a single clear reading.
 
@@ -53,7 +53,7 @@ The third check asks whether the query is **complex** — whether it asks for se
 
 The lecture's example:
 
-> *Do a comparison between X and Y, and show me the comparison report.*
+> **Do a comparison between X and Y, and show me the comparison report.**
 
 One query, but not one retrieval. It becomes a plan:
 
@@ -64,11 +64,11 @@ One query, but not one retrieval. It becomes a plan:
 | 3 | perform the **comparison** |
 | 4 | produce the response |
 
-With a concrete pair — comparing Java against JavaScript — step 1 retrieves the Java documents, and then step 2 does something subtler than simply retrieving Java*Script* documents.
+With a concrete pair — comparing Java against JavaScript — step 1 retrieves the Java documents, and then step 2 does something subtler than simply retrieving Java**Script** documents.
 
-> [!important] **The second retrieval is shaped by the first.** The lecture is specific: the retrieval for Y happens *in relation to* X — whatever topics came back for X, those same topics are what get retrieved for Y.
+> [!important] **The second retrieval is shaped by the first.** The lecture is specific: the retrieval for Y happens **in relation to** X — whatever topics came back for X, those same topics are what get retrieved for Y.
 >
-> That matters because a comparison is only a comparison if both sides cover the same ground. Retrieve "Java: memory model, concurrency, type system" and then retrieve whatever JavaScript documents happen to rank highest, and you have two unrelated summaries sitting next to each other rather than a comparison.
+> That matters because a comparison is only a comparison if both sides cover the same ground. Retrieve **Java: memory model, concurrency, type system** and then retrieve whatever JavaScript documents happen to rank highest, and you have two unrelated summaries sitting next to each other rather than a comparison.
 >
 > Note also what this requires: step 2 cannot be planned in full until step 1 has returned. That is planning **and** reasoning together, and it is the first place in this folder where one retrieval's parameters depend on another retrieval's results.
 
@@ -87,4 +87,4 @@ So decomposition is doing two things at once — breaking the query down, **and*
 ---
 
 > [!tip] Interview framing
-> "Before any retrieval happens, an agentic pipeline asks three things about the query. One: is retrieval required at all, which the agent decides by working out intent and checking whether the answer is already in the model's parametric knowledge. Two: is the query ambiguous, and if so rewrite it — worth distinguishing from the other rewrites in this space, because this one is preventative rather than a reaction to a failed retrieval. Three: is the query complex, and if so decompose it into sub-queries. The detail I'd highlight in decomposition is that for a comparison query — compare X and Y — the retrieval for Y is shaped by what came back for X, using the same topics, because otherwise you get two unrelated summaries rather than a comparison. That also means the second step can't be fully planned until the first returns, which is planning and reasoning operating together."
+> **Before any retrieval happens, an agentic pipeline asks three things about the query. One: is retrieval required at all, which the agent decides by working out intent and checking whether the answer is already in the model's parametric knowledge. Two: is the query ambiguous, and if so rewrite it — worth distinguishing from the other rewrites in this space, because this one is preventative rather than a reaction to a failed retrieval. Three: is the query complex, and if so decompose it into sub-queries. The detail I'd highlight in decomposition is that for a comparison query — compare X and Y — the retrieval for Y is shaped by what came back for X, using the same topics, because otherwise you get two unrelated summaries rather than a comparison. That also means the second step can't be fully planned until the first returns, which is planning and reasoning operating together.**

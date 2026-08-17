@@ -1,6 +1,6 @@
 The gap is between retrieval and generation. That is where CRAG puts something.
 
-In traditional RAG, the retrieved documents go straight to the LLM. **Corrective RAG intercepts them.** In that gap it seats a model whose only job is to look at the query and the retrieved documents and decide one thing: *are these documents actually useful for answering this question?*
+In traditional RAG, the retrieved documents go straight to the LLM. **Corrective RAG intercepts them.** In that gap it seats a model whose only job is to look at the query and the retrieved documents and decide one thing: **are these documents actually useful for answering this question?**
 
 That model is called the **retrieval evaluator**.
 
@@ -16,7 +16,7 @@ flowchart LR
     end
 ```
 
-If the query is *"what is an LLM"* and the retrieved documents are about random forests, the evaluator's job is to notice that and say so — before anything reaches the generator.
+If the query is **what is an LLM** and the retrieved documents are about random forests, the evaluator's job is to notice that and say so — before anything reaches the generator.
 
 ---
 
@@ -34,7 +34,7 @@ Take them one at a time.
 
 **Correct.** Nothing exotic. The documents go to the LLM, the LLM answers from them. The only addition is a cleanup pass — see [[03-Knowledge-Refinement]].
 
-**Incorrect.** This is where CRAG stops behaving like RAG. Rather than forcing the LLM to answer from documents it already knows are wrong, CRAG **leaves the corpus**. If the system has a web search tool attached, it searches the internet and answers from what comes back. Asked *"what is an LLM"* over a corpus of ML textbooks, the retriever returns random forests, the evaluator flags the retrieval as incorrect, and the system goes and looks it up instead.
+**Incorrect.** This is where CRAG stops behaving like RAG. Rather than forcing the LLM to answer from documents it already knows are wrong, CRAG **leaves the corpus**. If the system has a web search tool attached, it searches the internet and answers from what comes back. Asked **what is an LLM** over a corpus of ML textbooks, the retriever returns random forests, the evaluator flags the retrieval as incorrect, and the system goes and looks it up instead.
 
 **Ambiguous.** Some of the retrieved material genuinely addresses the query and some of it is junk. Neither pure path is right, so CRAG runs both: the good documents go forward as normal, a web search fills the rest, and the two are **merged into a single context** before generation.
 
@@ -96,13 +96,13 @@ The lecture does not construct the full architecture in one go — it starts fro
 |---|---|---|
 | 1 | knowledge refinement | [[03-Knowledge-Refinement]] |
 | 2 | retrieval evaluation and the three verdicts | [[04-Retrieval-Evaluation]] |
-| 3 | web search on the *incorrect* path | [[05-Web-Search-Fallback]] |
+| 3 | web search on the **incorrect** path | [[05-Web-Search-Fallback]] |
 | 4 | query rewriting before web search | [[06-Query-Rewriting-For-Search]] |
-| 5 | the *ambiguous* path | [[07-The-Ambiguous-Path]] |
+| 5 | the **ambiguous** path | [[07-The-Ambiguous-Path]] |
 
 Reading them in order is worth it. Each iteration's code is the previous iteration's code plus one node, and the diffs are small enough to hold in your head — which is the point of building it this way rather than presenting the finished graph.
 
 ---
 
 > [!tip] Interview framing
-> "Corrective RAG puts a retrieval evaluator between retrieval and generation. It looks at the query and the retrieved chunks and returns one of three verdicts. If the retrieval is correct, you proceed like normal RAG. If it's incorrect, you discard the chunks entirely and fall back to an external knowledge source — typically web search. If it's ambiguous, you keep the usable chunks, search the web for the rest, and merge both into one context. The one-line difference from traditional RAG is that traditional RAG assumes retrieval succeeded and CRAG checks. The paper's terms are 'knowledge internal' for the corpus side and 'knowledge external' for the web side, and the three verdicts map onto internal-only, external-only, and both."
+> **Corrective RAG puts a retrieval evaluator between retrieval and generation. It looks at the query and the retrieved chunks and returns one of three verdicts. If the retrieval is correct, you proceed like normal RAG. If it's incorrect, you discard the chunks entirely and fall back to an external knowledge source — typically web search. If it's ambiguous, you keep the usable chunks, search the web for the rest, and merge both into one context. The one-line difference from traditional RAG is that traditional RAG assumes retrieval succeeded and CRAG checks. The paper's terms are 'knowledge internal' for the corpus side and 'knowledge external' for the web side, and the three verdicts map onto internal-only, external-only, and both.**

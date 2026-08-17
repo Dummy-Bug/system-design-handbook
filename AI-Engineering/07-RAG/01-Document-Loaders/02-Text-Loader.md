@@ -1,6 +1,6 @@
 The theory note made a promise: whatever format goes into a document loader, the same unified thing comes out — a Document object. Time to watch that promise being kept in code. The knowledge source for this whole module is one directory containing files in different formats — a PDF, a CSV, a JSON, and a text file — and the plan is to load every one of them, starting with the simplest possible case: **the plain text file** 
 
-The text loader is deliberately the first one, because with no structure to parse, nothing distracts from the core API — and that API is *identical* for every loader that follows.
+The text loader is deliberately the first one, because with no structure to parse, nothing distracts from the core API — and that API is **identical** for every loader that follows.
 
 ---
 
@@ -33,7 +33,7 @@ print(file_path)
 print(file_path.exists())   # True
 ```
 
-Then the loader. `TextLoader` takes three parameters worth knowing: **`file_path`** (you can pass it as a string *or* as a Path object — both work), **`encoding`**, and **`autodetect_encoding`** for when you don't know the file's encoding:
+Then the loader. `TextLoader` takes three parameters worth knowing: **`file_path`** (you can pass it as a string **or** as a Path object — both work), **`encoding`**, and **`autodetect_encoding`** for when you don't know the file's encoding:
 
 ```python
 # define the loader
@@ -75,9 +75,9 @@ pp(extracted_doc.metadata)
 # {'source': '../knowledge-source/transformers.txt'}
 ```
 
-`page_content` holds the full extracted text. The metadata is minimal — just the source path — and that's honest: a bare text file simply doesn't *have* pages, authors, or creation dates to report. (Keep this in mind for contrast — the PDF loader's metadata will be a different story.)
+`page_content` holds the full extracted text. The metadata is minimal — just the source path — and that's honest: a bare text file simply doesn't **have** pages, authors, or creation dates to report. (Keep this in mind for contrast — the PDF loader's metadata will be a different story.)
 
-> [!info] The ritual you just saw is the ritual for *every* loader: **build the path → create the loader → call `.load()` → get a list of Documents.** From here on, only the loader class and its parameters change; the shape of what comes back never does.
+> [!info] The ritual you just saw is the ritual for **every** loader: **build the path → create the loader → call `.load()` → get a list of Documents.** From here on, only the loader class and its parameters change; the shape of what comes back never does.
 
 Two more things every loader carries, mentioned here once so they're known: alongside `load()` there's **`lazy_load()`** (returns documents one at a time — covered properly in the web-loaders note, where it matters), and **async variants** of both for concurrent code.
 

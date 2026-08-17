@@ -54,7 +54,7 @@ Engineers are expected to move beyond stateless prompt chains into complex, stat
 
 Foundation models are not treated as black boxes here. Agent effectiveness in production depends on optimizing the model interaction layer directly.
 
-**Attention variants.** Standard Multi-Head Attention (MHA), Grouped Query Attention (GQA) as used in Sarvam 30B, and Multi-Head Latent Attention (MLA) as deployed in Sarvam 105B. You must be able to *quantify* how each reduces memory footprint during extended agentic loops.
+**Attention variants.** Standard Multi-Head Attention (MHA), Grouped Query Attention (GQA) as used in Sarvam 30B, and Multi-Head Latent Attention (MLA) as deployed in Sarvam 105B. You must be able to **quantify** how each reduces memory footprint during extended agentic loops.
 
 **Tokenization for Indic scripts.** Subword dynamics, Byte-Pair Encoding, Unicode normalization. The key metric is **token fertility**:
 
@@ -99,7 +99,7 @@ Given the flagship conversational products — Sarvam Samvaad, Saaras v3, Bulbul
 - **Bi-directional streaming pipelines** over WebSockets and WebRTC for low-latency STT and TTS.
 - **Voice Activity Detection**, audio framing, signal denoising, and barge-in handling, holding **p95 end-to-end voice loop latency under 800 ms**.
 - **Voice transport integration** — LiveKit, Pipecat, Twilio Media Streams, Exotel — wired into agentic state machines.
-- **Code-switching** — input and output alternating between Indian languages and English *within a single turn*.
+- **Code-switching** — input and output alternating between Indian languages and English **within a single turn**.
 
 ---
 
@@ -131,7 +131,7 @@ Strong alignment in backend systems engineering and basic multi-agent developmen
 
 ### 1. The LLM-mechanics misconception
 
-The assumption that deep LLM knowledge is required for an *AI Engineer* but not an *Agentic Engineer* does not survive contact with Sarvam. They train their own models and build their own inference layers; agentic engineers optimize execution over those specific models.
+The assumption that deep LLM knowledge is required for an **AI Engineer** but not an **Agentic Engineer** does not survive contact with Sarvam. They train their own models and build their own inference layers; agentic engineers optimize execution over those specific models.
 
 Without MLA, KV-cache allocation boundaries, subword token fertility, and function-calling fine-tuning, you cannot diagnose non-deterministic tool failures, manage context window costs, or minimize production latency.
 
@@ -161,7 +161,7 @@ Demands high agency, systems thinking, customer-facing technical communication, 
 
 ## Backend Engineer (Autonomous Agents / Chanakya Platform)
 
-Builds the core platform, execution runtimes, and infrastructural "atoms" powering the ecosystem: production MCP servers, minimal-dependency containerized runtimes for air-gapped environments, unstructured ingestion pipelines (PDFs, audio transcripts, geospatial feeds), high-throughput low-latency API gateways.
+Builds the core platform, execution runtimes, and infrastructural **atoms** powering the ecosystem: production MCP servers, minimal-dependency containerized runtimes for air-gapped environments, unstructured ingestion pipelines (PDFs, audio transcripts, geospatial feeds), high-throughput low-latency API gateways.
 
 Requires advanced distributed systems design, async Python with Go or Rust, container orchestration (Docker, K3s, Kubernetes), database scaling (PostgreSQL, Redis, Qdrant), and security-hardened API architecture.
 
@@ -195,9 +195,9 @@ Frequently followed by a **timed practical build** — for example, a functional
 
 **60–90 minutes** on model internals and agentic system design.
 
-*Model side:* derive or explain attention computation over $Q, K, V$; compare MHA vs. GQA vs. MLA; explain positional encodings (RoPE); discuss Pre-LN vs. Post-LN normalization.
+**Model side:** derive or explain attention computation over $Q, K, V$; compare MHA vs. GQA vs. MLA; explain positional encodings (RoPE); discuss Pre-LN vs. Post-LN normalization.
 
-*Agent side:* LangGraph state isolation, DynamoDB vs. Redis checkpointing trade-offs, custom MCP server construction, schema validation, context compaction. Plus: how you would design a deterministic evaluation harness to catch trajectory drift.
+**Agent side:** LangGraph state isolation, DynamoDB vs. Redis checkpointing trade-offs, custom MCP server construction, schema validation, context compaction. Plus: how you would design a deterministic evaluation harness to catch trajectory drift.
 
 ### Stage 4 — High-scale systems and AI infrastructure design
 
@@ -215,7 +215,7 @@ Probes scalability, message queue selection (Kafka vs. SQS), vector database sha
 
 ## Month 1 — Foundation model mechanics, transformers, tokenization
 
-*Objective: stop treating LLMs as external black-box APIs.*
+**Objective: stop treating LLMs as external black-box APIs.**
 
 **Week 1 — Attention.** Derive and implement single-head and multi-head self-attention ($Q, K, V$) from scratch in PyTorch. Analyze GQA (Sarvam 30B) and MLA (Sarvam 105B), calculating theoretical KV-cache memory savings during long-context generation. Study positional encodings, contrasting sinusoidal with RoPE.
 

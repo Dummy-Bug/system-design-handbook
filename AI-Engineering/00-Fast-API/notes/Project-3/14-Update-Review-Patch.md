@@ -22,7 +22,7 @@ The lookup is identical to the previous route — `session.get(...)`, the same `
 
 ---
 
-## `exclude_unset=True` — the mechanism that makes "partial" genuinely partial
+## `exclude_unset=True` — the mechanism that makes partial genuinely partial
 
 `ReviewUpdate` declares both its fields as optional, defaulting to `None`:
 
@@ -38,9 +38,9 @@ A caller sending `{"rating": 4}` — updating only the rating — constructs a `
 {"rating": 4, "comment": None}
 ```
 
-`comment` shows up anyway, holding its default value, indistinguishable from a caller who deliberately wanted to *clear* the comment. Looping over that dict and applying it with `setattr` would silently null out an existing comment the caller never meant to touch.
+`comment` shows up anyway, holding its default value, indistinguishable from a caller who deliberately wanted to **clear** the comment. Looping over that dict and applying it with `setattr` would silently null out an existing comment the caller never meant to touch.
 
-> [!important] `exclude_unset=True` changes what `model_dump()` includes: only fields the caller **actually provided** in the request, not fields that merely fell back to their declared default. The same object, dumped with this flag, produces just `{"rating": 4}` — `comment` isn't in there at all, because it was never set. This is the literal mechanism behind `PATCH`'s "only send what changed" behavior — without this flag, every `PATCH` request would risk silently overwriting every field it didn't mention.
+> [!important] `exclude_unset=True` changes what `model_dump()` includes: only fields the caller **actually provided** in the request, not fields that merely fell back to their declared default. The same object, dumped with this flag, produces just `{"rating": 4}` — `comment` isn't in there at all, because it was never set. This is the literal mechanism behind `PATCH`'s **only send what changed** behavior — without this flag, every `PATCH` request would risk silently overwriting every field it didn't mention.
 
 ---
 

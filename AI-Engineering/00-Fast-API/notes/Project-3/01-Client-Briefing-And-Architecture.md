@@ -8,7 +8,7 @@ Rang Manch — a (fictitious) Pune-based theatre booking startup — needs a **r
 
 Two scope boundaries worth being precise about, since both shape everything downstream:
 
-- **This is one component, not a full application.** Rang Manch's app presumably already exists somewhere — this project builds only the review-serving piece behind it, the same "backend only, frontend out of scope" boundary as the previous two projects.
+- **This is one component, not a full application.** Rang Manch's app presumably already exists somewhere — this project builds only the review-serving piece behind it, the same **backend only, frontend out of scope** boundary as the previous two projects.
 - **Full CRUD, not just reads.** Every project so far has been GET-heavy — this is the first one genuinely creating, updating, and deleting data, not just serving fixed or looked-up records.
 
 ---
@@ -24,7 +24,7 @@ flowchart LR
     ORM --> DB[("SQLite<br/><i>swappable later for<br/>Postgres, MySQL, etc.</i>")]
 ```
 
-The key architectural point: an **ORM** (Object-Relational Mapper) sits between the application code and the actual database. Code written against the ORM stays almost identical regardless of which real database is running underneath — swapping SQLite for Postgres later is a small, contained change, not a rewrite. That's the specific promise of the intermediary layer, and it's why the diagram draws SQLModel as its own distinct box rather than folding it into "the database."
+The key architectural point: an **ORM** (Object-Relational Mapper) sits between the application code and the actual database. Code written against the ORM stays almost identical regardless of which real database is running underneath — swapping SQLite for Postgres later is a small, contained change, not a rewrite. That's the specific promise of the intermediary layer, and it's why the diagram draws SQLModel as its own distinct box rather than folding it into **the database.**
 
 ---
 
@@ -36,7 +36,7 @@ The key architectural point: an **ORM** (Object-Relational Mapper) sits between 
 | `GET` | `/reviews` | List reviews, with pagination |
 | `PATCH` | `/reviews/{id}` | Update an existing review |
 | `DELETE` | `/reviews/{id}` | Delete a review |
-| — | *average rating per play* | Confirmed as a requirement; exact endpoint shape comes in a later video |
+| — | **average rating per play** | Confirmed as a requirement; exact endpoint shape comes in a later video |
 
 This is the first project to use all four CRUD-relevant verbs together — `GET` and `POST` have shown up before individually, but `PATCH` and `DELETE` are both new in practice, not just named.
 
@@ -46,10 +46,10 @@ This is the first project to use all four CRUD-relevant verbs together — `GET`
 
 A denser preview than the earlier two, matching how much heavier this brief is:
 
-- **SQLModel** — combines SQLAlchemy (the actual database toolkit) and Pydantic (validation) into a single class definition. One class instead of two: the same object doubles as the database table's shape *and* the request/response validation shape.
-- **SQLite as a genuinely production-capable database** — a zero-config, single-file database, not merely a prototyping stand-in. Worth holding this claim with some nuance rather than absolutely: SQLite's concurrency model differs from a client-server database like Postgres (it's fundamentally single-writer), which makes it an excellent fit for plenty of real production workloads and a poor fit for others — the honest version of "don't dismiss it" is "know what its actual constraints are," not "it's always the right choice." Companies like Turso build genuinely production-grade infrastructure on top of it at scale.
+- **SQLModel** — combines SQLAlchemy (the actual database toolkit) and Pydantic (validation) into a single class definition. One class instead of two: the same object doubles as the database table's shape **and** the request/response validation shape.
+- **SQLite as a genuinely production-capable database** — a zero-config, single-file database, not merely a prototyping stand-in. Worth holding this claim with some nuance rather than absolutely: SQLite's concurrency model differs from a client-server database like Postgres (it's fundamentally single-writer), which makes it an excellent fit for plenty of real production workloads and a poor fit for others — the honest version of **don't dismiss it** is **know what its actual constraints are,** not **it's always the right choice.** Companies like Turso build genuinely production-grade infrastructure on top of it at scale.
 - **FastAPI lifespan events** — code that runs on application startup and shutdown, the mechanism this project uses to set up the database when the app boots.
-- **Session dependency injection** — a concrete, real implementation of the "hand the route a database session" example first described only hypothetically back in the request-lifecycle note's dependency-resolution stage.
+- **Session dependency injection** — a concrete, real implementation of the **hand the route a database session** example first described only hypothetically back in the request-lifecycle note's dependency-resolution stage.
 - **Pagination via `skip`/`limit`** — sometimes called `offset`/`limit` elsewhere; same underlying idea under two different naming conventions, for cutting a long result list into pages.
 - **Aggregation queries** — calculating the average rating at the database level, rather than pulling every review back and averaging it in Python.
 

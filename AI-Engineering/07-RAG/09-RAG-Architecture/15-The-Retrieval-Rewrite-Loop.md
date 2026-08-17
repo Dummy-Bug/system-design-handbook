@@ -1,6 +1,6 @@
 One branch is still a dead end. `not_useful` ends the flow, when what it should do is try again.
 
-Trying again means going back further than any previous repair. The revision loop in [[13-The-Revision-Loop]] reworked the *answer* using documents it already had. If the answer isn't useful, the documents themselves may be the problem — so this loop returns all the way to **retrieval**.
+Trying again means going back further than any previous repair. The revision loop in [[13-The-Revision-Loop]] reworked the **answer** using documents it already had. If the answer isn't useful, the documents themselves may be the problem — so this loop returns all the way to **retrieval**.
 
 But re-running retrieval with the same query returns the same documents. So the question gets **rewritten** first.
 
@@ -47,7 +47,7 @@ def retrieve(state: State):
     return {"docs": retriever.invoke(q)}
 ```
 
-And the initial state seeds them equal — first time round, the query *is* the question.
+And the initial state seeds them equal — first time round, the query **is** the question.
 
 ```python
 class RewriteDecision(BaseModel):
@@ -64,7 +64,7 @@ The prompt's rules: keep it to 6–16 words; **preserve key entities** like Nexa
 > CRAG rewrote **for a web search engine** — short, keyword-dense, with time constraints made explicit.
 > Self-RAG rewrites **for its own vector store** — preserving entities, adding vocabulary that the indexed PDFs plausibly contain.
 >
-> Same technique, opposite targets. *"Add high-signal keywords that likely appear in policy docs"* is a statement about **the corpus**, not about queries in general. A rewrite prompt is only as good as its knowledge of what it is searching.
+> Same technique, opposite targets. **Add high-signal keywords that likely appear in policy docs** is a statement about **the corpus**, not about queries in general. A rewrite prompt is only as good as its knowledge of what it is searching.
 
 ```python
 def rewrite_question(state: State):
@@ -90,7 +90,7 @@ Two details that matter more than they look.
 
 **It clears `docs`, `relevant_docs` and `context`.** State persists across nodes — the property that [[07-The-Ambiguous-Path]] exploited deliberately — and in a loop that same persistence becomes a hazard. Without the reset, stale documents from the previous pass would linger alongside the new ones.
 
-> [!warning] This is the characteristic bug of cyclic graphs. In an acyclic graph, "state persists" is purely convenient. In a loop, any field written on one pass is still there on the next, and you must decide field by field whether that is memory or contamination. Here `retrieval_query` and `rewrite_tries` are memory; `docs` and `context` are contamination.
+> [!warning] This is the characteristic bug of cyclic graphs. In an acyclic graph, **state persists** is purely convenient. In a loop, any field written on one pass is still there on the next, and you must decide field by field whether that is memory or contamination. Here `retrieval_query` and `rewrite_tries` are memory; `docs` and `context` are contamination.
 
 ---
 
@@ -125,11 +125,11 @@ g.add_edge("rewrite_question", "retrieve")
 
 Comparing this iteration's `is_relevant` prompt against the one in [[11-Filtering-Retrieved-Documents]], the lecture says it is unchanged. **The code disagrees**, and the difference is instructive.
 
-The original judged whether a document *contains information useful for answering the question*. The final version judges relevance **at a topic level**, states that a document need not contain the exact answer, offers examples (HR policies are relevant to notice-period questions; pricing documents are relevant to refund and trial questions; the company profile is relevant to leadership, culture and size questions), and closes with two decisive lines: *do not decide whether the document fully answers the question — that will be checked later by IsSUP*, and **when unsure, return true**.
+The original judged whether a document **contains information useful for answering the question**. The final version judges relevance **at a topic level**, states that a document need not contain the exact answer, offers examples (HR policies are relevant to notice-period questions; pricing documents are relevant to refund and trial questions; the company profile is relevant to leadership, culture and size questions), and closes with two decisive lines: **do not decide whether the document fully answers the question — that will be checked later by IsSUP**, and **when unsure, return true**.
 
 The filter was deliberately **loosened**.
 
-> [!info] That change follows from the architecture. In [[11-Filtering-Retrieved-Documents]] the relevance filter was the *only* quality gate, so it had to be strict — anything it let through went straight to the user. By this iteration there are three checks behind it: grounding, revision, and usefulness.
+> [!info] That change follows from the architecture. In [[11-Filtering-Retrieved-Documents]] the relevance filter was the **only** quality gate, so it had to be strict — anything it let through went straight to the user. By this iteration there are three checks behind it: grounding, revision, and usefulness.
 >
 > A strict early filter in a layered system is actively harmful, because a dropped document is **unrecoverable** — no later stage can retrieve what was discarded — whereas a document wrongly kept is caught downstream. So the correct posture flips from precision to recall: let borderline material through, and let the specialised checks reject it.
 >
@@ -139,7 +139,7 @@ The filter was deliberately **loosened**.
 
 ## Running the whole thing
 
-> *Describe NexaAI's company culture.*
+> **Describe NexaAI's company culture.**
 
 The debug output walks the full machine:
 
@@ -155,7 +155,7 @@ One inner repair, no outer repair, a grounded and useful result.
 
 > [!note] Two things to be honest about here.
 >
-> **The lecture never demonstrates the outer loop succeeding.** The instructor says plainly that he could not find a question where the answer was not-useful, was re-retrieved, and *became* useful — in his testing answers were consistently either useful or not. He recommends the viewer go looking. So the outer loop is built and wired but unproven on this corpus, and that is the honest status.
+> **The lecture never demonstrates the outer loop succeeding.** The instructor says plainly that he could not find a question where the answer was not-useful, was re-retrieved, and **became** useful — in his testing answers were consistently either useful or not. He recommends the viewer go looking. So the outer loop is built and wired but unproven on this corpus, and that is the honest status.
 >
 > **The notebook's initial state has a mismatch** — it asks about company culture while seeding `retrieval_query` with a refund-policy string, a copy-paste leftover. The lecture's stated intent is that both start equal. If you run the repo code and the first retrieval looks wrong, that is why.
 
@@ -193,9 +193,9 @@ CRAG fixes the **inputs** to generation. Self-RAG also inspects the **outputs**,
 >
 > The lecture is upfront that the paper's authors used a **fine-tuned model** and this build substitutes OpenAI LLMs at every reflection point — conceptually identical, different in the finer details.
 >
-> Worth knowing when you read the paper, and beyond what the lecture covers: the paper's actual contribution was to *train* those reflection decisions into the model as special tokens emitted inline during generation, rather than to orchestrate them as separate graph nodes. So a LangGraph build like this one reproduces Self-RAG's **control flow** while replacing its **mechanism** with prompted judges.
+> Worth knowing when you read the paper, and beyond what the lecture covers: the paper's actual contribution was to **train** those reflection decisions into the model as special tokens emitted inline during generation, rather than to orchestrate them as separate graph nodes. So a LangGraph build like this one reproduces Self-RAG's **control flow** while replacing its **mechanism** with prompted judges.
 >
-> That is not a criticism — the prompted version is what you can actually deploy without training anything. But it makes the claim "I implemented Self-RAG" one an interviewer can reasonably probe, and knowing which half you built is the answer.
+> That is not a criticism — the prompted version is what you can actually deploy without training anything. But it makes the claim **I implemented Self-RAG** one an interviewer can reasonably probe, and knowing which half you built is the answer.
 
 ---
 
@@ -212,4 +212,4 @@ CRAG fixes the **inputs** to generation. Self-RAG also inspects the **outputs**,
 ---
 
 > [!tip] Interview framing
-> "The last piece closes the outer loop: if the answer isn't useful, rewrite the query and go back to retrieval. The key state design is that `question` never changes — every judge keeps evaluating against what the user actually asked — while a separate `retrieval_query` field is what the loop mutates and what the retriever searches with. The rewriter gets the previous query and the previous answer, not just the original question, otherwise every iteration produces the same rewrite. And it resets `docs`, `relevant_docs` and `context`, because in a cyclic graph state persistence flips from convenient to hazardous — you have to decide per field whether it's memory or contamination. The subtlest thing I found was that the relevance filter got *looser* over the build: it started strict when it was the only gate, and ended up saying 'don't decide whether it fully answers the question, IsSUP will check that — when unsure return true.' That's right, because a dropped document is unrecoverable while a wrongly-kept one gets caught downstream. Early filters should get more permissive as you add later ones."
+> **The last piece closes the outer loop: if the answer isn't useful, rewrite the query and go back to retrieval. The key state design is that `question` never changes — every judge keeps evaluating against what the user actually asked — while a separate `retrieval_query` field is what the loop mutates and what the retriever searches with. The rewriter gets the previous query and the previous answer, not just the original question, otherwise every iteration produces the same rewrite. And it resets `docs`, `relevant_docs` and `context`, because in a cyclic graph state persistence flips from convenient to hazardous — you have to decide per field whether it's memory or contamination. The subtlest thing I found was that the relevance filter got looser over the build: it started strict when it was the only gate, and ended up saying 'don't decide whether it fully answers the question, IsSUP will check that — when unsure return true.' That's right, because a dropped document is unrecoverable while a wrongly-kept one gets caught downstream. Early filters should get more permissive as you add later ones.**

@@ -10,9 +10,9 @@ Two terms that get asked about, and that you have already met three times withou
 > You have a reference — a **known-correct answer** (or the key things a correct answer must contain) **written down in advance for each test case.** You grade by comparing the output against that reference.
 
 > **Reference-free evaluation**
-> You have **no predefined correct answer.** You judge the output's quality directly, on its own terms, against a criterion or rubric — but a rubric here is a **scale/standard** ("what does a good answer look like"), not a per-item correct answer.
+> You have **no predefined correct answer.** You judge the output's quality directly, on its own terms, against a criterion or rubric — but a rubric here is a **scale/standard** (**what does a good answer look like**), not a per-item correct answer.
 
-The load-bearing phrase is **per test case**. Reference-free evaluation still has *standards* — the helpfulness rubric was a standard. What it doesn't have is a row-by-row statement of what the right answer was.
+The load-bearing phrase is **per test case**. Reference-free evaluation still has **standards** — the helpfulness rubric was a standard. What it doesn't have is a row-by-row statement of what the right answer was.
 
 ---
 
@@ -24,7 +24,7 @@ The three worked examples from the previous note sort cleanly — and one of the
 
 ### Retriever eval → reference-based
 
-For each question we recorded the gold document IDs **in advance**: *"the answer to this question is in document 1001"*, *"the answer to this one is in 1001 and 1003."*
+For each question we recorded the gold document IDs **in advance**: **the answer to this question is in document 1001**, **the answer to this one is in 1001 and 1003.**
 
 That's a known-correct answer per test case. Recall@k is literally a comparison of retrieved-vs-reference. **Reference-based.**
 
@@ -32,7 +32,7 @@ That's a known-correct answer per test case. Recall@k is literally a comparison 
 
 Less obvious, and worth being precise about. The golden dataset had a **Human marks** column: a1 → 13/15, a2 → 4/15, a5 → 1/10.
 
-Ask what "correct" means for that system. The success criterion was *"grades the way a human expert does"* — so **the human's mark *is* the correct answer** for each row. We were telling the judge, in effect: *the human gave this answer 13; try to give it 13 too.* One reference per test case. **Reference-based.**
+Ask what **correct** means for that system. The success criterion was **grades the way a human expert does** — so **the human's mark is the correct answer** for each row. We were telling the judge, in effect: **the human gave this answer 13; try to give it 13 too.** One reference per test case. **Reference-based.**
 
 ### Chatbot helpfulness eval → reference-free
 
@@ -40,7 +40,7 @@ Look at that dataset again: it had **one column**, a list of questions. No expec
 
 The flow was: take a question → send it to the chatbot → chatbot produces an answer → human reads the rubric and assigns 1-5 based on judgment. Nothing in the dataset says what the right answer was. The human is relying on the **rubric as a standard**, not on a stored answer. **Reference-free.**
 
-> [!note] That human example was deliberately built without a reference. Human-graded evals are *often* reference-free — but not always, and the two axes are independent. Which is the next point, and the one worth carrying.
+> [!note] That human example was deliberately built without a reference. Human-graded evals are **often** reference-free — but not always, and the two axes are independent. Which is the next point, and the one worth carrying.
 
 ---
 
@@ -59,13 +59,13 @@ That's the whole distinction. If someone shows you an eval pipeline, you don't n
 
 ## The two axes are independent
 
-This is the part most people conflate, so it's worth laying out explicitly. *Who grades* and *whether a reference exists* are two separate questions, and every combination occurs:
+This is the part most people conflate, so it's worth laying out explicitly. **Who grades** and **whether a reference exists** are two separate questions, and every combination occurs:
 
 | | **Reference-based** | **Reference-free** |
 |---|---|---|
-| **Programmatic** | Retriever Recall@k · exact match · running the SQL and diffing results | Rare — code with no reference can only check *form* (valid JSON, length, no banned words), not quality |
+| **Programmatic** | Retriever Recall@k · exact match · running the SQL and diffing results | Rare — code with no reference can only check **form** (valid JSON, length, no banned words), not quality |
 | **Human** | Grading against a published answer key | Chatbot helpfulness rubric — the example above |
-| **LLM-as-judge** | UPSC grader calibrated to human marks | *"Rate this answer's tone 1-5"* · faithfulness checked against retrieved context |
+| **LLM-as-judge** | UPSC grader calibrated to human marks | **Rate this answer's tone 1-5** · faithfulness checked against retrieved context |
 
 Two things fall out of that table that are easy to miss:
 

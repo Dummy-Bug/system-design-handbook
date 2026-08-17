@@ -1,4 +1,4 @@
-The contextual compression retriever cut the noise *inside* a retrieved chunk. The **parent document retriever** goes after a deeper tension — one baked into the chunk *size* itself. It turns out that the ideal chunk size for finding the right passage is the exact opposite of the ideal chunk size for feeding the answer, and no single size can satisfy both. This retriever's whole trick is to stop trying.
+The contextual compression retriever cut the noise **inside** a retrieved chunk. The **parent document retriever** goes after a deeper tension — one baked into the chunk **size** itself. It turns out that the ideal chunk size for finding the right passage is the exact opposite of the ideal chunk size for feeding the answer, and no single size can satisfy both. This retriever's whole trick is to stop trying.
  
 ---
 
@@ -17,11 +17,11 @@ Now recall that a retriever does two things, and hold both in mind at once:
 - **Similarity search** — finding the chunks nearest the query.
 - **Augmentation** — building the context you hand the LLM.
 
-Ask what each one *wants*, and they pull in opposite directions.
+Ask what each one **wants**, and they pull in opposite directions.
 
-For the **best possible similarity search**, you want retrieval to be razor-accurate — the returned chunks should be genuinely, highly similar to the query. That requires high-quality embeddings, and high-quality embeddings require **small chunks** (low compression, faithful representation). So: *small chunks give better retrieval.*
+For the **best possible similarity search**, you want retrieval to be razor-accurate — the returned chunks should be genuinely, highly similar to the query. That requires high-quality embeddings, and high-quality embeddings require **small chunks** (low compression, faithful representation). So: **small chunks give better retrieval.**
 
-But then comes augmentation. If you take those same small chunks and stuff them into the context, the context is **starved** — each chunk carries so little text that the total information volume is inadequate. To give the LLM enough to work with, you want **large chunks** with plenty of surrounding information. So: *large chunks give better context.*
+But then comes augmentation. If you take those same small chunks and stuff them into the context, the context is **starved** — each chunk carries so little text that the total information volume is inadequate. To give the LLM enough to work with, you want **large chunks** with plenty of surrounding information. So: **large chunks give better context.**
 
 And if you try to satisfy augmentation by embedding **large** chunks in the first place? Retrieval quality collapses — the heavy compression on those big chunks loses semantic meaning, so similarity search returns worse matches. You can't win. This is a genuine, counter-intuitive **trade-off**: small chunks win retrieval and lose context; large chunks win context and lose retrieval. One chunk size cannot be good at both.
 
@@ -31,13 +31,13 @@ And if you try to satisfy augmentation by embedding **large** chunks in the firs
 
 ## The trick — retrieve on children, return parents
 
-The parent document retriever refuses the trade-off by using **two different chunk sizes for the two different jobs**: it runs retrieval on *small* chunks (so search is precise) but hands the LLM *large* chunks (so context is rich). The small chunks are called **children**, the large ones **parents**, and each child remembers which parent it came from.
+The parent document retriever refuses the trade-off by using **two different chunk sizes for the two different jobs**: it runs retrieval on **small** chunks (so search is precise) but hands the LLM **large** chunks (so context is rich). The small chunks are called **children**, the large ones **parents**, and each child remembers which parent it came from.
 
 To pull this off it wires together four components:
 
-1. **Parent splitter** — a text splitter that cuts your documents into **large** "parent" chunks.
-2. **Child splitter** — a text splitter that cuts each *parent* into several **small** "child" chunks.
-3. **Vector store** (e.g. Chroma) — holds only the **child** embeddings. Children are the *only* thing that gets embedded and searched.
+1. **Parent splitter** — a text splitter that cuts your documents into **large** **parent** chunks.
+2. **Child splitter** — a text splitter that cuts each **parent** into several **small** **child** chunks.
+3. **Vector store** (e.g. Chroma) — holds only the **child** embeddings. Children are the **only** thing that gets embedded and searched.
 4. **Docstore** — holds the **parent** chunks, keyed by ID. This is a plain key-value store, either in memory or on disk.
 
 The link between the two is an **ID**: every parent gets a unique ID (a UUID), and every child carries its parent's ID in its metadata. That ID is the thread that lets a retrieved child pull back its parent.
@@ -58,7 +58,7 @@ So after ingestion you have two stores holding two granularities: 50 small child
 
 But — and this is the whole point — those tiny children are **not** what goes into the context; on their own their information volume is inadequate. Instead, the retriever reads each retrieved child's `parent-id`, looks those parents up in the docstore, and returns the **parent** chunks. If several retrieved children belong to the same parent, that parent is returned once (deduplicated). The precise search happened on children; the rich context comes from parents.
 
-> [!info] **Children are used only for retrieval; parents are used for the context.** Small children make the similarity search precise; the parents they point to give the LLM a full, information-rich passage. You get accurate retrieval *and* adequate context — the trade-off dissolved.
+> [!info] **Children are used only for retrieval; parents are used for the context.** Small children make the similarity search precise; the parents they point to give the LLM a full, information-rich passage. You get accurate retrieval **and** adequate context — the trade-off dissolved.
 
 ---
 
@@ -77,7 +77,7 @@ from langchain_classic.storage import InMemoryStore, LocalFileStore, create_kv_d
 embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 ```
 
-The two splitters are where "parent" and "child" become concrete — the parent chunk is nearly four times the size of the child:
+The two splitters are where **parent** and **child** become concrete — the parent chunk is nearly four times the size of the child:
 
 ```python
 parent_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=200)   # large → context
@@ -145,7 +145,7 @@ Everything else is identical; only where the parents live has changed.
 ## What the parent document retriever gives you — and what it costs
 
 > [!info] **What it guarantees**
-> - **Precise retrieval *and* rich context at once** — it searches over small, faithfully-embedded child chunks but returns the large parent chunks they belong to.
+> - **Precise retrieval and rich context at once** — it searches over small, faithfully-embedded child chunks but returns the large parent chunks they belong to.
 > - **Automatic plumbing** — one `add_documents` call splits into parents, stores them, splits into children, embeds and stores those; `invoke` returns parents transparently.
 > - **A choice of parent storage** — `InMemoryStore` (fast, ephemeral) or `LocalFileStore` (durable across runs).
 
@@ -155,4 +155,4 @@ Everything else is identical; only where the parents live has changed.
 > - Parents are returned **whole** — you get the full parent even if only a small part of it was relevant (contextual compression is the tool that trims that back down).
 
 > [!tip] Interview framing
-> "The parent document retriever solves the chunk-size trade-off. Embeddings compress, so small chunks embed well and give precise retrieval, but small chunks make thin context; large chunks give rich context but embed poorly and hurt retrieval. Instead of compromising on one size, it uses two: a child splitter makes small chunks that get embedded and searched, and a parent splitter makes large chunks stored separately in a docstore. Each child carries its parent's ID, so you run similarity search on the precise little children, then return the large parents they point to as the context. In LangChain it's `ParentDocumentRetriever` with a `child_splitter`, a `parent_splitter`, a vector store for child embeddings, and a docstore — `InMemoryStore` or `LocalFileStore` — for the parents."
+> **The parent document retriever solves the chunk-size trade-off. Embeddings compress, so small chunks embed well and give precise retrieval, but small chunks make thin context; large chunks give rich context but embed poorly and hurt retrieval. Instead of compromising on one size, it uses two: a child splitter makes small chunks that get embedded and searched, and a parent splitter makes large chunks stored separately in a docstore. Each child carries its parent's ID, so you run similarity search on the precise little children, then return the large parents they point to as the context. In LangChain it's `ParentDocumentRetriever` with a `child_splitter`, a `parent_splitter`, a vector store for child embeddings, and a docstore — `InMemoryStore` or `LocalFileStore` — for the parents.**

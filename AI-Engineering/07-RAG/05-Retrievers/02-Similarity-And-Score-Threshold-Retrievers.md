@@ -45,7 +45,7 @@ retriever = vectorstore.as_retriever(
 )
 ```
 
-`search_type="similarity"` picks the algorithm — ordinary nearest-neighbour search. `search_kwargs={"k": 2}` is that algorithm's one parameter: *always bring back the 2 closest documents.* This is the retriever wrapper around the exact same operation `similarity_search` did — but now it is a reusable object with a standard interface.
+`search_type="similarity"` picks the algorithm — ordinary nearest-neighbour search. `search_kwargs={"k": 2}` is that algorithm's one parameter: **always bring back the 2 closest documents.** This is the retriever wrapper around the exact same operation `similarity_search` did — but now it is a reusable object with a standard interface.
 
 Drive it with `.invoke()`, handing it plain text:
 
@@ -71,7 +71,7 @@ query = "How do cells generate their energy?"
 results = vectorstore.similarity_search(query, k=3)
 ```
 
-Same nearest-neighbour search, same kind of result — the difference is purely that `.as_retriever(...)` gives you a composable *component*, while `.similarity_search(...)` is a bare method call on the store.
+Same nearest-neighbour search, same kind of result — the difference is purely that `.as_retriever(...)` gives you a composable **component**, while `.similarity_search(...)` is a bare method call on the store.
 
 > [!info] `search_type="similarity"` with `search_kwargs={"k": n}` returns **exactly the `n` nearest documents** — a fixed count, chosen by you.
 
@@ -79,15 +79,15 @@ Same nearest-neighbour search, same kind of result — the difference is purely 
 
 ## The blunt edge of a fixed k
 
-`k` is simple, but it is *blind to quality*. It returns `k` documents no matter what — even when that is the wrong number.
+`k` is simple, but it is **blind to quality**. It returns `k` documents no matter what — even when that is the wrong number.
 
-Ask for `k=2` when only **one** document is genuinely relevant, and you still get two: the retriever pads the result with the next-nearest chunk even though it is a weak, barely-related match, and that weak chunk now pollutes the context you hand the LLM. Ask for `k=2` when **five** documents are all strongly relevant, and you throw three good ones away. `k` cannot see how good the matches are — it only counts. What you often want instead is: *"give me everything that clears a quality bar, however many that turns out to be."* That is the second search type.
+Ask for `k=2` when only **one** document is genuinely relevant, and you still get two: the retriever pads the result with the next-nearest chunk even though it is a weak, barely-related match, and that weak chunk now pollutes the context you hand the LLM. Ask for `k=2` when **five** documents are all strongly relevant, and you throw three good ones away. `k` cannot see how good the matches are — it only counts. What you often want instead is: **give me everything that clears a quality bar, however many that turns out to be.** That is the second search type.
 
 ---
 
 ## Search type 2 — similarity score threshold (a quality bar)
 
-`"similarity_score_threshold"` flips the philosophy. You do **not** pass a `k`. You pass a `score_threshold`, a single float, and the retriever returns **every document whose similarity to the query is at or above that bar** — which might be five documents, might be one, might be zero. The count is now *dynamic*, decided by the data rather than fixed by you.
+`"similarity_score_threshold"` flips the philosophy. You do **not** pass a `k`. You pass a `score_threshold`, a single float, and the retriever returns **every document whose similarity to the query is at or above that bar** — which might be five documents, might be one, might be zero. The count is now **dynamic**, decided by the data rather than fixed by you.
 
 ```python
 query = "How does ML model training work?"
@@ -123,7 +123,7 @@ Score: 0.5720 | Topic: ml | Content: Supervised learning trains models on labele
 Score: 0.6079 | Topic: ml | Content: Overfitting occurs when a model memorises training data...
 ```
 
-The best match has the *smallest* number (0.5683), because it is the smallest distance. But a phrase like "score **threshold**" naturally means "keep the ones scoring **high**." The two conventions point in opposite directions — and that mismatch is exactly the trap. The threshold retriever works on a **similarity** score where **higher means better**, and it gets there by converting the distance with a simple `1 − distance`:
+The best match has the **smallest** number (0.5683), because it is the smallest distance. But a phrase like **score threshold** naturally means **keep the ones scoring high.** The two conventions point in opposite directions — and that mismatch is exactly the trap. The threshold retriever works on a **similarity** score where **higher means better**, and it gets there by converting the distance with a simple `1 − distance`:
 
 ```python
 for _, score in similarity_scores:
@@ -148,8 +148,8 @@ vectorstore = Chroma(
 
 Setting `space: cosine` in the HNSW index is what makes cosine distance the thing being measured, so that `1 − distance` lands in a sensible similarity range. Hold the mental model: **the store measures distance (lower = closer); the threshold retriever converts to similarity (higher = closer) and keeps everything above your bar.**
 
-> [!important] `similarity_search_with_score` returns a **distance** — *lower = more similar*.
-> The `similarity_score_threshold` retriever compares against a **similarity** score — *higher = more similar* — obtained as `1 − distance`. Same ranking, inverted number. Mixing the two up is the classic reason a threshold "returns nothing when it obviously should return something."
+> [!important] `similarity_search_with_score` returns a **distance** — **lower = more similar**.
+> The `similarity_score_threshold` retriever compares against a **similarity** score — **higher = more similar** — obtained as `1 − distance`. Same ranking, inverted number. Mixing the two up is the classic reason a threshold **returns nothing when it obviously should return something.**
 
 ---
 
@@ -164,7 +164,7 @@ With the similarity scores in hand — 0.4317, 0.4280, 0.3921 — a threshold of
 
 Only the 0.4317 document sits at or above 0.43, so **one** document comes back. That is the threshold doing precisely its job — gating on quality, not on count.
 
-Now the danger. Set the bar *above* your best match and the retriever returns an **empty list**:
+Now the danger. Set the bar **above** your best match and the retriever returns an **empty list**:
 
 ```python
 results   # threshold set too high
@@ -191,7 +191,7 @@ search_type="similarity"                 search_type="similarity_score_threshold
 
 Reach for **`similarity` / k** when the rest of your pipeline expects a fixed amount of context — for instance, you always want to stuff the top 3 chunks into a prompt of known size. Its weakness is that it cannot tell a strong match from a filler one; it just returns `k`.
 
-Reach for **`similarity_score_threshold`** when you would rather return nothing than return junk — when a confidently wrong answer built on an irrelevant chunk is worse than an honest "I don't know." Its cost is that the threshold is a real tuning parameter you have to calibrate, and set carelessly it returns either too much or nothing at all.
+Reach for **`similarity_score_threshold`** when you would rather return nothing than return junk — when a confidently wrong answer built on an irrelevant chunk is worse than an honest **I don't know.** Its cost is that the threshold is a real tuning parameter you have to calibrate, and set carelessly it returns either too much or nothing at all.
 
 > [!tip] Interview framing
-> "The two basic retriever search types answer 'how many documents come back' in opposite ways. `search_type='similarity'` with `k` returns a fixed number of nearest neighbours — predictable, but blind to quality, so it'll pad with weak matches or drop good ones. `search_type='similarity_score_threshold'` instead returns every document above a similarity cutoff, so the count is dynamic and quality-gated — it can even return nothing. The gotcha is the score itself: `similarity_search_with_score` gives a *distance* where lower is closer, but the threshold retriever works on a *similarity* of `1 − distance` where higher is closer, which is why the collection is built on cosine space. Use k when downstream needs a fixed amount of context; use the threshold when you'd rather return nothing than something irrelevant."
+> **The two basic retriever search types answer 'how many documents come back' in opposite ways. `search_type='similarity'` with `k` returns a fixed number of nearest neighbours — predictable, but blind to quality, so it'll pad with weak matches or drop good ones. `search_type='similarity_score_threshold'` instead returns every document above a similarity cutoff, so the count is dynamic and quality-gated — it can even return nothing. The gotcha is the score itself: `similarity_search_with_score` gives a distance where lower is closer, but the threshold retriever works on a similarity of `1 − distance` where higher is closer, which is why the collection is built on cosine space. Use k when downstream needs a fixed amount of context; use the threshold when you'd rather return nothing than something irrelevant.**

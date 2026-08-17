@@ -56,7 +56,7 @@ Exact line, exact argument, before any cart existed.
 
 A **static type checker** is a separate program that reads your source without running it, follows your annotations through the code, and reports where the values flowing around don't match what you claimed. `mypy` is the reference implementation; `pyright` is what VS Code's Pylance runs underneath.
 
-"Static" is the whole distinction: it analyses the code **at rest**, as text, rather than watching it work.
+**Static** is the whole distinction: it analyses the code **at rest**, as text, rather than watching it work.
 
 ## Why isn't this just part of Python?
 
@@ -66,11 +66,11 @@ The obvious question, especially coming from a language where the compiler refus
 
 **Partial adoption is the design, not a compromise.** You are meant to annotate one function, or ten thousand, and mix freely. If the interpreter enforced annotations, a half-annotated codebase would be an error rather than a perfectly normal waypoint — and nobody would ever get started, because the first useful result would require converting everything.
 
-**It would cost time on every call, forever.** Verifying `get_discount`'s arguments at runtime means verifying them on *every* invocation, in production, for the lifetime of the service. A separate program does it once, offline, and then never again.
+**It would cost time on every call, forever.** Verifying `get_discount`'s arguments at runtime means verifying them on **every** invocation, in production, for the lifetime of the service. A separate program does it once, offline, and then never again.
 
 **And the interpreter could not have caught this bug anyway.** Line 8 didn't execute for the small cart. The interpreter, by definition, only ever sees code that runs — so a runtime check on that line stays unreachable until a customer triggers it, which is precisely the situation you were trying to avoid.
 
-> [!important] **To catch a mistake on a branch that never runs, you have to read the text rather than execute it.** That is a fundamentally different activity from interpreting, and it belongs in a different program. This is not Python being lax — it's the recognition that "run this" and "reason about this without running it" are two jobs, and one tool doing both would do neither well.
+> [!important] **To catch a mistake on a branch that never runs, you have to read the text rather than execute it.** That is a fundamentally different activity from interpreting, and it belongs in a different program. This is not Python being lax — it's the recognition that **run this** and **reason about this without running it** are two jobs, and one tool doing both would do neither well.
 
 ## Where a checker goes blind
 
@@ -122,7 +122,7 @@ $ python3 reach_a.py
 TypeError: unsupported operand type(s) for +: 'int' and 'str'
 ```
 
-> [!warning] **`Success: no issues found` is not a statement about your code. It's a statement about the claims you gave the checker.** On the unannotated version it is a false all-clear over code that provably crashes — which makes that version *worse* than having no checker at all, because you'd have run it feeling covered.
+> [!warning] **`Success: no issues found` is not a statement about your code. It's a statement about the claims you gave the checker.** On the unannotated version it is a false all-clear over code that provably crashes — which makes that version **worse** than having no checker at all, because you'd have run it feeling covered.
 
 A checker has no crystal ball. It knows what you told it, propagates that as far as the code lets it, and where you told it nothing it stops — quietly, reporting success. Its reach is exactly the reach of your annotations.
 

@@ -82,7 +82,7 @@ nt1.py:17: note: Revealed type is "str"
 Success: no issues found in 1 source file
 ```
 
-Still `Success`, and lines 16–17 say why. Both are **`str`** — not "a `ThreadId`", not "a `RunId`". The checker never even remembers the names.
+Still `Success`, and lines 16–17 say why. Both are **`str`** — not **a `ThreadId`**, not **a `RunId`**. The checker never even remembers the names.
 
 > [!important] A **type alias** is a second name for the same type. `ThreadId = str` works like `x = 5`: afterwards `ThreadId` and `str` are two spellings of one thing, interchangeable everywhere.
 >
@@ -111,7 +111,7 @@ The modern spelling is `type ThreadId = str` (3.12+), which states the intent ex
 16  print(get_history(thread))
 ```
 
-Line 11 now *calls* `ThreadId(...)` rather than only annotating.
+Line 11 now **calls** `ThreadId(...)` rather than only annotating.
 
 ```
 $ mypy nt2.py
@@ -211,7 +211,7 @@ THREAD-ABC123
 
 > [!important] **A `ThreadId` goes anywhere a `str` is wanted; a `str` goes nowhere a `ThreadId` is wanted.**
 >
-> Same shape as a subclass — a `ThreadId` *is a* `str` — so logging it, formatting it, and putting it in a `dict[str, X]` all work without ceremony. Only the reverse direction has to be written down.
+> Same shape as a subclass — a `ThreadId` **is a** `str` — so logging it, formatting it, and putting it in a `dict[str, X]` all work without ceremony. Only the reverse direction has to be written down.
 
 Two details visible in that file:
 

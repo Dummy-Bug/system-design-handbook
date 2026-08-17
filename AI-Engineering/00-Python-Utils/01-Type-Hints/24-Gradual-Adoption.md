@@ -1,7 +1,7 @@
 #python #type-hints #typing #strict-mode #migration #python-utils
 
 
-The last rung, and the only one that is about a **process** rather than a feature. It owns an interview question — *"how would you introduce typing to a large untyped service?"* — where the tempting answer is wrong.
+The last rung, and the only one that is about a **process** rather than a feature. It owns an interview question — **how would you introduce typing to a large untyped service?** — where the tempting answer is wrong.
 
 ## Default mypy accepts unannotated code
 
@@ -27,7 +27,7 @@ Found 2 errors in 1 file (checked 1 source file)
 
 Default mypy is **content with completely unannotated code**, and that is deliberate — it is what makes hints addable to a codebase that already exists. No annotations, nothing to check, no complaints.
 
-`--strict` reverses the stance: *an unannotated function is itself the error.*
+`--strict` reverses the stance: **an unannotated function is itself the error.**
 
 ### The ratio is the problem
 
@@ -45,7 +45,7 @@ And the number is the problem, not the work behind it, because a 1600-error repo
 - It cannot land in one pull request without touching every file in the repo.
 - CI is red from day one, so the team learns to ignore the type checker — which is worse than never having turned it on.
 
-> [!warning] *"Turn on strict mode"* is the wrong answer to the interview question, and it is the answer most people give.
+> [!warning] **Turn on strict mode** is the wrong answer to the interview question, and it is the answer most people give.
 
 ## Dial one: scope by module
 
@@ -116,9 +116,9 @@ Three errors down to one. Both `legacy/hrms.py` errors are gone; `core` stays fu
 
 `disallow_untyped_calls` was switched off for `legacy.*`, and an untyped-call error is still reported. Where is it? `core/agent.py:5`.
 
-> [!important] **A per-module setting applies to the module where the error is *reported*, not to the module being referenced.**
+> [!important] **A per-module setting applies to the module where the error is reported, not to the module being referenced.**
 >
-> Exempting `legacy.*` silences errors *inside* `legacy`. It does nothing for a call site living in `core`.
+> Exempting `legacy.*` silences errors **inside** `legacy`. It does nothing for a call site living in `core`.
 
 Which turns out to be the useful half. That surviving error marks **exactly where typed code touches untyped code** — a migration work queue, generated automatically. Annotate one function:
 
@@ -201,6 +201,6 @@ Five things to carry:
 
 1. Default mypy accepts fully unannotated code **by design**; that is what makes adoption possible at all. `--strict` inverts the stance so that an unannotated function is itself an error.
 2. One untyped function yields one error for its definition plus one per call site, so a service with 400 of them prints roughly **1600 errors on day one**. The obstacle is not the work — it is that the report is unreviewable and CI goes red, which teaches the team to ignore the checker permanently.
-3. **Dial one is per-module overrides**, scoping by *which code*: strict by default, plus an explicit exemption list that only ever shrinks. A date-based boundary cannot work, because mypy sees files rather than history.
+3. **Dial one is per-module overrides**, scoping by **which code**: strict by default, plus an explicit exemption list that only ever shrinks. A date-based boundary cannot work, because mypy sees files rather than history.
 4. A per-module setting applies where the error is **reported**, not to the module being referenced — so exempting `legacy.*` leaves a call site in `core` still red. That is a feature: the surviving errors are exactly the typed/untyped boundary, which is the work queue.
-5. **Dial two is the individual flags.** `--strict` is thirteen of them wearing one name, so a check can be enabled repo-wide on its own, fixed, and kept. The answer to *"how would you introduce typing to a large untyped service?"* is **"strict by default with a shrinking exemption list"** — not *"turn on strict mode"*.
+5. **Dial two is the individual flags.** `--strict` is thirteen of them wearing one name, so a check can be enabled repo-wide on its own, fixed, and kept. The answer to **how would you introduce typing to a large untyped service?** is **strict by default with a shrinking exemption list** — not **turn on strict mode**.

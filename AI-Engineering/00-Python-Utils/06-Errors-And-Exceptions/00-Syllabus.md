@@ -4,9 +4,9 @@
 
 16 concepts. **Generic** — the language's error model plus the reliability patterns built on it.
 
-> Two halves that belong together. The first is the language: the hierarchy, chaining, exception groups. The second is what you *do* with failure in a distributed service — retries, backoff, timeouts, circuit breakers. Splitting them would leave the patterns floating without their mechanism.
+> Two halves that belong together. The first is the language: the hierarchy, chaining, exception groups. The second is what you **do** with failure in a distributed service — retries, backoff, timeouts, circuit breakers. Splitting them would leave the patterns floating without their mechanism.
 
-**Why this sits sixth:** exception classes need inheritance (02), retry decorators need decorators (03), and `except*` only makes sense alongside `TaskGroup` — which is already written up in folder 08 and currently has *no* companion explanation of the exception-group machinery it raises.
+**Why this sits sixth:** exception classes need inheritance (02), retry decorators need decorators (03), and `except*` only makes sense alongside `TaskGroup` — which is already written up in folder 08 and currently has **no** companion explanation of the exception-group machinery it raises.
 
 **Currency check (2026-08-04):** the recent history here is unusually active. **`ExceptionGroup` and `except*` (PEP 654) landed in 3.11**, together with `asyncio.TaskGroup` — they are two halves of one design. **`add_note()` (PEP 678)** also arrived in 3.11. Python 3.14 relaxed the parenthesis requirement on multi-exception `except` clauses. Verify all three against the changelog before writing.
 
@@ -15,7 +15,7 @@
 ## A · The language model
 
 **1. The exception hierarchy**
-`BaseException` → `Exception` → everything else. Why `KeyboardInterrupt` and `SystemExit` sit *outside* `Exception`, and why `except Exception:` is therefore the right broad catch and `except BaseException:` almost never is.
+`BaseException` → `Exception` → everything else. Why `KeyboardInterrupt` and `SystemExit` sit **outside** `Exception`, and why `except Exception:` is therefore the right broad catch and `except BaseException:` almost never is.
 
 **2. `try` / `except` / `else` / `finally`**
 All four clauses, including the two that get skipped: `else` (ran only if no exception) and the interaction of `finally` with `return`.
@@ -27,7 +27,7 @@ Multiple exception types, ordering from specific to general, and why bare `excep
 `raise`, bare `raise` inside an `except` block to preserve the traceback, and why `raise e` is subtly worse.
 
 **5. Exception chaining**
-`raise X from Y`, `raise X from None`, and `__cause__` vs `__context__`. Turning "an error happened while handling another error" from noise into a readable causal chain.
+`raise X from Y`, `raise X from None`, and `__cause__` vs `__context__`. Turning **an error happened while handling another error** from noise into a readable causal chain.
 
 **6. Custom exception classes**
 Designing a hierarchy — one base class per subsystem so callers can catch at whatever granularity they need. **Already done in the FastAPI notes** (custom exception + `add_exception_handler`) without discussing the design principle.
@@ -38,7 +38,7 @@ Attaching runtime context to an exception as it propagates, without wrapping or 
 ## B · Concurrent failure
 
 **8. `ExceptionGroup` and `except*`**
-When several things fail *at once*, a single exception can't represent it. The group type, the `except*` syntax that filters by member type, and the fact that multiple `except*` clauses can each fire for one group.
+When several things fail **at once**, a single exception can't represent it. The group type, the `except*` syntax that filters by member type, and the fact that multiple `except*` clauses can each fire for one group.
 
 **9. `TaskGroup` and structured concurrency failure**
 What actually happens when one task in a group raises: siblings cancelled, errors collected, an `ExceptionGroup` raised at the boundary. **This is the missing companion to `08-Async/07`**, which introduces `TaskGroup` without explaining the exception machinery it depends on.
@@ -83,7 +83,7 @@ Mapping internal exceptions to HTTP status codes in one place; never leaking sta
 
 ## Interview hooks
 
-*"A tool call to an external API fails intermittently — walk me through what your agent does."* The full answer touches retryable-vs-not, backoff with jitter, timeouts, circuit breaking, and fallback — concepts 11–14 in sequence. Sarvam names backpressure and circuit breakers explicitly (Week 9) and LangGraph exception handling (Week 5).
+**A tool call to an external API fails intermittently — walk me through what your agent does.** The full answer touches retryable-vs-not, backoff with jitter, timeouts, circuit breaking, and fallback — concepts 11–14 in sequence. Sarvam names backpressure and circuit breakers explicitly (Week 9) and LangGraph exception handling (Week 5).
 
 ## Sources to verify against
 

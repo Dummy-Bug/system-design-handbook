@@ -78,7 +78,7 @@ for i, doc in enumerate(reranked_results1, start=1):
 
 ### Query 1
 
-> *"How do large language models handle factual errors in their outputs?"*
+> **How do large language models handle factual errors in their outputs?**
 
 | Rank | Base retriever (`k=5`) | After Cohere rerank (`top_n=3`) |
 |---|---|---|
@@ -92,7 +92,7 @@ Two documents are dropped entirely, and the survivors are re-ordered: RLHF climb
 
 ### Query 2
 
-> *"What are best practices for scaling compute infrastructure during traffic spikes?"*
+> **What are best practices for scaling compute infrastructure during traffic spikes?**
 
 | Rank | Base retriever (`k=5`) | After Cohere rerank (`top_n=3`) |
 |---|---|---|
@@ -102,7 +102,7 @@ Two documents are dropped entirely, and the survivors are re-ordered: RLHF climb
 | 4 | Serverless computing… | — |
 | 5 | Managed database services… | — |
 
-**Multi-cloud** is the interesting casualty. It ranked 2nd on vector similarity because it is full of cloud-infrastructure language — but it is about vendor lock-in and data egress, not about handling traffic spikes. The cross-encoder, reading it *against this specific query*, drops it.
+**Multi-cloud** is the interesting casualty. It ranked 2nd on vector similarity because it is full of cloud-infrastructure language — but it is about vendor lock-in and data egress, not about handling traffic spikes. The cross-encoder, reading it **against this specific query**, drops it.
 
 ---
 
@@ -151,7 +151,7 @@ class FlashrankRerank(
 | **Cohere** | LLMs autoregressive · RLHF · Hallucination | **Cloud auto-scaling** · Kubernetes · Serverless |
 | **FlashRank** | LLMs autoregressive · RLHF · Hallucination | **Kubernetes** · Cloud auto-scaling · Serverless |
 
-On query 1 the two agree completely. On query 2 they **disagree about first place** — Cohere keeps cloud auto-scaling on top, FlashRank promotes Kubernetes — while agreeing on the three-document *set* and, notably, both discarding multi-cloud.
+On query 1 the two agree completely. On query 2 they **disagree about first place** — Cohere keeps cloud auto-scaling on top, FlashRank promotes Kubernetes — while agreeing on the three-document **set** and, notably, both discarding multi-cloud.
 
 That pattern is worth internalising: **rerankers agree far more about which documents belong than about their exact order.** The large win is set membership — dropping the plausible-but-wrong chunk. The ordering among genuinely relevant documents is a smaller, model-specific effect.
 
@@ -169,9 +169,9 @@ That pattern is worth internalising: **rerankers agree far more about which docu
 | Latency | network round trip per query | local compute per query |
 | Data leaves your network | yes | no |
 
-> [!warning] Both put a model call **on the critical path of every query**. The cost scales with stage-1 `k`: at `k=50` the reranker scores 50 pairs before the user sees anything. That is the trade you are making — a wider net catches more of the right documents *and* costs proportionally more time. It is the number to tune first when reranking feels too slow.
+> [!warning] Both put a model call **on the critical path of every query**. The cost scales with stage-1 `k`: at `k=50` the reranker scores 50 pairs before the user sees anything. That is the trade you are making — a wider net catches more of the right documents **and** costs proportionally more time. It is the number to tune first when reranking feels too slow.
 
 ---
 
 > [!tip] Interview framing
-> "In LangChain a reranker isn't a retriever, it's a document compressor — you wrap your normal retriever in a `ContextualCompressionRetriever` and pass the reranker as `base_compressor`. The base retriever fetches a wide candidate set, then every candidate is paired with the original query and scored by a cross-encoder, and you keep `top_n`. I've used both `CohereRerank` with `rerank-english-v3.0`, which is hosted and rate-limited on the free tier, and `FlashrankRerank` with `ms-marco-MiniLM-L-12-v2`, which is a ~20 MB model that runs locally with no API cost — that one's much better for iterating. On a 30-document corpus with `k=5` both dropped the same plausible-but-irrelevant chunk, a multi-cloud document that matched a scaling query on vocabulary but not on intent, and they agreed on the surviving set while disagreeing on the exact top-1. That matches what reranking mostly buys you: set membership rather than fine ordering. The cost is a model pass per candidate on every query, so stage-1 `k` is the latency knob."
+> **In LangChain a reranker isn't a retriever, it's a document compressor — you wrap your normal retriever in a `ContextualCompressionRetriever` and pass the reranker as `base_compressor`. The base retriever fetches a wide candidate set, then every candidate is paired with the original query and scored by a cross-encoder, and you keep `top_n`. I've used both `CohereRerank` with `rerank-english-v3.0`, which is hosted and rate-limited on the free tier, and `FlashrankRerank` with `ms-marco-MiniLM-L-12-v2`, which is a ~20 MB model that runs locally with no API cost — that one's much better for iterating. On a 30-document corpus with `k=5` both dropped the same plausible-but-irrelevant chunk, a multi-cloud document that matched a scaling query on vocabulary but not on intent, and they agreed on the surviving set while disagreeing on the exact top-1. That matches what reranking mostly buys you: set membership rather than fine ordering. The cost is a model pass per candidate on every query, so stage-1 `k` is the latency knob.**

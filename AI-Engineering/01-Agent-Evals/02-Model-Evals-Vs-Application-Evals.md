@@ -1,6 +1,6 @@
-Vibe testing doesn't survive contact with real users, and LLM applications are harder to test than ordinary software because they're probabilistic and because "good" has several dimensions instead of one.
+Vibe testing doesn't survive contact with real users, and LLM applications are harder to test than ordinary software because they're probabilistic and because **good** has several dimensions instead of one.
 
-**There are two completely different activities hiding under the phrase "LLM evals"**, and only one of them is our job.
+**There are two completely different activities hiding under the phrase LLM evals**, and only one of them is our job.
 
 ---
 
@@ -16,32 +16,32 @@ Three words in that sentence are load-bearing — **systematic**, **repeatable**
 
 ### Systematic — not random prompting
 
-Systematic means you are *not* doing what you did with your last project: five questions off the top of your head, replies look fine, ship it.
+Systematic means you are **not** doing what you did with your last project: five questions off the top of your head, replies look fine, ship it.
 
-Instead you build a **proper dataset**, and you deliberately try to cover the edge cases. The example worth copying: if you were building a course assistant for CampusX, you wouldn't invent test questions. You'd pull **100 real student doubts** out of actual chat logs and make *that* your dataset.
+Instead you build a **proper dataset**, and you deliberately try to cover the edge cases. The example worth copying: if you were building a course assistant for CampusX, you wouldn't invent test questions. You'd pull **100 real student doubts** out of actual chat logs and make **that** your dataset.
 
-That distinction is the whole point. Invented test cases measure how the system handles questions *you* thought of. Real logged questions measure how it handles the questions users actually ask — which are messier, and which is the only behaviour that matters.
+That distinction is the whole point. Invented test cases measure how the system handles questions **you** thought of. Real logged questions measure how it handles the questions users actually ask — which are messier, and which is the only behaviour that matters.
 
 ### Repeatable — the same test, run again
 
 Repeatable means: tomorrow you change the prompt. Or swap the model. Or replace the retriever. Or change the chunking strategy. Or rewrite the system instruction. **After any of those, you can still run the exact same test and get a comparable number.**
 
-This is not a nice-to-have. It is the *only* mechanism by which you can answer "is v2 better than v1?" You hold the dataset fixed, score v1 on it, score v2 on it, and compare. Without a fixed dataset you have two feelings and no way to choose between them.
+This is not a nice-to-have. It is the **only** mechanism by which you can answer **is v2 better than v1?** You hold the dataset fixed, score v1 on it, score v2 on it, and compare. Without a fixed dataset you have two feelings and no way to choose between them.
 
-> [!important] Repeatability is what turns evaluation from a one-time check into an instrument. A test you cannot re-run tells you about a moment; a test you can re-run tells you about a *direction*.
+> [!important] Repeatability is what turns evaluation from a one-time check into an instrument. A test you cannot re-run tells you about a moment; a test you can re-run tells you about a **direction**.
 
-### Clear criteria — you have to define what "good" means
+### Clear criteria — you have to define what good means
 
 ![[AI-Engineering/01-Agent-Evals/Images/v2-02-Clear-Criteria.png]]
 
-You cannot grade an answer until you've said what a good answer *is*. For a CampusX course assistant, "good" might decompose into four things:
+You cannot grade an answer until you've said what a good answer **is**. For a CampusX course assistant, **good** might decompose into four things:
 
 - **correct**
 - carries a **simple explanation**
 - **grounded in the course content** — not in whatever the model happens to know
 - **safe and policy-compliant** — no abuse, nothing threatening in tone
 
-Notice these are choices, not discoveries. Someone sat down and decided that a good answer for *this* product means those four things. A bank's support agent would list different ones.
+Notice these are choices, not discoveries. Someone sat down and decided that a good answer for **this** product means those four things. A bank's support agent would list different ones.
 
 And this gives the cleanest possible test for whether you're actually evaluating:
 
@@ -51,7 +51,7 @@ And this gives the cleanest possible test for whether you're actually evaluating
 
 ## The misconception worth killing immediately: an eval is not a metric
 
-In ML, "evaluation" *means* metric. How do you evaluate a model? Accuracy. Precision. Recall. Those are numbers, and evaluation is the act of computing them. So the natural assumption is that LLM evals are just a different set of numbers.
+In ML, **evaluation** **means** metric. How do you evaluate a model? Accuracy. Precision. Recall. Those are numbers, and evaluation is the act of computing them. So the natural assumption is that LLM evals are just a different set of numbers.
 
 **That assumption is wrong, and it's worth unlearning early.**
 
@@ -78,9 +78,9 @@ flowchart TD
     E --> L["<b>Which tool?</b><br/>RAGAS, since it's RAG"]
 ```
 
-Every one of those six is *part of the eval*. The metric — retrieval accuracy — is a single box in that diagram, not the diagram.
+Every one of those six is **part of the eval**. The metric — retrieval accuracy — is a single box in that diagram, not the diagram.
 
-> [!note] So when someone asks you what an LLM eval is, the answer isn't a metric name. It's: *the entire testing setup — what we test, against what definition of good, on which cases, judged how, run when, with which tool.*
+> [!note] So when someone asks you what an LLM eval is, the answer isn't a metric name. It's: **the entire testing setup — what we test, against what definition of good, on which cases, judged how, run when, with which tool.**
 
 ### And the goal isn't a score
 
@@ -100,7 +100,7 @@ Every one of those is a decision. If your evaluation produces a number that does
 
 ## The split: model evals vs application evals
 
-Now the distinction that makes everything downstream easier. Go back and read the definition once more — *"...used to judge **an LLM or LLM-powered system**."*
+Now the distinction that makes everything downstream easier. Go back and read the definition once more — **...used to judge an LLM or LLM-powered system.**
 
 Two different objects. So two different kinds of evaluation:
 
@@ -109,7 +109,7 @@ Two different objects. So two different kinds of evaluation:
 - **Model evals** evaluate **the LLM itself.**
 - **Application evals** evaluate **the whole application built on top of an LLM.**
 
-> [!warning] **Disclaimer, given explicitly in the lecture:** "model evals" and "application evals" are *not* official industry terms. They're coined here to make the distinction learnable. In the industry both are just called **LLM evals**, and people infer from context which one is meant. So use the split as a mental model — don't cite it as standard vocabulary.
+> [!warning] **Disclaimer, given explicitly in the lecture:** **model evals** and **application evals** are **not** official industry terms. They're coined here to make the distinction learnable. In the industry both are just called **LLM evals**, and people infer from context which one is meant. So use the split as a mental model — don't cite it as standard vocabulary.
 
 ---
 
@@ -117,7 +117,7 @@ Two different objects. So two different kinds of evaluation:
 
 Model evals exist to answer one question: **when a new LLM ships, what is it capable of?** The lab tests it, benchmarks it, documents the results, and publishes them.
 
-You've seen the output of this process without necessarily noticing. Every model launch announcement quotes a benchmark score or a leaderboard position — *"tops X benchmark", "scores Y%"*. Behind that number is a pre-built eval that the new model was run through to establish its capability level.
+You've seen the output of this process without necessarily noticing. Every model launch announcement quotes a benchmark score or a leaderboard position — **tops X benchmark**, **scores Y%**. Behind that number is a pre-built eval that the new model was run through to establish its capability level.
 
 ### The eight capability categories
 
@@ -156,7 +156,7 @@ Think about who does this work. Benchmarking a newly released LLM, documenting i
 
 So why learn it at all? Because you need to be **literate**, not practised. Specifically:
 
-> [!important] When you start a new project, one of your first real decisions is *which model goes in it* — OpenAI, Anthropic, or an open-source model. **That decision comes directly out of reading benchmarks.** Knowing what MMLU measures versus what SWE-bench measures is what lets you make that call on evidence instead of vibes.
+> [!important] When you start a new project, one of your first real decisions is **which model goes in it** — OpenAI, Anthropic, or an open-source model. **That decision comes directly out of reading benchmarks.** Knowing what MMLU measures versus what SWE-bench measures is what lets you make that call on evidence instead of vibes.
 
 
 
@@ -168,7 +168,7 @@ This is the category to care about, because building LLM applications is your jo
 
 ### Why they have to exist: the LLM is one component
 
-Beginners assume the LLM *is* the application. It's the brain, so surely everything is about the brain.
+Beginners assume the LLM **is** the application. It's the brain, so surely everything is about the brain.
 
 As you build bigger systems, that assumption falls apart:
 
@@ -190,7 +190,7 @@ Now: **does a strong processor guarantee a good phone?** Obviously not. The came
 
 > **Application evals assess the behaviour and performance of an LLM-powered application, whether at the level of the entire system or a specific component within it.**
 
-Note the *both* in there — application evals operate at two levels:
+Note the **both** in there — application evals operate at two levels:
 
 - **System level** — the final response quality, end-to-end latency, cost per token.
 - **Component level** — is my retriever returning the right chunks? Is my embedding model good enough? Is my reranker actually improving the ordering?
@@ -199,7 +199,7 @@ And the question being asked changes completely:
 
 ![[AI-Engineering/01-Agent-Evals/Images/v2-08-Application-Eval-Questions.png]]
 
-In an application eval you **don't** ask *"can the model do this?"* — that's the model eval's question. You ask **"does my product work?"**
+In an application eval you **don't** ask **can the model do this?** — that's the model eval's question. You ask **does my product work?**
 
 For a CampusX course assistant, that unpacks into:
 
@@ -211,7 +211,7 @@ For a CampusX course assistant, that unpacks into:
 - Did it respond quickly enough?
 - Did it stay safe?
 
-Every one of those is about *your* system, and none of them can be answered by a benchmark score on a leaderboard.
+Every one of those is about **your** system, and none of them can be answered by a benchmark score on a leaderboard.
 
-> [!tip] A useful heuristic: if you come across a video or article titled "LLM evaluation", assume roughly 99% of the time it means **application** evaluation, not model evaluation. That's also the one you need.
+> [!tip] A useful heuristic: if you come across a video or article titled **LLM evaluation**, assume roughly 99% of the time it means **application** evaluation, not model evaluation. That's also the one you need.
 

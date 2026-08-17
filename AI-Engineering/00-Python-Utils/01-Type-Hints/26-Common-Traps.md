@@ -28,7 +28,7 @@ $ mypy tr0.py
 Success: no issues found in 1 source file
 ```
 
-Fully typed and fully accepted — the annotation `list[str]` is correct, it *is* a list of strings.
+Fully typed and fully accepted — the annotation `list[str]` is correct, it **is** a list of strings.
 
 ```
 $ python3 tr0.py
@@ -36,7 +36,7 @@ first call : ['ran search']
 second call: ['ran search', 'ran summarise']
 ```
 
-The second call inherits the first call's work. And asking the function what its default *is*, after both calls, makes the reason plain:
+The second call inherits the first call's work. And asking the function what its default **is**, after both calls, makes the reason plain:
 
 ```
 stored default : (['ran search', 'ran summarise'],)
@@ -80,7 +80,7 @@ The `>>>` line lands **between 1 and 2** — before either call — and appears 
 
 So `make_list()` ran when Python executed the `def` statement on line 9, not when the function was called. One list was built at definition time, and lines 16 and 17 were both handed that same one.
 
-> [!important] `log: list[str] = []` reads like an instruction — *"when nobody passes a log, make an empty one"*. It is not. It is a **value computed once** and stored on the function object for the lifetime of the program.
+> [!important] `log: list[str] = []` reads like an instruction — **when nobody passes a log, make an empty one**. It is not. It is a **value computed once** and stored on the function object for the lifetime of the program.
 
 In agent code this is the bug that eats an afternoon. A default `messages: list[Message] = []` on a conversation handler means every conversation the service has ever handled accumulates in one list, and turn 400 arrives carrying 399 strangers' messages.
 
@@ -96,18 +96,18 @@ async def run_tool(name: str, log: list[str] | None = None) -> list[str]:
 
 `None` is immutable, so sharing it is harmless. The `[]` now sits in the function **body**, which runs per call, so every caller gets a genuinely new list.
 
-> [!tip] **Vocabulary, since the trap turns on it.** A *default* is the value a parameter takes when the caller passes nothing:
+> [!tip] **Vocabulary, since the trap turns on it.** A **default** is the value a parameter takes when the caller passes nothing:
 >
 > ```python
-> 1  def greet(name: str = "world") -> str:
-> 2      return f"hello {name}"
+> 1  def greet(name: str = **world**) -> str:
+> 2      return f**hello {name}**
 > 5  print(greet())          → hello world
-> 6  print(greet("laxy"))    → hello laxy
+> 6  print(greet(**laxy**))    → hello laxy
 > ```
 >
 > `= "world"` is the default. Line 5 passes nothing and gets it; line 6 passes something and doesn't.
 
-## `= None` and the two meanings of "optional"
+## `= None` and the two meanings of optional
 
 The fix above changed the annotation from `list[str]` to `list[str] | None`, which is where `07-Unions-And-Optionality` warned people get confused. The confusion has a specific shape:
 
@@ -117,7 +117,7 @@ The fix above changed the annotation from `list[str]` to `list[str] | None`, whi
 3      return log
 ```
 
-This is not "a list of strings that is `None`" — that phrase describes nothing. It says **"this is a list of strings"** and then supplies a default of `None`, which is not a list of strings. The annotation and the default contradict each other, and all three tools say so:
+This is not **a list of strings that is `None`** — that phrase describes nothing. It says **this is a list of strings** and then supplies a default of `None`, which is not a list of strings. The annotation and the default contradict each other, and all three tools say so:
 
 ```
 $ mypy tr3.py
@@ -137,20 +137,20 @@ AttributeError: 'NoneType' object has no attribute 'append'
 
 ### Implicit `Optional`, and why it was removed
 
-That mypy **note** is history worth knowing. Older mypy silently rewrote `log: list[str] = None` into `log: list[str] | None = None` for you, assuming a `None` default meant you wanted `None` permitted. It was called **implicit `Optional`**, and it was removed because it made the signature lie: the annotation said *list of strings* while the checker quietly allowed `None`, so every caller reading the signature got the wrong contract.
+That mypy **note** is history worth knowing. Older mypy silently rewrote `log: list[str] = None` into `log: list[str] | None = None` for you, assuming a `None` default meant you wanted `None` permitted. It was called **implicit `Optional`**, and it was removed because it made the signature lie: the annotation said **list of strings** while the checker quietly allowed `None`, so every caller reading the signature got the wrong contract.
 
 You will still meet it in old code and old tutorials. It is no longer the default in any current checker.
 
 ### The four spellings
 
-| | means | optional to *pass*? | may be `None`? |
+| | means | optional to **pass**? | may be `None`? |
 |---|---|---|---|
 | `log: list[str]` | must be a list | **no** — required | no |
 | `log: list[str] = []` | must be a list | yes | no — but **shared across calls** |
 | `log: list[str] \| None = None` | list or `None` | yes | yes |
 | `log: list[str] = None` | contradiction | — | — |
 
-> [!important] The word **"optional" does two unrelated jobs** in Python, which is the whole source of the confusion:
+> [!important] The word **optional does two unrelated jobs** in Python, which is the whole source of the confusion:
 >
 > - **optional to pass** — the parameter has a default. Controlled by `=`. Nothing to do with types.
 > - **may be `None`** — controlled by `| None` in the annotation.
@@ -189,7 +189,7 @@ Two different things on each pair:
 - `a` is an **object** — a thing that was made.
 - `type(a)` is the **class** — the recipe it was made from.
 
-And `type(s)` reports `SearchAgent`, not `Agent`. It gives what the object *actually is*, not what it inherits from.
+And `type(s)` reports `SearchAgent`, not `Agent`. It gives what the object **actually is**, not what it inherits from.
 
 The `__main__` in there is a **module name**. The same file, run two ways:
 
@@ -218,7 +218,7 @@ The address appears only on objects, and it is what distinguishes two of them: t
 
 > [!tip] This is worth the detour because **mypy prints the same `module.Class` form everywhere** — `tr4.Agent`, `fw2.Agent`, `nr3.ToolMessage`. Every `Revealed type is "..."` in this folder is read the same way.
 
-Which makes `type(self)(self.name)` readable: **`type(self)` is the class this object actually is, and calling a class makes a new instance of it.** So the expression means *"make a new one of whatever class I am, passing my name"* — as opposed to `Agent(self.name)`, which would always make an `Agent` regardless.
+Which makes `type(self)(self.name)` readable: **`type(self)` is the class this object actually is, and calling a class makes a new instance of it.** So the expression means **make a new one of whatever class I am, passing my name** — as opposed to `Agent(self.name)`, which would always make an `Agent` regardless.
 
 ### The small trap: `self` is already known
 
@@ -271,7 +271,7 @@ runtime class: <class '__main__.SearchAgent'>
 
 The `reveal_type` from the previous file is gone, so `clone()` is two lines here. The object **is** a `SearchAgent` — line 6 is `type(self)(...)`, so `clone()` constructs whatever class it was called on. It genuinely has `.search`. mypy refuses the call anyway, because `-> "Agent"` promised less than the method delivers.
 
-> [!important] `self` needs no annotation, but a **return type of the class name is a real bug**. It hard-codes the class where the method was *written*, not the class it was *called on*, so every subclass silently degrades to the base type the moment it passes through such a method.
+> [!important] `self` needs no annotation, but a **return type of the class name is a real bug**. It hard-codes the class where the method was **written**, not the class it was **called on**, so every subclass silently degrades to the base type the moment it passes through such a method.
 
 Fixing that properly is its own rung — `19-Self`, which exists for exactly this.
 
@@ -330,7 +330,7 @@ tr6.py:9: note: Revealed type is "list[Any]"
 
 Lines 1-3 need nothing. mypy reads the value and knows. Annotating them — `name: str = "search"` — adds a line that can only ever restate what the checker already worked out.
 
-Line 4 is the opposite, and mypy asks for help by name: **`Need type annotation for "results"`**. `[]` is a list of *what*? There is no value to read the answer off, so without you it degrades to `list[Any]` — and concept 8's rule then applies to everything that comes out of it.
+Line 4 is the opposite, and mypy asks for help by name: **`Need type annotation for "results"`**. `[]` is a list of **what**? There is no value to read the answer off, so without you it degrades to `list[Any]` — and concept 8's rule then applies to everything that comes out of it.
 
 > [!important] The rule is a question: **would the checker have got there on its own?**
 >
@@ -369,6 +369,6 @@ Five things to carry:
 
 1. A `def` is executed, and executing it evaluates the **defaults** as well as the annotations — once, at definition. So `log: list[str] = []` builds one list that every call then shares. In agent code this is a message list accumulating across every conversation the service has handled. Use `| None = None` and build the real value in the body.
 2. `list[str] = None` is a contradiction, and all three of mypy, pyright and the runtime reject it. Old mypy used to silently rewrite it to `list[str] | None` — **implicit `Optional`**, removed because it made signatures lie to their callers.
-3. **"Optional" means two unrelated things.** Optional to *pass* is the `=`; may be `None` is the `| None`. They coincide only in the `= None` spelling, which is why they get fused in people's heads.
+3. **Optional means two unrelated things.** Optional to **pass** is the `=`; may be `None` is the `| None`. They coincide only in the `= None` spelling, which is why they get fused in people's heads.
 4. `self` needs no annotation — it is an ordinary first parameter holding the very object the method was called on, so the checker infers it. But a **return type of the class name** is a genuine bug: it hard-codes where the method was written rather than what it was called on, and every subclass degrades to the base type. `19-Self` is the fix.
 5. Annotate where the checker cannot infer — empty containers, `None` defaults — and nowhere else. Over-annotating trains readers to skim, which costs you exactly where it matters.

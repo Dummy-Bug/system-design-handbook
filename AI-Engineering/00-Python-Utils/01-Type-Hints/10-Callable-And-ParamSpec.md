@@ -67,11 +67,11 @@ $ mypy call1.py
 call1.py:17: error: Argument 1 to "apply_twice" has incompatible type "str"; expected "Callable[..., Any]"  [arg-type]
 ```
 
-The string is caught. `Callable` comes from **`collections.abc`** — the same place as `Iterable` and `Sequence` — and it names the category *"a thing you can put brackets after and call."*
+The string is caught. `Callable` comes from **`collections.abc`** — the same place as `Iterable` and `Sequence` — and it names the category **a thing you can put brackets after and call.**
 
 But two details in that one line of output matter.
 
-**mypy expanded the bare `Callable` into `Callable[..., Any]`** — *"takes any arguments at all, returns something I won't examine."* The `...` is a real spelling, not shorthand in the message.
+**mypy expanded the bare `Callable` into `Callable[..., Any]`** — **takes any arguments at all, returns something I won't examine.** The `...` is a real spelling, not shorthand in the message.
 
 **And only line 17 was flagged.** Line 18 passes `shout`, which takes a `str` and returns a `str`, into a function that will call it with `5` and then feed the result back in. That is a genuine bug and it went through.
 
@@ -140,9 +140,9 @@ Three errors; only line 20 survives.
 
 Two things worth reading off those messages.
 
-**The checker describes each function by its signature** — `Callable[[str], str]` for `shout`, `Callable[[int, int], int]` for `add`. It derived those from the `def` lines. Every annotated function already *has* a `Callable` type whether or not anyone writes one; `Callable[...]` is just how you name that type in a place where a function is being received rather than defined.
+**The checker describes each function by its signature** — `Callable[[str], str]` for `shout`, `Callable[[int, int], int]` for `add`. It derived those from the `def` lines. Every annotated function already **has** a `Callable` type whether or not anyone writes one; `Callable[...]` is just how you name that type in a place where a function is being received rather than defined.
 
-**Line 23 is the interesting failure.** `add` is a perfectly good function that takes ints and returns an int — it simply takes *two*. Nothing about its types is wrong; the count is.
+**Line 23 is the interesting failure.** `add` is a perfectly good function that takes ints and returns an int — it simply takes **two**. Nothing about its types is wrong; the count is.
 
 > [!important] **The number of parameters is part of a function's type.** `Callable[[int], int]` and `Callable[[int, int], int]` are as different as `str` and `int`. That's the same idea as a tuple's length being part of its type, and it's the reason a decorator that flattens everything to `(*args, **kwargs)` loses real information — which is the problem the rest of this concept solves.
 
@@ -258,19 +258,19 @@ deco1.py:21: note: Revealed type is "def (*Any, **Any) -> Any"
 
 `plain` keeps its parameters and its return. `greet` — the same function, one line different — has become `(*Any, **Any) -> Any`.
 
-And it was the *annotation* that did it, not the code. Line 5 promised to return `Callable[..., Any]`, so as far as the checker is concerned that is now all `greet` is. Everything downstream is `Any`, with the spreading from `08-Any-Object-Never` doing the rest — which is why line 20's `.upper()` on a possibly-non-string also went unmentioned.
+And it was the **annotation** that did it, not the code. Line 5 promised to return `Callable[..., Any]`, so as far as the checker is concerned that is now all `greet` is. Everything downstream is `Any`, with the spreading from `08-Any-Object-Never` doing the rest — which is why line 20's `.upper()` on a possibly-non-string also went unmentioned.
 
 > [!warning] **Adding a decorator to a function silently switches off checking at every call site of that function.** Nothing warns you. The checker still reports `Success`, and the only symptom is errors that stop being found.
 
 ## What the annotation needs to say
 
-Describing `logged` as *"it returns the wrapper"* is true about the code and says nothing a type system can use — `wrapper` is an implementation detail the caller never sees.
+Describing `logged` as **it returns the wrapper** is true about the code and says nothing a type system can use — `wrapper` is an implementation detail the caller never sees.
 
 What the caller experiences is that after `@logged`, `greet` still takes a `name: str` and a `times: int` and still gives back a `str`. The printing happens around it; the interface did not move. So the promise is:
 
-> **"I return a function with exactly the same parameters and the same return type as the one you were given."**
+> **I return a function with exactly the same parameters and the same return type as the one you were given.**
 
-That is unsayable with `Callable[[int], int]`, which names *specific* types, while `logged` must work for every signature there is. What's needed is a way to say *"whatever parameters the input had"* and then reuse that same unknown on the way out.
+That is unsayable with `Callable[[int], int]`, which names **specific** types, while `logged` must work for every signature there is. What's needed is a way to say **whatever parameters the input had** and then reuse that same unknown on the way out.
 
 ## `ParamSpec`
 
@@ -288,11 +288,11 @@ That is unsayable with `Callable[[int], int]`, which names *specific* types, whi
 Line 4 declares two placeholders, and the `**` says which kind each one is:
 
 - **`R`** — an ordinary type placeholder. Stands for **one type**.
-- **`**P`** — a *parameter-specification* placeholder. Stands for a **whole parameter list**: how many, their names, their types, which are positional and which are keyword.
+- **`**P`** — a **parameter-specification** placeholder. Stands for a **whole parameter list**: how many, their names, their types, which are positional and which are keyword.
 
-The `**` is deliberately the same symbol as `**kwargs` — both mean "a bundle of arguments rather than one thing". Without it, `[P, R]` would declare two ordinary type placeholders and `Callable[P, R]` would not parse.
+The `**` is deliberately the same symbol as `**kwargs` — both mean **a bundle of arguments rather than one thing**. Without it, `[P, R]` would declare two ordinary type placeholders and `Callable[P, R]` would not parse.
 
-So line 4 reads: *takes a function with parameters `P` returning `R`, gives back a function with parameters `P` returning `R`* — the same `P`, the same `R`, whatever they turn out to be.
+So line 4 reads: **takes a function with parameters `P` returning `R`, gives back a function with parameters `P` returning `R`** — the same `P`, the same `R`, whatever they turn out to be.
 
 That's the 3.12+ spelling. Older code declares them separately and you will meet it:
 
@@ -329,11 +329,11 @@ deco2.py:20: error: Argument 1 to "greet" has incompatible type "int"; expected 
 deco2.py:20: error: Argument 2 to "greet" has incompatible type "str"; expected "int"  [arg-type]
 ```
 
-Line 16 is the point: **`def (name: str, times: int) -> str`** — byte for byte what the *undecorated* function revealed. Parameter names, types and return all survived, where the `Callable[..., Any]` version had flattened the same function to `def (*Any, **Any) -> Any`.
+Line 16 is the point: **`def (name: str, times: int) -> str`** — byte for byte what the **undecorated** function revealed. Parameter names, types and return all survived, where the `Callable[..., Any]` version had flattened the same function to `def (*Any, **Any) -> Any`.
 
 Lines 19 and 20 are caught, with 20 producing one error per wrong argument. Line 21 is silent — correctly, because the return type is known to be `str` again rather than `Any`.
 
-On line 5: `P.args` and `P.kwargs` spell "the positional half of `P`" and "the keyword half of `P`". They are used as a pair, only inside a function whose parameters are being described by `P`, and they are what tie `wrapper`'s arguments to the signature `logged` promised to preserve.
+On line 5: `P.args` and `P.kwargs` spell **the positional half of `P`** and **the keyword half of `P`**. They are used as a pair, only inside a function whose parameters are being described by `P`, and they are what tie `wrapper`'s arguments to the signature `logged` promised to preserve.
 
 ## Why there is no `**R`
 

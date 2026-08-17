@@ -5,18 +5,18 @@ Typing `python main.py` looks like one action. It is two, and almost every confu
 
 ## Four words for two things
 
-*Run*, *compile*, *interpret* and *execute* get used interchangeably, and they are not the same thing.
+**Run**, **compile**, **interpret** and **execute** get used interchangeably, and they are not the same thing.
 
 | Word | What it names |
 |---|---|
 | **Compile** | Turning your text into **bytecode** — a list of low-level instructions. A real, separate step, and it always happens. |
 | **Execute** | Carrying out those instructions, one at a time. |
-| **Interpret** | The same activity as *execute*. The word names **how**: a program reads the instructions and acts on them, rather than the processor running native machine code directly. |
-| **Run** | The colloquial umbrella — *"compile it, then execute it"*. What **you** do. |
+| **Interpret** | The same activity as **execute**. The word names **how**: a program reads the instructions and acts on them, rather than the processor running native machine code directly. |
+| **Run** | The colloquial umbrella — **compile it, then execute it**. What **you** do. |
 
-So there are **two phases, not four**. *Interpret* is another word for *execute*, and *run* covers both.
+So there are **two phases, not four**. **Interpret** is another word for **execute**, and **run** covers both.
 
-That also settles a question people argue about. Is Python compiled or interpreted? **Both.** It compiles your source to bytecode, then interprets that bytecode. "Compiled language" usually implies compiled all the way down to machine code — that's the distinction actually being drawn, not whether compilation happens at all. It always happens.
+That also settles a question people argue about. Is Python compiled or interpreted? **Both.** It compiles your source to bytecode, then interprets that bytecode. **Compiled language** usually implies compiled all the way down to machine code — that's the distinction actually being drawn, not whether compilation happens at all. It always happens.
 
 ## What each phase can catch
 
@@ -39,7 +39,7 @@ $ python3 bad_syntax.py
 SyntaxError: invalid syntax
 ```
 
-**`STEP 1` did not print.** There is a `print` on line 1 and it produced nothing at all. The file was *run* — you typed the command, Python started, opened the file, read it — but nothing was ever *executed*, because Python cannot turn line 3 into an instruction and therefore produces no instructions for the file at all. One malformed line anywhere and not a single line runs.
+**`STEP 1` did not print.** There is a `print` on line 1 and it produced nothing at all. The file was **run** — you typed the command, Python started, opened the file, read it — but nothing was ever **executed**, because Python cannot turn line 3 into an instruction and therefore produces no instructions for the file at all. One malformed line anywhere and not a single line runs.
 
 **Execution asks: does this name actually exist?** That question can only be answered once execution reaches the line that asks it:
 
@@ -122,7 +122,7 @@ That `.pyc` is the compiled bytecode for `helper.py`, saved to disk so the next 
 
 And the detail that catches people out:
 
-> [!important] **There is no `main.cpython-313.pyc`.** The file you *run* is compiled fresh every time and never cached — only files you **import** get a `.pyc`. The reasoning: a script is typically run once per process, so caching it would save nothing, while an imported module may be loaded by many programs, many times over.
+> [!important] **There is no `main.cpython-313.pyc`.** The file you **run** is compiled fresh every time and never cached — only files you **import** get a `.pyc`. The reasoning: a script is typically run once per process, so caching it would save nothing, while an imported module may be loaded by many programs, many times over.
 
 ## Why this matters beyond trivia
 

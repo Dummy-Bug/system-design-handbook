@@ -2,18 +2,18 @@
 
 ![[AI-Engineering/01-Agent-Evals/Images/v5-01-Three-Methods.png]]
 
-The eval *pipeline* exists to tell you whether a component, workflow, or application is working. The **method** is what actually carries that pipeline out. Put most plainly: **who executes the eval?**
+The eval **pipeline** exists to tell you whether a component, workflow, or application is working. The **method** is what actually carries that pipeline out. Put most plainly: **who executes the eval?**
 
 There are exactly three answers.
 
-**1 · Programmatic / deterministic** — *code produces the verdict.*
+**1 · Programmatic / deterministic** — **code produces the verdict.**
 The output is checked against a rule or a known correct answer by a program: exact match, regex, JSON schema validation, or running the output (execute the code, run the SQL) and comparing results. **Fast, cheap, reproducible — but only works where correctness is mechanically checkable.**
 
-**2 · Human** — *a person produces the verdict.*
+**2 · Human** — **a person produces the verdict.**
 People rate, rank, or compare outputs directly. **The most expensive and slowest, but the gold standard for nuanced, subjective, or high-stakes judgments.**
 
-**3 · Model-graded (LLM-as-judge)** — *a model produces the verdict.*
-A strong LLM scores or ranks the output against a rubric. **Used where there's no single right answer but you can describe what "good" looks like** — helpfulness, tone, groundedness.
+**3 · Model-graded (LLM-as-judge)** — **a model produces the verdict.**
+A strong LLM scores or ranks the output against a rubric. **Used where there's no single right answer but you can describe what good looks like** — helpfulness, tone, groundedness.
 
 > [!note] The Zomato email classifier was **programmatic** — a few lines of Python compared predicted label to expected label and computed accuracy. That was never a preference; it was the only sensible choice, because `billing == billing` is mechanically checkable.
 
@@ -30,11 +30,11 @@ CampusX builds a RAG chatbot so users get help without emailing. We decide to ev
 
 ![[AI-Engineering/01-Agent-Evals/Images/v5-02-RecallAtK.png]]
 
-> **Recall@k** — *Out of all the correct/relevant items that exist, how many did the system retrieve in its top-k results?*
+> **Recall@k** — **Out of all the correct/relevant items that exist, how many did the system retrieve in its top-k results?**
 >
 > `Recall@k = (relevant items retrieved in top k) / (total number of relevant items)`
 
-Work one row by hand. Question: *"What are the prerequisites for the ML course and how long is it?"*
+Work one row by hand. Question: **What are the prerequisites for the ML course and how long is it?**
 
 - Documents that actually contain the answer: **1001** and **1003** — two of them.
 - Retriever with `k=5` returns: `1001, 1002, 1004, 1005, 1006`.
@@ -69,17 +69,17 @@ Every question goes to the **retriever only** — not the whole chatbot — with
 Study the rows with the worst recall, then reach for one of four levers:
 
 - **Better embedding model** — perhaps it isn't capturing semantic meaning well enough
-- **Query expansion** — pass the user's question through an LLM to expand it *before* it reaches the retriever
+- **Query expansion** — pass the user's question through an LLM to expand it **before** it reaches the retriever
 - **Increase k** — try `k=10` instead of `5`
 - **Reranking** — if the right document was at position 8, a reranker can lift it to position 3
 
-> [!important] Whether an eval is programmatic, human, or model-graded depends on **who executes it and extracts the scores** — nothing else. **Creating the golden dataset is a separate activity, and it is essentially always done by a human.** This retriever eval is *programmatic* even though a human labelled the gold document IDs.
+> [!important] Whether an eval is programmatic, human, or model-graded depends on **who executes it and extracts the scores** — nothing else. **Creating the golden dataset is a separate activity, and it is essentially always done by a human.** This retriever eval is **programmatic** even though a human labelled the gold document IDs.
 
 ---
 
 # Example 2 — Human: evaluating helpfulness
 
-Same company, different question. The chatbot is live-ish and we want to know whether its answers are actually *helpful*.
+Same company, different question. The chatbot is live-ish and we want to know whether its answers are actually **helpful**.
 
 **Target:** the **entire application** — not one component, not one workflow. **Task:** evaluate helpfulness.
 
@@ -125,7 +125,7 @@ Grader A and Grader B score the same answers. Row 1: 5 and 5. Row 3: 5 and 5. Ro
 
 One grader you trust. Why add a second? Because **disagreement between graders is a measurement of your rubric, not of your chatbot.**
 
-> [!important] If two graders keep diverging on the same answers, the conclusion is *"there is ambiguity in the rubric."* One says 2, the other says 4, repeatedly — the instruction is unclear and both are guessing differently. High agreement means the rubric is well-specified. So a second grader is often added **purely to refine the rubric.**
+> [!important] If two graders keep diverging on the same answers, the conclusion is **there is ambiguity in the rubric.** One says 2, the other says 4, repeatedly — the instruction is unclear and both are guessing differently. High agreement means the rubric is well-specified. So a second grader is often added **purely to refine the rubric.**
 
 Average the grades and you have your helpfulness score — produced by a human.
 
@@ -138,12 +138,12 @@ The flow above is only the simplest one. Humans show up in five distinct roles:
 | Role | What it is |
 |---|---|
 | **Direct grading / rating** | A person reads outputs and scores them against a rubric — the pipeline you just built. The most basic role: human as the grader. |
-| **Red teaming** | Actively *attacking* the system to find failures: crafting jailbreaks, prompt injections, adversarial and edge-case inputs, trying to make it produce harmful or wrong output. Creative adversarial work automated evals **can't originate**. |
+| **Red teaming** | Actively **attacking** the system to find failures: crafting jailbreaks, prompt injections, adversarial and edge-case inputs, trying to make it produce harmful or wrong output. Creative adversarial work automated evals **can't originate**. |
 | **A/B testing** | Real users as graders **in production**; their behaviour (thumbs-up, task completion, re-asking, escalation) is the verdict on which version is better. |
 | **Gold-answer / dataset creator** | Writing or verifying the correct answers (gold SQL, gold doc IDs, concept rubrics) and curating the test set to cover the real distribution. |
-| **HITL (human-in-the-loop)** | A human placed *inside the production flow* as a checkpoint — reviewing, approving, editing, or rejecting live outputs before they reach the user, triggered on the risky slice (low-confidence, high-stakes, flagged). |
+| **HITL (human-in-the-loop)** | A human placed **inside the production flow** as a checkpoint — reviewing, approving, editing, or rejecting live outputs before they reach the user, triggered on the risky slice (low-confidence, high-stakes, flagged). |
 
-Two of these are worth pausing on. **Red teaming** is the one an automated eval structurally cannot replace — a program can re-run known attacks but cannot *invent* the next one. And **A/B testing** is the only entry where the grading happens after deployment, by people who don't know they're grading.
+Two of these are worth pausing on. **Red teaming** is the one an automated eval structurally cannot replace — a program can re-run known attacks but cannot **invent** the next one. And **A/B testing** is the only entry where the grading happens after deployment, by people who don't know they're grading.
 
 ## The trade
 
@@ -155,7 +155,7 @@ Two of these are worth pausing on. **Red teaming** is the one an automated eval 
 
 # Example 3 — LLM-as-a-judge: grading UPSC Mains answers
 
-Now the interesting case: **what if programmatic is impossible *and* human is unaffordable?**
+Now the interesting case: **what if programmatic is impossible and human is unaffordable?**
 
 ## The setup
 
@@ -163,7 +163,7 @@ CampusX runs a UPSC preparation website and YouTube channel. UPSC has three stag
 
 Here's the business problem. Lakhs of students could take the mock test. Even at 10,000 students, you need a lot of SMEs, paid per paper evaluated — and your profitability collapses.
 
-Then a company offers a platform: send any number of students, and an LLM-based system grades them against *your* rubrics for a fraction of the cost. Does that make business sense? Obviously.
+Then a company offers a platform: send any number of students, and an LLM-based system grades them against **your** rubrics for a fraction of the cost. Does that make business sense? Obviously.
 
 **We are that platform.** And now we have to evaluate it.
 
@@ -177,17 +177,17 @@ Not the only possible criterion, but a good one — and note what it implies: **
 
 ## Step 1 of the dataset — define the rubric (this is not the dataset)
 
-Take a three-question paper. Bring in an expert who grades well and ask only one thing: *what dimensions should I check in an answer?*
+Take a three-question paper. Bring in an expert who grades well and ask only one thing: **what dimensions should I check in an answer?**
 
 ![[AI-Engineering/01-Agent-Evals/Images/v5-07-UPSC-Rubric.png]]
 
 | Q | Question (Mains) | Expected dimensions | Max |
 |---|---|---|---|
-| q1 | *"Ethical governance is impossible without administrative accountability."* Discuss. | ① defines ethical governance & accountability ② explains the link between them ③ gives mechanisms (RTI, social audit, CVC) ④ cites examples/cases ⑤ balanced conclusion | 15 |
+| q1 | **Ethical governance is impossible without administrative accountability.** Discuss. | ① defines ethical governance & accountability ② explains the link between them ③ gives mechanisms (RTI, social audit, CVC) ④ cites examples/cases ⑤ balanced conclusion | 15 |
 | q2 | Examine the role of the Governor in Centre-State relations. | ① constitutional role (Art. 153-163) ② discretionary powers ③ points of friction/misuse ④ Sarkaria/Punchhi recommendations ⑤ balanced view | 10 |
-| q3 | *"Federalism in India is more cooperative than competitive."* Critically analyse. | ① defines cooperative vs competitive federalism ② arguments for cooperative (GST Council, ISC) ③ arguments for competitive (Ease of Business rankings) ④ recent tensions ⑤ reasoned stance | 15 |
+| q3 | **Federalism in India is more cooperative than competitive.** Critically analyse. | ① defines cooperative vs competitive federalism ② arguments for cooperative (GST Council, ISC) ③ arguments for competitive (Ease of Business rankings) ④ recent tensions ⑤ reasoned stance | 15 |
 
-> [!warning] **This is the rubric, not the dataset.** A rubric is a reusable standard for judging *any* answer to that question. Confusing the two is a common slip.
+> [!warning] **This is the rubric, not the dataset.** A rubric is a reusable standard for judging **any** answer to that question. Confusing the two is a common slip.
 
 ## Step 2 — the golden dataset
 
@@ -198,7 +198,7 @@ Now conduct the paper, take real student answers, and have **one** human SME gra
 | Ans | Q | Answer summary | Dimensions covered | Human marks |
 |---|---|---|---|---|
 | a1 | q1 | Defines both terms, links them, discusses RTI & social audit, cites 2G/CVC example, balanced conclusion | ①✓ ②✓ ③✓ ④✓ ⑤✓ | **13/15** |
-| a2 | q1 | Long, fluent essay on "good governance" generally; never links to accountability, no mechanisms, no examples | ①partial ②✗ ③✗ ④✗ ⑤✗ | **4/15** |
+| a2 | q1 | Long, fluent essay on **good governance** generally; never links to accountability, no mechanisms, no examples | ①partial ②✗ ③✗ ④✗ ⑤✗ | **4/15** |
 | a3 | q1 | Covers link and mechanisms well but no example and abrupt ending | ①✓ ②✓ ③✓ ④✗ ⑤✗ | **8/15** |
 | a4 | q2 | Constitutional role + discretionary powers + Sarkaria; misses friction points and conclusion | ①✓ ②✓ ③✗ ④✓ ⑤✗ | **6/10** |
 | a5 | q2 | Vague, mostly restates the question with heavy jargon, no constitutional articles | ①✗ ②✗ ③✗ ④✗ ⑤partial | **1/10** |
@@ -241,7 +241,7 @@ Respond in JSON only:
 Three things in that prompt are doing real work, and they're the transferable part:
 
 - **The rubric is injected per question**, pulled from the rubric table — the judge is not asked to invent standards.
-- **Explicit negative instructions.** *Do not reward verbosity, keyword-stuffing, or confident assertions that lack substantiation.* These name the exact failure modes an LLM judge falls into: fluent-and-long reads as good.
+- **Explicit negative instructions.** **Do not reward verbosity, keyword-stuffing, or confident assertions that lack substantiation.** These name the exact failure modes an LLM judge falls into: fluent-and-long reads as good.
 - **Structured output plus a reasoning field.** JSON makes it parseable; the two-sentence justification makes a disagreement auditable.
 
 ## Reading the result — MAE
@@ -260,7 +260,7 @@ Human and judge, same rubric, side by side:
 | a6 | q3 | 12 | 12 |
 | a7 | q3 | 6 | 5 |
 
-The success criterion said *"grades like a human"*, so the metric is the **gap** between the two columns — **Mean Absolute Error**:
+The success criterion said **grades like a human**, so the metric is the **gap** between the two columns — **Mean Absolute Error**:
 
 `MAE = ( |13-12| + |4-8| + |8-8| + … ) / 50 = 2.3`
 
@@ -268,7 +268,7 @@ The success criterion said *"grades like a human"*, so the metric is the **gap**
 
 Levers: a stronger LLM, a rewritten system prompt, or a sharper rubric. Then re-run on the same 50 answers, exactly as the loop in note 03 prescribes.
 
-> [!tip] Look at row a2 — human 4, judge 8. That's a *long, fluent essay that never actually answers.* The judge fell for exactly the failure the prompt tried to forbid. A single row like that is worth more than the aggregate, and finding it is what error analysis means.
+> [!tip] Look at row a2 — human 4, judge 8. That's a **long, fluent essay that never actually answers.** The judge fell for exactly the failure the prompt tried to forbid. A single row like that is worth more than the aggregate, and finding it is what error analysis means.
 
 ---
 

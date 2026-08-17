@@ -62,7 +62,7 @@ Success: no issues found in 1 source file
 
 **No complaint about either line.** The second one is a real bug — those numbers mean something different in the two systems, so the colour comes out wrong — and it will run, produce output, and never raise.
 
-The reason is exactly what an alias is: a second name for the same type. `RGB` *is* `tuple[int, int, int]`. So is `HSL`. To a checker they're not two types that happen to look alike; they're one type with two spellings, so there is nothing to object to.
+The reason is exactly what an alias is: a second name for the same type. `RGB` **is** `tuple[int, int, int]`. So is `HSL`. To a checker they're not two types that happen to look alike; they're one type with two spellings, so there is nothing to object to.
 
 ## `NewType`
 
@@ -91,7 +91,7 @@ expected "RGB"  [arg-type]
 Found 2 errors in 1 file
 ```
 
-Both mistakes caught, and the correct line passes silently. The bare tuple is now rejected too — which is the point rather than a side effect. A plain triple of numbers *isn't* an RGB colour until somebody says it is, and `RGB(...)` is where that gets said, in the source, where it can be reviewed.
+Both mistakes caught, and the correct line passes silently. The bare tuple is now rejected too — which is the point rather than a side effect. A plain triple of numbers **isn't** an RGB colour until somebody says it is, and `RGB(...)` is where that gets said, in the source, where it can be reviewed.
 
 ## What it actually costs at runtime
 

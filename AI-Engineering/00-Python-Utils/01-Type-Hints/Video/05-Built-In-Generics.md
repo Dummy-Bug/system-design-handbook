@@ -10,7 +10,7 @@ def f(d: dict) -> None:
     d['anything'] = object()
 ```
 
-A checker finds nothing wrong here, and it's right not to. `dict` says *"some dictionary"* — nothing about what's in it. Any key, any value, any combination. You've ruled out a list and a string and stopped.
+A checker finds nothing wrong here, and it's right not to. `dict` says **some dictionary** — nothing about what's in it. Any key, any value, any combination. You've ruled out a list and a string and stopped.
 
 Add the pieces and it becomes a claim worth making:
 
@@ -62,7 +62,7 @@ error: Incompatible types in assignment
  variable has type "tuple[int, int, int]")  [assignment]
 ```
 
-A tuple's length is part of its type, which no other container can say. `list[int]` has nothing to say about how many. That's the difference between "a coordinate" and "some numbers" — and the `...` form is how you say the second one deliberately.
+A tuple's length is part of its type, which no other container can say. `list[int]` has nothing to say about how many. That's the difference between **a coordinate** and **some numbers** — and the `...` form is how you say the second one deliberately.
 
 ## Where it stops being enough
 
@@ -87,6 +87,6 @@ Except the age isn't a string, so that's now false. The only accurate version ad
 
 Correct, and immediately unsatisfying. **Every value now shares one type.** The dictionary has a first name that must be a string and an age that must be a number, and this annotation cannot express the difference — it says each value is one of three things, without saying which key gets which.
 
-That's not a flaw in the syntax. `dict[K, V]` describes a mapping where all values are alike, which is what a dictionary *is* for. A record with fixed, differently-typed fields is a different thing wearing a dictionary's clothes, and it needs `TypedDict` — which is where the crack in this annotation gets demonstrated properly.
+That's not a flaw in the syntax. `dict[K, V]` describes a mapping where all values are alike, which is what a dictionary **is** for. A record with fixed, differently-typed fields is a different thing wearing a dictionary's clothes, and it needs `TypedDict` — which is where the crack in this annotation gets demonstrated properly.
 
 > [!tip] The habit: **parameterise every container you annotate.** A bare `list` or `dict` in a signature is nearly always someone who stopped one step early — it costs nothing to write `list[str]`, and it's the difference between an annotation that documents and one that also checks.

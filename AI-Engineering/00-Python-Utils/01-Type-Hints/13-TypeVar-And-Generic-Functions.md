@@ -26,7 +26,7 @@ Take the first item off a list — the shape behind picking a tool, a candidate,
 18  print(r.upper())
 ```
 
-`first` must work on a list of tool names *and* a list of run records, so `list[Any] -> Any` looks like the honest annotation — it genuinely does not know what's in the list.
+`first` must work on a list of tool names **and** a list of run records, so `list[Any] -> Any` looks like the honest annotation — it genuinely does not know what's in the list.
 
 Line 17 is correct: `t` is a string. Line 18 is a bug: `r` is a dict, and dicts have no `.upper()`.
 
@@ -66,7 +66,7 @@ The diagnosis: `first` **does** have a relationship between input and output —
 
 Same file as before, with lines 1–2 replaced. The `from typing import Any` at the top is gone — there is nothing left to import.
 
-`T` is declared in brackets after the name, then used in two places. The line reads: *given a list of `T`, return a `T`* — whatever `T` turns out to be at each call site.
+`T` is declared in brackets after the name, then used in two places. The line reads: **given a list of `T`, return a `T`** — whatever `T` turns out to be at each call site.
 
 ```
 $ mypy tv1.py
@@ -87,7 +87,7 @@ SEARCH
 s
 ```
 
-`first(tool_names).upper()` works and `first(tool_names)[0]` gives `"s"` — mypy inferred `T` from the argument at each site. You *can* write `first[str](tool_names)` when inference fails, but you rarely need to.
+`first(tool_names).upper()` works and `first(tool_names)[0]` gives `"s"` — mypy inferred `T` from the argument at each site. You **can** write `first[str](tool_names)` when inference fails, but you rarely need to.
 
 > [!important] That's the difference from `Any` in one line. **`Any` is two unknowns that never meet. `T` is one unknown, mentioned twice** — which is what lets the answer flow from the input to the output.
 
@@ -100,7 +100,7 @@ A helper that picks the highest-scoring item — the shape behind any ranking or
 2      return max(items)
 ```
 
-`max` has to compare items with `<`, and `T` is *any type at all*.
+`max` has to compare items with `<`, and `T` is **any type at all**.
 
 ```
 $ mypy tv3.py
@@ -143,10 +143,10 @@ tv5.py:30: error: "AIMessage" has no attribute "user_id"  [attr-defined]
 tv5.py:32: error: Value of type variable "T" of "last" cannot be "str"  [type-var]
 ```
 
-`T: Message` means **"`Message`, or any subclass of it."** Two consequences, and the second is the payoff:
+`T: Message` means **`Message`, or any subclass of it.** Two consequences, and the second is the payoff:
 
 - **Line 32 is rejected.** A `str` is not a `Message`, so the function cannot be called with one.
-- **Lines 26–27 keep the *specific* subclass** — `HumanMessage` and `AIMessage`, not `Message`. Which is why line 29 finds `user_id` and line 30 correctly does not.
+- **Lines 26–27 keep the specific subclass** — `HumanMessage` and `AIMessage`, not `Message`. Which is why line 29 finds `user_id` and line 30 correctly does not.
 
 Annotating `msgs: list[Message] -> Message` would also have rejected the strings — and would have handed every caller back a plain `Message`, throwing the subclass away. The placeholder keeps it.
 
@@ -166,7 +166,7 @@ tv4.py:23: note: Revealed type is "tv4.ToolCall"
 tv4.py:25: error: Value of type variable "T" of "best" cannot be "str"  [type-var]
 ```
 
-A tuple means **"exactly one of these, and nothing else."** No subclasses, and no common base required — `Candidate` and `ToolCall` here are unrelated classes that merely both have a `.score`.
+A tuple means **exactly one of these, and nothing else.** No subclasses, and no common base required — `Candidate` and `ToolCall` here are unrelated classes that merely both have a `.score`.
 
 | | `T: Message` (bound) | `T: (Candidate, ToolCall)` (constraints) |
 |---|---|---|
@@ -175,7 +175,7 @@ A tuple means **"exactly one of these, and nothing else."** No subclasses, and n
 | open to new types? | yes — any future subclass | no — the list is closed |
 | use when | there is a common base class | there isn't, and you want a fixed set |
 
-A bound is what you'll write almost always. Constraints are for types that genuinely have nothing in common — and reaching for them because several unrelated classes share a *method* is a signal for a different tool, on a later rung.
+A bound is what you'll write almost always. Constraints are for types that genuinely have nothing in common — and reaching for them because several unrelated classes share a **method** is a signal for a different tool, on a later rung.
 
 ## Declaring versus using
 

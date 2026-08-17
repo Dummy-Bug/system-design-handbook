@@ -4,7 +4,7 @@
 
 16 concepts. **Generic** — the field, not Xarvis. Map afterwards.
 
-> Learn the full surface first, *then* decide what Xarvis can demonstrate. Xarvis is single-model and single-provider today, so several concepts here will land as costed proposals rather than shipped systems — which is a legitimate interview answer if framed honestly.
+> Learn the full surface first, **then** decide what Xarvis can demonstrate. Xarvis is single-model and single-provider today, so several concepts here will land as costed proposals rather than shipped systems — which is a legitimate interview answer if framed honestly.
 
 **Currency check (2026-07-30) — the defining paradox:** token prices fell roughly **80% between 2025 and 2026**, and enterprise LLM API spend still passed **$8.4B in 2025** and is on track to double again. Prices collapsing while bills explode. The lesson: unit-cost improvements get consumed by volume growth, so cost engineering is a permanent discipline, not a one-time cleanup.
 
@@ -27,7 +27,7 @@ TTFT, TPOT/ITL, tokens/sec, total latency ≈ TTFT + TPOT × output_tokens. What
 Streaming changes the felt experience without changing total time. Where streaming helps, where it's a lie, and what the honest targets are for a chat product versus an agent loop.
 
 **5. Per-request P&L**
-Costing a single request end to end — model calls, tool calls, retrieval, retries. Attribution by feature, tenant, and user. Establishing the number *before* optimising anything.
+Costing a single request end to end — model calls, tool calls, retrieval, retries. Attribution by feature, tenant, and user. Establishing the number **before** optimising anything.
 
 ## B · The five levers
 
@@ -35,7 +35,7 @@ Costing a single request end to end — model calls, tool calls, retrieval, retr
 How it works: the processed representation of a stable prefix is stored, so subsequent requests skip reprocessing. Cache-friendly prompt ordering — fixed instructions first, volatile content last. TTL, minimum cacheable length, and cache-hit-rate as the metric that decides whether it's working.
 
 **7. Semantic caching**
-Application-level: return a stored response for a semantically *similar* query without touching the model. How it differs from prefix caching. Its failure modes — near-miss collisions, staleness, and personalised answers served to the wrong person.
+Application-level: return a stored response for a semantically **similar** query without touching the model. How it differs from prefix caching. Its failure modes — near-miss collisions, staleness, and personalised answers served to the wrong person.
 
 **8. Model routing and tiering**
 Cheap default with escalation to a frontier model. Routing by classifier, heuristic, task type, or confidence. Measuring the quality delta per tier so the saving is defensible. The usual single biggest cost lever.
@@ -85,19 +85,19 @@ Sequencing the levers by return per unit effort. Which are quality-neutral (cach
 
 | Topic | Goes to |
 |---|---|
-| Cost attribution *plumbing* — spans, token capture | Block 2 |
+| Cost attribution **plumbing** — spans, token capture | Block 2 |
 | Denial-of-wallet as a security control | Block 4 |
 | Compounding-error and step-count economics of agents | Block 6 |
 | Retrieval-side cost — embedding, index, rerank | Blocks 7-8 |
 
 ## Xarvis mapping
 
-*Filled after learning.* **applicable** / **theory-only** / **parked**.
+**Filled after learning.** **applicable** / **theory-only** / **parked**.
 
 Going in — this block has real money attached and one obvious win:
 
 - **Applicable and high-value:** prefix caching (6). Xarvis rebuilds a large system prompt every turn — persona + shared system content + time context — and caches none of it. That is textbook. Also output length control (10), token budgets (14), TTFT/TPOT measurement (3), per-request P&L (5).
-- **Costed proposal, not shipped:** routing (8) — Xarvis is single-model Gemini Flash, so this becomes "here's the frontier I measured and what I'd have chosen."
+- **Costed proposal, not shipped:** routing (8) — Xarvis is single-model Gemini Flash, so this becomes **here's the frontier I measured and what I'd have chosen.**
 - **Theory-only:** serving internals (12), self-host economics (13) — it's an API consumer.
 - **Parked:** semantic caching (7) makes far more sense over the retrieval product.
 

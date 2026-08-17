@@ -1,14 +1,12 @@
-Time to move from theory to a running application.
-
----
-
 ## Setting up the project
 
 ### Virtual environment
 
-Python needs to already be installed. Any recent version is fine.
+A virtual environment contains everything a project installs in a **folder scoped to just that project**, so this project's packages never mix with another project's, and neither one is affected by whatever happens to be installed system-wide on the machine.
 
-The reason this happens **per project, not once per machine**: the system's global Python may already have other projects' packages installed on it — different versions, different requirements, none of which should leak into or be affected by this one. A virtual environment contains everything a project installs to a folder scoped to just that project, so it can be handed to anyone else and reproduced exactly, without carrying along unrelated baggage from whatever machine it was built on.
+That isolation is the whole point — the folder itself is **not** what gets shared. It never goes into git. What gets handed to the next person is the **recipe**: `requirements.txt`, a list of package names and versions. They create their **own** empty virtual environment on their own machine and install from that file, and end up with the same set of packages.
+
+> [!note] The folder cannot be shared even if you tried. Its activation scripts have the absolute path of **your** machine written into them (`/Users/you/project/venv/...`), and any package with compiled parts ships a binary built for **your** operating system and processor — a macOS venv is meaningless on a Linux server. Copying the folder gives the other person something broken; giving them the recipe gives them something that works.
 
 ```bash
 
@@ -37,7 +35,7 @@ source venv/bin/activate
 pip install "fastapi[standard]"
 ```
 
-The `[standard]` extra pulls in the full set: Pydantic, `uvicorn`, DNS/email validation utilities, HTTP protocol libraries, and more. Notably, **it brings `uvicorn` along with it** — no separate install step needed.
+The `[standard]` extra pulls in the full set: `uvicorn`, DNS/email validation utilities, HTTP protocol libraries, and more. Notably, **it brings `uvicorn` along with it** — no separate install step needed. Pydantic is not part of `[standard]`; it's a hard dependency of FastAPI itself, so it arrives either way, even with a bare `pip install fastapi`.
 
 Then freeze the exact versions for reproducibility:
 
@@ -64,13 +62,13 @@ The `-r` flag tells `pip` to read package names from a file rather than the comm
 
 > [!important] This isn't quite the same install as `fastapi[standard]`. Writing `fastapi[standard]` pulls in FastAPI's own extras (email validation, and others). Writing `fastapi` and `uvicorn[standard]` as two separate lines gets uvicorn's extras — `uvloop`, `httptools`, `websockets`, `watchfiles` for hot reload — but not FastAPI's own `[standard]` extras. Both are reasonable; they're just not identical installs, so it's worth knowing which one is actually sitting in `requirements.txt` rather than assuming.
 
-A typo in that file (`uvcorn` instead of `uvicorn`) produces a clear "could not find a version that satisfies the requirement" error — not a crash, just `pip` correctly reporting that no package by that misspelled name exists. Errors like this are routine during setup, not a sign something is fundamentally wrong.
+
 
 ---
 
 ## What is uvicorn, and why is it needed at all?
 
-FastAPI code by itself is just Python. Something has to actually run it as a web server, listening on a port, accepting connections. That something is **uvicorn**.
+FastAPI code by itself is just Python. Something has to actually **run it as a web server**, listening on a port, accepting connections. That something is **uvicorn**.
 
 > [!important] Uvicorn is an **ASGI web server implementation for Python**. Its job is to take your FastAPI application and make it live as an actual web server — this is the concrete piece of software behind the ASGI concept discussed earlier: the thing that lets one worker juggle many in-flight requests.
 
@@ -100,7 +98,7 @@ A few things worth naming precisely:
 - **`app = FastAPI()`** creates the **application object** — the thing the rest of your code attaches routes to.
 - **`@app.get("/")`** is a decorator. It registers the function directly below it as the handler for GET requests to the root path `/`. `get` maps to retrieving data; there is a matching `post`, `put`, `patch`, `delete` for the other request types covered earlier.
 - **The function name is arbitrary.** `read_root` is just a label; calling it anything else changes nothing about behavior.
-- **A plain Python dictionary comes back as JSON automatically.** No manual serialization step — return the dict, and FastAPI converts it to JSON on its own.
+- **A plain Python dictionary comes back as JSON automatically.** No manual serialization step — **return the dict, and FastAPI converts it to JSON on its own**.
 
 ### Running it
 
@@ -116,7 +114,7 @@ This starts the server at `localhost:8000`. Visiting `/` in a browser shows the 
 
 Every request — from a browser, a request client, anything — shows up as a line in the terminal uvicorn is running in: method, path, response status, roughly as it happens. This includes requests that **aren't** the app's own routes — a browser automatically requesting `/favicon.ico`, for instance, which the app never defined and which just comes back as a 404.
 
-This log is the plainest possible window into "is my server actually being hit, and by what" — worth glancing at any time a request doesn't seem to be landing where expected, before assuming the code itself is wrong.
+This log is the plainest possible window into **is my server actually being hit, and by what** — worth glancing at any time a request doesn't seem to be landing where expected, before assuming the code itself is wrong.
 
 ### Common flags
 
@@ -140,26 +138,24 @@ if __name__ == "__main__":
 
 This is the standard `if __name__ == "__main__":` guard, doing the exact same thing the terminal command did — just triggered by running the file with `python main.py` instead.
 
-### Why `uvicorn.run(...)` takes a *string* here, not the `app` object
+### Why `uvicorn.run(...)` takes a string here, not the `app` object
 
-`uvicorn.run("main:app", ...)` looks like it should be simpler as `uvicorn.run(app, ...)` — the object is right there, already built, why hand over a string that just points back at it? The reason is `reload=True`.
+`uvicorn.run("main:app", ...)` looks like it should be simpler as `uvicorn.run(app, ...)` — the object is right there, already built, **why hand over a string that just points back at it**? The reason is `reload=True`.
 
 Think of it like ordering food versus cooking it yourself:
 
 - **The `app` object** is a finished, cooked meal — it already exists, fully assembled, sitting in this process's memory.
 - **The string `"main:app"`** is a recipe — instructions for building that same meal again, from scratch, anywhere.
 
-`--reload` doesn't patch a running app in place. When a file changes, uvicorn throws away the current process entirely and starts a **brand new one** — a fresh Python interpreter with empty memory, remembering nothing from before.
+`--reload` **doesn't patch a running app in place**. When a file changes, **uvicorn throws away the current process entirely** **and starts a brand new one** — a fresh Python interpreter with empty memory, remembering nothing from before.
 
 > [!important] A finished meal can't be handed across to a different kitchen. Neither can a live Python object be handed to a different process — separate processes don't share memory (the same fact behind why WSGI workers need separate copies of the app). So if `uvicorn.run(app, ...)` were used, the moment reload needs to spin up a new process, there is nothing to give it — the object only exists in the process that's about to be thrown away.
 >
-> The **recipe**, on the other hand, works anywhere. Every new process — including the very first one — just follows it: `import main`, grab `app` off it, done. That's why the string form is required the instant reload (or `--workers`, for the same reason: multiple *simultaneous* processes) is involved. Passing the object directly only works for a single process that's never going to need to restart itself.
+> The **recipe**, on the other hand, works anywhere. Every new process — including the very first one — just follows it: `import main`, grab `app` off it, done. That's why the string form is required the instant reload (or `--workers`, for the same reason: multiple **simultaneous** processes) is involved. Passing the object directly only works for a single process that's never going to need to restart itself.
 
 ---
 
 ## A more deliberate second file
-
-To keep the course structured, later examples get numbered filenames — e.g. `01-fastapi-foundation.py` — rather than always `main.py`. Purely a convention for organizing many small examples; nothing FastAPI-specific about the naming.
 
 ```python
 from fastapi import FastAPI, Request
@@ -218,7 +214,7 @@ def about():
     }
 ```
 
-The docstring convention: a short line naming the endpoint, then what it does after a dash. Not mandatory, but it becomes part of the generated documentation, so it earns its keep. `ap-south-1` here is an AWS region name, used as a stand-in for "wherever this service happens to be deployed."
+The docstring convention: a short line naming the endpoint, then what it does after a dash. Not mandatory, but **it becomes part of the generated documentation**, so it earns its keep. `ap-south-1` here is an AWS region name, used as a stand-in for **wherever this service happens to be deployed.**
 
 Run it:
 

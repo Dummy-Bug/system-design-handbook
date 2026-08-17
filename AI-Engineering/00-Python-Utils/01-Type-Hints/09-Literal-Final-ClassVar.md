@@ -53,7 +53,7 @@ st1.py:10: error: Argument 2 to "set_status" has incompatible type "Literal['ban
 
 Both caught, and the message spells out the legal set for whoever has to fix it.
 
-`Literal[...]` restricts a type to **exact values** — not "a string", but "one of these three strings". It works for numbers and booleans too: `Literal[0, 1]`, `Literal[True]`.
+`Literal[...]` restricts a type to **exact values** — not **a string**, but **one of these three strings**. It works for numbers and booleans too: `Literal[0, 1]`, `Literal[True]`.
 
 ## The other answer: `Enum`
 
@@ -150,7 +150,7 @@ Three values at line 7, two at line 10, one at line 13. This is the narrowing fr
 
 That's `Never` — the type with no values, from `08-Any-Object-Never`. There it came from a function that always raised; here it comes from narrowing having eliminated everything.
 
-> [!info] It's also why `-> str` doesn't produce a *missing return statement* error, even though the function visibly ends without returning. The end is unreachable, so no path falls off it.
+> [!info] It's also why `-> str` doesn't produce a **missing return statement** error, even though the function visibly ends without returning. The end is unreachable, so no path falls off it.
 
 ## `assert_never` — making exhaustiveness checkable
 
@@ -171,7 +171,7 @@ signature: (arg: Never, /) -> Never
 
 So `assert_never(s)` type-checks only if the checker believes `s` has no possible values at that point. Every case handled → `s` is `Never` → the call is valid. One case missed → `s` still holds that value → passing it to a `Never` parameter is an error.
 
-It is a way of writing *"execution cannot reach this line"* in a form that gets verified.
+It is a way of writing **execution cannot reach this line** in a form that gets verified.
 
 ```python
  1  from typing import Literal, assert_never
@@ -206,7 +206,7 @@ $ mypy exh2.py
 exh2.py:13: error: Argument 1 to "assert_never" has incompatible type "Literal['failed']"; expected "Never"  [arg-type]
 ```
 
-**It names the case you forgot.** Not "something is missing" — `Literal['failed']`, at line 13, in every function that switches on `Status`. Widen the type in one place and every unhandled switch reports itself.
+**It names the case you forgot.** Not **something is missing** — `Literal['failed']`, at line 13, in every function that switches on `Status`. Widen the type in one place and every unhandled switch reports itself.
 
 ### At runtime it fails loudly
 
@@ -249,7 +249,7 @@ Success: no issues found in 1 source file
 
 Same missing state, and **nothing at all**. `describe("failed")` runs, matches no branch, returns `None`, prints nothing. No error at check time, no error at runtime — the bug is a blank field in a log six weeks later.
 
-> [!important] `assert_never` turns *"did I handle every case?"* from something you remember to check into something both the checker and the runtime enforce. It works because `Never` has no values: reaching a line where the variable must be `Never` is only possible if every case really was eliminated.
+> [!important] `assert_never` turns **did I handle every case?** from something you remember to check into something both the checker and the runtime enforce. It works because `Never` has no values: reaching a line where the variable must be `Never` is only possible if every case really was eliminated.
 >
 > Any place a role, a status, or a result kind is switched on, this is what makes adding a fourth kind break the build instead of producing a silent no-op.
 
@@ -328,7 +328,7 @@ $ python3 fin1.py
 
 Blank again. **The reassignment still happened** — the loop still ran zero times, exactly as before.
 
-> [!warning] If you know `final` from Java, adjust one thing: there the compiler enforces it and the class genuinely cannot be built. `Final` here is a claim a checker verifies and the interpreter never looks at. It means *"nobody should reassign this, and mypy will tell you if they try"* — not *"this cannot be reassigned."*
+> [!warning] If you know `final` from Java, adjust one thing: there the compiler enforces it and the class genuinely cannot be built. `Final` here is a claim a checker verifies and the interpreter never looks at. It means **nobody should reassign this, and mypy will tell you if they try** — not **this cannot be reassigned.**
 >
 > Same as every other annotation in this folder, and worth re-noticing precisely because `final` is a keyword you already trust in another language.
 
@@ -379,7 +379,7 @@ Nothing in the code says which you meant.
 
 ### Marking the wrong one
 
-`ClassVar` might look like it means *"this line is in the class body"* — which would make both lines 2 and 3 qualify. Try it:
+`ClassVar` might look like it means **this line is in the class body** — which would make both lines 2 and 3 qualify. Try it:
 
 ```python
  1  from typing import ClassVar
@@ -401,8 +401,8 @@ cv1.py:9: error: Cannot assign to class variable "name" via instance  [misc]
 
 Line 9 is now an error — and line 9 is `self.name = name`, the line the constructor needs. Marking `name` as `ClassVar` contradicts what the class does.
 
-> [!important] `ClassVar` does not mean "declared in the class body" — every line there is. It means 
-> **"this belongs to the class, and no instance ever gets its own."**
+> [!important] `ClassVar` does not mean **declared in the class body** — every line there is. It means 
+> **this belongs to the class, and no instance ever gets its own.**
 
 `total_created` qualifies. `name` does not: line 9 gives each instance its own, and the class-body value is just a default for anyone who skips it.
 
@@ -439,7 +439,7 @@ $ mypy cv3.py
 cv3.py:18: error: Cannot assign to class variable "total_created" via instance  [misc]
 ```
 
-**Only line 18.** Line 15 is silent — assigning *through the class* is exactly what a class variable is for. Line 18 goes through `a`, an instance.
+**Only line 18.** Line 15 is silent — assigning **through the class** is exactly what a class variable is for. Line 18 goes through `a`, an instance.
 
 The runtime shows why they are not interchangeable:
 

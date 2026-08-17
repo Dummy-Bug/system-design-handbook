@@ -4,7 +4,7 @@
 
 17 concepts. **Generic** — Python's object model, not any framework's use of it.
 
-> The temptation here is to skip straight to "the bits Pydantic needs." Don't. The descriptor protocol and `__init_subclass__` are what make `BaseModel` possible at all, and "how does Pydantic actually work?" is a real interview question with a real answer.
+> The temptation here is to skip straight to **the bits Pydantic needs.** Don't. The descriptor protocol and `__init_subclass__` are what make `BaseModel` possible at all, and **how does Pydantic actually work?** is a real interview question with a real answer.
 
 **Why this sits second:** `class User(BaseModel)` is inheritance. `@field_validator` **requires** `@classmethod` and the Pydantic notes had to state that as a rule without being able to explain it. `@computed_field` stacks on `@property`. Every one of those is unexplained machinery until this folder exists.
 
@@ -38,7 +38,7 @@ What `super()` resolves to and why bare `super()` works in 3.x.
 C3 linearisation, `__mro__`, and cooperative `super()` calls. Mixins as the sane use of multiple inheritance.
 
 **8. Composition vs inheritance**
-When "has-a" beats "is-a". The nested-models pattern from the Pydantic notes is composition — worth naming as such.
+When **has-a** beats **is-a**. The nested-models pattern from the Pydantic notes is composition — worth naming as such.
 
 **9. Abstract base classes**
 `abc.ABC`, `@abstractmethod`, and enforcing an interface at instantiation time. Then the comparison that matters: **ABC (nominal — you must inherit) vs `Protocol` (structural — you must merely match)**, closing the loop with folder 01.
@@ -52,7 +52,7 @@ Which one `print()` uses, which one the REPL uses, and why every class worth deb
 `__eq__`, `__hash__`, `__len__`, `__getitem__`, `__contains__`, `__call__`. The `__eq__`/`__hash__` contract and why defining one without the other breaks dicts and sets.
 
 **12. `dataclasses`**
-`@dataclass`, `field(default_factory=...)`, `frozen=`, `slots=`, `kw_only=`. **The direct comparison to hold onto:** a dataclass gives you the same clean declarative syntax as a Pydantic model and does *no runtime validation whatsoever*. That contrast is the cleanest one-sentence answer to "why Pydantic instead of a dataclass?"
+`@dataclass`, `field(default_factory=...)`, `frozen=`, `slots=`, `kw_only=`. **The direct comparison to hold onto:** a dataclass gives you the same clean declarative syntax as a Pydantic model and does **no runtime validation whatsoever**. That contrast is the cleanest one-sentence answer to **why Pydantic instead of a dataclass?**
 
 **13. `Enum`**
 `Enum`, `StrEnum`, `IntEnum`, `auto()`. The natural home for a closed set of states — and the runtime counterpart to `Literal` from folder 01.
@@ -63,13 +63,13 @@ Lightweight immutable records, and where they still beat both dataclasses and mo
 ## D · The machinery underneath
 
 **15. The descriptor protocol**
-`__get__`, `__set__`, `__set_name__`. **`@property`, `@classmethod`, and `@staticmethod` are all descriptors** — this is the layer where "how does that decorator actually change attribute access?" gets answered.
+`__get__`, `__set__`, `__set_name__`. **`@property`, `@classmethod`, and `@staticmethod` are all descriptors** — this is the layer where **how does that decorator actually change attribute access?** gets answered.
 
 **16. `__slots__`**
 Trading dynamic attributes for memory and speed. Why it matters when you're holding a million small objects in a pipeline.
 
 **17. `__init_subclass__` and a look at metaclasses**
-How a base class can run code every time it's subclassed — which is, in essence, how `BaseModel` collects annotations and builds a validator the moment you define a model. Enough to answer *"how does Pydantic actually work?"* without pretending to be a metaclass expert.
+How a base class can run code every time it's subclassed — which is, in essence, how `BaseModel` collects annotations and builds a validator the moment you define a model. Enough to answer **how does Pydantic actually work?** without pretending to be a metaclass expert.
 
 ---
 
@@ -88,7 +88,7 @@ How a base class can run code every time it's subclassed — which is, in essenc
 
 ## Interview hooks
 
-Two questions this folder is the answer to: *"why does `field_validator` need `@classmethod`?"* and *"what does Pydantic give you that a dataclass doesn't?"* Both are cheap to ask and quickly separate use-it-from-a-tutorial from understand-it.
+Two questions this folder is the answer to: **why does `field_validator` need `@classmethod`?** and **what does Pydantic give you that a dataclass doesn't?** Both are cheap to ask and quickly separate use-it-from-a-tutorial from understand-it.
 
 ## Sources to verify against
 

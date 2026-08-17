@@ -4,9 +4,9 @@ Everything so far has been theory: what embeddings are, how the space is shaped,
 
 ## Two kinds of embedding model — proprietary vs open-source
 
-The first kind is a **proprietary** model, also called **closed-source**. The defining property is blunt: you *cannot* download it and run it on your own machine. The company that built it — OpenAI, for instance — keeps the architecture and the trained weights private. They are not published for anyone to grab. Instead, the model runs on **their** servers, and you reach it through an **API**: you send your text over the network, their server embeds it, and you get the vector back. Because it's their compute doing the work, you **pay** for it — typically per token or per call, on a subscription.
+The first kind is a **proprietary** model, also called **closed-source**. The defining property is blunt: you **cannot** download it and run it on your own machine. The company that built it — OpenAI, for instance — keeps the architecture and the trained weights private. They are not published for anyone to grab. Instead, the model runs on **their** servers, and you reach it through an **API**: you send your text over the network, their server embeds it, and you get the vector back. Because it's their compute doing the work, you **pay** for it — typically per token or per call, on a subscription.
 
-The second kind is an **open-source** model. Here the weights *are* published — you can download the model and run it on your own hardware, on your own server, with no per-call fee and no text leaving your infrastructure. That's the subject of the next note (using Ollama). For now, hold onto the contrast:
+The second kind is an **open-source** model. Here the weights **are** published — you can download the model and run it on your own hardware, on your own server, with no per-call fee and no text leaving your infrastructure. That's the subject of the next note (using Ollama). For now, hold onto the contrast:
 
 ```
 Proprietary (closed-source)          Open-source
@@ -18,7 +18,7 @@ pay per use (subscription)           free to run (you own the compute)
 e.g. OpenAI text-embedding-3         e.g. embeddinggemma via Ollama
 ```
 
-> [!info] Proprietary / closed-source embedding models live behind an API — the weights are private, the compute is the provider's, and you pay per use. Open-source models are downloadable and run on your own hardware for free. Neither is universally "better"; the next note lays out the full trade-off. This note shows the proprietary path with OpenAI.
+> [!info] Proprietary / closed-source embedding models live behind an API — the weights are private, the compute is the provider's, and you pay per use. Open-source models are downloadable and run on your own hardware for free. Neither is universally **better**; the next note lays out the full trade-off. This note shows the proprietary path with OpenAI.
 
 ---
 
@@ -88,7 +88,7 @@ len(embeddings_small)      # → 1536
 
 ## Embedding a whole document — `embed_documents`
 
-Retrieval has two sides. The query is one text embedded once, and that's `embed_query`. But the *knowledge base* is thousands of chunks that all need embedding — and for that there's a separate method, `embed_documents`, which takes a **list** of texts and embeds them in one batch. This is the ingestion half of RAG, and it sits right on top of the document-loader and text-splitter stages from the earlier modules.
+Retrieval has two sides. The query is one text embedded once, and that's `embed_query`. But the **knowledge base** is thousands of chunks that all need embedding — and for that there's a separate method, `embed_documents`, which takes a **list** of texts and embeds them in one batch. This is the ingestion half of RAG, and it sits right on top of the document-loader and text-splitter stages from the earlier modules.
 
 Walk the full path. Load a PDF into document objects, split it into chunks, then embed those chunks:
 
@@ -139,7 +139,7 @@ query_embeddings = embedder_large_custom.embed_query(text=query)
 len(query_embeddings)      # → 256
 ```
 
-The `-large` model is natively 3072-dimensional, but here it hands back a **256**-dimensional vector. This is the storage-vs-nuance trade-off from the previous note made into a one-line setting: shrink the dimensions and every vector gets cheaper to store and faster to compare, at the cost of some captured nuance. There's a lower and an upper limit to what you can request, but within that band you're free to pick the size that balances quality against cost for your corpus — exactly the "experiment to find the sweet spot" advice, now with a concrete lever to turn.
+The `-large` model is natively 3072-dimensional, but here it hands back a **256**-dimensional vector. This is the storage-vs-nuance trade-off from the previous note made into a one-line setting: shrink the dimensions and every vector gets cheaper to store and faster to compare, at the cost of some captured nuance. There's a lower and an upper limit to what you can request, but within that band you're free to pick the size that balances quality against cost for your corpus — exactly the **experiment to find the sweet spot** advice, now with a concrete lever to turn.
 
 > [!tip] `OpenAIEmbeddings(model=..., dimensions=n)` lets you truncate the output to `n` dimensions instead of the model's native size — a direct way to trade a little accuracy for smaller, cheaper, faster vectors. It's the practical control behind the whole dimensionality trade-off.
 

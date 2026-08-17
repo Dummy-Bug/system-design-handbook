@@ -1,7 +1,7 @@
 #python #decorators #functools #python-utils
 
 
-The mechanism is settled. What trips people up next is *why you'd reach for one* — so here are two decorators worth actually having, and then the bug that appears the moment you use both at once.
+The mechanism is settled. What trips people up next is **why you'd reach for one** — so here are two decorators worth actually having, and then the bug that appears the moment you use both at once.
 
 ## Logging every call
 
@@ -63,7 +63,7 @@ def my_timer(orig_func):
     return wrapper
 ```
 
-The one detail worth pausing on is why the result is stored instead of returned immediately. The wrapper still has work to do *after* the original function finishes — stop the clock, print the duration — so it holds the value in `result` and returns it at the very end. Return early and the timing code never runs.
+The one detail worth pausing on is why the result is stored instead of returned immediately. The wrapper still has work to do **after** the original function finishes — stop the clock, print the duration — so it holds the value in `result` and returns it at the very end. Return early and the timing code never runs.
 
 ```python
 @my_timer
@@ -79,7 +79,7 @@ display_info ran with (Tom, 22)
 display_info ran in: 1.00 sec
 ```
 
-> [!info] `time.perf_counter()` rather than `time.time()` is deliberate. `time.time()` reports wall-clock time and can jump backwards if the system clock is adjusted mid-measurement, producing a negative duration. `perf_counter` only ever moves forward and has higher resolution — it exists specifically for measuring elapsed time. `time.time()` answers "what time is it"; `perf_counter` answers "how long did that take".
+> [!info] `time.perf_counter()` rather than `time.time()` is deliberate. `time.time()` reports wall-clock time and can jump backwards if the system clock is adjusted mid-measurement, producing a negative duration. `perf_counter` only ever moves forward and has higher resolution — it exists specifically for measuring elapsed time. `time.time()` answers **what time is it**; `perf_counter` answers **how long did that take**.
 
 ## Stacking them — and where it goes wrong
 
@@ -132,7 +132,7 @@ LOG FILES: ['display_info.log']
   2026-08-05 14:25:50,398 Ran with args: ('Tom', 22), kwargs: {}
 ```
 
-So the log file is named correctly now, but the *console* has gone wrong instead — the timer reports on a function called `wrapper`. Compare the two runs: whichever decorator ends up on top is the one that reports the wrong name. Something is losing the original function's identity, and swapping the order only moves which of the two notices.
+So the log file is named correctly now, but the **console** has gone wrong instead — the timer reports on a function called `wrapper`. Compare the two runs: whichever decorator ends up on top is the one that reports the wrong name. Something is losing the original function's identity, and swapping the order only moves which of the two notices.
 
 ## Unrolling the stack
 
@@ -152,7 +152,7 @@ Read that inside-out and the bug becomes obvious:
 
 1. `my_timer(display_info)` runs first. It receives the real `display_info`, and returns its own inner function — which is named **`wrapper`**.
 
-2. `my_logger(...)` runs second, and what it receives is *that returned object*. Its `orig_func` parameter is not `display_info` at all; it is the timer's `wrapper`.
+2. `my_logger(...)` runs second, and what it receives is **that returned object**. Its `orig_func` parameter is not `display_info` at all; it is the timer's `wrapper`.
 
 3. So `orig_func.__name__` inside `my_logger` evaluates to `'wrapper'`, and the log filename becomes `wrapper.log`.
 
@@ -207,9 +207,9 @@ flowchart TD
     E --> F["timer_wrapper stops the clock<br/>prints 'display_info ran in ...'"]
 ```
 
-> [!important] **Nothing failed here — that's the point.** The `logger.info(...)` line executed exactly as written. The timer measured correctly and even printed the right name, because *its* `orig_func` is the genuine function. The only thing wrong is which **file** the log line landed in, and that was decided much earlier: `my_logger` computed the filename from `orig_func.__name__` at **decoration time**, when `orig_func` was `timer_wrapper`. A name frozen at decoration cannot correct itself on later calls, so every future call keeps writing to `wrapper.log`.
+> [!important] **Nothing failed here — that's the point.** The `logger.info(...)` line executed exactly as written. The timer measured correctly and even printed the right name, because **its** `orig_func` is the genuine function. The only thing wrong is which **file** the log line landed in, and that was decided much earlier: `my_logger` computed the filename from `orig_func.__name__` at **decoration time**, when `orig_func` was `timer_wrapper`. A name frozen at decoration cannot correct itself on later calls, so every future call keeps writing to `wrapper.log`.
 
-> [!important] Stacking applies bottom-up: the decorator closest to `def` wraps first, and each one above it wraps the *result* of the one below. Anything a decorator learns from `__name__` is therefore about the previous wrapper, not about your function.
+> [!important] Stacking applies bottom-up: the decorator closest to `def` wraps first, and each one above it wraps the **result** of the one below. Anything a decorator learns from `__name__` is therefore about the previous wrapper, not about your function.
 
 ## The fix: `functools.wraps`
 

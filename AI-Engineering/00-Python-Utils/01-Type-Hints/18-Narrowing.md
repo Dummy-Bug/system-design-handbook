@@ -32,7 +32,7 @@ The message names the offending member — `Item "ToolMessage" of "HumanMessage 
 
 > [!info] A `Protocol` does not fix this. It would let `render` accept anything with a `.text`, but then `ToolMessage` fails to qualify at all — it has `tool_name` and `result`, and describing shapes cannot give it a `.text` it doesn't have.
 >
-> The problem isn't *what do these share*. It's that they genuinely differ and each needs its own code.
+> The problem isn't **what do these share**. It's that they genuinely differ and each needs its own code.
 
 ## `isinstance` narrows both branches
 
@@ -115,7 +115,7 @@ nr2.py:20: error: Item "ToolMessage" of "HumanMessage | ToolMessage" has no attr
 
 The difference is **what the checker can see on line 17**.
 
-With the check written inline, it sees the literal form `isinstance(msg, ToolMessage)` and knows what that implies about `msg`. With the check in a function, line 17 is a call, and to interpret it mypy looks at what `is_tool` is *declared* to return: `bool`.
+With the check written inline, it sees the literal form `isinstance(msg, ToolMessage)` and knows what that implies about `msg`. With the check in a function, line 17 is a call, and to interpret it mypy looks at what `is_tool` is **declared** to return: `bool`.
 
 And a `bool` says only `True` or `False`. It doesn't say **which** check produced it or **which variable** it concerned. `is_tool(msg)` and `len(x) > 0` have the same type; there is nothing to tell them apart.
 
@@ -161,7 +161,7 @@ nr4.py:21: error: Item "ToolMessage" of "HumanMessage | ToolMessage" has no attr
 
 **And if it did read bodies, editing one would break its callers invisibly.** Narrowing at a call site would then depend on the current implementation, so a change inside `is_tool` would silently alter what type-checks in every file that calls it, including files in other packages.
 
-> [!important] **A call site is checked from the signature alone.** So anything callers need to know has to be *in* the signature.
+> [!important] **A call site is checked from the signature alone.** So anything callers need to know has to be **in** the signature.
 >
 > Same lesson as `13-TypeVar-And-Generic-Functions`, where `list[Any] -> Any` was true and useless while `list[T] -> T` put the relationship where callers could use it.
 
@@ -255,7 +255,7 @@ nr5.py:24: error: Item "ToolMessage" of "HumanMessage | ToolMessage" has no attr
 
 **Line 21 narrows; line 23 does not.** Inside the `if` it behaves exactly like `TypeIs`. The `else` side stays the full union, so line 24 fails.
 
-`TypeGuard` claims *"if this returns `True`, the argument is a `ToolMessage`"* — and says nothing about `False`. So when the check fails, the checker still considers `ToolMessage` possible: it knows the predicate said no, not that the type was excluded.
+`TypeGuard` claims **if this returns `True`, the argument is a `ToolMessage`** — and says nothing about `False`. So when the check fails, the checker still considers `ToolMessage` possible: it knows the predicate said no, not that the type was excluded.
 
 | | `TypeGuard[T]` | `TypeIs[T]` |
 |---|---|---|
@@ -290,7 +290,7 @@ nr6.py:16: note: Revealed type is "list[object]"
 
 **Line 4 is rejected**, and the reason is `15-Variance`: `list` is invariant, so `list[str]` is not a subtype of `list[object]`, however obviously every element is a string.
 
-`TypeIs` needs that subtype relationship *because* it narrows both branches. To say "on `False`, subtract `T` from the input type", the two have to be related — subtracting something that was never part of the input means nothing.
+`TypeIs` needs that subtype relationship **because** it narrows both branches. To say **on `False`, subtract `T` from the input type**, the two have to be related — subtracting something that was never part of the input means nothing.
 
 `TypeGuard` carries no such requirement, and lines 14 and 16 show it working: narrowed to `list[str]` inside, untouched `list[object]` outside. Claiming only the `True` case lets it narrow to any type at all.
 
