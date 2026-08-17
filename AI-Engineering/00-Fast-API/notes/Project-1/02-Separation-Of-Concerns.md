@@ -1,12 +1,10 @@
-The client brief ruled out a database. It didn't rule out organizing the data properly — those are two different decisions, and this video is really about the second one.
-
----
 
 ## Why the data doesn't just live in `main.py`
 
 Nothing stops the menu from being declared directly inside the same file as the routes. It would work. The reason not to do that is a general principle, not a FastAPI-specific rule:
 
-> [!important] **Separation of concerns.** Data and the logic that serves it are different responsibilities, and keeping them in different places makes each one easier to reason about on its own. This is the same underlying reason most real applications put their data behind a database rather than inline in application code — a database is one way of enforcing that separation, but it isn't the only way. Here, with no database allowed, a dedicated `data.py` file does the same job: the menu lives in exactly one place, and the routes that serve it live somewhere else entirely.
+> [!important] **Separation of concerns.** Data and the logic that serves it are different responsibilities, and keeping them in different places makes each one easier to reason about on its own. 
+> This is the same underlying reason most real applications put their data behind a database rather than inline in application code — a database is one way of enforcing that separation, but it isn't the only way. Here, with no database allowed, a dedicated `data.py` file does the same job: the menu lives in exactly one place, and the routes that serve it live somewhere else entirely.
 
 So `data.py` isn't a workaround for not having a database — it's the same discipline a database would normally provide, applied by hand because this project's constraint ruled the database out specifically.
 

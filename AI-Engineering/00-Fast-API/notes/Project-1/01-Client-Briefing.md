@@ -42,7 +42,7 @@ The **in-memory menu data** piece is intentionally unglamorous: a plain Python f
 | `GET /menu?category=chai` | Only items in the given category |
 | `GET /menu/{id}` | A single item, looked up by its id |
 
-> [!important] The category filter is a **query parameter**, not a path segment — `/menu?category=chai`, not `/menu/category=chai`. This matters because the distinction was already drawn precisely in an earlier note: a path segment like `{id}` has to be declared in the route itself and is meant for identifying **which resource**, while a query parameter is for **optional, declaration-free** modifiers like a filter. Category filtering is exactly the query-parameter case — it's optional, it doesn't identify a specific resource, and the route works fine without it.
+> [!important] The category filter is a **query parameter**, not a path segment — `/menu?category=chai`, not `/menu/category=chai`. This matters because a path segment like `{id}` has to be declared in the route itself and is meant for identifying **which resource**, while a query parameter is for **optional, declaration-free** modifiers like a filter. Category filtering is exactly the query-parameter case — it's optional, it doesn't identify a specific resource, and the route works fine without it.
 
 So of the three routes, two are really the same route wearing different clothes: `GET /menu` with no query params returns everything, and `GET /menu?category=chai` is the same handler with a filter applied. `GET /menu/{id}` is genuinely different — a path parameter identifying one specific item.
 
