@@ -1,7 +1,6 @@
 # Why `java.lang` is the most important package
 
-> **For writing any Java program — whether simple or complex — the most commonly required classes and
-> interfaces are grouped into a separate package, which is `java.lang`.**
+> **For writing any Java program — whether simple or complex — the most commonly required classes and interfaces are grouped into a separate package, which is `java.lang`.**
 
 He rates it above every other topic in the course, and the argument is a test you can run in your head:
 
@@ -31,23 +30,19 @@ class Test {
 | `System.out.println` | **`System`** — in `java.lang` |
 | `"hello world"` | a **`String`** object — in `java.lang` |
 
-> *"Without `java.lang` you can't use the `class` keyword, you can't write a `main` method, you can't
-> write an SOP statement. Without these things, is it possible for a Java program to exist? **Never.**"*
+> Without `java.lang` you can't use the `class` keyword, you can't write a `main` method, you can't write an SOP statement. Without these things, is it possible for a Java program to exist? **Never.**
 
 ## And that is why it needs no import
 
-> **We are not required to import `java.lang` explicitly, because all classes and interfaces present in
-> `java.lang` are by default available to every Java program.**
+> **We are not required to import `java.lang` explicitly, because all classes and interfaces present in `java.lang` are by default available to every Java program.**
 
-The reverse question is the one that gets asked: *why does `java.util` need an import but `java.lang`
-not?* Because without `java.util` a program can still exist — without `java.lang` it cannot.
+The reverse question is the one that gets asked: why does `java.util` need an import but `java.lang` not? Because without `java.util` a program can still exist — without `java.lang` it cannot.
 
 ---
 
 # The `Object` class
 
-> **Every class in Java is a child class of `Object`, either directly or indirectly. Hence `Object` is
-> considered the root of all Java classes.**
+> **Every class in Java is a child class of `Object`, either directly or indirectly. Hence `Object` is considered the root of all Java classes.**
 
 Measured on JDK 25:
 
@@ -62,21 +57,15 @@ Object's parent: null
 
 ## Why `Object` and not, say, `String`
 
-> **For any Java class — `Student`, `Customer`, `Account`, `String`, `StringBuffer` — the most commonly
-> required methods are defined in a separate class, which is `Object`.**
+> **For any Java class — `Student`, `Customer`, `Account`, `String`, `StringBuffer` — the most commonly required methods are defined in a separate class, which is `Object`.**
 
-`hashCode()` is needed by any object. `equals()` is needed by any object. `toString()` is needed by any
-object.
+`hashCode()` is needed by any object. `equals()` is needed by any object. `toString()` is needed by any object.
 
-**And how do you make those available to every class?** Make that class the **parent**, and inheritance
-does the rest.
+**And how do you make those available to every class?** Make that class the **parent**, and inheritance does the rest.
 
-> [!important] **Contrast it with `String`, which is the question he actually asks.** *"Why isn't
-> `String` the root?"*
+> [!important] **Contrast it with `String`, which is the question he actually asks.** Why isn't `String` the root?
 >
-> **`String` contains methods that apply only to `String` objects.** You cannot apply `String`'s methods
-> to a `Student` or a `Customer`. **`Object` contains methods applicable to any Java object** — which is
-> the only kind of class that can sit at the root of everything.
+> **`String` contains methods that apply only to `String` objects.** You cannot apply `String`'s methods to a `Student` or a `Customer`. **`Object` contains methods applicable to any Java object** — which is the only kind of class that can sit at the root of everything.
 
 ## Direct vs indirect child — and the interview trap
 
@@ -93,11 +82,9 @@ C's parent: class B
 B's parent: class java.lang.Object
 ```
 
-> **If our class does not extend any other class, then only is it the DIRECT child of `Object`. If our
-> class extends some other class, then our class is an INDIRECT child of `Object`.**
+> **If our class does not extend any other class, then only is it the DIRECT child of `Object`. If our class extends some other class, then our class is an INDIRECT child of `Object`.**
 
-> [!question]- **Deep dive — the confusion an interviewer may try to create.** Worth rehearsing, because
-> the setup sounds convincing.
+> [!question]- **Deep dive — the confusion an interviewer may try to create.** Worth rehearsing, because the setup sounds convincing.
 >
 > The interviewer writes:
 >
@@ -105,8 +92,7 @@ B's parent: class java.lang.Object
 > class A extends B { }
 > ```
 >
-> Then argues: *"`A` is a child of `B`. But every class in Java is also a child of `Object`. So `A` has
-> **two** parents — therefore Java **does** support multiple inheritance with classes."*
+> Then argues: `A` is a child of `B`. But every class in Java is also a child of `Object`. So `A` has **two** parents — therefore Java **does** support multiple inheritance with classes.
 >
 > **The first thing to do is reject the premise.** That is not what is happening:
 >
@@ -114,16 +100,14 @@ B's parent: class java.lang.Object
 > A  →  B  →  Object
 > ```
 >
-> **`A` is a child of `B`, and `B` is a child of `Object`.** `A` has exactly **one** direct parent. This
-> is **multilevel inheritance**, not multiple inheritance.
+> **`A` is a child of `B`, and `B` is a child of `Object`.** `A` has exactly **one** direct parent. This is **multilevel inheritance**, not multiple inheritance.
 >
 > | | |
 > |---|---|
 > | **multiple** inheritance | one class, **two direct parents** — ❌ not supported for classes |
 > | **multilevel** inheritance | a **chain** of single parents — ✅ what is happening here |
 >
-> > **Java does not provide support for multiple inheritance with respect to classes — either directly
-> > or indirectly.**
+> > **Java does not provide support for multiple inheritance with respect to classes — either directly or indirectly.**
 
 ---
 
@@ -145,9 +129,7 @@ B's parent: class java.lang.Object
 | 10 | `public final native void notify()` |
 | 11 | `public final native void notifyAll()` |
 
-> [!info] **`wait`, `notify` and `notifyAll` belong to `Object`, not to `Thread`.** *"Even though we use
-> these two in multithreading, these methods are related to the `Object` class."* That is a standard
-> interview question in itself — they are on `Object` because **any** object can act as a lock.
+> [!info] **`wait`, `notify` and `notifyAll` belong to `Object`, not to `Thread`.** Even though we use these two in multithreading, these methods are related to the `Object` class. That is a standard interview question in itself — they are on `Object` because **any** object can act as a lock.
 
 ## Counting them yourself
 
@@ -167,9 +149,7 @@ class Count {
 }
 ```
 
-> [!info] **Note the import.** `Method` lives in **`java.lang.reflect`** — a **sub-package** — so
-> `java.lang` being automatic does not help. You must write `import java.lang.reflect.*;` explicitly.
-> (The sub-package rule from `DECLARATIONS-AND-ACCESS-MODIFIERS/02`, and this is his own example of it.)
+> [!info] **Note the import.** `Method` lives in **`java.lang.reflect`** — a **sub-package** — so `java.lang` being automatic does not help. You must write `import java.lang.reflect.*;` explicitly. (The sub-package rule from `DECLARATIONS-AND-ACCESS-MODIFIERS/02`, and this is his own example of it.)
 
 Measured on JDK 25:
 
@@ -191,28 +171,20 @@ the number of methods: 12
 
 **Twelve, not eleven** — and he predicts exactly this:
 
-> *"In the interview room, if the interviewer asks, you have to tell 11. But why don't we give
-> importance to the 12th method? Because it is internally required for the `Object` class itself, not
-> for the child classes."*
+> In the interview room, if the interviewer asks, you have to tell 11. But why don't we give importance to the 12th method? Because it is internally required for the `Object` class itself, not for the child classes.
 
-> [!important] **The 12th method is `wait0`** — a private native helper that the three public `wait`
-> overloads delegate to. Measured with `javap -p`:
+> [!important] **The 12th method is `wait0`** — a private native helper that the three public `wait` overloads delegate to. Measured with `javap -p`:
 > ```
 > public final void wait(long) throws java.lang.InterruptedException;
 > private final native void wait0(long) throws java.lang.InterruptedException;
 > ```
-> It is internal plumbing, which is exactly why nobody counts it. **Say 11.** (Older JDKs had a
-> different private helper here, `registerNatives`, so do not be surprised to see that name in older
-> material — the count and the reasoning are the same either way.)
+> It is internal plumbing, which is exactly why nobody counts it. **Say 11.** (Older JDKs had a different private helper here, `registerNatives`, so do not be surprised to see that name in older material — the count and the reasoning are the same either way.)
 
-> [!warning] **`finalize()` is one of the 11, and it must never be used in new code.** It is deprecated
-> **for removal** — compiling any class that overrides it produces:
+> [!warning] **`finalize()` is one of the 11, and it must never be used in new code.** It is deprecated **for removal** — compiling any class that overrides it produces:
 > ```
 > warning: [removal] finalize() in Object has been deprecated and marked for removal
 > ```
-> Finalizers are unpredictable, can resurrect objects, and delay collection. **`try-with-resources`
-> and `java.lang.ref.Cleaner` replace it.** It is still examinable, and the garbage collection chapter
-> works through why it failed.
+> Finalizers are unpredictable, can resurrect objects, and delay collection. **`try-with-resources` and `java.lang.ref.Cleaner` replace it.** It is still examinable, and the garbage collection chapter works through why it failed.
 
 ---
 

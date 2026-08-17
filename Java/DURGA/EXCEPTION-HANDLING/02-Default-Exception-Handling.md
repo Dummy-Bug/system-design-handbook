@@ -9,7 +9,7 @@ Before anything can go wrong, you need the model of what happens when everything
 > - After completing every method call, the JVM **removes the corresponding entry** from the stack.
 > - After completing all method calls, the JVM **destroys the empty stack** and terminates the program normally.
 
-> [!info] **You have met this already, from the other side.** The JVM chapter's [[06-Stack-Memory-PC-Registers-And-Native-Method-Stacks|stack memory note]] covers the same mechanism — the same term *activation record*, one stack per thread, frames pushed and popped — and goes further into what is *inside* a frame. That note also shows what a `try` block compiles to and why an untaken `try` costs nothing at runtime, which is worth returning to once `try`/`catch` arrive in the next parts.
+> [!info] **You have met this already, from the other side.** The JVM chapter's [[06-Stack-Memory-PC-Registers-And-Native-Method-Stacks|stack memory note]] covers the same mechanism — the same term **activation record**, one stack per thread, frames pushed and popped — and goes further into what is **inside** a frame. That note also shows what a `try` block compiles to and why an untaken `try` costs nothing at runtime, which is worth returning to once `try`/`catch` arrive in the next parts.
 
 ## The program
 
@@ -60,7 +60,7 @@ Read left to right and then back:
 7. Control returns to `main`. Anything after the call to `doStuff`? No — so `main` completes normally and its entry is removed.
 8. The stack is now **empty**, and the JVM destroys it immediately before the thread terminates.
 
-> [!important] **Every method here "completed normally", and that phrase is about to matter.** This is the well-behaved case: each frame pops because its method finished, the stack empties in order, and the program terminates normally.
+> [!important] **Every method here completed normally, and that phrase is about to matter.** This is the well-behaved case: each frame pops because its method finished, the stack empties in order, and the program terminates normally.
 >
 
 
@@ -112,9 +112,9 @@ Nobody in this program handles anything. So what happens?
 
 **Step 2 — it hands it to the JVM.** the method hands the object to the JVM. 
 
-**Step 3 — the JVM comes to where it happened.** It arrives at `doMoreStuff` and asks: *an exception was raised in your area — do you have any handling code?* `doMoreStuff` says no. So the JVM **terminates it abnormally**, without executing any remaining lines — a thousand lines could follow and none of them run — and removes its frame.
+**Step 3 — the JVM comes to where it happened.** It arrives at `doMoreStuff` and asks: an exception was raised in your area — do you have any handling code? `doMoreStuff` says no. So the JVM **terminates it abnormally**, without executing any remaining lines — a thousand lines could follow and none of them run — and removes its frame.
 
-**Step 4 — the JVM finds the caller.** `doMoreStuff` is a method; somebody called it or it would never have run. Who? `doStuff`. The JVM asks: *ten minutes ago you called `doMoreStuff`. It raised an exception and did not handle it. As the caller, that responsibility is yours. Where is the handling code?* `doStuff` has none. Terminated abnormally, frame removed.
+**Step 4 — the JVM finds the caller.** `doMoreStuff` is a method; somebody called it or it would never have run. Who? `doStuff`. The JVM asks: ten minutes ago you called `doMoreStuff`. It raised an exception and did not handle it. As the caller, that responsibility is yours. Where is the handling code? `doStuff` has none. Terminated abnormally, frame removed.
 
 **Step 5 — up to `main`.** `main` has no handling code either, Terminated abnormally, frame removed.
 
@@ -167,9 +167,9 @@ Every element of step 1 is visible in it:
 | `/ by zero` | the **description** |
 | the three `at …` lines | the **location** — the stack trace |
 
-> [!important] **The stack trace is printed deepest-frame-first, and that is not an accident.** `doMoreStuff` is on top because it is where the exception was raised; `main` is at the bottom because it is where execution began. Read the top line to find *where it broke* and read downwards to find *how you got there*.
+> [!important] **The stack trace is printed deepest-frame-first, and that is not an accident.** `doMoreStuff` is on top because it is where the exception was raised; `main` is at the bottom because it is where execution began. Read the top line to find **where it broke** and read downwards to find **how you got there**.
 
-> [!important] **This is abnormal termination, and the exit code proves it.** The process exits with **1**, not 0. Nothing after the failing line ran, in any of the three methods. That is what "terminated abnormally" means in practice — not merely that an error was printed, but that every remaining statement in every frame was skipped.
+> [!important] **This is abnormal termination, and the exit code proves it.** The process exits with **1**, not 0. Nothing after the failing line ran, in any of the three methods. That is what terminated abnormally means in practice — not merely that an error was printed, but that every remaining statement in every frame was skipped.
 
 
 # What this part has established
@@ -207,7 +207,7 @@ flowchart TB
 
 > **Error:** in most cases errors are **not caused by our program** — they are due to a **lack of system resources** — and these are **non-recoverable**.
 
-**What "recoverable" means, concretely.** Your requirement is to read data from a remote file in London. Notice first that this exception only exists *because of your code* — if you were not reading a remote file, there would be no `FileNotFoundException` to have. It is your programmatic decision that created the possibility.
+**What `recoverable` means, concretely.** Your requirement is to read data from a remote file in London. Notice first that this exception only exists **because of your code** — if you were not reading a remote file, there would be no `FileNotFoundException` to have. It is your programmatic decision that created the possibility.
 
 And when it happens, you have somewhere to go:
 
@@ -221,7 +221,7 @@ try {
 
 That is recovery — you get control back and the rest of the program runs normally.
 
-**What "non-recoverable" means.** If an `OutOfMemoryError` occurs, being a programmer **you can do nothing about it**. There is no alternative to switch to; the heap is exhausted. Raising the heap is the **system administrator's or server administrator's** job, not something your code can arrange while it is failing.
+**What non-recoverable means.** If an `OutOfMemoryError` occurs, being a programmer **you can do nothing about it**. There is no alternative to switch to; the heap is exhausted. Raising the heap is the **system administrator's or server administrator's** job, not something your code can arrange while it is failing.
 
 | | `Exception` | `Error` |
 |---|---|---|
@@ -230,7 +230,7 @@ That is recovery — you get control back and the rest of the program runs norma
 | Example | `FileNotFoundException` → use a local file | `OutOfMemoryError` → admin must raise the heap |
 | Your move | catch it, continue | nothing |
 
-> [!important] **"What is the difference between `Exception` and `Error`?" is asked directly.** Answer in the two dimensions above — *who caused it* and *whether you can recover* — and give one example of each. Do not say errors cannot be caught: syntactically you can catch an `Error`, and that is exactly why the real distinction is **recoverability**, not catchability. There is nothing useful to do in the `catch`.
+> [!important] **What is the difference between `Exception` and `Error`? is asked directly.** Answer in the two dimensions above — **who caused it** and **whether you can recover** — and give one example of each. Do not say errors cannot be caught: syntactically you can catch an `Error`, and that is exactly why the real distinction is **recoverability**, not catchability. There is nothing useful to do in the `catch`.
 
 ---
 

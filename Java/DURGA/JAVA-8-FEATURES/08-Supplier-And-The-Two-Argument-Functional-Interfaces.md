@@ -1,7 +1,6 @@
 # The decision rule, in one table
 
-Before anything new, the three from last session are restated as a single decision — and this is the
-form worth memorising, because it is how you pick one in real code.
+Before anything new, the three from last session are restated as a single decision — and this is the form worth memorising, because it is how you pick one in real code.
 
 | Requirement | Interface |
 |---|---|
@@ -9,8 +8,7 @@ form worth memorising, because it is how you pick one in real code.
 | take input → perform an **operation** → return a result **of any type** | **`Function`** |
 | take input → perform an operation → **return nothing** | **`Consumer`** |
 
-> [!info] **A function can return boolean too.** Nothing stops `Function<Integer, Boolean>`. But if what
-> you want *is* a boolean, go for `Predicate` — it exists for exactly that, and it says so in the type.
+> [!info] **A function can return boolean too.** Nothing stops `Function<Integer, Boolean>`. But if what you want **is** a boolean, go for `Predicate` — it exists for exactly that, and it says so in the type.
 
 ---
 
@@ -58,12 +56,9 @@ Spyder released but it is a bigger flop
 Spyder storing info in database
 ```
 
-**Three separate consumers**, each a different thing you might do to a movie — announce it, report its
-result, store it. `cc` is the **chained consumer**: one `accept()` call runs all three, in order.
+**Three separate consumers**, each a different thing you might do to a movie — announce it, report its result, store it. `cc` is the **chained consumer**: one `accept()` call runs all three, in order.
 
-> [!info] **Don't read too much into the `println`s.** *"Don't feel it is only a SOP statement — of
-> course I am doing the corresponding activities also."* `c3` stands for genuinely writing to a
-> database; printing is just what fits on a slide.
+> [!info] **Don't read too much into the `println`s.** Don't feel it is only a SOP statement — of course I am doing the corresponding activities also. `c3` stands for genuinely writing to a database; printing is just what fits on a slide.
 
 ## `Consumer` has `andThen` but **not** `compose`
 
@@ -80,17 +75,11 @@ error: cannot find symbol
 
 > **`Function` has both `andThen` and `compose`. `Consumer` has only `andThen`.**
 
-> [!question]- **Deep dive — why `Consumer` has no `compose`, and it is not an oversight.**
-> `compose` means *run the other one first, then feed its result into me*. A `Consumer` **returns
-> nothing**, so there is no result to feed anywhere. `c2.compose(c1)` would have to take `c1`'s output
-> — and `c1` has none.
+> [!question]- **Deep dive — why `Consumer` has no `compose`, and it is not an oversight.** `compose` means **run the other one first, then feed its result into me**. A `Consumer` **returns nothing**, so there is no result to feed anywhere. `c2.compose(c1)` would have to take `c1`'s output — and `c1` has none.
 >
-> `andThen` survives because it needs no result: it means *run me, then run the other one on the same
-> input*. That works fine for consumers, and it is exactly what the movie example does — all three
-> consumers receive the same `Movie` object.
+> `andThen` survives because it needs no result: it means **run me, then run the other one on the same input**. That works fine for consumers, and it is exactly what the movie example does — all three consumers receive the same `Movie` object.
 >
-> The same reasoning explains the whole family. Wherever a method passes a value along the chain, only
-> the result-producing interfaces can have it.
+> The same reasoning explains the whole family. Wherever a method passes a value along the chain, only the result-producing interfaces can have it.
 
 ---
 
@@ -98,8 +87,7 @@ error: cannot find symbol
 
 The fourth of the four, and the mirror image of `Consumer`.
 
-> *"Sometimes I don't want to give any input. Just supply my required objects — it won't take any
-> input. Then we should go for supplier."*
+> Sometimes I don't want to give any input. Just supply my required objects — it won't take any input. Then we should go for supplier.
 
 ```java
 interface Supplier<R> {
@@ -112,12 +100,9 @@ interface Supplier<R> {
 | `Consumer<T>` | one input | **nothing** | `accept()` |
 | `Supplier<R>` | **nothing** | one object | `get()` |
 
-> [!important] **The type parameter on `Supplier` is the RETURN type, not the input type.** This is the
-> exam question. `Supplier` never accepts any input, so there is no input type to name — the single
-> parameter can only be what it hands back.
+> [!important] **The type parameter on `Supplier` is the RETURN type, not the input type.** This is the exam question. `Supplier` never accepts any input, so there is no input type to name — the single parameter can only be what it hands back.
 
-And because `get()` takes no argument and there is only one method, **there is no question of chaining**
-for `Supplier`.
+And because `get()` takes no argument and there is only one method, **there is no question of chaining** for `Supplier`.
 
 ## Supplier 1 — the system date
 
@@ -139,8 +124,7 @@ Call `s.get()` as many times as you like — every call supplies the date again.
 
 ## Supplier 2 — a random OTP
 
-*"Can you please supply a random OTP?"* An OTP is usually **six digits**, and each digit can be
-anything from **0 to 9**.
+Can you please supply a random OTP? An OTP is usually **six digits**, and each digit can be anything from **0 to 9**.
 
 **First, the logic for one random digit** — this is worth deriving rather than memorising:
 
@@ -172,10 +156,9 @@ Measured on JDK 25:
 548215
 ```
 
-Six calls, six different values, no repeats — *"the chance of repeating is very, very low."*
+Six calls, six different values, no repeats — the chance of repeating is very, very low.
 
-> **Write the supplier once; call it any number of times.** That is the payoff of all four of these
-> interfaces.
+> **Write the supplier once; call it any number of times.** That is the payoff of all four of these interfaces.
 
 ---
 
@@ -185,8 +168,7 @@ Now the limitation that runs through everything so far.
 
 > **`Predicate`, `Function` and `Consumer` all take exactly ONE input.**
 
-That is fine for *is this number even?* But what about **the sum of two given numbers — is it even?**
-Two inputs, one check. None of the three can express it.
+That is fine for is this number even? But what about **the sum of two given numbers — is it even?** Two inputs, one check. None of the three can express it.
 
 > **For that, go for the two-argument functional interfaces**, and `Bi` means **two**.
 
@@ -197,9 +179,7 @@ Two inputs, one check. None of the three can express it.
 | `Consumer<T>` | **`BiConsumer<T, U>`** | 2 |
 | `Supplier<R>` | ❌ **no `BiSupplier`** | — |
 
-> [!important] **Why there is no `BiSupplier`, and why that question is a good one.** `Bi` refers to
-> **two input arguments**. But a supplier **never takes any input at all** — so there is nothing for
-> `Bi` to double. *"Then automatically, where is the question of BiSupplier?"*
+> [!important] **Why there is no `BiSupplier`, and why that question is a good one.** `Bi` refers to **two input arguments**. But a supplier **never takes any input at all** — so there is nothing for `Bi` to double. Then automatically, where is the question of BiSupplier?
 >
 > Measured on JDK 25:
 > ```java
@@ -210,9 +190,7 @@ Two inputs, one check. None of the three can express it.
 > ```
 > It does not exist. Nor does `TriPredicate` or `QuadPredicate` — the family stops at two.
 
-**Everything else is unchanged.** *"Except that it takes two arguments, all the remaining methods,
-everything is the same — API-wise no difference at all."* `BiPredicate` still has `test`, `and`, `or`,
-`negate`; `BiFunction` still has `apply` and `andThen`.
+**Everything else is unchanged.** Except that it takes two arguments, all the remaining methods, everything is the same — API-wise no difference at all. `BiPredicate` still has `test`, `and`, `or`, `negate`; `BiFunction` still has `apply` and `andThen`.
 
 ## `BiPredicate`
 
@@ -270,8 +248,7 @@ Measured on JDK 25:
 400  Pavan
 ```
 
-The `BiFunction` has become an **object factory** — give it the two pieces of data and it is
-responsible for producing the object.
+The `BiFunction` has become an **object factory** — give it the two pieces of data and it is responsible for producing the object.
 
 ## `BiConsumer` — modify, return nothing
 
@@ -304,24 +281,19 @@ Bunny  3500.0
 Chinny  4500.0
 ```
 
-It returned nothing, and yet every salary changed — a consumer can still **mutate** the object it is
-handed. Returning nothing is not the same as doing nothing.
+It returned nothing, and yet every salary changed — a consumer can still **mutate** the object it is handed. Returning nothing is not the same as doing nothing.
 
-> [!important] **The compile error he hits live, and it is a good one.** Writing `c.accept(e, 500)`
-> instead of `500.0` fails. Measured on JDK 25:
+> [!important] **The compile error he hits live, and it is a good one.** Writing `c.accept(e, 500)` instead of `500.0` fails. Measured on JDK 25:
 > ```
 > error: incompatible types: int cannot be converted to Double
 > ```
-> Autoboxing will turn `int` into `Integer`, and widening will turn `int` into `double` — but Java will
-> **not** do both at once. `int` → `Integer` → `Double` is two conversions, and only one is allowed.
-> Write `500.0` and it boxes cleanly to `Double`.
+> Autoboxing will turn `int` into `Integer`, and widening will turn `int` into `double` — but Java will **not** do both at once. `int` → `Integer` → `Double` is two conversions, and only one is allowed. Write `500.0` and it boxes cleanly to `Double`.
 
 ---
 
 # Reading the package itself
 
-He opens the `java.util.function` documentation live and reads the entries, which is worth copying
-because the naming is completely systematic.
+He opens the `java.util.function` documentation live and reads the entries, which is worth copying because the naming is completely systematic.
 
 | Interface | Method | Takes | Returns |
 |---|---|---|---|
@@ -342,8 +314,7 @@ because the naming is completely systematic.
 | `Consumer` | `andThen()` only |
 | `Supplier` | none |
 
-He also spots `BinaryOperator` and `BooleanSupplier` in the same package while scrolling — the
-**primitive** variants, which are the subject of the next part.
+He also spots `BinaryOperator` and `BooleanSupplier` in the same package while scrolling — the **primitive** variants, which are the subject of the next part.
 
 ---
 

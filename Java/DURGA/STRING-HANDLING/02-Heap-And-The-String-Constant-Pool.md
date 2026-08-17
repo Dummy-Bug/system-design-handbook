@@ -27,7 +27,7 @@ flowchart LR
 
 **`s` always points to the heap object**, never to the pool one.
 
-> [!important] **The SCP object is not eligible for garbage collection.** It has no reference *you* wrote, so it looks unreachable — but the JVM maintains an implicit reference to every object created because of a string literal. That is what keeps it alive, and it is why the pool can still be there to reuse later.
+> [!important] **The SCP object is not eligible for garbage collection.** It has no reference **you** wrote, so it looks unreachable — but the JVM maintains an implicit reference to every object created because of a string literal. That is what keeps it alive, and it is why the pool can still be there to reuse later.
 
 ## Why one, in the second case
 
@@ -44,9 +44,7 @@ So one object, in the SCP, and `s` points straight to it.
 Every example in this note is these three rules applied to a different line. Learn them and you can count the objects in any snippet on sight.
 
 > [!important] **The three rules.**
-> **1.** For every use of **`new`** — a new object, **always**, in the **heap**. No checking, no reuse.
-> **2.** For every **string literal** — one copy in the **SCP**, but **only if it is not already there**.
-> **3.** Because of a **runtime operation** (a method call such as `concat`), if a new object is required, it is created **only in the heap**, never in the SCP.
+> **1.** For every use of **`new`** — a new object, **always**, in the **heap**. No checking, no reuse. **2.** For every **string literal** — one copy in the **SCP**, but **only if it is not already there**. **3.** Because of a **runtime operation** (a method call such as `concat`), if a new object is required, it is created **only in the heap**, never in the SCP.
 
 The consequence, and it is asked directly:
 
@@ -69,7 +67,7 @@ false
 
 > [!info] **Where the pool physically lives, and this part has changed.** Until **1.6**, the SCP was part of the **method area** — the **PermGen**, permanent generation — and it was a **fixed size**. From **1.7 onwards**, for efficient memory utilisation, the SCP was **moved into the heap**, where it can expand.
 >
-> This is one of the rare places where the course is bang up to date: he states the move correctly. Worth adding is what happened next — **PermGen was removed entirely in Java 8** and replaced by Metaspace, so on any JDK you will actually run, the pool is in the heap. Verified as still true on JDK 25. It also means interned strings *are* collectable now, which they were not in the PermGen days.
+> This is one of the rare places where the course is bang up to date: he states the move correctly. Worth adding is what happened next — **PermGen was removed entirely in Java 8** and replaced by Metaspace, so on any JDK you will actually run, the pool is in the heap. Verified as still true on JDK 25. It also means interned strings **are** collectable now, which they were not in the PermGen days.
 
 ---
 
@@ -86,7 +84,7 @@ Guess before reading: how many objects in total, and how many in each area?
 
 **Line 1.** `new` → heap object `bhaskar`, `s1` points to it. Literal → SCP copy. **Two objects.**
 
-**Line 2.** `new` → a second heap object, `s2` points to it. Literal → but `bhaskar` is *already* in the SCP, so nothing is added. **One new object.**
+**Line 2.** `new` → a second heap object, `s2` points to it. Literal → but `bhaskar` is **already** in the SCP, so nothing is added. **One new object.**
 
 **Line 3.** No `new`. Needs an SCP object — already there, so it is **reused**. `s3` points to the existing pool object. **Nothing created.**
 
@@ -116,11 +114,11 @@ s = s.concat("solutions");
 
 **Line 2.** `"software"` is a literal, so it gets an SCP copy — **that happens first**. Then `s.concat("software")` runs, which is a **runtime operation**, and it produces `durgasoftware`. By rule 3 that object goes **only in the heap**, never the pool. It is assigned to nothing, so it is immediately **eligible for GC**. **Two more objects.**
 
-**Line 3.** `"solutions"` is a literal → SCP copy. `s.concat("solutions")` — `s` is still `durga`, so the result is `durgasolutions`, created in the **heap**. This time it *is* assigned, so `s` now points to it. **Two more objects.**
+**Line 3.** `"solutions"` is a literal → SCP copy. `s.concat("solutions")` — `s` is still `durga`, so the result is `durgasolutions`, created in the **heap**. This time it **is** assigned, so `s` now points to it. **Two more objects.**
 
 | Area | Objects |
 |---|---|
-| **Heap** | `durga`, `durgasoftware` *(eligible for GC)*, `durgasolutions` |
+| **Heap** | `durga`, `durgasoftware` (eligible for GC), `durgasolutions` |
 | **SCP** | `durga`, `software`, `solutions` |
 
 **Six objects — three in the heap, three in the SCP.** Two of the heap objects are eligible for garbage collection; none of the SCP ones are.
@@ -131,7 +129,7 @@ Measured on JDK 25:
 durgasolutions
 ```
 
-> [!important] **Notice what the SCP filled up with.** `software` and `solutions` are in the pool **as literals**, not as results. The pool holds string *constants* — things written in the source — and never holds anything produced by a runtime operation. That is rule 3, and it is the rule people forget when counting.
+> [!important] **Notice what the SCP filled up with.** `software` and `solutions` are in the pool **as literals**, not as results. The pool holds string **constants** — things written in the source — and never holds anything produced by a runtime operation. That is rule 3, and it is the rule people forget when counting.
 
 ---
 
@@ -209,7 +207,7 @@ true
 true
 ```
 
-> [!info] **An aside he makes while writing the content out.** *"You cannot change me"* is fine for a `String` and poor advice for a person — be flexible, be adaptable, change with the time. Immutability is a property you want in a string constant and not a personality trait.
+> [!info] **An aside he makes while writing the content out.** You cannot change me is fine for a `String` and poor advice for a person — be flexible, be adaptable, change with the time. Immutability is a property you want in a string constant and not a personality trait.
 
 ## Working through it
 
@@ -217,7 +215,7 @@ true
 
 **`s1 == s3` → `false`.** `s3` is a literal, so it points at the **pool** object. `s1` points at a **heap** object. Different objects.
 
-**`s3 == s4` → `true`.** *The first `true`.* Both are literals, and the pool does not hold duplicates, so both point at the same pooled object.
+**`s3 == s4` → `true`.** The first `true`. Both are literals, and the pool does not hold duplicates, so both point at the same pooled object.
 
 **`s5` is where it gets interesting.**
 
@@ -266,8 +264,7 @@ So by the time concatenation is considered, `s8` is no longer a variable at all;
 **`s6 == s8` → `true`**, because both are literals with the same content, and the pool holds one copy.
 
 > [!important] **Two rules generate every line of this program.**
-> **1.** Both operands constant → concatenation at **compile time** → the result is a literal → it comes from the **SCP**.
-> **2.** At least one operand a non-final variable → concatenation at **runtime** → the result is a new object in the **heap**.
+> **1.** Both operands constant → concatenation at **compile time** → the result is a literal → it comes from the **SCP**. **2.** At least one operand a non-final variable → concatenation at **runtime** → the result is a new object in the **heap**.
 >
 > And **`final` turns a variable back into a constant**, which is why `s7` and `s9` differ by nothing but that one keyword and give opposite answers.
 

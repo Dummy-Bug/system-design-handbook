@@ -1,6 +1,6 @@
 Question-only practice sheet for **garbage collection specifically** for product-company backend roles at 3–5 years. Company evidence and supplemental prompts are separated below; “mid-tier” is not treated as an official public ranking.
 
-> [!important] **What changes at this tier.** They have real traffic and somebody who has been paged for a GC pause. The bar moves from *what is it* to **explain the mechanism, then debug it**. Nearly every question here has a silent second half — *"and how would you find that?"* — and that is what is actually scored. This is also where the chapter's own boundary starts to hurt: Durga Sir teaches eligibility, requesting and finalization, and this tier asks mostly about the collector itself.
+> [!important] **What changes at this tier.** They have real traffic and somebody who has been paged for a GC pause. The bar moves from **what is it** to **explain the mechanism, then debug it**. Nearly every question here has a silent second half — and how would you find that? — and that is what is actually scored. This is also where the chapter's own boundary starts to hurt: Durga Sir teaches eligibility, requesting and finalization, and this tier asks mostly about the collector itself.
 
 > [!info] **How the ordering was decided, honestly.** No public dataset of question frequency exists. This is my judgement from sources surveyed in August 2026, weighted toward 2025–2026 material. Bands are reliable; order within a band is approximate.
 
@@ -15,7 +15,7 @@ Question-only practice sheet for **garbage collection specifically** for product
 ### 1. Explain generational garbage collection — Eden, survivor spaces, old generation.
 
 - **Tests:** the single most-asked GC question at this tier.
-- **Notes:** ❌ **gap**, and not a fixable one from this course — I searched the chapter PDF and there are zero hits for *generation*, *survivor*, *Eden*.
+- **Notes:** ❌ **gap**, and not a fixable one from this course — I searched the chapter PDF and there are zero hits for **generation**, **survivor**, **Eden**.
 
 ### 2. Minor GC versus Major/Full GC — which one hurts?
 
@@ -35,7 +35,7 @@ Question-only practice sheet for **garbage collection specifically** for product
 ### 5. What is a stop-the-world pause?
 
 - **Notes:** ❌ **gap.** All application threads are frozen so the collector can work without memory changing underneath it.
-- **Chained follow-up:** *"Do concurrent collectors eliminate it?"* — **no**, they shorten it. Every collector still stops the world sometimes. Claiming otherwise is a tell that you have not run one.
+- **Chained follow-up:** Do concurrent collectors eliminate it? — **no**, they shorten it. Every collector still stops the world sometimes. Claiming otherwise is a tell that you have not run one.
 
 ### 6. Explain strong, soft, weak and phantom references.
 
@@ -51,7 +51,7 @@ Question-only practice sheet for **garbage collection specifically** for product
 
 ### 8. `finalize()` is deprecated — why, and what replaced it?
 
-- **Notes:** ✅ `04` and `05` cover the deprecation and name the replacements; the *reasons* are strongest in `05`.
+- **Notes:** ✅ `04` and `05` cover the deprecation and name the replacements; the **reasons** are strongest in `05`.
 - **The reasons, and our notes demonstrate each:** no timing guarantee at all; **uncaught exceptions inside it are silently swallowed** (`05` Case 3, measured); **object resurrection** is possible (`05` Case 4, measured); every finalizable object survives at least one extra collection cycle.
 - **Replacements:** try-with-resources with `AutoCloseable`; `Cleaner` where a safety net is genuinely needed — and `Cleaner` deliberately cannot resurrect, because the cleaning action is never given the object.
 
@@ -80,7 +80,7 @@ Question-only practice sheet for **garbage collection specifically** for product
 ### 13. Does the JVM run GC automatically? When?
 
 - **Notes:** ✅ `06` — yes, on low memory, and the measured demo shows the trigger point moved from 100,000 objects in 2016 to 1,000,000 on JDK 25, with five identical runs collecting different amounts each time.
-- **This is a good story to tell** — it demonstrates the "no guarantees" answer instead of asserting it.
+- **This is a good story to tell** — it demonstrates the no guarantees answer instead of asserting it.
 
 ### 14. How do you read a GC log?
 
@@ -98,7 +98,7 @@ Question-only practice sheet for **garbage collection specifically** for product
 
 ### 17. Name the `OutOfMemoryError` variants you have seen.
 
-- **Notes:** ⚠️ *Java heap space* and *Metaspace* are covered across the two chapters. **GC overhead limit exceeded**, **Direct buffer memory** and **unable to create new native thread** are a **gap**.
+- **Notes:** ⚠️ **Java heap space** and **Metaspace** are covered across the two chapters. **GC overhead limit exceeded**, **Direct buffer memory** and **unable to create new native thread** are a **gap**.
 
 ### 18. What is the difference between `Error` and `Exception`, using OOM as the example?
 
@@ -112,7 +112,7 @@ Question-only practice sheet for **garbage collection specifically** for product
 
 - **Notes:** ⚠️ `06` names mark-and-sweep and correctly says it is vendor dependent. **Mark-compact and copying are a gap.**
 
-### 20. Why does `freeMemory()` sometimes go *down* after a collection?
+### 20. Why does `freeMemory()` sometimes go **down** after a collection?
 
 - **Notes:** ✅ `03` — measured on JDK 25. G1 uncommits heap back to the OS, so `totalMemory()` shrinks and free shrinks with it, even though **used** memory fell.
 
@@ -143,7 +143,7 @@ Ranked by cost at this tier.
 | 9 | **OOM variants** beyond heap and Metaspace (Q17) | external |
 | 10 | **Mark-compact and copying** (Q19), **`Cleaner` mechanics** (Q21) | mixed |
 
-> [!warning] **The pattern.** Our notes are strong on everything the *programmer* controls — eligibility, requesting, finalization, leaks — and near-empty on the *collector itself*. That is not a defect in the notes; it is the shape of the course. This tier asks about both roughly equally, so about half these questions are currently unanswerable from what is written.
+> [!warning] **The pattern.** Our notes are strong on everything the **programmer** controls — eligibility, requesting, finalization, leaks — and near-empty on the **collector itself**. That is not a defect in the notes; it is the shape of the course. This tier asks about both roughly equally, so about half these questions are currently unanswerable from what is written.
 
 ## Company-reported evidence
 

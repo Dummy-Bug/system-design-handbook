@@ -1,20 +1,16 @@
 # The claim under test
 
-> **"Whenever we are creating a child class object, automatically a parent object will be created."**
+> **Whenever we are creating a child class object, automatically a parent object will be created.**
 
-> *"In your regular college classes, or in your books, or somewhere, this type of statement is very
-> common."*
+> In your regular college classes, or in your books, or somewhere, this type of statement is very common.
 
-He puts it to the class. A few hands go up for **yes**. And rather than argue, he designs a
-**measurement**.
+He puts it to the class. A few hands go up for **yes**. And rather than argue, he designs a **measurement**.
 
 ---
 
 # The experiment
 
-**The idea:** every object has a **hash code** — a number identifying it. If a child object *and* a
-parent object are both created, there are **two** objects, so there must be **two different** hash
-codes. If only one object exists, every hash code printed will be **the same**.
+**The idea:** every object has a **hash code** — a number identifying it. If a child object **and** a parent object are both created, there are **two** objects, so there must be **two different** hash codes. If only one object exists, every hash code printed will be **the same**.
 
 ```java
 class P {
@@ -33,9 +29,7 @@ class Test {
 }
 ```
 
-**Why this works:** `this` inside a constructor means *the current object*. If the parent constructor
-were initialising a **separate parent object**, its `this` would be a different object with a
-different hash code.
+**Why this works:** `this` inside a constructor means **the current object**. If the parent constructor were initialising a **separate parent object**, its `this` would be a different object with a different hash code.
 
 ## The result
 
@@ -50,23 +44,17 @@ in main,           c.hashCode() = 2060468723
 **One number, three times.**
 
 > [!important] **The conclusion, and it is a measurement rather than an opinion:**
-> > **Whenever we are creating a child class object, the parent constructor will be executed — but a
-> > parent object will NOT be created.**
+> > **Whenever we are creating a child class object, the parent constructor will be executed — but a parent object will NOT be created.**
 >
-> `this` in the parent constructor **is the child object**. There is no second object for it to refer
-> to.
+> `this` in the parent constructor **is the child object**. There is no second object for it to refer to.
 
 ## Why the misconception is so common
 
-> *"Most people don't know the job of a constructor — that is the problem. They feel: constructor
-> executed, therefore object created. So the parent constructor executed, therefore a parent object was
-> created."*
+> Most people don't know the job of a constructor — that is the problem. They feel: constructor executed, therefore object created. So the parent constructor executed, therefore a parent object was created.
 
-**Note `15` already broke that chain.** A constructor does not create anything — `new` does. And `new`
-was written **once**.
+**Note `15` already broke that chain.** A constructor does not create anything — `new` does. And `new` was written **once**.
 
-> **Count the `new` operators, not the constructors.** One `new`, one object. Two constructors ran, both
-> for that same object.
+> **Count the `new` operators, not the constructors.** One `new`, one object. Two constructors ran, both for that same object.
 
 ```mermaid
 flowchart TB

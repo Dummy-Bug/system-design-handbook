@@ -1,6 +1,6 @@
 Question-only practice sheet for **exception handling** for product-company backend roles at 3–5 years. Company evidence and supplemental prompts are separated below; “mid-tier” is not treated as an official public ranking.
 
-> [!important] **What this tier is testing.** They have real traffic and real support incidents. The bar moves from *what does the keyword do?* to **where should an exception be handled, translated, logged, retried, or allowed to propagate across a service?**
+> [!important] **What this tier is testing.** They have real traffic and real support incidents. The bar moves from what does the keyword do? to **where should an exception be handled, translated, logged, retried, or allowed to propagate across a service?**
 
 > [!info] **How the ordering was decided, honestly.** There is no public dataset of interview question frequency. This ordering is my judgement from the interview-prep sources surveyed in August 2026. Treat the **bands** as reliable and the **order inside a band** as approximate.
 

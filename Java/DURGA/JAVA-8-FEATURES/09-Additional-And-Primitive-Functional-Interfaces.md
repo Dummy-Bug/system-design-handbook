@@ -7,14 +7,11 @@ Four one-argument interfaces, three two-argument ones:
 | `Predicate` | `BiPredicate` |
 | `Function` | `BiFunction` |
 | `Consumer` | `BiConsumer` |
-| `Supplier` | — *(nothing to double)* |
+| `Supplier` | — (nothing to double) |
 
-> [!info] **And there it stops.** *"For three arguments, a predefined functional interface is not
-> there — you have to write the code explicitly based on your requirement."* The API gives you one and
-> two; beyond that you declare your own functional interface.
+> [!info] **And there it stops.** For three arguments, a predefined functional interface is not there — you have to write the code explicitly based on your requirement. The API gives you one and two; beyond that you declare your own functional interface.
 
-Only **three** names in the package begin with `Bi` — `BiConsumer`, `BiFunction`, `BiPredicate` — and
-in the documentation they sit together because the listing is alphabetical.
+Only **three** names in the package begin with `Bi` — `BiConsumer`, `BiFunction`, `BiPredicate` — and in the documentation they sit together because the listing is alphabetical.
 
 ---
 
@@ -33,8 +30,7 @@ System.out.println(p.test(10));
 
 Measured on JDK 25: `true`. Correct — and expensive.
 
-**`Predicate<Integer>`, not `Predicate<int>`.** A type parameter must be a **reference type**, never a
-primitive. So passing the literal `10` sets off a chain:
+**`Predicate<Integer>`, not `Predicate<int>`.** A type parameter must be a **reference type**, never a primitive. So passing the literal `10` sets off a chain:
 
 ```mermaid
 flowchart LR
@@ -58,12 +54,9 @@ int[] x = {0, 5, 10, 15, 20, 25, 30};
 for (int x1 : x) if (p.test(x1)) System.out.println(x1);
 ```
 
-Output is `0 10 20 30`. But **seven values means seven autoboxings and seven auto-unboxings**. Ask for
-50 numbers and it is fifty of each.
+Output is `0 10 20 30`. But **seven values means seven autoboxings and seven auto-unboxings**. Ask for 50 numbers and it is fifty of each.
 
-> [!important] **The conclusion, and it is the reason the rest of this part exists.** *"Whatever
-> functional interfaces we discussed up to this — these things are applicable for **object types**, but
-> not for primitive types."* Feed them primitives and you pay conversion on every single call.
+> [!important] **The conclusion, and it is the reason the rest of this part exists.** Whatever functional interfaces we discussed up to this — these things are applicable for **object types**, but not for primitive types. Feed them primitives and you pay conversion on every single call.
 >
 > **The fix is the primitive versions.**
 
@@ -85,9 +78,7 @@ Measured on JDK 25:
 
 **Identical output. Zero autoboxing, zero auto-unboxing.**
 
-> [!important] **Notice what is missing: the type parameter.** `IntPredicate`, not
-> `IntPredicate<Integer>`. *"Where is our type parameter? Gone. We are not required to specify it —
-> because which type of input this predicate can take is already there in the name itself."*
+> [!important] **Notice what is missing: the type parameter.** `IntPredicate`, not `IntPredicate<Integer>`. Where is our type parameter? Gone. We are not required to specify it — because which type of input this predicate can take is already there in the name itself.
 
 **The three primitive predicates:**
 
@@ -97,19 +88,15 @@ Measured on JDK 25:
 | `LongPredicate` | `long` |
 | `DoublePredicate` | `double` |
 
-Method is still `test()`, and `and()` / `or()` / `negate()` are all still there. *"Whatever names and
-so on, everything is the same."*
+Method is still `test()`, and `and()` / `or()` / `negate()` are all still there. Whatever names and so on, everything is the same.
 
-> [!info] **A question from the class: is there a primitive `BiPredicate`?** No. Measured on JDK 25,
-> `IntBiPredicate` gives `cannot find symbol`. **For two primitive arguments you must use the ordinary
-> `BiPredicate` and accept the boxing.**
+> [!info] **A question from the class: is there a primitive `BiPredicate`?** No. Measured on JDK 25, `IntBiPredicate` gives `cannot find symbol`. **For two primitive arguments you must use the ordinary `BiPredicate` and accept the boxing.**
 
 ---
 
 # Primitive functions
 
-Functions have **two** types to worry about — input and return — so their primitive family is larger,
-and it splits into three groups by which end you control.
+Functions have **two** types to worry about — input and return — so their primitive family is larger, and it splits into three groups by which end you control.
 
 ## Group 1 — control the INPUT only
 
@@ -132,11 +119,9 @@ Method: `apply()`.
 | `DoubleToIntFunction` | `double` | `int` | **`applyAsInt`** |
 | `DoubleToLongFunction` | `double` | `long` | **`applyAsLong`** |
 
-> [!important] **The method is NOT `apply` — and this is where he says most people fail.** For anything
-> with a primitive return type the method is **`applyAsInt`**, **`applyAsLong`** or **`applyAsDouble`**,
-> named after **what comes out**, not what goes in.
+> [!important] **The method is NOT `apply` — and this is where he says most people fail.** For anything with a primitive return type the method is **`applyAsInt`**, **`applyAsLong`** or **`applyAsDouble`**, named after **what comes out**, not what goes in.
 >
-> *"Most of the people are going to fail. Boss, it is just `apply`? No — `applyAsLong`."*
+> Most of the people are going to fail. Boss, it is just `apply`? No — `applyAsLong`.
 >
 > The rule that makes it guessable: **read the return type, then say `applyAs<ReturnType>`.**
 
@@ -151,8 +136,7 @@ Method: `apply()`.
 | `ToLongBiFunction<T, U>` | **any two** | `long` | `applyAsLong` |
 | `ToDoubleBiFunction<T, U>` | **any two** | `double` | `applyAsDouble` |
 
-**A worked pick.** *Write a function to find the square root of a given number.* Input is `int`, and
-`Math.sqrt` returns `double` — so both ends are primitive and known: `IntToDoubleFunction`.
+**A worked pick.** Write a function to find the square root of a given number. Input is `int`, and `Math.sqrt` returns `double` — so both ends are primitive and known: `IntToDoubleFunction`.
 
 ```java
 IntToDoubleFunction sqrt = i -> Math.sqrt(i);
@@ -167,15 +151,11 @@ Measured on JDK 25:
 2.6457513110645907
 ```
 
-**No boxing anywhere.** Had this been `Function<Integer, Double>` there would be a conversion on the
-way in *and* on the way out.
+**No boxing anywhere.** Had this been `Function<Integer, Double>` there would be a conversion on the way in **and** on the way out.
 
-> [!info] **A realistic version of the same shape.** Give an employee number, get back the salary.
-> Employee number is `int`, salary is `double` — `IntToDoubleFunction` again.
+> [!info] **A realistic version of the same shape.** Give an employee number, get back the salary. Employee number is `int`, salary is `double` — `IntToDoubleFunction` again.
 
-**And when only one end is a primitive**, you have a choice: `ToIntFunction<String>` (any input, `int`
-out) or `IntFunction<R>` (`int` in, any output). *"You can control either the input type or the return
-type."* One conversion remains at the uncontrolled end.
+**And when only one end is a primitive**, you have a choice: `ToIntFunction<String>` (any input, `int` out) or `IntFunction<R>` (`int` in, any output). You can control either the input type or the return type. One conversion remains at the uncontrolled end.
 
 ```java
 ToIntFunction<String> len = s -> s.length();
@@ -199,12 +179,9 @@ Measured on JDK 25: `5`.
 | `ObjLongConsumer<T>` | an object **and** a `long` |
 | `ObjDoubleConsumer<T>` | an object **and** a `double` |
 
-**Method is always `accept`** — no `acceptAsInt`, because a consumer returns nothing, so there is no
-return type to name. That is the one place the naming rule does not apply, and it is consistent once
-you see why.
+**Method is always `accept`** — no `acceptAsInt`, because a consumer returns nothing, so there is no return type to name. That is the one place the naming rule does not apply, and it is consistent once you see why.
 
-The `Obj…Consumer` family is *"something like `BiConsumer`"* — two arguments, where the **first is any
-object type and the second is a primitive**.
+The `Obj…Consumer` family is something like `BiConsumer` — two arguments, where the **first is any object type and the second is a primitive**.
 
 ```java
 IntConsumer ic = i -> System.out.println(i);
@@ -223,8 +200,7 @@ value 99
 
 ## Suppliers
 
-A supplier takes **no input**, so the only thing to specialise is the **return type** — and here
-`boolean` gets its own, which it does nowhere else:
+A supplier takes **no input**, so the only thing to specialise is the **return type** — and here `boolean` gets its own, which it does nowhere else:
 
 | | Returns | Method |
 |---|---|---|
@@ -259,11 +235,9 @@ Now a different kind of specialisation. Not about primitives at all.
 Function<Integer, Integer> f = i -> i * i;
 ```
 
-Look at that line: **`Integer` twice.** Input type and return type are the same, and you had to say so
-twice.
+Look at that line: **`Integer` twice.** Input type and return type are the same, and you had to say so twice.
 
-> **If the input type and the output type are always the same, don't use `Function` — use
-> `UnaryOperator`.**
+> **If the input type and the output type are always the same, don't use `Function` — use `UnaryOperator`.**
 
 ```java
 UnaryOperator<Integer> uo = i -> i * i;
@@ -281,8 +255,7 @@ $ javap java.util.function.UnaryOperator
 public interface java.util.function.UnaryOperator<T> extends java.util.function.Function<T, T> {
 ```
 
-> **`UnaryOperator<T>` is literally `Function<T, T>`** — a child of `Function` with both parameters
-> pinned to the same type. It inherits `apply`, `andThen` and `compose` unchanged.
+> **`UnaryOperator<T>` is literally `Function<T, T>`** — a child of `Function` with both parameters pinned to the same type. It inherits `apply`, `andThen` and `compose` unchanged.
 
 **Its primitive versions**, which drop the type parameter entirely:
 
@@ -292,10 +265,7 @@ public interface java.util.function.UnaryOperator<T> extends java.util.function.
 | `LongUnaryOperator` | `long` | `applyAsLong` |
 | `DoubleUnaryOperator` | `double` | `applyAsDouble` |
 
-> [!info] **It need not be a primitive to be worth using.** *"If I provide a `Student` object as
-> argument, the input is `Student` and the output is also `Student` — then don't go for a function,
-> better to go for `UnaryOperator`."* Increment an employee's salary and hand the employee back: same
-> type in, same type out.
+> [!info] **It need not be a primitive to be worth using.** If I provide a `Student` object as argument, the input is `Student` and the output is also `Student` — then don't go for a function, better to go for `UnaryOperator`. Increment an employee's salary and hand the employee back: same type in, same type out.
 
 ---
 
@@ -344,14 +314,13 @@ Measured on JDK 25: `200`.
 
 ## Unary vs binary, in one line
 
-> **`UnaryOperator` applies to ONE input type. `BinaryOperator` applies to TWO input types — and both
-> require that all the types involved are the same.**
+> **`UnaryOperator` applies to ONE input type. `BinaryOperator` applies to TWO input types — and both require that all the types involved are the same.**
 
 ---
 
 # A question from the class — chaining primitive operators
 
-Kalim asks: *if I want to increment `i` and also square it, is that one example or two?*
+Kalim asks: if I want to increment `i` and also square it, is that one example or two?
 
 **Two.** Each takes one `int` and returns one `int`, so each is an `IntUnaryOperator`:
 
@@ -373,28 +342,23 @@ Measured on JDK 25:
 
 The chained call: 4 + 1 = 5, then 5 × 5 = **25**.
 
-> [!question]- **Deep dive — so why not write one operator that does both?** The follow-up question,
-> and the answer is about who gets to reuse what.
+> [!question]- **Deep dive — so why not write one operator that does both?** The follow-up question, and the answer is about who gets to reuse what.
 >
-> You *could* write a single operator doing increment-then-square. But then:
+> You **could** write a single operator doing increment-then-square. But then:
 >
 > - somebody who wants **only the increment** cannot have it
 > - somebody who wants **only the square** cannot have it
 > - somebody who wants **both** is the only one served
 >
-> Keep them separate and **all three** are served: call `f1`, call `f2`, or call `f1.andThen(f2)`.
-> *"If we are taking different, that is the biggest advantage. In the same function, if we are doing
-> all the operations, then individual calling is not applicable."*
+> Keep them separate and **all three** are served: call `f1`, call `f2`, or call `f1.andThen(f2)`. If we are taking different, that is the biggest advantage. In the same function, if we are doing all the operations, then individual calling is not applicable.
 >
-> This is the composition argument in miniature, and it is why the API ships small interfaces and
-> chaining methods rather than big ones.
+> This is the composition argument in miniature, and it is why the API ships small interfaces and chaining methods rather than big ones.
 
 ---
 
 # The whole package, measured
 
-He explores the API live rather than reciting it. For reference, here is the complete list, taken from
-the JDK 25 sources — **43 functional interfaces** in `java.util.function`:
+He explores the API live rather than reciting it. For reference, here is the complete list, taken from the JDK 25 sources — **43 functional interfaces** in `java.util.function`:
 
 ```
 BiConsumer            BiFunction            BiPredicate           BinaryOperator
@@ -423,14 +387,9 @@ ToLongBiFunction      ToLongFunction        UnaryOperator
 > | `BinaryOperator` | `BiFunction` where all three types are the same |
 > | method `applyAs<Type>` / `getAs<Type>` | named after the **return** type |
 >
-> That is why he keeps guessing names correctly before checking the documentation — and gets them
-> right nearly every time.
+> That is why he keeps guessing names correctly before checking the documentation — and gets them right nearly every time.
 
-> [!info] **His closing observation, worth keeping.** *"In every example we used a lambda expression,
-> but you never felt that we are using a special concept — because we are already habituated. If you
-> start using these things in regular coding, we are habituating functional programming, and indirectly
-> lambda expressions."* The interfaces are not the point; they are the scaffolding that makes lambdas
-> ordinary.
+> [!info] **His closing observation, worth keeping.** In every example we used a lambda expression, but you never felt that we are using a special concept — because we are already habituated. If you start using these things in regular coding, we are habituating functional programming, and indirectly lambda expressions. The interfaces are not the point; they are the scaffolding that makes lambdas ordinary.
 
 ---
 

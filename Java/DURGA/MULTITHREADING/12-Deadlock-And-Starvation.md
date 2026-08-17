@@ -1,14 +1,12 @@
 # Deadlock
 
-> *"What is a deadlock? A lock without a key."*
+> What is a deadlock? A lock without a key.
 
 The technical definition:
 
-> **If two threads are waiting for each other forever, such type of infinite waiting is called
-> deadlock.**
+> **If two threads are waiting for each other forever, such type of infinite waiting is called deadlock.**
 
-Ask the first thread why it is waiting: *"I'm waiting for the second thread."* Ask the second:
-*"I'm waiting for the first."* **Neither will ever move.**
+Ask the first thread why it is waiting: I'm waiting for the second thread. Ask the second: I'm waiting for the first. **Neither will ever move.**
 
 ---
 
@@ -16,25 +14,19 @@ Ask the first thread why it is waiting: *"I'm waiting for the second thread."* A
 
 > **The `synchronized` keyword is the only reason for a deadlock situation.**
 
-> [!important] **This reframes the keyword completely.** Note `07` introduced `synchronized` as the
-> solution to data inconsistency. Here it is the **problem creator**:
+> [!important] **This reframes the keyword completely.** Note `07` introduced `synchronized` as the solution to data inconsistency. Here it is the **problem creator**:
 >
-> > *"Sir, I don't use the `synchronized` keyword — then I'm sure your program never enters a deadlock
-> > situation."*
+> > Sir, I don't use the `synchronized` keyword — then I'm sure your program never enters a deadlock situation.
 >
-> **No `synchronized`, no deadlock. Guaranteed.** Which is another reason for the rule from note `07`:
-> **if there is no specific requirement, never use it.**
+> **No `synchronized`, no deadlock. Guaranteed.** Which is another reason for the rule from note `07`: **if there is no specific requirement, never use it.**
 
 ## There is no cure
 
-> **There are no resolution techniques for deadlock, but several prevention techniques are
-> available.**
+> **There are no resolution techniques for deadlock, but several prevention techniques are available.**
 
-> [!warning] **Once a program is deadlocked, nothing can be done from inside it.** You cannot detect
-> and recover in code — the threads are blocked in the JVM, not in your logic. **The only remedy is to
-> kill the process.**
+> [!warning] **Once a program is deadlocked, nothing can be done from inside it.** You cannot detect and recover in code — the threads are blocked in the JVM, not in your logic. **The only remedy is to kill the process.**
 >
-> *"Prevention is better than cure"* — and here there is no cure at all.
+> Prevention is better than cure — and here there is no cure at all.
 
 ---
 
@@ -105,31 +97,23 @@ flowchart LR
     C -->|"needs A's lock"| M
 ```
 
-> [!important] **The `sleep(6000)` is what makes it reliable.** Without it, one thread would probably
-> finish before the other started, and the deadlock would only appear occasionally. **The sleep
-> guarantees both threads grab their first lock before either asks for the second** — which is exactly
-> the interleaving that deadlocks.
+> [!important] **The `sleep(6000)` is what makes it reliable.** Without it, one thread would probably finish before the other started, and the deadlock would only appear occasionally. **The sleep guarantees both threads grab their first lock before either asks for the second** — which is exactly the interleaving that deadlocks.
 >
-> **In production this is what makes deadlocks so nasty:** they need a specific timing, so they pass
-> every test and appear under load.
+> **In production this is what makes deadlocks so nasty:** they need a specific timing, so they pass every test and appear under load.
 
-> [!question]- **The negotiation that goes nowhere.** His dramatisation of why neither thread will
-> yield — and it is why the situation is unrecoverable.
+> [!question]- **The negotiation that goes nowhere.** His dramatisation of why neither thread will yield — and it is why the situation is unrecoverable.
 >
-> He walks up to Thread1: *"Do you have any lock with you?"* — *"Yes, I have A's lock."* — *"Then why
-> are you waiting?"* — *"I want B's lock."*
+> He walks up to Thread1: Do you have any lock with you? — Yes, I have A's lock. — Then why are you waiting? — I want B's lock.
 >
-> Thread2: *"Yes, I have B's lock. I'm waiting for A's lock."*
+> Thread2: Yes, I have B's lock. I'm waiting for A's lock.
 >
-> So he negotiates. **To Thread1:** *"You're waiting anyway — you can't do anything with that lock.
-> Release it, and within one minute I'll get you both locks."*
+> So he negotiates. **To Thread1:** You're waiting anyway — you can't do anything with that lock. Release it, and within one minute I'll get you both locks.
 >
-> **Thread1:** *"First bring me B's lock, then within half a minute I'll release mine."*
+> **Thread1:** First bring me B's lock, then within half a minute I'll release mine.
 >
-> **To Thread2**, the same offer. **Thread2:** *"First bring me A's lock, then I'll release mine."*
+> **To Thread2**, the same offer. **Thread2:** First bring me A's lock, then I'll release mine.
 >
-> **Each will only release after receiving.** There is no order in which anyone can go first — which
-> is precisely why no resolution technique exists.
+> **Each will only release after receiving.** There is no order in which anyone can go first — which is precisely why no resolution technique exists.
 
 ---
 
@@ -159,23 +143,15 @@ Java stack information for the threads listed above:
 
 Measured on JDK 25 with `jcmd <pid> Thread.print`.
 
-> [!important] **This is the practical skill worth having: when a Java process hangs, take a thread
-> dump.** `jcmd <pid> Thread.print` or `jstack <pid>` — and the JVM does the cycle detection for you,
-> naming both threads, both objects, and the exact lines.
+> [!important] **This is the practical skill worth having: when a Java process hangs, take a thread dump.** `jcmd <pid> Thread.print` or `jstack <pid>` — and the JVM does the cycle detection for you, naming both threads, both objects, and the exact lines.
 >
-> **It does not fix anything** — the process is still dead — but it turns *"the server is frozen"*
-> into a two-line diagnosis. This is the tooling the `GARBAGE-COLLECTION` notes flagged as missing from
-> the course, doing real work.
+> **It does not fix anything** — the process is still dead — but it turns the server is frozen into a two-line diagnosis. This is the tooling the `GARBAGE-COLLECTION` notes flagged as missing from the course, doing real work.
 
 ## Prevention
 
-> [!info] **The standard prevention technique, since he leaves it to the OS course.** **Always acquire
-> multiple locks in the same global order.** The program above deadlocks because main takes A then B,
-> while the child takes B then A. **If both took A then B, no cycle could form** — whoever gets A first
-> proceeds, and the other waits for A without holding B.
+> [!info] **The standard prevention technique, since he leaves it to the OS course.** **Always acquire multiple locks in the same global order.** The program above deadlocks because main takes A then B, while the child takes B then A. **If both took A then B, no cycle could form** — whoever gets A first proceeds, and the other waits for A without holding B.
 >
-> Other approaches: hold one lock at a time; use `tryLock()` with a timeout from
-> `java.util.concurrent.locks` (part 17) so a thread can back off instead of blocking forever.
+> Other approaches: hold one lock at a time; use `tryLock()` with a timeout from `java.util.concurrent.locks` (part 17) so a thread can back off instead of blocking forever.
 
 ---
 
@@ -188,15 +164,11 @@ The distinction he closes on, and it is examinable.
 | The waiting is | **infinite** | **long, but finite** |
 | Will it ever end? | ❌ **never** | ✅ **eventually** |
 
-> **Long waiting of a thread, where the waiting never ends, is a deadlock. Long waiting which ends at
-> some point is starvation.**
+> **Long waiting of a thread, where the waiting never ends, is a deadlock. Long waiting which ends at some point is starvation.**
 
-> [!info] **The example: a low-priority thread with high-priority threads constantly arriving.** It
-> waits, and waits — but the moment there are no high-priority threads left, **it gets the CPU**. It
-> was starved, not deadlocked.
+> [!info] **The example: a low-priority thread with high-priority threads constantly arriving.** It waits, and waits — but the moment there are no high-priority threads left, **it gets the CPU**. It was starved, not deadlocked.
 >
-> **The test to apply:** *is there any future in which this thread proceeds?* If yes, starvation. If
-> the answer is no by construction, deadlock.
+> **The test to apply:** is there any future in which this thread proceeds? If yes, starvation. If the answer is no by construction, deadlock.
 
 ---
 
@@ -217,4 +189,4 @@ The distinction he closes on, and it is examinable.
 | The standard prevention | acquire multiple locks in **the same global order** |
 | Alternative | **`tryLock()` with a timeout** |
 | **Starvation** | long waiting that **does eventually end** |
-| The test | *is there any future where this thread proceeds?* |
+| The test | is there any future where this thread proceeds? |

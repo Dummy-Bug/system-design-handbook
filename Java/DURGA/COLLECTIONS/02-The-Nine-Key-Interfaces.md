@@ -1,6 +1,5 @@
 
-> **1.** `Collection` **2.** `List` **3.** `Set` **4.** `SortedSet` **5.** `NavigableSet`
-> **6.** `Queue` **7.** `Map` **8.** `SortedMap` **9.** `NavigableMap`
+> **1.** `Collection` **2.** `List` **3.** `Set` **4.** `SortedSet` **5.** `NavigableSet` **6.** `Queue` **7.** `Map` **8.** `SortedMap` **9.** `NavigableMap`
 
 
 The split that organises all nine:
@@ -17,8 +16,7 @@ The split that organises all nine:
 
 # 1 · `Collection` (I)
 
-> **If we want to represent a group of individual objects as a single entity, then we should go for
-> `Collection`.**
+> **If we want to represent a group of individual objects as a single entity, then we should go for `Collection`.**
 
 Four things to be able to say about it:
 
@@ -29,38 +27,25 @@ Four things to be able to say about it:
 | **Its position** | generally considered the **root interface** of the framework |
 | **Implementations** | **no concrete class implements `Collection` directly** |
 
-**On the second point** — what counts as a "most common method"? Whatever you would want of *any*
-collection, whether it turns out to be an `ArrayList`, a `LinkedList` or a `TreeSet`: add an object,
-remove an object, ask whether it is empty, ask its size. Those live on `Collection` itself.
+**On the second point** — what counts as a most common method? Whatever you would want of **any** collection, whether it turns out to be an `ArrayList`, a `LinkedList` or a `TreeSet`: add an object, remove an object, ask whether it is empty, ask its size. Those live on `Collection` itself.
 
-**On the fourth** — concrete classes implement the *child* interfaces. `ArrayList` and `LinkedList`
-implement `List`; nothing implements `Collection` and stops there.
+**On the fourth** — concrete classes implement the **child** interfaces. `ArrayList` and `LinkedList` implement `List`; nothing implements `Collection` and stops there.
 
-> [!important] **The true root is `Iterable`, not `Collection`.** Measured on JDK 25,
-> `Collection`'s own superinterface list is **`[java.lang.Iterable]`** — so `Collection` has a parent,
-> and calling it the root is a convenience rather than a fact.
+> [!important] **The true root is `Iterable`, not `Collection`.** Measured on JDK 25, `Collection`'s own superinterface list is **`[java.lang.Iterable]`** — so `Collection` has a parent, and calling it the root is a convenience rather than a fact.
 >
-> He is careful about this himself, for a different and better reason: *"in the total collection
-> framework there are two parts — collection, and map. Map and collection, there is no relation at
-> all. Then how can I consider `Collection` the root interface of the collection framework?"*
+> He is careful about this himself, for a different and better reason: in the total collection framework there are two parts — collection, and map. Map and collection, there is no relation at all. Then how can I consider `Collection` the root interface of the collection framework?
 >
-> **So the honest answer names both objections:** `Collection` is the root of the *collection* half
-> only, and even there it sits under `Iterable` — which is what makes the for-each loop work on every
-> collection.
+> **So the honest answer names both objections:** `Collection` is the root of the **collection** half only, and even there it sits under `Iterable` — which is what makes the for-each loop work on every collection.
 
 ---
 
 # The interview question: `Collection` vs `Collections`
 
-He flags this as *"the most commonly asked question in the interview room"*, and warns against the
-answer people reach for first — that one is singular and one is plural, or that collections are a
-group of collections. **Neither. They are different kinds of thing entirely.**
+He flags this as the most commonly asked question in the interview room, and warns against the answer people reach for first — that one is singular and one is plural, or that collections are a group of collections. **Neither. They are different kinds of thing entirely.**
 
-> **`Collection` is an interface.** If we want to represent a group of individual objects as a single
-> entity, we should go for `Collection`.
+> **`Collection` is an interface.** If we want to represent a group of individual objects as a single entity, we should go for `Collection`.
 >
-> **`Collections` is a utility class** present in `java.util`, defining several utility methods for
-> collection objects — sorting, searching, and so on.
+> **`Collections` is a utility class** present in `java.util`, defining several utility methods for collection objects — sorting, searching, and so on.
 
 Measured on JDK 25:
 
@@ -69,12 +54,9 @@ java.util.Collection  isInterface=true
 java.util.Collections isInterface=false  final=true
 ```
 
-**The one-word answer is "interface versus class"** — then add the "when to use" sentence for each,
-and the question is fully answered.
+**The one-word answer is interface versus class** — then add the "when to use" sentence for each, and the question is fully answered.
 
-> [!info] **The example that shows why `Collections` has to exist.** A `List` knows nothing about
-> sorting — it preserves *insertion* order, and that is its whole character. So when you do want it
-> sorted, the method cannot live on `List`. It lives on the utility class:
+> [!info] **The example that shows why `Collections` has to exist.** A `List` knows nothing about sorting — it preserves **insertion** order, and that is its whole character. So when you do want it sorted, the method cannot live on `List`. It lives on the utility class:
 > ```java
 > Collections.sort(l);
 > ```
@@ -103,33 +85,23 @@ flowchart TB
     V --> S["<b>Stack</b> (C)<br/><i>1.0 · legacy</i>"]
 ```
 
-> **Anything that comes from the old generation is a legacy class.** `Vector` and `Stack` arrived in
-> **1.0**, before the collection framework existed at all.
+> **Anything that comes from the old generation is a legacy class.** `Vector` and `Stack` arrived in **1.0**, before the collection framework existed at all.
 
 ## The question that catches people
 
-*`List` came in 1.2. `Vector` came in 1.0. **How can a 1.0 class implement a 1.2 interface?***
+`List` came in 1.2. `Vector` came in 1.0. **How can a 1.0 class implement a 1.2 interface?**
 
-> **It could not, and it did not.** In **1.2, `Vector` and `Stack` were re-engineered** — modified,
-> updated — **to implement `List`.** The link did not exist in 1.0 or 1.1; it was added when the
-> framework was.
+> **It could not, and it did not.** In **1.2, `Vector` and `Stack` were re-engineered** — modified, updated — **to implement `List`.** The link did not exist in 1.0 or 1.1; it was added when the framework was.
 
-Confirmed on JDK 25: `List.class.isAssignableFrom(Vector.class)` → `true`, and `Stack`'s superclass
-is `Vector`.
+Confirmed on JDK 25: `List.class.isAssignableFrom(Vector.class)` → `true`, and `Stack`'s superclass is `Vector`.
 
-> [!warning] **Do not use `Vector` or `Stack` in new code.** Both synchronize every single method,
-> which costs you on every call whether or not any other thread exists. Use **`ArrayList`** where you
-> want a list, and **`ArrayDeque`** where you want a stack — `ArrayDeque` is faster than `Stack` for
-> exactly the job `Stack` is named after. When you genuinely need a thread-safe list, the answer is
-> `CopyOnWriteArrayList` or an explicitly synchronized wrapper, not `Vector`.
+> [!warning] **Do not use `Vector` or `Stack` in new code.** Both synchronize every single method, which costs you on every call whether or not any other thread exists. Use **`ArrayList`** where you want a list, and **`ArrayDeque`** where you want a stack — `ArrayDeque` is faster than `Stack` for exactly the job `Stack` is named after. When you genuinely need a thread-safe list, the answer is `CopyOnWriteArrayList` or an explicitly synchronized wrapper, not `Vector`.
 
 ---
 
 # 3 · `Set` (I)
 
-> **It is the child interface of `Collection`. If we want to represent a group of individual objects
-> as a single entity where duplicates are not allowed and insertion order is not preserved, then we
-> should go for `Set`.**
+> **It is the child interface of `Collection`. If we want to represent a group of individual objects as a single entity where duplicates are not allowed and insertion order is not preserved, then we should go for `Set`.**
 
 `Set` is `List` with both properties flipped. That is the cleanest way to hold it.
 
@@ -156,22 +128,17 @@ Two differences, and they are the two properties that define each one:
 | Duplicates | ✅ **allowed** | ❌ **not allowed** |
 | Insertion order | ✅ **preserved** | ❌ **not preserved** |
 
-> [!info] **"Not preserved" does not mean random.** In a `Set` the objects are arranged by **hash
-> code** or by **sorting order**, depending on the implementation — there is a definite arrangement,
-> it simply is not the one you added them in. What you cannot do is *predict* it from your insertion
-> sequence.
+> [!info] **Not preserved does not mean random.** In a `Set` the objects are arranged by **hash code** or by **sorting order**, depending on the implementation — there is a definite arrangement, it simply is not the one you added them in. What you cannot do is **predict** it from your insertion sequence.
 
 ---
 
 # 4 · `SortedSet` (I)
 
-> **It is the child interface of `Set`. If we want to represent a group of individual objects where
-> duplicates are not allowed but all objects will be inserted according to some sorting order, then
-> we should go for `SortedSet`.**
+> **It is the child interface of `Set`. If we want to represent a group of individual objects where duplicates are not allowed but all objects will be inserted according to some sorting order, then we should go for `SortedSet`.**
 
 The PDF gives a second, shorter phrasing worth having as well:
 
-> **If we want to represent a group of "unique objects" according to some sorting order, then we should go for `SortedSet`.**
+> **If we want to represent a group of unique objects according to some sorting order, then we should go for `SortedSet`.**
 
 ---
 
@@ -179,8 +146,7 @@ The PDF gives a second, shorter phrasing worth having as well:
 
 > **It is the child interface of `SortedSet`. It provides several methods for navigation purposes.**
 
-*"What is the previous element? What is the next element?"* — that is navigation, **`NavigableSet` came in 1.6**, and `TreeSet` was re-engineered to implement it,
-exactly as `Vector` had been for `List`.
+What is the previous element? What is the next element? — that is navigation, **`NavigableSet` came in 1.6**, and `TreeSet` was re-engineered to implement it, exactly as `Vector` had been for `List`.
 
 ```mermaid
 flowchart TB
@@ -190,70 +156,47 @@ flowchart TB
     NS --> T["TreeSet (C)<br/><i>1.2</i>"]
 ```
 
-**`TreeSet` is the only implementation class in that chain** — everything above it is an interface.
-Confirmed on JDK 25: `NavigableSet.class.isAssignableFrom(TreeSet.class)` → `true`.
+**`TreeSet` is the only implementation class in that chain** — everything above it is an interface. Confirmed on JDK 25: `NavigableSet.class.isAssignableFrom(TreeSet.class)` → `true`.
 
 ---
 
 # 6 · `Queue` (I)
 
-> **It is the child interface of `Collection`. If we want to represent a group of individual objects
-> **prior to processing**, then we should go for the `Queue` concept.**
+> **It is the child interface of `Collection`. If we want to represent a group of individual objects **prior to processing**, then we should go for the `Queue` concept.**
 
-> [!important] **"Prior to processing" is the phrase to memorise** — it is the wording from the Java
-> API itself, and it is what distinguishes `Queue` from every other collection. You are not storing these objects to keep them. You are holding them **until each one's turn comes to be processed.**
+> [!important] **Prior to processing is the phrase to memorise** — it is the wording from the Java API itself, and it is what distinguishes `Queue` from every other collection. You are not storing these objects to keep them. You are holding them **until each one's turn comes to be processed.**
 
 **Usually a queue follows first-in-first-out order**, but that is not a requirement:
 
-> **Based on our requirement we can implement our own priority order also.** Such queues are
-> `PriorityQueue`.
+> **Based on our requirement we can implement our own priority order also.** Such queues are `PriorityQueue`.
 
 ## The technical example
 
-Before you can send ten thousand emails, you have to hold the ten thousand addresses somewhere. Take
-the first, send it; take the second, send it. **The order you added them is the order the mail goes
-out** — which is precisely first-in-first-out, so a queue is the right structure. Same for an SMS
-blast to ten lakh mobile numbers.
+Before you can send ten thousand emails, you have to hold the ten thousand addresses somewhere. Take the first, send it; take the second, send it. **The order you added them is the order the mail goes out** — which is precisely first-in-first-out, so a queue is the right structure. Same for an SMS blast to ten lakh mobile numbers.
 
-> [!question]- **The two queues he still resents.** His own examples of "prior to processing", and
-> they land the definition better than the technical one does.
+> [!question]- **The two queues he still resents.** His own examples of prior to processing, and they land the definition better than the technical one does.
 >
-> **The passport queue, around 2006–07.** His application was rejected and he was called in with a
-> query, so he had to go in person and ask why. He joined the queue at **4 a.m.** He reached the
-> officer at **11 a.m.** — seven hours. The officer looked at the file number and said the address
-> proof was not valid, submit another one. **That exchange took thirty seconds.**
+> **The passport queue, around 2006–07.** His application was rejected and he was called in with a query, so he had to go in person and ask why. He joined the queue at **4 a.m.** He reached the officer at **11 a.m.** — seven hours. The officer looked at the file number and said the address proof was not valid, submit another one. **That exchange took thirty seconds.**
 >
-> Seven hours of queueing for thirty seconds of service. *"To get the service of 30 seconds I was
-> there almost 7 hours in the queue."*
+> Seven hours of queueing for thirty seconds of service. To get the service of 30 seconds I was there almost 7 hours in the queue.
 >
-> **The dam queue at Tirupati.** He was there to teach a GATE class at 2 p.m. and arrived at 8 a.m.,
-> so the institute suggested he visit the dam in the meantime. He paid 300 rupees for the special
-> entry and stood in the queue for four or five hours — his attention the whole time on a class
-> starting at 2 p.m. He got out around 4:30, came back at 6:30, taught until 8:30, and had a bus at
-> 8:30.
+> **The dam queue at Tirupati.** He was there to teach a GATE class at 2 p.m. and arrived at 8 a.m., so the institute suggested he visit the dam in the meantime. He paid 300 rupees for the special entry and stood in the queue for four or five hours — his attention the whole time on a class starting at 2 p.m. He got out around 4:30, came back at 6:30, taught until 8:30, and had a bus at 8:30.
 >
-> Both are the same shape: **you are in the queue not because the queue is where you want to be, but
-> because it is the only way to reach the processing at the far end.**
+> Both are the same shape: **you are in the queue not because the queue is where you want to be, but because it is the only way to reach the processing at the far end.**
 
 ## Implementation classes
 
-`PriorityQueue`, `BlockingQueue`, and under `BlockingQueue`: `PriorityBlockingQueue`,
-`LinkedBlockingQueue`, `SynchronousQueue`, and others.
+`PriorityQueue`, `BlockingQueue`, and under `BlockingQueue`: `PriorityBlockingQueue`, `LinkedBlockingQueue`, `SynchronousQueue`, and others.
 
 > **The whole `Queue` concept came in 1.5.** It is the newest of the six collection-half interfaces.
 
-> [!important] **`Deque` is the one this list is missing, and you will use it more than any of them.**
-> Added in **1.6**, `Deque` (double-ended queue) extends `Queue` and lets you add and remove at both
-> ends. **`ArrayDeque` is the modern answer to both "I want a queue" and "I want a stack"** — it beats
-> `LinkedList` for the first and `Stack` for the second. Verified on JDK 25: `Deque` extends `Queue`,
-> and `ArrayDeque` implements `Deque`.
+> [!important] **`Deque` is the one this list is missing, and you will use it more than any of them.** Added in **1.6**, `Deque` (double-ended queue) extends `Queue` and lets you add and remove at both ends. **`ArrayDeque` is the modern answer to both I want a queue and I want a stack** — it beats `LinkedList` for the first and `Stack` for the second. Verified on JDK 25: `Deque` extends `Queue`, and `ArrayDeque` implements `Deque`.
 
 ---
 
 # 7 · `Map` (I)
 
-> **`Map` is not a child interface of `Collection`.** **If we want to represent a group of objects as
-> key–value pairs, then we should go for `Map`.**
+> **`Map` is not a child interface of `Collection`.** **If we want to represent a group of objects as key–value pairs, then we should go for `Map`.**
 
 ```
 1  →  Durga
@@ -267,9 +210,7 @@ blast to ten lakh mobile numbers.
 | Duplicate **keys** | ❌ **not allowed** |
 | Duplicate **values** | ✅ **allowed** |
 
-**Where you meet maps in real work:** parameter name → parameter value, attribute name → attribute
-value. *"In the servlets, form parameters, request attributes — all these things are internally
-represented by using map concept only."*
+**Where you meet maps in real work:** parameter name → parameter value, attribute name → attribute value. In the servlets, form parameters, request attributes — all these things are internally represented by using map concept only.
 
 ## Implementation classes
 
@@ -283,31 +224,25 @@ represented by using map concept only."*
 | **`Hashtable`** | **1.0** — legacy |
 | **`Properties`** | **1.0** — legacy |
 
-> [!warning] **`Hashtable` has a lowercase `t`.** `HashTable` with a capital `T` is a compile error —
-> there is no such class. It is the single most common typo in this chapter.
+> [!warning] **`Hashtable` has a lowercase `t`.** `HashTable` with a capital `T` is a compile error — there is no such class. It is the single most common typo in this chapter.
 
-Confirmed on JDK 25: `Hashtable`'s superclass is `Dictionary`, and `Properties`' superclass is
-`Hashtable`.
+Confirmed on JDK 25: `Hashtable`'s superclass is `Dictionary`, and `Properties`' superclass is `Hashtable`.
 
 ---
 
 # 8 · `SortedMap` (I)
 
-> **It is the child interface of `Map`. If we want to represent a group of objects as key–value pairs
-> according to some sorting order of keys, then we should go for `SortedMap`.**
+> **It is the child interface of `Map`. If we want to represent a group of objects as key–value pairs according to some sorting order of keys, then we should go for `SortedMap`.**
 
-> [!important] **The sorting is on the key, never the value.** *"In `SortedMap` the sorting should be
-> based on key but not based on value — the value never participates in sorting."*
+> [!important] **The sorting is on the key, never the value.** In `SortedMap` the sorting should be based on key but not based on value — the value never participates in sorting.
 
 ---
 
 # 9 · `NavigableMap` (I)
 
-> **It is the child interface of `SortedMap`, and it defines several methods for navigation
-> purposes.**
+> **It is the child interface of `SortedMap`, and it defines several methods for navigation purposes.**
 
-`TreeMap` is the only implementation class. **`NavigableMap` came in 1.6**, `TreeMap` in 1.2 — the
-same re-engineering story again.
+`TreeMap` is the only implementation class. **`NavigableMap` came in 1.6**, `TreeMap` in 1.2 — the same re-engineering story again.
 
 ```mermaid
 flowchart TB
@@ -320,9 +255,7 @@ flowchart TB
 
 # The hierarchy as it stands on a modern JDK
 
-The diagrams above are the ones to draw in an interview, and they are how the framework is taught
-everywhere. **The real hierarchy has two extra layers in it**, and they are worth recognising when
-you see them in Javadoc.
+The diagrams above are the ones to draw in an interview, and they are how the framework is taught everywhere. **The real hierarchy has two extra layers in it**, and they are worth recognising when you see them in Javadoc.
 
 ```mermaid
 flowchart TB
@@ -339,17 +272,11 @@ flowchart TB
     SC --> D
 ```
 
-> [!question]- **Deep dive — what `SequencedCollection` added, and why it was worth a new layer.**
-> Open this if you have seen `getFirst()` in modern code and wondered where it came from.
+> [!question]- **Deep dive — what `SequencedCollection` added, and why it was worth a new layer.** Open this if you have seen `getFirst()` in modern code and wondered where it came from.
 >
-> Java 21 (JEP 431) noticed something embarrassing: **every one of these collections has a
-> first and a last element, and there was no common way to ask for either.** `List` used `get(0)`,
-> `Deque` used `getFirst()`, `SortedSet` used `first()`, and `LinkedHashSet` had **no way at all** to
-> get its last element without iterating the whole thing.
+> Java 21 (JEP 431) noticed something embarrassing: **every one of these collections has a first and a last element, and there was no common way to ask for either.** `List` used `get(0)`, `Deque` used `getFirst()`, `SortedSet` used `first()`, and `LinkedHashSet` had **no way at all** to get its last element without iterating the whole thing.
 >
-> Three interfaces were inserted to fix it — **`SequencedCollection`, `SequencedSet` and
-> `SequencedMap`** — carrying one small, uniform set of methods. Measured on JDK 25,
-> `SequencedCollection` declares exactly seven:
+> Three interfaces were inserted to fix it — **`SequencedCollection`, `SequencedSet` and `SequencedMap`** — carrying one small, uniform set of methods. Measured on JDK 25, `SequencedCollection` declares exactly seven:
 >
 > ```
 > getFirst   getLast
@@ -358,14 +285,9 @@ flowchart TB
 > reversed
 > ```
 >
-> **`reversed()` is the interesting one:** it returns a reverse-ordered *view*, not a copy, so
-> iterating a `List` backwards no longer needs an index loop.
+> **`reversed()` is the interesting one:** it returns a reverse-ordered **view**, not a copy, so iterating a `List` backwards no longer needs an index loop.
 >
-> **What this changes in the diagrams above:** `List` extends `SequencedCollection` rather than
-> `Collection` directly, `SortedSet` extends `SequencedSet`, and `SortedMap` extends `SequencedMap`.
-> Measured on JDK 25 — `List`'s declared superinterface is `SequencedCollection`, whose own
-> superinterface is `Collection`. **Nothing about the nine key interfaces changed**; a layer was
-> inserted beneath them, and `List` is still a `Collection` by transitivity.
+> **What this changes in the diagrams above:** `List` extends `SequencedCollection` rather than `Collection` directly, `SortedSet` extends `SequencedSet`, and `SortedMap` extends `SequencedMap`. Measured on JDK 25 — `List`'s declared superinterface is `SequencedCollection`, whose own superinterface is `Collection`. **Nothing about the nine key interfaces changed**; a layer was inserted beneath them, and `List` is still a `Collection` by transitivity.
 
 ---
 
@@ -373,13 +295,11 @@ flowchart TB
 
 > **The following are legacy characters present in the collection framework:**
 
-> **1.** `Enumeration` (I)  **2.** `Dictionary` (AC)  **3.** `Vector` (C)
-> **4.** `Stack` (C)  **5.** `Hashtable` (C)  **6.** `Properties` (C)
+> **1.** `Enumeration` (I)  **2.** `Dictionary` (AC)  **3.** `Vector` (C) **4.** `Stack` (C)  **5.** `Hashtable` (C)  **6.** `Properties` (C)
 
-All six came in **1.0**, before the framework existed. *"Legacy means what — which is coming from old generation."*
+All six came in **1.0**, before the framework existed. Legacy means what — which is coming from old generation.
 
-> [!info] **`(AC)` means abstract class.** *"AC means what — abstract class. Don't tell any other
-> definition, air conditioner or something, air cooler."*
+> [!info] **`(AC)` means abstract class.** AC means what — abstract class. Don't tell any other definition, air conditioner or something, air cooler.
 
 > [!important] **What to use instead, if the question turns practical.**
 >
@@ -391,8 +311,7 @@ All six came in **1.0**, before the framework existed. *"Legacy means what — w
 > | `Enumeration` | `Iterator` |
 > | `Dictionary` | `Map` |
 >
-> **`Properties` is the exception** — it is legacy by ancestry but still the standard way to read a
-> `.properties` file, and you will meet it in live code.
+> **`Properties` is the exception** — it is legacy by ancestry but still the standard way to read a `.properties` file, and you will meet it in live code.
 
 
 ---

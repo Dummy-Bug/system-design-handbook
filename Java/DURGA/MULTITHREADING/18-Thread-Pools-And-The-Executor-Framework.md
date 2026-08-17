@@ -1,29 +1,20 @@
 # Thread pools
 
-> **Creating a new thread for every job may create performance and memory problems. To overcome this,
-> we should go for a thread pool.**
+> **Creating a new thread for every job may create performance and memory problems. To overcome this, we should go for a thread pool.**
 
 > **A thread pool is a pool of already-created threads, ready to do our job.**
 
-> [!info] **The connection-pool analogy he starts from.** In JDBC, opening a connection for every
-> query, using it, and closing it **costs performance and memory every single time**. So instead you
-> create a **pool** of connections up front, borrow one when you need it, and **return it to the pool**
-> when you are done — the same connection object serving many requests.
+> [!info] **The connection-pool analogy he starts from.** In JDBC, opening a connection for every query, using it, and closing it **costs performance and memory every single time**. So instead you create a **pool** of connections up front, borrow one when you need it, and **return it to the pool** when you are done — the same connection object serving many requests.
 >
-> **Replace "connection" with "thread" and that is a thread pool.**
+> **Replace connection with thread and that is a thread pool.**
 
 ## The arithmetic
 
-**Ten independent jobs, the naive way:** create a thread, run the job, let it die. Ten times. **Ten
-threads created and destroyed.**
+**Ten independent jobs, the naive way:** create a thread, run the job, let it die. Ten times. **Ten threads created and destroyed.**
 
-**With a pool of five:** submit all ten. The five threads take the first five; as each finishes it
-picks up another. **Five threads do ten jobs.**
+**With a pool of five:** submit all ten. The five threads take the first five; as each finishes it picks up another. **Five threads do ten jobs.**
 
-> [!important] **This is the argument note `02` foreshadowed.** A thread **cannot be restarted** —
-> `IllegalThreadStateException`. So a program doing a job a million times would create a million
-> `Thread` objects. **Pools exist because threads cannot be reused, but the workers running your tasks
-> can be.**
+> [!important] **This is the argument note `02` foreshadowed.** A thread **cannot be restarted** — `IllegalThreadStateException`. So a program doing a job a million times would create a million `Thread` objects. **Pools exist because threads cannot be reused, but the workers running your tasks can be.**
 
 > **Java 1.5 introduced the thread pool framework, also known as the executor framework.**
 
@@ -45,9 +36,7 @@ service.shutdown();                                           // done with the s
 | **Submit** | `service.submit(runnableJob)` |
 | **Shut down** | `service.shutdown()` |
 
-> [!info] **Note what you no longer write.** No `new Thread(...)`, no `t.start()`, no keeping track of
-> which threads exist. *"We are not responsible to create threads — the executor service takes care of
-> it."* **You define the job and submit it.**
+> [!info] **Note what you no longer write.** No `new Thread(...)`, no `t.start()`, no keeping track of which threads exist. We are not responsible to create threads — the executor service takes care of it. **You define the job and submit it.**
 
 ---
 
@@ -95,9 +84,7 @@ Anil  ... job started   by pool-1-thread-1      ← thread-1 reused
 ...
 ```
 
-> [!important] **Read the thread names and the reuse is right there.** `pool-1-thread-2` runs **Ravi**
-> and then **Pavan**. Three threads, six jobs — **each thread did two.** That is the whole point,
-> visible in the output.
+> [!important] **Read the thread names and the reuse is right there.** `pool-1-thread-2` runs **Ravi** and then **Pavan**. Three threads, six jobs — **each thread did two.** That is the whole point, visible in the output.
 
 **The same six jobs through a pool of one:**
 
@@ -110,9 +97,7 @@ Ravi  ... started by pool-2-thread-1
 
 **Strictly sequential** — one thread, one job at a time, all six in order.
 
-> [!info] **The pool size is the concurrency limit, and that is the knob.** Size 3 runs three at once;
-> size 1 makes it serial. **Sizing it is the real decision:** roughly the number of CPU cores for
-> CPU-bound work, and considerably more for I/O-bound work where threads spend their time waiting.
+> [!info] **The pool size is the concurrency limit, and that is the knob.** Size 3 runs three at once; size 1 makes it serial. **Sizing it is the real decision:** roughly the number of CPU cores for CPU-bound work, and considerably more for I/O-bound work where threads spend their time waiting.
 
 ---
 
@@ -124,9 +109,7 @@ service.shutdown();
 
 **Terminates the threads in the pool once the submitted jobs are done.**
 
-> [!warning] **Without `shutdown()`, your program will not exit.** Pool threads are **non-daemon** by
-> default, so the JVM waits for them (note `13`) — and they wait forever for more work. **A missing
-> `shutdown()` is a hung process**, and it is the most common mistake with this API.
+> [!warning] **Without `shutdown()`, your program will not exit.** Pool threads are **non-daemon** by default, so the JVM waits for them (note `13`) — and they wait forever for more work. **A missing `shutdown()` is a hung process**, and it is the most common mistake with this API.
 
 **Submitting after shutdown**, measured on JDK 25:
 
@@ -134,9 +117,7 @@ service.shutdown();
 -> RejectedExecutionException
 ```
 
-> [!info] **`shutdown()` versus `shutdownNow()`.** `shutdown()` is graceful — no new jobs accepted,
-> already-submitted ones still run. **`shutdownNow()` attempts to stop running jobs immediately** by
-> **interrupting** them — which only works if your job actually responds to interruption (note `06`).
+> [!info] **`shutdown()` versus `shutdownNow()`.** `shutdown()` is graceful — no new jobs accepted, already-submitted ones still run. **`shutdownNow()` attempts to stop running jobs immediately** by **interrupting** them — which only works if your job actually responds to interruption (note `06`).
 >
 > **To wait for completion**, `shutdown()` does not block. Use:
 > ```java
@@ -158,10 +139,7 @@ service.shutdown();
 | `newScheduledThreadPool(n)` | jobs that run **later** or **repeatedly** |
 | `newVirtualThreadPerTaskExecutor()` | a **virtual thread per task** (Java 21+) |
 
-> [!important] **`newVirtualThreadPerTaskExecutor()` is the modern answer for I/O-bound work**, and it
-> inverts the advice above. Virtual threads are cheap enough that **you no longer pool them** — you
-> create one per task and let the JVM multiplex them onto carrier threads. **Pooling exists because
-> platform threads are expensive; virtual threads are not.**
+> [!important] **`newVirtualThreadPerTaskExecutor()` is the modern answer for I/O-bound work**, and it inverts the advice above. Virtual threads are cheap enough that **you no longer pool them** — you create one per task and let the JVM multiplex them onto carrier threads. **Pooling exists because platform threads are expensive; virtual threads are not.**
 >
 > For CPU-bound work, a fixed pool sized to the cores is still right.
 
@@ -169,15 +147,12 @@ service.shutdown();
 
 # `submit()` and `Future`
 
-> [!info] **`submit()` returns a `Future`, which the lecture does not use but which is the reason to
-> prefer `submit()` over `execute()`.**
+> [!info] **`submit()` returns a `Future`, which the lecture does not use but which is the reason to prefer `submit()` over `execute()`.**
 > ```java
 > Future<?> f = service.submit(job);
 > f.get();          // blocks until the job finishes
 > ```
-> **With a `Callable` instead of a `Runnable`**, the job can return a value and throw a checked
-> exception, and `f.get()` hands you the result. **This is how you get an answer back out of a pooled
-> task** — the problem note `11` solved by hand with `wait()`/`notify()`.
+> **With a `Callable` instead of a `Runnable`**, the job can return a value and throw a checked exception, and `f.get()` hands you the result. **This is how you get an answer back out of a pooled task** — the problem note `11` solved by hand with `wait()`/`notify()`.
 
 ---
 

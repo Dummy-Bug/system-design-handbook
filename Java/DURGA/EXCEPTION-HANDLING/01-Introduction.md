@@ -3,7 +3,7 @@
 
 > **Exception:** an **unwanted**, **unexpected** event that **disturbs the normal flow of the program**.
 
-Every word in it is doing work — *unwanted*, *unexpected*, and above all *disturbs the normal flow*. He builds up to it through two stories rather than stating it cold.
+Every word in it is doing work — **unwanted**, **unexpected**, and above all **disturbs the normal flow**. He builds up to it through two stories rather than stating it cold.
 
 # Why you should handle exceptions
 
@@ -25,7 +25,7 @@ Let that happen ten times and ten connections are wasted. And if the database se
 
 The right behaviour is obvious once stated: if an exception occurs, **close the connection first, then stop.**
 
-> [!important] **The main objective of exception handling is graceful (normal) termination of the program.** And *graceful* has a precise meaning here: **we should not miss anything and we should not lose anything.** The program may still end — but it ends having released what it held.
+> [!important] **The main objective of exception handling is graceful (normal) termination of the program.** And **graceful** has a precise meaning here: **we should not miss anything and we should not lose anything.** The program may still end — but it ends having released what it held.
 >
 
 
@@ -52,7 +52,6 @@ try {
 If the Remote file is not available, you cannot make it available — **you are not responsible for placing a file one Remote server.** What you can do is keep a local file on your own machine and use that instead.
 
 > [!important] **The two definitions to keep separate.**
-> **An exception** is an unwanted, unexpected event that disturbs the normal flow of the program.
-> **Exception handling** is defining an alternative way to continue the rest of the program normally — *not* repairing the exception.
+> **An exception** is an unwanted, unexpected event that disturbs the normal flow of the program. **Exception handling** is defining an alternative way to continue the rest of the program normally — **not** repairing the exception.
 
 ---

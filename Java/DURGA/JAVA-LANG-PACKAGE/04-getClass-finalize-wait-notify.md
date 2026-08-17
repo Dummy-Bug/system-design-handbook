@@ -9,9 +9,7 @@ ArrayList l = …;
 Object o = l.get(0);
 ```
 
-**What type is `o`?** You do not know. An `ArrayList` can hold anything — a `Student`, a `Customer`, a
-`String`. That is why `get()` is declared to return **`Object`**: it is the only type that fits every
-possibility.
+**What type is `o`?** You do not know. An `ArrayList` can hold anything — a `Student`, a `Customer`, a `String`. That is why `get()` is declared to return **`Object`**: it is the only type that fits every possibility.
 
 So you are holding an object whose class you cannot see. `getClass()` hands you that class:
 
@@ -19,19 +17,15 @@ So you are holding an object whose class you cannot see. `getClass()` hands you 
 Class c = o.getClass();
 ```
 
-> [!important] **What comes back is an object of type `java.lang.Class`.** It is not the object's data —
-> it is the **class definition itself**, packaged as an object you can interrogate: its name, its
-> methods, its constructors, its parent.
+> [!important] **What comes back is an object of type `java.lang.Class`.** It is not the object's data — it is the **class definition itself**, packaged as an object you can interrogate: its name, its methods, its constructors, its parent.
 
 ## Where that `Class` object comes from
 
-> **After loading every `.class` file, the JVM creates an object of type `java.lang.Class` in the heap
-> area.** One per loaded class.
+> **After loading every `.class` file, the JVM creates an object of type `java.lang.Class` in the heap area.** One per loaded class.
 >
 > **The programmer can use that `Class` object to get class-level information.**
 
-So `getClass()` does not build anything — it hands you the object the JVM already made at class loading
-time.
+So `getClass()` does not build anything — it hands you the object the JVM already made at class loading time.
 
 ```mermaid
 flowchart LR
@@ -64,10 +58,7 @@ the number of methods: 151
 first few: value, equals, length
 ```
 
-> [!important] **Never memorise a method count — measure it.** `String` reports **151** methods here,
-> including private helpers; it was 73 in the Java 8 era, before `isBlank`, `strip`, `lines`, `repeat`,
-> `formatted`, `chars` and `transform` arrived. The number is a property of the JDK you are running,
-> and the reflection technique above is the only answer that stays correct.
+> [!important] **Never memorise a method count — measure it.** `String` reports **151** methods here, including private helpers; it was 73 in the Java 8 era, before `isBlank`, `strip`, `lines`, `repeat`, `formatted`, `chars` and `transform` arrived. The number is a property of the JDK you are running, and the reflection technique above is the only answer that stays correct.
 
 **And it works on anything.** Measured on JDK 25:
 
@@ -78,8 +69,7 @@ java.lang.String
 java.lang.Integer
 ```
 
-> [!info] **The import that is required.** `Method` lives in **`java.lang.reflect`**, a **sub-package**
-> — so `java.lang` being automatic does not cover it. `import java.lang.reflect.*;` is mandatory.
+> [!info] **The import that is required.** `Method` lives in **`java.lang.reflect`**, a **sub-package** — so `java.lang` being automatic does not cover it. `import java.lang.reflect.*;` is mandatory.
 
 ## The real-world use — JDBC
 
@@ -90,12 +80,9 @@ Connection con = DriverManager.getConnection(url, user, password);
 System.out.println(con.getClass().getName());
 ```
 
-**`Connection` is an interface.** So what class is that object actually? It depends on the vendor —
-Oracle's driver returns one implementation, MySQL's another.
+**`Connection` is an interface.** So what class is that object actually? It depends on the vendor — Oracle's driver returns one implementation, MySQL's another.
 
-> *"I don't want to hard-code any vendor-specific name in my program. I want to use generalised API
-> names."* You program against `Connection`; `getClass().getName()` tells you at runtime **which
-> vendor's implementation you actually got**.
+> I don't want to hard-code any vendor-specific name in my program. I want to use generalised API names. You program against `Connection`; `getClass().getName()` tells you at runtime **which vendor's implementation you actually got**.
 
 ---
 
@@ -103,29 +90,21 @@ Oracle's driver returns one implementation, MySQL's another.
 
 > **`protected void finalize() throws Throwable`**
 
-> [!question]- **Deep dive — the garbage collector's last wish.** His story for what `finalize()` is,
-> and it gets the sequence exactly right.
+> [!question]- **Deep dive — the garbage collector's last wish.** His story for what `finalize()` is, and it gets the sequence exactly right.
 >
 > An object has no references pointing to it, so it is **eligible for garbage collection**.
 >
-> The garbage collector arrives and is delighted — *"today I got wonderful food, just like biryani"* —
-> a useless object is its food. It starts dancing in front of the object: *"I am going to destroy
-> you."*
+> The garbage collector arrives and is delighted — today I got wonderful food, just like biryani — a useless object is its food. It starts dancing in front of the object: I am going to destroy you.
 >
 > **The object starts crying.** And the garbage collector is not a cruel person:
 >
-> > *"Definitely I am going to destroy you, because if I don't, I am not doing my job well and the JVM
-> > will give me left and right. **But before destruction — do you have any last wish?** Let me know and
-> > I will fulfil it, then destroy you."*
+> > Definitely I am going to destroy you, because if I don't, I am not doing my job well and the JVM will give me left and right. **But before destruction — do you have any last wish?** Let me know and I will fulfil it, then destroy you.
 >
-> The object answers: *"There is a database connection associated with me, a network connection
-> associated with me. **Can you please close them?** Then you can destroy me."*
+> The object answers: There is a database connection associated with me, a network connection associated with me. **Can you please close them?** Then you can destroy me.
 >
-> **To fulfil that last wish, the garbage collector calls `finalize()`.** Once it completes, the object
-> is destroyed.
+> **To fulfil that last wish, the garbage collector calls `finalize()`.** Once it completes, the object is destroyed.
 
-> **Just before destroying an object, the garbage collector calls `finalize()` to perform clean-up
-> activities. Once `finalize()` completes, the garbage collector destroys the object.**
+> **Just before destroying an object, the garbage collector calls `finalize()` to perform clean-up activities. Once `finalize()` completes, the garbage collector destroys the object.**
 
 | Question | Answer |
 |---|---|
@@ -133,16 +112,11 @@ Oracle's driver returns one implementation, MySQL's another.
 | When? | **just before** destroying the object |
 | Why? | to perform **clean-up activities** |
 
-> [!warning] **Never write a `finalize()` method.** It is deprecated **for removal**, and compiling any
-> class that overrides it produces:
+> [!warning] **Never write a `finalize()` method.** It is deprecated **for removal**, and compiling any class that overrides it produces:
 > ```
 > warning: [removal] finalize() in Object has been deprecated and marked for removal
 > ```
-> The mechanism was always unreliable: **no guarantee it ever runs, no guarantee when**, it can
-> resurrect the object, and it delays collection. For the exact use case above — closing a database or
-> network connection — use **try-with-resources** for scoped cleanup and **`java.lang.ref.Cleaner`**
-> for the rest. The description above is still the right mental model of what it *does*, and it is
-> still asked about constantly.
+> The mechanism was always unreliable: **no guarantee it ever runs, no guarantee when**, it can resurrect the object, and it delays collection. For the exact use case above — closing a database or network connection — use **try-with-resources** for scoped cleanup and **`java.lang.ref.Cleaner`** for the rest. The description above is still the right mental model of what it **does**, and it is still asked about constantly.
 
 ---
 
@@ -162,20 +136,15 @@ Oracle's driver returns one implementation, MySQL's another.
 
 Two threads share an object. One **produces** items, the other **consumes** them.
 
-- The **consumer** wants an update that has not happened yet. It calls **`wait()`** and enters the
-  **waiting state** — in effect saying *"if anyone updates this, let me know; I'm waiting."*
+- The **consumer** wants an update that has not happened yet. It calls **`wait()`** and enters the **waiting state** — in effect saying if anyone updates this, let me know; I'm waiting.
 - The **producer** performs the update, then calls **`notify()`**.
 - The waiting consumer **receives the notification** and continues.
 
-> **The thread that is expecting the update is responsible for calling `wait()`. The thread that
-> performs the update is responsible for calling `notify()`.**
+> **The thread that is expecting the update is responsible for calling `wait()`. The thread that performs the update is responsible for calling `notify()`.**
 
-> [!important] **And these are `Object` methods, not `Thread` methods** — which is the interview
-> question hiding here. They live on `Object` because **any object can serve as the lock** two threads
-> coordinate on, so every object must be able to host a wait set.
+> [!important] **And these are `Object` methods, not `Thread` methods** — which is the interview question hiding here. They live on `Object` because **any object can serve as the lock** two threads coordinate on, so every object must be able to host a wait set.
 
-Full treatment belongs to the multithreading chapter; this is the reason they appear in the list of
-`Object`'s eleven.
+Full treatment belongs to the multithreading chapter; this is the reason they appear in the list of `Object`'s eleven.
 
 ---
 

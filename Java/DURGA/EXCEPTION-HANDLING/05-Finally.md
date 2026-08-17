@@ -65,7 +65,7 @@ exit code: 0
 
 All three blocks, in order. Normal termination.
 
-## Case 3 — exception raised, catch does *not* match
+## Case 3 — exception raised, catch does **not** match
 
 ```java
 try {
@@ -87,7 +87,7 @@ Exception in thread "main" java.lang.ArithmeticException: / by zero
 exit code: 1
 ```
 
-> [!important] **Case 3 is the one that proves the claim.** The exception was *not handled* — the program dies abnormally with exit code 1 — and **`finally` still ran**, before the default handler printed anything. That is what "irrespective of whether handled or not" means in practice: the cleanup happened on the way out.
+> [!important] **Case 3 is the one that proves the claim.** The exception was **not handled** — the program dies abnormally with exit code 1 — and **`finally` still ran**, before the default handler printed anything. That is what irrespective of whether handled or not means in practice: the cleanup happened on the way out.
 
 ---
 
@@ -111,7 +111,7 @@ try block executed
 finally block executed
 ```
 
-The `return` is *pending* while `finally` runs. Cleanup cannot be skipped by returning early — which is exactly the guarantee that makes `finally` worth having.
+The `return` is **pending** while `finally` runs. Cleanup cannot be skipped by returning early — which is exactly the guarantee that makes `finally` worth having.
 
 ## When all three return
 
@@ -144,7 +144,7 @@ Read the path: `10/0` throws, so `return 777` never happens. The catch matches a
 > R2.java:6: warning: [finally] finally clause cannot complete normally
 > ```
 >
-> Learn it because it is asked — *what does this print?* is a standard puzzle, and the answer is 999. Then know that the compiler considers it a defect.
+> Learn it because it is asked — what does this print? is a standard puzzle, and the answer is 999. Then know that the compiler considers it a defect.
 
 ---
 
@@ -171,8 +171,7 @@ exit code: 0
 
 Only `try`. **`finally` did not run.** And the reason is not a special case in the language — there is no JVM left to run it. `System.exit()` shuts the whole thing down.
 
-> [!important] **The chain of dominance, which is a clean way to remember all of this.**
-> `finally` dominates `return` — a pending return waits for cleanup.
+> [!important] **The chain of dominance, which is a clean way to remember all of this.** `finally` dominates `return` — a pending return waits for cleanup.
 > `System.exit(0)` dominates `finally` — nothing waits for anything, the JVM is gone.
 
 > [!info] **About that argument.** It is a **status code**, and it need not be zero — any integer is legal. By convention **zero means normal termination and non-zero means abnormal termination.** The code is used by whatever launched the JVM; as far as your program's own behaviour is concerned, zero or non-zero makes no difference to the result.
@@ -209,12 +208,11 @@ Only `try`. **`finally` did not run.** And the reason is not a special case in t
 | Purpose | prevent inheritance / overriding / reassignment | cleanup, always | cleanup, before destruction |
 
 > [!important] **The two notes that turn this from a list into an answer.**
-> **1.** `finally` is for cleanup related to the **`try` block**; `finalize()` is for cleanup related to the **object**. Different scopes entirely.
-> **2.** For maintaining cleanup code, **`finally` is recommended over `finalize()`** — because we cannot expect the exact behaviour of the garbage collector.
+> **1.** `finally` is for cleanup related to the **`try` block**; `finalize()` is for cleanup related to the **object**. Different scopes entirely. **2.** For maintaining cleanup code, **`finally` is recommended over `finalize()`** — because we cannot expect the exact behaviour of the garbage collector.
 
 > [!warning] **`finalize()` is deprecated for removal, and the second note above is the reason why.** The garbage collector's timing is not guaranteed at all, so cleanup attached to it may happen late or never. This is covered in full in the garbage collection chapter — [[04-Finalization-And-Memory-Leaks|finalization and memory leaks]] — including measured proof that its exceptions are silently swallowed and that it runs only once per object even if the object becomes eligible twice.
 >
-> The modern answer to *"where does cleanup go?"* is **`try`-with-resources**, which is part 10 of this chapter. `finally` remains correct and is what try-with-resources is built on top of.
+> The modern answer to where does cleanup go? is **`try`-with-resources**, which is part 10 of this chapter. `finally` remains correct and is what try-with-resources is built on top of.
 
 ---
 

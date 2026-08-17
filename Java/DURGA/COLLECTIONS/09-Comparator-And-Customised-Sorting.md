@@ -15,8 +15,7 @@ public int compare(Object obj1, Object obj2)
 public boolean equals(Object obj)
 ```
 
-**`compare()` has exactly the same three-way contract as `compareTo()`** — which is why note `08`
-spent so long on it:
+**`compare()` has exactly the same three-way contract as `compareTo()`** — which is why note `08` spent so long on it:
 
 | Returns | Meaning |
 |---|---|
@@ -33,27 +32,15 @@ class MyComparator implements Comparator {
 }
 ```
 
-Normally implementing an interface means implementing **every** method. Here you implement only
-`compare()`.
+Normally implementing an interface means implementing **every** method. Here you implement only `compare()`.
 
-> **We are not required to provide an implementation for `equals()` because it is already available to
-> our class from the `Object` class, through inheritance.**
+> **We are not required to provide an implementation for `equals()` because it is already available to our class from the `Object` class, through inheritance.**
 
-**No rule is being violated.** `MyComparator` is a child of `Object`, `Object` already has `equals()`,
-so the inherited version satisfies the interface. The only method genuinely left unimplemented is
-`compare()`.
+**No rule is being violated.** `MyComparator` is a child of `Object`, `Object` already has `equals()`, so the inherited version satisfies the interface. The only method genuinely left unimplemented is `compare()`.
 
-> [!info] **This is the marker-interface reasoning from `DECLARATIONS-AND-ACCESS-MODIFIERS/13` in
-> reverse.** There, an interface declared nothing and a class satisfied it trivially. Here, an
-> interface declares something that `Object` already provides — so the class satisfies half of it
-> without writing a line. **Declaring `equals()` in `Comparator` is documentation**, telling
-> implementers that equality matters for consistency; it imposes no work.
+> [!info] **This is the marker-interface reasoning from `DECLARATIONS-AND-ACCESS-MODIFIERS/13` in reverse.** There, an interface declared nothing and a class satisfied it trivially. Here, an interface declares something that `Object` already provides — so the class satisfies half of it without writing a line. **Declaring `equals()` in `Comparator` is documentation**, telling implementers that equality matters for consistency; it imposes no work.
 
-> [!important] **`Comparator` is a functional interface.** Confirmed on JDK 25 — it carries
-> `@FunctionalInterface`, precisely because `equals()` is inherited from `Object` and therefore does
-> not count towards the single-abstract-method rule. **That is exactly the "non-overriding abstract
-> method" wording from `JAVA-8-FEATURES/02`**, and it means every comparator in this note can be
-> written as a lambda:
+> [!important] **`Comparator` is a functional interface.** Confirmed on JDK 25 — it carries `@FunctionalInterface`, precisely because `equals()` is inherited from `Object` and therefore does not count towards the single-abstract-method rule. **That is exactly the non-overriding abstract method wording from `JAVA-8-FEATURES/02`**, and it means every comparator in this note can be written as a lambda:
 > ```java
 > new TreeSet<>((i1, i2) -> i2.compareTo(i1));
 > ```
@@ -62,8 +49,7 @@ so the inherited version satisfies the interface. The only method genuinely left
 
 # The worked example
 
-> **Write a program to insert integer objects into a `TreeSet` where the sorting order is descending
-> order.**
+> **Write a program to insert integer objects into a `TreeSet` where the sorting order is descending order.**
 
 Default natural sorting order for numbers is **ascending**. We want the opposite.
 
@@ -107,28 +93,21 @@ Measured on JDK 25:
 | **no comparator object** | **`compareTo()`** | default natural sorting order | `[0, 5, 10, 15, 20]` |
 | **a comparator object** | **`compare()`** | customised sorting order | `[20, 15, 10, 5, 0]` |
 
-> [!important] **Passing a `Comparator` redirects which method the JVM calls.** That is the entire
-> mechanism. `compareTo()` lives on the *element* and gives one fixed order; `compare()` lives on a
-> *separate object you supply* and gives whatever order you write. **You cannot change `Integer`'s
-> `compareTo`, but you can always supply a comparator.**
+> [!important] **Passing a `Comparator` redirects which method the JVM calls.** That is the entire mechanism. `compareTo()` lives on the **element** and gives one fixed order; `compare()` lives on a **separate object you supply** and gives whatever order you write. **You cannot change `Integer`'s `compareTo`, but you can always supply a comparator.**
 
-## Why the logic is "backwards"
+## Why the logic is `backwards`
 
 The body reads oddly at first — `if (i1 < i2) return +1`.
 
-**Work it through.** We want descending order. If `i1` is **smaller** than `i2`, then in descending
-order the smaller one must come **later**. "Later" means **positive**. So a smaller value returns a
-positive number.
+**Work it through.** We want descending order. If `i1` is **smaller** than `i2`, then in descending order the smaller one must come **later**. `Later` means **positive**. So a smaller value returns a positive number.
 
-> [!question]- **Deep dive — the full insertion trace, element by element.** Follow this once and the
-> mechanism stops being mysterious.
+> [!question]- **Deep dive — the full insertion trace, element by element.** Follow this once and the mechanism stops being mysterious.
 >
 > Inserting `10, 0, 15, 5, 20, 20` with the comparator above:
 >
 > **`add(10)`** — first element, nothing to compare against, inserted.
 >
-> **`add(0)`** → `compare(0, 10)`. `i1=0`, `i2=10`. `0 < 10` → **return +1** → positive → **0 goes
-> after 10**.
+> **`add(0)`** → `compare(0, 10)`. `i1=0`, `i2=10`. `0 < 10` → **return +1** → positive → **0 goes after 10**.
 > ```
 > 10 → 0
 > ```
@@ -138,25 +117,21 @@ positive number.
 > 15 → 10 → 0
 > ```
 >
-> **`add(5)`** → `compare(5, 10)`. `5 < 10` → **+1** → after 10. But 0 is already there, so compare
-> again: `compare(5, 0)`. `5 > 0` → **−1** → before 0.
+> **`add(5)`** → `compare(5, 10)`. `5 < 10` → **+1** → after 10. But 0 is already there, so compare again: `compare(5, 0)`. `5 > 0` → **−1** → before 0.
 > ```
 > 15 → 10 → 5 → 0
 > ```
 >
-> **`add(20)`** → `compare(20, 10)` → `20 > 10` → **−1** → before 10. 15 is there, so
-> `compare(20, 15)` → **−1** → before 15.
+> **`add(20)`** → `compare(20, 10)` → `20 > 10` → **−1** → before 10. 15 is there, so `compare(20, 15)` → **−1** → before 15.
 > ```
 > 20 → 15 → 10 → 5 → 0
 > ```
 >
-> **`add(20)` again** → `compare(20, 10)` → −1 → before. `compare(20, 15)` → −1 → before.
-> `compare(20, 20)` → **0** → **duplicate, rejected.**
+> **`add(20)` again** → `compare(20, 10)` → −1 → before. `compare(20, 15)` → −1 → before. `compare(20, 20)` → **0** → **duplicate, rejected.**
 >
 > **Reading the balanced tree left-root-right (in-order traversal) gives `20 15 10 5 0`.**
 >
-> Note that the comparator is consulted **repeatedly** for a single insertion — once per level of the
-> tree — which is why an expensive `compare()` costs more than you might expect.
+> Note that the comparator is consulted **repeatedly** for a single insertion — once per level of the tree — which is why an expensive `compare()` costs more than you might expect.
 
 ---
 
@@ -164,13 +139,9 @@ positive number.
 
 The single most useful idea in this session:
 
-> **The JVM is a blind person. Whatever you return, it acts on. If your `compare()` returns negative,
-> it places your element before. If positive, after. If zero, it treats it as a duplicate and does not
-> insert. Whether the elements are *really* duplicates or *really* greater is not its concern — that is
-> your job.**
+> **The JVM is a blind person. Whatever you return, it acts on. If your `compare()` returns negative, it places your element before. If positive, after. If zero, it treats it as a duplicate and does not insert. Whether the elements are really duplicates or really greater is not its concern — that is your job.**
 
-**This is why the pathological implementations below behave the way they do**, and why they are worth
-running.
+**This is why the pathological implementations below behave the way they do**, and why they are worth running.
 
 ---
 
@@ -180,7 +151,7 @@ All measured on JDK 25, inserting `10, 0, 15, 5, 20, 20` every time.
 
 | # | `compare()` body | Output |
 |---|---|---|
-| 1 | *no comparator at all* | `[0, 5, 10, 15, 20]` |
+| 1 | **no comparator at all** | `[0, 5, 10, 15, 20]` |
 | 2 | `if (i1<i2) +1; else if (i1>i2) -1; else 0` | `[20, 15, 10, 5, 0]` |
 | 3 | `return i1.compareTo(i2);` | `[0, 5, 10, 15, 20]` |
 | 4 | `return -i1.compareTo(i2);` | `[20, 15, 10, 5, 0]` |
@@ -197,31 +168,26 @@ All measured on JDK 25, inserting `10, 0, 15, 5, 20, 20` every time.
 **There are two independent ways to flip it, and they cancel:**
 
 - **Row 4** — negate the result. Every `before` becomes `after`.
-- **Row 5** — swap the arguments. Asking "where does `i2` go relative to `i1`" is the mirror question.
+- **Row 5** — swap the arguments. Asking where does `i2` go relative to `i1` is the mirror question.
 - **Row 6** — do **both**, and you are back where you started. **Two reversals = the original order.**
 
-> [!important] **Row 4 is the idiom worth remembering: `return -i1.compareTo(i2);`** It is one line,
-> it works for any comparable type, and it reads as *"the opposite of natural order."* Compare it with
-> row 2 — six lines of `if`/`else` for the identical result.
+> [!important] **Row 4 is the idiom worth remembering: `return -i1.compareTo(i2);`** It is one line, it works for any comparable type, and it reads as the opposite of natural order. Compare it with row 2 — six lines of `if`/`else` for the identical result.
 >
-> Modern Java has an even shorter form: **`Comparator.reverseOrder()`**, or `c.reversed()` on any
-> existing comparator.
+> Modern Java has an even shorter form: **`Comparator.reverseOrder()`**, or `c.reversed()` on any existing comparator.
 
 ## Rows 7 to 9 — the dangerous ones
 
-These are what "the JVM is blind" actually means.
+These are what the JVM is blind actually means.
 
-**Row 7 — `return +1`.** Every new element is reported as belonging *after* everything. Nothing is ever
-equal, so **nothing is ever rejected as a duplicate**:
+**Row 7 — `return +1`.** Every new element is reported as belonging **after** everything. Nothing is ever equal, so **nothing is ever rejected as a duplicate**:
 
 ```
 [10, 0, 15, 5, 20, 20]
 ```
 
-**Both 20s are present, and the order is insertion order.** A `TreeSet` that keeps duplicates and does
-not sort — because you told it to.
+**Both 20s are present, and the order is insertion order.** A `TreeSet` that keeps duplicates and does not sort — because you told it to.
 
-**Row 8 — `return -1`.** Every element goes *before* everything:
+**Row 8 — `return -1`.** Every element goes **before** everything:
 
 ```
 [20, 20, 5, 15, 0, 10]
@@ -237,17 +203,11 @@ not sort — because you told it to.
 
 **Only the first element survives. Everything else is discarded as a duplicate.**
 
-> [!warning] **A `Comparator` inconsistent with `equals()` breaks the collection's guarantees, and you
-> get no warning.** Rows 7–9 are not errors — they compile, they run, and they silently produce a
-> `TreeSet` that violates the two things a `TreeSet` promises: no duplicates, and sorted order.
+> [!warning] **A `Comparator` inconsistent with `equals()` breaks the collection's guarantees, and you get no warning.** Rows 7–9 are not errors — they compile, they run, and they silently produce a `TreeSet` that violates the two things a `TreeSet` promises: no duplicates, and sorted order.
 >
-> **The requirement the JDK documents is that `compare()` must be a *total order*:** consistent
-> (`compare(a,b)` always gives the same answer), antisymmetric (`compare(a,b)` and `compare(b,a)` have
-> opposite signs), and transitive. Rows 7 and 8 fail antisymmetry — `compare(a,b)` and `compare(b,a)`
-> both return `+1`. Row 9 claims everything is equal.
+> **The requirement the JDK documents is that `compare()` must be a total order:** consistent (`compare(a,b)` always gives the same answer), antisymmetric (`compare(a,b)` and `compare(b,a)` have opposite signs), and transitive. Rows 7 and 8 fail antisymmetry — `compare(a,b)` and `compare(b,a)` both return `+1`. Row 9 claims everything is equal.
 >
-> **This is a real bug in production code**, usually written as a `compare()` that forgets a case and
-> returns a constant on the fallthrough path.
+> **This is a real bug in production code**, usually written as a `compare()` that forgets a case and returns a constant on the fallthrough path.
 
 ---
 
@@ -265,14 +225,9 @@ The interview question this session exists to answer:
 | **How many orderings** | **one** per class | **as many as you like** |
 | **How the JVM uses it** | called when **no** comparator is supplied | called when a comparator **is** supplied |
 
-> [!important] **The deepest difference is the last-but-one row.** `Comparable` is baked into the
-> element's own class — one class, one ordering, and you cannot have two. `Comparator` is a separate
-> object, so **you can write ten of them for the same class** and choose per collection: sort employees
-> by name here, by salary there, by joining date somewhere else.
+> [!important] **The deepest difference is the last-but-one row.** `Comparable` is baked into the element's own class — one class, one ordering, and you cannot have two. `Comparator` is a separate object, so **you can write ten of them for the same class** and choose per collection: sort employees by name here, by salary there, by joining date somewhere else.
 >
-> That is also why you cannot make `String` sort case-insensitively by changing `Comparable` — you
-> would have to modify `java.lang.String`. You supply a comparator instead, and the JDK ships one:
-> `String.CASE_INSENSITIVE_ORDER`.
+> That is also why you cannot make `String` sort case-insensitively by changing `Comparable` — you would have to modify `java.lang.String`. You supply a comparator instead, and the JDK ships one: `String.CASE_INSENSITIVE_ORDER`.
 
 ---
 

@@ -81,17 +81,15 @@ error: incompatible types: ArrayList<String> cannot be converted to ArrayList<Ob
 
 Whatever the parameter type is on the right, the **same** type must appear on the left.
 
-> [!question]- **Deep dive — why the language forbids something that looks obviously safe.** Worth opening once, because the rule feels arbitrary until you see what it prevents.
-> Suppose `ArrayList<Object> l = new ArrayList<String>();` were allowed. `l` is declared as holding `Object`s, so this must be legal:
+> [!question]- **Deep dive — why the language forbids something that looks obviously safe.** Worth opening once, because the rule feels arbitrary until you see what it prevents. Suppose `ArrayList<Object> l = new ArrayList<String>();` were allowed. `l` is declared as holding `Object`s, so this must be legal:
 > ```java
 > l.add(Integer.valueOf(10));
 > ```
-> But the object underneath is genuinely an `ArrayList<String>`, and somebody else holds a reference to it *as* an `ArrayList<String>`:
+> But the object underneath is genuinely an `ArrayList<String>`, and somebody else holds a reference to it **as** an `ArrayList<String>`:
 > ```java
 > String s = stringList.get(0);   // gets an Integer — ClassCastException
 > ```
-> The whole point of generics was to make that impossible. Allowing the assignment would put the runtime failure straight back, so the compiler refuses one line earlier.
-> **Arrays do allow it**, which is why `Object[] a = new String[3]; a[0] = 10;` compiles and then throws `ArrayStoreException` at runtime — the exact hole generics were designed to close.
+> The whole point of generics was to make that impossible. Allowing the assignment would put the runtime failure straight back, so the compiler refuses one line earlier. **Arrays do allow it**, which is why `Object[] a = new String[3]; a[0] = 10;` compiles and then throws `ArrayStoreException` at runtime — the exact hole generics were designed to close.
 
 ---
 
@@ -117,7 +115,7 @@ error: unexpected type
 
 The reason is the one from collections: **collections can hold only objects, never primitives.**
 
-> [!info] **`required: reference` is the phrase to notice.** The compiler is not saying `int` is unknown — it is saying it needs a *reference* type and got a value type.
+> [!info] **`required: reference` is the phrase to notice.** The compiler is not saying `int` is unknown — it is saying it needs a **reference** type and got a value type.
 
 ---
 
@@ -179,7 +177,7 @@ And now both fixes follow mechanically:
 - **`add` takes only a `String`** → adding anything else is a compile error → **type safety**.
 - **`get` returns a `String`** → no cast needed → **type casting problem resolved**.
 
-> [!important] **This is the answer to "how do generics work internally?"** Not magic and not a runtime check — a **type parameter** substituted at compile time, which changes the signatures of the methods you are calling.
+> [!important] **This is the answer to how do generics work internally?** Not magic and not a runtime check — a **type parameter** substituted at compile time, which changes the signatures of the methods you are calling.
 
 > [!info] **What the compiler actually says.** After substitution, `add` takes a `String`, so passing an `Integer` is an argument mismatch:
 > ```
@@ -280,8 +278,7 @@ Exactly the pattern `ArrayList<T>` uses for `add(T)` and `T get(int)`.
 > Gen<Integer> g1 = new Gen<>(10);
 > ArrayList<String> l = new ArrayList<>();
 > ```
-> The compiler infers the right-hand side from the left. Everything above behaves identically — the
-> long form is written out in full here only because it makes the substitution visible.
+> The compiler infers the right-hand side from the left. Everything above behaves identically — the long form is written out in full here only because it makes the substitution visible.
 
 ---
 

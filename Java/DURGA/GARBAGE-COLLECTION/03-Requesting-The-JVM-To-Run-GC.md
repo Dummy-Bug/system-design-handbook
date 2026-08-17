@@ -13,7 +13,7 @@ Some JVMs might run it in the morning, some in the evening, some in the afternoo
 >
 > **You can request, not command.** If you know a large number of objects are eligible, you can ask the JVM to run the collector. It usually accepts — but **acceptance is not guaranteed**, and there is no way to force it.
 
-> [!warning] **The wording matters, and it is a common mistake.** People say *"`System.gc()` calls the garbage collector."* It does not. **You cannot call the garbage collector directly.** You can only request that the JVM run it — and the JVM may decline. Say it the wrong way and you have shown that you think you control something you do not.
+> [!warning] **The wording matters, and it is a common mistake.** People say `System.gc()` calls the garbage collector. It does not. **You cannot call the garbage collector directly.** You can only request that the JVM run it — and the JVM may decline. Say it the wrong way and you have shown that you think you control something you do not.
 
 There are **two ways** to make that request: through the `System` class, and through the `Runtime` class.
 
@@ -39,9 +39,9 @@ This one needs more setup, because it is really about how a Java application tal
 
 Picture your Java application on one side and the JVM on the other. The application wants something.
 
-- *I want to create 10,000 objects. How much free memory is there in the heap?* — the JVM answers with a number of bytes.
-- *And what is the total heap size?* — another number.
-- *That free memory may not be enough. Can you please run your garbage collector?*
+- I want to create 10,000 objects. How much free memory is there in the heap? — the JVM answers with a number of bytes.
+- And what is the total heap size? — another number.
+- That free memory may not be enough. Can you please run your garbage collector?
 
 Three questions, and each one is a method. But to ask any of them, the application needs an object to speak through:
 
@@ -71,7 +71,7 @@ Runtime r = Runtime.getRuntime();
 | `totalMemory()` | number of bytes of **total** heap memory |
 | `gc()` | requests the JVM to run the garbage collector |
 
-> [!info] **`freeMemory()` and `totalMemory()` are already covered in the JVM chapter**, in `05-The five memory areas` — together with `maxMemory()` and the room-and-chairs analogy for how the three relate. This chapter is only interested in them as a way of *seeing* the collector do something.
+> [!info] **`freeMemory()` and `totalMemory()` are already covered in the JVM chapter**, in `05-The five memory areas` — together with `maxMemory()` and the room-and-chairs analogy for how the three relate. This chapter is only interested in them as a way of **seeing** the collector do something.
 
 ## The program
 
@@ -121,7 +121,7 @@ Two things to read off that.
 
 **`r.gc()` did something.** Free memory rose by about 0.9 MB — the collector ran, found the ten thousand unreachable `Date` objects, and reclaimed the space. That rise is the whole point of the program: it is the collector's work made visible.
 
-> [!warning] **Pin the heap, or the numbers will mislead you.** Without `-Xms`/`-Xmx`, the default heap on a modern JVM both starts far larger and **resizes underneath you**. On the same machine with default settings, free memory after `r.gc()` reads **13 MB — down from 267 MB**, which looks like a catastrophic failure and is not one. G1 handed unused memory back to the operating system, so `totalMemory()` collapsed with it, and `freeMemory()` means *free space within the total*.
+> [!warning] **Pin the heap, or the numbers will mislead you.** Without `-Xms`/`-Xmx`, the default heap on a modern JVM both starts far larger and **resizes underneath you**. On the same machine with default settings, free memory after `r.gc()` reads **13 MB — down from 267 MB**, which looks like a catastrophic failure and is not one. G1 handed unused memory back to the operating system, so `totalMemory()` collapsed with it, and `freeMemory()` means **free space within the total**.
 >
 > If you ever need to measure this on an unpinned heap, the number that behaves sensibly is **`totalMemory() − freeMemory()`** — the memory actually in use, which falls after a collection exactly as you would expect.
 
@@ -137,7 +137,7 @@ Twenty bytes went into those objects. Now you call `r.gc()` and print free memor
 
 | Answer | Why it is possible |
 |---|---|
-| **50** | The JVM ignored the request — the collector never ran. Meanwhile running your program itself consumed a little memory, so free went *down*. |
+| **50** | The JVM ignored the request — the collector never ran. Meanwhile running your program itself consumed a little memory, so free went **down**. |
 | **60** | The request was ignored, and the program's own execution used a negligible amount. Unchanged. |
 | **70** | The collector ran but did not destroy all ten thousand objects — maybe four or five thousand — and stopped once there was enough room. |
 | **80** | The collector ran and destroyed all ten thousand, returning exactly to the starting figure. |
@@ -159,11 +159,11 @@ That single distinction is the basis of a standard certification question. Which
 | | Statement | | Why |
 |---|---|---|---|
 | 1 | `System.gc();` | **valid** | `gc()` is static in `System`, so calling it on the class name is correct |
-| 2 | `Runtime.gc();` | **invalid** | `gc()` is an *instance* method in `Runtime` — it cannot be called on the class name |
+| 2 | `Runtime.gc();` | **invalid** | `gc()` is an **instance** method in `Runtime` — it cannot be called on the class name |
 | 3 | `(new Runtime()).gc();` | **invalid** | it is calling on an object, but `Runtime` is a **singleton** — you cannot construct one with `new` |
 | 4 | `Runtime.getRuntime().gc();` | **valid** | the factory method gives you the object, and `gc()` is called on it |
 
-Option 3 is the one that catches people, because at a glance it looks right — it *is* calling the instance method on an instance. The failure is one step earlier, in how the instance was obtained.
+Option 3 is the one that catches people, because at a glance it looks right — it **is** calling the instance method on an instance. The failure is one step earlier, in how the instance was obtained.
 
 ## Which is recommended?
 
@@ -181,7 +181,7 @@ public static void gc() {
 
 > [!important] **Do not call either one in production.** An explicit request can trigger a full, stop-the-world collection that is far more disruptive than whatever you were trying to fix, and it overrides tuning decisions the collector was making on better information than you have. Many deployments run with **`-XX:+DisableExplicitGC`**, which turns both calls into no-ops precisely so that library code cannot do it.
 >
-> For the interview: know the two forms, know which of the four spellings are valid, know that `System.gc()` delegates to `Runtime`. Then know that the answer to *"when would you call it?"* is **almost never** — and if you need it for a demo, `System.gc()` is the one everybody writes, because it is one line.
+> For the interview: know the two forms, know which of the four spellings are valid, know that `System.gc()` delegates to `Runtime`. Then know that the answer to when would you call it? is **almost never** — and if you need it for a demo, `System.gc()` is the one everybody writes, because it is one line.
 
 ---
 

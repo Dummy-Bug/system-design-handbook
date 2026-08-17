@@ -11,8 +11,7 @@ flowchart TB
     R --> MR["<b>MyRunnable</b><br/><i>approach 2: implement Runnable</i>"]
 ```
 
-> **`Thread` already implements `Runnable`.** So approach 1 gets you a `Runnable` too — just with the
-> whole of `Thread` attached. Approach 2 implements `Runnable` **directly**.
+> **`Thread` already implements `Runnable`.** So approach 1 gets you a `Runnable` too — just with the whole of `Thread` attached. Approach 2 implements `Runnable` **directly**.
 
 | | |
 |---|---|
@@ -53,27 +52,20 @@ class ThreadDemo {
 | **2** | `new Thread(r)` | the thread that will run it |
 | **3** | `t.start()` | **now there are two threads** |
 
-> [!important] **Why line 2 is necessary, and it is the crux of this approach.** `MyRunnable` has a
-> job but **no way to start itself** — `Runnable` declares only `run()`, and neither `MyRunnable` nor
-> `Runnable` has a `start()` method.
+> [!important] **Why line 2 is necessary, and it is the crux of this approach.** `MyRunnable` has a job but **no way to start itself** — `Runnable` declares only `run()`, and neither `MyRunnable` nor `Runnable` has a `start()` method.
 >
-> *"One car is ready, but someone is required to start this car."* **`Thread` is what has the start
-> capability**, so you hand your job to a `Thread` and ask the `Thread` to begin.
+> One car is ready, but someone is required to start this car. **`Thread` is what has the start capability**, so you hand your job to a `Thread` and ask the `Thread` to begin.
 >
-> **Only one word changes from approach 1** — `extends Thread` becomes `implements Runnable` — but that
-> word is why you now need two objects instead of one.
+> **Only one word changes from approach 1** — `extends Thread` becomes `implements Runnable` — but that word is why you now need two objects instead of one.
 
 ## What `new Thread(r)` actually does
 
 `t.start()` creates a thread, and that thread calls `run()`. **But which `run()`?**
 
-- `t` is of type `Thread`, so `Thread`'s `start()` runs, and `Thread`'s `start()` calls `Thread`'s
-  `run()`.
-- **`Thread.run()` has an empty implementation** — there is no inheritance link between `MyRunnable`
-  and `Thread`.
+- `t` is of type `Thread`, so `Thread`'s `start()` runs, and `Thread`'s `start()` calls `Thread`'s `run()`.
+- **`Thread.run()` has an empty implementation** — there is no inheritance link between `MyRunnable` and `Thread`.
 
-**So you pass `r` to the constructor.** That object is stored as the **target runnable**, and
-`Thread.run()` executes *it* instead:
+**So you pass `r` to the constructor.** That object is stored as the **target runnable**, and `Thread.run()` executes **it** instead:
 
 ```java
 public void run() {
@@ -85,9 +77,7 @@ public void run() {
 }
 ```
 
-> [!info] **This is the JDK 25 source note `02` quoted in advance**, saying to hold on to it. `Thread.run()`
-> only *behaves* as empty when no target was supplied. **Passing a `Runnable` is what makes it
-> non-empty**, and that is the entire mechanism of approach 2.
+> [!info] **This is the JDK 25 source note `02` quoted in advance**, saying to hold on to it. `Thread.run()` only **behaves** as empty when no target was supplied. **Passing a `Runnable` is what makes it non-empty**, and that is the entire mechanism of approach 2.
 
 ---
 
@@ -120,8 +110,7 @@ case 4: t2.run()     -> run() executed by: main
 case 6: r.run()      -> run() executed by: main
 ```
 
-**Case 3 is the only one that does what you meant.** It is also the only line where `getName()`
-reports something other than `main` — which is the proof that a second thread exists at all.
+**Case 3 is the only one that does what you meant.** It is also the only line where `getName()` reports something other than `main` — which is the proof that a second thread exists at all.
 
 ## Case 5, measured
 
@@ -131,23 +120,18 @@ error: cannot find symbol
   location: variable r of type MyRunnable
 ```
 
-> **Start capability is not there with `r`.** *"If `r` had the start capability, what is the need of
-> creating a thread object?"* — the absence of `start()` on `Runnable` is exactly why `Thread` has to
-> be involved.
+> **Start capability is not there with `r`.** If `r` had the start capability, what is the need of creating a thread object? — the absence of `start()` on `Runnable` is exactly why `Thread` has to be involved.
 
-> [!important] **Two independent questions decide every row**, and separating them makes the table
-> derivable rather than memorable:
+> [!important] **Two independent questions decide every row**, and separating them makes the table derivable rather than memorable:
 >
-> 1. **`start()` or `run()`?** — `start()` creates a thread; `run()` is an ordinary method call on the
->    current thread.
-> 2. **Was a target passed?** — with a target, `Thread.run()` delegates to it; without one, it does
->    nothing.
+> 1. **`start()` or `run()`?** — `start()` creates a thread; `run()` is an ordinary method call on the current thread.
+> 2. **Was a target passed?** — with a target, `Thread.run()` delegates to it; without one, it does nothing.
 
 ---
 
 # The hybrid approach
 
-> **Durga's approach to define a thread** *(not recommended to use)*.
+> **Durga's approach to define a thread** (not recommended to use).
 
 You can **define** with approach 1 and **start** with approach 2:
 
@@ -168,12 +152,9 @@ child thread, running on: Thread-1
 main thread
 ```
 
-**It works.** Why: `MyThread` extends `Thread`, and `Thread` implements `Runnable` — so a `MyThread`
-**is a `Runnable`** and is a legal constructor argument. Confirmed: `t instanceof Runnable` → `true`.
+**It works.** Why: `MyThread` extends `Thread`, and `Thread` implements `Runnable` — so a `MyThread` **is a `Runnable`** and is a legal constructor argument. Confirmed: `t instanceof Runnable` → `true`.
 
-> [!info] **The reason to know it is the exam, not the codebase.** *"Even in the SCJP exam, if you see
-> this type of question, don't feel it is something invalid — it is valid only."* It creates two
-> `Thread` objects to run one job, which is why it is not recommended.
+> [!info] **The reason to know it is the exam, not the codebase.** Even in the SCJP exam, if you see this type of question, don't feel it is something invalid — it is valid only. It creates two `Thread` objects to run one job, which is why it is not recommended.
 
 ---
 
@@ -183,21 +164,15 @@ main thread
 
 ## 1 — You keep your one inheritance slot
 
-`extends Thread` uses up the single superclass Java allows. If your class already needs to extend
-something else, approach 1 is simply unavailable. **`implements Runnable` leaves `extends` free.**
+`extends Thread` uses up the single superclass Java allows. If your class already needs to extend something else, approach 1 is simply unavailable. **`implements Runnable` leaves `extends` free.**
 
 ## 2 — The job and the worker are separate things
 
-Approach 1 makes your class *be* a thread. Approach 2 makes your class *describe a job* that any
-thread can run.
+Approach 1 makes your class **be** a thread. Approach 2 makes your class **describe a job** that any thread can run.
 
-> [!important] **The second reason is the one that matters in modern code**, and note `02` already
-> pointed at it. A `Runnable` can be handed to an **executor**, submitted to a **thread pool**, or
-> scheduled — because it is just a job. **A subclass of `Thread` can only ever be one thread, run
-> once.** Everything in the enhancements chapter is built on `Runnable`, not on subclassing.
+> [!important] **The second reason is the one that matters in modern code**, and note `02` already pointed at it. A `Runnable` can be handed to an **executor**, submitted to a **thread pool**, or scheduled — because it is just a job. **A subclass of `Thread` can only ever be one thread, run once.** Everything in the enhancements chapter is built on `Runnable`, not on subclassing.
 >
-> It is also why `extends Thread` locks you out of **virtual threads**: `Thread.ofVirtual()` takes a
-> `Runnable`, and a subclass of `Thread` is a platform thread by construction.
+> It is also why `extends Thread` locks you out of **virtual threads**: `Thread.ofVirtual()` takes a `Runnable`, and a subclass of `Thread` is a platform thread by construction.
 
 ## And `Runnable` is a lambda
 
@@ -208,8 +183,7 @@ Thread t = new Thread(() -> System.out.println("child thread"));
 t.start();
 ```
 
-**No class, no override, no separate file.** When comparing the two approaches, weigh this in — it is
-the `Runnable` side that got dramatically lighter.
+**No class, no override, no separate file.** When comparing the two approaches, weigh this in — it is the `Runnable` side that got dramatically lighter.
 
 ---
 

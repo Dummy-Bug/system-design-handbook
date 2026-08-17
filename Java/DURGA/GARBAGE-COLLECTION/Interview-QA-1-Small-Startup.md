@@ -1,6 +1,6 @@
 Question-only practice sheet for **garbage collection specifically** for backend roles at 3–5 years. Company evidence and supplemental prompts are separated below; this file does not claim that every question was asked by a small startup.
 
-> [!important] **What a startup is testing here.** They have no platform team and nobody who tunes JVMs. Every question below is a proxy for one worry: *will this person write code that fills the heap and take production down.* Plain, confident answers win. "I've never tuned a collector, but here's how I'd approach a leak" is perfectly acceptable at this tier — it is not at the other two.
+> [!important] **What a startup is testing here.** They have no platform team and nobody who tunes JVMs. Every question below is a proxy for one worry: will this person write code that fills the heap and take production down. Plain, confident answers win. I've never tuned a collector, but here's how I'd approach a leak is perfectly acceptable at this tier — it is not at the other two.
 
 > [!info] **How the ordering was decided, honestly.** There is no public dataset of question frequency. This is my judgement from how often each recurs across the interview-prep sources surveyed in August 2026, weighted toward 2025–2026 material. Treat the **bands** as reliable, the order inside a band as approximate.
 
@@ -16,7 +16,7 @@ Question-only practice sheet for **garbage collection specifically** for backend
 
 - **Tests:** the baseline. Almost universal as an opener.
 - **Notes:** ✅ `01` — a daemon thread inside the JVM whose job is to destroy useless objects; C++ made the programmer do both creation and destruction and they neglected the second.
-- **Chained follow-up:** *"So why is there no `delete` keyword in Java?"* — because the responsibility was deliberately taken away from the programmer. `01` answers this directly.
+- **Chained follow-up:** So why is there no `delete` keyword in Java? — because the responsibility was deliberately taken away from the programmer. `01` answers this directly.
 
 ### 2. When does an object become eligible for garbage collection?
 
@@ -27,12 +27,12 @@ Question-only practice sheet for **garbage collection specifically** for backend
 
 - **Tests:** whether you think you control something you don't. Very common, and easy to answer badly.
 - **Notes:** ✅ `03` — it is a **request**, never a command; no guarantee it is honoured.
-- **What loses points:** saying *"`System.gc()` calls the garbage collector."* You cannot call it. You request that the JVM run it.
+- **What loses points:** saying `System.gc()` calls the garbage collector. You cannot call it. You request that the JVM run it.
 
 ### 4. Have you ever had an `OutOfMemoryError`? What did you do?
 
 - **Tests:** production exposure. **The most important question in this file** — the one they actually care about, and the only one where a story beats a definition.
-- **Notes:** ⚠️ `06` covers what a memory leak *is*; the **diagnosis workflow is a gap**.
+- **Notes:** ⚠️ `06` covers what a memory leak **is**; the **diagnosis workflow is a gap**.
 
 ### 5. What is a memory leak in Java? Isn't that impossible with a garbage collector?
 
@@ -71,7 +71,7 @@ Question-only practice sheet for **garbage collection specifically** for backend
 ### 11. What happens to an object created inside a method when the method finishes?
 
 - **Notes:** ✅ `02` — eligible by default, because the local variables holding it were slots in a frame that no longer exists.
-- **Chained follow-up:** *"Always?"* — no, and the three exceptions in `02` (returned and captured, returned and ignored, assigned to a `static`) are exactly the follow-up.
+- **Chained follow-up:** Always? — no, and the three exceptions in `02` (returned and captured, returned and ignored, assigned to a `static`) are exactly the follow-up.
 
 ### 12. Is `finalize()` guaranteed to run?
 

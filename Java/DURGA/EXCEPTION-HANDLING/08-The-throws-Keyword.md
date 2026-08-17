@@ -101,7 +101,7 @@ Exception in thread "main" java.lang.InterruptedException: delegated, not handle
 
 It compiled. It also **died abnormally** — stack trace, default exception handler, the lot. Exactly what part 2 described.
 
-> [!important] **`throws` moves the responsibility; it does not discharge it.** The compiler stops objecting, and nothing else changes. If nobody up the chain actually catches the thing, you get precisely the abnormal termination you were trying to avoid — you have just moved *where* it happens.
+> [!important] **`throws` moves the responsibility; it does not discharge it.** The compiler stops objecting, and nothing else changes. If nobody up the chain actually catches the thing, you get precisely the abnormal termination you were trying to avoid — you have just moved **where** it happens.
 >
 > This is why `try`-`catch` is recommended. `catch` is handling. `throws` is paperwork.
 
@@ -123,7 +123,7 @@ Exception in thread "main" java.lang.ArithmeticException: / by zero
 
 The `throws ArithmeticException` is **pure decoration**. Unchecked exceptions were never checked, so there was nothing to convince the compiler of. Remove the clause and the behaviour is identical.
 
-> [!info] **It is not quite useless as documentation.** Declaring `throws` on an unchecked exception tells a reader "this can happen", and it appears in the Javadoc. But it changes nothing about compilation or runtime, and the lecture's judgement — *no use* — is right about its mechanical effect.
+> [!info] **It is not quite useless as documentation.** Declaring `throws` on an unchecked exception tells a reader this can happen, and it appears in the Javadoc. But it changes nothing about compilation or runtime, and the lecture's judgement — **no use** — is right about its mechanical effect.
 
 ---
 

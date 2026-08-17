@@ -2,16 +2,13 @@
 
 > **Is it possible to create an object for an abstract class directly? No. Indirectly?**
 
-Some of the class expects *yes* — that a constructor must exist for some hidden, indirect route to
-object creation.
+Some of the class expects **yes** — that a constructor must exist for some hidden, indirect route to object creation.
 
 > **No. For an abstract class we cannot create an object either directly OR indirectly.**
 >
-> *"When should we go for an abstract class? A partially implemented class. If the implementation is
-> not complete, how can you create an object?"*
+> When should we go for an abstract class? A partially implemented class. If the implementation is not complete, how can you create an object?
 
-**So the puzzle stands in its sharpest form:** you can never make one, yet it can have a constructor.
-What for?
+**So the puzzle stands in its sharpest form:** you can never make one, yet it can have a constructor. What for?
 
 ---
 
@@ -59,8 +56,7 @@ class Teacher extends Person {
 
 > [!important] **Generalise: 100 properties in `Person`, 1,000 child classes.**
 >
-> Every one of those 1,000 constructors begins with **the same 100 assignment lines**. `this.name`,
-> `this.age`, `this.height`, `this.weight`… a hundred times, copied into a thousand classes.
+> Every one of those 1,000 constructors begins with **the same 100 assignment lines**. `this.name`, `this.age`, `this.height`, `this.weight`… a hundred times, copied into a thousand classes.
 >
 > > **Unnecessary duplicate code — code redundancy.**
 
@@ -116,20 +112,13 @@ class Teacher extends Person {
 
 # The formal answer
 
-> **The main objective of an abstract class constructor is to perform initialization for the instance
-> variables which are inheriting from the abstract class to the child class.**
+> **The main objective of an abstract class constructor is to perform initialization for the instance variables which are inheriting from the abstract class to the child class.**
 >
-> **Whenever we are creating a child class object, the abstract class constructor will be executed to
-> perform that initialization — code reusability.**
+> **Whenever we are creating a child class object, the abstract class constructor will be executed to perform that initialization — code reusability.**
 
-> [!important] **And this does not contradict "you cannot instantiate an abstract class."** The
-> constructor never runs to build a `Person`. It runs **as part of building a `Student`**, to set up the
-> half of that `Student` that came from `Person`. Note `17` proved there is only ever one object.
+> [!important] **And this does not contradict you cannot instantiate an abstract class.** The constructor never runs to build a `Person`. It runs **as part of building a `Student`**, to set up the half of that `Student` that came from `Person`. Note `17` proved there is only ever one object.
 
-> [!info] **The wrong version of the answer, explicitly rejected.** *"Some people may feel: directly we
-> can't create an object for an abstract class, but indirectly we can, and for that purpose the
-> constructor is required. **100% wrong statement.** Either directly or indirectly we cannot create an
-> object for an abstract class."*
+> [!info] **The wrong version of the answer, explicitly rejected.** Some people may feel: directly we can't create an object for an abstract class, but indirectly we can, and for that purpose the constructor is required. **100% wrong statement.** Either directly or indirectly we cannot create an object for an abstract class.
 
 ---
 
@@ -144,4 +133,4 @@ class Teacher extends Person {
 | The purpose | initialise the instance variables **inherited** by the child |
 | When it runs | whenever a **child** object is created |
 | The benefit | **code reusability**, shorter code, better readability |
-| The wrong answer | that it enables "indirect" object creation |
+| The wrong answer | that it enables `indirect` object creation |

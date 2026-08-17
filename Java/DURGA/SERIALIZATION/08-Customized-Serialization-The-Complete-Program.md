@@ -1,7 +1,6 @@
 # The complete program
 
-> *"Take very special care to understand this. At least twice or thrice I will explain — if you can
-> understand this example, nothing is there in customized serialization."*
+> Take very special care to understand this. At least twice or thrice I will explain — if you can understand this example, nothing is there in customized serialization.
 
 **Everything from parts `06` and `07` as one runnable file.**
 
@@ -59,9 +58,7 @@ file contains 'Anushka' alone? false
 file contains '123Anushka'?    true
 ```
 
-> [!important] **All three constraints from part `06` are met at once.** `password` is still
-> `transient`. The `password` *field* in the file is still `null`. The receiver still gets `Anushka`.
-> **What is actually in the file is `123Anushka` — the box of mangoes.**
+> [!important] **All three constraints from part `06` are met at once.** `password` is still `transient`. The `password` **field** in the file is still `null`. The receiver still gets `Anushka`. **What is actually in the file is `123Anushka` — the box of mangoes.**
 
 ---
 
@@ -71,8 +68,7 @@ file contains '123Anushka'?    true
 
 > **The JVM checks: in the `Account` class, is there a `private writeObject` method?**
 
-**If there is,** *"the JVM feels the programmer doesn't want default serialization — the programmer is
-performing customized serialization. JVM felt very happy, and simply executes this method."*
+**If there is,** the JVM feels the programmer doesn't want default serialization — the programmer is performing customized serialization. JVM felt very happy, and simply executes this method.
 
 ## Inside `writeObject`
 
@@ -82,11 +78,9 @@ performing customized serialization. JVM felt very happy, and simply executes th
 oos.defaultWriteObject();
 ```
 
-> *"Now I have to request the JVM: I want default serialization, can you please do that? This method is
-> meant for default serialization."*
+> Now I have to request the JVM: I want default serialization, can you please do that? This method is meant for default serialization.
 
-**After this line the file holds `username = Durga` and `password = null`** — password is `transient`,
-so the default machinery writes the default value, exactly as part `03` established.
+**After this line the file holds `username = Durga` and `password = null`** — password is `transient`, so the default machinery writes the default value, exactly as part `03` established.
 
 **Step 2 and 3 — the extra work.**
 
@@ -111,8 +105,7 @@ flowchart TB
 
 # Tracing the second half
 
-**The moment `ois.readObject()` runs**, the JVM checks the `Account` class for a `private readObject`
-and executes it.
+**The moment `ois.readObject()` runs**, the JVM checks the `Account` class for a `private readObject` and executes it.
 
 ```java
 ois.defaultReadObject();                        // username = Durga, password = null
@@ -120,10 +113,9 @@ String ePassword = (String) ois.readObject();   // "123Anushka"
 password = ePassword.substring(3);              // "Anushka"
 ```
 
-> *"`substring(3)` — from index three onwards the remaining things will come. `123` will be gone."*
+> `substring(3)` — from index three onwards the remaining things will come. `123` will be gone.
 
-**`password` is assigned directly**, inside the object being reconstructed. **After this method
-returns, the account has both values.**
+**`password` is assigned directly**, inside the object being reconstructed. **After this method returns, the account has both values.**
 
 ---
 
@@ -136,38 +128,27 @@ His own A/B test, and it is the cleanest way to see what the methods are doing:
 | **Without** `writeObject`/`readObject` | `Durga ... Anushka`<br>**`Durga ... null`** |
 | **With** them | `Durga ... Anushka`<br>**`Durga ... Anushka`** |
 
-> *"If I comment these two methods — is it default serialization or customized serialization? Default
-> only, because I'm not writing any `writeObject`/`readObject` method."*
+> If I comment these two methods — is it default serialization or customized serialization? Default only, because I'm not writing any `writeObject`/`readObject` method.
 
 ---
 
 # Two ways to get this wrong
 
-> [!warning] **Forget `defaultWriteObject()` and you lose the ordinary fields.** The callback
-> **replaces** the default behaviour; it does not run alongside it.
+> [!warning] **Forget `defaultWriteObject()` and you lose the ordinary fields.** The callback **replaces** the default behaviour; it does not run alongside it.
 >
 > Measured on JDK 25, with the `defaultWriteObject()` / `defaultReadObject()` lines removed:
 > ```
 > without defaultWriteObject -> username=null  password=Anushka
 > ```
-> **Exactly inverted** — the password is recovered and `username` is gone, because nothing ever wrote
-> it. **`defaultWriteObject()` must be the first statement**, and `defaultReadObject()` the first
-> statement on the way back.
+> **Exactly inverted** — the password is recovered and `username` is gone, because nothing ever wrote it. **`defaultWriteObject()` must be the first statement**, and `defaultReadObject()` the first statement on the way back.
 
-> [!warning] **Customize one side only, and it fails silently.** With `writeObject` defined but no
-> matching `readObject`:
+> [!warning] **Customize one side only, and it fails silently.** With `writeObject` defined but no matching `readObject`:
 > ```
 > write customized, read not -> username=Durga  password=null
 > ```
-> **No exception.** The extra `123Anushka` object is simply left sitting unread in the stream. **The
-> two methods are a matched pair** — they encode a private format, and both halves have to agree on
-> it.
+> **No exception.** The extra `123Anushka` object is simply left sitting unread in the stream. **The two methods are a matched pair** — they encode a private format, and both halves have to agree on it.
 
-> [!warning] **`"123" + password` is not encryption.** It is a teaching placeholder, and the note keeps
-> it because the mechanism is the lesson. **Never ship this shape.** The value is written to the file
-> in plain sight — `123Anushka` is as readable as `Anushka`. If a password genuinely must survive
-> serialization, store a **salted hash** you never need to reverse, or encrypt with a real key kept
-> outside the file. **Anything you can decrypt with only what is in the stream, so can the attacker.**
+> [!warning] **`"123" + password` is not encryption.** It is a teaching placeholder, and the note keeps it because the mechanism is the lesson. **Never ship this shape.** The value is written to the file in plain sight — `123Anushka` is as readable as `Anushka`. If a password genuinely must survive serialization, store a **salted hash** you never need to reverse, or encrypt with a real key kept outside the file. **Anything you can decrypt with only what is in the stream, so can the attacker.**
 
 ---
 
@@ -178,7 +159,7 @@ His own A/B test, and it is the cleanest way to see what the methods are doing:
 | The whole mechanism | **two callback methods** on the class being serialized |
 | First line of `writeObject` | **`oos.defaultWriteObject()`** |
 | First line of `readObject` | **`ois.defaultReadObject()`** |
-| Those two methods mean | *"JVM, please do the default part as well"* |
+| Those two methods mean | JVM, please do the default part as well |
 | Then the extra work | `"123" + password`, written with **`oos.writeObject()`** |
 | And on the way back | **`ois.readObject()`**, `substring(3)`, assign to `password` |
 | Result | `Durga ... Anushka` **both times** |

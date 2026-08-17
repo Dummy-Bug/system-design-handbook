@@ -4,7 +4,7 @@ Of every object type in Java, `String` is the one you cannot avoid. Take any Jav
 
 That gives the topic three separate claims on your attention: **day-to-day coding**, where it is unavoidable; **the interview room**, where the first question is very often this one; and **certification**, where you can expect around twenty questions drawn from `String` and `StringBuffer` directly or indirectly.
 
-> [!important] **The compulsory interview question.** *"What is the difference between `String` and `StringBuffer`?"* — asked of anyone with two, three or more years of experience, effectively without exception. You cannot expect a Java interview that does not touch it.
+> [!important] **The compulsory interview question.** What is the difference between `String` and `StringBuffer`? — asked of anyone with two, three or more years of experience, effectively without exception. You cannot expect a Java interview that does not touch it.
 
 Order matters here. The certification syllabus lists `String` under `StringBuilder`, but `StringBuilder` cannot be explained until `StringBuffer` is, and `StringBuffer` cannot be explained until `String` is. So the sequence is **`String` → `StringBuffer` → `StringBuilder`**.
 
@@ -12,9 +12,9 @@ Order matters here. The certification syllabus lists `String` under `StringBuild
 
 # Difference one — immutability versus mutability
 
-Ask the difference between `String` and `StringBuffer` in an offline session of a hundred people, and **ninety of them answer immediately**: *String objects are immutable, StringBuffer objects are mutable.* They have read it somewhere in an FAQ list and remembered the two words.
+Ask the difference between `String` and `StringBuffer` in an offline session of a hundred people, and **ninety of them answer immediately**: String objects are immutable, StringBuffer objects are mutable. They have read it somewhere in an FAQ list and remembered the two words.
 
-Then comes the follow-up — *"What is the meaning of mutability and immutability? Can you explain with an example?"* — and **ninety percent of the wickets are down.**
+Then comes the follow-up — What is the meaning of mutability and immutability? Can you explain with an example? — and **ninety percent of the wickets are down.**
 
 So take the words first, and then earn them with an example.
 
@@ -83,13 +83,13 @@ flowchart LR
 
 Output: `durgasoftware`. **This changeable behaviour is mutability.**
 
-> [!important] **This is the example to give in the interview room.** Not a definition — these two four-line programs. They answer *"what is the difference between `String` and `StringBuffer`"* and *"explain mutability and immutability with an example"* in one move, which is two or three questions answered confidently from a single piece of preparation.
+> [!important] **This is the example to give in the interview room.** Not a definition — these two four-line programs. They answer what is the difference between `String` and `StringBuffer` and explain mutability and immutability with an example in one move, which is two or three questions answered confidently from a single piece of preparation.
 
 ---
 
 # Difference two — `equals()` behaves differently in the two classes
 
-Almost everyone stops at mutability. So when the interviewer says *"other than immutability and mutability, is there any other difference?"*, having a second answer is worth a great deal — and there is one.
+Almost everyone stops at mutability. So when the interviewer says other than immutability and mutability, is there any other difference?, having a second answer is worth a great deal — and there is one.
 
 ## The program
 
@@ -124,7 +124,7 @@ Both programs used `new` twice, so both created two distinct objects. Neither pa
 
 ## `.equals()` is where the difference lives
 
-Ask a thousand people the difference between `==` and `.equals()`, and **at least 999 will say**: *`==` is reference comparison, `.equals()` is content comparison.*
+Ask a thousand people the difference between `==` and `.equals()`, and **at least 999 will say**: `==` is reference comparison, `.equals()` is content comparison.
 
 > [!warning] **Strictly speaking, that statement is wrong**, and knowing why is the point of this section.
 
@@ -150,9 +150,9 @@ So:
 | **`String`** | reference comparison → `false` | **content** comparison → `true` |
 | **`StringBuffer`** | reference comparison → `false` | **reference** comparison → `false` |
 
-> [!important] **State it precisely and you separate yourself immediately.** `equals()` in `Object` is reference comparison. It is *not* inherently about content — a class has to override it to make it so, and `String` did while `StringBuffer` did not. If you want content comparison in your own class, you write it yourself.
+> [!important] **State it precisely and you separate yourself immediately.** `equals()` in `Object` is reference comparison. It is **not** inherently about content — a class has to override it to make it so, and `String` did while `StringBuffer` did not. If you want content comparison in your own class, you write it yourself.
 
-> [!info] **Why `StringBuffer` never overrode it** is worth a thought, even though the course does not ask. `StringBuffer` is mutable, so its contents change over time. An object whose equality answer changes during its lifetime is unusable as a hash key and surprising everywhere else — so leaving equality as identity is the safer design. `String` can afford content equality precisely *because* it is immutable.
+> [!info] **Why `StringBuffer` never overrode it** is worth a thought, even though the course does not ask. `StringBuffer` is mutable, so its contents change over time. An object whose equality answer changes during its lifetime is unusable as a hash key and surprising everywhere else — so leaving equality as identity is the safer design. `String` can afford content equality precisely **because** it is immutable.
 
 ---
 
@@ -167,5 +167,5 @@ So:
 | The method on each | `concat()` for `String`, `append()` for `StringBuffer` |
 | `==` on either class | **reference** comparison — no difference between them |
 | `.equals()` on `String` | **content** comparison — overridden |
-| `.equals()` on `StringBuffer` | **reference** comparison — *not* overridden, so `Object`'s runs |
+| `.equals()` on `StringBuffer` | **reference** comparison — **not** overridden, so `Object`'s runs |
 | `equals()` in `Object` itself | **reference** comparison, not content |

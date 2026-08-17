@@ -2,11 +2,11 @@ You are not responsible for destroying objects. That was the whole point of the 
 
 > Even though the programmer is not responsible for destruction of objects, it is **always a good programming practice to make an object eligible for GC if it is no longer required**.
 
-Being the programmer, you know something the JVM does not — whether the next lines of your code are going to use that object or not. Only you can say *this is finished with*. So say it.
+Being the programmer, you know something the JVM does not — whether the next lines of your code are going to use that object or not. Only you can say **this is finished with**. So say it.
 
 ---
 
-# Two analogies for "eligible", before any code
+# Two analogies for `eligible`, before any code
 
 **Making something eligible for cleanup is not the same as cleaning it up.**
 
@@ -77,9 +77,9 @@ flowchart LR
     end
 ```
 
-> **Way 1.** If an object is no longer required, **assign `null` to all its reference variables**. That object is then eligible for garbage collection. This approach is called *nullifying the reference variable*.
+> **Way 1.** If an object is no longer required, **assign `null` to all its reference variables**. That object is then eligible for garbage collection. This approach is called **nullifying the reference variable**.
 
-Note the words *all its reference variables* — one object can have several names pointing at it, and it is only eligible when every one of them is gone.
+Note the words **all its reference variables** — one object can have several names pointing at it, and it is only eligible when every one of them is gone.
 
 > [!info] **You have seen this in real code without knowing why.** In large applications you will come across a bare line like `con = null;` after some database work is finished. That is not tidiness or superstition — it is this exact technique. The connection object is no longer required, so its reference is nulled, and the object becomes eligible for collection.
 
@@ -111,11 +111,11 @@ s2 = s1;
 // 2 objects eligible for GC
 ```
 
-`s2` now points at the same object `s1` does. Which means the object `s2` *used* to point at has been abandoned, and is eligible too.
+`s2` now points at the same object `s1` does. Which means the object `s2` **used** to point at has been abandoned, and is eligible too.
 
-> **Way 2.** If an object is no longer required, **reassign its reference variable to some other object**. The old object is then eligible for garbage collection. This approach is called *reassigning the reference variable*.
+> **Way 2.** If an object is no longer required, **reassign its reference variable to some other object**. The old object is then eligible for garbage collection. This approach is called **reassigning the reference variable**.
 
-> [!important] **Ways 1 and 2 are the same idea with different syntax.** In both cases the object ends with zero references. Nulling is what you do when you want nothing there; reassigning is what you do when you want something else there. Interviewers sometimes ask for "the ways" expecting four distinct mechanisms — these two are distinct moves, but the underlying rule they satisfy is identical.
+> [!important] **Ways 1 and 2 are the same idea with different syntax.** In both cases the object ends with zero references. Nulling is what you do when you want nothing there; reassigning is what you do when you want something else there. Interviewers sometimes ask for the ways expecting four distinct mechanisms — these two are distinct moves, but the underlying rule they satisfy is identical.
 
 ---
 
@@ -143,7 +143,7 @@ The answer is **two**.
 
 `s1` and `s2` are local variables of `m1`. A variable declared inside a method is a local variable, it is created when the method executes, and **when the method completes it is gone**. Both references disappear at the closing brace, both objects are left with nothing pointing at them, and both become eligible.
 
-> [!info] **Why "it is gone" is literally true — see [[06-Stack-Memory-PC-Registers-And-Native-Method-Stacks#1 · Local variable array|the local variable array]] in the JVM chapter.** `s1` and `s2` are not variables that get cleaned up when the method ends; they are **slots in an array that is created fresh on every call and thrown away on return**. `javap` shows them numbered — slot 1 and slot 2 — with the whole array sized by the compiler before the program ever runs.
+> [!info] **Why it is gone is literally true — see [[06-Stack-Memory-PC-Registers-And-Native-Method-Stacks#1 · Local variable array|the local variable array]] in the JVM chapter.** `s1` and `s2` are not variables that get cleaned up when the method ends; they are **slots in an array that is created fresh on every call and thrown away on return**. `javap` shows them numbered — slot 1 and slot 2 — with the whole array sized by the compiler before the program ever runs.
 >
 > That note also gives the reason a field behaves differently here: a static or instance variable **never gets a slot at all**, precisely because it outlives the call. Which is exactly why Case 3 below — the object held by a `static` field — survives while its neighbour does not.
 
@@ -199,7 +199,7 @@ Calling a method that returns something does not oblige you to keep the result �
 
 **Two objects.**
 
-> [!important] **Case 1 and Case 2 are the pair worth memorising.** Identical method, identical objects, and the answer changes from one to two based on a single line in the caller. This is precisely the shape of the "how many objects are eligible after line N" question, and it is why you must read the call site, not just the method.
+> [!important] **Case 1 and Case 2 are the pair worth memorising.** Identical method, identical objects, and the answer changes from one to two based on a single line in the caller. This is precisely the shape of the how many objects are eligible after line N question, and it is why you must read the call site, not just the method.
 
 ### Case 3 — the object is assigned to a static variable
 
@@ -314,22 +314,22 @@ flowchart LR
     end
 ```
 
-> **Way 4.** When a group of objects reference **only each other**, with no reference from outside the group, the whole group is isolated from the outside world and **the entire group is eligible for garbage collection**. This is an *Island of Isolation*.
+> **Way 4.** When a group of objects reference **only each other**, with no reference from outside the group, the whole group is isolated from the outside world and **the entire group is eligible for garbage collection**. This is an **Island of Isolation**.
 
 The collector can identify groups like this. Internal references do not save you.
 
-> [!important] Each object is "supporting" the next by holding a reference to it, and every one of those references is internal. Support from inside the sinking group is worth nothing to the garbage collector. Only a reference from outside keeps the group alive.
+> [!important] Each object is `supporting` the next by holding a reference to it, and every one of those references is internal. Support from inside the sinking group is worth nothing to the garbage collector. Only a reference from outside keeps the group alive.
 
 ---
 
 # The two conclusions
 
 
-> [!important] **1 — If an object has no reference variable, it is *always* eligible for garbage collection.** No exceptions, no argument. This is the plain case and the one everybody already knows.
+> [!important] **1 — If an object has no reference variable, it is always eligible for garbage collection.** No exceptions, no argument. This is the plain case and the one everybody already knows.
 >
-> **2 — Even when an object *does* have a reference, it can still be eligible.** If every reference pointing at it is an internal reference from within an isolated group, the object is eligible anyway. The best example is the Island of Isolation.
+> **2 — Even when an object does have a reference, it can still be eligible.** If every reference pointing at it is an internal reference from within an isolated group, the object is eligible anyway. The best example is the Island of Isolation.
 
-The second one is why *"does it have a reference?"* is not actually the right question. The right question is **"can it be reached from outside?"** — and those two only look the same until you meet an island.
+The second one is why does it have a reference? is not actually the right question. The right question is **can it be reached from outside?** — and those two only look the same until you meet an island.
 
 ---
 

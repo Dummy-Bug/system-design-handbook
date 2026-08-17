@@ -1,7 +1,6 @@
 # What the parent constructor is actually for
 
-Note `15` established that a constructor **initialises** rather than creates. This part applies that
-to inheritance, and the answer falls out of it.
+Note `15` established that a constructor **initialises** rather than creates. This part applies that to inheritance, and the answer falls out of it.
 
 ## The setup
 
@@ -37,8 +36,7 @@ class Student extends Person {
 
 ## Who initialises which
 
-A `Student` object has four fields, so all four must be initialised. But the child constructor does not
-have to do all of it:
+A `Student` object has four fields, so all four must be initialised. But the child constructor does not have to do all of it:
 
 ```java
 class Student extends Person {
@@ -63,8 +61,7 @@ Student s = new Student("Durga", 48, 101, 90);
 | `rollNumber` | `Student`'s constructor |
 | `marks` | `Student`'s constructor |
 
-> **The parent constructor is responsible for performing initialization of the properties which are
-> coming from the parent. The child constructor takes care of the child-specific properties.**
+> **The parent constructor is responsible for performing initialization of the properties which are coming from the parent. The child constructor takes care of the child-specific properties.**
 
 ```mermaid
 flowchart TB
@@ -78,16 +75,11 @@ flowchart TB
 > [!important] **Both constructors ran — for one object.**
 > > **Both parent and child constructors are executed for the CHILD object's initialization only.**
 >
-> *"Can you please tell — is a parent object created? **No.** Parent properties come to the child, and
-> to perform initialization of those properties the parent constructor runs."*
+> Can you please tell — is a parent object created? **No.** Parent properties come to the child, and to perform initialization of those properties the parent constructor runs.
 >
-> **This is the answer to doubt 3 from note `15`,** and note `17` proves it with a measurement rather
-> than an argument.
+> **This is the answer to doubt 3 from note `15`,** and note `17` proves it with a measurement rather than an argument.
 
-> [!info] **Why this is worth doing at all.** Without the parent constructor, `Student` would have to
-> assign `name` and `age` itself — and so would `Teacher`, `Employee`, `Customer` and every other
-> subclass. **The shared initialisation lives in one place instead of being copied into each child.**
-> Note `18` scales this up to show exactly how much it saves.
+> [!info] **Why this is worth doing at all.** Without the parent constructor, `Student` would have to assign `name` and `age` itself — and so would `Teacher`, `Employee`, `Customer` and every other subclass. **The shared initialisation lives in one place instead of being copied into each child.** Note `18` scales this up to show exactly how much it saves.
 
 ---
 

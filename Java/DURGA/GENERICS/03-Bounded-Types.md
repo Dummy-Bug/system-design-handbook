@@ -16,7 +16,7 @@ class Test<T> {
 Those are **arithmetic operations**, and arithmetic makes sense only for numbers.
 
 - If `a` and `b` are `String`, then `a + b` is fine — concatenation. But `a * b`? `a / b`? **Meaningless.**
-- If `a` and `b` are `Student`, then *first student plus second student* is meaningless from the start.
+- If `a` and `b` are `Student`, then **first student plus second student** is meaningless from the start.
 
 > If the functionality is applicable only for a particular range, then we have to **bound the type parameter** to that range.
 
@@ -110,13 +110,13 @@ class Test<T super String>{}           error: > expected
 
 So wherever you would want `implements`, write `extends` instead and it works — that is why `T extends Runnable` is legal even though `Runnable` is an interface.
 
-> [!important] **Remember the `super` result — it is about to become half-true.** `super` is banned **here**, at class level, with a named type parameter `T`. It is *allowed* at method level with the wildcard `?`, which is the subject of note `04`. Many people carry "super is not allowed in generics" as a flat rule and get caught by the wildcard form.
+> [!important] **Remember the `super` result — it is about to become half-true.** `super` is banned **here**, at class level, with a named type parameter `T`. It is **allowed** at method level with the wildcard `?`, which is the subject of note `04`. Many people carry super is not allowed in generics as a flat rule and get caught by the wildcard form.
 
 ---
 
 # Combination bounds
 
-A bound need not be a single type. Suppose the requirement is: the type parameter must be **a child of `Number`** *and* **implement `Runnable`** — both at once.
+A bound need not be a single type. Suppose the requirement is: the type parameter must be **a child of `Number`** **and** **implement `Runnable`** — both at once.
 
 ```java
 class Test<T extends Number & Runnable> {}

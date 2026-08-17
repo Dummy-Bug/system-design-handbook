@@ -1,12 +1,10 @@
 # The `Map` interface
 
-The second half of the framework begins. Everything so far has been about **individual objects**;
-this is about **key–value pairs**.
+The second half of the framework begins. Everything so far has been about **individual objects**; this is about **key–value pairs**.
 
 > **Map is not a child interface of `Collection`.**
 
-*"In our collection framework movie, the first half is `Collection` and the second half is `Map`."*
-Underline it — do not strike it through.
+In our collection framework movie, the first half is `Collection` and the second half is `Map`. Underline it — do not strike it through.
 
 > **If we want to represent a group of objects as key–value pairs, then we should go for `Map`.**
 
@@ -17,9 +15,7 @@ Underline it — do not strike it through.
 104  →  Pavan
 ```
 
-**Where you meet this in real work:** roll number → name, mobile number → address, domain name → IP
-address, parameter name → parameter value, attribute name → attribute value. *"Request form
-parameters are internally stored in map style only."*
+**Where you meet this in real work:** roll number → name, mobile number → address, domain name → IP address, parameter name → parameter value, attribute name → attribute value. Request form parameters are internally stored in map style only.
 
 | | |
 |---|---|
@@ -30,15 +26,13 @@ parameters are internally stored in map style only."*
 
 > **Hence a map is considered a collection of `Entry` objects.**
 
-> [!info] **"Entry" is a technical word, not a casual one** — there is an interface named `Entry`, and
-> it is why the sentence above is precise rather than descriptive.
+> [!info] **`Entry` is a technical word, not a casual one** — there is an interface named `Entry`, and it is why the sentence above is precise rather than descriptive.
 
 ---
 
 # `Map` interface methods
 
-`Collection`'s methods do not apply here — **the concepts are different.** `add()` takes one object; a
-map needs a key *and* a value at once. So `Map` defines its own.
+`Collection`'s methods do not apply here — **the concepts are different.** `add()` takes one object; a map needs a key **and** a value at once. So `Map` defines its own.
 
 | Method | |
 |---|---|
@@ -52,9 +46,7 @@ map needs a key *and* a value at once. So `Map` defines its own.
 | `int size()` | how many **key–value pairs**? |
 | `void clear()` | remove everything |
 
-> [!info] **`get()` on a missing key returns `null`**, not an exception — *"there is no key, so the
-> corresponding value is `null`."* And `remove(key)` removes the **whole entry**, because *"without a
-> key there is no chance of a value."*
+> [!info] **`get()` on a missing key returns `null`**, not an exception — there is no key, so the corresponding value is `null`. And `remove(key)` removes the **whole entry**, because without a key there is no chance of a value.
 
 ## Why `put()` returns an `Object`
 
@@ -66,8 +58,7 @@ m.put(102, "Shiva");     // returns null
 m.put(101, "Ravi");      // key 101 already exists
 ```
 
-> **If the key is already present, the old value is replaced with the new value, and `put()` returns
-> the old value.**
+> **If the key is already present, the old value is replaced with the new value, and `put()` returns the old value.**
 
 Measured on JDK 25:
 
@@ -76,14 +67,11 @@ put duplicate  = 700
 after replace  = {balayya=800, chiranjeevi=1000, venkatesh=200, nagarjuna=500}
 ```
 
-> [!important] **Contrast this with `Set.add()` from note `07`.** A `Set` returns **`false`** and
-> **discards** your object. A `Map` **overwrites** and hands you back what was there before.
+> [!important] **Contrast this with `Set.add()` from note `07`.** A `Set` returns **`false`** and **discards** your object. A `Map` **overwrites** and hands you back what was there before.
 >
-> **The difference is that a map entry has two halves.** Rejecting the whole pair would throw away the
-> new value you were trying to store, so the key stays and the value is updated instead. Returning the
-> old value means the replacement is not silent — you can see what you displaced.
+> **The difference is that a map entry has two halves.** Rejecting the whole pair would throw away the new value you were trying to store, so the key stays and the value is updated instead. Returning the old value means the replacement is not silent — you can see what you displaced.
 >
-> **When nothing was replaced, `put` returns `null`.** So `null` from `put` means *"this key is new."*
+> **When nothing was replaced, `put` returns `null`.** So `null` from `put` means this key is new.
 
 ---
 
@@ -105,20 +93,15 @@ values()   = [800, 1000, 200, 500]
 entrySet() = [balayya=800, chiranjeevi=1000, venkatesh=200, nagarjuna=500]
 ```
 
-> [!important] **The return type of each one is derived, not arbitrary** — and this is a fair
-> interview question. `keySet()` returns a `Set` **because duplicate keys are impossible**.
-> `values()` returns a `Collection` and not a `Set` **because duplicate values are possible**, so it
-> cannot promise uniqueness.
+> [!important] **The return type of each one is derived, not arbitrary** — and this is a fair interview question. `keySet()` returns a `Set` **because duplicate keys are impossible**. `values()` returns a `Collection` and not a `Set` **because duplicate values are possible**, so it cannot promise uniqueness.
 >
-> **These three are called the collection views of a map.** You call them on a map object and get
-> collection-framework objects back — which is how the two halves of the framework connect.
+> **These three are called the collection views of a map.** You call them on a map object and get collection-framework objects back — which is how the two halves of the framework connect.
 
 ---
 
 # The `Entry` interface
 
-> **Without an existing map object there is no chance of an existing entry object. Hence the `Entry`
-> interface is defined inside the `Map` interface.**
+> **Without an existing map object there is no chance of an existing entry object. Hence the `Entry` interface is defined inside the `Map` interface.**
 
 ```java
 interface Map {
@@ -130,13 +113,9 @@ interface Map {
 }
 ```
 
-Confirmed on JDK 25: `Map.Entry.class.getDeclaringClass()` is **`Map`**, and its declared methods are
-`getKey`, `getValue`, `setValue` (plus `equals` and `hashCode`).
+Confirmed on JDK 25: `Map.Entry.class.getDeclaringClass()` is **`Map`**, and its declared methods are `getKey`, `getValue`, `setValue` (plus `equals` and `hashCode`).
 
-> [!info] **This is `INNER-CLASSES` justifying itself in the JDK.** The whole chapter opened with
-> *"without existing one type of object there is no chance of existing another"* — and named
-> **Map–Entry** as one of its three examples. Here is that rule producing a nested interface in the
-> standard library.
+> [!info] **This is `INNER-CLASSES` justifying itself in the JDK.** The whole chapter opened with without existing one type of object there is no chance of existing another — and named **Map–Entry** as one of its three examples. Here is that rule producing a nested interface in the standard library.
 
 | Method | |
 |---|---|
@@ -168,12 +147,9 @@ Measured on JDK 25:
 {null=v2, k1=null, k2=null, k3=null}   size=4
 ```
 
-**One `null` key** (the second `put(null, …)` replaced the first), and **three `null` values**
-happily coexisting.
+**One `null` key** (the second `put(null, …)` replaced the first), and **three `null` values** happily coexisting.
 
-> [!important] **The `null` asymmetry follows from the duplicate rules, not from a separate rule.**
-> Keys cannot duplicate, so there can be at most one `null` key. Values can duplicate, so there can be
-> any number of `null` values. **Every `null` question in this chapter answers itself this way.**
+> [!important] **The `null` asymmetry follows from the duplicate rules, not from a separate rule.** Keys cannot duplicate, so there can be at most one `null` key. Values can duplicate, so there can be any number of `null` values. **Every `null` question in this chapter answers itself this way.**
 
 ## The four constructors
 
@@ -188,9 +164,7 @@ HashMap m = new HashMap(Map m);                             // inter-conversion
 
 Confirmed on JDK 25: **4** public constructors.
 
-> [!info] **The fourth one takes a `Map`, not a `Collection`.** Inter-conversion still exists, but only
-> between maps — because you cannot build a map out of a collection without inventing keys. **The
-> pattern holds; the parameter type follows the concept.**
+> [!info] **The fourth one takes a `Map`, not a `Collection`.** Inter-conversion still exists, but only between maps — because you cannot build a map out of a collection without inventing keys. **The pattern holds; the parameter type follows the concept.**
 
 ---
 
@@ -254,13 +228,9 @@ Measured on JDK 25:
 | the order is not insertion order | **hash code of keys** decides, and it is not predictable |
 | the final line differs from the loop's | **`setValue` wrote through to the map** |
 
-> [!important] **`setValue()` modifies the map itself, not a copy.** The loop prints `nagarjuna ...
-> 500`, then sets it to `10000` — and the map printed afterwards shows `nagarjuna=10000`. **The entry
-> is a live view into the map**, which is why `entrySet()` is the only safe way to modify values while
-> iterating.
+> [!important] **`setValue()` modifies the map itself, not a copy.** The loop prints `nagarjuna ... 500`, then sets it to `10000` — and the map printed afterwards shows `nagarjuna=10000`. **The entry is a live view into the map**, which is why `entrySet()` is the only safe way to modify values while iterating.
 >
-> *"Some people may ask — we changed the value to 10000, but why are we still getting 500? Because we
-> printed before changing it."* The print happens first; the write happens after.
+> Some people may ask — we changed the value to 10000, but why are we still getting 500? Because we printed before changing it. The print happens first; the write happens after.
 
 ## Walking a map with a cursor
 
@@ -286,15 +256,13 @@ while (itr.hasNext()) {
 > ```java
 > m.forEach((k, v) -> System.out.println(k + " ... " + v));
 > ```
-> **The explicit-iterator form is still what gets asked**, and it is what you need if you want to
-> `remove()` during the walk.
+> **The explicit-iterator form is still what gets asked**, and it is what you need if you want to `remove()` during the walk.
 
 ---
 
 # `LinkedHashMap`
 
-> **`LinkedHashMap` is the child class of `HashMap`. It is exactly the same as `HashMap` including
-> constructors and methods, except that insertion order is preserved.**
+> **`LinkedHashMap` is the child class of `HashMap`. It is exactly the same as `HashMap` including constructors and methods, except that insertion order is preserved.**
 
 | | `HashMap` | `LinkedHashMap` |
 |---|---|---|
@@ -310,9 +278,7 @@ The same program with `LinkedHashMap`, measured on JDK 25:
 
 **Exactly the insertion order.** Confirmed: `LinkedHashMap`'s superclass is `HashMap`.
 
-> [!info] **The `HashSet`/`LinkedHashSet` relationship from note `07`, repeated exactly.** Same
-> difference, same reason, same use case — **cache-based applications**, where duplicates are not
-> allowed and insertion order matters.
+> [!info] **The `HashSet`/`LinkedHashSet` relationship from note `07`, repeated exactly.** Same difference, same reason, same use case — **cache-based applications**, where duplicates are not allowed and insertion order matters.
 
 ---
 

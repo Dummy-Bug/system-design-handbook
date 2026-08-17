@@ -1,37 +1,28 @@
 # The five problems with `synchronized`
 
-Note `07` promised this: *"treat `synchronized` as the hero for now — after a few classes it will
-become zero."* **This is where that happens.**
+Note `07` promised this: treat `synchronized` as the hero for now — after a few classes it will become zero. **This is where that happens.**
 
-The two headline complaints are already known: **performance** (threads wait) and **deadlock**
-(`synchronized` is the only cause, note `12`). Here they are itemised properly.
+The two headline complaints are already known: **performance** (threads wait) and **deadlock** (`synchronized` is the only cause, note `12`). Here they are itemised properly.
 
 ---
 
 ## 1 — No way to try for a lock without waiting
 
-With `synchronized`, if the lock is unavailable, **the thread waits. That is the only option.** How
-long? *"Maybe within 1 minute, or 10 minutes, or 1 hour, or 10 days — I don't know."*
+With `synchronized`, if the lock is unavailable, **the thread waits. That is the only option.** How long? Maybe within 1 minute, or 10 minutes, or 1 hour, or 10 days — I don't know.
 
-> **What you want instead:** *"Try for the lock. If it is available, give it to me. If not, don't make
-> me wait — I will do alternative work."*
+> **What you want instead:** Try for the lock. If it is available, give it to me. If not, don't make me wait — I will do alternative work.
 
-> [!info] **The bus stop.** With `synchronized`, you wait for the bus however long it takes. What you
-> want is: *"Is a bus here? Then I get on. Not here? I won't wait — I'll make another arrangement and
-> carry on."*
+> [!info] **The bus stop.** With `synchronized`, you wait for the bus however long it takes. What you want is: Is a bus here? Then I get on. Not here? I won't wait — I'll make another arrangement and carry on.
 
 ## 2 — No way to specify a maximum waiting time
 
-You cannot say *"wait up to 10 minutes for this lock, and if I don't get it, continue with something
-else."* **It is wait forever or nothing.**
+You cannot say wait up to 10 minutes for this lock, and if I don't get it, continue with something else. **It is wait forever or nothing.**
 
-**And this is the deadlock connection:** a thread that can give up after a timeout **cannot be
-deadlocked**.
+**And this is the deadlock connection:** a thread that can give up after a timeout **cannot be deadlocked**.
 
 ## 3 — No control over which waiting thread gets the lock
 
-Three threads are waiting, the lock is released. **Which one gets it?** Whatever the scheduler
-decides. **There is no way to say "the longest-waiting thread should get it."**
+Three threads are waiting, the lock is released. **Which one gets it?** Whatever the scheduler decides. **There is no way to say the longest-waiting thread should get it.**
 
 ## 4 — No API to list the waiting threads
 
@@ -54,8 +45,7 @@ void m2() {
 }
 ```
 
-> **Across multiple methods, `synchronized` cannot help.** You cannot open a lock in one method and
-> close it in another.
+> **Across multiple methods, `synchronized` cannot help.** You cannot open a lock in one method and close it in another.
 
 ---
 
@@ -63,9 +53,7 @@ void m2() {
 
 > **To overcome these problems, `java.util.concurrent.locks` was introduced in 1.5.**
 
-> [!important] **Once you start using this package, you can stop using `synchronized` altogether.**
-> *"Not required to use the `synchronized` keyword any more. But very unfortunately most programmers
-> don't know about it, so people are still using `synchronized`."*
+> [!important] **Once you start using this package, you can stop using `synchronized` altogether.** Not required to use the `synchronized` keyword any more. But very unfortunately most programmers don't know about it, so people are still using `synchronized`.
 
 **Each problem, answered.** Measured on JDK 25 with `ReentrantLock`:
 
@@ -97,9 +85,7 @@ waited 1006ms, acquired=false
 
 **Waited exactly one second, then gave up** — and carried on.
 
-> [!important] **This is the practical deadlock cure.** A thread that backs off after a timeout can
-> release what it holds and retry, so the circular wait from note `12` cannot persist. **There is no
-> resolution technique for a `synchronized` deadlock; with a timeout, the deadlock resolves itself.**
+> [!important] **This is the practical deadlock cure.** A thread that backs off after a timeout can release what it holds and retry, so the circular wait from note `12` cannot persist. **There is no resolution technique for a `synchronized` deadlock; with a timeout, the deadlock resolves itself.**
 
 ## 3 — the fairness policy
 
@@ -112,11 +98,9 @@ new ReentrantLock(true).isFair()  = true
 new ReentrantLock().isFair()      = false
 ```
 
-**With fairness on, the longest-waiting thread gets the lock.** *"Be a bit fair — don't do fraud."*
+**With fairness on, the longest-waiting thread gets the lock.** Be a bit fair — don't do fraud.
 
-> [!info] **Fairness is off by default, deliberately.** A fair lock must maintain the queue order,
-> which costs throughput. **Turn it on when starvation matters** (note `12`), leave it off when
-> throughput does.
+> [!info] **Fairness is off by default, deliberately.** A fair lock must maintain the queue order, which costs throughput. **Turn it on when starvation matters** (note `12`), leave it off when throughput does.
 
 ## 4 — inspecting the waiters
 
@@ -149,9 +133,7 @@ m1: done
 
 # The trade you are making
 
-> [!warning] **`lock()` and `unlock()` are not automatic — and that is the one real disadvantage.**
-> `synchronized` releases the lock when the block exits, **however it exits**, including on an
-> exception. A `Lock` does not.
+> [!warning] **`lock()` and `unlock()` are not automatic — and that is the one real disadvantage.** `synchronized` releases the lock when the block exits, **however it exits**, including on an exception. A `Lock` does not.
 >
 > **So every `lock()` must be paired with `unlock()` in a `finally`:**
 > ```java
@@ -162,9 +144,7 @@ m1: done
 >     lock.unlock();      // ALWAYS, even if the body throws
 > }
 > ```
-> **Forget the `finally` and one exception leaks the lock permanently** — every other thread blocks
-> forever, which is a worse outcome than anything `synchronized` can produce. This is the trade:
-> **more power, no safety net.**
+> **Forget the `finally` and one exception leaks the lock permanently** — every other thread blocks forever, which is a worse outcome than anything `synchronized` can produce. This is the trade: **more power, no safety net.**
 
 ---
 

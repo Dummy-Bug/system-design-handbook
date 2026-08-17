@@ -1,23 +1,20 @@
 # Interface methods
 
-> **Every method present inside an interface is always `public` and `abstract`, whether we declare it
-> or not.**
+> **Every method present inside an interface is always `public` and `abstract`, whether we declare it or not.**
 
-The interview follow-up is *why* — and both halves have a one-line answer.
+The interview follow-up is **why** — and both halves have a one-line answer.
 
 ## Why always `public`
 
 > **To make this method available to every implementation class.**
 
-The implementation class may sit in the **same package or a different one** — both are possible, and
-the interface has no way to know. Anything less than `public` would rule out the second case.
+The implementation class may sit in the **same package or a different one** — both are possible, and the interface has no way to know. Anything less than `public` would rule out the second case.
 
 ## Why always `abstract`
 
-> **An interface is a requirement specification. The implementation class is responsible for providing
-> the implementation.**
+> **An interface is a requirement specification. The implementation class is responsible for providing the implementation.**
 
-*"This is the service I want."* The specification does not carry the implementation, by definition.
+This is the service I want. The specification does not carry the implementation, by definition.
 
 ## The four equivalent declarations
 
@@ -32,9 +29,7 @@ public abstract void m1();
 
 ## Which modifiers are rejected
 
-Since an abstract interface method is **already** `public` and **already** `abstract`, anything
-contradicting either is illegal. **The forbidden list is five:** `protected`, `final`, `synchronized`,
-`native`, `strictfp`.
+Since an abstract interface method is **already** `public` and **already** `abstract`, anything contradicting either is illegal. **The forbidden list is five:** `protected`, `final`, `synchronized`, `native`, `strictfp`.
 
 Measured on JDK 25:
 
@@ -46,24 +41,18 @@ Measured on JDK 25:
 | `native` | ❌ `modifier native not allowed here` |
 | `strictfp` | ❌ `modifier strictfp not allowed here` |
 
-> [!important] **`private` and `static` are *not* on that list — they are legal, but only with a
-> body.** Write `private void m1();` with a semicolon and the compiler does not object to the modifier;
-> it says `missing method body, or declare abstract`. Give it a body and it compiles. Measured on
-> JDK 25, all four of these are legal:
+> [!important] **`private` and `static` are not on that list — they are legal, but only with a body.** Write `private void m1();` with a semicolon and the compiler does not object to the modifier; it says `missing method body, or declare abstract`. Give it a body and it compiles. Measured on JDK 25, all four of these are legal:
 > ```java
 > interface I2 { static void m1() { } }
 > interface I2 { default void m1() { } }
 > interface I2 { private void m1() { } }
 > interface I2 { private static void m1() { } }
 > ```
-> So the rule stated precisely: **an interface method is implicitly `public`** — except a `private`
-> one — **and implicitly `abstract` only if it is not `default`, `static` or `private`.** Methods with
-> bodies get their full treatment in `JAVA-8-FEATURES/05`; the rest of this session is about the
-> abstract ones.
+> So the rule stated precisely: **an interface method is implicitly `public`** — except a `private` one — **and implicitly `abstract` only if it is not `default`, `static` or `private`.** Methods with bodies get their full treatment in `JAVA-8-FEATURES/05`; the rest of this session is about the abstract ones.
 
 ## The exam question
 
-*Which of the following method declarations are allowed inside an interface?*
+Which of the following method declarations are allowed inside an interface?
 
 | Declaration | Allowed? | Why |
 |---|---|---|
@@ -80,14 +69,11 @@ Measured on JDK 25:
 
 ## What they are for
 
-The requirement specification says: *implement the college automation system, and wherever a college
-name is required use `DurgaSoft`; wherever a location is required use `Hyderabad`.*
+The requirement specification says: implement the college automation system, and wherever a college name is required use `DurgaSoft`; wherever a location is required use `Hyderabad`.
 
-> **An interface can contain variables. The main purpose of an interface variable is to define
-> requirement level constants.**
+> **An interface can contain variables. The main purpose of an interface variable is to define requirement level constants.**
 
-The methods say **what services** to implement; the variables say **which constants** to use while
-implementing them.
+The methods say **what services** to implement; the variables say **which constants** to use while implementing them.
 
 ## Always `public static final`
 
@@ -110,9 +96,7 @@ interface V3 {
 | **`static`** | you **cannot create an object of an interface** — so it must be reachable **without one** |
 | **`final`** | **multiple implementation classes** share it; if one could change it, **all the others would be affected** |
 
-> [!info] **The `final` reason, concretely.** JDBC is implemented by Oracle, MySQL, IBM and others. They
-> all see the same interface variable. If the Oracle driver could set it to 20, every other vendor's
-> driver would silently see 20. **The implementation classes may read it; none may modify it.**
+> [!info] **The `final` reason, concretely.** JDBC is implemented by Oracle, MySQL, IBM and others. They all see the same interface variable. If the Oracle driver could set it to 20, every other vendor's driver would silently see 20. **The implementation classes may read it; none may modify it.**
 
 ## The equivalent declarations
 
@@ -140,8 +124,7 @@ Measured on JDK 25:
 | `transient` | ❌ `modifier transient not allowed here` | see below |
 | `volatile` | ❌ `modifier volatile not allowed here` | it is already `final` |
 
-> [!question]- **Deep dive — why `transient` in particular is meaningless here.** A chain of three
-> steps, and it is a nice piece of reasoning.
+> [!question]- **Deep dive — why `transient` in particular is meaningless here.** A chain of three steps, and it is a nice piece of reasoning.
 >
 > `transient` marks a field to be **skipped during serialization**. But:
 >
@@ -149,17 +132,13 @@ Measured on JDK 25:
 > 2. **You cannot create an object of an interface.**
 > 3. No object ⇒ no state to save ⇒ **no serialization** ⇒ nothing for `transient` to exclude.
 >
-> And `volatile` fails for a simpler reason: `volatile` says *this value may change from another
-> thread*, while `final` says *this value never changes*. `final volatile` is a contradiction, and the
-> variable is already `final`.
+> And `volatile` fails for a simpler reason: `volatile` says **this value may change from another thread**, while `final` says **this value never changes**. `final volatile` is a contradiction, and the variable is already `final`.
 
 ## Initialization is mandatory, at the declaration
 
-An interface variable is `static final`, and part 08 established the rule for those: **initialize
-before class loading completion**, in one of two places — at the declaration, or in a **static block**.
+An interface variable is `static final`, and part 10 established the rule for those: **initialize before class loading completion**, in one of two places — at the declaration, or in a **static block**.
 
-> [!important] **But an interface cannot contain a static block.** No static blocks, no instance
-> blocks, no constructors — an interface holds only methods and variables.
+> [!important] **But an interface cannot contain a static block.** No static blocks, no instance blocks, no constructors — an interface holds only methods and variables.
 >
 > **So one of the two legal places does not exist, leaving exactly one:**
 > > **For interface variables we must perform initialization at the time of declaration.**
@@ -173,8 +152,7 @@ interface V2 { int x; }
 error: = expected
 ```
 
-The compiler is not saying "uninitialized" — it is saying **an `=` was expected right there**, because
-that is the only place the value can go.
+The compiler is not saying `uninitialized` — it is saying **an `=` was expected right there**, because that is the only place the value can go.
 
 ## The implementation class may read, not write
 
@@ -199,9 +177,7 @@ class Loc implements I6 {
 }
 ```
 
-> [!important] **The two look almost identical, and the difference is one word.** The first *assigns to*
-> the interface's variable. The second **declares a new local variable** that happens to share the
-> name — it shadows the interface one and has nothing to do with it.
+> [!important] **The two look almost identical, and the difference is one word.** The first **assigns to** the interface's variable. The second **declares a new local variable** that happens to share the name — it shadows the interface one and has nothing to do with it.
 >
 > **Declaring is fine; assigning is not.**
 
@@ -209,8 +185,7 @@ class Loc implements I6 {
 
 # Method naming conflicts
 
-Two interfaces, both with a method called `m1`. What happens depends on exactly how they differ — and
-there are three cases.
+Two interfaces, both with a method called `m1`. What happens depends on exactly how they differ — and there are three cases.
 
 ## Case 1 — same signature, same return type
 
@@ -225,11 +200,9 @@ class C1 implements Left1, Right1 {
 
 Measured on JDK 25 — compiles, prints once.
 
-> **If two interfaces contain a method with the same signature and the same return type, then in the
-> implementation class we have to provide implementation for only ONE method.**
+> **If two interfaces contain a method with the same signature and the same return type, then in the implementation class we have to provide implementation for only ONE method.**
 
-> *"Left person came — where is my implementation? This is it. Right person came — where is mine? The
-> same one. Both people require the same implementation, so one method serves both."*
+> Left person came — where is my implementation? This is it. Right person came — where is mine? The same one. Both people require the same implementation, so one method serves both.
 
 ## Case 2 — same name, different argument types
 
@@ -245,8 +218,7 @@ m1()
 m1(int) 5
 ```
 
-> **If two interfaces contain a method with the same name but different argument types, we must provide
-> implementation for BOTH methods — and these methods are overloaded methods.**
+> **If two interfaces contain a method with the same name but different argument types, we must provide implementation for BOTH methods — and these methods are overloaded methods.**
 
 ## Case 3 — same signature, different return types
 
@@ -270,8 +242,7 @@ Measured on JDK 25:
 error: method m1() is already defined in class C3
 ```
 
-Because — as part 09 established — **the return type is not part of the signature**. Two methods named
-`m1()` with no parameters are duplicates, whatever they return.
+Because — as part 11 established — **the return type is not part of the signature**. Two methods named `m1()` with no parameters are duplicates, whatever they return.
 
 **Try implementing only one:**
 
@@ -282,9 +253,7 @@ class C4 implements Left4, Right4 { public void m1() { } }
 error: C4 is not abstract and does not override abstract method m1() in Right4
 ```
 
-> [!question]- **Deep dive — the escape routes he tries, and why every one of them fails.** He asks the
-> class five separate times whether a Java class can implement any number of interfaces simultaneously,
-> gets a confident **yes** each time, and then walks them into this.
+> [!question]- **Deep dive — the escape routes he tries, and why every one of them fails.** He asks the class five separate times whether a Java class can implement any number of interfaces simultaneously, gets a confident **yes** each time, and then walks them into this.
 >
 > **Attempt 1 — put both methods in the class.** `method m1() is already defined`.
 >
@@ -293,21 +262,17 @@ error: C4 is not abstract and does not override abstract method m1() in Right4
 > abstract class Test implements Left, Right { public void m1() { } }
 > class SubTest extends Test { public int m1() { return 10; } }
 > ```
-> Now the child's `int m1()` is trying to **override** the parent's `void m1()` — and overriding
-> requires the same return type:
+> Now the child's `int m1()` is trying to **override** the parent's `void m1()` — and overriding requires the same return type:
 > ```
 > error: m1() in SubTest cannot override m1() in Test
 >   return type int is not compatible with void
 > ```
 >
-> **Attempt 3 — separate classes, or an inner class for one of them.** That is no longer implementing
-> both *simultaneously*, which was the requirement.
+> **Attempt 3 — separate classes, or an inner class for one of them.** That is no longer implementing both **simultaneously**, which was the requirement.
 >
 > > **It is impossible to implement both interfaces simultaneously.**
 >
-> So the honest interview answer is: **"Yes, a Java class can implement any number of interfaces — with
-> one exception: if two interfaces contain a method with the same signature but different return
-> types, it is impossible."**
+> So the honest interview answer is: **Yes, a Java class can implement any number of interfaces — with one exception: if two interfaces contain a method with the same signature but different return types, it is impossible.**
 
 ## The exception to the exception — covariant return types
 
@@ -328,9 +293,7 @@ Measured on JDK 25:
 covariant works
 ```
 
-**One method satisfies both**, because `String` **is** an `Object` — returning a `String` is a valid
-way of returning an `Object`. Put the general type in one interface and the specific type in the
-other, and the specific one implements both.
+**One method satisfies both**, because `String` **is** an `Object` — returning a `String` is a valid way of returning an `Object`. Put the general type in one interface and the specific type in the other, and the specific one implements both.
 
 ---
 
@@ -353,8 +316,7 @@ Measured on JDK 25:
 error: reference to x is ambiguous
 ```
 
-**But unlike the method case, this one has a fix.** Interface variables are `public static final`, and
-static members are accessed through the type name:
+**But unlike the method case, this one has a fix.** Interface variables are `public static final`, and static members are accessed through the type name:
 
 ```java
 System.out.println(LeftV2.x);
@@ -372,8 +334,7 @@ Measured on JDK 25:
 > - **Method** naming conflict, case 3 → **no solution** — you cannot implement both.
 > - **Variable** naming conflict → **always solvable** — qualify with the interface name.
 >
-> Because a variable is *read through* a name you can qualify, while a method must be *declared* in the
-> class, where only one declaration can exist.
+> Because a variable is **read through** a name you can qualify, while a method must be **declared** in the class, where only one declaration can exist.
 
 ---
 

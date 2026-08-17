@@ -1,8 +1,6 @@
 # `TreeSet`
 
-> [!info] **Why there is no `SortedSet` demo.** *"For `SortedSet`, can you please explain a demo
-> program? You can't — because `SortedSet` is an interface. If it were a class I could create an object
-> and show it."* `TreeSet` is its implementation class, so this is where the behaviour becomes visible.
+> [!info] **Why there is no `SortedSet` demo.** For `SortedSet`, can you please explain a demo program? You can't — because `SortedSet` is an interface. If it were a class I could create an object and show it. `TreeSet` is its implementation class, so this is where the behaviour becomes visible.
 >
 > `NavigableSet` is deferred to its own session on the 1.6 enhancements.
 
@@ -16,16 +14,13 @@
 | **Implements** | `Serializable`, `Cloneable` — not `RandomAccess` |
 | **Sorting** | **default natural** or **customised** |
 
-**`TreeSet` is one of the two exceptions to the heterogeneous rule** from note `03` — the other being
-`TreeMap`. The reason is the same: sorting requires **comparison**, and you cannot compare a
-`String` with an `Integer`.
+**`TreeSet` is one of the two exceptions to the heterogeneous rule** from note `03` — the other being `TreeMap`. The reason is the same: sorting requires **comparison**, and you cannot compare a `String` with an `Integer`.
 
 ---
 
 # The four constructors
 
-> [!important] **Learn these carefully — they repeat verbatim for `TreeMap`.** *"Even in the next
-> classes we are going to cover `SortedMap`, `TreeMap` — same terminology, copy paste."*
+> [!important] **Learn these carefully — they repeat verbatim for `TreeMap`.** Even in the next classes we are going to cover `SortedMap`, `TreeMap` — same terminology, copy paste.
 
 **1 — default natural sorting order**
 
@@ -33,8 +28,7 @@
 TreeSet t = new TreeSet();
 ```
 
-> Creates an empty `TreeSet` where the elements will be inserted according to **default natural
-> sorting order**.
+> Creates an empty `TreeSet` where the elements will be inserted according to **default natural sorting order**.
 
 **2 — customised sorting order**
 
@@ -42,8 +36,7 @@ TreeSet t = new TreeSet();
 TreeSet t = new TreeSet(Comparator c);
 ```
 
-> Creates an empty `TreeSet` where the elements will be inserted according to **customised sorting
-> order**, specified by the `Comparator` object.
+> Creates an empty `TreeSet` where the elements will be inserted according to **customised sorting order**, specified by the `Comparator` object.
 
 **3 and 4 — inter-conversion**
 
@@ -52,8 +45,7 @@ TreeSet t = new TreeSet(Collection c);
 TreeSet t = new TreeSet(SortedSet s);
 ```
 
-The `SortedSet` version **carries the source's sorting across**; the plain `Collection` version has no
-sorting to carry, so **default natural sorting order is used**.
+The `SortedSet` version **carries the source's sorting across**; the plain `Collection` version has no sorting to carry, so **default natural sorting order is used**.
 
 Confirmed on JDK 25: `TreeSet` has exactly **4** public constructors.
 
@@ -64,7 +56,7 @@ Confirmed on JDK 25: `TreeSet` has exactly **4** public constructors.
 > | **no argument** | **default natural** sorting order → `Comparable` |
 > | **`Comparator`** | **customised** sorting order → `Comparator` |
 >
-> *"Remember this thumb rule, because we are going to use these two words minimum 10 times."*
+> Remember this thumb rule, because we are going to use these two words minimum 10 times.
 
 ---
 
@@ -94,12 +86,9 @@ Measured on JDK 25:
 
 **Note where lowercase `a` lands — at the end, not the start.**
 
-> [!important] **Small `a` is bigger than capital `A`.** Their Unicode values are **97** and **65**,
-> and *"default natural sorting order"* for strings means comparing those numbers. So every capital
-> letter sorts before every lowercase one. Measured on JDK 25: `'a'=97  'A'=65`.
+> [!important] **Small `a` is bigger than capital `A`.** Their Unicode values are **97** and **65**, and default natural sorting order for strings means comparing those numbers. So every capital letter sorts before every lowercase one. Measured on JDK 25: `'a'=97  'A'=65`.
 >
-> This is the single most common surprise in string sorting, and it is why `"Zebra"` comes before
-> `"apple"`.
+> This is the single most common surprise in string sorting, and it is why `"Zebra"` comes before `"apple"`.
 
 ## Adding a heterogeneous object
 
@@ -120,9 +109,7 @@ java.lang.ClassCastException: class java.lang.String cannot be cast to class jav
 
 He gives this its own heading, and there is a version story attached.
 
-> **Whenever we add an object to a `TreeSet`, comparison must be performed.** Where does `null` go —
-> before `A` or after `A`? To decide, `null` has to be compared with an existing element, and
-> comparing anything with `null` gives a `NullPointerException`.
+> **Whenever we add an object to a `TreeSet`, comparison must be performed.** Where does `null` go — before `A` or after `A`? To decide, `null` has to be compared with an existing element, and comparing anything with `null` gives a `NullPointerException`.
 
 **Measured on JDK 25:**
 
@@ -134,11 +121,7 @@ He gives this its own heading, and there is a version story attached.
 
 > **`null` is not allowed in a `TreeSet` — not even as the first element.**
 
-> [!important] **Older material says the first element is a special case, and it was true through
-> Java 6.** The reasoning was sound: the first element has nothing to be compared *against*, so no
-> comparison happens and `null` slips in. It was Java 7 that closed the loophole, and Durga Sir
-> demonstrates the change live by switching JDKs mid-lecture — *"1.6 gives you `null`, 1.7 gives you
-> `NullPointerException`."*
+> [!important] **Older material says the first element is a special case, and it was true through Java 6.** The reasoning was sound: the first element has nothing to be compared **against**, so no comparison happens and `null` slips in. It was Java 7 that closed the loophole, and Durga Sir demonstrates the change live by switching JDKs mid-lecture — 1.6 gives you `null`, 1.7 gives you `NullPointerException`.
 >
 > **The fix is one line in `TreeMap`**, visible in the JDK 25 source:
 > ```java
@@ -146,11 +129,9 @@ He gives this its own heading, and there is a version story attached.
 >     compare(key, key);   // type (and possibly null) check
 >     ...
 > ```
-> The first element is now **compared with itself**, purely to force the null check and the type check
-> to happen. So *"`null` — such a type of story is not applicable for `TreeSet`."*
+> The first element is now **compared with itself**, purely to force the null check and the type check to happen. So `null` — such a type of story is not applicable for `TreeSet`.
 
-> [!important] **The same line means the first element is type-checked too.** A single non-`Comparable`
-> object in an otherwise empty `TreeSet` fails immediately:
+> [!important] **The same line means the first element is type-checked too.** A single non-`Comparable` object in an otherwise empty `TreeSet` fails immediately:
 > ```java
 > TreeSet t = new TreeSet();
 > t.add(new Student("durga"));     // the only element
@@ -164,8 +145,7 @@ He gives this its own heading, and there is a version story attached.
 
 # Demo 2 — homogeneous but not comparable
 
-The point of this example: **homogeneous is not sufficient.** All the objects can be the same type and
-the `TreeSet` can still refuse them.
+The point of this example: **homogeneous is not sufficient.** All the objects can be the same type and the `TreeSet` can still refuse them.
 
 ```java
 import java.util.*;
@@ -192,27 +172,21 @@ Measured on JDK 25:
 java.lang.ClassCastException: class Student cannot be cast to class java.lang.Comparable
 ```
 
-**Both objects are `Student`s** — perfectly homogeneous. The failure is that `Student` does not
-implement `Comparable`, so the `TreeSet` has no way to order them.
+**Both objects are `Student`s** — perfectly homogeneous. The failure is that `Student` does not implement `Comparable`, so the `TreeSet` has no way to order them.
 
-> **If we are depending on default natural sorting order, compulsorily the objects should be
-> homogeneous AND comparable. Otherwise we will get a runtime exception saying
-> `ClassCastException`.**
+> **If we are depending on default natural sorting order, compulsorily the objects should be homogeneous AND comparable. Otherwise we will get a runtime exception saying `ClassCastException`.**
 
-**Read the error message itself** — `cannot be cast to java.lang.Comparable` names exactly what is
-missing. That is the tell that distinguishes this failure from the heterogeneous one, whose message
-names two concrete classes instead.
+**Read the error message itself** — `cannot be cast to java.lang.Comparable` names exactly what is missing. That is the tell that distinguishes this failure from the heterogeneous one, whose message names two concrete classes instead.
 
-## What "comparable" means
+## What `comparable` means
 
-> **An object is said to be comparable if and only if the corresponding class implements the
-> `Comparable` interface.**
+> **An object is said to be comparable if and only if the corresponding class implements the `Comparable` interface.**
 
 | Class | `Comparable`? |
 |---|---|
 | `String` | ✅ |
 | All **wrapper classes** — `Integer`, `Double`, `Byte`, … | ✅ |
-| `StringBuffer` | ✅ *(see below)* |
+| `StringBuffer` | ✅ (see below) |
 | A class you wrote, without implementing it | ❌ |
 
 Confirmed on JDK 25 with `javap java.lang.String`:
@@ -222,9 +196,7 @@ public final class java.lang.String implements java.io.Serializable,
         java.lang.Comparable<java.lang.String>, java.lang.CharSequence, ...
 ```
 
-> [!important] **Older material uses `StringBuffer` as the example of a non-comparable class, and that
-> no longer works.** `StringBuffer` and `StringBuilder` **gained `compareTo` in Java 11**
-> (JDK-8137326), so a `TreeSet` of `StringBuffer` now sorts happily:
+> [!important] **Older material uses `StringBuffer` as the example of a non-comparable class, and that no longer works.** `StringBuffer` and `StringBuilder` **gained `compareTo` in Java 11** (JDK-8137326), so a `TreeSet` of `StringBuffer` now sorts happily:
 > ```java
 > TreeSet t = new TreeSet();
 > t.add(new StringBuffer("A")); t.add(new StringBuffer("Z"));
@@ -233,13 +205,9 @@ public final class java.lang.String implements java.io.Serializable,
 > ```
 > [A, B, L, Z]
 > ```
-> Measured on JDK 25, and `javap` confirms `StringBuffer implements ... Comparable<StringBuffer>`.
-> Bisected with `--release`: fails at **10**, compiles at **11**.
+> Measured on JDK 25, and `javap` confirms `StringBuffer implements ... Comparable<StringBuffer>`. Bisected with `--release`: fails at **10**, compiles at **11**.
 >
-> **The rule is unchanged** — homogeneous *and* comparable — but you need a genuinely non-comparable
-> class to demonstrate it, which is why the example above uses a hand-written `Student`. If an exam
-> paper asks about `TreeSet` and `StringBuffer` expecting `ClassCastException`, it is testing Java 10
-> or earlier.
+> **The rule is unchanged** — homogeneous **and** comparable — but you need a genuinely non-comparable class to demonstrate it, which is why the example above uses a hand-written `Student`. If an exam paper asks about `TreeSet` and `StringBuffer` expecting `ClassCastException`, it is testing Java 10 or earlier.
 
 ---
 
@@ -276,9 +244,7 @@ For `obj1.compareTo(obj2)`:
 | **positive** | `obj1` has to come **after** `obj2` |
 | **zero** | `obj1` and `obj2` are **equal** |
 
-> [!important] **The sign is what matters, not the magnitude.** *"Maybe minus one, minus 100, minus
-> 1000, minus 10000 — all are equal. Value is not important, sign only."* Never write code that depends
-> on `compareTo` returning a particular number.
+> [!important] **The sign is what matters, not the magnitude.** Maybe minus one, minus 100, minus 1000, minus 10000 — all are equal. Value is not important, sign only. Never write code that depends on `compareTo` returning a particular number.
 
 ## Measured
 
@@ -309,12 +275,9 @@ java.lang.NullPointerException
 | `"A".compareTo("A")` | **0** | equal |
 | `"A".compareTo(null)` | **`NullPointerException`** | — |
 
-**That last line is the null-acceptance rule from earlier, seen at its source.** `TreeSet` rejects
-`null` because `compareTo` does.
+**That last line is the null-acceptance rule from earlier, seen at its source.** `TreeSet` rejects `null` because `compareTo` does.
 
-> [!info] **Learn this contract properly, because `Comparator` reuses it.** The next session's
-> `compare()` method has the same three-way negative/positive/zero return, so *"if you are able to
-> understand this terminology, the next things will become a bit easy."*
+> [!info] **Learn this contract properly, because `Comparator` reuses it.** The next session's `compare()` method has the same three-way negative/positive/zero return, so if you are able to understand this terminology, the next things will become a bit easy.
 
 ---
 
@@ -335,10 +298,9 @@ System.out.println(t);
 [A, K, Z]
 ```
 
-**One `A`**, because duplicates are rejected. And the order is alphabetical. But *how*?
+**One `A`**, because duplicates are rejected. And the order is alphabetical. But **how**?
 
-> **Whenever we try to insert an object into a `TreeSet`, if we are depending on default natural
-> sorting order, internally the JVM calls the `compareTo()` method.**
+> **Whenever we try to insert an object into a `TreeSet`, if we are depending on default natural sorting order, internally the JVM calls the `compareTo()` method.**
 
 ```mermaid
 flowchart TB
@@ -362,11 +324,9 @@ flowchart TB
 > | **`obj1`** | the object **which is to be inserted** — the new one |
 > | **`obj2`** | the object **which is already inserted** — the one in the set |
 >
-> So inserting `Z` into a set that already holds `K` calls **`Z.compareTo(K)`**, not the other way
-> round. **The incoming object is always the one the method is called on.**
+> So inserting `Z` into a set that already holds `K` calls **`Z.compareTo(K)`**, not the other way round. **The incoming object is always the one the method is called on.**
 >
-> Getting this backwards inverts your entire sort order, which is exactly the bug that shows up when
-> people write their first `compareTo`.
+> Getting this backwards inverts your entire sort order, which is exactly the bug that shows up when people write their first `compareTo`.
 
 ---
 
@@ -385,7 +345,7 @@ flowchart TB
 | Why the first element is not exempt | `TreeMap` runs **`compare(key, key)`** as a type and null check |
 | Homogeneous is not enough | objects must also be **comparable** |
 | Comparable means | the class **implements `Comparable`** |
-| Comparable classes | `String`, all **wrapper** classes, `StringBuffer` *(since Java 11)* |
+| Comparable classes | `String`, all **wrapper** classes, `StringBuffer` (since Java 11) |
 | Not comparable | any class you wrote without implementing it |
 | The failure | `ClassCastException: ... cannot be cast to java.lang.Comparable` |
 | `Comparable` lives in | **`java.lang`**, **one** method — `compareTo` |

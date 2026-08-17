@@ -25,8 +25,7 @@ The question is what `final` does to each — and the answer is different all th
 | … | | |
 | student 600 | Shiva | 700 |
 
-> **If the value of a variable varies from object to object, such variables are called instance
-> variables** — also known as **object level variables**.
+> **If the value of a variable varies from object to object, such variables are called instance variables** — also known as **object level variables**.
 >
 > **For every object, a separate copy of the instance variables is created.**
 
@@ -47,8 +46,7 @@ Measured on JDK 25:
 0
 ```
 
-> **For instance variables we are not required to perform initialization explicitly — the JVM always
-> provides default values.**
+> **For instance variables we are not required to perform initialization explicitly — the JVM always provides default values.**
 
 ## What `final` changes
 
@@ -62,8 +60,7 @@ Measured on JDK 25:
 error: variable x not initialized in the default constructor
 ```
 
-> **If an instance variable is declared `final`, the JVM will NOT provide a default value. We must
-> perform initialization explicitly — whether we are using the variable or not.**
+> **If an instance variable is declared `final`, the JVM will NOT provide a default value. We must perform initialization explicitly — whether we are using the variable or not.**
 
 ## Where you may initialize it
 
@@ -79,10 +76,7 @@ Which gives exactly three places:
 
 Measured on JDK 25 — **all three compile.**
 
-> [!info] **Why exactly those three, and why the rule is phrased that way.** The instance control flow
-> runs: instance variable assignments and instance blocks **first**, then the constructor. All three
-> places sit before the constructor finishes — so "before constructor completion" is not an arbitrary
-> cut-off, it is a description of what has already run by then.
+> [!info] **Why exactly those three, and why the rule is phrased that way.** The instance control flow runs: instance variable assignments and instance blocks **first**, then the constructor. All three places sit before the constructor finishes — so before constructor completion is not an arbitrary cut-off, it is a description of what has already run by then.
 
 **Anywhere else fails.** Measured on JDK 25:
 
@@ -103,12 +97,9 @@ A method runs **after** the constructor — by then the object exists and `x` is
 
 Add a **college name** to those 600 students. Every one of them says `DurgaSoft`.
 
-> **If the value of a variable is NOT varied from object to object, such variables are not recommended
-> as instance variables** — you would create 600 identical copies, wasting memory. *"How many times do
-> we need to create `DurgaSoft`? 600 times."*
+> **If the value of a variable is NOT varied from object to object, such variables are not recommended as instance variables** — you would create 600 identical copies, wasting memory. How many times do we need to create `DurgaSoft`? 600 times.
 >
-> **Declare such variables at class level using the `static` modifier.** Then **one copy** is created
-> at class level and **shared by every object**.
+> **Declare such variables at class level using the `static` modifier.** Then **one copy** is created at class level and **shared by every object**.
 
 ## The default value, and what `final` changes
 
@@ -128,9 +119,7 @@ Measured on JDK 25:
 error: variable x might not have been initialized
 ```
 
-> [!info] **The two cases give two different messages.** The *static* case says
-> `might not have been initialized`; the *instance* case above named the constructor explicitly. Do not
-> expect one message to cover both.
+> [!info] **The two cases give two different messages.** The **static** case says `might not have been initialized`; the **instance** case above named the constructor explicitly. Do not expect one message to cover both.
 
 ## Where you may initialize it
 
@@ -159,8 +148,7 @@ error: cannot assign a value to static final variable x
 > | final **instance** variable | before **constructor completion** | declaration, **instance block**, **constructor** |
 > | final **static** variable | before **class loading completion** | declaration, **static block** |
 >
-> The static one is stricter because class loading happens **before any object exists** — and a
-> constructor only runs when one is created. The deadline explains the list in both cases.
+> The static one is stricter because class loading happens **before any object exists** — and a constructor only runs when one is created. The deadline explains the list in both cases.
 
 ---
 
@@ -168,20 +156,15 @@ error: cannot assign a value to static final variable x
 
 ## What they are
 
-> **Variables declared inside a method, a block, or a constructor — to meet the temporary requirements
-> of the programmer — are called local variables.**
+> **Variables declared inside a method, a block, or a constructor — to meet the temporary requirements of the programmer — are called local variables.**
 
-Also known as **temporary variables**, **stack variables** (they live in stack memory) or **automatic
-variables**.
+Also known as **temporary variables**, **stack variables** (they live in stack memory) or **automatic variables**.
 
 ## The JVM provides nothing
 
-> **For local variables the JVM does NOT provide any default values** — not even when they are not
-> final. **We must perform initialization explicitly before using them.**
+> **For local variables the JVM does NOT provide any default values** — not even when they are not final. **We must perform initialization explicitly before using them.**
 
-> [!info] **Why the difference.** Instance and static variables are **standard data** — part of an
-> object or part of a class, so the JVM initialises them. A local variable is **temporary data**,
-> alive only for the length of a method call, so the JVM leaves it to you.
+> [!info] **Why the difference.** Instance and static variables are **standard data** — part of an object or part of a class, so the JVM initialises them. A local variable is **temporary data**, alive only for the length of a method call, so the JVM leaves it to you.
 
 Measured on JDK 25:
 
@@ -190,8 +173,7 @@ Measured on JDK 25:
 | `int x; System.out.println("hello");` | ✅ **valid** — prints `hello` |
 | `int x; System.out.println(x);` | ❌ `variable x might not have been initialized` |
 
-> **If we are not using the local variable, it is not required to initialize it.** The requirement is
-> **before use**, not at declaration.
+> **If we are not using the local variable, it is not required to initialize it.** The requirement is **before use**, not at declaration.
 
 ## And `final` changes nothing about that
 
@@ -204,7 +186,7 @@ public static void main(String[] args) {
 }
 ```
 
-*"Compile-time error, or `hello`?"*
+Compile-time error, or `hello`?
 
 Measured on JDK 25:
 
@@ -216,19 +198,15 @@ hello
 > - final **instance** and final **static** variables must be initialized **whether used or not**.
 > - a final **local** variable must be initialized **only before use** — exactly like a non-final one.
 >
-> *"Even though the local variable is final, before using only we have to perform initialization. If we
-> are not using it, it is not required — even though it is final."*
+> Even though the local variable is final, before using only we have to perform initialization. If we are not using it, it is not required — even though it is final.
 
 ---
 
 # The only modifier a local variable may have
 
-`public`, `private`, `protected` and default control **where** a variable can be accessed. But a local
-variable's scope is **already fixed** — it is visible inside its method or block and nowhere else. So
-those words have nothing to say about it.
+`public`, `private`, `protected` and default control **where** a variable can be accessed. But a local variable's scope is **already fixed** — it is visible inside its method or block and nowhere else. So those words have nothing to say about it.
 
-> **The only applicable modifier for a local variable is `final`.** Any other modifier is a
-> compile-time error.
+> **The only applicable modifier for a local variable is `final`.** Any other modifier is a compile-time error.
 
 Measured on JDK 25:
 
@@ -242,17 +220,13 @@ Measured on JDK 25:
 | `volatile` | ❌ `illegal start of expression` |
 | **`final`** | ✅ **valid** |
 
-> [!info] **And a local variable is not final by default.** *"Some people may feel by default every
-> local variable is final. No — if you want, you can apply it."*
+> [!info] **And a local variable is not final by default.** Some people may feel by default every local variable is final. No — if you want, you can apply it.
 
-> [!question]- **Deep dive — the student whose Java was "not working properly".** A story he tells to
-> make this rule stick, and it is a good diagnostic lesson.
+> [!question]- **Deep dive — the student whose Java was not working properly.** A story he tells to make this rule stick, and it is a good diagnostic lesson.
 >
-> A working professional came to him at the end of a session: *"Sir, in my system Java is not working
-> properly."* He assumed a `PATH` or `CLASSPATH` problem — until she added: **"Some programs compile
-> and run fine, but some don't."**
+> A working professional came to him at the end of a session: Sir, in my system Java is not working properly. He assumed a `PATH` or `CLASSPATH` problem — until she added: **Some programs compile and run fine, but some don't.**
 >
-> *"I got a shock — because if it were a path problem, NO program should work."*
+> I got a shock — because if it were a path problem, NO program should work.
 >
 > He asked her to write one of the failing programs:
 >
@@ -265,18 +239,15 @@ Measured on JDK 25:
 > }
 > ```
 >
-> **`public` on a local variable.** *"The problem is not with Java. The problem is with your program."*
+> **`public` on a local variable.** The problem is not with Java. The problem is with your program.
 >
-> The diagnostic point is worth as much as the rule: **"it works for some programs and not others"
-> rules out the environment entirely.** A broken installation fails uniformly.
+> The diagnostic point is worth as much as the rule: **it works for some programs and not others rules out the environment entirely.** A broken installation fails uniformly.
 
-## And "no modifier means default" does not apply either
+## And no modifier means default does not apply either
 
-> **If we don't declare any modifier, then by default it is default access — but this rule applies only
-> to instance and static variables, NOT to local variables.**
+> **If we don't declare any modifier, then by default it is default access — but this rule applies only to instance and static variables, NOT to local variables.**
 
-A local variable with no modifier is not "default access". It has no access modifier at all, because
-access modifiers are meaningless for it.
+A local variable with no modifier is not default access. It has no access modifier at all, because access modifiers are meaningless for it.
 
 ---
 
@@ -309,8 +280,7 @@ The reassignment inside `m1` works, and `x` and `y` are visible only inside `m1`
 
 **Everything above therefore applies to them** — including which modifier they may carry:
 
-> **Hence a formal parameter can be declared `final`. And if a formal parameter is declared `final`, we
-> cannot perform reassignment within the method.**
+> **Hence a formal parameter can be declared `final`. And if a formal parameter is declared `final`, we cannot perform reassignment within the method.**
 
 Measured on JDK 25:
 
@@ -321,16 +291,11 @@ public static void m1(final int x, int y) { x = 100; }
 error: final parameter x may not be assigned
 ```
 
-> [!info] **Parameters get their own message.** Reassigning any other final variable says
-> `cannot assign a value to final variable x`; a **final parameter** gets the dedicated
-> `final parameter x may not be assigned`.
+> [!info] **Parameters get their own message.** Reassigning any other final variable says `cannot assign a value to final variable x`; a **final parameter** gets the dedicated `final parameter x may not be assigned`.
 
-> [!info] **The exam form of this.** *"Consider the following code — (a) no compile-time error,
-> (b) compile-time error because a formal parameter cannot be declared final, (c) compile-time error
-> because reassignment is not allowed."*
+> [!info] **The exam form of this.** Consider the following code — (a) no compile-time error, (b) compile-time error because a formal parameter cannot be declared final, (c) compile-time error because reassignment is not allowed.
 >
-> **The answer is (c).** Option (b) is the trap: declaring the parameter `final` is perfectly legal —
-> it is the **reassignment** that fails.
+> **The answer is (c).** Option (b) is the trap: declaring the parameter `final` is perfectly legal — it is the **reassignment** that fails.
 
 ---
 
@@ -353,7 +318,7 @@ error: final parameter x may not be assigned
 | final local, used | must be initialized **before use**, same as non-final |
 | The only local modifier | **`final`** — everything else is `illegal start of expression` |
 | Local variables are **not** final by default | correct |
-| "No modifier = default access" | applies to instance/static only, **not** local |
+| `No modifier = default access` | applies to instance/static only, **not** local |
 | Formal parameters are | **local variables** of that method |
 | A final formal parameter | legal — but **cannot be reassigned** |
 | That error on JDK 25 | `final parameter x may not be assigned` |

@@ -2,8 +2,7 @@
 
 `synchronized` on a method locks **the whole method**. Often that is far more than you need.
 
-> [!question]- **The Dilsukhnagar bomb blast, and the flights out of New York.** His argument for why
-> locking a whole method is absurd when only part of it needs it.
+> [!question]- **The Dilsukhnagar bomb blast, and the flights out of New York.** His argument for why locking a whole method is absurd when only part of it needs it.
 >
 > A bomb goes off in **Dilsukhnagar**, an area of Hyderabad. In response:
 >
@@ -11,12 +10,11 @@
 > - **no city bus is allowed to run in London**
 > - **no local train is allowed to leave Sydney**
 >
-> The people in each city ask why. *"There was a bomb blast in Dilsukhnagar."*
+> The people in each city ask why. There was a bomb blast in Dilsukhnagar.
 >
-> **If you wrote code that behaved like this, people would laugh at you.** Block Dilsukhnagar. Perhaps
-> block Hyderabad. **There is no reason to stop flights in New York.**
+> **If you wrote code that behaved like this, people would laugh at you.** Block Dilsukhnagar. Perhaps block Hyderabad. **There is no reason to stop flights in New York.**
 >
-> > *"Very unfortunately, most programmers are doing exactly this type of programming."*
+> > Very unfortunately, most programmers are doing exactly this type of programming.
 
 ## The situation
 
@@ -24,31 +22,21 @@ A method with **10,000 lines**, of which about **10** touch shared state — a d
 
 **What most people do:** declare the entire method `synchronized`.
 
-**What that costs:** every thread wanting *any* of those 10,000 lines waits for whoever is inside,
-even though 9,990 of them were never a problem.
+**What that costs:** every thread wanting **any** of those 10,000 lines waits for whoever is inside, even though 9,990 of them were never a problem.
 
-> **If very few lines of the code require synchronization, then it is not recommended to declare the
-> entire method as synchronized. We have to enclose those few lines of the code using a synchronized
-> block.**
+> **If very few lines of the code require synchronization, then it is not recommended to declare the entire method as synchronized. We have to enclose those few lines of the code using a synchronized block.**
 
-> **The main advantage of a synchronized block over a synchronized method is that it reduces the
-> waiting time of threads and improves the performance of the system.**
+> **The main advantage of a synchronized block over a synchronized method is that it reduces the waiting time of threads and improves the performance of the system.**
 
-> [!question]- **The narrow bridge at Kodada.** The same point measured in hours, and it is the
-> sharper version.
+> [!question]- **The narrow bridge at Kodada.** The same point measured in hours, and it is the sharper version.
 >
-> Hyderabad to Vijayawada is about **300 km — 6 hours**. Somewhere in the middle, at Kodada, there is
-> a **narrow bridge where only one vehicle can cross at a time.**
+> Hyderabad to Vijayawada is about **300 km — 6 hours**. Somewhere in the middle, at Kodada, there is a **narrow bridge where only one vehicle can cross at a time.**
 >
-> **The bad solution:** allow only one vehicle on the whole Hyderabad–Vijayawada route. The next
-> vehicle cannot start until the previous one arrives — **6 hours per vehicle**, so about **four
-> vehicles per day**.
+> **The bad solution:** allow only one vehicle on the whole Hyderabad–Vijayawada route. The next vehicle cannot start until the previous one arrives — **6 hours per vehicle**, so about **four vehicles per day**.
 >
-> *"If my life's goal is to reach Vijayawada, I may not reach it in my lifetime"* — at four a day, your
-> vehicle might be 40,000 places back in the queue.
+> If my life's goal is to reach Vijayawada, I may not reach it in my lifetime — at four a day, your vehicle might be 40,000 places back in the queue.
 >
-> **The good solution:** let everyone drive the 300 km freely, and **synchronize only the bridge.**
-> Multiple vehicles travel at once; at the bridge, one at a time.
+> **The good solution:** let everyone drive the 300 km freely, and **synchronize only the bridge.** Multiple vehicles travel at once; at the bridge, one at a time.
 >
 > | | Wait |
 > |---|---|
@@ -81,8 +69,7 @@ synchronized (b) {
 }
 ```
 
-> **If a thread gets the lock of the particular object `b`, then only it is allowed to execute this
-> area.**
+> **If a thread gets the lock of the particular object `b`, then only it is allowed to execute this area.**
 
 ## 3 — Class level lock
 
@@ -92,11 +79,9 @@ synchronized (Display.class) {
 }
 ```
 
-> **If a thread gets the class level lock of `Display`, then only it is allowed to execute this
-> area.**
+> **If a thread gets the class level lock of `Display`, then only it is allowed to execute this area.**
 
-`Display.class` is the **`Class` object** of `Display`, and its lock is the class-level lock from note
-`08` — confirming that the class lock really is just an object lock on the `Class` object.
+`Display.class` is the **`Class` object** of `Display`, and its lock is the class-level lock from note `08` — confirming that the class lock really is just an object lock on the `Class` object.
 
 ---
 
@@ -136,18 +121,11 @@ Good Morning: Dhoni
 ...
 ```
 
-> [!important] **Row 3 is why form 2 exists.** With `synchronized(this)` the two objects have separate
-> locks and interleave. Point both at **one shared object `B`** and they serialise — **without making
-> the objects related in any other way.**
+> [!important] **Row 3 is why form 2 exists.** With `synchronized(this)` the two objects have separate locks and interleave. Point both at **one shared object `B`** and they serialise — **without making the objects related in any other way.**
 >
-> **This is the tool for guarding shared state that does not live in either object**: a static
-> counter, a shared file, a connection. You create a private lock object and every thread that touches
-> that state synchronizes on it.
+> **This is the tool for guarding shared state that does not live in either object**: a static counter, a shared file, a connection. You create a private lock object and every thread that touches that state synchronizes on it.
 
-> [!warning] **Never synchronize on a `String` literal or a boxed primitive.** `synchronized("lock")`
-> compiles and appears to work, but string literals are interned (`STRING-HANDLING/02`) and small
-> `Integer`s are cached (note `12` of Collections) — so **unrelated code elsewhere can end up sharing
-> your lock** and block you for reasons you will never find.
+> [!warning] **Never synchronize on a `String` literal or a boxed primitive.** `synchronized("lock")` compiles and appears to work, but string literals are interned (`STRING-HANDLING/02`) and small `Integer`s are cached (note `12` of Collections) — so **unrelated code elsewhere can end up sharing your lock** and block you for reasons you will never find.
 >
 > The safe idiom is a dedicated object nobody else can reach:
 > ```java
@@ -163,10 +141,7 @@ Good Morning: Dhoni
 | The **whole method** needs synchronization | **`synchronized` method** |
 | Only **a few lines** need it | **`synchronized` block** |
 
-> [!info] **He puts the distinction as global versus local.** Declaring a method `synchronized` is a
-> *global* decision about every line in it; a block is a *local* decision about the lines that
-> actually share state. **Prefer the smallest region that is still correct** — but no smaller, because
-> a lock that does not cover the whole critical section is worse than no lock, since it looks safe.
+> [!info] **He puts the distinction as global versus local.** Declaring a method `synchronized` is a **global** decision about every line in it; a block is a **local** decision about the lines that actually share state. **Prefer the smallest region that is still correct** — but no smaller, because a lock that does not cover the whole critical section is worse than no lock, since it looks safe.
 
 ---
 

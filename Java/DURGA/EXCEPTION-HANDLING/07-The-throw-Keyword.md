@@ -86,7 +86,7 @@ Exception in thread "main" java.lang.NullPointerException: Cannot throw exceptio
 
 > [!warning] **Two things in the non-null output are worth stopping on, and the second is not in the lecture.**
 >
-> The trace says **`<clinit>`**, not `main` — `<clinit>` being the static initialiser. The exception was *thrown* from `main` on line 4, but the trace points at line 1 where it was **created**.
+> The trace says **`<clinit>`**, not `main` — `<clinit>` being the static initialiser. The exception was **thrown** from `main` on line 4, but the trace points at line 1 where it was **created**.
 >
 > That is because a stack trace is captured **when the exception object is constructed**, not when it is thrown. Confirmed directly:
 >
@@ -146,7 +146,7 @@ Exception in thread "main" java.lang.ArithmeticException: / by zero
 >
 > `10/0` is an **expression that happens to fail at runtime**. The compiler does not evaluate expressions to decide reachability — it applies flow rules — and by those rules `System.out.println(10/0)` completes normally, so the next line is reachable.
 >
-> So *unreachable statement* is not a claim about what will really happen. It is a claim about what the flow rules can prove.
+> So **unreachable statement** is not a claim about what will really happen. It is a claim about what the flow rules can prove.
 
 ---
 

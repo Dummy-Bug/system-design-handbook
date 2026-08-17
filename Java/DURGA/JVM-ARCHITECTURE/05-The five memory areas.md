@@ -6,7 +6,7 @@ Whenever the JVM loads and runs a Java program, it needs memory to store several
 > 4. **PC registers**
 > 5. **Native method stacks**
 
-The motivation is plain if you take the JVM's two jobs literally: *load and run*. Loading needs somewhere to put class data. Running creates objects, which need somewhere to live; and calls methods, whose local variables need somewhere to live. Five areas, each answering one of those needs.
+The motivation is plain if you take the JVM's two jobs literally: **load and run**. Loading needs somewhere to put class data. Running creates objects, which need somewhere to live; and calls methods, whose local variables need somewhere to live. Five areas, each answering one of those needs.
 
 The five do not sit side by side as equals. They divide along one line — **how many of each exist** — and that line is the single most useful thing to hold in your head:
 
@@ -61,11 +61,11 @@ There is no per-thread copy to fall back on. Every thread in the JVM is incremen
 
 > [!important] **Method area data is not thread safe, and that follows from it being shared.** Multiple threads can reach it simultaneously, and nothing about the area itself prevents them colliding. This is not a defect — it is the same trade the multithreading chapter describes, where shared state is what makes synchronization necessary. It is also the reason a `static` variable is the classic thing to get wrong in concurrent code: every thread in the JVM is looking at the same one.
 
-> [!info] **"Need not be continuous" is easy to skip past.** The method area is not required to be one unbroken block of memory — it can be scattered, and grow in pieces. Nothing you write depends on this, but it is a stated property and it rules out reasoning about the method area as though it were an array.
+> [!info] **Need not be continuous is easy to skip past.** The method area is not required to be one unbroken block of memory — it can be scattered, and grow in pieces. Nothing you write depends on this, but it is a stated property and it rules out reasoning about the method area as though it were an array.
 
-> [!important] **"Method area" is the specification's word; a running JVM calls it Metaspace.** Restated here because this is where the area is formally introduced. Metaspace is **native memory**, outside the heap, and it grows on demand — `OutOfMemoryError: Metaspace` means *too many classes loaded*, and `-XX:MaxMetaspaceSize` caps it.
+> [!important] **Method area is the specification's word; a running JVM calls it Metaspace.** Restated here because this is where the area is formally introduced. Metaspace is **native memory**, outside the heap, and it grows on demand — `OutOfMemoryError: Metaspace` means **too many classes loaded**, and `-XX:MaxMetaspaceSize` caps it.
 >
-> One detail contradicts the diagram most people draw: the **values** of static fields sit in the `Class` object on the **heap**, even though the specification places static variables in the method area. That is not a contradiction of anything in this note — **the method area owns the description, the heap holds the value** — and it is worked through properly in **"The one row that trips everyone up"** below, once objects and the heap are on the table.
+> One detail contradicts the diagram most people draw: the **values** of static fields sit in the `Class` object on the **heap**, even though the specification places static variables in the method area. That is not a contradiction of anything in this note — **the method area owns the description, the heap holds the value** — and it is worked through properly in **The one row that trips everyone up** below, once objects and the heap are on the table.
 
 ---
 
@@ -99,7 +99,7 @@ Row for row the same, with one line different — and that one line is the whole
 
 Two consequences worth pulling out of that list.
 
-**Instance variables follow their object.** An instance variable is *part of* an object, so it has no separate home — wherever the object is, the instance variable is. Objects live on the heap, therefore instance variables live on the heap. That completes a three-way split you will be asked to recite:
+**Instance variables follow their object.** An instance variable is **part of** an object, so it has no separate home — wherever the object is, the instance variable is. Objects live on the heap, therefore instance variables live on the heap. That completes a three-way split you will be asked to recite:
 
 | Variable kind | Lives in |
 |---|---|
@@ -107,7 +107,7 @@ Two consequences worth pulling out of that list.
 | **instance** variables | **heap area** |
 | **local** variables | stack area |
 
-The table is the answer to give; the reason behind it is *how many copies there are*, and that is easier to see drawn. Take one small class with all three kinds of variable in it:
+The table is the answer to give; the reason behind it is **how many copies there are**, and that is easier to see drawn. Take one small class with all three kinds of variable in it:
 
 ```mermaid
 flowchart LR
@@ -126,15 +126,13 @@ Read the right-hand column downwards and the rule states itself: the more specif
 
 **Every array in Java is an object.** So arrays are stored on the heap too — including an array of primitives. `int[] a = new int[10]` puts an object on the heap, even though nothing about `int` is object-like.
 
-> [!info] Coder Army — **methods are stored once, in the method area; an object holds only its instance variables**
-> Whichever `Student` you call `markAttendance()` on, there is **one copy of that method**, sitting in the method area with the rest of the class data. Instance methods and `static` methods alike — a method is never copied into an object. The object carries its instance variables and nothing else.
+> [!info] Coder Army — **methods are stored once, in the method area; an object holds only its instance variables** Whichever `Student` you call `markAttendance()` on, there is **one copy of that method**, sitting in the method area with the rest of the class data. Instance methods and `static` methods alike — a method is never copied into an object. The object carries its instance variables and nothing else.
 >
-> Which raises the obvious follow-up: if there is only one copy, what makes `s1.markAttendance()` print *Laxy* and `s2.markAttendance()` print *Amit*? The object is handed **into** the shared method, as slot 0 of its stack frame. That is what `this` is, and it is worked through in the local variable array section of the next note.
+> Which raises the obvious follow-up: if there is only one copy, what makes `s1.markAttendance()` print **Laxy** and `s2.markAttendance()` print **Amit**? The object is handed **into** the shared method, as slot 0 of its stack frame. That is what `this` is, and it is worked through in the local variable array section of the next note.
 
-> [!important] **"Not thread safe" is a property of the memory, not a warning about your code.** Nothing stops two threads reaching the same object at the same time, because the heap is one shared region by design. That sharing is exactly what makes threads cheap and useful — and exactly what makes synchronization necessary. The JVM provides the shared space; keeping access to it correct is your job.
+> [!important] **Not thread safe is a property of the memory, not a warning about your code.** Nothing stops two threads reaching the same object at the same time, because the heap is one shared region by design. That sharing is exactly what makes threads cheap and useful — and exactly what makes synchronization necessary. The JVM provides the shared space; keeping access to it correct is your job.
 
-> [!info] Coder Army — **the string pool**, a region inside the heap that the five-area list never mentions
-> A string literal does not live inside the object that refers to it. It lives in the **string pool**, a special region **inside the heap**, and the field holds a reference out to it.
+> [!info] Coder Army — **the string pool**, a region inside the heap that the five-area list never mentions A string literal does not live inside the object that refers to it. It lives in the **string pool**, a special region **inside the heap**, and the field holds a reference out to it.
 >
 > ```java
 > class Student {
@@ -145,7 +143,7 @@ Read the right-hand column downwards and the rule states itself: the more specif
 >
 > The `Student` object is on the heap and its `name` field sits inside it — but the characters `Laxy` are in the pool, and `name` merely points at them. Write `"Laxy"` again anywhere else in the program and you get a reference to the **same** pooled object. That is the whole purpose of the pool: identical literals are stored once.
 >
-> `new String("Laxy")` deliberately opts out of it. `new` always means *make a fresh object on the heap*, so you get a second copy with the same characters and a different identity — which is why comparing strings with `==` behaves differently depending on how they were created.
+> `new String("Laxy")` deliberately opts out of it. `new` always means **make a fresh object on the heap**, so you get a second copy with the same characters and a different identity — which is why comparing strings with `==` behaves differently depending on how they were created.
 
 > [!info] Coder Army — **what `new Student("Laxy", 28)` does, in order** — and the step almost everybody skips
 > ```
@@ -158,12 +156,11 @@ Read the right-hand column downwards and the rule states itself: the more specif
 >
 > Step 2 is the one to hold on to. **The defaults are already in place before your constructor runs.** A constructor never builds an object out of nothing; it overwrites values that are sitting there already. That is exactly why a field you forget to assign reads `null` or `0` instead of whatever junk happened to be in that memory.
 
-> [!info] Coder Army — **"eligible for collection" is not "collected"**, and why the heap is a graph rather than a list
-> Writing `s1 = null` deletes nothing. It removes one reference, and the object becomes **eligible** — the collector takes it whenever it next runs, which might be much later, or never, if the program ends first.
+> [!info] Coder Army — **"eligible for collection" is not "collected"**, and why the heap is a graph rather than a list Writing `s1 = null` deletes nothing. It removes one reference, and the object becomes **eligible** — the collector takes it whenever it next runs, which might be much later, or never, if the program ends first.
 >
 > And you rarely write `null` to cause that. The usual route is quieter: when a method returns its frame pops, and **every reference that frame held disappears at once**.
 >
-> "Unreachable" also means more than *no variable points at it*. An object's instance field can hold a reference to another object, so the heap is a **graph**, and reachability is followed along chains:
+> `Unreachable` also means more than **no variable points at it**. An object's instance field can hold a reference to another object, so the heap is a **graph**, and reachability is followed along chains:
 >
 > ```mermaid
 > flowchart LR
@@ -193,10 +190,10 @@ Create three `Student` objects and count what the JVM is actually storing:
 
 | What is stored | How many | Where |
 |---|---|---|
-| the **description** — "`Student` has a field `name`, of type `String`" | **one**, for the whole class | method area |
+| the **description** — `Student` has a field `name`, of type `String` | **one**, for the whole class | method area |
 | the **value slot** — the box holding `"Laxy"` | **one per object** | heap, inside the object |
 
-The description lives in one place and the value lives in another — and that has never bothered anybody. It is just *"the class knows what fields exist; each object carries its own copies."*
+The description lives in one place and the value lives in another — and that has never bothered anybody. It is just the class knows what fields exist; each object carries its own copies.
 
 Now do the same counting for a static field:
 
@@ -208,7 +205,7 @@ class Student {
 
 Run the program and create **zero** `Student` objects. `Student.count` still works, and still reads `0`. So there is exactly one value slot for it — and that slot **cannot** be inside a `Student` object, because there are none.
 
-So which object holds it? There is only one candidate: the object that exists for *the class itself* — the **`Class` object**, created at load time and handed to you as `Student.class`. And the `Class` object is a normal object living on the **heap**.
+So which object holds it? There is only one candidate: the object that exists for **the class itself** — the **`Class` object**, created at load time and handed to you as `Student.class`. And the `Class` object is a normal object living on the **heap**.
 
 ```mermaid
 flowchart LR
@@ -230,7 +227,7 @@ flowchart LR
 
 Read it as one sentence: **every description is on the left, every value is on the right.** The static is not an exception to that — it follows the same rule as the instance field. The only thing that makes it look special is that its value slot lives in the `Class` object rather than in a `Student` object, because the class is what it belongs to.
 
-> [!important] **When asked, say "method area".** That is what the specification says and what the question is testing. The heap detail is a follow-up you offer *after* the answer, not instead of it: *"the spec places static variables in the method area; in HotSpot the value slots are actually held inside the `Class` object on the heap, and have been since JDK 7."*
+> [!important] **When asked, say method area.** That is what the specification says and what the question is testing. The heap detail is a follow-up you offer **after** the answer, not instead of it: the spec places static variables in the method area; in HotSpot the value slots are actually held inside the `Class` object on the heap, and have been since JDK 7.
 
 ---
 
@@ -291,7 +288,7 @@ And the fourth number, which has no method of its own because you compute it:
 
 The 60 people sitting down. Note it is measured against **total**, not max — you cannot have consumed memory that was never allocated.
 
-> [!important] **`totalMemory()` is not the total the heap can be.** It reads like it should be the maximum, and it is not — `maxMemory()` is. `totalMemory()` is what is allocated *at this moment*, and it grows towards `maxMemory()` as the program needs more. The concept is **initial memory**; the method is simply named `totalMemory`, and that mismatch is the whole trap.
+> [!important] **`totalMemory()` is not the total the heap can be.** It reads like it should be the maximum, and it is not — `maxMemory()` is. `totalMemory()` is what is allocated **at this moment**, and it grows towards `maxMemory()` as the program needs more. The concept is **initial memory**; the method is simply named `totalMemory`, and that mismatch is the whole trap.
 
 ## The program
 
@@ -311,7 +308,7 @@ class HeapDemo {
 
 Without the division you get raw **bytes** — numbers in the hundreds of millions, which nobody can read. `1 MB = 1024 × 1024 bytes`, so dividing by that gives megabytes.
 
-> [!info] **Use `double` rather than `long` for the divisor if you want the fractional part.** With `long` you get integer division and `0` for consumed memory; with `double` you see `0.36` and can tell the difference between "nothing" and "a little".
+> [!info] **Use `double` rather than `long` for the divisor if you want the fractional part.** With `long` you get integer division and `0` for consumed memory; with `double` you see `0.36` and can tell the difference between nothing and a little.
 
 ## Measured, on JDK 25
 
@@ -350,7 +347,7 @@ flowchart TB
     end
 ```
 
-Which is also the answer to *why two flags and not one*: `-Xmx` decides how far the program is ever allowed to go, `-Xms` decides how much of that it is handed up front.
+Which is also the answer to **why two flags and not one**: `-Xmx` decides how far the program is ever allowed to go, `-Xms` decides how much of that it is handed up front.
 
 ```
 java -Xmx512m HeapDemo             sets maximum heap size to 512 MB
@@ -369,15 +366,14 @@ Verified on JDK 25 — and each flag moves exactly the number it should, leaving
 
 That table is the demonstration in one glance: `-Xmx` moves the max and nothing else; `-Xms` moves the total and nothing else; together they set both.
 
-> [!info] **You asked for 64 and got 66 — that is normal.** The JVM rounds heap sizes to alignment boundaries and to whole numbers of regions in the garbage collector, so the figure you get back is near what you asked for rather than exactly it. Ask for `512m` for the *maximum* and you do tend to get 512 exactly, as above — it is the initial size that gets nudged.
+> [!info] **You asked for 64 and got 66 — that is normal.** The JVM rounds heap sizes to alignment boundaries and to whole numbers of regions in the garbage collector, so the figure you get back is near what you asked for rather than exactly it. Ask for `512m` for the **maximum** and you do tend to get 512 exactly, as above — it is the initial size that gets nudged.
 
 > [!info] **`-X` means non-standard.** Every flag starting with `-X` is officially outside the Java specification and not guaranteed across JVM implementations. In practice `-Xmx` and `-Xms` are supported everywhere and are the two most-used flags in production Java — but that is convention, not a promise, and it is why they look different from ordinary options.
 
-> [!question]- Why would you ever set the minimum heap size *up*?
-> To stop the JVM growing the heap in steps while your application warms up. Each growth is work, and it happens under load at exactly the wrong moment. Setting `-Xms` equal to `-Xmx` is a common production pattern for long-running servers — the heap is allocated once at start-up, at full size, and never has to be resized again. That is the reason the flag is worth reaching for, beyond simply "increase or decrease the heap".
+> [!question]- Why would you ever set the minimum heap size **up**?
+> To stop the JVM growing the heap in steps while your application warms up. Each growth is work, and it happens under load at exactly the wrong moment. Setting `-Xms` equal to `-Xmx` is a common production pattern for long-running servers — the heap is allocated once at start-up, at full size, and never has to be resized again. That is the reason the flag is worth reaching for, beyond simply increase or decrease the heap.
 
-> [!info] Coder Army — **a memory leak in a garbage-collected language**, which sounds like it should be impossible
-> The collector frees what is **unreachable**. So if you hold on to something forever, the collector is doing its job perfectly and the memory is still never freed:
+> [!info] Coder Army — **a memory leak in a garbage-collected language**, which sounds like it should be impossible The collector frees what is **unreachable**. So if you hold on to something forever, the collector is doing its job perfectly and the memory is still never freed:
 >
 > ```java
 > class Demo {
@@ -395,8 +391,7 @@ That table is the demonstration in one glance: `-Xmx` moves the max and nothing 
 >
 > The shape to recognise is **a long-lived container that only ever gets added to** — static collections, caches with no eviction, listener lists nobody unregisters from. The fix is always the same: drop the reference when you are done with it, so the object can actually become unreachable.
 
-> [!example] Coder Army — **forcing `OutOfMemoryError` on purpose**, with a 4 MB heap
-> Take the leak above, cap the heap with the two flags, and count the blocks as they go in:
+> [!example] Coder Army — **forcing `OutOfMemoryError` on purpose**, with a 4 MB heap Take the leak above, cap the heap with the two flags, and count the blocks as they go in:
 >
 > ```java
 > int count = 0;
@@ -418,7 +413,7 @@ That table is the demonstration in one glance: `-Xmx` moves the max and nothing 
 > Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
 > ```
 >
-> A 4 MB ceiling at roughly 1 MB a block should give four, and it gives **five**. `250_000 × 4 bytes = 1,000,000 bytes`, but a megabyte is `1024 × 1024 = 1,048,576` bytes — so each block is about 4.6% *smaller* than a megabyte, and five of them fit. It is the same 1000-versus-1024 gap that makes the program earlier in this note divide by `1024 * 1024` rather than by a million.
+> A 4 MB ceiling at roughly 1 MB a block should give four, and it gives **five**. `250_000 × 4 bytes = 1,000,000 bytes`, but a megabyte is `1024 × 1024 = 1,048,576` bytes — so each block is about 4.6% **smaller** than a megabyte, and five of them fit. It is the same 1000-versus-1024 gap that makes the program earlier in this note divide by `1024 * 1024` rather than by a million.
 
 ---
 

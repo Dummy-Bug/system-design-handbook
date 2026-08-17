@@ -1,7 +1,6 @@
-# Case 2 — the parent is *not* serializable
+# Case 2 — the parent is **not** serializable
 
-> *"Very dangerous. Almost four conclusions are there, you have to keep these properly. This is the
-> most difficult concept — take special care."*
+> Very dangerous. Almost four conclusions are there, you have to keep these properly. This is the most difficult concept — take special care.
 
 ```java
 class Animal {                                      // NOT Serializable
@@ -13,8 +12,7 @@ class Dog extends Animal implements Serializable {  // the CHILD declares it
 }
 ```
 
-**Case 1 (part `10`) was the parent declaring it. This is the reverse**, and it behaves nothing like
-you would guess.
+**Case 1 (part `10`) was the parent declaring it. This is the reverse**, and it behaves nothing like you would guess.
 
 ---
 
@@ -24,12 +22,9 @@ you would guess.
 
 **And his argument for why that must be true is the same one from part `10`, run in reverse:**
 
-> *"If we had the conclusion that the parent must be serializable, then you couldn't serialize a single
-> Java object — because for all Java classes the parent is `Object`, and `Object` doesn't implement
-> `Serializable`. But still we can serialize a `Dog` object, an `Account` object…"*
+> If we had the conclusion that the parent must be serializable, then you couldn't serialize a single Java object — because for all Java classes the parent is `Object`, and `Object` doesn't implement `Serializable`. But still we can serialize a `Dog` object, an `Account` object…
 
-**So the child implementing `Serializable` is enough.** *"Whether the parent is serializable or not,
-not required to worry at all."*
+**So the child implementing `Serializable` is enough.** Whether the parent is serializable or not, not required to worry at all.
 
 ---
 
@@ -41,32 +36,26 @@ d1.i = 888;          // inherited from the non-serializable Animal
 d1.j = 999;          // the child's own
 ```
 
-> **At the time of serialization, the JVM will check: is any instance variable inheriting from a
-> non-serializable parent? If any instance variable is inheriting from a non-serializable parent, the
-> JVM ignores the original value and saves the default value to the file.**
+> **At the time of serialization, the JVM will check: is any instance variable inheriting from a non-serializable parent? If any instance variable is inheriting from a non-serializable parent, the JVM ignores the original value and saves the default value to the file.**
 
 | Variable | Comes from | Written to the file |
 |---|---|---|
 | `i` | **non-serializable** `Animal` | **`0`** — the default |
 | `j` | the serializable `Dog` | **`999`** |
 
-**The `888` is gone**, for exactly the reason `transient` values are gone in part `03`: the machinery
-declines to write it.
+**The `888` is gone**, for exactly the reason `transient` values are gone in part `03`: the machinery declines to write it.
 
 ---
 
 # Rule 3 — instance control flow runs in the parent
 
-**This is the rule nobody predicts.** *"Most of the people are going to expect the answer will become
-`888 999`. We are not going to get that output — I'm sure."*
+**This is the rule nobody predicts.** Most of the people are going to expect the answer will become `888 999`. We are not going to get that output — I'm sure.
 
 **And it is not `0 999` either.**
 
-> **At the time of deserialization, the JVM will check: is any parent class non-serializable? If any
-> parent class is non-serializable, then the JVM will execute instance control flow in every
-> non-serializable parent, and share its instance variable values to the current object.**
+> **At the time of deserialization, the JVM will check: is any parent class non-serializable? If any parent class is non-serializable, then the JVM will execute instance control flow in every non-serializable parent, and share its instance variable values to the current object.**
 
-## What "instance control flow" means
+## What instance control flow means
 
 | Step | |
 |---|---|
@@ -74,8 +63,7 @@ declines to write it.
 | 2 | **execution of instance variable assignments and instance blocks** |
 | 3 | **execution of the constructor** |
 
-**Step 2 is what sets `i` back to `10`** — the field initialiser `int i = 10;` runs again, on the object
-being reconstructed. **Then that value is shared to the current object.**
+**Step 2 is what sets `i` back to `10`** — the field initialiser `int i = 10;` runs again, on the object being reconstructed. **Then that value is shared to the current object.**
 
 ```mermaid
 flowchart TB
@@ -90,12 +78,9 @@ flowchart TB
 
 # Rule 4 — and it calls the no-arg constructor
 
-> **While executing instance control flow, the JVM will always call the no-argument constructor of the
-> non-serializable parent. Hence every non-serializable parent should compulsorily contain a
-> no-argument constructor.**
+> **While executing instance control flow, the JVM will always call the no-argument constructor of the non-serializable parent. Hence every non-serializable parent should compulsorily contain a no-argument constructor.**
 
-> **If a no-argument constructor is not there, we get a runtime exception saying
-> `InvalidClassException`.**
+> **If a no-argument constructor is not there, we get a runtime exception saying `InvalidClassException`.**
 
 ---
 
@@ -137,10 +122,7 @@ Animal constructor called          <- AGAIN. this is the proof of rule 3
 10 ... 999
 ```
 
-> [!important] **The second `Animal constructor called` is the whole lesson.** Nobody called a
-> constructor — `readObject()` was called. **That line is direct evidence that the JVM ran instance
-> control flow inside the non-serializable parent**, and the constructors he added to the classes exist
-> purely to make it visible.
+> [!important] **The second `Animal constructor called` is the whole lesson.** Nobody called a constructor — `readObject()` was called. **That line is direct evidence that the JVM ran instance control flow inside the non-serializable parent**, and the constructors he added to the classes exist purely to make it visible.
 >
 > **And the output is `10 ... 999`:**
 >
@@ -151,10 +133,7 @@ Animal constructor called          <- AGAIN. this is the proof of rule 3
 > | **`10`** | the parent's **fresh** value, shared to the object |
 > | **`999`** | the child's own field, straight from the file |
 
-> [!info] **Note the asymmetry between the two halves of the object.** The `Dog` part is *restored*
-> from the file, with its constructor **not** run. The `Animal` part is *constructed*, from scratch,
-> with its constructor **run**. **One object, two completely different creation mechanisms** — and the
-> dividing line is exactly where `Serializable` stops.
+> [!info] **Note the asymmetry between the two halves of the object.** The `Dog` part is **restored** from the file, with its constructor **not** run. The `Animal` part is **constructed**, from scratch, with its constructor **run**. **One object, two completely different creation mechanisms** — and the dividing line is exactly where `Serializable` stops.
 
 ---
 
@@ -173,9 +152,7 @@ class Animal { int i = 10; }        // no constructor written
 got 10 999
 ```
 
-> *"If the class doesn't contain any constructor, the compiler will always generate a no-argument
-> constructor. The default constructor is always no-argument."* **So the requirement is satisfied
-> without you doing anything.**
+> If the class doesn't contain any constructor, the compiler will always generate a no-argument constructor. The default constructor is always no-argument. **So the requirement is satisfied without you doing anything.**
 
 ## When there is only a parameterised constructor
 
@@ -191,9 +168,7 @@ class Dog extends Animal implements Serializable {
 }
 ```
 
-> *"If we are writing at least one constructor, the compiler won't generate the default no-argument
-> constructor. That's why the non-serializable parent class doesn't contain a no-argument
-> constructor."*
+> If we are writing at least one constructor, the compiler won't generate the default no-argument constructor. That's why the non-serializable parent class doesn't contain a no-argument constructor.
 
 Measured on JDK 25:
 
@@ -205,14 +180,9 @@ serialization succeeded
 deserialization -> java.io.InvalidClassException: DogP; no valid constructor
 ```
 
-> [!warning] **Serialization succeeds. Deserialization fails.** The write goes through perfectly and
-> the file is produced — the failure arrives only when someone tries to read it back, possibly on
-> another machine, possibly much later. **Adding a parameterised constructor to a non-serializable
-> parent can break deserialization of files that were written before you added it.**
+> [!warning] **Serialization succeeds. Deserialization fails.** The write goes through perfectly and the file is produced — the failure arrives only when someone tries to read it back, possibly on another machine, possibly much later. **Adding a parameterised constructor to a non-serializable parent can break deserialization of files that were written before you added it.**
 >
-> **Read the exception message carefully:** `InvalidClassException: DogP; no valid constructor`. **It
-> names the child** — the class being deserialized — **not `AnimalP`**, which is the class actually
-> missing the constructor. The fix is in the parent; the message points at the child.
+> **Read the exception message carefully:** `InvalidClassException: DogP; no valid constructor`. **It names the child** — the class being deserialized — **not `AnimalP`**, which is the class actually missing the constructor. The fix is in the parent; the message points at the child.
 
 ---
 

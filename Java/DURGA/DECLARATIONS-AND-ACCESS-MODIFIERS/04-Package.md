@@ -21,8 +21,7 @@ Translated into Java:
 
 ## 1. Resolving naming conflicts
 
-> [!info] **The analogy — chief ministers.** India has one CM for Telangana, one for Andhra Pradesh,
-> one for Tamil Nadu, one for Karnataka. *"Assume states are not there — then how many CMs are possible?"* **One.** The states are what allow many.
+> [!info] **The analogy — chief ministers.** India has one CM for Telangana, one for Andhra Pradesh, one for Tamil Nadu, one for Karnataka. Assume states are not there — then how many CMs are possible? **One.** The states are what allow many.
 >
 > **Packages are the states.** One `Date` in `java.util`, another `Date` in `java.sql`. Take the packages away and only one `Date` could exist in the whole language.
 
@@ -39,7 +38,7 @@ com.xyz.order.delivery
 
 Together they are the **order module**; elsewhere there is a payment module, a transaction module.
 
-> **Modularity of the application is improved, and so is maintainability** — because *"instead of keeping all the things in one clumsy place"*, you can point at the part you need to change.
+> **Modularity of the application is improved, and so is maintainability** — because instead of keeping all the things in one clumsy place, you can point at the part you need to change.
 
 ## 4. Security
 
@@ -47,10 +46,9 @@ Together they are the **order module**; elsewhere there is a payment module, a t
 class Test { }      // no modifier = default access
 ```
 
-> **Default access means package-level access** — the class is visible **only within its own package**.
-> An outsider cannot touch it.
+> **Default access means package-level access** — the class is visible **only within its own package**. An outsider cannot touch it.
 
-> *"My package acts as a wall for this class."*
+> My package acts as a wall for this class.
 
 Measured on JDK 25 — a default-access class in `packa`, used from `packb`:
 
@@ -81,8 +79,7 @@ Read it in pieces:
 | `housing` | the **sub-module** name |
 | `Account` | the **class** name |
 
-> *If I saw this line anywhere — on a piece of paper on the road — I would know: this class relates to icicibank, the loan module, housing loan. The remaining thing I'm not required to check.* 
-> The name alone locates the code in the organisation.
+> If I saw this line anywhere — on a piece of paper on the road — I would know: this class relates to icicibank, the loan module, housing loan. The remaining thing I'm not required to check. The name alone locates the code in the organisation.
 
 ---
 
@@ -106,15 +103,13 @@ public class Test {
 $ javac Test.java
 ```
 
-**Compiles fine** — there is no rule that a package statement forces anything. But measured on JDK 25,
-the class file lands here:
+**Compiles fine** — there is no rule that a package statement forces anything. But measured on JDK 25, the class file lands here:
 
 ```
 Test.class
 ```
 
-In the **current working directory**, flat. *"But `Test` is related to `com.durgasoft.ocjp`, and you
-are placing `Test.class` in the current working directory — that is meaningless."*
+In the **current working directory**, flat. But `Test` is related to `com.durgasoft.ocjp`, and you are placing `Test.class` in the current working directory — that is meaningless.
 
 ## Compiling with `-d`
 
@@ -156,8 +151,7 @@ compiled
 newdir/com/durgasoft/ocjp/Test.class
 ```
 
-> [!important] **The only failure is a destination that cannot be created** — an unwritable or
-> impossible path:
+> [!important] **The only failure is a destination that cannot be created** — an unwritable or impossible path:
 > ```
 > $ javac -d /no/such/place Test.java
 > error: error while writing Test: could not create parent directories
@@ -180,8 +174,7 @@ $ java Test
 Error: Could not find or load main class Test
 ```
 
-> *"I want to enter inside `com`, and from there give `java Test` — it won't work."* The class's real
-> name **is** `com.durgasoft.ocjp.Test`; the folders are just where the bytes live.
+> I want to enter inside `com`, and from there give `java Test` — it won't work. The class's real name **is** `com.durgasoft.ocjp.Test`; the folders are just where the bytes live.
 
 ```mermaid
 flowchart LR
@@ -201,7 +194,7 @@ package pack2;
 public class A { }
 ```
 
-> **In any Java source file there can be at most one package statement** — *at most one* meaning one or zero. More than one is a compile-time error.
+> **In any Java source file there can be at most one package statement** — **at most one** meaning one or zero. More than one is a compile-time error.
 
 Measured on JDK 25:
 
@@ -211,7 +204,7 @@ package pack2;
 ^
 ```
 
-**Read why that is the message.** After a package statement the compiler expects an optional import, and then a **type declaration**. It finds another `package` instead, and reports what it *was* looking for. The list names every kind of type declaration there is — `record` included.
+**Read why that is the message.** After a package statement the compiler expects an optional import, and then a **type declaration**. It finds another `package` instead, and reports what it **was** looking for. The list names every kind of type declaration there is — `record` included.
 
 ---
 
@@ -234,12 +227,11 @@ package pack1;
 ^
 ```
 
-> [!important] **The two mistakes give two different messages, so do not expect them to match.** 
-> Two package statements gives `class, interface, enum, or record expected`
+> [!important] **The two mistakes give two different messages, so do not expect them to match.** Two package statements gives `class, interface, enum, or record expected`
 > 
 >  an import before a package gives the longer `class, interface, annotation type, enum, record, method or field expected`. 
 >  
->  The *cause* is the same in both — the compiler wanted a type declaration and got a `package` — but it was at a different point in the file, so the set of things it would have accepted differs.
+>  The **cause** is the same in both — the compiler wanted a type declaration and got a `package` — but it was at a different point in the file, so the set of things it would have accepted differs.
 
 ---
 
@@ -257,12 +249,11 @@ Putting both conclusions together:
 
 ## The question he sets, and the trap in it
 
-*How many class, interface or enum declarations are allowed?* The options: **at least one**, **any
-number**, **at most one**, **exactly one**.
+How many class, interface or enum declarations are allowed? The options: **at least one**, **any number**, **at most one**, **exactly one**.
 
-Most of the class answers **at least one** — surely a program must declare *something*.
+Most of the class answers **at least one** — surely a program must declare **something**.
 
-> [!important] **The answer is "any number", and the proof is a file with nothing in it.**
+> [!important] **The answer is any number, and the proof is a file with nothing in it.**
 >
 > Measured on JDK 25 — an **empty file** named `Empty.java`:
 > ```
@@ -273,13 +264,13 @@ Most of the class answers **at least one** — surely a program must declare *so
 >
 > > **An empty source file is a valid Java program.**
 >
-> Once that is true, *at least one* is dead, and everything weaker follows.
+> Once that is true, **at least one** is dead, and everything weaker follows.
 
 **Hence all five of these are valid Java source files:**
 
 | | Contents |
 |---|---|
-| 1 | *(nothing at all)* |
+| 1 | (nothing at all) |
 | 2 | `package pack1;` |
 | 3 | `import java.util.*;` |
 | 4 | `package pack1;` + `import java.util.*;` |

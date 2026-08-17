@@ -13,7 +13,7 @@ The obvious answer — and it is what almost everyone assumes — is that the ap
 
 **It does not.** Not first, anyway.
 
-> [!important] **The application class loader's first move is to hand the request upwards, not to search.** It delegates to its parent, platform. Platform does not search either — it delegates to *its* parent, bootstrap. Only when the request has reached the top does anybody actually look at a directory. This inversion is the entire idea.
+> [!important] **The application class loader's first move is to hand the request upwards, not to search.** It delegates to its parent, platform. Platform does not search either — it delegates to **its** parent, bootstrap. Only when the request has reached the top does anybody actually look at a directory. This inversion is the entire idea.
 
 ---
 
@@ -80,7 +80,7 @@ flowchart LR
     B["<b>1st</b><br/>bootstrap"] --> E["<b>2nd</b><br/>platform"] --> A["<b>3rd</b><br/>application"]
 ```
 
-So if the same class is reachable from more than one place, **the higher loader wins**. *Present in all three?* Bootstrap loads it. *Present to platform and application only?* Platform loads it, and the application copy is never even looked at.
+So if the same class is reachable from more than one place, **the higher loader wins**. Present in all three? Bootstrap loads it. Present to platform and application only? Platform loads it, and the application copy is never even looked at.
 
 > [!important] **This is why you cannot hijack a core class.** Write your own `java.lang.String`, drop it in your working directory, and it will never be reached — the request goes up to bootstrap first, bootstrap finds the real `String`, and the search stops there. Delegating upward before searching is precisely the mechanism that makes the core API impossible to shadow from application code. Security is not a side effect of this design; it is the reason for it.
 >
@@ -144,7 +144,7 @@ Customer -> jdk.internal.loader.ClassLoaders$AppClassLoader@7a8c5397
    and it came from: APPLICATION class path
 ```
 
-**Run 2 — same command, but `Customer` is now *also* on the bootstrap class path:**
+**Run 2 — same command, but `Customer` is now also on the bootstrap class path:**
 
 ```
 java -Xbootclasspath/a:boot -cp app Test
@@ -170,14 +170,13 @@ Now walk each line through the algorithm:
 
 Run 2 is the case worth dwelling on. `Customer` exists in **two** locations, and the copy on the application class path is never even looked at — bootstrap is searched first, finds one, and the search ends.
 
-**And the `where()` line proves it.** It is not merely that a different *loader* answered; a different *copy of the class* was loaded and ran. The application copy sat there unused.
+**And the `where()` line proves it.** It is not merely that a different **loader** answered; a different **copy of the class** was loaded and ran. The application copy sat there unused.
 
-> [!info] **`null` is an answer, not a failure.** `String` *was* loaded, and something loaded it. But bootstrap is written in C/C++, so there is no Java object to hand back and print. The chicken-and-egg problem from the previous note shows up here as a literal `null` on your console.
+> [!info] **`null` is an answer, not a failure.** `String` **was** loaded, and something loaded it. But bootstrap is written in C/C++, so there is no Java object to hand back and print. The chicken-and-egg problem from the previous note shows up here as a literal `null` on your console.
 >
 > The two non-`null` lines are nothing special either — just the default `toString()` shape, **`ClassName@hashcode-in-hexadecimal`**.
 
-> [!question]- Why two different errors at the bottom — `ClassNotFoundException` and `NoClassDefFoundError`?
-> Because there are two different ways to ask for a class. `ClassNotFoundException` is a **checked exception** and comes from asking for a class *by name at runtime* — `Class.forName("Student")` with no such class anywhere. `NoClassDefFoundError` is an **`Error`**, and it comes from the JVM resolving a reference that the compiler had already accepted — the class was there when you compiled, and it is gone now.
+> [!question]- Why two different errors at the bottom — `ClassNotFoundException` and `NoClassDefFoundError`? Because there are two different ways to ask for a class. `ClassNotFoundException` is a **checked exception** and comes from asking for a class **by name at runtime** — `Class.forName("Student")` with no such class anywhere. `NoClassDefFoundError` is an **`Error`**, and it comes from the JVM resolving a reference that the compiler had already accepted — the class was there when you compiled, and it is gone now.
 >
 > Same end of the same search; different question asked. And the second is a `LinkageError` subclass, which ties it back to the failure family from the previous note.
 

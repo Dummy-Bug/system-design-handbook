@@ -16,7 +16,7 @@ Carry all three words straight across into programming:
 
 > [!important] **The principle: when we want something, we take enormous care. When we have to give it back, we take none.** He called every fifteen minutes to get the money. When it was his turn to return it, the phone went dead.
 
-You are taking notes and your pen dies. You turn around — *does anyone have a spare pen? Please, can you help?* Very polite, very respectful. Somebody gives you one, you write, the class ends. Now you have to give it back. And this time you toss it at them — *here, take it* — without even handing it over properly.
+You are taking notes and your pen dies. You turn around — does anyone have a spare pen? Please, can you help? Very polite, very respectful. Somebody gives you one, you write, the class ends. Now you have to give it back. And this time you toss it at them — **here, take it** — without even handing it over properly.
 
 Same person. Same pen. Completely different level of care in the two directions.
 
@@ -31,7 +31,7 @@ In C++ the programmer owns both ends of an object's life:
 > - **create** the object — with the `new` keyword
 > - **destroy** the object — with the `delete` keyword
 
-And which of those gets the attention? Creation, obviously. Without the object you cannot go any further, so you create it carefully, because you need it. *I need a `Student` object* — `Student s = new Student();` — done, and on you go.
+And which of those gets the attention? Creation, obviously. Without the object you cannot go any further, so you create it carefully, because you need it. **I need a `Student` object** — `Student s = new Student();` — done, and on you go.
 
 Then the work with the object finishes and the object is no longer required. You know it is no longer required; you are the programmer, nobody is better placed to know. Destroying it is now your job.
 
@@ -51,7 +51,7 @@ Because of that neglect, at some point the memory is full of nothing but useless
 
 > [!important] **Do not claim in an interview that C++ programmers still manage every object by hand.** C++ has largely answered this itself, with **RAII and smart pointers** — `std::unique_ptr` and `std::shared_ptr`. Ownership is expressed in the type and destruction happens automatically at scope exit, so a well-written modern C++ program is rarely calling `delete` directly at all.
 >
-> The picture above is accurate for **the era Java was designed in**, and it remains the right explanation of *why* Java went the way it did. It is not a fair description of C++ today.
+> The picture above is accurate for **the era Java was designed in**, and it remains the right explanation of **why** Java went the way it did. It is not a fair description of C++ today.
 
 > [!info] **A small precision on the name.** `OutOfMemoryError` is a Java type. A C++ program exhausting the heap gets `std::bad_alloc` from `new`, or a null pointer back from `malloc`. The failure being described is real and identical in effect; the specific name belongs to Java.
 
@@ -59,7 +59,7 @@ Because of that neglect, at some point the memory is full of nothing but useless
 
 # What Java changed
 
-Somebody looked at this problem and asked a sharper question than *"how do we make programmers more careful?"* — because the answer to that is *you can't*. The question they asked instead was: **where is the programmer already careful, and where is he not?**
+Somebody looked at this problem and asked a sharper question than how do we make programmers more careful? — because the answer to that is **you can't**. The question they asked instead was: **where is the programmer already careful, and where is he not?**
 
 - **Careful at creation.** He needs the object, so he will always create it properly. Leave that responsibility exactly where it is.
 - **Careless at destruction.** He neglects it, and his neglect can take the whole application down. So **take that responsibility away from him entirely.**
@@ -97,13 +97,13 @@ Because of that assistant, the chance of a Java program failing because of memor
 
 **1 — The garbage collector is a daemon thread.** It is always running in the background, and background threads are daemon threads. The garbage collector is the standard example of one.
 
-**2 — This is why Java has no `delete` keyword.** There is nothing for it to do. Destruction is not yours to trigger, so the language never gave you the verb. If you are asked *"why is there no `delete` in Java?"*, the answer is this whole chapter in miniature: the responsibility was deliberately removed from the programmer, because the programmer was the part that failed.
+**2 — This is why Java has no `delete` keyword.** There is nothing for it to do. Destruction is not yours to trigger, so the language never gave you the verb. If you are asked why is there no `delete` in Java?, the answer is this whole chapter in miniature: the responsibility was deliberately removed from the programmer, because the programmer was the part that failed.
 
 **3 — The garbage collector is part of the JVM.** It is not a library, not something you configure into your application. It lives inside the JVM, alongside the execution engine.
 
 **4 — It is one reason Java is called robust.** Robustness is one of the buzzwords in Java's own list, and it means the chance of a Java program failing is very low. The garbage collector is one of the reasons that claim can be made at all.
 
-> [!important] **The interview answer, assembled.** *"The garbage collector is a daemon thread inside the JVM whose job is to destroy useless objects. In C++ the programmer had to both create and destroy, and neglected destruction, which crashed applications with memory problems. Java kept creation with the programmer and moved destruction to the collector — which is also why there is no `delete` keyword in Java."*
+> [!important] **The interview answer, assembled.** The garbage collector is a daemon thread inside the JVM whose job is to destroy useless objects. In C++ the programmer had to both create and destroy, and neglected destruction, which crashed applications with memory problems. Java kept creation with the programmer and moved destruction to the collector — which is also why there is no `delete` keyword in Java.
 
 ---
 

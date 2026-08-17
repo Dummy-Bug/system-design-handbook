@@ -4,21 +4,13 @@ Note `10`'s results, collected — he spends an hour and a half on these alone:
 
 > **1.** Two threads can communicate using **`wait()`, `notify()`, `notifyAll()`**.
 > **2.** These methods are in the **`Object`** class, not `Thread`.
-> **3.** They can be called **only from a synchronized area** — otherwise `IllegalMonitorStateException`.
-> **4.** If a thread calls **`wait()`**, it releases the lock **immediately** and enters the waiting state.
-> **5.** If a thread calls **`notify()`**, it releases the lock — **but not necessarily immediately**.
+> **3.** They can be called **only from a synchronized area** — otherwise `IllegalMonitorStateException`. **4.** If a thread calls **`wait()`**, it releases the lock **immediately** and enters the waiting state. **5.** If a thread calls **`notify()`**, it releases the lock — **but not necessarily immediately**.
 
-> [!important] **Conclusion 5 is the one that differs from 4, and the wording matters.** `wait()`
-> releases the lock **at once**, because the whole point is to let the other thread in. `notify()` only
-> releases the lock **when it leaves the synchronized block** — the notifying thread carries on to the
-> end of its block first.
+> [!important] **Conclusion 5 is the one that differs from 4, and the wording matters.** `wait()` releases the lock **at once**, because the whole point is to let the other thread in. `notify()` only releases the lock **when it leaves the synchronized block** — the notifying thread carries on to the end of its block first.
 
-> **`wait()`, `notify()` and `notifyAll()` are the ONLY methods where a thread releases a lock.**
-> Except for these, a thread never gives up a lock it holds.
+> **`wait()`, `notify()` and `notifyAll()` are the ONLY methods where a thread releases a lock.** Except for these, a thread never gives up a lock it holds.
 
-**The reason is self-evident once stated:** if the waiting thread did not release the lock, the
-notifying thread could never get in to perform the update — and if the notifier never released it, the
-waiter could never resume. **Communication requires both sides to let go.**
+**The reason is self-evident once stated:** if the waiting thread did not release the lock, the notifying thread could never get in to perform the update — and if the notifier never released it, the waiter could never resume. **Communication requires both sides to let go.**
 
 ---
 
@@ -55,8 +47,7 @@ Measured on JDK 25, six consecutive runs:
 
 **Zero every time** — `main` reaches the print before the child has done anything.
 
-> [!important] **But zero is not the only possible answer, and that is worse than always being
-> wrong.** Three outcomes are possible:
+> [!important] **But zero is not the only possible answer, and that is worse than always being wrong.** Three outcomes are possible:
 >
 > | | When |
 > |---|---|
@@ -64,8 +55,7 @@ Measured on JDK 25, six consecutive runs:
 > | **5050** | the child finishes first |
 > | **anything between** | main prints while the child is **mid-loop** — 1653, 4851, … |
 >
-> His own runs produced `4851` and `1653`. **A bug that usually gives 0 and occasionally gives 1653 is
-> far harder to find than one that always fails.**
+> His own runs produced `4851` and `1653`. **A bug that usually gives 0 and occasionally gives 1653 is far harder to find than one that always fails.**
 
 ---
 
@@ -81,29 +71,22 @@ System.out.println(b.total);
 
 **It gives 5050.** And it is wrong anyway.
 
-> [!question]- **"Ten seconds — will the loop finish?"** The exchange with the class, and the point he
-> is making about underestimating the machine.
+> [!question]- **Ten seconds — will the loop finish?** The exchange with the class, and the point he is making about underestimating the machine.
 >
 > He asks the class whether a 100-iteration loop will finish within 10 seconds. **Most say it may not.**
 >
-> > *"Make sure — you people are unfit for a software engineering job, because you are underestimating
-> > the computer. In one nanosecond a computer can perform millions of operations."*
+> > Make sure — you people are unfit for a software engineering job, because you are underestimating the computer. In one nanosecond a computer can perform millions of operations.
 >
-> He walks it down: 10 seconds? Yes. **1 second?** Yes. **100 milliseconds?** Yes. **10 milliseconds?**
-> Yes. **1 millisecond?** Yes. **1 nanosecond?** *"Don't keep any doubt — 5050 is the answer."*
+> He walks it down: 10 seconds? Yes. **1 second?** Yes. **100 milliseconds?** Yes. **10 milliseconds?** Yes. **1 millisecond?** Yes. **1 nanosecond?** Don't keep any doubt — 5050 is the answer.
 >
-> The lesson is not really about `sleep`. It is that **a loop of 100 additions is nothing**, and
-> intuitions about how long code takes are usually off by orders of magnitude.
+> The lesson is not really about `sleep`. It is that **a loop of 100 additions is nothing**, and intuitions about how long code takes are usually off by orders of magnitude.
 
 **Why `sleep()` is still the wrong answer — two reasons:**
 
-1. **You sleep too long.** If the update is ready in a microsecond, the other 9.999 seconds are pure
-   waste, and system performance suffers.
-2. **You might not sleep long enough.** For a bigger calculation, 10 seconds may not be enough — and
-   then you print an **intermediate value** and never know.
+1. **You sleep too long.** If the update is ready in a microsecond, the other 9.999 seconds are pure waste, and system performance suffers.
+2. **You might not sleep long enough.** For a bigger calculation, 10 seconds may not be enough — and then you print an **intermediate value** and never know.
 
-> **When the update will be ready, we don't know. So sleeping for a fixed amount of time is not good
-> programming practice.**
+> **When the update will be ready, we don't know. So sleeping for a fixed amount of time is not good programming practice.**
 
 ## Attempt 2 — `join()`
 
@@ -124,8 +107,7 @@ public void run() {
 }
 ```
 
-> **The update is ready after the for loop. But with `join()` my main thread waits until the whole
-> crore of lines is done too. Why should I wait when the value I need was ready in the middle?**
+> **The update is ready after the for loop. But with `join()` my main thread waits until the whole crore of lines is done too. Why should I wait when the value I need was ready in the middle?**
 
 ## Attempt 3 — `wait()` and `notify()`
 
@@ -161,8 +143,7 @@ Measured on JDK 25:
 total = 5050
 ```
 
-> **The main thread is not required to wait a single extra nanosecond.** The moment the update is
-> ready, `notify()` fires and the waiter resumes — no fixed delay, no waiting for unrelated work.
+> **The main thread is not required to wait a single extra nanosecond.** The moment the update is ready, `notify()` fires and the waiter resumes — no fixed delay, no waiting for unrelated work.
 
 ## The comparison
 
@@ -173,10 +154,7 @@ total = 5050
 | `join()` | ⚠️ | waits for the **whole thread**, not for the **update** |
 | **`wait()` / `notify()`** | ✅ | waits for **exactly the event you care about** |
 
-> [!important] **The distinction worth carrying: `join()` waits for a THREAD; `wait()` waits for a
-> CONDITION.** If what you need is "this thread is completely done", `join()` is the right and simpler
-> tool. If what you need is "this particular thing has happened" — and work continues afterwards —
-> only `wait`/`notify` expresses it.
+> [!important] **The distinction worth carrying: `join()` waits for a THREAD; `wait()` waits for a CONDITION.** If what you need is this thread is completely done, `join()` is the right and simpler tool. If what you need is this particular thing has happened — and work continues afterwards — only `wait`/`notify` expresses it.
 
 ---
 
@@ -188,11 +166,9 @@ total = 5050
 java.lang.IllegalMonitorStateException
 ```
 
-**Conclusion 3 in action.** `b.wait()` needs the lock of `b`, so it must be inside `synchronized (b)`.
-`this.notify()` needs the lock of the child object, so it must be inside `synchronized (this)`.
+**Conclusion 3 in action.** `b.wait()` needs the lock of `b`, so it must be inside `synchronized (b)`. `this.notify()` needs the lock of the child object, so it must be inside `synchronized (this)`.
 
-> [!warning] **Always call `wait()` inside a loop, not an `if`.** The idiom every real codebase uses
-> is:
+> [!warning] **Always call `wait()` inside a loop, not an `if`.** The idiom every real codebase uses is:
 > ```java
 > synchronized (b) {
 >     while (!b.ready)      // not: if (!b.ready)
@@ -200,13 +176,9 @@ java.lang.IllegalMonitorStateException
 >     use(b.total);
 > }
 > ```
-> **Two reasons.** A thread can wake from `wait()` **without any notification at all** — a *spurious
-> wakeup*, which the specification explicitly permits. And with several waiters, `notifyAll()` wakes
-> everyone, so by the time your thread reacquires the lock another may already have consumed the
-> update.
+> **Two reasons.** A thread can wake from `wait()` **without any notification at all** — a **spurious wakeup**, which the specification explicitly permits. And with several waiters, `notifyAll()` wakes everyone, so by the time your thread reacquires the lock another may already have consumed the update.
 >
-> **The one-line rule: after waking, re-check the condition that made you wait.** The example above
-> works because there is exactly one waiter and one notifier — real code rarely has that guarantee.
+> **The one-line rule: after waking, re-check the condition that made you wait.** The example above works because there is exactly one waiter and one notifier — real code rarely has that guarantee.
 
 ---
 

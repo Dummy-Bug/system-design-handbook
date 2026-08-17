@@ -32,7 +32,7 @@ That is multitasking: several tasks, progressing together, in one place.
 
 ### Two flavours of it
 
-Everything that follows hangs off one split. Multitasking comes in exactly two kinds, and the difference between them is **what counts as a "task"**.
+Everything that follows hangs off one split. Multitasking comes in exactly two kinds, and the difference between them is **what counts as a `task`**.
 
 ```mermaid
 flowchart TB
@@ -43,9 +43,9 @@ flowchart TB
     T --> TL(["best suited at <b>programmatic level</b>"])
 ```
 
-Read the two boxes side by side and notice that only four words change: *independent program* becomes *independent part of the same program*. That is the entire distinction, and interviewers ask for it constantly.
+Read the two boxes side by side and notice that only four words change: **independent program** becomes **independent part of the same program**. That is the entire distinction, and interviewers ask for it constantly.
 
-> [!important] **Same definition, different granularity.** Both are "several tasks at once". Process based multitasking runs several **programs**. Thread based multitasking runs several **parts of one program**. Nothing else separates them at the level that matters to you as a programmer.
+> [!important] **Same definition, different granularity.** Both are several tasks at once. Process based multitasking runs several **programs**. Thread based multitasking runs several **parts of one program**. Nothing else separates them at the level that matters to you as a programmer.
 
 The rest of this note defines each one properly, because the pair of definitions — and the difference between them — is standard interview material.
 
@@ -57,7 +57,7 @@ Stated the way you would write it in an exam:
 
 > Executing several tasks simultaneously, where each task is a **separate independent process**, is called **process based multitasking**.
 
-The load-bearing word is **independent**. Not "unrelated in theme" — independent in the sense that task 2 does not need task 1 to have finished, or even to exist.
+The load-bearing word is **independent**. Not unrelated in theme — independent in the sense that task 2 does not need task 1 to have finished, or even to exist.
 
 ### The example
 
@@ -89,18 +89,18 @@ Here is the part that decides whether the concept is any use to you.
 
 Picture the conversation that makes this concrete. A client comes to you with a requirement:
 
-> *"Can you build this for me?"*
-> *"Yes — in Java."*
-> *"Tell me something good about Java."*
-> *"Java provides support for multitasking."*
-> *"Meaning what, in plain words?"*
-> *"While your program runs in the foreground, you can listen to MP3 songs and download a file in the background."*
+> Can you build this for me?
+> Yes — in Java.
+> Tell me something good about Java.
+> Java provides support for multitasking.
+> Meaning what, in plain words?
+> While your program runs in the foreground, you can listen to MP3 songs and download a file in the background.
 
 And at that point the client, entirely reasonably, throws you out of the room.
 
-> [!important] **Ask who owns the benefit.** Listening to songs while an application runs is not a feature of *your application* — it is a feature of the **operating system**, which is willing to schedule three processes at once. You wrote none of it, you control none of it, and you cannot bill for it.
+> [!important] **Ask who owns the benefit.** Listening to songs while an application runs is not a feature of **your application** — it is a feature of the **operating system**, which is willing to schedule three processes at once. You wrote none of it, you control none of it, and you cannot bill for it.
 >
-> Process based multitasking is real and useful. It is just not something a programmer *implements*. It is something the OS *provides*.
+> Process based multitasking is real and useful. It is just not something a programmer **implements**. It is something the OS **provides**.
 
 So the concept is worth knowing and worth being able to define — it is where the split comes from, and it is a standard question — but it is not the concept you will be programming with.
 
@@ -169,14 +169,14 @@ This is the single check that separates the flavours, and it is worth doing out 
 |---|---|---|
 | How many **programs** are running? | three (editor, player, downloader) | **one** |
 | How many **independent parts** are running? | one per program | **two or more inside that one program** |
-| A "task" is… | a separate independent **process** | a separate independent **part of the same program** |
+| A `task` is… | a separate independent **process** | a separate independent **part of the same program** |
 | Best suited at | **OS level** | **programmatic level** |
 
-> [!important] **A thread is not a program. A thread is an independent path of execution inside one program.** When someone asks "how many threads does this program have", they are asking how many separate flows are moving through the code at once — not how many things are installed on your machine.
+> [!important] **A thread is not a program. A thread is an independent path of execution inside one program.** When someone asks how many threads does this program have, they are asking how many separate flows are moving through the code at once — not how many things are installed on your machine.
 
 ### The differences your OS course cares about
 
-*"Difference between process based and thread based multitasking"* is also a standard question in the operating systems paper, and there the answer goes further than the definition. Two points come up every time:
+Difference between process based and thread based multitasking is also a standard question in the operating systems paper, and there the answer goes further than the definition. Two points come up every time:
 
 | | Processes | Threads |
 |---|---|---|
@@ -218,7 +218,7 @@ flowchart LR
     many --> R2["<b>shorter total time</b><br/>processor stays busy"]
 ```
 
-Doing one thing at a time means that every pause in that one thing is a pause in *everything*. Doing several means the processor always has something else to get on with — so the same total work finishes in less wall-clock time, and the system responds faster.
+Doing one thing at a time means that every pause in that one thing is a pause in **everything**. Doing several means the processor always has something else to get on with — so the same total work finishes in less wall-clock time, and the system responds faster.
 
 That is the payoff, and it is the same payoff at both levels. Where it actually gets used is next.
 
@@ -254,15 +254,15 @@ flowchart TB
     H --> R(["total running time for one song:<br/><b>≈ 365 days</b>"])
 ```
 
-While the hero dances, everyone else stands like a statue. The birds stop dead in mid-air. The aeroplane hangs there waiting its turn. Then, five minutes later, the next actor gets the screen and *the hero* freezes.
+While the hero dances, everyone else stands like a statue. The birds stop dead in mid-air. The aeroplane hangs there waiting its turn. Then, five minutes later, the next actor gets the screen and **the hero** freezes.
 
 Two hundred birds at ten minutes each. Every raindrop queued behind the one before it. The song alone would run for the better part of a year, and the audience would tear the screen down long before the second bird made it across.
 
 Now lift the rule. Everyone dances at once, the birds fly while the plane crosses, the rain falls through all of it — and the whole sequence takes **five minutes**.
 
-> [!important] **Each of those activities is a thread.** Every dancer is a thread. The aeroplane is a thread. Every single bird is a thread, and so is every raindrop. Nothing about the *content* changed between the two versions — only whether the activities were allowed to run simultaneously. That difference is the difference between a five-minute song and a year-long one.
+> [!important] **Each of those activities is a thread.** Every dancer is a thread. The aeroplane is a thread. Every single bird is a thread, and so is every raindrop. Nothing about the **content** changed between the two versions — only whether the activities were allowed to run simultaneously. That difference is the difference between a five-minute song and a year-long one.
 
-This is why animation and graphics work is the standard first example. The output *is* many independent things happening at once, so the code has to be many independent things happening at once.
+This is why animation and graphics work is the standard first example. The output **is** many independent things happening at once, so the code has to be many independent things happening at once.
 
 ---
 
@@ -316,11 +316,11 @@ flowchart LR
 
 **Every server maintains multiple threads internally.** When a request arrives, the container hands it to a thread from that pool — request 1 to thread 1, request 2 to thread 2, and so on. Those threads run simultaneously, so the requests are served simultaneously.
 
-That is not a feature bolted on top of the server. It *is* the server. Underneath every web server and application server you have ever deployed to, the concept doing the work is multithreading.
+That is not a feature bolted on top of the server. It **is** the server. Underneath every web server and application server you have ever deployed to, the concept doing the work is multithreading.
 
-> [!info] **The pool is finite, and its size is a number you can look up.** Tomcat ships with a bounded worker pool — the lecture quotes 60; a current Tomcat defaults to `maxThreads=200`. Either way the shape of the fact is what matters: the server can serve *that many* requests concurrently, and request number 201 waits for a thread to free up.
+> [!info] **The pool is finite, and its size is a number you can look up.** Tomcat ships with a bounded worker pool — the lecture quotes 60; a current Tomcat defaults to `maxThreads=200`. Either way the shape of the fact is what matters: the server can serve **that many** requests concurrently, and request number 201 waits for a thread to free up.
 >
-> This is worth carrying forward. "How many threads" is a **tuning decision** with a real ceiling behind it, not an infinite resource — which is exactly the problem the executor framework exists to manage, later in this chapter.
+> This is worth carrying forward. How many threads is a **tuning decision** with a real ceiling behind it, not an infinite resource — which is exactly the problem the executor framework exists to manage, later in this chapter.
 
 ---
 
@@ -380,7 +380,7 @@ flowchart TB
 
 Fifty hours became about fifteen. Same machine, same logic, same files — the only change was that the independent jobs stopped queueing.
 
-The client was delighted, and then immediately asked the follow-up every client asks: *fifteen hours is still too heavy. Can it go lower?*
+The client was delighted, and then immediately asked the follow-up every client asks: fifteen hours is still too heavy. Can it go lower?
 
 ---
 
@@ -436,7 +436,7 @@ The manpower version of the same arithmetic, which is how it usually gets explai
 
 > [!important] **Notice that the returns are already bending.** Ten people do not finish a ten-hour job in one hour — they finish it in one or two, and if you kept adding people the number would stop moving. The same is true of threads. The jump from 3 to 60 threads here bought a huge win because the work was **I/O bound on independent folders**; sixty threads all fighting over one CPU-bound calculation would not have.
 
-> [!info] **And spawning a thread per folder by hand is not what you would write today.** A folder tree with ten thousand directories would create ten thousand threads, and each one costs real memory and real scheduling. The modern shape of this exact program is a fixed **thread pool** that you hand ten thousand *tasks* to — which is what the executor framework at the end of this chapter is for. The insight (find the independent jobs) is unchanged; only the machinery for running them has improved.
+> [!info] **And spawning a thread per folder by hand is not what you would write today.** A folder tree with ten thousand directories would create ten thousand threads, and each one costs real memory and real scheduling. The modern shape of this exact program is a fixed **thread pool** that you hand ten thousand **tasks** to — which is what the executor framework at the end of this chapter is for. The insight (find the independent jobs) is unchanged; only the machinery for running them has improved.
 
 ---
 

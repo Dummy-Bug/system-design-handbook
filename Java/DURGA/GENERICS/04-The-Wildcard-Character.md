@@ -36,7 +36,7 @@ public static void m1(ArrayList<Customer> l) { … }
 
 > **Every change in the argument type compulsorily requires a new method.** The length of the code increases and readability goes down.
 
-What is wanted is **one** method callable with an `ArrayList` of *any* type. That is the wildcard:
+What is wanted is **one** method callable with an `ArrayList` of **any** type. That is the wildcard:
 
 ```java
 public static void m1(ArrayList<?> l) { … }
@@ -95,7 +95,7 @@ l.add("A");   error: incompatible types: String cannot be converted to CAP#1
 ```
 
 
-> [!info] **`CAP#1` in the error message is worth decoding.** It stands for **capture #1** — the compiler's name for *"the one specific but unknown type this `?` stands for on this call"*. It is telling you it knows there is a definite type there and refuses to guess. The Java 6/7 message was less explicit; the meaning is unchanged. Verified on JDK 25.
+> [!info] **`CAP#1` in the error message is worth decoding.** It stands for **capture #1** — the compiler's name for the one specific but unknown type this `?` stands for on this call. It is telling you it knows there is a definite type there and refuses to guess. The Java 6/7 message was less explicit; the meaning is unchanged. Verified on JDK 25.
 
 > [!important] **There is a universal rule: for every advantage, something is lost.** You gained the ability to pass any list. What you lost is the ability to put anything in it.
 >
@@ -133,7 +133,7 @@ Measured on JDK 25, with `ArrayList<? extends Number>`:
 l.add(10);   error: incompatible types: int cannot be converted to CAP#1
 ```
 
-The narrowing helps the *caller*, not the body. You know it is *some* kind of `Number` — but `Integer`? `Double`? Adding an `Integer` to an `ArrayList<Double>` would be wrong, so nothing is allowed.
+The narrowing helps the **caller**, not the body. You know it is **some** kind of `Number` — but `Integer`? `Double`? Adding an `Integer` to an `ArrayList<Double>` would be wrong, so nothing is allowed.
 
 > These types of methods are **also** best suitable for read-only operations.
 
@@ -143,7 +143,7 @@ And here the pattern breaks — in both directions.
 
 **First: `super` is legal here.** Note `03` established that `super` is banned in a class-level bound. That remains true.
 
-> [!important] **`super` is not allowed with `T` at class level. It *is* allowed with `?` at method level.** Most people carry "super is not allowed in generics" as a flat rule and get caught by exactly this. Both halves are examinable.
+> [!important] **`super` is not allowed with `T` at class level. It is allowed with `?` at method level.** Most people carry super is not allowed in generics as a flat rule and get caught by exactly this. Both halves are examinable.
 
 **Calling it:**
 
@@ -152,7 +152,7 @@ And here the pattern breaks — in both directions.
 | **class** | `X` or its **super classes** |
 | **interface** | `X`, or **super classes of `X`'s implementation classes** |
 
-That second row is genuinely awkward, and it is worth walking. Take `X` as `Runnable`. `Runnable` itself qualifies. Its implementation classes — `Thread`, for instance — do **not**, because those are *children* and are already covered by `extends`. What qualifies is what sits **above** `Thread`: `Object`.
+That second row is genuinely awkward, and it is worth walking. Take `X` as `Runnable`. `Runnable` itself qualifies. Its implementation classes — `Thread`, for instance — do **not**, because those are **children** and are already covered by `extends`. What qualifies is what sits **above** `Thread`: `Object`.
 
 ```mermaid
 flowchart TB
@@ -194,7 +194,7 @@ The reason is the mirror image of Form 3. The list holds `X` **or something more
 
 > [!important] **One sentence carries the table.** `? extends` widens who may **call** you and forbids writing; `? super` narrows who may call you and permits writing. **Flexible in, or flexible out — never both.**
 
-> [!info] **This has a name you will meet outside the course: PECS — Producer `extends`, Consumer `super`.** If the parameter *produces* values for you to read, use `? extends`. If it *consumes* values you hand it, use `? super`. It is the same table compressed into four words, and it is how the rule is usually stated in modern code review. Nothing above changes; PECS is just the mnemonic.
+> [!info] **This has a name you will meet outside the course: PECS — Producer `extends`, Consumer `super`.** If the parameter **produces** values for you to read, use `? extends`. If it **consumes** values you hand it, use `? super`. It is the same table compressed into four words, and it is how the rule is usually stated in modern code review. Nothing above changes; PECS is just the mnemonic.
 
 ---
 
@@ -237,7 +237,7 @@ flowchart LR
     L -.->|"="| R
 ```
 
-> [!important] **The reasoning is worth more than the rule.** `?` means *"some type I am not naming"* — which is a perfectly good description of a **reference**, and useless as a description of an **object**. Creating an object requires knowing what to create. A reference may be vague; the thing it points to cannot be.
+> [!important] **The reasoning is worth more than the rule.** `?` means some type I am not naming — which is a perfectly good description of a **reference**, and useless as a description of an **object**. Creating an object requires knowing what to create. A reference may be vague; the thing it points to cannot be.
 >
 > `required: class or interface without bounds` is the compiler saying exactly that: on the right it needs a real, unqualified type.
 

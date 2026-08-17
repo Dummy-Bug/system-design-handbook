@@ -1,7 +1,6 @@
 # The question
 
-We cannot create an object for an **abstract class**, and we cannot create one for an **interface**
-either. Yet:
+We cannot create an object for an **abstract class**, and we cannot create one for an **interface** either. Yet:
 
 | | Constructor? |
 |---|---|
@@ -16,8 +15,7 @@ either. Yet:
 
 **Step 1 — what a constructor is for.** From note `15`:
 
-> **The main purpose of a constructor is to perform initialization of an object — that is, to perform
-> initialization for INSTANCE VARIABLES.**
+> **The main purpose of a constructor is to perform initialization of an object — that is, to perform initialization for INSTANCE VARIABLES.**
 
 **Step 2 — an abstract class has instance variables.**
 
@@ -30,13 +28,11 @@ abstract class Person {
 }
 ```
 
-Those variables are inherited by every child, and something has to initialise them — which is exactly
-what note `18` showed. **Instance variables exist ⇒ a constructor is needed.**
+Those variables are inherited by every child, and something has to initialise them — which is exactly what note `18` showed. **Instance variables exist ⇒ a constructor is needed.**
 
 **Step 3 — an interface has none.**
 
-> **Every variable present inside an interface is always `public static final`, whether we declare it or
-> not** (note `12`). **`static` means it belongs to the class, not to an object.**
+> **Every variable present inside an interface is always `public static final`, whether we declare it or not** (note `12`). **`static` means it belongs to the class, not to an object.**
 >
 > **Hence there is no chance of an instance variable existing inside an interface.**
 
@@ -61,10 +57,7 @@ Measured on JDK 25:
 error: <identifier> expected
 ```
 
-> [!info] **Read that message carefully — it is not "constructors are not allowed".** The compiler does
-> not even parse `IC()` as a constructor. Inside an interface, a name followed by parentheses can only
-> be a **method**, and a method needs a return type — so it reports a missing identifier. **The concept
-> does not exist there at all**, which is a stronger statement than being forbidden.
+> [!info] **Read that message carefully — it is not constructors are not allowed.** The compiler does not even parse `IC()` as a constructor. Inside an interface, a name followed by parentheses can only be a **method**, and a method needs a return type — so it reports a missing identifier. **The concept does not exist there at all**, which is a stronger statement than being forbidden.
 
 ---
 
@@ -80,8 +73,7 @@ This question is the last link in a chain that runs through the whole series:
 | `18` | that is **why** an abstract class has a constructor, despite being uninstantiable |
 | **`19`** | **an interface has no instance variables, so it needs none** |
 
-Every step depends on the first. Get "a constructor creates an object" wrong and none of the rest can
-be reasoned about.
+Every step depends on the first. Get a constructor creates an object wrong and none of the rest can be reasoned about.
 
 ---
 

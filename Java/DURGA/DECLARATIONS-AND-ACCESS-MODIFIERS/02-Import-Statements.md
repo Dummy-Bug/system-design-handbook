@@ -1,21 +1,20 @@
 ## Fully qualified names
 
-> [!question]- **Deep dive — his analogy for what a fully qualified name is: the SCJP training address.**
-> The story he uses to build the idea from nothing, and it is the reason the term sticks.
+> [!question]- **Deep dive — his analogy for what a fully qualified name is: the SCJP training address.** The story he uses to build the idea from nothing, and it is the reason the term sticks.
 >
-> Somebody posts on a forum: *"Where is SCJP training available?"*
+> Somebody posts on a forum: Where is SCJP training available?
 >
-> - *"It is available in Durgasoft."* → **"Where is Durgasoft?"**
-> - *"It is at SR Nagar."* → **"Where is SR Nagar?"**
-> - *"In Hyderabad."* → **"Which Hyderabad — India or Pakistan?"**
+> - It is available in Durgasoft. → **Where is Durgasoft?**
+> - It is at SR Nagar. → **Where is SR Nagar?**
+> - In Hyderabad. → **Which Hyderabad — India or Pakistan?**
 >
 > Every answer raises another question, because each one is only meaningful relative to something the asker does not know. So answer it completely, from the top:
 >
 > > **World → Asia → India → Telangana → Hyderabad → SR Nagar → Durgasoft**
 >
-> Now there is nothing left to ask. *"Thanks man — not possible to attend, because I'm from Afghanistan."*
+> Now there is nothing left to ask. Thanks man — not possible to attend, because I'm from Afghanistan.
 >
-> **That complete path is a fully qualified name.** `java.util.ArrayList` is the same thing: package,sub-package, class, leaving nothing for the compiler to ask about.
+> **That complete path is a fully qualified name.** `java.util.ArrayList` is the same thing: package, sub-package, class, leaving nothing for the compiler to ask about.
 
 ```java
 java.util.ArrayList l = new java.util.ArrayList();
@@ -23,8 +22,7 @@ java.util.ArrayList l = new java.util.ArrayList();
 
 Measured on JDK 25 — **compiles and runs**, with no import at all.
 
-> *"Compiler, do you know the `java` package? In that, the `util` sub-package. In that, `ArrayList`.
-> That `ArrayList` I'm using."*
+> Compiler, do you know the `java` package? In that, the `util` sub-package. In that, `ArrayList`. That `ArrayList` I'm using.
 
 ## Why fully qualified names are not the answer
 
@@ -92,8 +90,7 @@ a.getInfo();
 
 You are doing code-work — reading it so you can extend it tomorrow — and you need to see how`getInfo()` is implemented. **Which package is `Account` in?**
 
-> *"I opened `com.hdfc` — almost 15 minutes I spent, and I didn't see `Account` anywhere. Then I
-> opened `com.icicibank`, and there I could see the `Account` class."*
+> I opened `com.hdfc` — almost 15 minutes I spent, and I didn't see `Account` anywhere. Then I opened `com.icicibank`, and there I could see the `Account` class.
 
 Then a few lines later, `Loan l = new Loan();` — and the search starts over, in the other order.
 
@@ -106,14 +103,12 @@ import com.icicibank.Loan;
 
 **The question answers itself from the top of the file.** `Loan` is in `icicibank`, `Account` is in `hdfc`. You never open a package to find out.
 
-> [!important] **His answer to "but explicit means more typing."**
+> [!important] **His answer to but explicit means more typing.**
 > **Typing is a one-time activity. Reading is a many-time activity.**
 >
-> *"Typing is only one time. But readability — several people have to analyse my code. That's why
-> highest priority for readability, not for typing."*
+> Typing is only one time. But readability — several people have to analyse my code. That's why highest priority for readability, not for typing.
 
-> [!info] **A practical confirmation.** *"Usually we won't write import statements — the IDE generates
-> them."* And **no IDE in the universe generates implicit import statements.** Eclipse, IntelliJ and the rest all expand to explicit imports, which is the industry voting the same way.
+> [!info] **A practical confirmation.** Usually we won't write import statements — the IDE generates them. And **no IDE in the universe generates implicit import statements.** Eclipse, IntelliJ and the rest all expand to explicit imports, which is the industry voting the same way.
 
 ---
 
@@ -139,12 +134,9 @@ Measured on JDK 25:
 
 **Only option 4 is an error.** After a package name the `.*` is compulsory — a semicolon straight after the package name names nothing the compiler can resolve.
 
-> [!important] **Option 2 is the one people get wrong.** `import SomeClass.*;` is **valid syntax** — a
-> type-import-on-demand that imports the class's **member (nested) types**. The right question to ask is *"is there any type declared inside `ArrayList`?"* — and the answer for `ArrayList` is no, so the
-> statement is **useless but perfectly legal**. It imports nothing and compiles fine.
+> [!important] **Option 2 is the one people get wrong.** `import SomeClass.*;` is **valid syntax** — a type-import-on-demand that imports the class's **member (nested) types**. The right question to ask is is there any type declared inside `ArrayList`? — and the answer for `ArrayList` is no, so the statement is **useless but perfectly legal**. It imports nothing and compiles fine.
 
-> [!example]- **Deep dive — the same statement doing real work, on a class that does have nested
-> types.** `Map` is the proof that `.*` after a class name is meaningful syntax.
+> [!example]- **Deep dive — the same statement doing real work, on a class that does have nested types.** `Map` is the proof that `.*` after a class name is meaningful syntax.
 >
 > Measured on JDK 25:
 > ```java
@@ -171,12 +163,11 @@ class MyObject extends java.rmi.server.UnicastRemoteObject { }
 
 **No import statement anywhere. Does it compile?** Yes.
 
-> **Whenever we are using a fully qualified name, it is not required to write an import statement.**
-> **Whenever we are writing an import statement, it is not required to use the fully qualified name.**
+> **Whenever we are using a fully qualified name, it is not required to write an import statement.** **Whenever we are writing an import statement, it is not required to use the fully qualified name.**
 
 They are two ways to say the same thing, and you need exactly one of them.
 
-> *"Why did the import statement come? Because we don't want to use the fully qualified name."*
+> Why did the import statement come? Because we don't want to use the fully qualified name.
 
 ---
 
@@ -222,10 +213,7 @@ error: reference to List is ambiguous
 
 If a name could come from several places, the compiler has a fixed order of preference.
 
-> **While resolving class names, the compiler always gives precedence in the following order:**
-> **1. explicit class import**
-> **2. classes present in the current working directory** (the **default package**)
-> **3. implicit class import**
+> **While resolving class names, the compiler always gives precedence in the following order:** **1. explicit class import** **2. classes present in the current working directory** (the **default package**) **3. implicit class import**
 
 ```java
 import java.util.Date;   // explicit
@@ -264,22 +252,17 @@ import java.util.regex.*;  // 3
 
 **Answer: 3.** Measured on JDK 25, `import java.util.*;` gives `cannot find symbol` for `Pattern`,while `import java.util.regex.*;` compiles and runs.
 
-> [!important] **The argument that proves the rule, and it is his.** *If* importing a package included
-> its sub-packages, then **`import java.*;` alone would be enough for everything** — `util` is a sub-package of `java`, `sql` is a sub-package of `java`, `io` is a sub-package of `java`.
+> [!important] **The argument that proves the rule, and it is his.** **If** importing a package included its sub-packages, then **`import java.*;` alone would be enough for everything** — `util` is a sub-package of `java`, `sql` is a sub-package of `java`, `io` is a sub-package of `java`.
 >
-> *"Then only one import statement is required. Why are you writing `import java.util.*`, `import
-> java.sql.*`?"* The fact that everybody writes those imports every day is itself the proof.
+> Then only one import statement is required. Why are you writing `import java.util.*`, `import java.sql.*`? The fact that everybody writes those imports every day is itself the proof.
 
-> [!info] **The second proof, which is sharper.** `java.lang` needs no import at all. But
-> **`java.lang.reflect.Method` does.** If sub-packages came along for free, `Method` would be available automatically like `String` is — and it is not.
+> [!info] **The second proof, which is sharper.** `java.lang` needs no import at all. But **`java.lang.reflect.Method` does.** If sub-packages came along for free, `Method` would be available automatically like `String` is — and it is not.
 
 ---
 
 # Case 7 — the two packages you never import
 
-> **All classes and interfaces present in the following two packages are available by default to every  Java program, so we are not required to import them:**
-> **1. `java.lang`**
-> **2. the default package** — that is, the **current working directory**
+> **All classes and interfaces present in the following two packages are available by default to every  Java program, so we are not required to import them:** **1. `java.lang`** **2. the default package** — that is, the **current working directory**
 
 The first is familiar: `String s = new String("Durga");` needs no import because `String` is in `java.lang`.
 
@@ -310,7 +293,7 @@ Two versions of one program, identical apart from this:
 >
 > **Import statements are a totally compile-time concept.** More imports means more compile time, and **no effect whatsoever on execution time.**
 >
-> *We can compromise with anything, but not performance. If it really affected the performance of the system, this concept should be removed.*
+> We can compromise with anything, but not performance. If it really affected the performance of the system, this concept should be removed.
 > 
 > A feature that is purely for the programmer's convenience cannot be allowed to cost anything at runtime — so it does not.
 
@@ -323,8 +306,7 @@ Two versions of one program, identical apart from this:
 
 **Which is better?** The Java approach.
 
-> Which input-output file you are going to use, we don't know. Loading all of them at the beginning is not at all a good programming practice. 
-> Loading all 5,000 Java classes at the beginning is unnecessary memory waste — performance is going to be down
+> Which input-output file you are going to use, we don't know. Loading all of them at the beginning is not at all a good programming practice. Loading all 5,000 Java classes at the beginning is unnecessary memory waste — performance is going to be down
 
 ---
 

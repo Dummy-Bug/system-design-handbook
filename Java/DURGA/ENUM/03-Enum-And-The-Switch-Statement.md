@@ -1,7 +1,6 @@
 # What a switch statement will accept as its argument
 
-Before enum can be discussed against `switch`, the argument-type rules have to be on the table. He
-warns that although this looks like basics, **there are several important loopholes here.**
+Before enum can be discussed against `switch`, the argument-type rules have to be on the table. He warns that although this looks like basics, **there are several important loopholes here.**
 
 **Until the 1.4 version**, the only allowed argument types for `switch` were:
 
@@ -9,9 +8,7 @@ warns that although this looks like basics, **there are several important loopho
 
 `long`, `float`, `double` and `boolean` all give a compile-time error.
 
-**From the 1.5 version**, two things were added. The first came for free with **autoboxing and auto
-unboxing** — because a primitive and its wrapper object now convert to each other automatically, the
-corresponding wrapper classes became legal too:
+**From the 1.5 version**, two things were added. The first came for free with **autoboxing and auto unboxing** — because a primitive and its wrapper object now convert to each other automatically, the corresponding wrapper classes became legal too:
 
 `Byte`, `Short`, `Character`, `Integer`
 
@@ -32,9 +29,7 @@ flowchart LR
     A["<b>≤ 1.4</b><br/>byte · short<br/>char · int"] --> B["<b>1.5</b><br/>+ wrapper classes<br/>+ <b>enum</b>"] --> C["<b>1.7</b><br/>+ String"]
 ```
 
-> [!info] **The full argument for *why* only these types is a flow-control topic**, not an enum one —
-> he defers it to the `switch` discussion under flow control. Here the only thing that matters is the
-> row that says **enum**.
+> [!info] **The full argument for why only these types is a flow-control topic**, not an enum one — he defers it to the `switch` discussion under flow control. Here the only thing that matters is the row that says **enum**.
 
 ---
 
@@ -59,8 +54,7 @@ class Test {
 }
 ```
 
-`b` is of type `Beer`, which is an **enum type**, so from 1.5 onwards it may be passed to `switch`.
-Its value is `KF`, so the `KF` case matches. Measured on JDK 25:
+`b` is of type `Beer`, which is an **enum type**, so from 1.5 onwards it may be passed to `switch`. Its value is `KF`, so the `KF` case matches. Measured on JDK 25:
 
 ```
 it is a children's brand
@@ -72,11 +66,7 @@ Change the first line to `Beer b = Beer.RC;` and the `RC` case matches instead. 
 it is not that much kick
 ```
 
-> [!info] **Do not spend attention on the comments themselves** — whether a beer is really a
-> children's brand or too light or has that much kick. Give the attention to the thing being
-> demonstrated: **an enum type can be passed as an argument to a switch statement.** That is what
-> gets asked, and it is asked as *can you explain it with an example* — so be ready to write this
-> program.
+> [!info] **Do not spend attention on the comments themselves** — whether a beer is really a children's brand or too light or has that much kick. Give the attention to the thing being demonstrated: **an enum type can be passed as an argument to a switch statement.** That is what gets asked, and it is asked as **can you explain it with an example** — so be ready to write this program.
 
 ---
 
@@ -84,8 +74,7 @@ it is not that much kick
 
 This is the conclusion the whole note is built around.
 
-Look at the case labels above: `KF`, `KO`, `RC`, `FO`. Every one of them is a genuine constant of
-`Beer`. Now suppose you add a local brand that is *not* in the enum — `KALYANI`:
+Look at the case labels above: `KF`, `KO`, `RC`, `FO`. Every one of them is a genuine constant of `Beer`. Now suppose you add a local brand that is **not** in the enum — `KALYANI`:
 
 ```java
 enum Beer {
@@ -96,8 +85,7 @@ enum Beer {
     case KALYANI: System.out.println("buy one get one free"); break;
 ```
 
-> If we pass an enum type as argument to a switch statement, **every case label must name a constant
-> of that enum.** Otherwise we get a compile-time error.
+> If we pass an enum type as argument to a switch statement, **every case label must name a constant of that enum.** Otherwise we get a compile-time error.
 
 Measured on JDK 25:
 
@@ -111,8 +99,7 @@ error: cannot find symbol
 There are exactly **two ways** to fix it:
 
 1. Replace `KALYANI` with a valid enum constant, or
-2. **Add `KALYANI` to the enum** as a constant — then every case label is valid again and the code
-   compiles.
+2. **Add `KALYANI` to the enum** as a constant — then every case label is valid again and the code compiles.
 
 ## The label may be qualified or unqualified
 
@@ -125,14 +112,11 @@ switch (b) {
 }
 ```
 
-> [!important] **Older material insists the name must be *unqualified* — bare `KF`, never `Beer.KF`.**
-> That was the rule through Java 20, and its error message said so:
+> [!important] **Older material insists the name must be unqualified — bare `KF`, never `Beer.KF`.** That was the rule through Java 20, and its error message said so:
 > ```
 > error: an enum switch case label must be the unqualified name of an enumeration constant
 > ```
-> **Java 21 lifted it**, as part of the pattern-matching work that required `case` labels to name types
-> and constants generally. Compile the same file with `javac --release 8` and you can still see the old
-> rejection, so recognise both forms and know which release each belongs to.
+> **Java 21 lifted it**, as part of the pattern-matching work that required `case` labels to name types and constants generally. Compile the same file with `javac --release 8` and you can still see the old rejection, so recognise both forms and know which release each belongs to.
 
 ---
 

@@ -2,11 +2,9 @@
 
 Start with the everyday word, not the Java one.
 
-> *"What is a wrapper? It's a cover — something like a chocolate cover."* A Dairy Milk is a piece of
-> chocolate inside a neat wrapper, and the wrapper is what lets you put it on the market.
+> What is a wrapper? It's a cover — something like a chocolate cover. A Dairy Milk is a piece of chocolate inside a neat wrapper, and the wrapper is what lets you put it on the market.
 
-**The same idea, in Java:** you have a **primitive**, and you need to present it to the world **as an
-object**. Something must wrap it — and that something is a **wrapper class**.
+**The same idea, in Java:** you have a **primitive**, and you need to present it to the world **as an object**. Something must wrap it — and that something is a **wrapper class**.
 
 ---
 
@@ -32,16 +30,13 @@ Integer i = new Integer(10);
 l.add(i);             // ✅
 ```
 
-> [!info] **Why this matters at all.** Java is an object-oriented language — *"most of the time we have
-> to talk in terms of objects only."* Without wrapper classes, primitives could never participate:
-> *"primitives would always be primitives only, they can't have object capability."*
+> [!info] **Why this matters at all.** Java is an object-oriented language — most of the time we have to talk in terms of objects only. Without wrapper classes, primitives could never participate: primitives would always be primitives only, they can't have object capability.
 
 ## 2. To define utility methods for primitives
 
 A `Student` object needs methods — `getName()`, `getMarks()` — and they live in the `Student` class.
 
-**But a primitive `10` needs methods too.** Converting it to a `String`, parsing one, finding the
-maximum value — where would those live? A primitive has no class of its own.
+**But a primitive `10` needs methods too.** Converting it to a `String`, parsing one, finding the maximum value — where would those live? A primitive has no class of its own.
 
 > **The wrapper class provides the home for the utility methods required by primitives.**
 
@@ -50,8 +45,7 @@ Integer.toString(10);      // primitive → String
 ```
 
 > **The main objectives of wrapper classes:**
-> **1. to wrap a primitive into object form, so we can handle primitives just like objects**
-> **2. to define several utility methods required for primitives**
+> **1. to wrap a primitive into object form, so we can handle primitives just like objects** **2. to define several utility methods required for primitives**
 
 ---
 
@@ -68,27 +62,22 @@ Integer.toString(10);      // primitive → String
 | `char` | **`Character`** |
 | `boolean` | `Boolean` |
 
-**Eight primitives, eight wrappers.** Note the two whose names are not just capitalised — `int` →
-`Integer` and `char` → `Character`.
+**Eight primitives, eight wrappers.** Note the two whose names are not just capitalised — `int` → `Integer` and `char` → `Character`.
 
 ---
 
 # Constructors
 
-> **ALMOST ALL wrapper classes contain two constructors:** one taking the **corresponding primitive**,
-> the other taking a **`String`**.
+> **ALMOST ALL wrapper classes contain two constructors:** one taking the **corresponding primitive**, the other taking a **`String`**.
 
 ```java
 Integer i1 = new Integer(10);      // primitive
 Integer i2 = new Integer("10");    // String
 ```
 
-**Both are deprecated — you write `Integer.valueOf(...)` instead.** The constructors are still worth
-knowing because the question *"how many constructors does each wrapper have?"* is asked directly, and
-because the reason they were retired is itself the interesting part.
+**Both are deprecated — you write `Integer.valueOf(...)` instead.** The constructors are still worth knowing because the question how many constructors does each wrapper have? is asked directly, and because the reason they were retired is itself the interesting part.
 
-> [!important] **He stresses the word "almost".** *"Have you observed — I'm not using the word **all**.
-> **Almost all.**"* That caution is exactly right. Measured on JDK 25:
+> [!important] **He stresses the word `almost`.** Have you observed — I'm not using the word **all**. **Almost all.** That caution is exactly right. Measured on JDK 25:
 >
 > | Wrapper | Public constructors |
 > |---|---|
@@ -96,9 +85,7 @@ because the reason they were retired is itself the interesting part.
 > | **`Character`** | **1** — `Character(char)` only |
 > | **`Float`** | **3** — `Float(float)`, `Float(double)`, `Float(String)` |
 >
-> **`Character` is the exception**, and the reason is that there is no sensible `String` form for a
-> single character that is not already a `char`. **`Float` has an extra one** so a `double` literal can
-> be narrowed directly.
+> **`Character` is the exception**, and the reason is that there is no sensible `String` form for a single character that is not already a `char`. **`Float` has an extra one** so a `double` literal can be narrowed directly.
 
 > [!warning] **Never call a wrapper constructor.** Compiling one gives:
 > ```
@@ -108,9 +95,7 @@ because the reason they were retired is itself the interesting part.
 > ```java
 > Integer i = Integer.valueOf(10);      // instead of new Integer(10)
 > ```
-> **Why the factory wins, and it is the reason the constructors were retired:** `valueOf()` may return
-> a **cached** object for small values — `Integer` caches −128 to 127 — while `new` is contractually
-> obliged to create a fresh object every single time. The factory is faster and uses less memory.
+> **Why the factory wins, and it is the reason the constructors were retired:** `valueOf()` may return a **cached** object for small values — `Integer` caches −128 to 127 — while `new` is contractually obliged to create a fresh object every single time. The factory is faster and uses less memory.
 >
 > **In practice you write neither**, because autoboxing (note `10`) does it for you:
 > ```java

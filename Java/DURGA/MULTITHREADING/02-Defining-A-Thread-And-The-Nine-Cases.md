@@ -6,11 +6,11 @@ The introduction is done: multitasking, the two kinds, and why thread based mult
 
 ## What is a thread
 
-Ask the question and you get a spread of answers: *a flow of execution*, *an independent job*, *a lightweight process*. All of them are in circulation, all of them are accepted, and they are pointing at the same object. For everything that follows, use this one:
+Ask the question and you get a spread of answers: **a flow of execution**, **an independent job**, **a lightweight process**. All of them are in circulation, all of them are accepted, and they are pointing at the same object. For everything that follows, use this one:
 
 > **A thread is a separate flow of execution.**
 
-One flow means one thread. Add another flow and you have two threads. Each of those flows is running *something* — so the second half of the idea follows immediately:
+One flow means one thread. Add another flow and you have two threads. Each of those flows is running **something** — so the second half of the idea follows immediately:
 
 > **Every thread has a job.**
 
@@ -41,7 +41,7 @@ Put the two halves together and the design rule from the case study falls out on
 > 1. **By extending `Thread` class**
 > 2. **By implementing `Runnable` interface**
 
-*"In how many ways can you define a thread?"* is frequently the first question asked on this topic, and the follow-up is always *which one is better*. This note does the first way. The second way, and the comparison, come next.
+In how many ways can you define a thread? is frequently the first question asked on this topic, and the follow-up is always **which one is better**. This note does the first way. The second way, and the comparison, come next.
 
 ---
 
@@ -102,7 +102,7 @@ flowchart TB
     C1 --> E
 ```
 
-> [!important] **`main()` is a method. The main thread is a thread.** They are not the same thing, and the relationship between them is one-directional: the main thread is the one that *calls* `main()`. Once you separate those two words, "which thread executed this line?" becomes answerable for every line in the program.
+> [!important] **`main()` is a method. The main thread is a thread.** They are not the same thing, and the relationship between them is one-directional: the main thread is the one that **calls** `main()`. Once you separate those two words, which thread executed this line? becomes answerable for every line in the program.
 
 ---
 
@@ -123,11 +123,11 @@ Same code, same machine, same command — five different answers. That is not a 
 > [!question]- If the order isn't guaranteed, how can you build anything on it?
 > Because you only split work into threads **when the jobs are independent**. If the child's job doesn't read what the main thread wrote, the interleaving cannot change the result — it only changes the transcript.
 >
-> Turn it around and you get the rule for when *not* to use threads: **if there is a dependency between two jobs, do not run them on separate threads.** The moment order matters, you either keep them sequential or you have to impose the order deliberately — which is what `join()` and synchronization are for, later in the chapter.
+> Turn it around and you get the rule for when **not** to use threads: **if there is a dependency between two jobs, do not run them on separate threads.** The moment order matters, you either keep them sequential or you have to impose the order deliberately — which is what `join()` and synchronization are for, later in the chapter.
 
 ---
 
-## "Every Java program has one thread" — nearly
+## Every Java program has one thread — nearly
 
 The statement you will be asked for is: **every Java program has at least one thread, the main thread.** That is the answer to give.
 
@@ -142,7 +142,7 @@ daemon      Notification Thread
 daemon      Common-Cleaner
 ```
 
-Garbage collection is the one everybody names, but it is not alone. Daemon threads get their own note later; for now just know that "one thread" means *one thread of yours*.
+Garbage collection is the one everybody names, but it is not alone. Daemon threads get their own note later; for now just know that one thread means **one thread of yours**.
 
 ---
 
@@ -159,7 +159,7 @@ t.start();
 
 No subclass, no override, no separate file.
 
-**2 — extending `Thread` locks you out of virtual threads.** Virtual threads are the answer to *"I need thousands of concurrent jobs"*, and they cannot be created by subclassing:
+**2 — extending `Thread` locks you out of virtual threads.** Virtual threads are the answer to I need thousands of concurrent jobs, and they cannot be created by subclassing:
 
 ```java
 Thread v = Thread.ofVirtual().start(() -> System.out.println("virtual"));
@@ -207,7 +207,7 @@ What follows from that is the rule for the rest of the chapter:
 
 > [!important] **Whenever the situation comes to multithreading, there is no guarantee of the exact output — but we can state several possible outputs.**
 >
-> This is precisely how it is examined. A question will ask *"which of the following is a **possible** output?"* — never *"which is **the** output?"* — whenever a multithreaded program is on the paper.
+> This is precisely how it is examined. A question will ask which of the following is a **possible** output?**— never**which is **the** output? — whenever a multithreaded program is on the paper.
 
 For the `child thread` / `main thread` program, all of these are legal:
 
@@ -221,10 +221,10 @@ For the `child thread` / `main thread` program, all of these are legal:
 
 **Any combination of the two lines is a possible output.** The only thing fixed is that each thread's own lines stay in its own order.
 
-> [!important] **"The scheduler is part of the JVM" is a simplification — say it precisely and it is a better answer.**
+> [!important] **The scheduler is part of the JVM is a simplification — say it precisely and it is a better answer.**
 >
 > - **Platform threads** — everything in this chapter until virtual threads appear — are mapped **one-to-one onto operating system threads**. The scheduling decision is made by the **OS scheduler**, one level below the JVM. This is why the behaviour changes when you change machines, not just when you change JVMs.
-> - Java *did* once schedule threads itself. Those were **green threads**, dropped in Java 1.3. (Durga's own agenda still lists "green thread" as a topic — that is how far back this material's roots go.)
+> - Java **did** once schedule threads itself. Those were **green threads**, dropped in Java 1.3. (Durga's own agenda still lists green thread as a topic — that is how far back this material's roots go.)
 > - **Virtual threads** bring JVM-level scheduling back: many virtual threads are multiplexed onto a small pool of carrier threads by a scheduler inside the JVM.
 >
 > **The consequence is the same whichever scheduler is deciding — you cannot predict the order.**
@@ -239,8 +239,7 @@ When you write `t.start()`, the JVM looks for `start()` on `MyThread`, does not 
 
 So what if you just call `run()` yourself and skip the middleman?
 
-> In the case of `t.start()`, a **new thread is created**, and that thread is responsible for executing `run()`.
-> In the case of `t.run()`, **no new thread is created** — `run()` is executed like a **normal method call** by the main thread.
+> In the case of `t.start()`, a **new thread is created**, and that thread is responsible for executing `run()`. In the case of `t.run()`, **no new thread is created** — `run()` is executed like a **normal method call** by the main thread.
 
 ```mermaid
 flowchart TB
@@ -270,7 +269,7 @@ main thread [main]
 
 Every line of `run()` first, then every line of `main()`, and **the entire output produced by only the main thread**.
 
-> [!important] **The tell is that this output is repeatable.** Run it a thousand times, on a thousand machines, and it does not move — because there is only one thread. Non-determinism is *evidence* that a second thread exists. When multithreaded code gives you the same answer every single time, suspect that you never started a thread.
+> [!important] **The tell is that this output is repeatable.** Run it a thousand times, on a thousand machines, and it does not move — because there is only one thread. Non-determinism is **evidence** that a second thread exists. When multithreaded code gives you the same answer every single time, suspect that you never started a thread.
 
 ---
 
@@ -282,7 +281,7 @@ The obvious follow-up: if `run()` holds the job, why is `start()` mandatory? Why
 
 You want to put your kid into a school. What is actually involved: check which school is good, check whether admission is even available, check the distance, check the transport, then go in person, pay the fee, and complete every joining formality. Only after all of that does the school treat your kid as a valid student.
 
-Now skip all of it. Walk your kid to the school gate, say *"this is the school, enjoy, I'll collect you at five,"* and leave.
+Now skip all of it. Walk your kid to the school gate, say this is the school, enjoy, I'll collect you at five, and leave.
 
 Within half an hour you are getting a phone call from the police — and the school certainly does not consider your kid enrolled. **The kid is at the right building. None of the formalities happened.**
 
@@ -304,7 +303,7 @@ Every one of those is a formality you never write and never see. You write `t.st
 
 > [!important] **`start()` is the best assistant a programmer has here.** Your responsibility is one thing only: define the job inside `run()`. Everything required to make that job into a real, scheduled thread is on the other side of a single method call. If it were not, every program that wanted a thread would have to reimplement it.
 
-> [!example]- **Deep dive — what is actually inside `start()`, in full.** The "70,000 lines" is rhetoric; the real thing is nine lines and more interesting than the story.
+> [!example]- **Deep dive — what is actually inside `start()`, in full.** The 70,000 lines is rhetoric; the real thing is nine lines and more interesting than the story.
 >
 > From the JDK 25 sources shipped with the JDK on this machine:
 >
@@ -321,11 +320,11 @@ Every one of those is a formality you never write and never see. You write `t.st
 > private native void start0();
 > ```
 >
-> Seven lines: one state check, then a **native** call. The "mandatory activities" are real, but they live in the virtual machine's C++ code, where a genuine OS thread gets created and handed to the scheduler — not in Java at all.
+> Seven lines: one state check, then a **native** call. The mandatory activities are real, but they live in the virtual machine's C++ code, where a genuine OS thread gets created and handed to the scheduler — not in Java at all.
 >
 > Two things worth taking from the actual source rather than the story:
 > - the `threadStatus != 0` check is the entire mechanism behind **Case 9** (`IllegalThreadStateException`), which arrives shortly
-> - `start0()` being native is *why* you cannot write it yourself. The point of the analogy survives intact; only the line count was invented.
+> - `start0()` being native is **why** you cannot write it yourself. The point of the analogy survives intact; only the line count was invented.
 
 ---
 
@@ -401,7 +400,7 @@ Output, verified: nothing at all.
 > }
 > ```
 >
-> It only *behaves* as empty here because `new MyThread()` passed no target, so `task` is null. **This is exactly the mechanism that makes the `Runnable` approach work** — hold on to it for the next video rather than filing it under trivia.
+> It only **behaves** as empty here because `new MyThread()` passed no target, so `task` is null. **This is exactly the mechanism that makes the `Runnable` approach work** — hold on to it for the next video rather than filing it under trivia.
 
 ---
 
@@ -467,7 +466,7 @@ public class SuperStart {
 }
 ```
 
-`super.start()` reaches `Thread`'s `start()`, so a real thread *is* created. Now work out who executes what:
+`super.start()` reaches `Thread`'s `start()`, so a real thread **is** created. Now work out who executes what:
 
 ```mermaid
 flowchart TB
@@ -487,13 +486,13 @@ That gives exactly three possible outputs:
 | 2 | `start method` → `run method` → `main method` | child slotted in between the main thread's two lines |
 | 3 | `start method` → `main method` → `run method` | main thread finished both of its lines first |
 
-> [!important] **`main method` before `start method` is impossible.** Those two lines are printed by the *same* thread, in the order they appear in the code. A single thread's own statements never reorder. Only the *child's* line is free to move — which is why there are three possibilities and not six.
+> [!important] **`main method` before `start method` is impossible.** Those two lines are printed by the **same** thread, in the order they appear in the code. A single thread's own statements never reorder. Only the **child's** line is free to move — which is why there are three possibilities and not six.
 
 > [!info] **Measured: all three are legal, but they are nowhere near equally likely.** Running this 40 times on JDK 25 gave `start / main / run` 39 times and `start / run / main` once. `run` first did not appear at all.
 >
 > Nothing is wrong with the theory — starting a thread takes long enough (a native call into the VM, then an OS thread) that the main thread almost always gets through its two `println`s first. On the slower machines this lecture was recorded on, the race was closer and all three showed up in a handful of runs.
 >
-> The lesson is the sharper version of Case 1: **rare is not impossible.** A race that loses 39 times out of 40 in a demo is exactly the kind that surfaces in production, on different hardware, at 3 a.m. Never conclude "the order is fine" from repeated runs — conclude it from the code.
+> The lesson is the sharper version of Case 1: **rare is not impossible.** A race that loses 39 times out of 40 in a demo is exactly the kind that surfaces in production, on different hardware, at 3 a.m. Never conclude the order is fine from repeated runs — conclude it from the code.
 
 ---
 
@@ -518,7 +517,7 @@ flowchart LR
 | State | You get there by | What it means |
 |---|---|---|
 | **New / Born** | `MyThread t = new MyThread();` | the object exists; the system knows nothing about it |
-| **Ready / Runnable** | `t.start()` | *"I'm ready to run — somebody give me a turn"* |
+| **Ready / Runnable** | `t.start()` | I'm ready to run — somebody give me a turn |
 | **Running** | the scheduler allocates the processor | `run()` is actually executing |
 | **Dead** | `run()` completes | finished; and, as Case 9 shows, finished for good |
 
@@ -526,15 +525,15 @@ Read it as one sentence: **you create it, you start it, the scheduler picks it, 
 
 ### The one line worth borrowing
 
-The states are named *born* and *dead* for a reason, and the lecture leans on it deliberately — the line quoted at every funeral, that **everyone who is born will one day die**, is exactly the guarantee a thread gives you:
+The states are named **born** and **dead** for a reason, and the lecture leans on it deliberately — the line quoted at every funeral, that **everyone who is born will one day die**, is exactly the guarantee a thread gives you:
 
 > Every thread that is born will, one day, enter the **dead state**.
 
-The half of the saying nobody can promise for people — *and everyone who dies will be born again* — is the half Java flatly refuses. That refusal is Case 9, and the whole reason it gets a case of its own.
+The half of the saying nobody can promise for people — **and everyone who dies will be born again** — is the half Java flatly refuses. That refusal is Case 9, and the whole reason it gets a case of its own.
 
 > [!important] **The guarantee runs one way only.** New → dead is certain and irreversible. Dead → new never happens. Hold on to the asymmetry: every rule in the next case falls out of it.
 
-> [!info] **A running thread does not only run.** It can call `sleep()` and enter a sleeping state, call `join()` and wait for another thread, call `wait()` and wait to be notified. Each of those is a detour out of *Running* and back again, and each one gets its own note later in this chapter. The four states above are the spine; those are the branches off it.
+> [!info] **A running thread does not only run.** It can call `sleep()` and enter a sleeping state, call `join()` and wait for another thread, call `wait()` and wait to be notified. Each of those is a detour out of **Running** and back again, and each one gets its own note later in this chapter. The four states above are the spine; those are the branches off it.
 >
 > As the lecture puts it: a person does his job, but he also does extracurricular activities — sometimes he sleeps, sometimes he joins, sometimes he yields. Same person, same life, temporary detours.
 
@@ -543,13 +542,13 @@ The half of the saying nobody can promise for people — *and everyone who dies 
 > | `Thread.State` | Maps to the diagram above |
 > |---|---|
 > | `NEW` | New / Born |
-> | `RUNNABLE` | **Ready *and* Running merged into one** |
+> | `RUNNABLE` | **Ready and Running merged into one** |
 > | `BLOCKED` | waiting to acquire a monitor lock — arrives with synchronization |
 > | `WAITING` | inside `wait()` or `join()` with no timeout |
 > | `TIMED_WAITING` | inside `sleep(ms)`, `wait(ms)`, `join(ms)` |
 > | `TERMINATED` | Dead |
 >
-> The merge is the interesting part: **the JVM does not distinguish "ready" from "running"**, because for platform threads that decision belongs to the OS scheduler and Java cannot see it. Both look like `RUNNABLE` from inside Java.
+> The merge is the interesting part: **the JVM does not distinguish ready from running**, because for platform threads that decision belongs to the OS scheduler and Java cannot see it. Both look like `RUNNABLE` from inside Java.
 >
 > Measured on JDK 25, a thread in each situation:
 >
@@ -573,15 +572,15 @@ The half of the saying nobody can promise for people — *and everyone who dies 
 
 Follow one kid through the education system as it is run today.
 
-The school is chosen before he is born. The first year he is handed between a night-shift father, a day-shift mother and a grandmother, and never sees both parents at once. Year two: play school. Year three: nursery — parcelled into a bus at 7 a.m., thrown back out at 5 p.m., and asked *"what did you learn today?"* by a mother who paid three lakhs for the admission, then asked again at 8 p.m. by the father. He is three. He does not know what the question means. He gets slapped for the blank face.
+The school is chosen before he is born. The first year he is handed between a night-shift father, a day-shift mother and a grandmother, and never sees both parents at once. Year two: play school. Year three: nursery — parcelled into a bus at 7 a.m., thrown back out at 5 p.m., and asked what did you learn today? by a mother who paid three lakhs for the admission, then asked again at 8 p.m. by the father. He is three. He does not know what the question means. He gets slapped for the blank face.
 
 Then tenth class, and the parents decide the commute is wasted time, so he goes residential — **in the same city they live in**. Woken at 4 a.m. by a watchman with a stick. 4–6 study hours, 6–7 get ready, 7–12 classes, 12–1 lunch, 1–2 on the bed whether or not sleep comes, 2–5 study hours, 5–6 get ready, 6–9 classes, 9–11 study hours. Five security staff watching him from 4 a.m. to 11 p.m.
 
-He comes out a state ranker — 596 marks. The verdict: *"excellent, but everything so far is waste. The next two years are what matter."* So: two years of intermediate. Then long-term coaching. Then MBBS. Then MS. Then MD.
+He comes out a state ranker — 596 marks. The verdict: excellent, but everything so far is waste. The next two years are what matter. So: two years of intermediate. Then long-term coaching. Then MBBS. Then MS. Then MD.
 
 He surfaces from the books at **32**, holding a certificate, out of a life of maybe 60 years. And what he feels, looking at it, is not pride:
 
-> *"Thirty-two years gone for this piece of paper. I don't have a single sweet memory of my childhood."*
+> Thirty-two years gone for this piece of paper. I don't have a single sweet memory of my childhood.
 
 So he writes to Brahma with one request: **re-create me. Restart my life cycle. Let me be born again and live it properly this time.**
 
@@ -641,10 +640,10 @@ Note that it **compiles fine**. There is nothing wrong with the syntax of callin
 >
 > `threadStatus == 0` means `NEW`. The very first thing `start()` does is check that the thread has never been started — so the rule is not a policy bolted on somewhere, it is the first line of the method. And the check is one-way: a `TERMINATED` thread is no closer to `NEW` than a running one.
 
-> [!important] **A dead thread stays dead. If you need the job done again, create a new thread object.** This is also the first real argument for the executor framework at the end of the chapter: if every run of a job needs a brand-new `Thread`, then a program doing that job a million times creates a million threads. Pools exist because *threads* cannot be reused, but the *workers running your tasks* can be.
+> [!important] **A dead thread stays dead. If you need the job done again, create a new thread object.** This is also the first real argument for the executor framework at the end of the chapter: if every run of a job needs a brand-new `Thread`, then a program doing that job a million times creates a million threads. Pools exist because **threads** cannot be reused, but the **workers running your tasks** can be.
 
 ---
 
 That closes the nine cases, and with them the first way of defining a thread. Everything here came from one small class that extends `Thread` and overrides `run()`.
 
-Next: **the second way — implementing `Runnable`** — and the question the whole comparison exists to answer: *which of the two approaches is best?*
+Next: **the second way — implementing `Runnable`** — and the question the whole comparison exists to answer: which of the two approaches is best?

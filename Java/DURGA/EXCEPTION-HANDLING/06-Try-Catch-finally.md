@@ -25,7 +25,7 @@ statement6;
 | **4** | exception at statement **4** (inside catch) | 1, **5** | **abnormal** |
 | **5** | exception at statement **5** (inside finally) **or 6** | — | **always abnormal** |
 
-**Statement 5 appears in every row where it can** — cases 1 to 4, whatever else happens. That is the entire content of this part, expressed as a table, and notice in cases 3 and 4 that `finally` runs and statement 6 does not, which is the sequence measured above. Case 5 is the exception to it in both senses: statement 5 cannot run *itself* if statement 5 is what failed, and there is no further `finally` behind it to catch the fall.
+**Statement 5 appears in every row where it can** — cases 1 to 4, whatever else happens. That is the entire content of this part, expressed as a table, and notice in cases 3 and 4 that `finally` runs and statement 6 does not, which is the sequence measured above. Case 5 is the exception to it in both senses: statement 5 cannot run **itself** if statement 5 is what failed, and there is no further `finally` behind it to catch the fall.
 
 > [!info] **Case 4 is worth a second look.** An exception inside the `catch` block is unhandled — nothing is guarding the catch. The program dies. But `finally` still runs first, which is why cleanup belongs there and nowhere else.
 
@@ -60,7 +60,7 @@ try {                          // ← outer try
 stmt-12;
 ```
 
-Twelve numbered statements, two `catch` blocks, two `finally` blocks. The exception types are `X` for the inner catch and `Y` for the outer one — deliberately unrelated, so "matched" always means exactly one of them.
+Twelve numbered statements, two `catch` blocks, two `finally` blocks. The exception types are `X` for the inner catch and `Y` for the outer one — deliberately unrelated, so `matched` always means exactly one of them.
 
 ## The fourteen cases
 
@@ -97,20 +97,17 @@ Read it in five groups rather than fourteen rows.
 
 **Cases 13–14 — the exception is in the outer `catch` or the outer `finally`.** There is nothing left above to handle it. Case 13 still owes statement 11, so that runs first. Case 14 has nothing owed at all, so it just dies.
 
-> [!important] **Three rules generate all fourteen, and these are what to carry rather than the table.**
-> **1.** An exception looks for a handler **innermost first**. Raised at statement 5, the inner `catch` gets first refusal; if it does not match, the outer `catch` is tried.
-> **2.** **Every `finally` whose `try` was entered will run** — so a failure at statement 5 still runs statement 8 *and* statement 11, in that order, on the way out.
-> **3.** If nothing matches anywhere, it is abnormal termination — but only *after* every entered `finally` has run.
+> [!important] **Three rules generate all fourteen, and these are what to carry rather than the table.** **1.** An exception looks for a handler **innermost first**. Raised at statement 5, the inner `catch` gets first refusal; if it does not match, the outer `catch` is tried. **2.** **Every `finally` whose `try` was entered will run** — so a failure at statement 5 still runs statement 8 **and** statement 11, in that order, on the way out. **3.** If nothing matches anywhere, it is abnormal termination — but only **after** every entered `finally` has run.
 >
 > Everything in the table is those three rules applied to a different starting point. If you can state them, you can derive any row on the spot, which is what an interviewer is actually testing.
 
 > [!important] **Two groups of rows are easy to get wrong, and the rules above are how you check them.**
 >
-> **Cases 7 and 8 cannot include statements 5 and 6.** The premise is that statement 7 ran — and statement 7 is the *inner catch*, which only runs when something in the inner `try` failed. If 5 and 6 had both completed there would have been no exception to catch. Measured: `1 2 3 4 8 10 11 12` and `1 2 3 4 8 11`.
+> **Cases 7 and 8 cannot include statements 5 and 6.** The premise is that statement 7 ran — and statement 7 is the **inner catch**, which only runs when something in the inner `try` failed. If 5 and 6 had both completed there would have been no exception to catch. Measured: `1 2 3 4 8 10 11 12` and `1 2 3 4 8 11`.
 >
 > **Cases 9 to 12 cannot include statement 7.** The premise is that statements 4, 5 and 6 all completed, so the inner `catch` was never entered at all. Measured, case 11 gives `1 2 3 4 5 6 8 10 11 12`.
 >
-> The trap in both is writing down every statement that appears *textually above* the failure point instead of the path a real run can take. Derive from the three rules and neither mistake is possible.
+> The trap in both is writing down every statement that appears **textually above** the failure point instead of the path a real run can take. Derive from the three rules and neither mistake is possible.
 
 And the two notes worth carrying:
 
@@ -152,7 +149,7 @@ Three exceptions were raised. **One is reported** — the `NullPointerException`
 >
 > Modern Java's answer is `try`-with-resources, where an exception from closing a resource is **suppressed and attached** to the primary exception rather than replacing it — so both survive. That is part 10.
 
-> [!info] **Notice the NPE message itself: `Cannot invoke "String.length()" because "<local3>" is null`.** That precision is **helpful NullPointerExceptions**, on by default. The message names the method you tried to call *and* the expression that was null — so a line with several possible culprits no longer needs a debugger to narrow down. Older JDKs printed a bare `java.lang.NullPointerException` with no explanation at all.
+> [!info] **Notice the NPE message itself: `Cannot invoke "String.length()" because "<local3>" is null`.** That precision is **helpful NullPointerExceptions**, on by default. The message names the method you tried to call **and** the expression that was null — so a line with several possible culprits no longer needs a debugger to narrow down. Older JDKs printed a bare `java.lang.NullPointerException` with no explanation at all.
 
 ## Which combinations compile
 
@@ -176,7 +173,7 @@ Measured on JDK 25 — each row is the whole body of `main`:
 | `try {} catch (Exception e) {} catch (Exception e2) {}` | ❌ `exception Exception has already been caught` |
 | `try {} catch (Exception e) { try {} catch (Exception e1) {} }` | ✅ compiles — nesting is fine |
 
-> [!important] **Row four is the one that surprises people.** `try {} finally {} catch (…) {}` fails with *`'catch' without 'try'`* — which reads oddly, since there is clearly a `try` above it. The reason is that `finally` **closes** the construct: once it appears, the `try` statement is complete, and the `catch` that follows belongs to nothing. Order is not stylistic.
+> [!important] **Row four is the one that surprises people.** `try {} finally {} catch (…) {}` fails with **`'catch' without 'try'`** — which reads oddly, since there is clearly a `try` above it. The reason is that `finally` **closes** the construct: once it appears, the `try` statement is complete, and the `catch` that follows belongs to nothing. Order is not stylistic.
 >
 > Note also that the `try`-alone message names **`resource declarations`** as a third way to satisfy a `try`. That is try-with-resources, and it is why `try (…) { }` with no `catch` and no `finally` is legal — part 10.
 

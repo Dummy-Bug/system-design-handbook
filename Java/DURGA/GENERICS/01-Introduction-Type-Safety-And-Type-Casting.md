@@ -75,9 +75,9 @@ If arrays are type safe and collections are not, generics look unnecessary. Ther
 
 > **Arrays are fixed in size.** To use an array you must know the size in advance.
 
-And often you do not. You want type safety *and* a growable container — and nothing in the language gave you both. **That gap is what generics fill.**
+And often you do not. You want type safety **and** a growable container — and nothing in the language gave you both. **That gap is what generics fill.**
 
-> [!important] **State the purpose precisely: to provide type safety *to the collections*.** Collections are growable but unsafe; arrays are safe but fixed. Generics add the missing half to the growable one.
+> [!important] **State the purpose precisely: to provide type safety to the collections.** Collections are growable but unsafe; arrays are safe but fixed. Generics add the missing half to the growable one.
 
 ---
 

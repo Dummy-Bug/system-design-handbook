@@ -77,15 +77,14 @@ true
 false
 ```
 
-> [!important] **How to answer any question of this shape.** One question, asked once per line: *does this operation change the content?*
-> **Yes** → new object, in the **heap**, new reference.
+> [!important] **How to answer any question of this shape.** One question, asked once per line: does this operation change the content? **Yes** → new object, in the **heap**, new reference.
 > **No** → the **existing object is reused**, wherever it happens to live.
 
 ---
 
 # Creating your own immutable class
 
-> *"Is it possible to create our own immutable class?"* — **yes.** *"Explain with an example."*
+> Is it possible to create our own immutable class? — **yes.** Explain with an example.
 
 This is one of the most valuable questions in the room, and it is really a test of whether you understood the rule above, because you are about to implement it yourself.
 
@@ -139,7 +138,7 @@ if (this.i == i) return this;              // no change → reuse
 else             return new Test(i);       // change    → new object
 ```
 
-> [!important] **`modify()` is what makes the class immutable** — not any keyword. Every method in `String` is implemented in exactly this style: if the content would change, build and return a new object; if not, return the existing one. That is *why* `String` is immutable.
+> [!important] **`modify()` is what makes the class immutable** — not any keyword. Every method in `String` is implemented in exactly this style: if the content would change, build and return a new object; if not, return the existing one. That is **why** `String` is immutable.
 
 ## Why the class is `final`
 
@@ -195,8 +194,7 @@ E.java:5: error: cannot assign a value to final variable sb
 ```
 
 > [!important] **The distinction in one line.**
-> **`final`** → you cannot **reassign the variable**. The object is entirely open to change.
-> **Immutable** → you cannot **change the object**. The variable is entirely free to be reassigned.
+> **`final`** → you cannot **reassign the variable**. The object is entirely open to change. **Immutable** → you cannot **change the object**. The variable is entirely free to be reassigned.
 >
 > They constrain opposite things, which is why one can never substitute for the other.
 

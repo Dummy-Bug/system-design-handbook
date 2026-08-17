@@ -1,6 +1,4 @@
-> [!info] **This note follows on from note `03`**, which covers anonymous inner classes themselves and
-> their three categories. Everything here assumes that syntax — `new Popcorn() { … }`,
-> `new Runnable() { … }` — is already familiar.
+> [!info] **This note follows on from note `03`**, which covers anonymous inner classes themselves and their three categories. Everything here assumes that syntax — `new Popcorn() { … }`, `new Runnable() { … }` — is already familiar.
 
 # Normal Java class versus anonymous inner class
 
@@ -14,12 +12,9 @@ A normal Java class can extend **only one** class at a time:
 class A extends B { }
 ```
 
-And an anonymous inner class? Recall what `new Popcorn() { … }` actually means — *I am writing a
-class that extends `Popcorn`*. How many classes can it extend? One: `Popcorn`. Same with
-`new Thread() { … }` — one class, `Thread`.
+And an anonymous inner class? Recall what `new Popcorn() { … }` actually means — **I am writing a class that extends `Popcorn`**. How many classes can it extend? One: `Popcorn`. Same with `new Thread() { … }` — one class, `Thread`.
 
-> **A normal Java class can extend only one class at a time. Of course, an anonymous inner class also
-> can extend only one class at a time.**
+> **A normal Java class can extend only one class at a time. Of course, an anonymous inner class also can extend only one class at a time.**
 
 **No difference.** But do not assume the rest follow the same way.
 
@@ -31,11 +26,9 @@ Here they diverge. A normal Java class can implement **any number**:
 class A implements B, C, D { }
 ```
 
-An anonymous inner class cannot. `new Runnable() { … }` means *I am writing a class that implements
-`Runnable`* — and there is exactly one slot between the `new` and the `{`.
+An anonymous inner class cannot. `new Runnable() { … }` means **I am writing a class that implements `Runnable`** — and there is exactly one slot between the `new` and the `{`.
 
-> **A normal Java class can implement any number of interfaces simultaneously, but an anonymous inner
-> class can implement only one interface at a time.**
+> **A normal Java class can implement any number of interfaces simultaneously, but an anonymous inner class can implement only one interface at a time.**
 
 ## 3 — both at once
 
@@ -45,11 +38,9 @@ A normal Java class can do both together:
 class A extends B implements C, D, E { }
 ```
 
-An anonymous inner class cannot, for the same reason as above — there is one slot, and it takes
-either a class or an interface.
+An anonymous inner class cannot, for the same reason as above — there is one slot, and it takes either a class or an interface.
 
-> **An anonymous inner class can extend a class or can implement an interface, but not both
-> simultaneously.**
+> **An anonymous inner class can extend a class or can implement an interface, but not both simultaneously.**
 
 Measured on JDK 25, trying to name two supertypes is a syntax error before anything else:
 
@@ -77,8 +68,7 @@ class Test {
 
 In an anonymous inner class you cannot write **any**. And the reason is almost silly once you see it:
 
-> **The name of the constructor and the name of the class must be the same. But an anonymous inner
-> class does not have a name.** Hence we cannot write any constructor explicitly.
+> **The name of the constructor and the name of the class must be the same. But an anonymous inner class does not have a name.** Hence we cannot write any constructor explicitly.
 
 Measured on JDK 25, the compiler's complaint says exactly that in its own way:
 
@@ -95,32 +85,23 @@ error: invalid method declaration; return type required
             ^
 ```
 
-**It is not even read as a constructor.** With no class name to match, `Z2()` is parsed as a *method*
-that forgot its return type. That is the strongest possible confirmation of his reasoning.
+**It is not even read as a constructor.** With no class name to match, `Z2()` is parsed as a **method** that forgot its return type. That is the strongest possible confirmation of his reasoning.
 
-> [!important] **So what runs instead?** `new Thread() { … }` calls the **parent class constructor**.
-> The compiler generates a constructor implicitly, and it does nothing but chain to the superclass —
-> which is why an anonymous inner class always depends on a constructor that already exists on its
-> parent. You cannot add initialisation parameters of your own.
+> [!important] **So what runs instead?** `new Thread() { … }` calls the **parent class constructor**. The compiler generates a constructor implicitly, and it does nothing but chain to the superclass — which is why an anonymous inner class always depends on a constructor that already exists on its parent. You cannot add initialisation parameters of your own.
 
-> [!info] **An instance initialiser block is the workaround, and it is worth knowing.** If you need
-> setup code in an anonymous inner class, a bare `{ … }` block inside the body runs at construction
-> time and does the job a constructor would have done. That is post-2016 idiom rather than his
-> material, but it is the answer to *"then how do you initialise one?"*
+> [!info] **An instance initialiser block is the workaround, and it is worth knowing.** If you need setup code in an anonymous inner class, a bare `{ … }` block inside the body runs at construction time and does the job a constructor would have done. That is post-2016 idiom rather than his material, but it is the answer to then how do you initialise one?
 
 ## 5 — when to use which
 
-> If the requirement is **standard and required several times**, then we should go for a **normal top
-> level class**.
+> If the requirement is **standard and required several times**, then we should go for a **normal top level class**.
 >
-> If the requirement is **temporary and required only once** — instant use — then we should go for an
-> **anonymous inner class**.
+> If the requirement is **temporary and required only once** — instant use — then we should go for an **anonymous inner class**.
 
 ## The five differences together
 
 | | Normal Java class | Anonymous inner class |
 |---|---|---|
-| Extend a class | only **one** | only **one** — *no difference* |
+| Extend a class | only **one** | only **one** — **no difference** |
 | Implement interfaces | **any number** | **only one** |
 | Extend **and** implement | ✅ simultaneously | ❌ **one or the other**, never both |
 | Constructors | **any number** | ❌ **none** — it has no name |
@@ -130,8 +111,7 @@ that forgot its return type. That is the strongest possible confirmation of his 
 
 # Where anonymous inner classes are genuinely used
 
-The interview question is *where are anonymous inner classes best suited?*, and there is a single
-standard answer:
+The interview question is where are anonymous inner classes best suited?, and there is a single standard answer:
 
 > **In GUI based applications, to implement event handling.**
 
@@ -141,10 +121,9 @@ Picture a GUI frame — an ATM screen, say — with several buttons on it:
 
 **withdraw** · **get balance** · **change pin** · **mini statement**
 
-Click `withdraw` and you expect one behaviour. Click `get balance` and you expect a completely
-different one. And the behaviour for `withdraw` is needed **only for that button** and nowhere else.
+Click `withdraw` and you expect one behaviour. Click `get balance` and you expect a completely different one. And the behaviour for `withdraw` is needed **only for that button** and nowhere else.
 
-That is exactly *temporary, required only once, instant use* — difference 5 above, arising naturally.
+That is exactly **temporary, required only once, instant use** — difference 5 above, arising naturally.
 
 ## The code
 
@@ -168,20 +147,15 @@ class MyGuiFrame extends JFrame {
 }
 ```
 
-`ActionListener` is an **interface**, so `new ActionListener() { … }` is *writing a class that
-implements `ActionListener`* — structurally identical to `new Runnable() { … }`.
+`ActionListener` is an **interface**, so `new ActionListener() { … }` is **writing a class that implements `ActionListener`** — structurally identical to `new Runnable() { … }`.
 
-> [!info] **A naming detail he mentions in passing:** **listeners are interfaces, events are
-> classes.** `ActionListener` is the interface you implement; `ActionEvent` is the class you receive.
+> [!info] **A naming detail he mentions in passing:** **listeners are interfaces, events are classes.** `ActionListener` is the interface you implement; `ActionEvent` is the class you receive.
 
 ## What it saves
 
 Count the top-level classes in that program: **one**.
 
-Now suppose anonymous inner classes did not exist. For `b1` you would need
-`class MyActionListener1 implements ActionListener`, for `b2`
-`class MyActionListener2 implements ActionListener`, and so on — **one whole top-level class per
-button**, each used exactly once.
+Now suppose anonymous inner classes did not exist. For `b1` you would need `class MyActionListener1 implements ActionListener`, for `b2` `class MyActionListener2 implements ActionListener`, and so on — **one whole top-level class per button**, each used exactly once.
 
 > Wherever that functionality is required, **there only** we can run the show.
 
@@ -200,15 +174,9 @@ GuiDemo$1.class
 GuiDemo$2.class
 ```
 
-**One class you wrote, two anonymous classes the compiler generated** — `$1` and `$2`, numbered
-rather than named, because they have no names. The saving is visible right there in the file listing.
+**One class you wrote, two anonymous classes the compiler generated** — `$1` and `$2`, numbered rather than named, because they have no names. The saving is visible right there in the file listing.
 
-> [!info] **His live demo uses AWT rather than Swing** — a `Frame` with
-> `f.addWindowListener(new WindowAdapter() { public void windowClosing(WindowEvent e) { … } })`,
-> which prints *"I'm closing window"* ten times and then calls `System.exit(0)`. Same shape, one
-> extra idea: `WindowAdapter` is a **class**, not an interface, so that one is *an anonymous inner
-> class that extends a class* rather than one that implements an interface — both categories from
-> note `03` appearing in one screen.
+> [!info] **His live demo uses AWT rather than Swing** — a `Frame` with `f.addWindowListener(new WindowAdapter() { public void windowClosing(WindowEvent e) { … } })`, which prints I'm closing window ten times and then calls `System.exit(0)`. Same shape, one extra idea: `WindowAdapter` is a **class**, not an interface, so that one is **an anonymous inner class that extends a class** rather than one that implements an interface — both categories from note `03` appearing in one screen.
 
 ---
 
@@ -216,13 +184,11 @@ rather than named, because they have no names. The saving is visible right there
 
 The fourth and last category — and the first thing to settle is the name.
 
-> Sometimes we can declare an inner class **with the `static` modifier**. Such types of inner classes
-> are called **static nested classes**.
+> Sometimes we can declare an inner class **with the `static` modifier**. Such types of inner classes are called **static nested classes**.
 
-Note `01` flagged that the fourth category is called *nested* while the other three are called
-*inner*, and promised a reason. Here it is.
+Note `01` flagged that the fourth category is called **nested** while the other three are called **inner**, and promised a reason. Here it is.
 
-## Why the word is "nested"
+## Why the word is `nested`
 
 The argument runs by analogy with variables, so start there:
 
@@ -233,11 +199,9 @@ class Test {
 }
 ```
 
-**Without existing a `Test` object, is there any chance of existing `x`?** No — an instance variable
-is always part of an object.
+**Without existing a `Test` object, is there any chance of existing `x`?** No — an instance variable is always part of an object.
 
-**Without existing a `Test` object, is there any chance of existing `y`?** **Yes.** A static variable
-is nowhere related to any particular object; it talks at class level.
+**Without existing a `Test` object, is there any chance of existing `y`?** **Yes.** A static variable is nowhere related to any particular object; it talks at class level.
 
 Now apply exactly the same reasoning to classes:
 
@@ -248,14 +212,10 @@ class Outer {
 }
 ```
 
-- `Inner` is non-static, so **without an `Outer` object there is no chance of an `Inner` object.** The
-  inner class object is **strongly associated** with the outer class object.
-- `Nested` is static, so **without an `Outer` object there may well be a `Nested` object.** It is
-  **not strongly associated** with the outer class at all.
+- `Inner` is non-static, so **without an `Outer` object there is no chance of an `Inner` object.** The inner class object is **strongly associated** with the outer class object.
+- `Nested` is static, so **without an `Outer` object there may well be a `Nested` object.** It is **not strongly associated** with the outer class at all.
 
-> **That is why the word is *nested* rather than *inner*.** With a static nested class you have
-> simply taken one class and put it inside another — there is **no strong association** between them.
-> With a genuine inner class, the inner one is always inner: outer first, then inner.
+> **That is why the word is nested rather than inner.** With a static nested class you have simply taken one class and put it inside another — there is **no strong association** between them. With a genuine inner class, the inner one is always inner: outer first, then inner.
 
 ```mermaid
 flowchart TB
@@ -268,8 +228,7 @@ flowchart TB
     end
 ```
 
-> [!important] **This single distinction generates every difference in the table below.** Do not
-> memorise four rows; memorise *strongly associated or not* and derive them.
+> [!important] **This single distinction generates every difference in the table below.** Do not memorise four rows; memorise **strongly associated or not** and derive them.
 
 ## Creating one — no outer object required
 
@@ -288,9 +247,7 @@ class Outer {
 }
 ```
 
-Compare that with note `01`'s `Outer.Inner i = o.new Inner();` — all the awkward syntax is gone,
-because there is nothing to attach to. Within the same class you can reach a static member directly,
-without even the class name.
+Compare that with note `01`'s `Outer.Inner i = o.new Inner();` — all the awkward syntax is gone, because there is nothing to attach to. Within the same class you can reach a static member directly, without even the class name.
 
 Measured on JDK 25:
 
@@ -298,8 +255,7 @@ Measured on JDK 25:
 static nested class method
 ```
 
-**From outside the outer class**, you need the class name as a qualifier, exactly as with any other
-static member:
+**From outside the outer class**, you need the class name as a qualifier, exactly as with any other static member:
 
 ```java
 Outer.Nested n = new Outer.Nested();
@@ -313,14 +269,11 @@ Measured on JDK 25 — prints the same line. And note the two forms side by side
 | normal inner class | `Outer.Inner i = o.new Inner();` — an outer **object** first |
 | static nested class | `Outer.Nested n = new Outer.Nested();` — the outer **class name** only |
 
-The generated class file is still `Outer$Nested.class` — the `$` convention from note `01` does not
-change.
+The generated class file is still `Outer$Nested.class` — the `$` convention from note `01` does not change.
 
 ## Static members, main, and running it directly
 
-Note `01` established that a normal inner class cannot hold static members, because you cannot touch
-it directly. **A static nested class you *can* touch directly** — so static members are fine,
-including `main`.
+Note `01` established that a normal inner class cannot hold static members, because you cannot touch it directly. **A static nested class you can touch directly** — so static members are fine, including `main`.
 
 ```java
 class Test {
@@ -346,8 +299,7 @@ $ java Test$Nested
 static nested class main method
 ```
 
-> **In a static nested class we can declare static members including a `main` method, and hence we
-> can invoke a static nested class directly from the command prompt.**
+> **In a static nested class we can declare static members including a `main` method, and hence we can invoke a static nested class directly from the command prompt.**
 
 ## Which outer members it can reach
 
@@ -375,11 +327,9 @@ error: non-static variable x cannot be referenced from a static context
                                ^
 ```
 
-> **From a static nested class we can access only the static members of the outer class directly. We
-> cannot access non-static members.**
+> **From a static nested class we can access only the static members of the outer class directly. We cannot access non-static members.**
 
-Contrast with note `02`: from a *normal* inner class, **both** static and non-static members are
-reachable.
+Contrast with note `02`: from a **normal** inner class, **both** static and non-static members are reachable.
 
 ---
 
@@ -392,19 +342,11 @@ The summary table, and every row traces back to the association point.
 | **1. Existence** | without an outer class object there is **no chance** of an inner class object — **strongly associated** | without an outer class object there **may** be a nested class object — **not strongly associated** |
 | **2. Outer members reachable** | **both** static and non-static, directly | **only static** |
 
-**Two rows, and they are the same fact seen from two sides.** A normal inner class always has an
-enclosing instance, so it can reach that instance's members. A static nested class has none, so it
-cannot.
+**Two rows, and they are the same fact seen from two sides.** A normal inner class always has an enclosing instance, so it can reach that instance's members. A static nested class has none, so it cannot.
 
-> [!important] **Older material gives four rows, and the extra two no longer separate the two
-> constructs.** They are *"a normal inner class cannot declare static members"* and *"a normal inner
-> class cannot declare `main`, and so cannot be run from the command prompt"*. Both were true through
-> Java 15; **Java 16 permitted static members in inner classes**, so a normal inner class can now hold
-> statics *and* a `main`. Measured on JDK 25, `java Outer$Inner` on an inner class carrying a `main`
-> runs it — see note `01`.
+> [!important] **Older material gives four rows, and the extra two no longer separate the two constructs.** They are a normal inner class cannot declare static members and a normal inner class cannot declare `main`, and so cannot be run from the command prompt. Both were true through Java 15; **Java 16 permitted static members in inner classes**, so a normal inner class can now hold statics **and** a `main`. Measured on JDK 25, `java Outer$Inner` on an inner class carrying a `main` runs it — see note `01`.
 >
-> If you are asked for the difference, lead with the two rows above: **the association rule and the
-> access rule.**
+> If you are asked for the difference, lead with the two rows above: **the association rule and the access rule.**
 
 ---
 
@@ -422,7 +364,7 @@ cannot.
 | Best suited to | **GUI applications, event handling** |
 | Listeners are | **interfaces**; events are **classes** |
 | A static nested class is | an inner class declared with **`static`** |
-| Why "nested" and not "inner" | it is **not strongly associated** with the outer class object |
+| Why nested and not inner | it is **not strongly associated** with the outer class object |
 | Creating one | `Outer.Nested n = new Outer.Nested();` — **no outer object** |
 | Static members and `main` | ✅ allowed — it can be run from the command prompt |
 | Outer members it can reach | **only static** ones |

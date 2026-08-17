@@ -15,9 +15,7 @@ The first of the two legacy map classes.
 | **Every method** | **synchronized** → the object is **thread safe** |
 | **Best choice for** | **search** operations |
 
-> [!info] **The class and its data structure share a name.** *"The underlying data structure for
-> `Hashtable` is hash table only."* Hash table is a standard data structure; Java's class is
-> implemented on it and took the name.
+> [!info] **The class and its data structure share a name.** The underlying data structure for `Hashtable` is hash table only. Hash table is a standard data structure; Java's class is implemented on it and took the name.
 
 ## `null` is banned outright
 
@@ -30,8 +28,7 @@ null KEY   -> NullPointerException
 
 > **`null` — such a type of story is not applicable for `Hashtable`**, for either the key or the value.
 
-> [!important] **This is the sharpest `HashMap` vs `Hashtable` difference after synchronization**, and
-> it is asked directly:
+> [!important] **This is the sharpest `HashMap` vs `Hashtable` difference after synchronization**, and it is asked directly:
 >
 > | | `HashMap` | `Hashtable` |
 > |---|---|---|
@@ -53,11 +50,9 @@ Hashtable h = new Hashtable(int initialCapacity, float fillRatio);
 Hashtable h = new Hashtable(Map m);
 ```
 
-> [!important] **Default initial capacity is 11, not 16.** `HashSet`, `HashMap` and `LinkedHashMap` all
-> default to **16**; `Hashtable` defaults to **11**. The fill ratio is **0.75** in every case.
+> [!important] **Default initial capacity is 11, not 16.** `HashSet`, `HashMap` and `LinkedHashMap` all default to **16**; `Hashtable` defaults to **11**. The fill ratio is **0.75** in every case.
 >
-> **This is a favourite exam trip-up.** The odd number is a leftover from 1.0, when a prime capacity
-> was thought to spread hash codes more evenly.
+> **This is a favourite exam trip-up.** The odd number is a leftover from 1.0, when a prime capacity was thought to spread hash codes more evenly.
 
 Confirmed on JDK 25: **4** constructors, and `Hashtable`'s superclass is **`Dictionary`**.
 
@@ -79,10 +74,7 @@ class Temper {
 }
 ```
 
-> [!info] **Both overrides exist to make the internals observable.** `hashCode()` normally returns
-> something unpredictable from `Object`, so **we override it to return a number we chose** — now we
-> know exactly where each key should land. `toString()` prints that number, so the output is readable.
-> `i + ""` converts the `int` to a `String`, because `toString()` must return a `String`.
+> [!info] **Both overrides exist to make the internals observable.** `hashCode()` normally returns something unpredictable from `Object`, so **we override it to return a number we chose** — now we know exactly where each key should land. `toString()` prints that number, so the output is readable. `i + ""` converts the `int` to a `String`, because `toString()` must return a `String`.
 
 ## The program
 
@@ -105,8 +97,7 @@ class HashtableDemo {
 
 ## Where each entry lands
 
-**Default capacity 11 means 11 buckets, numbered 0 to 10.** A key with hash code *n* goes to bucket
-**`n % 11`**:
+**Default capacity 11 means 11 buckets, numbered 0 to 10.** A key with hash code **n** goes to bucket **`n % 11`**:
 
 | Key | hash code | bucket | |
 |---|---|---|---|
@@ -131,8 +122,7 @@ bucket  1  |  23=E
 bucket  0  |
 ```
 
-> **Within a bucket, multiple entries can be stored — no problem at all.** That is what a collision
-> is, and it is handled rather than being an error.
+> **Within a bucket, multiple entries can be stored — no problem at all.** That is what a collision is, and it is handled rather than being an error.
 
 ## The printing rule
 
@@ -179,25 +169,15 @@ Measured on JDK 25:
 
 **Plain descending order**, because nothing collides and the buckets are read top to bottom.
 
-> [!important] **Three runs, three different orders, same six entries.** The order out of a hash-based
-> collection is a function of **the hash codes** and **the capacity** — change either and the output
-> changes. **This is the proof behind "insertion order is not preserved"**, and it is why note `07`
-> refused to predict a `HashSet`'s order.
+> [!important] **Three runs, three different orders, same six entries.** The order out of a hash-based collection is a function of **the hash codes** and **the capacity** — change either and the output changes. **This is the proof behind insertion order is not preserved**, and it is why note `07` refused to predict a `HashSet`'s order.
 >
-> All three outputs reproduce exactly on JDK 25, a decade after the recording — the bucket mechanics
-> have not moved.
+> All three outputs reproduce exactly on JDK 25, a decade after the recording — the bucket mechanics have not moved.
 
-> [!question]- **Deep dive — what modern `HashMap` does that this model does not show.** Worth knowing,
-> because it is a common follow-up question.
+> [!question]- **Deep dive — what modern `HashMap` does that this model does not show.** Worth knowing, because it is a common follow-up question.
 >
-> The bucket model above is accurate, and since **Java 8** `HashMap` adds one refinement: when a single
-> bucket accumulates **8 or more** entries (`TREEIFY_THRESHOLD = 8`, visible in the JDK source), that
-> bucket's linked list is converted into a **red-black tree**.
+> The bucket model above is accurate, and since **Java 8** `HashMap` adds one refinement: when a single bucket accumulates **8 or more** entries (`TREEIFY_THRESHOLD = 8`, visible in the JDK source), that bucket's linked list is converted into a **red-black tree**.
 >
-> **Why:** a bucket with *n* colliding entries costs O(n) to search as a list, but O(log n) as a tree.
-> With a bad `hashCode()` that sends everything to one bucket, the difference between O(n) and
-> O(log n) is the difference between a hung server and a slow one — this change was made partly as a
-> defence against hash-collision denial-of-service attacks.
+> **Why:** a bucket with **n** colliding entries costs O(n) to search as a list, but O(log n) as a tree. With a bad `hashCode()` that sends everything to one bucket, the difference between O(n) and O(log n) is the difference between a hung server and a slow one — this change was made partly as a defence against hash-collision denial-of-service attacks.
 >
 > **It shrinks back** to a list at `UNTREEIFY_THRESHOLD = 6` when entries are removed.
 >
@@ -207,7 +187,7 @@ Measured on JDK 25:
 
 # `Properties`
 
-> *"The most valuable concept, especially for our real-time coding."*
+> The most valuable concept, especially for our real-time coding.
 
 ## The problem it solves
 
@@ -218,8 +198,7 @@ String user = "scott";
 String password = "tiger";
 ```
 
-**The client requires credentials to change every three months.** To change `tiger` to `tiger123` you
-must edit the source, and then:
+**The client requires credentials to change every three months.** To change `tiger` to `tiger123` you must edit the source, and then:
 
 ```mermaid
 flowchart LR
@@ -237,13 +216,11 @@ flowchart LR
 
 ## What makes `Properties` different from any other map
 
-> **In a normal map — `HashMap`, `Hashtable`, `TreeMap` — the key and value can be any type. But in
-> `Properties`, both the key and the value should be `String` type only.**
+> **In a normal map — `HashMap`, `Hashtable`, `TreeMap` — the key and value can be any type. But in `Properties`, both the key and the value should be `String` type only.**
 
 **Because a properties file is text**, and everything read out of it is text.
 
-Confirmed on JDK 25: `Properties`' superclass is **`Hashtable`** — so it is a map by inheritance, with
-the string restriction layered on top.
+Confirmed on JDK 25: `Properties`' superclass is **`Hashtable`** — so it is a map by inheritance, with the string restriction layered on top.
 
 ## The methods
 
@@ -259,12 +236,9 @@ Properties p = new Properties();     // the only constructor you need
 | `void load(InputStream is)` | **read** the file into the object |
 | `void store(OutputStream os, String comment)` | **write** the object back to a file |
 
-> [!info] **`setProperty` behaves exactly like `put`** — if the name already exists, the old value is
-> replaced and **returned**; if it is new, it returns `null`. Same contract as note `11`.
+> [!info] **`setProperty` behaves exactly like `put`** — if the name already exists, the old value is replaced and **returned**; if it is new, it returns `null`. Same contract as note `11`.
 
-> [!info] **`propertyNames()` returns an `Enumeration`, not a `Set`.** That is the legacy cursor from
-> note `05` — `Properties` is a 1.0 class, so it hands you a 1.0 cursor. Modern code uses
-> `stringPropertyNames()`, which returns a `Set<String>`.
+> [!info] **`propertyNames()` returns an `Enumeration`, not a `Set`.** That is the legacy cursor from note `05` — `Properties` is a 1.0 class, so it hands you a 1.0 cursor. Modern code uses `stringPropertyNames()`, which returns a `Set<String>`.
 
 ## The demo
 
@@ -325,14 +299,9 @@ user=scott2
 | `store()` | writes it back, with **your comment and a timestamp** as `#` lines |
 | the escaped `\:` | `store()` **escapes** the characters that are special in the format |
 
-> [!info] **`store()` escapes on the way out and `load()` unescapes on the way in.** The colons in the
-> JDBC URL come back written as `\:` — that is the format protecting itself, and reading the file with
-> `load()` returns the original string. **Do not hand-edit those escapes out.**
+> [!info] **`store()` escapes on the way out and `load()` unescapes on the way in.** The colons in the JDBC URL come back written as `\:` — that is the format protecting itself, and reading the file with `load()` returns the original string. **Do not hand-edit those escapes out.**
 
-> [!important] **`Properties` is the one legacy class you will still use.** It is legacy by ancestry —
-> a `Hashtable` subclass from 1.0 — but reading a `.properties` file is exactly what it is for, and
-> nothing replaced it. **Do not put it in the same sentence as `Vector` and `Stack`** when asked what
-> to avoid.
+> [!important] **`Properties` is the one legacy class you will still use.** It is legacy by ancestry — a `Hashtable` subclass from 1.0 — but reading a `.properties` file is exactly what it is for, and nothing replaced it. **Do not put it in the same sentence as `Vector` and `Stack`** when asked what to avoid.
 
 ---
 
@@ -346,12 +315,12 @@ user=scott2
 | Default initial capacity | **11** — not 16 |
 | Default fill ratio | **0.75** |
 | `Hashtable`'s superclass | **`Dictionary`** |
-| A key with hash code *n* goes to | bucket **`n % capacity`** |
+| A key with hash code **n** goes to | bucket **`n % capacity`** |
 | Two keys in one bucket | a **collision** — both are stored |
 | Printing order | **top to bottom**, and **right to left** within a bucket |
 | Change the `hashCode()` | the output order changes |
 | Change the capacity | the output order changes |
-| Which is why | **"insertion order is not preserved"** is unpredictable, not merely different |
+| Which is why | **insertion order is not preserved** is unpredictable, not merely different |
 | Modern `HashMap` extra | a bucket of **8+** entries becomes a **red-black tree** |
 | `Properties` exists because | anything that **changes frequently** must not be hard-coded |
 | The cost of hard-coding | recompile → rebuild → redeploy → restart |

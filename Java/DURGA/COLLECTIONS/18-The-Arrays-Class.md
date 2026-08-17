@@ -11,10 +11,7 @@ The second utility class, and the last topic in the chapter.
 | `Collections` | **collection** objects |
 | **`Arrays`** | **array** objects |
 
-> [!info] **This class exists to patch note `01`'s third limitation.** Arrays have no underlying data
-> structure, so *"for every requirement we have to write the code explicitly"* — you write the search
-> logic, you write the sort logic. **`Arrays` fills that gap.** *"Most of the people don't know about
-> this class, that's why whenever array sorting is required they are writing the sort logic manually."*
+> [!info] **This class exists to patch note `01`'s third limitation.** Arrays have no underlying data structure, so for every requirement we have to write the code explicitly — you write the search logic, you write the sort logic. **`Arrays` fills that gap.** Most of the people don't know about this class, that's why whenever array sorting is required they are writing the sort logic manually.
 
 **Three utilities to cover:** sorting, searching, and converting an array to a list.
 
@@ -36,14 +33,9 @@ public static void sort(Object[] o, Comparator c)    // 3
 | **2** | an **object** array | **default natural** sorting order |
 | **3** | an **object** array | **customised** sorting order |
 
-> [!important] **There is no `sort(primitive[], Comparator)` — and the reason is worth knowing.**
-> `Comparator`'s method is `compare(Object, Object)`, so **it can only receive objects.** A primitive
-> cannot be passed where an `Object` is expected, so customised sorting is structurally impossible for
-> a primitive array.
+> [!important] **There is no `sort(primitive[], Comparator)` — and the reason is worth knowing.** `Comparator`'s method is `compare(Object, Object)`, so **it can only receive objects.** A primitive cannot be passed where an `Object` is expected, so customised sorting is structurally impossible for a primitive array.
 >
-> > **We can sort primitive arrays only based on default natural sorting order, whereas we can sort
-> > object arrays either based on default natural sorting order or based on customised sorting
-> > order.**
+> > **We can sort primitive arrays only based on default natural sorting order, whereas we can sort object arrays either based on default natural sorting order or based on customised sorting order.**
 >
 > **The workaround, if you need it:** use `Integer[]` instead of `int[]`, and the third method applies.
 
@@ -81,9 +73,7 @@ object after     = [A, B, Z]
 object w/ comp   = [Z, B, A]
 ```
 
-> [!info] **Printing an array needs help.** `System.out.println(a)` on an array prints something like
-> `[I@1b6d3586` — arrays do not override `toString()`. Use a **for-each loop**, or
-> **`Arrays.toString(a)`**, which is another of this class's utility methods.
+> [!info] **Printing an array needs help.** `System.out.println(a)` on an array prints something like `[I@1b6d3586` — arrays do not override `toString()`. Use a **for-each loop**, or **`Arrays.toString(a)`**, which is another of this class's utility methods.
 
 ---
 
@@ -99,8 +89,7 @@ public static int binarySearch(Object[] o, Object target, Comparator c)
 
 **The same three-way split as `sort`, for the same reason.**
 
-> **All rules of the `Arrays` class binary search methods are exactly the same as the `Collections`
-> class binary search methods.**
+> **All rules of the `Arrays` class binary search methods are exactly the same as the `Collections` class binary search methods.**
 
 Which means everything from note `17` applies unchanged:
 
@@ -133,18 +122,13 @@ binarySearch(14) = -5    <- unsuccessful: 14 would go at index 4
 public static List asList(Object[] a)
 ```
 
-> **Strictly speaking, this method won't create an independent list object. For the existing array we
-> are getting a list VIEW.**
+> **Strictly speaking, this method won't create an independent list object. For the existing array we are getting a list VIEW.**
 
-> [!info] **The database analogy he uses.** *"In your database somewhere you may have a table and a
-> view. A view is a logical thing; a table is physical."* One table can have many views, and a view
-> holds no data of its own — it is a way of looking at the table.
+> [!info] **The database analogy he uses.** In your database somewhere you may have a table and a view. A view is a logical thing; a table is physical. One table can have many views, and a view holds no data of its own — it is a way of looking at the table.
 >
-> **`asList` is the same idea.** The underlying object is still the **array**. You are given a `List`
-> reference through which to look at it. **Nothing was copied.**
+> **`asList` is the same idea.** The underlying object is still the **array**. You are given a `List` reference through which to look at it. **Nothing was copied.**
 >
-> Contrast the other direction: `Collection.toArray()` (note `03`) really does build a new array —
-> hence `to`, not `as`.
+> Contrast the other direction: `Collection.toArray()` (note `03`) really does build a new array — hence `to`, not `as`.
 
 ## The view goes both ways
 
@@ -164,9 +148,7 @@ l.set(1, "CHANGED-VIA-LIST");
 after list write  = [CHANGED-VIA-ARRAY, CHANGED-VIA-LIST, B]   ← seen in the ARRAY
 ```
 
-> **By using the array reference, if we perform any change, that change will be reflected in the list.
-> And by using the list reference, if we perform any change, that change will be reflected in the
-> array.**
+> **By using the array reference, if we perform any change, that change will be reflected in the list. And by using the list reference, if we perform any change, that change will be reflected in the array.**
 
 **There is only one collection of data here** — the array — with two references pointing at it.
 
@@ -180,20 +162,15 @@ remove() on asList -> UnsupportedOperationException
 set()    on asList -> OK
 ```
 
-> [!warning] **`Arrays.asList()` gives you a list you cannot grow or shrink.** `set()` works because
-> writing to a slot is something an array can do. **`add()` and `remove()` throw
-> `UnsupportedOperationException`**, because an array is fixed in size — note `01`'s very first
-> limitation, showing through the `List` interface.
+> [!warning] **`Arrays.asList()` gives you a list you cannot grow or shrink.** `set()` works because writing to a slot is something an array can do. **`add()` and `remove()` throw `UnsupportedOperationException`**, because an array is fixed in size — note `01`'s very first limitation, showing through the `List` interface.
 >
-> The class you get back is **`java.util.Arrays$ArrayList`** — an inner class of `Arrays`, **not
-> `java.util.ArrayList`.** They share a name and nothing else.
+> The class you get back is **`java.util.Arrays$ArrayList`** — an inner class of `Arrays`, **not `java.util.ArrayList`.** They share a name and nothing else.
 >
 > **To get a real, growable list:**
 > ```java
 > List<String> real = new ArrayList<>(Arrays.asList(arr));
 > ```
-> That is the inter-conversion constructor from note `03`, and it **copies** — so the two are then
-> independent.
+> That is the inter-conversion constructor from note `03`, and it **copies** — so the two are then independent.
 
 ---
 

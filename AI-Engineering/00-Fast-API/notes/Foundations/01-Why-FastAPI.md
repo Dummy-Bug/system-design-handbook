@@ -14,7 +14,7 @@ All three are genuinely good. None of them is a mistake. But they are not interc
 
 ### Django's completeness is also its cost
 
-Django hands you a great deal out of the box — an admin interface, a prescribed project layout, its own opinion about how the pieces fit together. If you want exactly the application Django expects you to build, this is a gift.
+Django hands you a great deal out of the box — an admin interface, a prescribed project layout, **its own opinion about how the pieces fit together**. If you want exactly the application Django expects you to build, this is a gift.
 
 If you want a backend that speaks JSON to whatever client shows up, most of it is weight you carry and never use. And the opinions are not optional — you build Django's way or you fight it.
 
@@ -42,7 +42,7 @@ That sounds like less, and it is. That is the point.
 
 ---
 
-## What "pure backend" buys you
+## What **pure backend** buys you
 
 Because FastAPI produces only an API, whatever consumes that API is entirely your choice:
 

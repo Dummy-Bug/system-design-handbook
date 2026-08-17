@@ -57,8 +57,7 @@ The same two rules produce the last two failures: **the class comes first**, and
 What happens when a generic object reaches code that knows nothing about generics?
 
 
-> If we send a **generic** object to a **non-generic** area, it starts behaving like a **non-generic** object.
-> If we send a **non-generic** object to a **generic** area, it starts behaving like a **generic** object.
+> If we send a **generic** object to a **non-generic** area, it starts behaving like a **non-generic** object. If we send a **non-generic** object to a **generic** area, it starts behaving like a **generic** object.
 
 > That is, **the location in which the object is present decides its behaviour.**
 
@@ -106,7 +105,7 @@ Inside `m1` the parameter is a **raw** `ArrayList`, so `10`, `10.5` and `true` a
 
 > **Generics are applicable only at compile time. At runtime there is no such concept.**
 
-The argument is short. Generics exist to give type safety and to remove casts — and **both of those are compiler activities**. If you add a wrong type, the *compiler* objects. If you skip a cast, the *compiler* objects. Nothing in either job needs to survive into execution.
+The argument is short. Generics exist to give type safety and to remove casts — and **both of those are compiler activities**. If you add a wrong type, the **compiler** objects. If you skip a cast, the **compiler** objects. Nothing in either job needs to survive into execution.
 
 So, as the **last step of compilation, the generic syntax is removed**, and the JVM never sees it. This is **erasure**.
 
@@ -214,7 +213,7 @@ public void methodOne(ArrayList l) {}
 
 Two methods, one signature — rejected at step 3.
 
-> [!important] **The word `erasure` in the message is the definition.** An **erasure** is a method signature *after the generic syntax has been removed*. Both methods have the same erasure, so both cannot exist.
+> [!important] **The word `erasure` in the message is the definition.** An **erasure** is a method signature **after the generic syntax has been removed**. Both methods have the same erasure, so both cannot exist.
 >
 > And note what this proves: if generics survived to runtime, these would be genuinely different methods and the code would be fine. **The error exists only because the syntax is erased** — which is the point being demonstrated.
 

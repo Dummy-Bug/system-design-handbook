@@ -1,10 +1,8 @@
 # `SortedMap`
 
-> **`SortedMap` is the child interface of `Map`. If we want to represent a group of key–value pairs
-> according to some sorting order of keys, then we should go for `SortedMap`.**
+> **`SortedMap` is the child interface of `Map`. If we want to represent a group of key–value pairs according to some sorting order of keys, then we should go for `SortedMap`.**
 
-> [!important] **Sorting is based on the key, never on the value.** This is the same rule as
-> `SortedSet` in note `07`, and it is the one people forget. The values are along for the ride.
+> [!important] **Sorting is based on the key, never on the value.** This is the same rule as `SortedSet` in note `07`, and it is the one people forget. The values are along for the ride.
 
 ## The six specific methods
 
@@ -25,14 +23,9 @@
 
 All measured on JDK 25.
 
-> [!important] **The same boundary rules as `SortedSet`, and they are still asymmetric.**
-> **`headMap` excludes** its argument, **`tailMap` includes** it, and **`subMap` includes the start and
-> excludes the end.** If you learned them for `SortedSet`, you already know them here — only the method
-> names gained `Map` instead of `Set`.
+> [!important] **The same boundary rules as `SortedSet`, and they are still asymmetric.** **`headMap` excludes** its argument, **`tailMap` includes** it, and **`subMap` includes the start and excludes the end.** If you learned them for `SortedSet`, you already know them here — only the method names gained `Map` instead of `Set`.
 
-> [!info] **`firstKey()` / `lastKey()` rather than `first()` / `last()`.** The name says *key* because
-> that is what is returned — not the entry, and not the value. To get the value you still have to
-> `get()` it.
+> [!info] **`firstKey()` / `lastKey()` rather than `first()` / `last()`.** The name says **key** because that is what is returned — not the entry, and not the value. To get the value you still have to `get()` it.
 
 ---
 
@@ -46,21 +39,15 @@ All measured on JDK 25.
 | **Duplicate values** | ✅ allowed |
 | **Sorting** | **default natural** or **customised** |
 
-> [!info] **A red-black tree is a self-balancing binary search tree.** "Balanced tree" was the answer
-> given for `TreeSet` in note `08`; red-black is the specific kind. The colouring is a bookkeeping
-> trick that keeps the tree from degenerating into a list, guaranteeing **O(log n)** lookup, insert and
-> delete. **`TreeSet` is implemented on top of `TreeMap`**, which is why the two chapters read the same.
+> [!info] **A red-black tree is a self-balancing binary search tree.** Balanced tree was the answer given for `TreeSet` in note `08`; red-black is the specific kind. The colouring is a bookkeeping trick that keeps the tree from degenerating into a list, guaranteeing **O(log n)** lookup, insert and delete. **`TreeSet` is implemented on top of `TreeMap`**, which is why the two chapters read the same.
 
 ## Keys are restricted; values are not
 
-> **If we are depending on default natural sorting order, the keys should be homogeneous and
-> comparable, otherwise we will get a `ClassCastException`.**
+> **If we are depending on default natural sorting order, the keys should be homogeneous and comparable, otherwise we will get a `ClassCastException`.**
 >
-> **If we are defining our own sorting by `Comparator`, then the keys need not be homogeneous and
-> comparable** — we can take heterogeneous, non-comparable objects.
+> **If we are defining our own sorting by `Comparator`, then the keys need not be homogeneous and comparable** — we can take heterogeneous, non-comparable objects.
 
-> **Whether we are depending on default natural sorting order or customised sorting order, there are
-> no restrictions for values.** Heterogeneous, non-comparable — no problem at all.
+> **Whether we are depending on default natural sorting order or customised sorting order, there are no restrictions for values.** Heterogeneous, non-comparable — no problem at all.
 
 Measured on JDK 25:
 
@@ -69,10 +56,7 @@ heterogeneous keys    -> ClassCastException
 heterogeneous VALUES  -> OK
 ```
 
-> [!important] **The asymmetry has one cause: only keys are sorted.** A key has to be compared against
-> other keys to find its place in the tree, so it must be comparable. **A value is never compared with
-> anything** — it is just carried along — so nothing is required of it. Every restriction in this class
-> falls out of that one sentence.
+> [!important] **The asymmetry has one cause: only keys are sorted.** A key has to be compared against other keys to find its place in the tree, so it must be comparable. **A value is never compared with anything** — it is just carried along — so nothing is required of it. Every restriction in this class falls out of that one sentence.
 
 ---
 
@@ -89,23 +73,17 @@ Measured on JDK 25:
 
 > **`null` is not allowed as a key in a `TreeMap` — not even as the first entry.**
 
-**The reasoning is unchanged:** inserting a key means comparing it against the keys already there to
-decide where it goes, and comparing anything with `null` throws.
+**The reasoning is unchanged:** inserting a key means comparing it against the keys already there to decide where it goes, and comparing anything with `null` throws.
 
-> [!important] **Older material makes the first entry a special case, and it was true through Java 6.**
-> With nothing to compare against, `null` used to slip in as the first key. **Java 7 closed it**, using
-> the same `compare(key, key)` type-and-null check in `TreeMap` that note `08` quoted from the source.
-> From 1.7 onward, *"`null` — such a type of story is not applicable for a `TreeMap`."*
+> [!important] **Older material makes the first entry a special case, and it was true through Java 6.** With nothing to compare against, `null` used to slip in as the first key. **Java 7 closed it**, using the same `compare(key, key)` type-and-null check in `TreeMap` that note `08` quoted from the source. From 1.7 onward, `null` — such a type of story is not applicable for a `TreeMap`.
 
-> [!info] **`null` *values* are fine**, at any time. Only keys participate in comparison — the same
-> asymmetry as above. Measured on JDK 25, a `TreeMap` accepts `put(3, null)` without complaint.
+> [!info] **`null` values are fine**, at any time. Only keys participate in comparison — the same asymmetry as above. Measured on JDK 25, a `TreeMap` accepts `put(3, null)` without complaint.
 
 ---
 
 # The four constructors
 
-**Identical in shape to `TreeSet`'s** — which is exactly what note `08` promised: *"same terminology,
-copy paste."*
+**Identical in shape to `TreeSet`'s** — which is exactly what note `08` promised: same terminology, copy paste.
 
 ```java
 TreeMap t = new TreeMap();                  // 1 — default natural sorting order
@@ -144,9 +122,7 @@ Measured on JDK 25:
 {100=Z, 101=X, 103=Y, 104=106}
 ```
 
-**Keys ascending**, which is default natural sorting order for numbers. Note the last entry: the key
-is an `Integer` and the value is also an `Integer` — **values have no type restriction**, so mixing
-`String` and `Integer` values is fine.
+**Keys ascending**, which is default natural sorting order for numbers. Note the last entry: the key is an `Integer` and the value is also an `Integer` — **values have no type restriction**, so mixing `String` and `Integer` values is fine.
 
 **Adding a `String` key to this map:**
 
@@ -187,12 +163,9 @@ Measured on JDK 25:
 {ZZZ=30, XXX=10, LLL=40, AAA=20}
 ```
 
-**Reverse alphabetical**, because `s2.compareTo(s1)` swaps the arguments — variant 5 from note `09`'s
-table.
+**Reverse alphabetical**, because `s2.compareTo(s1)` swaps the arguments — variant 5 from note `09`'s table.
 
-> [!info] **`comparator()` now returns an object, not `null`.** Measured on JDK 25: the default-order
-> map returns `null` from `comparator()`, and this one returns **a `Comparator` object**. That is how
-> you interrogate a map you did not build to find out whether it carries a custom ordering.
+> [!info] **`comparator()` now returns an object, not `null`.** Measured on JDK 25: the default-order map returns `null` from `comparator()`, and this one returns **a `Comparator` object**. That is how you interrogate a map you did not build to find out whether it carries a custom ordering.
 
 ---
 

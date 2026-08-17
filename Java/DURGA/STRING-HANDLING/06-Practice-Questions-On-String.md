@@ -139,7 +139,7 @@ public class Test {
 
 Two ways to get this wrong, and the question is built to offer both.
 
-**The reasoning that produces `-1`:** *"`trim()` removed the spaces, so `indexOf(' ')` finds none and returns −1."* Wrong twice over — `trim()`'s result was discarded **and** the space is in the middle, so it was never a candidate for removal anyway.
+**The reasoning that produces `-1`:** `trim()` removed the spaces, so `indexOf(' ')` finds none and returns −1. Wrong twice over — `trim()`'s result was discarded **and** the space is in the middle, so it was never a candidate for removal anyway.
 
 The string is untouched. Index the characters:
 
@@ -213,7 +213,7 @@ So `s1` and `s2` are in different areas with different content — different cas
 if (s1.toLowerCase() == s2.toLowerCase())
 ```
 
-Both sides become `"java"`, so it *looks* like it should be true. But `==` compares references, so you have to ask what object each side actually produced — which is the reuse rule from note `05`:
+Both sides become `"java"`, so it **looks** like it should be true. But `==` compares references, so you have to ask what object each side actually produced — which is the reuse rule from note `05`:
 
 - **`s1.toLowerCase()`** — `s1` is `"Java"`. Lowercasing it **changes the content**, so a **new object is created in the heap**.
 - **`s2.toLowerCase()`** — `s2` is already `"java"`. **No change**, so the **existing object is reused**.
@@ -236,4 +236,4 @@ Two different objects with identical content, compared with `==` → **`false`**
 | 4 | `trim()` ignores the middle, result discarded | answering `-1` |
 | 5 | `==` is reference comparison; change → new object | answering D |
 
-> [!important] **Two habits answer four of the five.** First, whenever a `String` method is called without assigning the result, **cross the line out** — it did nothing. Second, whenever you see `==`, stop comparing contents and ask *which object is on each side.*
+> [!important] **Two habits answer four of the five.** First, whenever a `String` method is called without assigning the result, **cross the line out** — it did nothing. Second, whenever you see `==`, stop comparing contents and ask which object is on each side.

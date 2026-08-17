@@ -1,7 +1,6 @@
 # The plan
 
-Part `06` left three constraints: the password stays `transient`, the file still holds `null`, and the
-receiver still gets `Anushka`. **Here is the trick that satisfies all three.**
+Part `06` left three constraints: the password stays `transient`, the file still holds `null`, and the receiver still gets `Anushka`. **Here is the trick that satisfies all three.**
 
 ## At the sender side
 
@@ -12,9 +11,7 @@ String encryptedPassword = "123" + password;      // -> "123Anushka"
 // write encryptedPassword to the file, by hand
 ```
 
-**The encryption itself is not the point.** *"Do some modification — maybe reverse the password, add
-something, remove something, or execute some high-level security algorithm."* His is deliberately
-trivial: **prepend `123`.**
+**The encryption itself is not the point.** Do some modification — maybe reverse the password, add something, remove something, or execute some high-level security algorithm. His is deliberately trivial: **prepend `123`.**
 
 ## At the receiver side
 
@@ -25,8 +22,7 @@ trivial: **prepend `123`.**
 password = encrypted.substring(3);                // -> "Anushka"
 ```
 
-> *"Whatever extra thing you added, remove that. Whatever encryption you did, perform the reverse
-> operation."*
+> Whatever extra thing you added, remove that. Whatever encryption you did, perform the reverse operation.
 
 ```mermaid
 flowchart LR
@@ -35,8 +31,7 @@ flowchart LR
     T["password field<br/><b>transient</b> → null"] -.->|"still null in the file"| E
 ```
 
-**The `transient` field still writes `null`.** The real value travels **separately**, disguised — the
-mangoes and the polythene cover.
+**The `transient` field still writes `null`.** The real value travels **separately**, disguised — the mangoes and the polythene cover.
 
 ---
 
@@ -55,26 +50,21 @@ private void readObject(ObjectInputStream ois) throws Exception { }
 | **`writeObject`** | automatically, **at the time of serialization** | the extra work at the **sender** side |
 | **`readObject`** | automatically, **at the time of deserialization** | the extra work at the **receiver** side |
 
-> **`writeObject()` will be executed automatically by the JVM at the time of serialization. That's why
-> at the time of serialization, if we want to do any extra work, we have to define it in this method
-> only.**
+> **`writeObject()` will be executed automatically by the JVM at the time of serialization. That's why at the time of serialization, if we want to do any extra work, we have to define it in this method only.**
 
 **And the same sentence with the words swapped for `readObject()` and deserialization.**
 
 ## They are callback methods
 
-> **If any method will be executed automatically by the JVM, such a type of method is by default
-> considered a callback method.**
+> **If any method will be executed automatically by the JVM, such a type of method is by default considered a callback method.**
 
-**You never call `writeObject()` yourself.** You call `oos.writeObject(a1)` — a different method, on
-the stream — and the JVM calls yours.
+**You never call `writeObject()` yourself.** You call `oos.writeObject(a1)` — a different method, on the stream — and the JVM calls yours.
 
 ---
 
 # The signature is not negotiable
 
-> **Compulsorily the syntax should be like this only, because this is the JVM-understandable syntax.
-> Suppose instead of `private` I took `public` — the JVM may not call it.**
+> **Compulsorily the syntax should be like this only, because this is the JVM-understandable syntax. Suppose instead of `private` I took `public` — the JVM may not call it.**
 
 **He is right, and the failure mode is worse than an error.** Measured on JDK 25:
 
@@ -100,14 +90,9 @@ private void writeObject(OutputStream):
                                        <- nothing
 ```
 
-> [!warning] **Get the signature wrong and there is no error, no warning, and no exception — your
-> method simply never runs.** The program compiles, the program runs, and the password comes back
-> `null`. **This is the single nastiest bug in this topic**, because everything looks correct.
+> [!warning] **Get the signature wrong and there is no error, no warning, and no exception — your method simply never runs.** The program compiles, the program runs, and the password comes back `null`. **This is the single nastiest bug in this topic**, because everything looks correct.
 >
-> **The reason is that these methods are not overrides.** There is no interface declaring them —
-> `Serializable` has no methods at all. The JVM looks them up **reflectively, by exact name and exact
-> parameter type**, and requires them to be private and non-static. Anything else is not the method it
-> is looking for, so it finds nothing and carries on.
+> **The reason is that these methods are not overrides.** There is no interface declaring them — `Serializable` has no methods at all. The JVM looks them up **reflectively, by exact name and exact parameter type**, and requires them to be private and non-static. Anything else is not the method it is looking for, so it finds nothing and carries on.
 
 > [!important] **Two things make this detectable, and you should use both.**
 >
@@ -116,8 +101,7 @@ private void writeObject(OutputStream):
 > @Serial
 > private void writeObject(ObjectOutputStream oos) throws IOException { }
 > ```
-> It is the serialization equivalent of `@Override` — it tells the compiler *"this is meant to be one
-> of the magic methods, please check it."*
+> It is the serialization equivalent of `@Override` — it tells the compiler this is meant to be one of the magic methods, please check it.
 >
 > **2. Compile with `-Xlint:serial`.** Measured on JDK 25, against a deliberately `public` version:
 > ```
@@ -134,37 +118,27 @@ private void writeObject(ObjectOutputStream oos) throws IOException;
 private void readObject(ObjectInputStream ois)  throws IOException, ClassNotFoundException;
 ```
 
-**`throws Exception` works** — the exception list is not part of how the JVM finds the method — but the
-two above are the conventional forms and the ones `@Serial` expects.
+**`throws Exception` works** — the exception list is not part of how the JVM finds the method — but the two above are the conventional forms and the ones `@Serial` expects.
 
 ---
 
 # Which class do they go in?
 
-> *"In our previous example, how many classes are there? The `Account` class, and the demo class.
-> Where do we place these two methods?"*
+> In our previous example, how many classes are there? The `Account` class, and the demo class. Where do we place these two methods?
 
-> **Whichever object's serialization requires the extra work — in that corresponding class, define
-> these methods.**
+> **Whichever object's serialization requires the extra work — in that corresponding class, define these methods.**
 
-**We are serializing an `Account` object and the extra work is about the account's password**, so
-**both methods go inside `Account`**, not in the class holding `main`.
+**We are serializing an `Account` object and the extra work is about the account's password**, so **both methods go inside `Account`**, not in the class holding `main`.
 
-> *"While performing dog object serialization, if we have to do extra work, then in the `Dog` class we
-> have to define these methods."*
+> While performing dog object serialization, if we have to do extra work, then in the `Dog` class we have to define these methods.
 
-> [!info] **Each class in the graph gets its own pair.** These are per-class, not per-stream: when a
-> graph of objects is written, the JVM calls the `writeObject` of each class that has one, for its own
-> part of the object. **A `Dog` with a custom `writeObject` and a `Cat` with a custom `writeObject` will
-> both have theirs called.**
+> [!info] **Each class in the graph gets its own pair.** These are per-class, not per-stream: when a graph of objects is written, the JVM calls the `writeObject` of each class that has one, for its own part of the object. **A `Dog` with a custom `writeObject` and a `Cat` with a custom `writeObject` will both have theirs called.**
 
 ---
 
 # Where this is going
 
-**Everything is now in place except one thing:** these methods have to write the ordinary fields *too*,
-not just the extra value — otherwise `username` would be lost as well. **That is `defaultWriteObject()`,
-and part `08` puts the whole thing together as a running program.**
+**Everything is now in place except one thing:** these methods have to write the ordinary fields **too**, not just the extra value — otherwise `username` would be lost as well. **That is `defaultWriteObject()`, and part `08` puts the whole thing together as a running program.**
 
 ---
 

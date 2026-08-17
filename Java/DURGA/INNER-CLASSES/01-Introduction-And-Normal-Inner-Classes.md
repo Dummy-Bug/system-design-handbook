@@ -1,14 +1,10 @@
 # What an inner class is
 
-He opens with a warning. In the whole Core Java / OCJP syllabus there are **only two difficult
-topics**: **generics** and **inner classes**. Both bring new syntax at once, so both need clear
-clarity rather than familiarity. Inner classes is the relatively simpler of the two — *not that much
-dangerous than generics*.
+He opens with a warning. In the whole Core Java / OCJP syllabus there are **only two difficult topics**: **generics** and **inner classes**. Both bring new syntax at once, so both need clear clarity rather than familiarity. Inner classes is the relatively simpler of the two — **not that much dangerous than generics**.
 
 The definition is short:
 
-> Sometimes we can declare a class **inside another class**. Such types of classes are called
-> **inner classes**.
+> Sometimes we can declare a class **inside another class**. Such types of classes are called **inner classes**.
 
 ```java
 class Test {
@@ -23,65 +19,46 @@ class Test {
 
 # The history — why inner classes exist at all
 
-Java **1.0** arrived in **1995**, and Sun created an enormous hype around it: *a top-level, very
-simple, platform independent language — once Java 1.0 comes, all the remaining languages are going to
-be packed.*
+Java **1.0** arrived in **1995**, and Sun created an enormous hype around it: a top-level, very simple, platform independent language — once Java 1.0 comes, all the remaining languages are going to be packed.
 
-Worldwide programming experts waited for the day, and when it came they analysed the features and
-were very happy. Platform independent. Object oriented. Robust. Secured. Simple. A long list.
+Worldwide programming experts waited for the day, and when it came they analysed the features and were very happy. Platform independent. Object oriented. Robust. Secured. Simple. A long list.
 
 But they identified **two areas** where Java was not up to the mark:
 
-**Problem 1 — performance.** In 1995 C and C++ were the popular languages, and against them Java's
-performance was very, very low.
+**Problem 1 — performance.** In 1995 C and C++ were the popular languages, and against them Java's performance was very, very low.
 
-**Problem 2 — AWT.** The GUI concepts had an *n* number of bugs in them.
+**Problem 2 — AWT.** The GUI concepts had an **n** number of bugs in them.
 
-The experts went back to Sun: *why don't you fill this gap?* And Sun responded fast — **the 1.1
-version came just three months later**, targeting exactly those two problems:
+The experts went back to Sun: why don't you fill this gap? And Sun responded fast — **the 1.1 version came just three months later**, targeting exactly those two problems:
 
 | Problem | What 1.1 introduced |
 |---|---|
 | Performance | **JIT compilers** — just-in-time compilation |
 | AWT/GUI bugs | the **event handling** concept — listeners |
 
-> [!info] **His verdict on how well the first fix worked:** performance improved by *0.00001 percent* —
-> relatively, no improvement at all. And he adds that this is still the biggest problem with Java as
-> of 1.8. Take the sarcasm rather than the number; JIT is genuinely why Java performs as it does
-> today, but his point is that it did not close the gap with C in 1997.
+> [!info] **His verdict on how well the first fix worked:** performance improved by 0.00001 percent — relatively, no improvement at all. And he adds that this is still the biggest problem with Java as of 1.8. Take the sarcasm rather than the number; JIT is genuinely why Java performs as it does today, but his point is that it did not close the gap with C in 1997.
 
-**And inner classes came in as part of the second fix.** As part of event handling, Sun used a class
-inside a class for the first time.
+**And inner classes came in as part of the second fix.** As part of event handling, Sun used a class inside a class for the first time.
 
-> **The inner classes concept was introduced in the 1.1 version, to fix GUI bugs, as a part of event
-> handling. But because of the powerful features and benefits of inner classes, programmers slowly
-> started using them in regular coding also.**
+> **The inner classes concept was introduced in the 1.1 version, to fix GUI bugs, as a part of event handling. But because of the powerful features and benefits of inner classes, programmers slowly started using them in regular coding also.**
 
-So in the olden days inner classes were specific to GUI. These days it is an ordinary programming
-concept.
+So in the olden days inner classes were specific to GUI. These days it is an ordinary programming concept.
 
 ---
 
 # When to use an inner class
 
-This is the design question — the interview version is *can you explain a scenario where inner
-classes are best suited?* — and he gives one sentence to memorise before any example:
+This is the design question — the interview version is can you explain a scenario where inner classes are best suited? — and he gives one sentence to memorise before any example:
 
-> **Without existing one type of object, if there is no chance of existing another type of object,
-> then we should go for inner classes.**
+> **Without existing one type of object, if there is no chance of existing another type of object, then we should go for inner classes.**
 
-He is explicit that the sentence means nothing yet. Three examples follow, and the clarity comes
-after them.
+He is explicit that the sentence means nothing yet. Three examples follow, and the clarity comes after them.
 
 ## Example 1 — university and department
 
-A university contains several departments: computer science, electronics, electrical. Now suppose the
-government decides the university is involved in some illegal activity and closes it. **If the
-university closes, do all the departments close?** Yes.
+A university contains several departments: computer science, electronics, electrical. Now suppose the government decides the university is involved in some illegal activity and closes it. **If the university closes, do all the departments close?** Yes.
 
-So **without existing a `University` object there is no chance of existing a `Department` object.** A
-department is always part of a university. If that is true, why would you define `Department` as a
-separate top-level class?
+So **without existing a `University` object there is no chance of existing a `Department` object.** A department is always part of a university. If that is true, why would you define `Department` as a separate top-level class?
 
 ```java
 class University {
@@ -94,8 +71,7 @@ class University {
 
 ## Example 2 — car and engine
 
-A car has several individual components, and the major one is the engine. **Without existing a `Car`
-object there is no chance of existing an `Engine` object** — an engine is always part of a car.
+A car has several individual components, and the major one is the engine. **Without existing a `Car` object there is no chance of existing an `Engine` object** — an engine is always part of a car.
 
 ```java
 class Car {
@@ -116,8 +92,7 @@ A `Map` is a group of **key–value pairs**:
 | 102 | ravi |
 | 103 | shiva |
 
-And **each key–value pair is called an entry.** Without existing a `Map` object, there is no chance
-of existing an `Entry` object — an entry is always part of a map. So:
+And **each key–value pair is called an entry.** Without existing a `Map` object, there is no chance of existing an `Entry` object — an entry is always part of a map. So:
 
 ```java
 interface Map {
@@ -128,8 +103,7 @@ interface Map {
 
 `Map` is the **outer interface**, `Entry` is the **inner interface**.
 
-> [!example]- **Proof — `Entry` really is declared inside `Map`, and the class file name says so.**
-> Open this for the one-line confirmation that example 3 is not invented.
+> [!example]- **Proof — `Entry` really is declared inside `Map`, and the class file name says so.** Open this for the one-line confirmation that example 3 is not invented.
 > Measured on JDK 25:
 > ```
 > $ javap java.util.Map
@@ -144,9 +118,7 @@ interface Map {
 >   …
 > }
 > ```
-> Note the name: **`java.util.Map$Entry`**. That `$` is the same one discussed further down this
-> note — it is how a nested type's class file is named, and it is visible right here in the JDK's own
-> API. And in ordinary use:
+> Note the name: **`java.util.Map$Entry`**. That `$` is the same one discussed further down this note — it is how a nested type's class file is named, and it is visible right here in the JDK's own API. And in ordinary use:
 > ```java
 > for (Map.Entry<Integer, String> e : m.entrySet())
 >     System.out.println(e.getKey() + " = " + e.getValue());
@@ -161,18 +133,15 @@ interface Map {
 
 Now the sentence means something. Restate it in terms of the classes:
 
-> **Note 1.** Without existing an **outer class object**, there is no chance of existing an **inner
-> class object**.
+> **Note 1.** Without existing an **outer class object**, there is no chance of existing an **inner class object**.
 
 Every example fits: no `University` → no `Department`; no `Car` → no `Engine`; no `Map` → no `Entry`.
 
 And the second conclusion is the one people get wrong:
 
-> **Note 2.** The relation between outer class and inner class is **not an is-a relationship**. It is
-> a **has-a relationship** — that is, **composition or aggregation**.
+> **Note 2.** The relation between outer class and inner class is **not an is-a relationship**. It is a **has-a relationship** — that is, **composition or aggregation**.
 
-A university **has a** department. A car **has an** engine. A map **has an** entry. The outer class is
-not a parent and the inner class is not a child.
+A university **has a** department. A car **has an** engine. A map **has an** entry. The outer class is not a parent and the inner class is not a child.
 
 ```mermaid
 flowchart LR
@@ -181,16 +150,13 @@ flowchart LR
     M["<b>Map</b><br/><i>outer</i>"] -->|"<b>has-a</b>"| N["<b>Entry</b><br/><i>inner</i>"]
 ```
 
-> [!important] **This is the sharpest thing in the note.** Inheritance is for *is-a* plus code
-> reusability — a parent class with common methods and a child with specific ones. Inner classes are
-> for **has-a**. If you catch yourself calling the outer class a parent, you have the wrong concept.
+> [!important] **This is the sharpest thing in the note.** Inheritance is for **is-a** plus code reusability — a parent class with common methods and a child with specific ones. Inner classes are for **has-a**. If you catch yourself calling the outer class a parent, you have the wrong concept.
 
 ---
 
 # The four types of inner class
 
-> Based on the **position of declaration** and **behaviour**, all inner classes are divided into
-> **four types**.
+> Based on the **position of declaration** and **behaviour**, all inner classes are divided into **four types**.
 
 | | Type | What makes it that type |
 |---|---|---|
@@ -199,10 +165,7 @@ flowchart LR
 | **3** | **anonymous** inner class | declared **without a name** |
 | **4** | **static nested** class | declared with the **`static`** modifier |
 
-> [!important] **Read the fourth row again — it says *nested*, not *inner*.** Three of the four are
-> called inner classes and the fourth is called a **static nested class**. That is not a naming
-> accident and it is not just for the sake of a name; there is a real internal reason, which comes
-> when static nested classes are covered. Notice it now so the word does not surprise you later.
+> [!important] **Read the fourth row again — it says nested, not inner.** Three of the four are called inner classes and the fourth is called a **static nested class**. That is not a naming accident and it is not just for the sake of a name; there is a real internal reason, which comes when static nested classes are covered. Notice it now so the word does not surprise you later.
 
 ---
 
@@ -215,16 +178,11 @@ class Outer {
 }
 ```
 
-Is this a static nested class? No — there is no `static` modifier. Is it anonymous? No — it has a
-name. Is it method local? No — it is not inside a method. **Whatever remains is the normal or regular
-inner class.**
+Is this a static nested class? No — there is no `static` modifier. Is it anonymous? No — it has a name. Is it method local? No — it is not inside a method. **Whatever remains is the normal or regular inner class.**
 
-But that is not the definition to give in an interview, because the obvious follow-up is *then what
-is a method local inner class?* and you would have to answer *the one that is not normal, not
-anonymous and not static* — the same thing going in circles. So state it positively:
+But that is not the definition to give in an interview, because the obvious follow-up is then what is a method local inner class? and you would have to answer **the one that is not normal, not anonymous and not static** — the same thing going in circles. So state it positively:
 
-> If we are declaring **any named class**, **directly inside a class**, **without a static
-> modifier**, such a type of inner class is called a **normal or regular inner class**.
+> If we are declaring **any named class**, **directly inside a class**, **without a static modifier**, such a type of inner class is called a **normal or regular inner class**.
 
 Three requirements, each ruling out one of the other three types:
 
@@ -240,23 +198,16 @@ Three requirements, each ruling out one of the other three types:
 
 Save that `Outer`/`Inner` pair as `Outer.java` and compile it. **How many `.class` files?**
 
-**Two** — because whether it is an outer class or an inner class, **every class gets its own separate
-`.class` file.** Measured on JDK 25:
+**Two** — because whether it is an outer class or an inner class, **every class gets its own separate `.class` file.** Measured on JDK 25:
 
 ```
 Outer.class
 Outer$Inner.class
 ```
 
-The outer one is straightforward. The inner one is **not** `Inner.class`, because `Inner` is not a
-direct, standalone class — it lives inside `Outer`. So the outer class name comes first, then a
-**dollar symbol**, then the inner class name.
+The outer one is straightforward. The inner one is **not** `Inner.class`, because `Inner` is not a direct, standalone class — it lives inside `Outer`. So the outer class name comes first, then a **dollar symbol**, then the inner class name.
 
-> [!important] **This is a genuinely useful fact outside the exam.** A **jar** file — Java archive —
-> contains a group of `.class` files. Extract one and look at the names. **Anywhere you see a dollar
-> symbol in a class file name, that is an inner class.** What is before the `$` is the outer class
-> name and what is after it is the inner class name. `java.util.Map$Entry` in the deep dive above is
-> exactly this.
+> [!important] **This is a genuinely useful fact outside the exam.** A **jar** file — Java archive — contains a group of `.class` files. Extract one and look at the names. **Anywhere you see a dollar symbol in a class file name, that is an inner class.** What is before the `$` is the outer class name and what is after it is the inner class name. `java.util.Map$Entry` in the deep dive above is exactly this.
 
 ## Running them
 
@@ -264,8 +215,7 @@ direct, standalone class — it lives inside `Outer`. So the outer class name co
 $ java Outer
 ```
 
-Does `Outer` contain a `main` method? No. So running it fails. And the same for the inner class,
-since it has no `main` either:
+Does `Outer` contain a `main` method? No. So running it fails. And the same for the inner class, since it has no `main` either:
 
 ```
 $ java Outer$Inner
@@ -330,26 +280,18 @@ $ java 'O2$Inner'
 inner class main method
 ```
 
-Two class files, and `java Outer$Inner` prints the message — so **an inner class may declare static
-members, may have a `main`, and may be run directly from the command prompt.**
+Two class files, and `java Outer$Inner` prints the message — so **an inner class may declare static members, may have a `main`, and may be run directly from the command prompt.**
 
-> [!important] **Older material says all three of those are impossible, and you will meet it.**
-> Through **Java 15** an inner class could not declare static members at all, and the compiler said:
+> [!important] **Older material says all three of those are impossible, and you will meet it.** Through **Java 15** an inner class could not declare static members at all, and the compiler said:
 > ```
 > error: Illegal static declaration in inner class O2.Inner
 >   modifier 'static' is only allowed in constant variable declarations
 > ```
-> **Java 16 lifted the restriction** (JEP 395, the records JEP, carried it). The cutover is exact —
-> `javac --release 15` still rejects the program and `--release 16` accepts it.
+> **Java 16 lifted the restriction** (JEP 395, the records JEP, carried it). The cutover is exact — `javac --release 15` still rejects the program and `--release 16` accepts it.
 >
-> The reasoning behind the old rule is still the reasoning of this whole chapter, and it is why the
-> restriction existed: without an outer object there is no chance of an inner object, so **inner class
-> code is not directly touchable** and everything about an inner class is instance-level. `static` is
-> precisely the opposite — directly touchable, no object required.
+> The reasoning behind the old rule is still the reasoning of this whole chapter, and it is why the restriction existed: without an outer object there is no chance of an inner object, so **inner class code is not directly touchable** and everything about an inner class is instance-level. `static` is precisely the opposite — directly touchable, no object required.
 
-> [!info] **Even under the old rule, "no static members at all" was too strong.** `static final`
-> **compile-time constants** were always permitted — that is what the old error meant by *constant
-> variable declarations*:
+> [!info] **Even under the old rule, no static members at all was too strong.** `static final` **compile-time constants** were always permitted — that is what the old error meant by **constant variable declarations**:
 >
 > | Declaration inside the inner class | Through Java 15 |
 > |---|---|
@@ -361,17 +303,13 @@ members, may have a `main`, and may be run directly from the command prompt.**
 >
 > All five are legal now.
 
-> [!important] **What did *not* change is the idea the chapter is built on.** An inner class instance
-> still holds a hidden reference to its enclosing instance, and you still cannot create one without an
-> outer object. Java 16 changed only whether *static* declarations are permitted alongside that — not
-> the has-a relationship.
+> [!important] **What did not change is the idea the chapter is built on.** An inner class instance still holds a hidden reference to its enclosing instance, and you still cannot create one without an outer object. Java 16 changed only whether **static** declarations are permitted alongside that — not the has-a relationship.
 
 ---
 
 # Accessing inner class code
 
-Everything below is syntax, and he flags it as directly examinable — *from line 12, which of the
-following is the proper code to call `m1()`?* There are three cases and only two distinct answers.
+Everything below is syntax, and he flags it as directly examinable — from line 12, which of the following is the proper code to call `m1()`? There are three cases and only two distinct answers.
 
 The class under discussion:
 
@@ -385,8 +323,7 @@ class Outer {
 }
 ```
 
-`m1()` is an **instance** method of `Inner`, so calling it requires an `Inner` object — and an
-`Inner` object requires an `Outer` object first.
+`m1()` is an **instance** method of `Inner`, so calling it requires an `Inner` object — and an `Inner` object requires an `Outer` object first.
 
 ## Case 1 — from the static area of the outer class
 
@@ -402,10 +339,8 @@ public static void main(String[] args) {
 
 Two pieces of that line are new syntax and both get tested:
 
-- The reference type is **`Outer.Inner`**, with a **dot** — even though the *class file* is
-  `Outer$Inner` with a dollar. In code you write the dot.
-- The creation is **`o.new Inner()`** — `new` prefixed by an existing outer object reference. This is
-  the "syntactical dancing" he refers to, and it exists nowhere else in the language.
+- The reference type is **`Outer.Inner`**, with a **dot** — even though the **class file** is `Outer$Inner` with a dollar. In code you write the dot.
+- The creation is **`o.new Inner()`** — `new` prefixed by an existing outer object reference. This is the syntactical dancing he refers to, and it exists nowhere else in the language.
 
 ### Collapsing it into one line
 
@@ -445,16 +380,11 @@ class Outer {
 }
 ```
 
-The obvious objection: *how can you create an `Inner` object without creating an `Outer` object
-first?* The answer is that you already did.
+The obvious objection: how can you create an `Inner` object without creating an `Outer` object first? The answer is that you already did.
 
-> To enter `m2()` at all, an outer object must have been created — you cannot call an instance method
-> without one. **The outer object already exists**, so from inside `m2()` you can create the inner
-> object directly and call `m1()`.
+> To enter `m2()` at all, an outer object must have been created — you cannot call an instance method without one. **The outer object already exists**, so from inside `m2()` you can create the inner object directly and call `m1()`.
 
-> [!important] **Case 2 is the easy one, and that is the point.** From the instance area it is
-> `Inner i = new Inner();` — ordinary, familiar code with no new syntax at all. All the awkward
-> syntax in case 1 exists only because there was no outer object to hand.
+> [!important] **Case 2 is the easy one, and that is the point.** From the instance area it is `Inner i = new Inner();` — ordinary, familiar code with no new syntax at all. All the awkward syntax in case 1 exists only because there was no outer object to hand.
 
 ## Case 3 — from outside the outer class
 
@@ -474,8 +404,7 @@ class Test {
 }
 ```
 
-**This is exactly the same code as case 1.** No outer object is available here either, so the same
-two steps are required.
+**This is exactly the same code as case 1.** No outer object is available here either, so the same two steps are required.
 
 All four call sites measured on JDK 25 — each prints `inner class method`.
 

@@ -144,7 +144,7 @@ Measured afterwards: `sb.length()` is `0`. The builder is genuinely empty.
 
 **Answer: C.**
 
-> [!info] **The `size()` versus `length()` confusion is deliberate.** `size()` is the method on collections, `length` is the *variable* on arrays, and `length()` is the *method* on `String`, `StringBuffer` and `StringBuilder`. Three similar names across three families, and exams mix them on purpose. Note `04` covers the array-versus-`String` half of the same trap.
+> [!info] **The `size()` versus `length()` confusion is deliberate.** `size()` is the method on collections, `length` is the **variable** on arrays, and `length()` is the **method** on `String`, `StringBuffer` and `StringBuilder`. Three similar names across three families, and exams mix them on purpose. Note `04` covers the array-versus-`String` half of the same trap.
 
 ---
 
@@ -257,7 +257,7 @@ Note the indices: in `1234-5678-9101-5979`, positions 15 to 18 are the final `59
 
 ## Option A — fails
 
-`sb.substring(15, 19)` **does** extract `5979` — but the result is **assigned to nothing**. That object is discarded and eligible for garbage collection, while `sb` still holds the complete card number. So `x + sb` produces the mask *followed by every digit*.
+`sb.substring(15, 19)` **does** extract `5979` — but the result is **assigned to nothing**. That object is discarded and eligible for garbage collection, while `sb` still holds the complete card number. So `x + sb` produces the mask **followed by every digit**.
 
 Measured:
 
@@ -303,7 +303,7 @@ Same output as A, by a different mistake.
 
 **Answer: B and C.**
 
-> [!important] **A and D fail for opposite reasons, and both are instructive.** **A** does the right extraction and throws it away. **D** keeps everything and merely prefixes it. Only B and C ever discard the digits that were supposed to be hidden — and in a real masking function, "the sensitive data is still in the returned string" is precisely the bug that matters.
+> [!important] **A and D fail for opposite reasons, and both are instructive.** **A** does the right extraction and throws it away. **D** keeps everything and merely prefixes it. Only B and C ever discard the digits that were supposed to be hidden — and in a real masking function, the sensitive data is still in the returned string is precisely the bug that matters.
 
 ---
 

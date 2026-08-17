@@ -65,7 +65,7 @@ exit code: 0
 
 > [!important] **The exit code is the cleanest way to see the difference.** `1` versus `0`, from programs that differ only by a `try`/`catch`. The exception still happened in both — `10/0` is still `10/0` — but in the second one the program **continued and terminated normally**, which is the definition of graceful termination from part 1.
 >
-> Note also *what* the catch block did: it printed `10/2`. That is the "alternative way" from part 1 made concrete — not a repair of the division by zero, a different route to carrying on.
+> Note also **what** the catch block did: it printed `10/2`. That is the alternative way from part 1 made concrete — not a repair of the division by zero, a different route to carrying on.
 
 ---
 
@@ -214,9 +214,9 @@ Wrong.java:7: error: exception ArithmeticException has already been caught
 1 error
 ```
 
-> [!important] **The error message is the explanation.** *`exception ArithmeticException has already been caught`* — because `catch (Exception e)` above it would match every `ArithmeticException` too, the second block is **unreachable**. The compiler refuses dead code it can prove is dead.
+> [!important] **The error message is the explanation.** **`exception ArithmeticException has already been caught`** — because `catch (Exception e)` above it would match every `ArithmeticException` too, the second block is **unreachable**. The compiler refuses dead code it can prove is dead.
 
-> So the rule *child to parent* is not a convention. It follows from the fact that catch blocks are tried **in order, top to bottom**, and the first matching one wins. Put the widest net first and nothing narrower below it can ever fire.
+> So the rule **child to parent** is not a convention. It follows from the fact that catch blocks are tried **in order, top to bottom**, and the first matching one wins. Put the widest net first and nothing narrower below it can ever fire.
 
 **Child first — correct:**
 
@@ -236,7 +236,7 @@ arithmetic handler
 ```
 
 
-> [!info] **Which of the two catch blocks ran, above?** `arithmetic handler` — the child. That confirms the matching is by order and specificity, not by "best fit": `Exception` would have matched too, and never got the chance.
+> [!info] **Which of the two catch blocks ran, above?** `arithmetic handler` — the child. That confirms the matching is by order and specificity, not by best fit: `Exception` would have matched too, and never got the chance.
 
 ---
 

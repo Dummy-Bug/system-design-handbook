@@ -1,24 +1,22 @@
 # The definitions
 
-> **Checked exceptions:** the exceptions which are **checked by the compiler**, whether the programmer is handling them or not, **for smooth execution of the program at runtime**.
-> Examples: `FileNotFoundException`
+> **Checked exceptions:** the exceptions which are **checked by the compiler**, whether the programmer is handling them or not, **for smooth execution of the program at runtime**. Examples: `FileNotFoundException`
 
-> **Unchecked exceptions:** the exceptions which are **not checked by the compiler**, whether the programmer is handling them or not.
-> Examples: `ArithmeticException`, `NullPointerException`
+> **Unchecked exceptions:** the exceptions which are **not checked by the compiler**, whether the programmer is handling them or not. Examples: `ArithmeticException`, `NullPointerException`
 
 
-> [!important] **Whether an exception is checked or unchecked, it must occur at *runtime* only. There is no chance of any exception occurring at compile time.**
+> [!important] **Whether an exception is checked or unchecked, it must occur at runtime only. There is no chance of any exception occurring at compile time.**
 >
-> What you get at compile time are **syntactical mistakes** — and those are not exceptions at all. Nothing about the checked/unchecked split has anything to do with *when the exception happens*. It is entirely about **who checks whether you have prepared for it.**
+> What you get at compile time are **syntactical mistakes** — and those are not exceptions at all. Nothing about the checked/unchecked split has anything to do with **when the exception happens**. It is entirely about **who checks whether you have prepared for it.**
 
 
-> [!important] **The obligation that comes with "checked".** In your program, if there is **any chance** of a checked exception being raised, you **must** handle it — either with **`try`/`catch`** or with the **`throws`** keyword — otherwise **the code will not compile.**
+> [!important] **The obligation that comes with `checked`.** In your program, if there is **any chance** of a checked exception being raised, you **must** handle it — either with **`try`/`catch`** or with the **`throws`** keyword — otherwise **the code will not compile.**
 
 And the rule that decides which is which, for real Java types:
 
 > **`RuntimeException` and its child classes, and `Error` and its child classes, are unchecked.** All the remaining are **checked**.
 
-> [!info] **A useful shortcut he gives.** Wherever a JDK method declares `throws SomethingException` in its signature, that exception is a checked one — `CertificateException`, `RemoteException`, `SQLException`, `FileNotFoundException`. The `throws` clause exists *because* the compiler is going to insist.
+> [!info] **A useful shortcut he gives.** Wherever a JDK method declares `throws SomethingException` in its signature, that exception is a checked one — `CertificateException`, `RemoteException`, `SQLException`, `FileNotFoundException`. The `throws` clause exists **because** the compiler is going to insist.
 
 ---
 
@@ -50,7 +48,7 @@ exit code: 1
 
 Word for word what the lecture quotes. And read it carefully, because this is where the wrong answer at the top of this note comes from:
 
-> [!warning] **This error does not say the exception occurred.** It says **`unreported`**. The compiler is saying: *there is a possibility of `FileNotFoundException` here, and you have not told me what you would do about it. Show me — then I will compile.* The file may well exist and the exception may never happen. That is irrelevant to the compiler.
+> [!warning] **This error does not say the exception occurred.** It says **`unreported`**. The compiler is saying: there is a possibility of `FileNotFoundException` here, and you have not told me what you would do about it. Show me — then I will compile. The file may well exist and the exception may never happen. That is irrelevant to the compiler.
 >
 > **`must be caught or declared to be thrown`** is the compiler naming your two options: `catch` it, or declare `throws`.
 
@@ -103,11 +101,9 @@ Adding `throws FileNotFoundException` satisfies the compiler about the checked e
 # Fully checked versus partially checked
 
 
-> A checked exception is **fully checked** if and only if **all its child classes are also checked**.
-> Examples: `IOException`, `InterruptedException`
+> A checked exception is **fully checked** if and only if **all its child classes are also checked**. Examples: `IOException`, `InterruptedException`
 
-> A checked exception is **partially checked** if and only if **some of its child classes are unchecked**.
-> Example: `Exception`
+> A checked exception is **partially checked** if and only if **some of its child classes are unchecked**. Example: `Exception`
 
 > [!important] **There are exactly two partially checked exceptions in Java: `Throwable` and `Exception`.**
 >
@@ -123,9 +119,9 @@ Each of these is `try { System.out.println("hello"); } catch (X e) { }` — a `t
 |---|---|
 | `Exception` | **compiles** |
 | `Throwable` | **compiles** |
-| `RuntimeException` | compiles *(unchecked)* |
-| `ArithmeticException` | compiles *(unchecked)* |
-| `Error` | compiles *(unchecked)* |
+| `RuntimeException` | compiles (unchecked) |
+| `ArithmeticException` | compiles (unchecked) |
+| `Error` | compiles (unchecked) |
 | `IOException` | ❌ `exception IOException is never thrown in body of corresponding try statement` |
 | `FileNotFoundException` | ❌ `exception FileNotFoundException is never thrown in body of corresponding try statement` |
 | `InterruptedException` | ❌ `exception InterruptedException is never thrown in body of corresponding try statement` |
@@ -161,4 +157,4 @@ Straight from the chapter PDF as a question, and worth being able to answer inst
 | The rule | everything not below `RuntimeException` or `Error` | `RuntimeException` + children, `Error` + children |
 | Analogy | hall ticket, spare pen, diesel, spare tyre | bomb blast, fatal accident |
 
-> [!important] **If you say only one sentence, say this one:** *checked exceptions are checked by the compiler for smooth execution at runtime, so you must handle them or declare them; unchecked exceptions are not checked by the compiler at all — and **both** occur only at runtime.* The last clause is what separates a correct answer from the common wrong one.
+> [!important] **If you say only one sentence, say this one:** checked exceptions are checked by the compiler for smooth execution at runtime, so you must handle them or declare them; unchecked exceptions are not checked by the compiler at all — and **both** occur only at runtime. The last clause is what separates a correct answer from the common wrong one.

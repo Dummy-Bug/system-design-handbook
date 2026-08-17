@@ -1,8 +1,8 @@
 Question-only practice sheet for **garbage collection specifically** at FAANGM and adjacent top-tier companies for backend roles at 3–5 years. The FAANGM label is a company bucket, not proof that every listed prompt came from a FAANG interview.
 
-> [!important] **What changes at this tier.** Definitions are assumed. The time goes on **trade-offs, measurement and constraint**, and three things are scored: do you reason from first principles, do you attach **numbers** to claims, and do you volunteer *when not to do this*. "It depends" is the right opening only if the next sentence says **what it depends on**.
+> [!important] **What changes at this tier.** Definitions are assumed. The time goes on **trade-offs, measurement and constraint**, and three things are scored: do you reason from first principles, do you attach **numbers** to claims, and do you volunteer **when not to do this**. It depends is the right opening only if the next sentence says **what it depends on**.
 >
-> They will also follow you down until you hit your limit, deliberately. Hitting it is fine. Bluffing past it is not — and GC is a topic where bluffing is unusually easy to detect, because the follow-up is always "what did you measure?"
+> They will also follow you down until you hit your limit, deliberately. Hitting it is fine. Bluffing past it is not — and GC is a topic where bluffing is unusually easy to detect, because the follow-up is always what did you measure?
 
 > [!info] **How the ordering was decided, honestly.** No public dataset exists, and this tier is the least documented of the three — published lists are mostly reconstruction. Judgement from sources surveyed in August 2026, weighted toward 2025–2026. Treat the bands as **approximate here**, more so than in the other two files.
 
@@ -16,7 +16,7 @@ Question-only practice sheet for **garbage collection specifically** at FAANGM a
 
 ### 1. Your p99 latency spikes every few minutes. Is it GC? Prove it.
 
-- **Tests:** whether you connect the collector to user-visible latency, and whether you *rule things out* before acting.
+- **Tests:** whether you connect the collector to user-visible latency, and whether you **rule things out** before acting.
 - **Notes:** ❌ **gap** — GC logs, pause distribution, correlating pause timestamps against the latency spikes.
 
 ### 2. G1 versus ZGC — pick one for this service and justify it.
@@ -44,11 +44,11 @@ Question-only practice sheet for **garbage collection specifically** at FAANGM a
 - **Tests:** whether you can reason about language design, not just recite a deprecation notice.
 - **Notes:** ✅ **our strongest question at this tier** — `05` demonstrates two of the four reasons with measured programs.
 - **The four reasons:** no timing guarantee, so it cannot manage resources; **uncaught exceptions silently swallowed** (`05` Case 3, exit code 0 versus 1); **resurrection** — an object can make itself reachable during its own finalization (`05` Case 4, same hash code printed twice); and every finalizable object costs an extra collection cycle.
-- **Then close it:** `Cleaner` fixes resurrection *by construction* — the cleaning action never receives the object, so it has nothing to resurrect.
+- **Then close it:** `Cleaner` fixes resurrection **by construction** — the cleaning action never receives the object, so it has nothing to resurrect.
 
-### 7. How would you *prove* a memory leak rather than guess?
+### 7. How would you **prove** a memory leak rather than guess?
 
-- **Tests:** rigour. The word *prove* is doing the work.
+- **Tests:** rigour. The word **prove** is doing the work.
 - **Notes:** ❌ **gap.** Two heap dumps separated in time, compare retained sets, find what grows; or trend the live set after full collections across cycles.
 
 ---
@@ -58,7 +58,7 @@ Question-only practice sheet for **garbage collection specifically** at FAANGM a
 ### 8. What is a TLAB and why does it exist?
 
 - **Notes:** ❌ **gap.** Each thread gets its own slice of Eden, so allocation is a pointer bump with no contention.
-- **Why it lands:** it answers *"how is allocation this cheap when the heap is shared?"* — which connects straight back to JVM `05`'s point that shared memory is not thread safe.
+- **Why it lands:** it answers how is allocation this cheap when the heap is shared? — which connects straight back to JVM `05`'s point that shared memory is not thread safe.
 
 ### 9. What is a safepoint, and what is time-to-safepoint?
 
@@ -74,7 +74,7 @@ Question-only practice sheet for **garbage collection specifically** at FAANGM a
 - **Notes:** ❌ **gap.**
 - **The senior answer:** rarely. Soft references hand your eviction policy to the collector, which decides on memory pressure rather than on your access patterns. A bounded cache with a real eviction policy is almost always better. Weak references are for canonical mappings and listeners; phantom references are a cleanup-notification mechanism, not a cache tool.
 
-### 12. Why does an untaken `try` cost nothing, and what *is* expensive?
+### 12. Why does an untaken `try` cost nothing, and what **is** expensive?
 
 - **Notes:** ✅ JVM `06` — the exception table is data beside the code, consulted only after a throw; guarded and unguarded compile to identical instructions.
 - **The GC connection:** throwing allocates, and stack trace capture allocates proportionally to depth — which is how exception-as-control-flow shows up as allocation pressure.
@@ -100,7 +100,7 @@ Question-only practice sheet for **garbage collection specifically** at FAANGM a
 ### 16. What is a write barrier? What is a card table or remembered set?
 
 - **Notes:** ❌ **gap.** How a young collection avoids scanning the old generation to find references pointing into Eden.
-- **Reaching your limit here is acceptable** — "I know it exists and roughly why, I haven't worked at that level" is a fine answer at 3–5 years.
+- **Reaching your limit here is acceptable** — I know it exists and roughly why, I haven't worked at that level is a fine answer at 3–5 years.
 
 ### 17. Why does the heap sometimes shrink after a collection, and when is that bad?
 

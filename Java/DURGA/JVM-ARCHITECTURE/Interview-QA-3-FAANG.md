@@ -1,6 +1,6 @@
 Interview questions on **JVM architecture and memory**, as asked at FAANG and FAANG-adjacent companies for a backend role at 3–5 years.
 
-> [!important] **What changes at this tier.** Almost nothing here is a definition question. The interviewer assumes you know what the heap is and spends the time on **trade-offs, measurement and constraint**. Three things are being scored: do you reason from first principles rather than recall, do you attach **numbers** to claims, and do you volunteer *when not to do this*. "It depends" is the correct start to most of these answers — but only if the next sentence says **what it depends on**.
+> [!important] **What changes at this tier.** Almost nothing here is a definition question. The interviewer assumes you know what the heap is and spends the time on **trade-offs, measurement and constraint**. Three things are being scored: do you reason from first principles rather than recall, do you attach **numbers** to claims, and do you volunteer **when not to do this**. It depends is the correct start to most of these answers — but only if the next sentence says **what it depends on**.
 >
 > The other shift: they will follow you down as far as you can go and then one step further, deliberately, to find the edge. Reaching the edge is fine. Bluffing past it is fatal.
 
@@ -16,13 +16,13 @@ Interview questions on **JVM architecture and memory**, as asked at FAANG and FA
 
 - **Tests:** the flagship question of this tier. Memory knowledge applied to a design problem under a hard constraint.
 - **Notes:** ❌ **gap** — bounded size versus soft references, eviction policy, what happens when entries are large and few versus small and many, and why a `WeakHashMap` is almost never the right answer for a cache.
-- **The move that scores:** you bound it explicitly and you say how you would *size* the bound, rather than reaching for a reference type and hoping the collector saves you.
+- **The move that scores:** you bound it explicitly and you say how you would **size** the bound, rather than reaching for a reference type and hoping the collector saves you.
 
 ### 2. Your service has a p99 latency SLA of 100ms and misses it every few minutes. Walk me through the investigation.
 
 - **Tests:** whether you connect GC to user-visible latency. Very common as an opening scenario.
 - **Notes:** ❌ **gap** — GC logs, pause distribution, allocation rate, and ruling GC in or out before touching it.
-- **The move that scores:** you *rule it out* first. Periodic p99 spikes are as often a downstream timeout or a connection pool as they are a collector.
+- **The move that scores:** you **rule it out** first. Periodic p99 spikes are as often a downstream timeout or a connection pool as they are a collector.
 
 ### 3. G1 versus ZGC — which would you pick, and why?
 
@@ -40,11 +40,11 @@ Interview questions on **JVM architecture and memory**, as asked at FAANG and FA
 ### 5. Trace `new Foo()` from the allocation to the object being reclaimed.
 
 - **Tests:** the whole lifecycle in one narrative. They are listening for where you go vague.
-- **Notes:** ⚠️ the front half is strong — `05` § *what `new Student(...)` does, in order*, defaults before the constructor, reference into the caller's slot. The back half (TLAB allocation, promotion through the generations, reclamation) is a **gap**.
+- **Notes:** ⚠️ the front half is strong — `05` § what `new Student(...)` does, in order, defaults before the constructor, reference into the caller's slot. The back half (TLAB allocation, promotion through the generations, reclamation) is a **gap**.
 
 ### 6. How would you prove a suspected memory leak, rather than guess at it?
 
-- **Tests:** rigour. The word *prove* is doing the work — they want a method, not a tool name.
+- **Tests:** rigour. The word **prove** is doing the work — they want a method, not a tool name.
 - **Notes:** ❌ **gap.** Two heap dumps separated in time, compare retained sets, find what grows; or watch live-set-after-full-GC trend upward across cycles.
 - **The move that scores:** you name what would **disprove** it too.
 
@@ -60,17 +60,17 @@ Interview questions on **JVM architecture and memory**, as asked at FAANG and FA
 ### 8. What is a TLAB and why does it exist?
 
 - **Notes:** ❌ **gap.** Thread-local allocation buffers: each thread gets its own slice of Eden so allocation is a pointer bump with no contention.
-- **Why it lands well:** it is the answer to *"how is heap allocation as cheap as it is, given the heap is shared?"* — which connects directly to `05`'s point that shared memory is not thread safe.
+- **Why it lands well:** it is the answer to how is heap allocation as cheap as it is, given the heap is shared? — which connects directly to `05`'s point that shared memory is not thread safe.
 
 ### 9. What are compressed oops, and what happens around 32GB of heap?
 
-- **Notes:** ❌ **gap.** References are stored as 32-bit offsets below roughly 32GB; past that they widen to 64-bit and effective capacity can *fall* as the heap grows.
+- **Notes:** ❌ **gap.** References are stored as 32-bit offsets below roughly 32GB; past that they widen to 64-bit and effective capacity can **fall** as the heap grows.
 - **Why it is asked:** it is a genuinely counter-intuitive result, and it is the kind of thing you only know if you have sized a large heap.
 
 ### 10. What is escape analysis? Does every object go on the heap?
 
 - **Notes:** ❌ **gap** — escape analysis and scalar replacement.
-- **Chained follow-up:** *"So can you rely on it?"* — no, and saying so is the mature answer.
+- **Chained follow-up:** So can you rely on it? — no, and saying so is the mature answer.
 
 ### 11. What is a safepoint? What is time-to-safepoint?
 
@@ -97,12 +97,12 @@ Interview questions on **JVM architecture and memory**, as asked at FAANG and FA
 ### 16. When would you deliberately use off-heap memory?
 
 - **Notes:** ❌ **gap** — `DirectByteBuffer`, zero-copy IO, and taking large stable data out of the collector's reach.
-- **Chained follow-up:** *"What did you give up?"* — manual lifetime management, and a different OOM that most dashboards do not watch.
+- **Chained follow-up:** What did you give up? — manual lifetime management, and a different OOM that most dashboards do not watch.
 
 ### 17. Explain why wrapping code in `try` costs nothing at runtime.
 
 - **Notes:** ✅ `06` § frame data — the exception table is data beside the code, consulted only after a throw; the guarded and unguarded versions compile to identical instructions.
-- **Chained follow-up:** *"Then what is expensive?"* — throwing, and stack trace capture in particular.
+- **Chained follow-up:** Then what is expensive? — throwing, and stack trace capture in particular.
 
 ### 18. How do virtual threads change memory behaviour at a million threads?
 
@@ -116,7 +116,7 @@ Interview questions on **JVM architecture and memory**, as asked at FAANG and FA
 ### 19. What is a write barrier? What is a card table or remembered set?
 
 - **Notes:** ❌ **gap.** How a young collection avoids scanning the old generation to find references into Eden.
-- **Reaching your limit here is acceptable.** Most 3–5 YOE candidates do not have this, and the honest "I know it exists and roughly why, I have not worked at that level" is a fine answer.
+- **Reaching your limit here is acceptable.** Most 3–5 YOE candidates do not have this, and the honest I know it exists and roughly why, I have not worked at that level is a fine answer.
 
 ### 20. What is AppCDS and what problem does it solve?
 

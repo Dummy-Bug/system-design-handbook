@@ -1,4 +1,4 @@
-Everything in this chapter sits one level below the code you write. You will not call any of it, and you do not need it to write a working program — but the moment an interviewer asks *what actually happens when you run `java Test`*, this is the answer, and it is the difference between a confident reply and a silence.
+Everything in this chapter sits one level below the code you write. You will not call any of it, and you do not need it to write a working program — but the moment an interviewer asks **what actually happens when you run `java Test`**, this is the answer, and it is the difference between a confident reply and a silence.
 
 The topic starts one step further back than the JVM, with the word in its name.
 
@@ -6,7 +6,7 @@ The topic starts one step further back than the JVM, with the word in its name.
 
 # What a virtual machine is
 
-Ask what *virtual* means and the answer arrives easily: **something that is not physical, not original**. The word is already familiar from elsewhere — virtual classroom, virtual memory, virtual space. In each case something behaves like the real thing without being made of the same stuff.
+Ask what **virtual** means and the answer arrives easily: **something that is not physical, not original**. The word is already familiar from elsewhere — virtual classroom, virtual memory, virtual space. In each case something behaves like the real thing without being made of the same stuff.
 
 Put a calculator on the table and you can weigh it, measure it, describe its dimensions. Now open the calculator application on your machine. It adds, subtracts and multiplies exactly like the physical one — and it has no weight and no size. There is nothing to measure.
 
@@ -22,7 +22,7 @@ flowchart LR
     V -->|"same operations"| R
 ```
 
-> [!important] **The test is behaviour, not substance.** A virtual machine is not a lesser version of a real one — it is a program that presents the same interface and performs the same operations. Whether anything physical sits underneath is exactly what the word *virtual* is telling you not to assume.
+> [!important] **The test is behaviour, not substance.** A virtual machine is not a lesser version of a real one — it is a program that presents the same interface and performs the same operations. Whether anything physical sits underneath is exactly what the word **virtual** is telling you not to assume.
 
 ---
 
@@ -112,7 +112,7 @@ flowchart LR
 
 **Load and run.** Every component introduced from here on exists to serve one of those two verbs — which is a useful thing to hold on to, because the architecture diagram arrives next and it has a lot of boxes in it.
 
-## What "runtime" actually means
+## What `runtime` actually means
 
 The word sits in the middle of J-**R**-E and gets used constantly, so it is worth pinning down before going further.
 
@@ -126,7 +126,7 @@ class Hi {
 }
 ```
 
-Compile it and `Hi.class` appears. **The code for `println` is not inside that file.** `println` is a real method that ends up talking to the operating system to get characters onto a screen — and none of that machinery is present. The class file contains the *name* `java/io/PrintStream.println` and nothing else about it. Same for `System`. Same for `String`.
+Compile it and `Hi.class` appears. **The code for `println` is not inside that file.** `println` is a real method that ends up talking to the operating system to get characters onto a screen — and none of that machinery is present. The class file contains the **name** `java/io/PrintStream.println` and nothing else about it. Same for `System`. Same for `String`.
 
 So the file you produced is not a program a computer can run. Two things must already exist on the machine before `hello` can appear:
 
@@ -155,7 +155,7 @@ lib/modules     ← the library classes your code names but does not contain
 
 ### Compile time and run time
 
-The word also names a *moment*, and both meanings come from the same split:
+The word also names a **moment**, and both meanings come from the same split:
 
 | | What happens | What must be present |
 |---|---|---|
@@ -194,17 +194,17 @@ Not a Java idea. A compiled or interpreted program is never self-sufficient, so 
 | **C#** | IL bytecode | CLR + base class library | the **.NET runtime** |
 | **Python** | `.py` source | interpreter + standard library | **CPython** |
 | **JavaScript** | `.js` source | engine + built-in objects | **Node.js** / the browser |
-| **Go** | a native binary | *bundled inside the binary itself* | (nothing to install) |
+| **Go** | a native binary | **bundled inside the binary itself** | (nothing to install) |
 
 That is the same point the virtual machine table made earlier, from the other direction: **whatever the language, something must be there at run time to actually run it.**
 
 > [!info] **Go is the interesting row.** It compiles to a binary you can copy onto a bare machine and run with nothing installed — so it looks like it has no runtime. It does: garbage collection and thread scheduling still have to happen, so Go's runtime is **compiled into every binary it produces**. Same jobs, different packaging — bundled instead of installed separately. Which tells you what the JRE really was: Java's runtime, packaged as a separate install so that one copy could serve every Java program on the machine.
 
-> [!important] **A runtime is not a launcher that starts your program and steps aside.** It is underneath your program the entire time it runs. Every object allocated, every exception thrown, every thread scheduled, every garbage collection — that is the runtime working while your code works. "Load and run" describes the JVM's job; the running never stops needing it.
+> [!important] **A runtime is not a launcher that starts your program and steps aside.** It is underneath your program the entire time it runs. Every object allocated, every exception thrown, every thread scheduled, every garbage collection — that is the runtime working while your code works. Load and run describes the JVM's job; the running never stops needing it.
 
 ---
 
-> [!important] **"JVM is part of the JRE, JRE is part of the JDK" is the right answer — but the JRE is not a folder you can point at.** Java 9 removed the separate JRE directory from the JDK (JEP 220), and the standalone JRE download went with it. The **relationship is unchanged and still examinable**; only the folder that used to correspond to it is gone. The section below is what that means on disk, and saying it correctly is what marks you as current.
+> [!important] **JVM is part of the JRE, JRE is part of the JDK is the right answer — but the JRE is not a folder you can point at.** Java 9 removed the separate JRE directory from the JDK (JEP 220), and the standalone JRE download went with it. The **relationship is unchanged and still examinable**; only the folder that used to correspond to it is gone. The section below is what that means on disk, and saying it correctly is what marks you as current.
 
 ## Where the JRE went
 
@@ -223,8 +223,8 @@ jdk1.7.0/                        ← the JDK
 
 Two things followed from this that are worth naming, because both have since stopped being true:
 
-- **`jre/` was a directory you could `cd` into.** "The JRE is part of the JDK" was a fact about the filesystem, not only about concepts.
-- **You could download the JRE on its own.** Someone who only wanted to *run* Java installed a JRE — a smaller package with `java` but no `javac`. That was the normal end-user download.
+- **`jre/` was a directory you could `cd` into.** The JRE is part of the JDK was a fact about the filesystem, not only about concepts.
+- **You could download the JRE on its own.** Someone who only wanted to **run** Java installed a JRE — a smaller package with `java` but no `javac`. That was the normal end-user download.
 
 ### Currently — one directory, no inner JRE
 
@@ -239,7 +239,7 @@ openjdk-25.0.1/Contents/Home/
 └── (no jre/)
 ```
 
-`$JAVA_HOME/jre` does not exist — the directory is simply absent. `java` and `javac` now sit in the same `bin/`, and there is no inner folder left to label "the JRE".
+`$JAVA_HOME/jre` does not exist — the directory is simply absent. `java` and `javac` now sit in the same `bin/`, and there is no inner folder left to label the JRE.
 
 ```mermaid
 flowchart TB
@@ -257,7 +257,7 @@ flowchart TB
 
 ### Why it changed — the runtime became modular
 
-Java 9 split the runtime into modules — **69 of them on this JDK** (`java.base`, `java.sql`, `java.desktop`, and so on). Once the runtime is a set of parts rather than one lump, *"the JRE"* stops being a single fixed thing worth shipping. You build the runtime you actually need:
+Java 9 split the runtime into modules — **69 of them on this JDK** (`java.base`, `java.sql`, `java.desktop`, and so on). Once the runtime is a set of parts rather than one lump, the JRE stops being a single fixed thing worth shipping. You build the runtime you actually need:
 
 ```
 jlink --add-modules java.base --output myruntime
@@ -281,7 +281,7 @@ And its `bin/` holds **`java` and `keytool` — no `javac`**. It runs (`openjdk 
 | There is a `jre/` folder inside the JDK | ❌ gone since Java 9 |
 | You can download a JRE by itself | ❌ gone — build one with `jlink` |
 
-> [!important] **The definition is safe; the folder is not.** *"JVM is part of the JRE, JRE is part of the JDK"* is the correct answer. Go looking for the directory and it will not be there — and the reason it is not (modules, and `jlink` building runtimes on demand) is itself a good thing to be able to explain.
+> [!important] **The definition is safe; the folder is not.** JVM is part of the JRE, JRE is part of the JDK is the correct answer. Go looking for the directory and it will not be there — and the reason it is not (modules, and `jlink` building runtimes on demand) is itself a good thing to be able to explain.
 
 ---
 
@@ -339,7 +339,7 @@ The name says the job: **read `.class` files from the hard disk and load them in
 
 > Loading means **reading class files** and **storing the corresponding binary data in the method area**.
 
-Follow one file. You write `Test.java`, compile it, and `Test.class` appears on the hard disk — in some directory on `C:` or `D:`, wherever you were working. That is *outside* the JVM. The JVM's first job is to bring it *inside*:
+Follow one file. You write `Test.java`, compile it, and `Test.class` appears on the hard disk — in some directory on `C:` or `D:`, wherever you were working. That is **outside** the JVM. The JVM's first job is to bring it **inside**:
 
 ```mermaid
 flowchart LR
@@ -348,7 +348,7 @@ flowchart LR
 
 ### What exactly gets stored
 
-"The class data" is vague. This list is not:
+The class data is vague. This list is not:
 
 > **For each class file the JVM will store the following information in the method area:**
 > 1. Fully qualified name of the loaded class / interface / enum
@@ -359,7 +359,7 @@ flowchart LR
 > 6. Methods information
 > 7. Constant pool information — **and so on**
 
-> [!info] **There is an eighth worth naming: constructors information.** The seven above are the standard list, but constructors are certainly in there too — the "and so on" is doing real work. It matters for the demo below, where you can ask a class for its constructors just as easily as its methods.
+> [!info] **There is an eighth worth naming: constructors information.** The seven above are the standard list, but constructors are certainly in there too — the and so on is doing real work. It matters for the demo below, where you can ask a class for its constructors just as easily as its methods.
 
 Drawn out, the method area is not one undivided lump — it is **one block of data per loaded class**, and each block holds that same list of items:
 
@@ -388,7 +388,7 @@ flowchart TB
 
 Three details in that list repay attention.
 
-**"Immediate" parent, not the whole ancestry.** Each class records only its direct superclass, and the chain is walked one link at a time.
+**`Immediate` parent, not the whole ancestry.** Each class records only its direct superclass, and the chain is walked one link at a time.
 
 **Class, interface or enum is stored explicitly.** By the time you are looking at binary data in the method area, nothing about the shape of the file tells you which it was.
 
@@ -419,20 +419,19 @@ flowchart LR
     HD --> M2 --> H2
 ```
 
-> [!important] **It is a `Class` object, not a `Student` object — and the distinction is the whole point.** Loading `Student.class` does **not** create a `Student`. No constructor has run; you never asked for a student. What gets created is one object of type `java.lang.Class` whose job is to *describe* `Student` — its name, its parent, its methods, its fields. The `Student` objects come later, when your code says `new Student()`, and they are a completely separate thing living elsewhere on the heap.
+> [!important] **It is a `Class` object, not a `Student` object — and the distinction is the whole point.** Loading `Student.class` does **not** create a `Student`. No constructor has run; you never asked for a student. What gets created is one object of type `java.lang.Class` whose job is to **describe** `Student` — its name, its parent, its methods, its fields. The `Student` objects come later, when your code says `new Student()`, and they are a completely separate thing living elsewhere on the heap.
 
 And its purpose:
 
 > **The `Class` object can be used by the programmer to get class-level information** — fully qualified name of the class, parent name, methods and variables information, and so on.
 
-*How many methods does `Student` have? How many constructors does `Customer` have?* Those questions are answerable at runtime precisely because this object exists.
+How many methods does `Student` have? How many constructors does `Customer` have? Those questions are answerable at runtime precisely because this object exists.
 
 ### What lives where — definition versus value
 
-The two areas are not two copies of the same thing. They hold different *kinds* of thing, and one sentence separates them:
+The two areas are not two copies of the same thing. They hold different **kinds** of thing, and one sentence separates them:
 
-> [!important] **The method area holds the class's DEFINITION. The heap holds the VALUES.**
-> The declaration *"there is a field called `name`, of type `String`"* is written once, in the method area, and never repeated. What `name` actually **is** — `"Amit"` for one student, `"Riya"` for another — lives inside each object on the heap. Definition once; values many.
+> [!important] **The method area holds the class's DEFINITION. The heap holds the VALUES.** The declaration there is a field called `name`, of type `String` is written once, in the method area, and never repeated. What `name` actually **is** — `"Amit"` for one student, `"Riya"` for another — lives inside each object on the heap. Definition once; values many.
 
 ```
 METHOD AREA  ── one copy, shared by everything
@@ -447,14 +446,14 @@ HEAP  ── many objects
    Student object #2   name = "Riya"  ← that student's value
 ```
 
-So `getName()`'s bytecode exists **once**, however many students you create. A thousand `Student` objects on the heap share the single copy of that method in the method area; each carries only its own values. That is why creating an object is cheap — you are allocating room for its *fields*, not for another copy of its code.
+So `getName()`'s bytecode exists **once**, however many students you create. A thousand `Student` objects on the heap share the single copy of that method in the method area; each carries only its own values. That is why creating an object is cheap — you are allocating room for its **fields**, not for another copy of its code.
 
 Which gives two separate routes for two separate questions:
 
 | You want to know | Ask | Example |
 |---|---|---|
-| something about **the class** | the `Class` object | *what methods does `Student` have?* |
-| something about **one instance** | that `Student` object | *what is this student's name?* |
+| something about **the class** | the `Class` object | what methods does `Student` have? |
+| something about **one instance** | that `Student` object | what is this student's name? |
 
 And the same split, stated the way it is usually examined — where each kind of variable lives:
 
@@ -516,7 +515,7 @@ Three pieces to notice:
 | the return value | the `Class` object the JVM just created on the heap |
 | `getDeclaredMethods()` | reads the methods information out of the method area, through that object |
 
-So one line of code triggers both halves of loading: `Student.class` goes into the method area, and its `Class` object appears on the heap. The variable you get back *is* that object.
+So one line of code triggers both halves of loading: `Student.class` goes into the method area, and its `Class` object appears on the heap. The variable you get back **is** that object.
 
 > [!info] **`Method` is not in `java.lang`.** It lives in **`java.lang.reflect`**, so an import is required — unlike `Class` itself, which is in `java.lang` and needs nothing. Forgetting this is the usual first compile error here. `Class.forName` also throws `ClassNotFoundException`, hence the `throws Exception`.
 
@@ -531,7 +530,7 @@ Class c = Class.forName("java.lang.String");
 
 and it prints `String`'s methods instead of `Student`'s. Nothing else in the program changes.
 
-**That is the takeaway.** The JVM stores methods information for *every* class it loads — yours and the standard library's alike — so the `Class` object can answer for any of them. Method counts vary by JDK version and are not worth memorising; the technique is, because it tells you how to check anything on whatever JDK you are actually running.
+**That is the takeaway.** The JVM stores methods information for **every** class it loads — yours and the standard library's alike — so the `Class` object can answer for any of them. Method counts vary by JDK version and are not worth memorising; the technique is, because it tells you how to check anything on whatever JDK you are actually running.
 
 One example is worth remembering, though:
 
@@ -558,7 +557,7 @@ Rows 1–11 are the ones everybody names. Row 12 is the one nobody does.
 
 > [!info] **Three `wait` overloads, counted separately.** `wait()`, `wait(long)` and `wait(long, int)` are three distinct methods with three distinct signatures — which is why the tally reaches 11 and not 9. They come back in the multithreading chapter.
 
-> [!important] **The twelfth method is `wait0`** — the private native primitive that the three public `wait` overloads delegate to. So if you are asked "how many methods does `Object` have", the honest answer is *"eleven that anyone uses, twelve declared"*. (Older JDKs had a different private helper in this slot, `registerNatives`, so older material names that one instead.)
+> [!important] **The twelfth method is `wait0`** — the private native primitive that the three public `wait` overloads delegate to. So if you are asked how many methods does `Object` have, the honest answer is eleven that anyone uses, twelve declared. (Older JDKs had a different private helper in this slot, `registerNatives`, so older material names that one instead.)
 
 ---
 
@@ -600,9 +599,9 @@ true
 
 > [!important] **Read the two lines of output separately, because they are guaranteed differently.** The hash code number itself is **not something to memorise or depend on** — it is an identity hash code and varies from system to system. What is fixed, and what the demo is actually showing, is that **both printed values are identical** and that `c1 == c2` is `true`. Those two facts are the result; the number is incidental.
 >
-> One measured caveat: running this twice on JDK 25 gave the *same* number both times. HotSpot's default identity-hash generator is a per-thread pseudo-random sequence, so a deterministic single-threaded program like this one tends to reproduce it. "Varies from system to system" holds; "varies every run" does not, at least not here — which is exactly the kind of thing that makes an incidental number look like a guarantee if you only ever run it on one machine.
+> One measured caveat: running this twice on JDK 25 gave the **same** number both times. HotSpot's default identity-hash generator is a per-thread pseudo-random sequence, so a deterministic single-threaded program like this one tends to reproduce it. Varies from system to system holds; varies every run does not, at least not here — which is exactly the kind of thing that makes an incidental number look like a guarantee if you only ever run it on one machine.
 
-Put as a question: *use the `Student` class ten times — how many `Class` objects get created?* **One.**
+Put as a question: use the `Student` class ten times — how many `Class` objects get created? **One.**
 
 ```mermaid
 flowchart TB
@@ -615,7 +614,7 @@ flowchart TB
 > [!info] **`Student.class` is that same object too.** The literal form is just another way of reaching it without an instance — verified: `Student.class == c1` is `true`. Which is also why `Class.forName("Student")` in the previous demo and `s1.getClass()` in this one hand you the identical object.
 
 > [!question]- Why does one object per class matter beyond the exam?
-> Because it is the anchor for class identity in the JVM. Two objects are the same *type* precisely when their `Class` objects are the same object — that is what `instanceof` and every cast are ultimately checking. It is also what makes the `Class` object a safe place to hang per-class data: static field values live there, and synchronising on it (`synchronized(Student.class)`) gives you exactly one lock for the whole class, because there is exactly one object.
+> Because it is the anchor for class identity in the JVM. Two objects are the same **type** precisely when their `Class` objects are the same object — that is what `instanceof` and every cast are ultimately checking. It is also what makes the `Class` object a safe place to hang per-class data: static field values live there, and synchronising on it (`synchronized(Student.class)`) gives you exactly one lock for the whole class, because there is exactly one object.
 
 ---
 

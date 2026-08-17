@@ -4,13 +4,11 @@ Before the list, the classification the list is organised by.
 
 > Based on **the person who is raising the exception**, all exceptions are divided into two types.
 
-> **JVM exceptions** — raised **automatically by the JVM** whenever a particular event occurs.
-> Examples: `ArrayIndexOutOfBoundsException`, `NullPointerException`
+> **JVM exceptions** — raised **automatically by the JVM** whenever a particular event occurs. Examples: `ArrayIndexOutOfBoundsException`, `NullPointerException`
 
-> **Programmatic exceptions** — raised **explicitly by the programmer or by the API developer**.
-> Example: `IllegalArgumentException`
+> **Programmatic exceptions** — raised **explicitly by the programmer or by the API developer**. Example: `IllegalArgumentException`
 
-> [!important] **This is the useful axis, and it is not the same as checked versus unchecked.** *Who raises it* tells you where to look when it happens. A JVM exception means the runtime caught you doing something impossible. A programmatic exception means **somebody wrote a `throw`** — either you, or the author of the library you called — because they decided your input or timing was wrong.
+> [!important] **This is the useful axis, and it is not the same as checked versus unchecked.** **Who raises it** tells you where to look when it happens. A JVM exception means the runtime caught you doing something impossible. A programmatic exception means **somebody wrote a `throw`** — either you, or the author of the library you called — because they decided your input or timing was wrong.
 
 ---
 
@@ -51,7 +49,7 @@ System.out.println(s.length());
 Exception in thread "main" java.lang.NullPointerException: Cannot invoke "String.length()" because "<local1>" is null
 ```
 
-> [!info] **That message is newer than the course.** **Helpful NullPointerExceptions** arrived in **Java 14** and are on by default: the JVM now names the method it could not invoke and the expression that was null. In 2016 this line read `java.lang.NullPointerException` and nothing else, and finding *which* reference was null in `a.b().c().d()` was manual work. Mention this if NPE debugging comes up in an interview — it is a concrete, current thing to know.
+> [!info] **That message is newer than the course.** **Helpful NullPointerExceptions** arrived in **Java 14** and are on by default: the JVM now names the method it could not invoke and the expression that was null. In 2016 this line read `java.lang.NullPointerException` and nothing else, and finding **which** reference was null in `a.b().c().d()` was manual work. Mention this if NPE debugging comes up in an interview — it is a concrete, current thing to know.
 
 ### 3 · `StackOverflowError`
 
@@ -72,7 +70,7 @@ Exception in thread "main" java.lang.StackOverflowError
 
 ### 4 · `NoClassDefFoundError`
 
-Child of **`Error`**, unchecked. Raised when a class **was present at compile time** but its `.class` file is missing at runtime — the classic *"compiled fine, exploded on the server"* failure, usually a jar left off the runtime classpath.
+Child of **`Error`**, unchecked. Raised when a class **was present at compile time** but its `.class` file is missing at runtime — the classic compiled fine, exploded on the server failure, usually a jar left off the runtime classpath.
 
 **The missing-main-class case is a different error.** Measured on JDK 25:
 
@@ -82,7 +80,7 @@ Error: Could not find or load main class NoSuchClassAtAll
 Caused by: java.lang.ClassNotFoundException: NoSuchClassAtAll
 ```
 
-> [!important] **`ClassNotFoundException` vs `NoClassDefFoundError` is itself an interview question**, and the two are easy to confuse because both mean *"a class is missing"*.
+> [!important] **`ClassNotFoundException` vs `NoClassDefFoundError` is itself an interview question**, and the two are easy to confuse because both mean a class is missing.
 >
 > | | `ClassNotFoundException` | `NoClassDefFoundError` |
 > |---|---|---|
@@ -134,7 +132,7 @@ Exception in thread "main" java.lang.ExceptionInInitializerError
 Caused by: java.lang.NullPointerException: Cannot invoke "String.length()" because "<local0>" is null
 ```
 
-> [!important] **Note the `Caused by:` line — the original exception is preserved underneath.** The `ExceptionInInitializerError` is a wrapper saying *initialisation failed*; the chained cause tells you why. So when you meet this, the interesting information is always on the second line.
+> [!important] **Note the `Caused by:` line — the original exception is preserved underneath.** The `ExceptionInInitializerError` is a wrapper saying **initialisation failed**; the chained cause tells you why. So when you meet this, the interesting information is always on the second line.
 >
 > This connects to the JVM chapter: static initialisation happens during the **initialization** phase of class loading, so a failure here means the class never becomes usable at all.
 
@@ -157,7 +155,7 @@ Exception in thread "main" java.lang.IllegalArgumentException
 	at java.base/java.lang.Thread.setPriority(Thread.java:1705)
 ```
 
-> [!info] **Look at where the trace points: inside `Thread.setPriority`, in `java.base`.** That is the "API developer" half of the definition made visible. Somebody at Oracle wrote a range check and a `throw` — this exception exists because of a decision in library code, not because the JVM detected an impossible operation.
+> [!info] **Look at where the trace points: inside `Thread.setPriority`, in `java.base`.** That is the API developer half of the definition made visible. Somebody at Oracle wrote a range check and a `throw` — this exception exists because of a decision in library code, not because the JVM detected an impossible operation.
 
 ### 8 · `NumberFormatException`
 
@@ -188,7 +186,7 @@ session.invalidate();
 System.out.println(session.getId());   // IllegalStateException
 ```
 
-> [!important] **The pair worth holding together: `IllegalArgumentException` is *wrong input*, `IllegalStateException` is *wrong time*.** Same call, same arguments — legal before `invalidate()`, illegal after. Nothing about the argument changed; the object's state did.
+> [!important] **The pair worth holding together: `IllegalArgumentException` is wrong input, `IllegalStateException` is wrong time.** Same call, same arguments — legal before `invalidate()`, illegal after. Nothing about the argument changed; the object's state did.
 
 ### 10 · `AssertionError`
 
@@ -226,6 +224,6 @@ Exception in thread "main" java.lang.AssertionError
 | 9 | `IllegalStateException` | `RuntimeException` | unchecked | **programmer / API developer** |
 | 10 | `AssertionError` | `Error` | unchecked | **programmer / API developer** |
 
-> [!important] **Every one of the ten is unchecked.** Which is not a coincidence — these are the ones you meet constantly, and if any of them were checked, ordinary code would be unwritable. Every array access would need a `throws`, every method call on an object would need one. The checked exceptions are the ones about the *outside world* — files, networks, interruption — where a caller genuinely has an alternative to fall back on.
+> [!important] **Every one of the ten is unchecked.** Which is not a coincidence — these are the ones you meet constantly, and if any of them were checked, ordinary code would be unwritable. Every array access would need a `throws`, every method call on an object would need one. The checked exceptions are the ones about the **outside world** — files, networks, interruption — where a caller genuinely has an alternative to fall back on.
 >
 > Four of the ten are `Error`s rather than `Exception`s: **`StackOverflowError`, `NoClassDefFoundError`, `ExceptionInInitializerError`, `AssertionError`.** By part 2's rule those are non-recoverable, and that is exactly right — there is nothing sensible to do in a `catch` for any of them.

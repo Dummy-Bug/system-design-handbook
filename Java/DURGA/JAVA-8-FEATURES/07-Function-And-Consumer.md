@@ -2,8 +2,7 @@
 
 A quick restatement before the new material, because the whole part is built by contrast with it.
 
-> **Predicate is a boolean-valued function.** Wherever some **conditional check** is required, go for
-> `Predicate`.
+> **Predicate is a boolean-valued function.** Wherever some **conditional check** is required, go for `Predicate`.
 
 ```java
 import java.util.function.*;
@@ -22,18 +21,15 @@ false
 
 But conditional checking is not the only thing programs do.
 
-> *"Sometimes my requirement is: I will provide some input, perform some operation, and provide the
-> corresponding output. I don't want a conditional check."*
+> Sometimes my requirement is: I will provide some input, perform some operation, and provide the corresponding output. I don't want a conditional check.
 
-Give it 4, get 16 back. **That result need not be boolean.** It can be `int`, `String`, a `Student`, a
-`Customer` — anything. `Predicate` cannot express that, because its return type is fixed.
+Give it 4, get 16 back. **That result need not be boolean.** It can be `int`, `String`, a `Student`, a `Customer` — anything. `Predicate` cannot express that, because its return type is fixed.
 
 ---
 
 # `Function`
 
-> **`Function` is a predefined functional interface for: take an input, perform some operation, and
-> return a result of any type.**
+> **`Function` is a predefined functional interface for: take an input, perform some operation, and return a result of any type.**
 
 ```java
 interface Function<T, R> {
@@ -50,9 +46,7 @@ This is the exam question hiding in the shape of the two interfaces.
 | `Predicate<T>` | varies | **always `boolean`** | **1** |
 | `Function<T, R>` | varies | **varies** | **2** |
 
-> Because a predicate's return type is **always boolean**, there is nothing to specify — so only the
-> input type is a parameter. A function's return type **changes from example to example**, so it must
-> be specified explicitly. That is the entire reason for the difference.
+> Because a predicate's return type is **always boolean**, there is nothing to specify — so only the input type is a parameter. A function's return type **changes from example to example**, so it must be specified explicitly. That is the entire reason for the difference.
 
 | Interface | Its single method |
 |---|---|
@@ -83,9 +77,7 @@ Measured on JDK 25: `5` and `24`.
 Function<String, String> f = s -> s.toUpperCase();
 ```
 
-Input `String`, output `String` — for a case conversion both sides are the same type. Read each one by
-asking the two questions in order: **what type goes in, what type comes out.** That is the whole of
-choosing the type parameters.
+Input `String`, output `String` — for a case conversion both sides are the same type. Read each one by asking the two questions in order: **what type goes in, what type comes out.** That is the whole of choosing the type parameters.
 
 ---
 
@@ -126,11 +118,7 @@ Function<Student, String> f = st -> {
 };
 ```
 
-> [!info] **A question from the class: could those `if`s be predicates?** Yes — *"inside a function we
-> can use a predicate, no problem."* Each condition like `marks >= 50` is a boolean check and could be
-> a `Predicate`. But you would **not replace the whole function with a predicate**, because the
-> function returns a `String`, not a boolean. Predicates go **inside**; the function is still the right
-> outer shape.
+> [!info] **A question from the class: could those `if`s be predicates?** Yes — inside a function we can use a predicate, no problem. Each condition like `marks >= 50` is a boolean check and could be a `Predicate`. But you would **not replace the whole function with a predicate**, because the function returns a `String`, not a boolean. Predicates go **inside**; the function is still the right outer shape.
 
 Call it with `f.apply(s1)`.
 
@@ -140,10 +128,9 @@ Call it with `f.apply(s1)`.
 
 The third predefined functional interface, and the name is the definition.
 
-> *"Consumer always takes some input value and does not return anything. Just consume."*
+> Consumer always takes some input value and does not return anything. Just consume.
 
-> **`Consumer` takes the input, performs an operation, and returns nothing.** *"I am not expecting any
-> return type from you — you just consume."*
+> **`Consumer` takes the input, performs an operation, and returns nothing.** I am not expecting any return type from you — you just consume.
 
 ```java
 interface Consumer<T> {
@@ -151,8 +138,7 @@ interface Consumer<T> {
 }
 ```
 
-The method name follows the same pattern as the others: `Predicate` → `test`, `Function` → `apply`,
-`Consumer` → **`accept`**.
+The method name follows the same pattern as the others: `Predicate` → `test`, `Function` → `apply`, `Consumer` → **`accept`**.
 
 ```java
 Consumer<String> c = s -> System.out.println(s);
@@ -161,19 +147,15 @@ c.accept("Durga");
 
 Prints `Durga` and returns nothing.
 
-> [!info] **Realistic uses.** Give it an `Employee` object and it prints the employee's information —
-> or **stores that information in the database**. After storing, it returns nothing. That is a
-> consumer.
+> [!info] **Realistic uses.** Give it an `Employee` object and it prints the employee's information — or **stores that information in the database**. After storing, it returns nothing. That is a consumer.
 
-**One type parameter**, for the same reason as `Predicate` — there is no return type to specify,
-because there is no return value at all.
+**One type parameter**, for the same reason as `Predicate` — there is no return type to specify, because there is no return value at all.
 
 ---
 
 # All three together
 
-This is the example he builds to give *"the complete picture"* — one program using a function, a
-predicate and a consumer, each for the job it fits.
+This is the example he builds to give the complete picture — one program using a function, a predicate and a consumer, each for the job it fits.
 
 ```java
 import java.util.function.*;
@@ -235,31 +217,17 @@ Sunny  65  B[First Class]
 | `Predicate<Student>` | check **marks ≥ 60** | `boolean` |
 | `Consumer<Student>` | **print** the student's information | nothing |
 
-And notice the consumer **calls the function inside itself** — `f.apply(st)` sits in the consumer's
-body. They compose freely.
+And notice the consumer **calls the function inside itself** — `f.apply(st)` sits in the consumer's body. They compose freely.
 
-> [!info] **Why these are almost always written inline.** *"Usually consumers, all these things are
-> lambda expressions, just for instant usage purposes."* Asked whether a consumer defined in one class
-> can be called from another — generally no, because it is declared **inside a method**, so it is local
-> to that method. That is the normal way to use them.
+> [!info] **Why these are almost always written inline.** Usually consumers, all these things are lambda expressions, just for instant usage purposes. Asked whether a consumer defined in one class can be called from another — generally no, because it is declared **inside a method**, so it is local to that method. That is the normal way to use them.
 
-> [!question]- **Deep dive — his digression on the grade table: "don't try for 100 out of 100."** Not
-> technical, and it comes straight out of writing the grades A through E. Kept because it is his, and
-> because it is the kind of aside that makes the example stick.
+> [!question]- **Deep dive — his digression on the grade table: don't try for 100 out of 100.** Not technical, and it comes straight out of writing the grades A through E. Kept because it is his, and because it is the kind of aside that makes the example stick.
 >
-> *"Among distinction, first class, second class, third class and failed — which people are going to
-> succeed like anything in their life? Maybe the failed student or the third class student. The person
-> getting distinction, the chance of success is very, very low."*
+> Among distinction, first class, second class, third class and failed — which people are going to succeed like anything in their life? Maybe the failed student or the third class student. The person getting distinction, the chance of success is very, very low.
 >
-> His argument: in your own classroom, look at where the topper ended up. The 90–100% people often
-> become developers; the 60–65% people settle well, become HR heads, company owners, politicians.
-> *"Failed persons are going to manage third class people, third class people are going to manage
-> second class people… first class people are going to manage distinction people."* He mentions seeing
-> a video about a state education minister who was an eighth-standard failure.
+> His argument: in your own classroom, look at where the topper ended up. The 90–100% people often become developers; the 60–65% people settle well, become HR heads, company owners, politicians. Failed persons are going to manage third class people, third class people are going to manage second class people… first class people are going to manage distinction people. He mentions seeing a video about a state education minister who was an eighth-standard failure.
 >
-> *"My sincere recommendation: don't try to get 100 out of 100, it's a time waste. 80%, 85% is more
-> than enough, and spend the rest of the time on other activities. Don't waste your valuable life to
-> get 100 out of 100."*
+> My sincere recommendation: don't try to get 100 out of 100, it's a time waste. 80%, 85% is more than enough, and spend the rest of the time on other activities. Don't waste your valuable life to get 100 out of 100.
 
 ---
 
@@ -311,11 +279,9 @@ flowchart LR
 - **`andThen`** — 2 doubled is 4; 4 cubed is 4 × 4 × 4 = **64**.
 - **`compose`** — 2 cubed is 8; 8 doubled is **16**.
 
-> *"It's a simple syntactical trick, beyond that nothing is there."* In general you can just use
-> `andThen`, which reads in the order it executes.
+> It's a simple syntactical trick, beyond that nothing is there. In general you can just use `andThen`, which reads in the order it executes.
 
-**Chaining is not limited to two.** `f1.andThen(f2).andThen(f3).andThen(f4).apply(10)` is fine — any
-number, applied left to right.
+**Chaining is not limited to two.** `f1.andThen(f2).andThen(f3).andThen(f4).apply(10)` is fine — any number, applied left to right.
 
 ---
 

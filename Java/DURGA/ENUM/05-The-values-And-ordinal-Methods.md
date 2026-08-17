@@ -2,9 +2,7 @@
 
 There are two API methods to know for enum. This is the first.
 
-The situation it solves: **I have an enum. I know its name. I do not know how many constants are
-inside it.** Maybe the declaration is available somewhere, maybe not. Can you please list out all
-the values present inside it?
+The situation it solves: **I have an enum. I know its name. I do not know how many constants are inside it.** Maybe the declaration is available somewhere, maybe not. Can you please list out all the values present inside it?
 
 > **The purpose of `values()` is to list out all values present inside an enum.**
 
@@ -25,9 +23,7 @@ class Test {
 }
 ```
 
-The return type is **`Beer[]` — an array**. That follows from what the method does: it returns a
-*group* of values, and every one of those values is a `Beer` object, so to hold them you compulsorily
-need a `Beer` array.
+The return type is **`Beer[]` — an array**. That follows from what the method does: it returns a **group** of values, and every one of those values is a `Beer` object, so to hold them you compulsorily need a `Beer` array.
 
 Measured on JDK 25:
 
@@ -38,22 +34,17 @@ RC
 FO
 ```
 
-The names print rather than anything else, for the reason established in note `02` — printing an enum
-constant calls `toString()`, which is implemented to return the constant's name.
+The names print rather than anything else, for the reason established in note `02` — printing an enum constant calls `toString()`, which is implemented to return the constant's name.
 
 ## The specialty — where does `values()` actually live?
 
 This is the part he flags as the specialty, and it is the examinable bit.
 
-`values()` is called as `Beer.values()` — **by using the class name** — so it is a **static method**.
-Fine. But *where is it declared?*
+`values()` is called as `Beer.values()` — **by using the class name** — so it is a **static method**. Fine. But where is it declared?
 
 **Inside `Beer`?** No. `Beer` contains only constants. You wrote `KF, KO, RC, FO;` and nothing else.
 
-**Then it must be inherited from the parent, `java.lang.Enum`?** That is the reasonable guess — if
-the child does not contain a method, it must come from the parent. So he runs `javap java.lang.Enum`
-and reads down the list: `name()`, `ordinal()`, a constructor, `toString()`, `equals()`, `hashCode()`,
-`clone()`, `compareTo()`, `getDeclaringClass()`, `valueOf()`, `finalize()`…
+**Then it must be inherited from the parent, `java.lang.Enum`?** That is the reasonable guess — if the child does not contain a method, it must come from the parent. So he runs `javap java.lang.Enum` and reads down the list: `name()`, `ordinal()`, a constructor, `toString()`, `equals()`, `hashCode()`, `clone()`, `compareTo()`, `getDeclaringClass()`, `valueOf()`, `finalize()`…
 
 **`valueOf` is there. `values` is not.**
 
@@ -69,18 +60,13 @@ flowchart TB
 
 So where is it coming from?
 
-> **The `enum` keyword implicitly provides this method** for every enum. That is why you cannot find
-> it anywhere in the Java API.
+> **The `enum` keyword implicitly provides this method** for every enum. That is why you cannot find it anywhere in the Java API.
 
-`values()` is not an API method at all. It does not come from `Enum` and it does not come from
-`Object` — the compiler generates it into every enum class it compiles.
+`values()` is not an API method at all. It does not come from `Enum` and it does not come from `Object` — the compiler generates it into every enum class it compiles.
 
-> [!important] **This is the whole reason the question gets asked.** *Show me where `values()` is
-> declared* has no answer in the API docs. The right response is that the `enum` keyword supplies it
-> implicitly. Contrast it with `ordinal()`, which **is** a genuine API method in `java.lang.Enum`.
+> [!important] **This is the whole reason the question gets asked.** **Show me where `values()` is declared** has no answer in the API docs. The right response is that the `enum` keyword supplies it implicitly. Contrast it with `ordinal()`, which **is** a genuine API method in `java.lang.Enum`.
 
-> [!example]- **Proof — the same `javap` run on both classes.** Open this to see the method appear in
-> one place and not the other.
+> [!example]- **Proof — the same `javap` run on both classes.** Open this to see the method appear in one place and not the other.
 > `java.lang.Enum` — no `values()` anywhere in it:
 > ```
 > $ javap java.lang.Enum
@@ -104,10 +90,7 @@ So where is it coming from?
 >   static {};
 > }
 > ```
-> Neither `values()` nor that one-argument `valueOf(String)` was written by you. Both were injected
-> by the compiler into this specific enum — which is exactly why they cannot be found in the API,
-> and why their return types are `Beer` and `Beer[]` rather than something generic. Measured on
-> JDK 25.
+> Neither `values()` nor that one-argument `valueOf(String)` was written by you. Both were injected by the compiler into this specific enum — which is exactly why they cannot be found in the API, and why their return types are `Beer` and `Beer[]` rather than something generic. Measured on JDK 25.
 
 ---
 
@@ -115,9 +98,7 @@ So where is it coming from?
 
 The second method, and the idea comes from arrays.
 
-Inside an array, **the order of elements matters**: first element at index 0, second at index 1,
-third at index 2. Exactly the same is true inside an enum — **the order of constants is important**,
-and the number representing that order is called the **ordinal value**.
+Inside an array, **the order of elements matters**: first element at index 0, second at index 1, third at index 2. Exactly the same is true inside an enum — **the order of constants is important**, and the number representing that order is called the **ordinal value**.
 
 ```java
 enum Beer {
@@ -134,8 +115,7 @@ enum Beer {
 
 > **Ordinal values are zero-based, just like an array index.**
 
-> If you have an enum constant and you want to find its ordinal value, then we should go for the
-> **`ordinal()`** method.
+> If you have an enum constant and you want to find its ordinal value, then we should go for the **`ordinal()`** method.
 
 ## Both methods in one program
 
@@ -173,8 +153,7 @@ Unlike `values()`, this one is a real API method. From `javap java.lang.Enum`:
 public final int ordinal();
 ```
 
-It is present in **`java.lang.Enum`**, and your enum inherits it as a direct child. The return type
-is `int`.
+It is present in **`java.lang.Enum`**, and your enum inherits it as a direct child. The return type is `int`.
 
 > [!important] **The contrast is the answer to the exam question.**
 >

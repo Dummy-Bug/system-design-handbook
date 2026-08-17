@@ -2,12 +2,9 @@
 
 > **The process of creating an exactly duplicate object is called cloning.**
 
-> [!info] **The word arrived from outside programming.** In the late 1990s cloning was discovered and
-> *"the entire world felt happy — exactly the same Xerox copy can be created, something like a
-> miracle."* Then the disadvantages were weighed against the advantages, and **cloning on human beings
-> was banned** in most jurisdictions.
+> [!info] **The word arrived from outside programming.** In the late 1990s cloning was discovered and the entire world felt happy — exactly the same Xerox copy can be created, something like a miracle. Then the disadvantages were weighed against the advantages, and **cloning on human beings was banned** in most jurisdictions.
 >
-> *"But not required to worry — **cloning on a Java object is legal.**"*
+> But not required to worry — **cloning on a Java object is legal.**
 
 ---
 
@@ -15,31 +12,21 @@
 
 ## Reason 1 — a backup copy
 
-> [!question]- **Deep dive — the SCJP notes and the driving licence.** His two analogies for why a
-> duplicate is worth making, and the second is the sharper one.
+> [!question]- **Deep dive — the SCJP notes and the driving licence.** His two analogies for why a duplicate is worth making, and the second is the sharper one.
 >
-> **The notes.** You write your SCJP notes carefully, in two or three colours, over 600–700 pages. If
-> that book is lost, it is a serious problem. So what experienced students do: **take a Xerox copy, keep
-> the original safe, and use the copy day to day.** Lose the copy and nothing is lost — take another
-> from the original.
+> **The notes.** You write your SCJP notes carefully, in two or three colours, over 600–700 pages. If that book is lost, it is a serious problem. So what experienced students do: **take a Xerox copy, keep the original safe, and use the copy day to day.** Lose the copy and nothing is lost — take another from the original.
 >
-> **The licence.** *"How many of you carry the **original** driving licence in your pocket?"* Several
-> hands. *"Never recommended."* Take a colour photocopy, carry that, and keep the original somewhere
-> secure. Same for the PAN card and voter ID.
+> **The licence.** How many of you carry the **original** driving licence in your pocket?Several hands.Never recommended. Take a colour photocopy, carry that, and keep the original somewhere secure. Same for the PAN card and voter ID.
 >
-> > **The purpose of maintaining a duplicate is backup. If something goes wrong, the original is
-> > untouched and you can recover.**
+> > **The purpose of maintaining a duplicate is backup. If something goes wrong, the original is untouched and you can recover.**
 
-**In code:** you obtained an object through a **risky or expensive operation**. Operating on it
-directly is dangerous — if something goes wrong, there is no way back. So **clone it first**, work on
-the clone, and keep the original in reserve.
+**In code:** you obtained an object through a **risky or expensive operation**. Operating on it directly is dangerous — if something goes wrong, there is no way back. So **clone it first**, work on the clone, and keep the original in reserve.
 
 ## Reason 2 — to preserve state
 
-You are going to perform updates, and later you need to **compare the updated values against the
-original ones.**
+You are going to perform updates, and later you need to **compare the updated values against the original ones.**
 
-> *"If all operations are performed on the original object only, then where are my initial values?"*
+> If all operations are performed on the original object only, then where are my initial values?
 
 **Clone before updating**, and the original state survives for comparison.
 
@@ -93,9 +80,7 @@ t2: 888 999
 same object? false
 ```
 
-> [!important] **Three things that output proves at once.** A **genuinely separate object** was created
-> (`t1 == t2` is false); it started with **the original's values** (`10, 20`); and **modifying the copy
-> leaves the original untouched** — which is the entire point of a backup.
+> [!important] **Three things that output proves at once.** A **genuinely separate object** was created (`t1 == t2` is false); it started with **the original's values** (`10, 20`); and **modifying the copy leaves the original untouched** — which is the entire point of a backup.
 
 ## The three requirements
 
@@ -105,15 +90,11 @@ same object? false
 java.lang.CloneNotSupportedException: T2
 ```
 
-> **`Cloneable` is a marker interface** — no methods, and implementing it grants the ability. This is
-> the exact example from `DECLARATIONS-AND-ACCESS-MODIFIERS/13`, and *"don't feel `clone()` is available
-> inside `Cloneable`"* — it lives in `Object`.
+> **`Cloneable` is a marker interface** — no methods, and implementing it grants the ability. This is the exact example from `DECLARATIONS-AND-ACCESS-MODIFIERS/13`, and don't feel `clone()` is available inside `Cloneable` — it lives in `Object`.
 
-**2. You must override `clone()` and call `super.clone()`.** The inherited one is `protected`, so it is
-not reachable from outside your class; overriding it as `public` is what exposes the ability.
+**2. You must override `clone()` and call `super.clone()`.** The inherited one is `protected`, so it is not reachable from outside your class; overriding it as `public` is what exposes the ability.
 
-**3. The result must be cast.** `clone()` returns `Object`, so `(Test)` is required to get your type
-back.
+**3. The result must be cast.** `clone()` returns `Object`, so `(Test)` is required to get your type back.
 
 ```mermaid
 flowchart LR

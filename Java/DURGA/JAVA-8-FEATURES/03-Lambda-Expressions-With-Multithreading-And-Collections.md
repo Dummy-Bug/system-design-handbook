@@ -1,10 +1,8 @@
 # The rule this whole part rests on
 
-> **Lambda expressions are applicable only for functional interfaces.** If you do not have a functional
-> interface, you cannot write a lambda expression.
+> **Lambda expressions are applicable only for functional interfaces.** If you do not have a functional interface, you cannot write a lambda expression.
 
-> *"These two people have that much strong association. Without a functional interface, no chance of a
-> lambda expression."*
+> These two people have that much strong association. Without a functional interface, no chance of a lambda expression.
 
 ## One more warm-up, end to end
 
@@ -39,13 +37,11 @@ When `i.squareIt(5)` is called, `n` becomes 5, and `5 * 5` gives 25.
 
 # Doubt 1 — are lambda expressions actually used often?
 
-Asked by a student: *we do not always have a functional interface, so is this a rare thing?*
+Asked by a student: we do not always have a functional interface, so is this a rare thing?
 
-> **No. Lambda expressions are a very commonly used concept, because functional interfaces are very
-> common.**
+> **No. Lambda expressions are a very commonly used concept, because functional interfaces are very common.**
 
-Look at what a functional interface actually is — one method, one job. Now look at what ordinary
-programming consists of:
+Look at what a functional interface actually is — one method, one job. Now look at what ordinary programming consists of:
 
 | Everyday requirement | Shape |
 |---|---|
@@ -54,27 +50,21 @@ programming consists of:
 | take a `Student` object and print its information | **consume** an object → one method |
 | get me a connection object | **supply** an object → one method |
 
-Every one of those is a single-method job, and Java 8 ships a package full of ready-made functional
-interfaces for exactly these shapes:
+Every one of those is a single-method job, and Java 8 ships a package full of ready-made functional interfaces for exactly these shapes:
 
-> **`java.util.function`** — several **predefined functional interfaces** covering the general
-> requirements of programming.
+> **`java.util.function`** — several **predefined functional interfaces** covering the general requirements of programming.
 
-That package is a later part of the chapter. The point here is only that the functional-interface
-shape is not rare — it is what most code is made of.
+That package is a later part of the chapter. The point here is only that the functional-interface shape is not rare — it is what most code is made of.
 
-> *"The person who uses lambda expressions rarely — that person does not know the subject. If you know
-> lambda expressions, you can use them everywhere."*
+> The person who uses lambda expressions rarely — that person does not know the subject. If you know lambda expressions, you can use them everywhere.
 
 ---
 
 # Doubt 2 — does a lambda generate a `.class` file?
 
-The bigger doubt, raised by several students at once. The answer is **no**, and he proves it live by
-sorting his working folder by timestamp.
+The bigger doubt, raised by several students at once. The answer is **no**, and he proves it live by sorting his working folder by timestamp.
 
-> **A separate `.class` file will never be generated for a lambda expression.** At compile time it is
-> converted into a **private method** of the enclosing class.
+> **A separate `.class` file will never be generated for a lambda expression.** At compile time it is converted into a **private method** of the enclosing class.
 
 ## The proof
 
@@ -108,13 +98,11 @@ class Test {
 }
 ```
 
-**`private static int lambda$main$0(int)`** — the lambda body, compiled into a private method of
-`Test`, exactly as he describes.
+**`private static int lambda$main$0(int)`** — the lambda body, compiled into a private method of `Test`, exactly as he describes.
 
 ## The contrast that settles the misconception
 
-> *"Some people may feel lambda expressions came to replace anonymous inner classes. No — it is no way
-> related to anonymous inner classes. That is why no `.class` file will be generated."*
+> Some people may feel lambda expressions came to replace anonymous inner classes. No — it is no way related to anonymous inner classes. That is why no `.class` file will be generated.
 
 Write the same thing as an anonymous inner class and compile it. Measured on JDK 25:
 
@@ -130,12 +118,9 @@ Anon.class
 Interf2.class
 ```
 
-**Three files** — the `Anon$1.class` is the anonymous inner class. The lambda version of the same
-program produces no such file.
+**Three files** — the `Anon$1.class` is the anonymous inner class. The lambda version of the same program produces no such file.
 
-> [!info] **Asked in the session: is there any difference between a normal `.class` file and a
-> "lambda-related" `.class` file?** There is no such thing as a lambda-related class file, so the
-> question does not arise. All class files are the same kind of file.
+> [!info] **Asked in the session: is there any difference between a normal `.class` file and a lambda-related `.class` file?** There is no such thing as a lambda-related class file, so the question does not arise. All class files are the same kind of file.
 
 ---
 
@@ -146,8 +131,7 @@ program produces no such file.
 1. By **implementing `Runnable`**
 2. By **extending `Thread`**
 
-`Runnable` contains only `run()` — **one abstract method** — so `Runnable` is a functional interface,
-and anywhere a `Runnable` is required a lambda can go instead.
+`Runnable` contains only `run()` — **one abstract method** — so `Runnable` is a functional interface, and anywhere a `Runnable` is required a lambda can go instead.
 
 ## The old way
 
@@ -168,9 +152,7 @@ class ThreadDemo {
 }
 ```
 
-**Count the threads at each point.** Before `t.start()` there is exactly **one** thread — the **main
-thread**. After `t.start()` there are **two**: the main thread, which carries on with the loop in
-`main`, and the **child thread**, which executes the `run()` body. Both run **simultaneously**.
+**Count the threads at each point.** Before `t.start()` there is exactly **one** thread — the **main thread**. After `t.start()` there are **two**: the main thread, which carries on with the loop in `main`, and the **child thread**, which executes the `run()` body. Both run **simultaneously**.
 
 Measured on JDK 25 (one run, laid out on one line):
 
@@ -180,11 +162,9 @@ Child Thread Child Thread Child Thread Main Thread Main Thread Child Thread Chil
 Child Thread Main Thread Main Thread Main Thread Main Thread Main Thread
 ```
 
-**Mixed output — and we cannot predict the exact order.** That is the definition of two threads
-running at once. Run it again and the interleaving differs.
+**Mixed output — and we cannot predict the exact order.** That is the definition of two threads running at once. Run it again and the interleaving differs.
 
-> [!info] **Why bother with threads at all.** If multiple threads execute simultaneously the job
-> finishes in less time, so **performance improves**. That is the main advantage of multithreading.
+> [!info] **Why bother with threads at all.** If multiple threads execute simultaneously the job finishes in less time, so **performance improves**. That is the main advantage of multithreading.
 
 ## The lambda way
 
@@ -205,19 +185,13 @@ class ThreadDemo2 {
 
 Measured on JDK 25 — same mixed interleaving, and only **one** class file (`ThreadDemo2.class`).
 
-> *"Why this bloody `class MyRunnable implements Runnable` concept? Not required. From Java 1.8
-> onwards, this is the style we have to follow."*
+> Why this bloody `class MyRunnable implements Runnable` concept? Not required. From Java 1.8 onwards, this is the style we have to follow.
 
-> [!question]- **Deep dive — "but the `main` method got longer, so what did we save?"** A fair
-> objection raised in the session, and the answer is about the file, not the method.
+> [!question]- **Deep dive — but the `main` method got longer, so what did we save?** A fair objection raised in the session, and the answer is about the file, not the method.
 >
-> Yes, `main` grew by the lines that used to live in `run()`. But ask the other question: **how many
-> top-level classes are in the file now?** One instead of two. The `MyRunnable` class — its
-> declaration, its `implements` clause, its method signature, its braces — is gone entirely, and so is
-> the `.class` file it produced.
+> Yes, `main` grew by the lines that used to live in `run()`. But ask the other question: **how many top-level classes are in the file now?** One instead of two. The `MyRunnable` class — its declaration, its `implements` clause, its method signature, its braces — is gone entirely, and so is the `.class` file it produced.
 >
-> **The total length of the program went down, and readability went up.** Measuring one method instead
-> of the whole file is what makes the saving look like a loss.
+> **The total length of the program went down, and readability went up.** Measuring one method instead of the whole file is what makes the saving look like a loss.
 
 ---
 
@@ -243,20 +217,16 @@ Measured on JDK 25:
 
 Two things to read off that output:
 
-- **The order is insertion order.** `ArrayList` preserves the order you added things in; it never
-  sorts and never reorders.
-- **The square brackets and commas come from `toString()`**, which every collection overrides to print
-  as `[first, second, third]`.
+- **The order is insertion order.** `ArrayList` preserves the order you added things in; it never sorts and never reorders.
+- **The square brackets and commas come from `toString()`**, which every collection overrides to print as `[first, second, third]`.
 
-`ArrayList<Integer>` — that angle-bracket syntax is **generics**, and it says this list holds `Integer`
-objects.
+`ArrayList<Integer>` — that angle-bracket syntax is **generics**, and it says this list holds `Integer` objects.
 
 ## Sorting needs a `Comparator`
 
 `Collections.sort(l, c)` takes the list and a **comparator**, and the comparator decides the order.
 
-> **`Comparator` contains only one method: `compare(Object obj1, Object obj2)`, and it returns an
-> `int`.**
+> **`Comparator` contains only one method: `compare(Object obj1, Object obj2)`, and it returns an `int`.**
 
 The contract, which has to be memorised in this exact form:
 
@@ -266,13 +236,11 @@ The contract, which has to be memorised in this exact form:
 | **positive** | `obj1` has to come **after** `obj2` |
 | **zero** | `obj1` and `obj2` are **equal** |
 
-> *"Please insert this point in your mind, then you can understand my next-level discussion. Even if
-> you don't know collections, try to remember these words."*
+> Please insert this point in your mind, then you can understand my next-level discussion. Even if you don't know collections, try to remember these words.
 
 ## The old way — a separate comparator class
 
-Ascending order. If 20 and 10 are compared, 20 must come **after** 10, so the smaller element returns
-negative:
+Ascending order. If 20 and 10 are compared, 20 must come **after** 10, so the smaller element returns negative:
 
 ```java
 import java.util.*;
@@ -303,31 +271,21 @@ Measured on JDK 25:
 [0, 5, 10, 15, 20, 25, 30]
 ```
 
-> [!example]- **Deep dive — the live bug: a misspelled class name that compiled and ran anyway.** This
-> happens to him mid-demo and it is worth keeping, because the failure mode is genuinely confusing and
-> costs people hours.
+> [!example]- **Deep dive — the live bug: a misspelled class name that compiled and ran anyway.** This happens to him mid-demo and it is worth keeping, because the failure mode is genuinely confusing and costs people hours.
 >
-> He mistyped the comparator's class name — the declaration said one thing, `new MyComparator()` said
-> another. The expected result is a compile error. **Instead the program compiled and ran, and printed
-> a sorted list.**
+> He mistyped the comparator's class name — the declaration said one thing, `new MyComparator()` said another. The expected result is a compile error. **Instead the program compiled and ran, and printed a sorted list.**
 >
-> *"Really, I got shocked."*
+> Really, I got shocked.
 >
-> The reason: **an old `MyComparator.class` from an earlier example was still sitting in the working
-> directory.** `javac` did not need the source — it found a matching `.class` file and linked against
-> that. The output was produced by a comparator from a completely different program.
+> The reason: **an old `MyComparator.class` from an earlier example was still sitting in the working directory.** `javac` did not need the source — it found a matching `.class` file and linked against that. The output was produced by a comparator from a completely different program.
 >
-> He deletes the stale `MyComparator.class`, recompiles, and *now* the compiler says it cannot find
-> `MyComparator` — the honest error that should have appeared in the first place.
+> He deletes the stale `MyComparator.class`, recompiles, and **now** the compiler says it cannot find `MyComparator` — the honest error that should have appeared in the first place.
 >
-> **The lesson:** a `.class` file left in the working directory is as real to the compiler as source
-> code. When behaviour makes no sense — especially when something works that clearly should not — look
-> at what is actually on disk. *"How stupid it is, man."*
+> **The lesson:** a `.class` file left in the working directory is as real to the compiler as source code. When behaviour makes no sense — especially when something works that clearly should not — look at what is actually on disk. How stupid it is, man.
 
 ## Collapsing the comparator to one line
 
-The `if / else if / else` is three returns choosing between three values, which is exactly what the
-**ternary operator** is for:
+The `if / else if / else` is three returns choosing between three values, which is exactly what the **ternary operator** is for:
 
 ```java
 public int compare(Integer i1, Integer i2) {
@@ -335,8 +293,7 @@ public int compare(Integer i1, Integer i2) {
 }
 ```
 
-Read it as the same decision tree: *if the first condition holds, return `-1`; otherwise test the
-second; if that holds return `1`; otherwise return `0`.*
+Read it as the same decision tree: if the first condition holds, return `-1`; otherwise test the second; if that holds return `1`; otherwise return `0`.
 
 Measured on JDK 25: `[0, 5, 10, 15, 20, 25, 30]` — identical output.
 
@@ -371,7 +328,7 @@ And the inference chain once more, because it is the same chain every time:
 | These two arguments belong to which method? | `compare` | `Comparator` is a functional interface — it has only one |
 | What type are they? | `Integer` | the reference is `Comparator<Integer>` |
 
-> *"`class MyComparator implements Comparator`, dot dot dot — all that nonsense, gone."*
+> `class MyComparator implements Comparator`, dot dot dot — all that nonsense, gone.
 
 ---
 
@@ -381,8 +338,7 @@ Two one-liners shown in advance, with the explicit warning not to worry about th
 
 ## Printing every element
 
-The Java 7 way needs a **cursor** — an `Iterator` or a `ListIterator`, a `while (it.hasNext())` loop, a
-`it.next()` inside it. The Java 8 way:
+The Java 7 way needs a **cursor** — an `Iterator` or a `ListIterator`, a `while (it.hasNext())` loop, a `it.next()` inside it. The Java 8 way:
 
 ```java
 l.stream().forEach(System.out::println);
@@ -400,8 +356,7 @@ Measured on JDK 25:
 15
 ```
 
-> The `::` in `System.out::println` is the **double colon operator** — a **method reference**. Method
-> references and constructor references are a later part of the chapter.
+> The `::` in `System.out::println` is the **double colon operator** — a **method reference**. Method references and constructor references are a later part of the chapter.
 
 ## Collecting only the even numbers
 
@@ -416,20 +371,16 @@ Measured on JDK 25:
 [20, 10, 30, 0]
 ```
 
-**One line.** It reads every element of `l`, keeps the even ones, collects them into a **new list**,
-and returns it — `l` itself is untouched. In Java 7 the same thing is a new `ArrayList`, a loop over
-every element, an `if`, and an `add`: *"minimum 10 lines of code."*
+**One line.** It reads every element of `l`, keeps the even ones, collects them into a **new list**, and returns it — `l` itself is untouched. In Java 7 the same thing is a new `ArrayList`, a loop over every element, an `if`, and an `add`: minimum 10 lines of code.
 
-> [!important] **The import that catches everyone, and it caught him live.** With only
-> `import java.util.*;` the code does not compile. Measured on JDK 25:
+> [!important] **The import that catches everyone, and it caught him live.** With only `import java.util.*;` the code does not compile. Measured on JDK 25:
 > ```
 > error: cannot find symbol
 >   symbol:   variable Collectors
 > ```
 > `Collectors` lives in **`java.util.stream`**, which is a **sub-package** of `java.util`.
 >
-> > **If you import a package, only the classes present inside that package are available — not the
-> > classes of its sub-packages.** To use them you need a separate import down to the sub-package.
+> > **If you import a package, only the classes present inside that package are available — not the classes of its sub-packages.** To use them you need a separate import down to the sub-package.
 >
 > So `import java.util.stream.*;` has to be added as well.
 

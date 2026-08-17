@@ -40,7 +40,7 @@ The first call does the work you would expect. The second call does **exactly th
 
 > The problem with the interpreter is that it **interprets every time**, even the same method invoked multiple times, which **reduces performance** of the system.
 
-The obvious objection is the right one: *why not convert it into machine code only once?*
+The obvious objection is the right one: why not convert it into machine code only once?
 
 This is what the **JIT compiler** exists to fix.
 
@@ -82,8 +82,7 @@ flowchart TB
 
 > The threshold count value **varies from JVM to JVM**.
 
-> [!warning] Coder Army — **where that native code lives: the code cache, not the method area**
-> A common way to put this is that JIT-compiled code is stored in the method area, alongside the bytecode it came from. On HotSpot it is not. Compiled methods go into a separate native-memory region called the **code cache**, sized with **`-XX:ReservedCodeCacheSize`**.
+> [!warning] Coder Army — **where that native code lives: the code cache, not the method area** A common way to put this is that JIT-compiled code is stored in the method area, alongside the bytecode it came from. On HotSpot it is not. Compiled methods go into a separate native-memory region called the **code cache**, sized with **`-XX:ReservedCodeCacheSize`**.
 >
 > Worth knowing because it fails in a way of its own: if the code cache fills up, the JIT **stops compiling entirely** and the JVM quietly drops back to interpreting. Nothing crashes and no exception is thrown — the application simply gets slower and stays slower, with only a `CodeCache is full. Compiler has been disabled.` line in the log to explain it.
 
@@ -92,9 +91,9 @@ flowchart TB
 > 1. The JVM interprets the total program line by line **at least once**.
 > 2. JIT compilation is applicable **only for repeatedly invoked methods**, but not for every method.
 
-Both follow from the counter. A method has to be *called* before its count can rise, and it has to be *interpreted* on those early calls, because compilation has not happened yet. So nothing skips the interpreter entirely, and a method called once is never compiled at all.
+Both follow from the counter. A method has to be **called** before its count can rise, and it has to be **interpreted** on those early calls, because compilation has not happened yet. So nothing skips the interpreter entirely, and a method called once is never compiled at all.
 
-> [!important] **This is why Java is both a compiled and an interpreted language**, which sounds like a contradiction until you count the stages. `javac` compiles source to **bytecode** — that is compilation. The interpreter converts bytecode to machine code line by line — that is interpretation. And the JIT compiler converts hot methods to native code — compilation again, at runtime. Three stages, two of them compilation, and the answer to *"is Java compiled or interpreted?"* is **both**.
+> [!important] **This is why Java is both a compiled and an interpreted language**, which sounds like a contradiction until you count the stages. `javac` compiles source to **bytecode** — that is compilation. The interpreter converts bytecode to machine code line by line — that is interpretation. And the JIT compiler converts hot methods to native code — compilation again, at runtime. Three stages, two of them compilation, and the answer to is Java compiled or interpreted? is **both**.
 
 ## Recompiling for better code
 
@@ -106,7 +105,7 @@ A method that is merely hot gets compiled. A method that stays hot gets compiled
 
 > **Profiler**, which is part of the JIT compiler, is responsible to identify **HOT SPOTS**.
 
-> [!info] **This is where the name "HotSpot JVM" comes from.** The standard JVM you are running is called HotSpot precisely because this is its defining trick: watch the program, find the hot spots, compile those. Worth making explicit, because "HotSpot" appears in every stack trace and error message you will ever read.
+> [!info] **This is where the name HotSpot JVM comes from.** The standard JVM you are running is called HotSpot precisely because this is its defining trick: watch the program, find the hot spots, compile those. Worth making explicit, because HotSpot appears in every stack trace and error message you will ever read.
 
 ## Inside the JIT compiler
 
@@ -145,13 +144,13 @@ flowchart LR
 
 So the flow is: execution engine → JNI → native method library, and the information comes back the same way.
 
-> [!info] **This closes a loop from the very first note.** The basic architecture diagram had JNI hanging off the side of the execution engine, and it was described then as "a supporting piece rather than a fourth module". This is why: it does no execution of its own. It exists so that the execution engine can reach code the JVM did not compile.
+> [!info] **This closes a loop from the very first note.** The basic architecture diagram had JNI hanging off the side of the execution engine, and it was described then as a supporting piece rather than a fourth module. This is why: it does no execution of its own. It exists so that the execution engine can reach code the JVM did not compile.
 
 ---
 
 # Tiered compilation — how it really runs
 
-The model above — interpret first, count invocations, compile the hot ones — is exactly how HotSpot works. The one simplification is the counting: there is not a *single* threshold or a *single* compiler, but a ladder of both.
+The model above — interpret first, count invocations, compile the hot ones — is exactly how HotSpot works. The one simplification is the counting: there is not a **single** threshold or a **single** compiler, but a ladder of both.
 
 > [!important] **There are two JIT compilers, and a hot method is typically compiled twice.** HotSpot runs **tiered compilation**, on by default (verified: `TieredCompilation = true` on JDK 25). Instead of one threshold, there is a ladder:
 >
@@ -177,13 +176,13 @@ The model above — interpret first, count invocations, compile the hot ones —
 > 13    8       3       Hot::m1 (24 bytes)   made not entrant: not used
 > ```
 >
-> The same method compiled at **level 3** (C1), then at **level 4** (C2), and then the level-3 version thrown away — *made not entrant* — because the better version had replaced it.
+> The same method compiled at **level 3** (C1), then at **level 4** (C2), and then the level-3 version thrown away — **made not entrant** — because the better version had replaced it.
 >
-> That third line is "recompile the hot method for more optimised code" happening in front of you. It is not an exotic feature — it is the default path for anything that stays hot.
+> That third line is recompile the hot method for more optimised code happening in front of you. It is not an exotic feature — it is the default path for anything that stays hot.
 
-> [!warning] **The "three calls" threshold in the walkthrough above is illustrative, not real.** It is a fine number for a whiteboard. The real figures are in the hundreds to thousands, as measured above, and they vary — between JVMs, between tiers, and with the flags in use. Never quote a specific number as *the* threshold.
+> [!warning] **The three calls threshold in the walkthrough above is illustrative, not real.** It is a fine number for a whiteboard. The real figures are in the hundreds to thousands, as measured above, and they vary — between JVMs, between tiers, and with the flags in use. Never quote a specific number as **the** threshold.
 
-> [!info] **The interpreter is not merely a slow fallback.** It also does the profiling that makes good compilation possible — recording which branches are taken, which types actually show up at a call site. C2 uses that to make optimisations a static compiler could never justify, such as inlining a virtual call because only one implementation has ever been seen. That is why "interpret first, then compile" beats "compile everything up front", and it is a large part of why a long-running JVM can match or beat statically compiled code.
+> [!info] **The interpreter is not merely a slow fallback.** It also does the profiling that makes good compilation possible — recording which branches are taken, which types actually show up at a call site. C2 uses that to make optimisations a static compiler could never justify, such as inlining a virtual call because only one implementation has ever been seen. That is why interpret first, then compile beats compile everything up front, and it is a large part of why a long-running JVM can match or beat statically compiled code.
 
 ---
 

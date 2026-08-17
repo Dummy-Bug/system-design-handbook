@@ -9,13 +9,13 @@
 | **`throw`** | to hand our created exception object to the JVM **manually** |
 | **`throws`** | to **delegate** the responsibility of exception handling to the caller method |
 
-> [!important] **Worth memorising in exactly this form.** *"What are the exception handling keywords and what does each do?"* is a warm-up question, and five crisp phrases — risky, handling, cleanup, hand over, delegate — answer it completely. The trap inside it is `throw` versus `throws`: one hands an object to the JVM *now*, the other declares that this method will not deal with one.
+> [!important] **Worth memorising in exactly this form.** What are the exception handling keywords and what does each do? is a warm-up question, and five crisp phrases — risky, handling, cleanup, hand over, delegate — answer it completely. The trap inside it is `throw` versus `throws`: one hands an object to the JVM **now**, the other declares that this method will not deal with one.
 
 ---
 
 # The compile-time errors, collected
 
-Every one of these has appeared in this chapter, and each was measured on JDK 25 where it was introduced. Having them as a set is useful because a common exam format is *"which of the following produces a compile-time error?"*
+Every one of these has appeared in this chapter, and each was measured on JDK 25 where it was introduced. Having them as a set is useful because a common exam format is which of the following produces a compile-time error?
 
 | # | Error | Cause | Where it appeared |
 |---|---|---|---|
@@ -28,7 +28,7 @@ Every one of these has appeared in this chapter, and each was measured on JDK 25
 | 7 | `incompatible types: XXX cannot be converted to Throwable` | `throw` or `throws` used with a non-`Throwable` type | parts 6, 7 |
 | 8 | `unreachable statement` | a statement written directly after a `throw` | part 6 |
 
-> [!info] **Error 3 is the one that encodes a rule rather than a mistake.** The others are all "you wrote something malformed". That one is the compiler enforcing the fully-checked/partially-checked distinction — which is why `catch (Exception e)` over an empty `try` compiles and `catch (IOException e)` does not.
+> [!info] **Error 3 is the one that encodes a rule rather than a mistake.** The others are all you wrote something malformed. That one is the compiler enforcing the fully-checked/partially-checked distinction — which is why `catch (Exception e)` over an empty `try` compiles and `catch (IOException e)` does not.
 
 ---
 
@@ -107,11 +107,11 @@ The exception name in the trace is **your class name**, with no package prefix a
 
 The reason follows from part 7. Extend `Exception` instead and your exception is **checked**, which means every method that might propagate it needs a `throws` clause, and every caller above that, all the way up. You would be forcing your own API's users into paperwork for a condition they usually cannot do anything about.
 
-> [!info] "Prefer unchecked" is now mainstream — most frameworks you will use, Spring included, wrap checked exceptions into unchecked ones for exactly the propagation reason above.
+> [!info] Prefer unchecked is now mainstream — most frameworks you will use, Spring included, wrap checked exceptions into unchecked ones for exactly the propagation reason above.
 
 > **checked** exception is the compiler forcing a caller to make a decision, which is valuable only when the caller genuinely can recover — the `FileNotFoundException` → use-a-local-file case from part 1. The usable rule: **unchecked for programming errors and conditions nobody can recover from; checked for a recoverable condition that a caller must be made to think about.** Durga Sir's advice is the right default, not an absolute.
 
-> [!important] **One more note from the PDF, easy to miss:** we can catch **any `Throwable` type, including `Error`s**. `catch (Error e)` compiles and works — part 3's table confirms it, since `Error` is unchecked and can be caught over any `try`. That it is *possible* is not a reason to do it; the reason not to is the one from part 2 — errors are **non-recoverable**, so there is nothing useful to put in the block.
+> [!important] **One more note from the PDF, easy to miss:** we can catch **any `Throwable` type, including `Error`s**. `catch (Error e)` compiles and works — part 3's table confirms it, since `Error` is unchecked and can be caught over any `try`. That it is **possible** is not a reason to do it; the reason not to is the one from part 2 — errors are **non-recoverable**, so there is nothing useful to put in the block.
 
 ---
 

@@ -88,8 +88,7 @@ flowchart TB
 ```
 
 > **1.** If the content is **fixed** and won't change frequently → **`String`**.
-> **2.** If the content **changes frequently** but **thread safety is required** → **`StringBuffer`**.
-> **3.** If the content **changes frequently** and **thread safety is not required** → **`StringBuilder`**.
+> **2.** If the content **changes frequently** but **thread safety is required** → **`StringBuffer`**. **3.** If the content **changes frequently** and **thread safety is not required** → **`StringBuilder`**.
 
 The reason `String` wins the fixed case is everything from note `03`: the same content can be reused through the SCP, so no separate object is needed and both performance and memory utilisation improve.
 

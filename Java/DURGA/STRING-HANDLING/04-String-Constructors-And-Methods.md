@@ -1,6 +1,6 @@
 # The constructors of `String`
 
-Six of them, and each answers *"I have this — how do I get a `String` from it?"*
+Six of them, and each answers I have this — how do I get a `String` from it?
 
 | # | Constructor | Creates |
 |---|---|---|
@@ -130,8 +130,7 @@ System.out.println(s.equalsIgnoreCase("durga"));
 Measured: `true`.
 
 > [!important] **The example that fixes which is which: username and password.**
-> A **username or email** may be typed in any case — Gmail does not care whether you type it in uppercase or lowercase. Validate it with **`equalsIgnoreCase()`**.
-> A **password** is always case-sensitive — which is exactly why a stray Caps Lock costs you a login attempt. Validate it with **`equals()`**.
+> A **username or email** may be typed in any case — Gmail does not care whether you type it in uppercase or lowercase. Validate it with **`equalsIgnoreCase()`**. A **password** is always case-sensitive — which is exactly why a stray Caps Lock costs you a login attempt. Validate it with **`equals()`**.
 
 So `String` has **two** equality methods: one where case counts, one where it does not.
 
@@ -206,7 +205,7 @@ System.out.println(s.substring(3));
 
 Index 3 is `d`, so from `d` onwards. Measured: `defg`.
 
-> [!info] **The tagline he uses to remember `abcdefg`** comes from a Telugu film titled *Balu* — *"a boy can do everything for a girl"* — which was popular enough that people immediately produced reversed versions of it. Whether the original or the reversal is the truer statement he leaves open.
+> [!info] **The tagline he uses to remember `abcdefg`** comes from a Telugu film titled **Balu** — a boy can do everything for a girl — which was popular enough that people immediately produced reversed versions of it. Whether the original or the reversal is the truer statement he leaves open.
 
 ## 9 · `public String substring(int begin, int end)`
 
@@ -309,9 +308,9 @@ Measured: entering `Hyderabad` with a capital H gives `please enter a valid city
 
 **Two fixes, and the second is better.**
 
-*Fix one* — replace `equals()` with `equalsIgnoreCase()`. Correct, but it must be done in **three** places.
+**Fix one** — replace `equals()` with `equalsIgnoreCase()`. Correct, but it must be done in **three** places.
 
-*Fix two* — normalise the input once, on the way in:
+**Fix two** — normalise the input once, on the way in:
 
 ```java
 String name = sc.nextLine().toLowerCase();
@@ -341,7 +340,7 @@ Measured after the fix: `   HYDeRabad   ` with leading and trailing spaces and m
 
 ## The catch, and it is examined heavily
 
-> [!important] **`trim()` removes blank spaces at the beginning and at the end — but *not* in the middle.**
+> [!important] **`trim()` removes blank spaces at the beginning and at the end — but not in the middle.**
 
 ```java
 String s = "durga soft";
@@ -372,9 +371,9 @@ Measured on JDK 25:
 > | `U+3000` ideographic space | true | ❌ | ✅ |
 > | `U+00A0` no-break space | **false** | ❌ | ❌ |
 >
-> So `trim()` silently leaves the wide Unicode spaces that a user pasting from a document will actually produce. **Prefer `strip()` in new code.** Note the last row: the non-breaking space is not whitespace by definition, so *neither* method removes it — a real source of confusion when cleaning pasted input. Everything Durga Sir teaches about `trim()` remains exactly true; `strip()` is an addition, not a correction.
+> So `trim()` silently leaves the wide Unicode spaces that a user pasting from a document will actually produce. **Prefer `strip()` in new code.** Note the last row: the non-breaking space is not whitespace by definition, so **neither** method removes it — a real source of confusion when cleaning pasted input. Everything Durga Sir teaches about `trim()` remains exactly true; `strip()` is an addition, not a correction.
 >
-> Java 11 also added **`isBlank()`** — true for a string that is empty *or* only whitespace — which is usually what the city-name check actually wanted.
+> Java 11 also added **`isBlank()`** — true for a string that is empty **or** only whitespace — which is usually what the city-name check actually wanted.
 
 ---
 

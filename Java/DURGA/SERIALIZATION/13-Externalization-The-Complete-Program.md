@@ -1,7 +1,6 @@
 # The externalization program
 
-**Part `12` was the theory. This is it running**, and the output settles four separate questions at
-once.
+**Part `12` was the theory. This is it running**, and the output settles four separate questions at once.
 
 ```java
 import java.io.*;
@@ -33,12 +32,9 @@ class ExternalizableDemo implements Externalizable {
 }
 ```
 
-**Three properties, and only two of them are written.** *"The object contains three variables — maybe
-1,000 also — but I require only `s` and `i`. That's why only `s` and `i` we are saving to the file."*
+**Three properties, and only two of them are written.** The object contains three variables — maybe 1,000 also — but I require only `s` and `i`. That's why only `s` and `i` we are saving to the file.
 
-> [!important] **Note the two constructors and why both exist.** The **parameterised** one is for you,
-> to build the object. The **public no-arg** one is for the JVM, at deserialization time — it is never
-> called by your code, and the print statement inside it is there purely to prove the JVM calls it.
+> [!important] **Note the two constructors and why both exist.** The **parameterised** one is for you, to build the object. The **public no-arg** one is for the JVM, at deserialization time — it is never called by your code, and the print statement inside it is there purely to prove the JVM calls it.
 
 ## The signatures
 
@@ -47,9 +43,7 @@ public void writeExternal(ObjectOutput out) throws IOException;
 public void readExternal(ObjectInput in)   throws IOException, ClassNotFoundException;
 ```
 
-**These are `public`**, because they are interface methods being implemented — the exact opposite of
-the `private` callbacks in part `07`. **And `ObjectOutput` / `ObjectInput` are interfaces**, the parents
-of `ObjectOutputStream` and `ObjectInputStream`.
+**These are `public`**, because they are interface methods being implemented — the exact opposite of the `private` callbacks in part `07`. **And `ObjectOutput` / `ObjectInput` are interfaces**, the parents of `ObjectOutputStream` and `ObjectInputStream`.
 
 ---
 
@@ -77,24 +71,20 @@ Durga 10 0
 | **`public no-arg constructor` printed** | the JVM really does **construct a fresh object** at deserialization |
 | **`j` is `0`** | `j` was **never written**, so nothing restored it |
 
-> *"Whether `j` is zero or non-zero, no problem at all — because as a programmer, our requirement is
-> that the receiver requires only two values: `Durga` and `10`."*
+> Whether `j` is zero or non-zero, no problem at all — because as a programmer, our requirement is that the receiver requires only two values: `Durga` and `10`.
 
 ## Tracing the write
 
-> **Whenever we are serializing `t1`, the JVM checks whether the class implements `Serializable` or
-> `Externalizable`.**
+> **Whenever we are serializing `t1`, the JVM checks whether the class implements `Serializable` or `Externalizable`.**
 
 | The class implements | What the JVM does |
 |---|---|
 | `Serializable` | saves the **total object** |
-| **`Externalizable`** | *"the programmer requires only one or two properties"* — **calls `writeExternal()`** |
+| **`Externalizable`** | the programmer requires only one or two properties — **calls `writeExternal()`** |
 
 ## Tracing the read
 
-> **The JVM creates a separate new object by executing the public no-argument constructor.** At that
-> moment all three fields hold their defaults — `null`, `0`, `0`. **Then `readExternal()` is called on
-> that object**, and it replaces `null` with `Durga` and the first `0` with `10`.
+> **The JVM creates a separate new object by executing the public no-argument constructor.** At that moment all three fields hold their defaults — `null`, `0`, `0`. **Then `readExternal()` is called on that object**, and it replaces `null` with `Durga` and the first `0` with `10`.
 
 **`j` is never touched, so it keeps the `0` the constructor left it with.**
 
@@ -125,11 +115,7 @@ flowchart TB
 | No-arg constructor called? | ✅ **yes** | ❌ **no** |
 | What the file held | **two** values | **the whole object** |
 
-> [!important] **The constructor line does not print in the `Serializable` version, and that is the
-> cleanest possible proof of the difference.** *"What is the reason? Because the file contains the
-> total object"* — there is nothing to construct, so nothing is constructed. **Part `02`'s deep dive
-> said deserialization skips your constructor; this is the exception, and the reason for the
-> exception.**
+> [!important] **The constructor line does not print in the `Serializable` version, and that is the cleanest possible proof of the difference.** What is the reason? Because the file contains the total object — there is nothing to construct, so nothing is constructed. **Part `02`'s deep dive said deserialization skips your constructor; this is the exception, and the reason for the exception.**
 
 ## And without the public no-arg constructor
 
@@ -162,8 +148,7 @@ Measured on JDK 25:
    Durga 10 0
 ```
 
-**Identical to the version with no `transient` at all.** For contrast, the same fields under
-`Serializable`:
+**Identical to the version with no `transient` at all.** For contrast, the same fields under `Serializable`:
 
 ```
 --- Serializable with transient s and i:
@@ -172,13 +157,9 @@ Measured on JDK 25:
 
 > **`transient` will play a role in serialization, but it won't play any role in externalization.**
 
-> [!important] **The reasoning is a one-liner, and it is the answer to give.** *"Who is responsible to
-> save the data? The programmer. If you don't want to save the value of a particular variable — **don't
-> save that variable**. Everything is in the programmer's hand. What is the need of using the
-> `transient` keyword?"*
+> [!important] **The reasoning is a one-liner, and it is the answer to give.** Who is responsible to save the data? The programmer. If you don't want to save the value of a particular variable — **don't save that variable**. Everything is in the programmer's hand. What is the need of using the `transient` keyword?
 >
-> **`transient` is an instruction to the default machinery**, and in externalization the default
-> machinery never runs. **Using it is harmless but meaningless.**
+> **`transient` is an instruction to the default machinery**, and in externalization the default machinery never runs. **Using it is harmless but meaningless.**
 
 ---
 
@@ -210,4 +191,4 @@ Measured on JDK 25:
 | Same class as `Serializable` | **`Durga 10 20`**, and **no constructor call** |
 | `transient` under externalization | **no effect at all** |
 | Why | `transient` instructs the **default machinery**, which never runs |
-| The one-line answer | *"if you don't want to save it, **don't write it**"* |
+| The one-line answer | if you don't want to save it, **don't write it** |

@@ -14,28 +14,15 @@ Before explaining it, he places it among its siblings — everything that arrive
 | enum |
 | **static import** |
 
-> [!question]- **Deep dive — the movie analogy, and why he calls static import the flop of 1.5.** Kept
-> because it is how he frames the whole feature, and because the verdict is still the industry's.
+> [!question]- **Deep dive — the movie analogy, and why he calls static import the flop of 1.5.** Kept because it is how he frames the whole feature, and because the verdict is still the industry's.
 >
-> Before any film is released, the producer and director hold an audio function and promise it will
-> *"break Tollywood records, Bollywood records, world records."* Then one fine day the movie releases —
-> **and the audience decides whether it is a hit or a flop.** He remembers one such function for a film
-> called *Orange*, where a speaker promised it would be huge. *"How much hit was that movie? You can
-> decide — it is nothing but a flop movie."*
+> Before any film is released, the producer and director hold an audio function and promise it will break Tollywood records, Bollywood records, world records. Then one fine day the movie releases — **and the audience decides whether it is a hit or a flop.** He remembers one such function for a film called **Orange**, where a speaker promised it would be huge. How much hit was that movie? You can decide — it is nothing but a flop movie.
 >
-> **The same publicity happened for Java 1.5.** *"Some people conducted a press meet saying: after
-> releasing 1.5, all the remaining languages are going to be packed, because we are redefining total
-> Java once again."* Then the release came, and worldwide programmers — the audience — judged the
-> features. Most were genuinely excellent, *"each and every feature's target is to simplify the
-> programmer's life."*
+> **The same publicity happened for Java 1.5.** Some people conducted a press meet saying: after releasing 1.5, all the remaining languages are going to be packed, because we are redefining total Java once again. Then the release came, and worldwide programmers — the audience — judged the features. Most were genuinely excellent, each and every feature's target is to simplify the programmer's life.
 >
-> **But not every new concept is a hit.** *"There is one concept which is a flop concept in the 1.5
-> version — static import."* And by 1.6 the message had changed: *"if there is no specific requirement,
-> it is not recommended to use static import."*
+> **But not every new concept is a hit.** There is one concept which is a flop concept in the 1.5 version — static import. And by 1.6 the message had changed: if there is no specific requirement, it is not recommended to use static import.
 
-> **According to Sun, static import reduces the length of the code and improves readability.**
-> **According to worldwide programming experts, static import creates confusion and reduces readability. 
-> Hence, if there is no specific requirement, it is not recommended.**
+> **According to Sun, static import reduces the length of the code and improves readability.** **According to worldwide programming experts, static import creates confusion and reduces readability. Hence, if there is no specific requirement, it is not recommended.**
 
 ## What it actually does
 
@@ -47,7 +34,7 @@ System.out.println(Math.max(10, 20));
 System.out.println(Math.random());
 ```
 
-Write `Math.sqrt` twenty times and you type `Math` twenty times. *"Why don't you remove that class name from the static method?"*
+Write `Math.sqrt` twenty times and you type `Math` twenty times. Why don't you remove that class name from the static method?
 
 **Drop the class name and it breaks.** Measured on JDK 25:
 
@@ -97,9 +84,7 @@ Measured on JDK 25, run twice:
 
 > **Usually we access static members using the class name. Whenever we write a static import, we can access static members directly, without the class name.**
 
-> [!important] **The spelling trap.** The concept is called **static import**, but what you write is
-> **`import static`** — in that order. *"While writing we have to write `import static`, but while
-> pronouncing, `static import` is the popular one."* 
+> [!important] **The spelling trap.** The concept is called **static import**, but what you write is **`import static`** — in that order. While writing we have to write `import static`, but while pronouncing, `static import` is the popular one.
 > 
 > Note also: import the **name only** — `sqrt`, not `sqrt()`.
 
@@ -241,7 +226,7 @@ class R1 {
 }
 ```
 
-**Which one wins?** Most of the class answers *"Integer — because explicit import has the highest priority."* That is the rule from the previous session.
+**Which one wins?** Most of the class answers Integer — because explicit import has the highest priority. That is the rule from the previous session.
 
 **While resolving static members,
 
@@ -265,9 +250,9 @@ Measured on JDK 25, removing one source at a time:
 | 2 | classes in the **current working directory** | **explicit** static import |
 | 3 | **implicit** class import | **implicit** static import |
 
-> [!important] **Why the difference makes sense.** For a *class* name there is no "current class" tier — a class is not a member of the class using it, so the list starts at the imports. 
+> [!important] **Why the difference makes sense.** For a **class** name there is no current class tier — a class is not a member of the class using it, so the list starts at the imports. 
 >
-> For a *static member* there is, and the language resolves what is **declared right here** before it looks anywhere else. Your own declarations always win over anything imported.
+> For a **static member** there is, and the language resolves what is **declared right here** before it looks anywhere else. Your own declarations always win over anything imported.
 >
 
 

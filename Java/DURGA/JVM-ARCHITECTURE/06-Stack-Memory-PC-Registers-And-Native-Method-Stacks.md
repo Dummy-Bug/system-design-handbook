@@ -64,12 +64,11 @@ flowchart TB
     R1 --> SAFE(["private to its thread →<br/><b>thread safe</b>"])
 ```
 
-> [!important] **This is the one memory area that is thread safe, and it is thread safe for a structural reason rather than a defensive one.** Nothing is locked, nothing is synchronized, nothing is copied. Each thread simply has its own stack that no other thread can reach — safety by *not sharing*, which is always cheaper than safety by coordination.
+> [!important] **This is the one memory area that is thread safe, and it is thread safe for a structural reason rather than a defensive one.** Nothing is locked, nothing is synchronized, nothing is copied. Each thread simply has its own stack that no other thread can reach — safety by **not sharing**, which is always cheaper than safety by coordination.
 >
 > Line the three up and the pattern is complete: method area shared → not thread safe; heap shared → not thread safe; **stack not shared → thread safe**. Which is also the practical reason local variables are the safest place to keep anything in concurrent code.
 
-> [!info] Coder Army — **why local variables are not simply kept on the heap** like everything else
-> Every object the program creates goes on the heap, so it is fair to ask why locals get an area of their own.
+> [!info] Coder Army — **why local variables are not simply kept on the heap** like everything else Every object the program creates goes on the heap, so it is fair to ask why locals get an area of their own.
 >
 > Three reasons, and all of them are about cost. Calling methods is the **most frequent thing a program does**, and a stack gives you push and pop in constant time — no searching for free space, no bookkeeping. Locals are **short-lived by definition**; the instant the method returns every one of them is dead, so releasing them is nothing more than moving the top-of-stack pointer down. And because of that, the **garbage collector never has to look at them at all** — nothing to mark, nothing to trace, no pause.
 >
@@ -135,7 +134,7 @@ The reason is lifetime. The local variable array is **created fresh on every cal
 | `i` — parameter | **yes** | slot 1 |
 | `local` — local | **yes** | slot 2 |
 
-> [!info] Coder Army — **"Java is pass-by-value" is just two slot arrays side by side**
+> [!info] Coder Army — **Java is pass-by-value is just two slot arrays side by side**
 > ```java
 > public static void main(String[] args) {
 >     int a = 10;
@@ -156,7 +155,7 @@ The reason is lifetime. The local variable array is **created fresh on every cal
 >
 > `a` and `x` both hold `10`, and they are **different slots in different arrays**. The call copied the value across; after that nothing connects them. Assign to `x` inside `add` and `a` is untouched — not because a rule forbids it, but because there is no path from one slot to the other.
 >
-> The same happens when you pass an object: what gets copied into the callee's slot is the **reference**. Two slots then point at one heap object, so changes to that object's fields are visible through both — which is where the endless "Java is pass-by-reference" argument comes from. It is not. The reference itself was passed by value.
+> The same happens when you pass an object: what gets copied into the callee's slot is the **reference**. Two slots then point at one heap object, so changes to that object's fields are visible through both — which is where the endless Java is pass-by-reference argument comes from. It is not. The reference itself was passed by value.
 
 #### 2 — Slot 0 is `this`
 
@@ -218,7 +217,7 @@ Frame.java:8: error: non-static variable name cannot be referenced from a static
 1 error
 ```
 
-Which is the rule *"you cannot use an instance variable in a static method"* seen from the memory side. It is not an arbitrary restriction the compiler imposes — reaching `name` means going through an object, the object comes from slot 0, and in a static method **there is nothing in slot 0 to go through**. Note that `counter++` on the line above is untouched: a static variable belongs to the class, so no object is needed to reach it.
+Which is the rule you cannot use an instance variable in a static method seen from the memory side. It is not an arbitrary restriction the compiler imposes — reaching `name` means going through an object, the object comes from slot 0, and in a static method **there is nothing in slot 0 to go through**. Note that `counter++` on the line above is untouched: a static variable belongs to the class, so no object is needed to reach it.
 
 #### 3 — `long` and `double` take two slots, everything else takes one
 
@@ -229,7 +228,7 @@ Which is the rule *"you cannot use an instance variable in a static method"* see
 | `byte`, `short`, `char` | **1** | **converted to `int` before storing**, then occupy one slot |
 | `boolean` | **usually 1** | varies from JVM to JVM; most follow one slot |
 
-The `byte`/`short`/`char` row is the one people get wrong. A `byte` is one byte and a `char` is two — but neither is *stored* at its natural size. Both are promoted to `int` first, and then take a full slot.
+The `byte`/`short`/`char` row is the one people get wrong. A `byte` is one byte and a `char` is two — but neither is **stored** at its natural size. Both are promoted to `int` first, and then take a full slot.
 
 You can see all of it in the slot numbers. This method, verified on JDK 25, with a `long x` and an `int sum` added inside the body:
 
@@ -282,7 +281,7 @@ disjoint()                         locals = 2
       1  b      I           ← alive for bytecodes 11–17, SAME slot
 ```
 
-In `nested()`, `a` is read again *after* the inner block, so it has to survive across `b`'s whole lifetime. The two overlap, and `b` is pushed to its own slot:
+In `nested()`, `a` is read again **after** the inner block, so it has to survive across `b`'s whole lifetime. The two overlap, and `b` is pushed to its own slot:
 
 ```
 nested()                           locals = 3
@@ -294,7 +293,7 @@ nested()                           locals = 3
 
 Same two variables, same types, one more slot — decided entirely by whether their lifetimes overlap. Measured on JDK 25.
 
-> [!important] **This is the answer to "how does the JVM know how big a stack frame needs to be, before it runs the method?"** It does not work it out. The compiler already computed it and stamped it into the class file, so creating a frame is just *allocate this many slots and go*. That is a large part of why method calls are cheap, and why the JVM can hand every thread its own stack without thinking about it.
+> [!important] **This is the answer to how does the JVM know how big a stack frame needs to be, before it runs the method?** It does not work it out. The compiler already computed it and stamped it into the class file, so creating a frame is just **allocate this many slots and go**. That is a large part of why method calls are cheap, and why the JVM can hand every thread its own stack without thinking about it.
 
 ---
 
@@ -311,7 +310,7 @@ The local variable array holds **declared** variables — one slot each, decided
 - a value can be **pushed** on top
 - an operation takes the **top one or two values off**, and puts its answer back on top
 
-Nothing is addressed by position. There is no "slot 1" of the operand stack — every operation acts on whatever happens to be on top right now.
+Nothing is addressed by position. There is no slot 1 of the operand stack — every operation acts on whatever happens to be on top right now.
 
 Both examples below come from this class, compiled and disassembled on JDK 25:
 
@@ -345,13 +344,13 @@ With `a = 100` and `b = 90`, and remembering slot 0 is `this`:
 
 | after | Local variable array | Operand stack | depth |
 |---|---|---|---|
-| **start** | `[this, 100, 90, —]` | *empty* | 0 |
+| **start** | `[this, 100, 90, —]` | **empty** | 0 |
 | `iload_1` | `[this, 100, 90, —]` | `100` | 1 |
 | `iload_2` | `[this, 100, 90, —]` | `100, 90` | **2 ← peak** |
 | `iadd` | `[this, 100, 90, —]` | `190` | 1 |
-| `istore_3` | `[this, 100, 90, **190**]` | *empty* | 0 |
+| `istore_3` | `[this, 100, 90, **190**]` | **empty** | 0 |
 | `iload_3` | `[this, 100, 90, 190]` | `190` | 1 |
-| `ireturn` | — | *empty* | 0 |
+| `ireturn` | — | **empty** | 0 |
 
 The deepest it ever gets is **2**, when both operands are on the stack waiting for the `iadd` — which is exactly what `stack=2` says.
 
@@ -376,33 +375,32 @@ int expr(int, int, int, int);
 |---|---|---|
 | `iload_1` | `a` | 1 |
 | `iload_2` | `a, b` | 2 |
-| `iadd` | `x`  *(= a+b)* | 1 |
+| `iadd` | `x`  (= a+b) | 1 |
 | `iload_3` | `x, c` | 2 |
 | `iload 4` | **`x, c, d`** | **3 ← peak** |
-| `isub` | `x, y`  *(= c−d)* | 2 |
+| `isub` | `x, y`  (= c−d) | 2 |
 | `imul` | `z` | 1 |
-| `ireturn` | *empty* | 0 |
+| `ireturn` | **empty** | 0 |
 
 **The peak is `x, c, d`** — and that is the part worth slowing down on. `x` is finished but cannot leave, because the multiply still needs it; meanwhile `c` and `d` have to be pushed one at a time to feed the subtraction. Three values coexist.
 
-Note what is *not* the peak: `x` and `y` and the result never exist together. `imul` removes both operands and replaces them with the answer, so depth goes 2 → 1 in a single step.
+Note what is **not** the peak: `x` and `y` and the result never exist together. `imul` removes both operands and replaces them with the answer, so depth goes 2 → 1 in a single step.
 
 And notice `expr` has **no `istore` at all**. Nothing is ever written back to a slot — you declared no variable for the intermediates, so each value goes straight from one operation into the next, and the final result is handed to the caller.
 
 > [!important] **Both numbers on the `stack=`/`locals=` line are computed by the compiler and written into the class file.** `locals=5` sizes the local variable array; `stack=3` sizes the operand stack. Neither is worked out at runtime.
 >
-> So when the JVM calls a method it allocates the **whole frame in one step** — *"5 slots and a 3-deep scratch area"* — and then never grows, resizes, or checks anything again. That is why calls are cheap, and it is also why `StackOverflowError` arrives at a repeatable depth: every frame for a given method is exactly the same size, so a fixed stack divided by a fixed frame size gives the same limit every run.
+> So when the JVM calls a method it allocates the **whole frame in one step** — 5 slots and a 3-deep scratch area — and then never grows, resizes, or checks anything again. That is why calls are cheap, and it is also why `StackOverflowError` arrives at a repeatable depth: every frame for a given method is exactly the same size, so a fixed stack divided by a fixed frame size gives the same limit every run.
 
 > [!info] **The operand stack always ends empty.** Values are pushed in, work is done, the result is either stored to a slot or returned to the caller, and the scratch space is left clean for whatever comes next.
 
-> [!info] **This is why the JVM is called a *stack-based* virtual machine.** Most physical CPUs are register-based — instructions name the registers to operate on. JVM bytecode names almost nothing; it pushes operands onto a stack and applies operations to whatever is on top. That is what makes the bytecode portable: it does not have to know how many registers your processor has.
+> [!info] **This is why the JVM is called a stack-based virtual machine.** Most physical CPUs are register-based — instructions name the registers to operate on. JVM bytecode names almost nothing; it pushes operands onto a stack and applies operations to whatever is on top. That is what makes the bytecode portable: it does not have to know how many registers your processor has.
 
 ---
 
 ### 3 · Frame data
 
-> Frame data contains all **symbolic references (constant pool)** related to that method.
-> It also contains a reference to the **exception table**, which provides the corresponding catch block information in the case of exceptions.
+> Frame data contains all **symbolic references (constant pool)** related to that method. It also contains a reference to the **exception table**, which provides the corresponding catch block information in the case of exceptions.
 
 Two things, and both connect back to earlier material.
 
@@ -463,7 +461,7 @@ Exception table:
 
 The whole mechanism is that one row, and it reads as a sentence:
 
-> *"If an `ArithmeticException` is thrown by any instruction between offset **0** and **3**, jump to offset **4**."*
+> If an `ArithmeticException` is thrown by any instruction between offset **0** and **3**, jump to offset **4**.
 
 `from` and `to` bound the protected region — that is the `try` block. `target` is where the handler starts — that is the `catch` block. `type` is the exception class the row applies to. Several `catch` clauses on one `try` produce several rows, checked in order.
 
@@ -473,7 +471,7 @@ When an exception is actually thrown, the JVM scans this frame's table for a row
 2. **pushes the exception object** onto it
 3. **sets the PC to `target`**
 
-Which explains the first instruction of the catch block, `astore_3` — *take the top of the stack and store it in slot 3*. And slot 3 is:
+Which explains the first instruction of the catch block, `astore_3` — **take the top of the stack and store it in slot 3**. And slot 3 is:
 
 ```
    Slot  Name   Signature
@@ -485,10 +483,9 @@ Which explains the first instruction of the catch block, `astore_3` — *take th
 
 So `astore_3` **is** the line `catch (ArithmeticException e)`, binding the thrown object to `e`. The catch parameter is an ordinary local variable in an ordinary slot, no different from any other.
 
-> [!important] **An untaken `try` block costs nothing at runtime.** Zero extra instructions, zero checks — the identical four instructions run whether or not the code is wrapped in `try`. The table is data stored beside the code, consulted only *after* something has already gone wrong. This is why wrapping code in `try` is free and **throwing** is the expensive part, and it is the reason exceptions must never be used for ordinary control flow.
+> [!important] **An untaken `try` block costs nothing at runtime.** Zero extra instructions, zero checks — the identical four instructions run whether or not the code is wrapped in `try`. The table is data stored beside the code, consulted only **after** something has already gone wrong. This is why wrapping code in `try` is free and **throwing** is the expensive part, and it is the reason exceptions must never be used for ordinary control flow.
 
-> [!info] Coder Army — **the third thing in frame data: the return address**
-> The list above names two. There is a third, and it is the one that makes returning from a method work at all: the frame records **where to resume in the caller**.
+> [!info] Coder Army — **the third thing in frame data: the return address** The list above names two. There is a third, and it is the one that makes returning from a method work at all: the frame records **where to resume in the caller**.
 >
 > The instinct is that this must be unnecessary. The stack is last-in-first-out, so when `m1`'s frame pops, `main`'s frame is sitting right underneath it — surely that is already enough to know where to go back to?
 >
@@ -506,7 +503,7 @@ So `astore_3` **is** the line `catch (ArithmeticException e)`, binding the throw
 >
 > So on the pop, that recorded address is loaded into the **PC register**, which is the next section. That is the link between the two: frame data stores where to come back to, and the PC register is what actually goes there.
 
-Frame data is, in one phrase, *metadata* for the frame.
+Frame data is, in one phrase, **metadata** for the frame.
 
 
 ---
@@ -519,7 +516,7 @@ Frame data is, in one phrase, *metadata* for the frame.
 
 PC is **program counter** — the same idea from computer organisation, and for the same reason.
 
-The argument for one-per-thread is worth following, because it is the clearest justification of the whole per-thread grouping: **each thread is a separate flow of execution, so each thread is at a different instruction at any moment.** Ten threads means ten "next instructions" to keep track of, therefore ten PC registers.
+The argument for one-per-thread is worth following, because it is the clearest justification of the whole per-thread grouping: **each thread is a separate flow of execution, so each thread is at a different instruction at any moment.** Ten threads means ten next instructions to keep track of, therefore ten PC registers.
 
 ```mermaid
 flowchart LR
@@ -528,7 +525,7 @@ flowchart LR
     TN["thread n"] --> PN["PC register n<br/><i>at instruction 8</i>"]
 ```
 
-> [!info] **You will never touch this one.** It is used entirely by the JVM internally. It appears in the list because "how many memory areas" expects five, and because it explains how a thread knows where it is.
+> [!info] **You will never touch this one.** It is used entirely by the JVM internally. It appears in the list because how many memory areas expects five, and because it explains how a thread knows where it is.
 
 ---
 
@@ -617,9 +614,9 @@ flowchart LR
     S3 --> O4
 ```
 
-Read it as one rule and the diagram writes itself: **every object is on the heap, without exception — the variables differ only in where the *reference* is kept.** `s2` is a static variable so the reference sits in the method area; `t` and `s3` are locals so their references sit in the stack; `s1` is an instance variable so it lives inside the `Test` object, on the heap. All four objects are on the heap regardless.
+Read it as one rule and the diagram writes itself: **every object is on the heap, without exception — the variables differ only in where the reference is kept.** `s2` is a static variable so the reference sits in the method area; `t` and `s3` are locals so their references sit in the stack; `s1` is an instance variable so it lives inside the `Test` object, on the heap. All four objects are on the heap regardless.
 
-> [!info] **This is where most of the confusion in the topic lives, and it comes from conflating the variable with the object.** "Where is `s3` stored?" and "where is the `Student` stored?" have different answers — stack and heap respectively — for the same line of code.
+> [!info] **This is where most of the confusion in the topic lives, and it comes from conflating the variable with the object.** Where is `s3` stored? and where is the `Student` stored? have different answers — stack and heap respectively — for the same line of code.
 
 ---
 
@@ -627,7 +624,7 @@ Read it as one rule and the diagram writes itself: **every object is on the heap
 
 The five-area model above is straight from the JVM specification. Two further facts that the model implies but does not spell out — and both of them you will actually meet.
 
-> [!warning] **The stack has a size limit, and blowing it is a distinct error.** Infinite recursion pushes frames until the runtime stack cannot grow, and you get **`StackOverflowError`** — *not* `OutOfMemoryError`, which is the heap's failure. Knowing which error names which area is half of diagnosing it.
+> [!warning] **The stack has a size limit, and blowing it is a distinct error.** Infinite recursion pushes frames until the runtime stack cannot grow, and you get **`StackOverflowError`** — **not** `OutOfMemoryError`, which is the heap's failure. Knowing which error names which area is half of diagnosing it.
 >
 > The stack size is set with **`-Xss`**, completing the set alongside `-Xmx` and `-Xms` from the heap note. Measured on JDK 25, recursing until it breaks:
 >
@@ -637,6 +634,6 @@ The five-area model above is straight from the JVM specification. Two further fa
 > -Xss4m       : StackOverflowError at depth 162,189
 > ```
 >
-> Roughly linear in the stack size, which is exactly what "one frame per call, stacked" predicts. Note also that the depth is in the tens of thousands by default — deep recursion is fine; *unbounded* recursion is not.
+> Roughly linear in the stack size, which is exactly what one frame per call, stacked predicts. Note also that the depth is in the tens of thousands by default — deep recursion is fine; **unbounded** recursion is not.
 
-> [!info] **Virtual threads change what "one stack per thread" costs.** The rule still holds — every virtual thread has its own stack — but a virtual thread's stack lives on the **heap** as a resizable chunk rather than being a fixed operating-system thread stack. That is precisely what makes millions of them affordable, where millions of platform threads would not be. The model is intact; the implementation underneath it now has two very different shapes.
+> [!info] **Virtual threads change what one stack per thread costs.** The rule still holds — every virtual thread has its own stack — but a virtual thread's stack lives on the **heap** as a resizable chunk rather than being a fixed operating-system thread stack. That is precisely what makes millions of them affordable, where millions of platform threads would not be. The model is intact; the implementation underneath it now has two very different shapes.

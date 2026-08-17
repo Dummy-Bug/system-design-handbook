@@ -1,8 +1,6 @@
 # The three mechanisms
 
-When you call an overloaded method, the compiler may have to convert your argument to make it fit. It
-has three ways to do that — and when more than one would work, there is a **fixed order of
-preference**. That order is this part.
+When you call an overloaded method, the compiler may have to convert your argument to make it fit. It has three ways to do that — and when more than one would work, there is a **fixed order of preference**. That order is this part.
 
 | | What it is | Since |
 |---|---|---|
@@ -19,8 +17,7 @@ byte → short → int → long → float → double
         char ↗
 ```
 
-`byte` is 1 byte, `short` is 2 — so `byte` to `short` widens. Also `char` → `int`, `int` → `long`,
-`long` → `float`, `float` → `double`.
+`byte` is 1 byte, `short` is 2 — so `byte` to `short` widens. Also `char` → `int`, `int` → `long`, `long` → `float`, `float` → `double`.
 
 ## Var-arg methods
 
@@ -62,22 +59,15 @@ Measured on JDK 25:
 widening
 ```
 
-> [!question]- **Deep dive — his explanation for why, and it generalises.** The reason is not a rule
-> about types at all.
+> [!question]- **Deep dive — his explanation for why, and it generalises.** The reason is not a rule about types at all.
 >
-> *"Autoboxing came, and at the same time widening also wanted the chance. Both met at some common
-> place to fight — because only one can get it. After half an hour of fighting, **who wins the race?**"*
+> Autoboxing came, and at the same time widening also wanted the chance. Both met at some common place to fight — because only one can get it. After half an hour of fighting, **who wins the race?**
 >
-> **Widening.** *"Because this widening person has 19-plus years of industry experience"* — widening
-> exists since **Java 1.0** (1995). *"But autoboxing came in 1.5 — a fresher."*
+> **Widening.** Because this widening person has 19-plus years of industry experience — widening exists since **Java 1.0** (1995). But autoboxing came in 1.5 — a fresher.
 >
-> > **Old concept vs new concept: the compiler always gives preference to the OLD concept, to provide
-> > compatibility with older versions.**
+> > **Old concept vs new concept: the compiler always gives preference to the OLD concept, to provide compatibility with older versions.**
 >
-> That is the actual engineering reason, not just an analogy. Code written before 1.5 had `m1(x)`
-> resolving to `m1(long)`. If Java 1.5 had let autoboxing take priority, **every such call would
-> silently start invoking a different method** after an upgrade. Backward compatibility forced the
-> ordering.
+> That is the actual engineering reason, not just an analogy. Code written before 1.5 had `m1(x)` resolving to `m1(long)`. If Java 1.5 had let autoboxing take priority, **every such call would silently start invoking a different method** after an upgrade. Backward compatibility forced the ordering.
 
 > **Widening dominates autoboxing.**
 
@@ -117,19 +107,15 @@ Measured on JDK 25:
 autoboxing
 ```
 
-> [!important] **The tie-break is a different principle: var-args always come last.** A var-arg method
-> is the compiler's **last resort** — it is only chosen when no fixed-arity method can be made to work,
-> because it is the most permissive signature there is and would otherwise swallow every call.
+> [!important] **The tie-break is a different principle: var-args always come last.** A var-arg method is the compiler's **last resort** — it is only chosen when no fixed-arity method can be made to work, because it is the most permissive signature there is and would otherwise swallow every call.
 >
-> This is why the ordering is not simply "oldest wins" but a three-level ladder.
+> This is why the ordering is not simply oldest wins but a three-level ladder.
 
 ---
 
 # The complete order
 
-> **1. Widening**
-> **2. Autoboxing**
-> **3. Var-args**
+> **1. Widening** **2. Autoboxing** **3. Var-args**
 
 ```mermaid
 flowchart TB
@@ -144,10 +130,7 @@ flowchart TB
 | var-args vs **widening** | **widening** | older concept |
 | var-args vs **autoboxing** | **autoboxing** | var-args are always the **last** resort |
 
-> [!info] **A practical consequence worth carrying.** If you overload a method and one version takes a
-> wrapper while another takes a wider primitive, **the primitive version wins for primitive arguments**
-> — which is frequently not what the author intended. It is a real source of surprising behaviour in
-> APIs, and this ordering is why.
+> [!info] **A practical consequence worth carrying.** If you overload a method and one version takes a wrapper while another takes a wider primitive, **the primitive version wins for primitive arguments** — which is frequently not what the author intended. It is a real source of surprising behaviour in APIs, and this ordering is why.
 
 ---
 

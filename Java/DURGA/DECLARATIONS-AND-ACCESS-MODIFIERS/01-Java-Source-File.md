@@ -8,9 +8,7 @@ class B { }
 class C { }
 ```
 
-> **2. At most one class can be declared `public`** — *at most* meaning **zero or one**.
-> **3. If there is a public class, the name of the program and the name of the public class must match.** Otherwise, compile-time error.
-> **4. If there is no public class, any name can be used. No restrictions.**
+> **2. At most one class can be declared `public`** — **at most** meaning **zero or one**. **3. If there is a public class, the name of the program and the name of the public class must match.** Otherwise, compile-time error. **4. If there is no public class, any name can be used. No restrictions.**
 
 ## Case 1 — no public class
 
@@ -20,8 +18,7 @@ class B { }
 class C { }
 ```
 
-Save it as `D.java`. Measured on JDK 25 — **compiles fine.** Save it as `A.java`, `B.java` or
-`Z.java`; all fine. No public class means no constraint.
+Save it as `D.java`. Measured on JDK 25 — **compiles fine.** Save it as `A.java`, `B.java` or `Z.java`; all fine. No public class means no constraint.
 
 ## Case 2 — one public class, wrong file name
 
@@ -39,7 +36,7 @@ public class B { }
        ^
 ```
 
-> *"The compiler very decently provides the information."* It does not just reject the file — it tells you the exact name it wants.
+> The compiler very decently provides the information. It does not just reject the file — it tells you the exact name it wants.
 
 Save the identical code as **`B.java`** and it compiles.
 
@@ -57,7 +54,7 @@ saved as `B2.java`. Measured on JDK 25:
 B2.java:3: error: class C2 is public, should be declared in a file named C2.java
 ```
 
-Read what the compiler is really saying: `B2` is fine — it is public and the file is `B2.java`. It is **`C2`** that has no home. Since a file has only one name, **only one class can be public**, and the "at most one" rule falls out of the naming rule rather than being a separate law.
+Read what the compiler is really saying: `B2` is fine — it is public and the file is `B2.java`. It is **`C2`** that has no home. Since a file has only one name, **only one class can be public**, and the at most one rule falls out of the naming rule rather than being a separate law.
 
 ```mermaid
 flowchart TB
@@ -98,15 +95,13 @@ A.class  B.class  C.class  D.class
 
 > **Whenever we compile a Java program, a separate `.class` file is generated for every class present in that program.**
 
-Four classes, four class files. And note what is **not** there: there is no file named after the *program*. 
-Measured on JDK 25 — compiling `D.java` produces `A.class`, `B.class`, `C.class` and
-`D.class`, because `D` happens to be a class here. Had the file been named `Durga.java`, no `Durga.class` would appear.
+Four classes, four class files. And note what is **not** there: there is no file named after the **program**. Measured on JDK 25 — compiling `D.java` produces `A.class`, `B.class`, `C.class` and `D.class`, because `D` happens to be a class here. Had the file been named `Durga.java`, no `Durga.class` would appear.
 
 > **Class file names are based on the classes present in the program, not on the name of the program.**
 
 ## The distinction to memorise
 
-> **We compile a Java *program* (a source file). We run a Java *class*.**
+> **We compile a Java program (a source file). We run a Java class.**
 
 Look at what each command takes as its argument:
 
@@ -155,25 +150,22 @@ Caused by: java.lang.ClassNotFoundException: Durga
 
 **The two conclusions:** no `main` in the class you named → runtime failure about `main`; no class file at all → runtime failure about the class.
 
-> [!important] The second failure names `ClassNotFoundException`, not `NoClassDefFoundError` — and
-> the difference is itself an interview question.** `ClassNotFoundException` is a **checked `Exception`, thrown when a class is looked up by name and is not on the classpath.
+> [!important] The second failure names `ClassNotFoundException`, not `NoClassDefFoundError` — and the difference is itself an interview question.** `ClassNotFoundException` is a **checked `Exception`, thrown when a class is looked up by name and is not on the classpath.
 > 
-> `NoClassDefFoundError` is an **`Error`**, thrown when the class *was* present at compile time but is missing at run time, or when its static initialiser already failed once. 
-> A missing main class is the first case, so that is what the launcher reports.
+> `NoClassDefFoundError` is an **`Error`**, thrown when the class **was** present at compile time but is missing at run time, or when its static initialiser already failed once. A missing main class is the first case, so that is what the launcher reports.
 
 > [!info] **Single-file source launch — you can skip `javac` entirely for a one-file program:**
 > ```
 > $ java Fq.java
 > [works with the fully qualified name]
 > ```
-> Measured on JDK 25. It compiles in memory and runs the first class it finds — handy for exactly the
-> throwaway experiments this chapter is full of. It does not change any rule above.
+> Measured on JDK 25. It compiles in memory and runs the first class it finds — handy for exactly the throwaway experiments this chapter is full of. It does not change any rule above.
 
 ---
 
 # One class per file — why it is worth the discipline
 
-Everything above says you *may* put many classes in one file. The next section says do not.
+Everything above says you **may** put many classes in one file. The next section says do not.
 
 > **It is not recommended to declare multiple classes in a single source file. Declare only one class per source file, and keep the program name the same as the class name.**
 
@@ -200,15 +192,13 @@ error: cannot find symbol
   location: class Test
 ```
 
-> The compiler is saying, very politely: *"You are using some class named `ArrayList`. Where is it available? First let me know, then only I can compile."*
+> The compiler is saying, very politely: You are using some class named `ArrayList`. Where is it available? First let me know, then only I can compile.
 
 ## The doubt he raises about the compiler
 
-> *"If the compiler really doesn't know anything about `ArrayList`, how did it identify that
-> `ArrayList` is a **class**? Maybe the compiler is acting."*
+> If the compiler really doesn't know anything about `ArrayList`, how did it identify that `ArrayList` is a **class**? Maybe the compiler is acting.
 
-A fair suspicion — and testable. Use the same unknown name three different ways and see what the
-compiler calls it. Measured on JDK 25:
+A fair suspicion — and testable. Use the same unknown name three different ways and see what the compiler calls it. Measured on JDK 25:
 
 | Code | `symbol:` reported |
 |---|---|
@@ -216,8 +206,7 @@ compiler calls it. Measured on JDK 25:
 | `System.out.println(ArrayList);` | `variable ArrayList` |
 | `ArrayList();` | `method ArrayList()` |
 
-> [!important] **So the compiler really is innocent.** It does not know what `ArrayList` is. It reports the **role you used the name in** — 
-> used like a class, it says class; 
+> [!important] **So the compiler really is innocent.** It does not know what `ArrayList` is. It reports the **role you used the name in** — used like a class, it says class;
 > used like a variable, it says variable; 
 > used like a method, it says method. 
 >

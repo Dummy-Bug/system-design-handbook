@@ -2,20 +2,16 @@
 
 > **`static` is a modifier applicable for methods and variables, but not for classes.**
 >
-> **We cannot declare a top-level class as `static` — but we CAN declare an inner class as `static`.
-> Such inner classes are called static nested classes.**
+> **We cannot declare a top-level class as `static` — but we CAN declare an inner class as `static`. Such inner classes are called static nested classes.**
 
-That second half is the exception that trips people: `static class Foo { }` at the top of a file is an
-error, but the identical line **inside** another class is fine. (This connects to the 5-vs-8 modifier
-count from part 05 — `static` is one of the three extra modifiers inner classes get.)
+That second half is the exception that trips people: `static class Foo { }` at the top of a file is an error, but the identical line **inside** another class is fine. (This connects to the 5-vs-8 modifier count from part 05 — `static` is one of the three extra modifiers inner classes get.)
 
 ---
 
 # The difference the whole part rests on
 
 > **In the case of instance variables, a separate copy is created for every object.**
-> **In the case of static variables, a single copy is created at class level and shared by every object
-> of that class.**
+> **In the case of static variables, a single copy is created at class level and shared by every object of that class.**
 
 ## The measured demonstration
 
@@ -35,8 +31,7 @@ class Copy {
 }
 ```
 
-**What does `t2` print?** The candidate answers he offers: `10 20`, `888 999`, `888 20`, `10 999`, or a
-compile error.
+**What does `t2` print?** The candidate answers he offers: `10 20`, `888 999`, `888 20`, `10 999`, or a compile error.
 
 Measured on JDK 25:
 
@@ -56,19 +51,15 @@ Measured on JDK 25:
 | `t2.x` | **888** — same single copy `t1` modified |
 | `t2.y` | **20** — t2's own copy, untouched by `t1.y = 999` |
 
-> **Change a static variable through any reference and the change is visible to all objects, because
-> there is only one copy. Change an instance variable through one reference and the other objects are
-> unaffected, because each has its own.**
+> **Change a static variable through any reference and the change is visible to all objects, because there is only one copy. Change an instance variable through one reference and the other objects are unaffected, because each has its own.**
 
-> [!info] **And note `t1.x` is legal at all.** You *can* access a static variable through an object
-> reference — it just doesn't mean what it looks like. `t1.x` and `t2.x` are the same variable.
+> [!info] **And note `t1.x` is legal at all.** You **can** access a static variable through an object reference — it just doesn't mean what it looks like. `t1.x` and `t2.x` are the same variable.
 
 ---
 
 # Static area vs instance area
 
-> **We cannot access instance members directly from a static area. But we can access static members
-> from both instance and static areas directly.**
+> **We cannot access instance members directly from a static area. But we can access static members from both instance and static areas directly.**
 
 The reason is about **when things exist**:
 
@@ -80,9 +71,7 @@ flowchart LR
     I -->|"✅ static already exists"| S
 ```
 
-> *"A static variable is created at the very beginning, at the time of class loading. That's why from
-> anywhere you can access it. But an instance variable is always related to an object — and a static
-> area is nowhere related to an object."*
+> A static variable is created at the very beginning, at the time of class loading. That's why from anywhere you can access it. But an instance variable is always related to an object — and a static area is nowhere related to an object.
 
 ---
 
@@ -110,13 +99,9 @@ Measured on JDK 25 — all six pairings:
 | **1 & 2** | two variables **named `x`** | ❌ `variable x is already defined in class Q` |
 | **3 & 4** | two methods **named `m1()`** | ❌ `method m1() is already defined in class Q` |
 
-**The first four are the rule.** The last two are the extra options he adds afterwards, and they are
-the more interesting ones:
+**The first four are the rule.** The last two are the extra options he adds afterwards, and they are the more interesting ones:
 
-> [!important] **1 & 2 — an instance variable and a static variable cannot share a name.**
-> *"Instance variable and local variable with the same name? Allowed. Static variable and local
-> variable with the same name? Allowed. **Instance variable and static variable with the same name?
-> Not allowed.**"*
+> [!important] **1 & 2 — an instance variable and a static variable cannot share a name.** Instance variable and local variable with the same name? Allowed. Static variable and local variable with the same name? Allowed. **Instance variable and static variable with the same name? Not allowed.**
 >
 > They live in the same scope — the class body — so one shadows nothing, it simply collides.
 
@@ -125,16 +110,13 @@ the more interesting ones:
 > public void m1() { }
 > public static void m1() { }
 > ```
-> Most people expect this to work: *"one is an instance method, the other is a static method — surely
-> they're different."*
+> Most people expect this to work: one is an instance method, the other is a static method — surely they're different.
 >
 > **They are not.** Measured on JDK 25: `method m1() is already defined in class Q`.
 >
-> > **The signature of a method is its name plus its argument types. The return type and the modifiers
-> > are NOT part of the signature.**
+> > **The signature of a method is its name plus its argument types. The return type and the modifiers are NOT part of the signature.**
 >
-> Both are `m1()`. Same signature, same class — a duplicate, regardless of `static`. This is the same
-> rule that governs overloading, arriving from an unexpected direction.
+> Both are `m1()`. Same signature, same class — a duplicate, regardless of `static`. This is the same rule that governs overloading, arriving from an unexpected direction.
 
 ---
 

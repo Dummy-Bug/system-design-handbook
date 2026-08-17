@@ -20,7 +20,7 @@ Question-only practice sheet for **exception handling** for backend roles at 3â€
 
 - **Tests:** the baseline vocabulary question.
 - **Notes:** âœ… `01`.
-- **Chained follow-up:** *"How is an exception different from an error?"*
+- **Chained follow-up:** How is an exception different from an error?
 
 ### 2. What is the difference between `Exception` and `Error`?
 
@@ -41,7 +41,7 @@ Question-only practice sheet for **exception handling** for backend roles at 3â€
 
 - **Tests:** cleanup semantics and edge cases.
 - **Notes:** âœ… `05`.
-- **Chained follow-up:** *"What happens if `System.exit(0)` is called?"*
+- **Chained follow-up:** What happens if `System.exit(0)` is called?
 
 ### 6. Can you have multiple `catch` blocks? Does their order matter?
 

@@ -1,22 +1,18 @@
 # The four implications
 
-`==` compares **references**. `equals()` compares **whatever it was overridden to compare** — content,
-usually. That asymmetry produces four conclusions, and only two of them are certainties.
+`==` compares **references**. `equals()` compares **whatever it was overridden to compare** — content, usually. That asymmetry produces four conclusions, and only two of them are certainties.
 
 ## 1. `==` true ⇒ `equals()` true
 
 > **If two objects are equal by `==`, then they are ALWAYS equal by `equals()`.**
 
-If `r1 == r2` is true, both references point at **the same object** — and any sane `equals()`, including
-`Object`'s, reports an object equal to itself.
+If `r1 == r2` is true, both references point at **the same object** — and any sane `equals()`, including `Object`'s, reports an object equal to itself.
 
 ## 2. `==` false ⇒ nothing follows
 
-> **If two objects are not equal by `==`, we CAN'T CONCLUDE ANYTHING about `equals()`. It may return
-> true or false.**
+> **If two objects are not equal by `==`, we CAN'T CONCLUDE ANYTHING about `equals()`. It may return true or false.**
 
-Two distinct objects might still hold identical content — and if `equals()` was overridden for content
-comparison, it says `true`.
+Two distinct objects might still hold identical content — and if `equals()` was overridden for content comparison, it says `true`.
 
 ## 3. `equals()` true ⇒ nothing follows
 
@@ -28,8 +24,7 @@ The mirror image of 2. Content equality says nothing about identity.
 
 > **If two objects are not equal by `equals()`, then they are ALWAYS not equal by `==`.**
 
-The contrapositive of 1. If they were the same object, `equals()` would have said `true`; it did not,
-so they are different objects, so `==` is false.
+The contrapositive of 1. If they were the same object, `equals()` would have said `true`; it did not, so they are different objects, so `==` is false.
 
 ```mermaid
 flowchart LR
@@ -39,12 +34,9 @@ flowchart LR
     G["equals() true"] -.->|"⇒ nothing"| H["== ?"]
 ```
 
-> [!important] **His advice on how to hold this.** *"Don't try to remember the points. Remember the
-> internal concept, then you can easily remember the conclusions."*
+> [!important] **His advice on how to hold this.** Don't try to remember the points. Remember the internal concept, then you can easily remember the conclusions.
 >
-> The internal concept is one sentence: **`==` true means *the same object*, which is the strongest
-> thing you can say.** Everything else follows — a strong fact implies a weak one (1 and 4 are
-> certainties), and a weak fact implies nothing about a strong one (2 and 3 are not).
+> The internal concept is one sentence: **`==` true means the same object, which is the strongest thing you can say.** Everything else follows — a strong fact implies a weak one (1 and 4 are certainties), and a weak fact implies nothing about a strong one (2 and 3 are not).
 
 ---
 
@@ -67,14 +59,11 @@ Measured on JDK 25:
 | `sb1.equals(sb2)` | **false** | **`StringBuffer` does NOT override `equals()`** |
 | `s1.equals(sb1)` | **false** | unrelated types — no exception, just `false` |
 
-> [!important] **Rows 2 and 4 are the pair worth remembering.** Identical content, identical shape of
-> call — **opposite answers**, purely because one class overrode `equals()` and the other did not.
+> [!important] **Rows 2 and 4 are the pair worth remembering.** Identical content, identical shape of call — **opposite answers**, purely because one class overrode `equals()` and the other did not.
 >
-> Confirmed on JDK 25: `javap java.lang.StringBuffer` contains **zero** `equals` methods, so `Object`'s
-> reference comparison runs.
+> Confirmed on JDK 25: `javap java.lang.StringBuffer` contains **zero** `equals` methods, so `Object`'s reference comparison runs.
 >
-> **This is the concrete cost of not overriding `equals()`,** and the reason note `03` spent a whole
-> session on how to do it.
+> **This is the concrete cost of not overriding `equals()`,** and the reason note `03` spent a whole session on how to do it.
 
 ---
 
@@ -93,8 +82,7 @@ Measured on JDK 25:
 error: incomparable types: String and StringBuffer
 ```
 
-> **To use the equality operator, there must be some relation between the argument types — child to
-> parent, parent to child, or the same type. If there is no relation, we get a compile-time error.**
+> **To use the equality operator, there must be some relation between the argument types — child to parent, parent to child, or the same type. If there is no relation, we get a compile-time error.**
 
 **But `equals()` in the same situation is fine:**
 
@@ -102,20 +90,16 @@ error: incomparable types: String and StringBuffer
 s1.equals(sb1)     → false
 ```
 
-> [!important] **The difference in one line: `==` is checked by the compiler; `equals()` is a method
-> call.**
+> [!important] **The difference in one line: `==` is checked by the compiler; `equals()` is a method call.**
 >
-> `==` has a **compile-time type rule** — the compiler can see the comparison is meaningless and refuses
-> it. `equals()` takes an **`Object`** parameter, so *anything* fits at compile time, and the answer is
-> decided at runtime.
+> `==` has a **compile-time type rule** — the compiler can see the comparison is meaningless and refuses it. `equals()` takes an **`Object`** parameter, so **anything** fits at compile time, and the answer is decided at runtime.
 >
 > | | Unrelated types |
 > |---|---|
 > | `==` | ❌ **compile-time error** — `incomparable types` |
 > | `.equals()` | ✅ compiles, returns **`false`** |
 >
-> And note `03` showed the third possibility: a **badly written** `equals()` throws `ClassCastException`
-> here instead of returning `false` — which is exactly why that catch block mattered.
+> And note `03` showed the third possibility: a **badly written** `equals()` throws `ClassCastException` here instead of returning `false` — which is exactly why that catch block mattered.
 
 ---
 

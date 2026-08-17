@@ -1,11 +1,8 @@
 # An enum can contain a constructor
 
-The reasoning takes one step. What is an enum? A group of constants. And note `01` established that
-**every constant is an object of the type enum**. The moment you say *object*, the **constructor**
-concept comes into the picture automatically.
+The reasoning takes one step. What is an enum? A group of constants. And note `01` established that **every constant is an object of the type enum**. The moment you say **object**, the **constructor** concept comes into the picture automatically.
 
-> **An enum can contain a constructor**, because every constant is an object — and whenever that
-> constant is created, the constructor is executed.
+> **An enum can contain a constructor**, because every constant is an object — and whenever that constant is created, the constructor is executed.
 
 ```java
 enum Beer {
@@ -28,11 +25,9 @@ Four constants, therefore four `Beer` objects, therefore the constructor runs **
 
 ## When does it run?
 
-Every enum constant is `public static final` — so the question becomes *when are static variables
-created?* **At the time of class loading.** So:
+Every enum constant is `public static final` — so the question becomes when are static variables created? **At the time of class loading.** So:
 
-> At the time of **enum class loading**, all the constants are created, and for every constant the
-> constructor is executed **separately**. Four constants, four executions. Five constants, five.
+> At the time of **enum class loading**, all the constants are created, and for every constant the constructor is executed **separately**. Four constants, four executions. Five constants, five.
 
 ## The class loading twist
 
@@ -43,8 +38,7 @@ Beer.class
 Test.class
 ```
 
-Now, running `java Test` loads `Test.class`. Does it load `Beer.class`? **Only if `Test` actually
-uses `Beer` functionality.**
+Now, running `java Test` loads `Test.class`. Does it load `Beer.class`? **Only if `Test` actually uses `Beer` functionality.**
 
 Measured on JDK 25, with `Beer b = Beer.KF;` present:
 
@@ -77,12 +71,9 @@ Hello
 
 ## The conclusion that gets asked
 
-Look again at the version that does print four times. **How many constants does `Test` actually
-use?** One — `Beer.KF`. Yet the constructor ran four times.
+Look again at the version that does print four times. **How many constants does `Test` actually use?** One — `Beer.KF`. Yet the constructor ran four times.
 
-> Whether you are using **one** constant or **two** constants, once the enum class file is loaded,
-> **all** the constants are created — because all of them are static variables, and every static
-> variable is created at class loading.
+> Whether you are using **one** constant or **two** constants, once the enum class file is loaded, **all** the constants are created — because all of them are static variables, and every static variable is created at class loading.
 
 ```mermaid
 flowchart TB
@@ -108,38 +99,27 @@ Measured on JDK 25:
 error: enum classes may not be instantiated
 ```
 
-> If you want a `Beer` object, **just add another constant to the list** — the syntax itself creates
-> the object for you. What is the need to create it explicitly? And if you genuinely want to create
-> objects with `new`, then go for a class; by coming to an enum you are throwing away the advantage
-> the enum concept gives you.
+> If you want a `Beer` object, **just add another constant to the list** — the syntax itself creates the object for you. What is the need to create it explicitly? And if you genuinely want to create objects with `new`, then go for a class; by coming to an enum you are throwing away the advantage the enum concept gives you.
 
 So two things follow, and the second is a consequence of the first:
 
-> **We cannot create an enum object explicitly**, and therefore **we cannot invoke an enum
-> constructor directly.** The constructor is executed automatically at enum class loading, and only
-> there.
+> **We cannot create an enum object explicitly**, and therefore **we cannot invoke an enum constructor directly.** The constructor is executed automatically at enum class loading, and only there.
 
-> [!info] **The wording drifted slightly.** He quotes the error as `enum types may not be
-> instantiated`; JDK 25 says `enum classes may not be instantiated`. Same error, same rule. Verified
-> on JDK 25.
+> [!info] **The wording drifted slightly.** He quotes the error as `enum types may not be instantiated`; JDK 25 says `enum classes may not be instantiated`. Same error, same rule. Verified on JDK 25.
 
 ---
 
 # The full-fledged enum
 
-This is the summary example — the one where the power of Java's enum shows up in a single listing.
-It has a group of constants, an instance variable, **two** constructors and a method.
+This is the summary example — the one where the power of Java's enum shows up in a single listing. It has a group of constants, an instance variable, **two** constructors and a method.
 
-The motivation is realistic. Beer to beer, several properties change: **price**, **taste**,
-**colour**, **thickness**. You cannot expect every beer to have the same price. So declare an instance
-variable for it:
+The motivation is realistic. Beer to beer, several properties change: **price**, **taste**, **colour**, **thickness**. You cannot expect every beer to have the same price. So declare an instance variable for it:
 
 ```java
 int price;
 ```
 
-That property applies to every enum constant. And an instance variable is usually initialised inside
-the constructor:
+That property applies to every enum constant. And an instance variable is usually initialised inside the constructor:
 
 ```java
 Beer(int price) {
@@ -149,9 +129,7 @@ Beer(int price) {
 
 ## The problem, and how the syntax solves it
 
-Here is the difficulty. To pass a price you would ordinarily write `new Beer(100)` — but you have
-just seen that creating an enum object explicitly is impossible. **So how does the value ever get
-in?**
+Here is the difficulty. To pass a price you would ordinarily write `new Beer(100)` — but you have just seen that creating an enum object explicitly is impossible. **So how does the value ever get in?**
 
 Go back to note `01`'s equivalent code. Writing `KF` inside the enum means:
 
@@ -171,8 +149,7 @@ And the way to ask for that is to write the argument **on the constant itself**:
 KF(100)
 ```
 
-> **Declare the constant as `KF(100)`, and the constructor chosen is the one matching those
-> arguments.** `KF` alone calls the no-argument constructor; `KF(100)` calls the `int` one.
+> **Declare the constant as `KF(100)`, and the constructor chosen is the one matching those arguments.** `KF` alone calls the no-argument constructor; `KF(100)` calls the `int` one.
 
 ## The program
 
@@ -198,9 +175,7 @@ class Test {
 }
 ```
 
-`KF`, `KO` and `RC` pass a value, so the `int` constructor runs for each. `FO` passes nothing, so the
-**no-argument constructor** runs and gives it the default price of 65 — which is why that second
-constructor is **compulsory**: without it, `FO` would not compile.
+`KF`, `KO` and `RC` pass a value, so the `int` constructor runs for each. `FO` passes nothing, so the **no-argument constructor** runs and gives it the default price of 65 — which is why that second constructor is **compulsory**: without it, `FO` would not compile.
 
 `values()` from note `05` supplies the list, and each constant is asked for its own price.
 
@@ -213,9 +188,7 @@ RC....90
 FO....65
 ```
 
-> [!important] **That single enum contains a group of constants, an instance variable, two
-> constructors and a method.** This is the example to reproduce when somebody asks how Java's enum
-> differs from C's. It is a class in everything but the keyword.
+> [!important] **That single enum contains a group of constants, an instance variable, two constructors and a method.** This is the example to reproduce when somebody asks how Java's enum differs from C's. It is a class in everything but the keyword.
 
 ---
 
@@ -249,26 +222,17 @@ enum Colour2 { BLUE, RED; public abstract void info(); }
 error: Colour2 is not abstract and does not override abstract method info() in Colour2
 ```
 
-> [!question]- **Deep dive — two objections that make this look impossible, and how the syntax answers
-> both.** Worth opening, because the objections are the ones an interviewer will raise.
+> [!question]- **Deep dive — two objections that make this look impossible, and how the syntax answers both.** Worth opening, because the objections are the ones an interviewer will raise.
 >
-> **Objection 1.** Every enum is **implicitly final**. But a class containing even one abstract method
-> must itself be declared **abstract**, and `final` + `abstract` is an illegal combination. So how can
-> the enum hold an abstract method at all?
+> **Objection 1.** Every enum is **implicitly final**. But a class containing even one abstract method must itself be declared **abstract**, and `final` + `abstract` is an illegal combination. So how can the enum hold an abstract method at all?
 >
-> **Objection 2.** An abstract method's implementation goes **in the child class** — and note `04`
-> established that you cannot write a child class of an enum. So where does the body go?
+> **Objection 2.** An abstract method's implementation goes **in the child class** — and note `04` established that you cannot write a child class of an enum. So where does the body go?
 >
-> **The constant bodies answer both at once.** `BLUE { … }` is not decoration: the compiler generates
-> an **anonymous subclass** of `Colour` for that constant and puts the body in it. So there *is* a
-> child class for every constant — the compiler wrote it — and the enum class itself never needs to be
-> abstract, because no constant is left unimplemented.
+> **The constant bodies answer both at once.** `BLUE { … }` is not decoration: the compiler generates an **anonymous subclass** of `Colour` for that constant and puts the body in it. So there **is** a child class for every constant — the compiler wrote it — and the enum class itself never needs to be abstract, because no constant is left unimplemented.
 >
-> This is why the rule is *every* constant and not *some*: the moment one constant is left bare, it
-> would have to be an instance of the enum class itself, which really would need to be abstract.
+> This is why the rule is **every** constant and not **some**: the moment one constant is left bare, it would have to be an instance of the enum class itself, which really would need to be abstract.
 >
-> Note `09` is this same mechanism, taught there with a concrete method being overridden rather than an
-> abstract one being implemented.
+> Note `09` is this same mechanism, taught there with a concrete method being overridden rather than an abstract one being implemented.
 
 ---
 

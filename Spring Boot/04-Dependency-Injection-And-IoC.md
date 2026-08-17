@@ -299,7 +299,6 @@ NotificationService notification = new EmailService();
 
 # The real problem is where the object is created
 
-**Clear one doubt first:**
 
 > **Creating an object is not the problem. Where you create that object is the problem.**
 
@@ -331,7 +330,7 @@ flowchart LR
 
 > **Nobody has a problem with dependency. The problem is that you are creating the object of the thing you depend on, yourself.**
 
-**Plus one more:** `OrderService` is **business logic**, and creating an object is not business logic.
+**Plus one more:** `OrderService` is **business logic**, and **creating an object is not business logic**.
 
 ---
 
@@ -400,7 +399,7 @@ SMS notification sent
 
 ## What just happened, named
 
-> **The dependency is now coming from outside. In programming terminology, this is called **dependency injection**.**
+> The dependency is now coming from outside. In programming terminology, this is called **dependency injection**.
 
 **It was `OrderService`'s responsibility to create its own dependency. That responsibility was taken away from it** — because it never should have had it — **and injected in from somewhere else.**
 
@@ -679,7 +678,7 @@ flowchart TB
 
 **Everything above works, and it is genuinely better than what came before.** But look at what `Main` is now doing: creating every object, wiring every dependency, configuring everything.
 
-> Although Main configures everything, this design is **still better** than every class going and creating its own dependency. That was the bad way. Main wiring it is better than that. **I know Main gets complicated.** And this is exactly where the Spring Framework comes in.
+> Although Main configures everything, this design is **still better** than every class going and creating its own dependency. That was the bad way. Main wiring it is better than that. **But Main gets complicated.** And this is exactly where the Spring Framework comes in.
 
 **A handful of services is fine. Now imagine `UserService`, `PaymentService`, and dozens more, each with its own dependencies** — `Main` becomes an enormous wiring diagram.
 

@@ -4,16 +4,14 @@
 
 **The name says it: a variable that is local to a thread.**
 
-> [!info] **The servlet scopes analogy he starts from.** In servlets, data can be stored at different
-> **scopes**:
+> [!info] **The servlet scopes analogy he starts from.** In servlets, data can be stored at different **scopes**:
 >
 > | Scope | Lives for |
 > |---|---|
 > | **request** | one request — gone once that request is processed |
 > | **session** | the whole session — you log into Gmail once, and every subsequent action knows who you are until you log out |
 >
-> **`ThreadLocal` adds a third: thread scope.** Data stored there is available **everywhere that thread
-> goes**, for as long as it lives.
+> **`ThreadLocal` adds a third: thread scope.** Data stored there is available **everywhere that thread goes**, for as long as it lives.
 
 ---
 
@@ -27,34 +25,24 @@ void m1() { m2(); }
 void m2() { /* the data fetched earlier is needed HERE */ }
 ```
 
-**You fetched something at the top — a transaction ID, a database connection, a user ID — and you need
-it three calls deep.** The options without `ThreadLocal`:
+**You fetched something at the top — a transaction ID, a database connection, a user ID — and you need it three calls deep.** The options without `ThreadLocal`:
 
-- **pass it as a parameter** through every method in the chain, including methods that do not care
-  about it
+- **pass it as a parameter** through every method in the chain, including methods that do not care about it
 - **make it a static field** — but then every thread shares one value, which is wrong
 
-> **`ThreadLocal` maintains a separate copy for every thread**, so each thread reads and writes its
-> own without passing anything.
+> **`ThreadLocal` maintains a separate copy for every thread**, so each thread reads and writes its own without passing anything.
 
 ## The typical uses
 
-> **For every thread a separate database connection is required. For every thread a separate counter
-> variable. For every thread a separate customer ID.**
+> **For every thread a separate database connection is required. For every thread a separate counter variable. For every thread a separate customer ID.**
 
 > [!question]- **The servlet transaction ID.** His worked scenario, and it is the realistic one.
 >
-> A servlet invokes several business methods, and you must **generate a unique transaction ID for each
-> request** and make it available to all of them.
+> A servlet invokes several business methods, and you must **generate a unique transaction ID for each request** and make it available to all of them.
 >
-> **In the single-instance-multi-threaded servlet model, one thread is created per request.** So
-> "unique per request" and "unique per thread" are the same requirement — and a `ThreadLocal` holding
-> the transaction ID gives every business method access to the right one **without changing a single
-> method signature**.
+> **In the single-instance-multi-threaded servlet model, one thread is created per request.** So unique per request and unique per thread are the same requirement — and a `ThreadLocal` holding the transaction ID gives every business method access to the right one **without changing a single method signature**.
 
-> [!important] **Without `ThreadLocal`, the programmer maintains this by hand.** *"If there are 1000
-> threads, how many counter variables must you maintain? 1000."* You would need a map from thread to
-> value, and you would have to clean it up. **`ThreadLocal` is that map, managed for you.**
+> [!important] **Without `ThreadLocal`, the programmer maintains this by hand.** If there are 1000 threads, how many counter variables must you maintain? 1000. You would need a map from thread to value, and you would have to clean it up. **`ThreadLocal` is that map, managed for you.**
 
 ---
 
@@ -93,8 +81,7 @@ main still sees: null  <- never touched
 
 **One `ThreadLocal` object, four independent values.** Measured on JDK 25.
 
-> **A thread can access its own local variable, and cannot access another thread's local variable.**
-> T1's count cannot be read by T2, and vice versa.
+> **A thread can access its own local variable, and cannot access another thread's local variable.** T1's count cannot be read by T2, and vice versa.
 
 **`remove()`:**
 
@@ -127,22 +114,17 @@ Measured on JDK 25: `tl.get()` → **`abc`**, without any `set()`.
 > B -> 2
 > C -> 3
 > ```
-> **The supplier runs once per thread**, on that thread's first `get()` — which is exactly how you give
-> each thread a distinct ID. **Prefer `withInitial()`**; the anonymous-subclass form still works and is
-> what older code uses.
+> **The supplier runs once per thread**, on that thread's first `get()` — which is exactly how you give each thread a distinct ID. **Prefer `withInitial()`**; the anonymous-subclass form still works and is what older code uses.
 
 ---
 
 # Lifecycle
 
-> **Once a thread enters the dead state, all its thread-local variables are eligible for garbage
-> collection.**
+> **Once a thread enters the dead state, all its thread-local variables are eligible for garbage collection.**
 
 **Values live and die with their thread**, so ordinary short-lived threads need no cleanup.
 
-> [!warning] **With a thread POOL, this guarantee disappears — and it becomes a memory leak.** Pool
-> threads (note `18`) **do not die** between tasks. A value set during one task **stays attached to
-> that thread** and is visible to the next, unrelated task that thread picks up.
+> [!warning] **With a thread POOL, this guarantee disappears — and it becomes a memory leak.** Pool threads (note `18`) **do not die** between tasks. A value set during one task **stays attached to that thread** and is visible to the next, unrelated task that thread picks up.
 >
 > **Two consequences, both bad:**
 > - **data leaks between requests** — task B sees task A's user ID
@@ -157,13 +139,11 @@ Measured on JDK 25: `tl.get()` → **`abc`**, without any `set()`.
 >     context.remove();      // ALWAYS
 > }
 > ```
-> **`remove()` in a `finally`** — the same discipline as `unlock()` in note `17`, for the same reason.
-> This is the single most common `ThreadLocal` bug in server code.
+> **`remove()` in a `finally`** — the same discipline as `unlock()` in note `17`, for the same reason. This is the single most common `ThreadLocal` bug in server code.
 
 ## Version
 
-> **`ThreadLocal` was introduced in 1.2, and enhanced in 1.5** — it is not a 1.5 addition, which is
-> worth knowing since the rest of this block is.
+> **`ThreadLocal` was introduced in 1.2, and enhanced in 1.5** — it is not a 1.5 addition, which is worth knowing since the rest of this block is.
 
 ---
 

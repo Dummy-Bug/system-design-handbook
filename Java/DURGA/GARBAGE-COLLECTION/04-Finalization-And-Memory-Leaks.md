@@ -24,13 +24,13 @@
 >
 > **The modern replacements** are `try`-with-resources with `AutoCloseable` for anything scope-bound — which is what you should actually be writing for connections — and `java.lang.ref.Cleaner` for the rare case where you genuinely need a safety net after an object becomes unreachable.
 >
-> Everything in these notes is still worth learning: it is asked constantly, and the *reasons* it was deprecated only make sense once you know the cases below. But if an interviewer asks whether you would use it, the answer is no.
+> Everything in these notes is still worth learning: it is asked constantly, and the **reasons** it was deprecated only make sense once you know the cases below. But if an interviewer asks whether you would use it, the answer is no.
 
 ---
 
 # Where `finalize()` comes from
 
-If the collector can call `finalize()` on *any* object, the method must be available on every object. It is:
+If the collector can call `finalize()` on **any** object, the method must be available on every object. It is:
 
 > `finalize()` is defined in the **`Object`** class, and hence it is available to **every Java class** — because `Object` is the superclass of them all.
 
@@ -44,7 +44,7 @@ Three things worth reading off that signature: it is **`protected`**, it returns
 
 And in `Object`, the body is empty. Open `Object.java` and the method is there with nothing inside it.
 
-> [!info] **Why `Object`'s version is empty, and why that is correct.** The `Object` class cannot possibly know what cleanup *your* object needs — only you know that this object holds a database connection. So the base implementation does nothing, and **you override it in your own class** to define your own cleanup activities.
+> [!info] **Why `Object`'s version is empty, and why that is correct.** The `Object` class cannot possibly know what cleanup **your** object needs — only you know that this object holds a database connection. So the base implementation does nothing, and **you override it in your own class** to define your own cleanup activities.
 
 ---
 
@@ -105,7 +105,7 @@ It is the same rule as any other method call, and Durga Sir makes the connection
 
 `String` does not override `finalize()`, so it inherits the empty one from `Object`. Empty method, no output.
 
-> [!important] **Case 1, stated properly.** Just before destroying an object, the collector calls `finalize()` **on the object that is eligible** — so **that object's class's** `finalize()` runs. If a `String` object is eligible, `String`'s `finalize()` runs, *not* the `Test` class's, no matter what `Test` overrides.
+> [!important] **Case 1, stated properly.** Just before destroying an object, the collector calls `finalize()` **on the object that is eligible** — so **that object's class's** `finalize()` runs. If a `String` object is eligible, `String`'s `finalize()` runs, **not** the `Test` class's, no matter what `Test` overrides.
 
 ## Making it work
 
@@ -133,7 +133,7 @@ End of main
 finalize method called
 ```
 
-Now the eligible object *is* a `Test`, so `Test`'s `finalize()` runs. And note the ordering — `End of main` came first on this run, which is exactly the two-thread unpredictability described above. The other order is equally legal.
+Now the eligible object **is** a `Test`, so `Test`'s `finalize()` runs. And note the ordering — `End of main` came first on this run, which is exactly the two-thread unpredictability described above. The other order is equally legal.
 
 > [!info] **This is why people think `finalize()` is broken.** They make a `String` or a `Student` eligible, override `finalize()` in the class holding `main`, see nothing printed, and conclude the method does not work. It works perfectly; it ran on the wrong class.
 
@@ -145,7 +145,7 @@ Now the eligible object *is* a `Test`, so `Test`'s `finalize()` runs. And note t
 
 Yes. And the consequence is the important bit.
 
-> [!important] **If the programmer calls `finalize()`, it executes like an ordinary method call and the object is *not* destroyed.** If the **garbage collector** calls it, the object **is** destroyed once the method completes.
+> [!important] **If the programmer calls `finalize()`, it executes like an ordinary method call and the object is not destroyed.** If the **garbage collector** calls it, the object **is** destroyed once the method completes.
 >
 > `finalize()` does not destroy anything. It performs cleanup. Destruction is the collector's separate act, immediately afterwards — and only when the collector was the caller.
 
@@ -181,8 +181,7 @@ finalize method called
 
 The first two are the explicit calls, in order, before anything else. Then `End of main` from the main thread and the collector's call — and again, those last two could arrive in either order.
 
-> [!example]- **Proof that the third call is the collector's** — run the same program with finalization switched off
-> JDK 18 added a flag to disable finalization entirely. Running the identical program with it:
+> [!example]- **Proof that the third call is the collector's** — run the same program with finalization switched off JDK 18 added a flag to disable finalization entirely. Running the identical program with it:
 >
 > ```
 > java --finalization=disabled Case2
@@ -194,7 +193,7 @@ The first two are the explicit calls, in order, before anything else. Then `End 
 >
 > Two calls, not three. The programmer's explicit calls are unaffected — they are ordinary method calls and nothing can stop them. The collector's call is gone, because finalization is off. That cleanly separates which of the three calls came from where.
 
-> [!important] A cleanup method called by *you* is just a method. The same method called by *the runtime* is the last thing that happens before the object is destroyed. Who calls it decides what it means 
+> [!important] A cleanup method called by **you** is just a method. The same method called by **the runtime** is the last thing that happens before the object is destroyed. Who calls it decides what it means 
 
 ---
 
@@ -212,9 +211,9 @@ The first two are the explicit calls, in order, before anything else. Then `End 
 
 # Case 3 — an exception inside `finalize()`
 
-> [!important] **If the *programmer* calls `finalize()` and an uncaught exception is raised inside it, the JVM terminates the program abnormally**, propagating that exception.
+> [!important] **If the programmer calls `finalize()` and an uncaught exception is raised inside it, the JVM terminates the program abnormally**, propagating that exception.
 >
-> **If the *garbage collector* calls `finalize()` and an uncaught exception is raised inside it, the JVM ignores the exception entirely** and the rest of the program continues normally.
+> **If the garbage collector calls `finalize()` and an uncaught exception is raised inside it, the JVM ignores the exception entirely** and the rest of the program continues normally.
 
 
 
@@ -267,7 +266,7 @@ Normal termination. The `ArithmeticException` is still raised inside `finalize()
 
 
 
-**If a `catch` block *is* present, it executes in both cases.** The collector does not skip your exception handling. The ignoring applies only when nothing catches the exception.
+**If a `catch` block is present, it executes in both cases.** The collector does not skip your exception handling. The ignoring applies only when nothing catches the exception.
 
 So, which of these is true?
 
@@ -276,7 +275,7 @@ So, which of these is true?
 | While executing `finalize()`, the JVM ignores **every** exception | **invalid** |
 | While executing `finalize()`, the JVM ignores **only uncaught** exceptions | **valid** |
 
-> [!important] **Say "only uncaught".** If a `catch` block exists, the exception is caught and handled exactly as it would be anywhere else — the JVM has nothing to ignore. The special behaviour only kicks in when the exception would otherwise escape.
+> [!important] **Say only uncaught.** If a `catch` block exists, the exception is caught and handled exactly as it would be anywhere else — the JVM has nothing to ignore. The special behaviour only kicks in when the exception would otherwise escape.
 
 > [!warning] **This is one of the reasons `finalize()` was deprecated.** A method whose exceptions are silently discarded is a method whose failures are invisible. Cleanup that quietly did not happen, with no log line and no stack trace, is precisely the sort of bug that is impossible to find. `AutoCloseable` and try-with-resources do not behave this way — an exception from `close()` propagates, and suppressed exceptions are attached to the primary one rather than discarded.
 
@@ -304,7 +303,7 @@ s = this;
 
 `finalize()` completes. And the collector **cannot destroy it**, because it is no longer unreachable. It has a reference.
 
-The collector is disappointed — it waited all that time, and the object was saved in the last second. *I will see your end next time.* The object is delighted; it survived.
+The collector is disappointed — it waited all that time, and the object was saved in the last second. I will see your end next time. The object is delighted; it survived.
 
 ```mermaid
 flowchart TB
@@ -375,9 +374,9 @@ Read those four lines carefully, because each one is a step in the argument:
 
 > [!important] **Two eligibilities, one `finalize()`.** The object was eligible twice — once when `f = null`, once when `s = null`. `finalize()` ran exactly once. That is the whole of Case 4, demonstrated rather than asserted.
 
-> [!warning] **What you have just seen is object resurrection, and it is a large part of why `finalize()` is being removed.** An object that is already being collected can make itself reachable again, which means the collector has to run a second pass to establish whether finalizable objects are *really* unreachable. Every object with a `finalize()` method therefore survives at least one extra collection cycle and imposes a cost on every collection.
+> [!warning] **What you have just seen is object resurrection, and it is a large part of why `finalize()` is being removed.** An object that is already being collected can make itself reachable again, which means the collector has to run a second pass to establish whether finalizable objects are **really** unreachable. Every object with a `finalize()` method therefore survives at least one extra collection cycle and imposes a cost on every collection.
 >
-> Add the "only once" rule and the picture gets worse: a resurrected object can never be finalized again, so if its cleanup mattered, it silently never happens the second time.
+> Add the only once rule and the picture gets worse: a resurrected object can never be finalized again, so if its cleanup mattered, it silently never happens the second time.
 >
 > **`Cleaner` deliberately cannot do this** — the cleanup action is not given a reference to the object, so it has nothing to resurrect. That design decision is a direct response to this case.
 
@@ -472,21 +471,21 @@ Five runs, five different answers, nothing changed between them.
 
 Question 5 is answered by the measurement above: a million objects were eligible and roughly ten to twenty thousand were collected. **No, it does not destroy all of them.**
 
-> [!important] **If an interviewer asks any of those five, the correct answer starts with "it is not guaranteed."** Then say what *is* true. Confidently naming a specific behaviour is the wrong answer, because the specification deliberately does not require one.
+> [!important] **If an interviewer asks any of those five, the correct answer starts with it is not guaranteed.** Then say what **is** true. Confidently naming a specific behaviour is the wrong answer, because the specification deliberately does not require one.
 
-## The two things you *can* say
+## The two things you **can** say
 
 **1 — When the program runs low on memory, the JVM runs the collector automatically.** Not at a stated moment, but reliably enough to state as a general rule.
 
 **2 — Every collector is built on mark-and-sweep.** The algorithm in one line: **if the object has a reference, mark it; if it does not, sweep it.**
 
-> [!important] **"Mark and sweep" is the right vocabulary and an incomplete picture of any production collector.** Marking live objects and reclaiming the rest is the foundation, but nothing shipping today is a plain mark-and-sweep:
+> [!important] **Mark and sweep is the right vocabulary and an incomplete picture of any production collector.** Marking live objects and reclaiming the rest is the foundation, but nothing shipping today is a plain mark-and-sweep:
 >
 > - they are **generational** — the heap is split so that short-lived objects are collected cheaply and often
 > - they combine marking with **copying and compaction**, to avoid leaving the heap fragmented
 > - **G1** is the default collector; **ZGC** and **Shenandoah** do most of their marking **concurrently**, while your application keeps running
 >
-> Durga Sir's own hedge — that the algorithm is **vendor dependent** — is exactly right, and it is why "it is not guaranteed" remains the correct opening to all five questions above. How the collectors themselves work is not taught in this course; it is a known gap in these notes.
+> Durga Sir's own hedge — that the algorithm is **vendor dependent** — is exactly right, and it is why it is not guaranteed remains the correct opening to all five questions above. How the collectors themselves work is not taught in this course; it is a known gap in these notes.
 
 ---
 
@@ -509,13 +508,13 @@ Ten million objects, and **every one still has a reference variable pointing at 
 
 Memory pressure begins, so the JVM runs the collector. The collector arrives in the heap area and starts checking. Is this one eligible? No — it has a reference. This one? No — it has a reference. This one? No. It keeps roaming the heap looking for something, anything, it is allowed to destroy.
 
-Meanwhile the program reaches a critical stage. The JVM turns up and lays into the collector: *I sent you half an hour ago and you have not freed a single bit of memory. What have you been doing?*
+Meanwhile the program reaches a critical stage. The JVM turns up and lays into the collector: I sent you half an hour ago and you have not freed a single bit of memory. What have you been doing?
 
 The collector cries. Then, after a few minutes, it explains:
 
-*What can I do? **No object is eligible.** Every object in the heap has a reference variable. There is nothing for me to destroy.*
+What can I do? **No object is eligible.** Every object in the heap has a reference variable. There is nothing for me to destroy.
 
-And the JVM has to accept it: *sorry — if no object is eligible, you can do nothing and I can do nothing.*
+And the JVM has to accept it: sorry — if no object is eligible, you can do nothing and I can do nothing.
 
 The program fails with **`OutOfMemoryError`**. The collector is present, the JVM is present, and neither is of any use.
 
@@ -547,7 +546,7 @@ You find leaks with memory management tools that attach to a running Java progra
 
 > [!info] **The tooling is a known gap in these notes**, and a deliberate one — none of it is taught anywhere in this course, so closing it properly is a separate piece of work. Older material names **HP OVO**, **IBM Tivoli**, **JProbe** and **Patrol** here; all four are legacy or discontinued, and naming them in an interview would be actively strange.
 
-> [!important] **This is an interview question at your level, and Durga Sir says so explicitly.** For candidates with two or three years upwards, *"what is a memory leak?"* is fair game. The answer, complete: **objects that the application is no longer using but which are not eligible for garbage collection, because references to them are still being held. They accumulate, the collector cannot reclaim them, and eventually the application dies with `OutOfMemoryError`.** Then give an example — a static collection that only ever grows is the classic one.
+> [!important] **This is an interview question at your level, and Durga Sir says so explicitly.** For candidates with two or three years upwards, what is a memory leak? is fair game. The answer, complete: **objects that the application is no longer using but which are not eligible for garbage collection, because references to them are still being held. They accumulate, the collector cannot reclaim them, and eventually the application dies with `OutOfMemoryError`.** Then give an example — a static collection that only ever grows is the classic one.
 
 ---
 
@@ -563,6 +562,6 @@ Thirteen videos, and this is the whole of it:
 | **Finalization** | five cases: whose `finalize()` runs, calling it yourself, exceptions inside it, why it runs only once, and when the JVM collects unprompted |
 | **Memory leaks** | objects unused but not eligible — the one failure the collector cannot save you from |
 
-And the thread running through all of it: **almost nothing about the collector is guaranteed.** Not when it runs, not what algorithm it uses, not what order it works in, not whether it finishes the job. What *is* guaranteed is the part you control — an object with no reachable reference is eligible, and making objects eligible when you are done with them is the only lever you actually have.
+And the thread running through all of it: **almost nothing about the collector is guaranteed.** Not when it runs, not what algorithm it uses, not what order it works in, not whether it finishes the job. What **is** guaranteed is the part you control — an object with no reachable reference is eligible, and making objects eligible when you are done with them is the only lever you actually have.
 
 > [!info] **What this chapter does not cover, so you know where you stand.** Generational heap layout (Eden, survivor spaces, old generation), the specific collectors and how to choose between them, GC logs, heap dump analysis, and reference types beyond the ordinary strong reference — soft, weak and phantom. None of that is in Durga Sir's course. It is the material the interview-QA files in `JVM-ARCHITECTURE/` flag as gaps, and it is the next thing to pick up.

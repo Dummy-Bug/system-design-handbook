@@ -23,8 +23,7 @@ oos.writeObject(c1);        // then cat
 oos.writeObject(r1);        // then rat
 ```
 
-**One stream, three `writeObject()` calls.** *"Any number of objects we can serialize — no problem at
-all."*
+**One stream, three `writeObject()` calls.** Any number of objects we can serialize — no problem at all.
 
 ---
 
@@ -50,8 +49,7 @@ same order  -> bow meow eek
 
 ## Getting it wrong
 
-*"By mistake, if I interchange these lines — internally the first `readObject()` gives a dog, but I am
-trying to typecast to cat."*
+By mistake, if I interchange these lines — internally the first `readObject()` gives a dog, but I am trying to typecast to cat.
 
 ```java
 Cat c2 = (Cat) ois.readObject();       // but a Dog comes out first
@@ -63,21 +61,15 @@ Measured on JDK 25:
 java.lang.ClassCastException: class Dog4 cannot be cast to class Cat4
 ```
 
-> [!important] **The order of objects is part of the file format.** Nothing in the stream lets you
-> seek to "the cat" — it is a sequence, read front to back. **Interchange the order at deserialization
-> time and you get `ClassCastException`.**
+> [!important] **The order of objects is part of the file format.** Nothing in the stream lets you seek to the cat — it is a sequence, read front to back. **Interchange the order at deserialization time and you get `ClassCastException`.**
 
-> [!info] **Reading past the last object throws `EOFException`.** Measured on JDK 25 — a fourth
-> `readObject()` on a three-object file gives **`java.io.EOFException`**. It is not `null` and it is
-> not a clean end marker, which matters for the loop below: **the loop has to be bounded, or the
-> `EOFException` has to be caught.**
+> [!info] **Reading past the last object throws `EOFException`.** Measured on JDK 25 — a fourth `readObject()` on a three-object file gives **`java.io.EOFException`**. It is not `null` and it is not a clean end marker, which matters for the loop below: **the loop has to be bounded, or the `EOFException` has to be caught.**
 
 ---
 
 # When you don't know the order
 
-> *"Some X person is serializing, some Y person is deserializing. I don't know in which order X person
-> serialized. If we don't know the order of objects in serialization, how can we handle it?"*
+> Some X person is serializing, some Y person is deserializing. I don't know in which order X person serialized. If we don't know the order of objects in serialization, how can we handle it?
 
 **Read into an `Object` reference, then ask what it is.**
 
@@ -85,11 +77,9 @@ java.lang.ClassCastException: class Dog4 cannot be cast to class Cat4
 Object o = ois.readObject();
 ```
 
-**Why this works:** *"Parent reference can be used to hold a child object."* `Object` will hold a
-`Dog`, a `Cat` or a `Rat` equally well.
+**Why this works:** Parent reference can be used to hold a child object. `Object` will hold a `Dog`, a `Cat` or a `Rat` equally well.
 
-**But that alone is not enough** — *"by using the parent reference, child-specific methods we can't
-call."* So you have to test and cast:
+**But that alone is not enough** — by using the parent reference, child-specific methods we can't call. So you have to test and cast:
 
 ```java
 Object o = ois.readObject();
@@ -108,20 +98,15 @@ if (o instanceof Dog) {
 
 > **`instanceof` is the best helper in this scenario.**
 
-> [!warning] **Read once, then test — do not call `readObject()` inside each branch.** He catches
-> himself making exactly this mistake mid-derivation: *"a small mistake I am doing — we read already,
-> we are not required to read. Just typecast `o`."*
+> [!warning] **Read once, then test — do not call `readObject()` inside each branch.** He catches himself making exactly this mistake mid-derivation: a small mistake I am doing — we read already, we are not required to read. Just typecast `o`.
 >
-> **A second `readObject()` inside the `if` would consume the *next* object**, silently skipping one
-> and eventually throwing `EOFException`. The object is already in `o`; only cast it.
+> **A second `readObject()` inside the `if` would consume the next object**, silently skipping one and eventually throwing `EOFException`. The object is already in `o`; only cast it.
 
-## "That's a lot of code for one object"
+## That's a lot of code for one object
 
-> *"For one object I have to write this much lengthy code — if a thousand objects are there, then a
-> thousand times I have to write it?"*
+> For one object I have to write this much lengthy code — if a thousand objects are there, then a thousand times I have to write it?
 
-**No.** *"I will keep this total thing inside a loop — while loop or for loop or for-each loop — so
-that for any object the code will become the same. The length of the code is not going to increase."*
+**No.** I will keep this total thing inside a loop — while loop or for loop or for-each loop — so that for any object the code will become the same. The length of the code is not going to increase.
 
 Measured on JDK 25, the loop form:
 
@@ -134,8 +119,7 @@ unknown order, classic instanceof:
 
 ## The modern form
 
-> [!important] **Pattern matching removes the cast entirely.** `instanceof` binds the variable
-> directly, and a `switch` over the type reads far better than an `if`/`else if` chain:
+> [!important] **Pattern matching removes the cast entirely.** `instanceof` binds the variable directly, and a `switch` over the type reads far better than an `if`/`else if` chain:
 >
 > ```java
 > Object o = ois.readObject();
@@ -164,10 +148,7 @@ unknown order, classic instanceof:
 >   Rat -> eek
 > ```
 >
-> **`instanceof` with a binding variable is standard since Java 16; pattern matching for `switch` since
-> Java 21.** The `if (o instanceof Dog) { Dog d = (Dog) o; ... }` shape still works and is what older
-> code looks like — but writing the cast out is now redundant, and the `switch` form is checked for
-> exhaustiveness, which the `if` chain is not.
+> **`instanceof` with a binding variable is standard since Java 16; pattern matching for `switch` since Java 21.** The `if (o instanceof Dog) { Dog d = (Dog) o; ... }` shape still works and is what older code looks like — but writing the cast out is now redundant, and the `switch` form is checked for exhaustiveness, which the `if` chain is not.
 
 ---
 

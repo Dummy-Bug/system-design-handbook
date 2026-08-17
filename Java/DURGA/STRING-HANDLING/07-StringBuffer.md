@@ -30,7 +30,7 @@ Ten changes to a `StringBuffer` produce **one object**.
 | Ten changes | ten objects | **one** object |
 | Suits content that is | **fixed** — city name, college name, an address | **changing** |
 
-> [!important] **Say the advantage in one sentence.** *"All required changes are performed in the existing object only, so a new object is not created for every small change."*
+> [!important] **Say the advantage in one sentence.** All required changes are performed in the existing object only, so a new object is not created for every small change.
 
 ---
 
@@ -38,9 +38,9 @@ Ten changes to a `StringBuffer` produce **one object**.
 
 Before the constructors, one distinction that does not exist for `String` at all.
 
-Ask for the **capacity** of a `String` and the question is meaningless. You cannot add to it or remove from it, so however many characters it had at creation is however many it will ever have. **Length and capacity would always be the same number**, which is why the word *capacity* is never used with `String`.
+Ask for the **capacity** of a `String` and the question is meaningless. You cannot add to it or remove from it, so however many characters it had at creation is however many it will ever have. **Length and capacity would always be the same number**, which is why the word **capacity** is never used with `String`.
 
-`StringBuffer` is different, because you *can* add. So two separate questions arise:
+`StringBuffer` is different, because you **can** add. So two separate questions arise:
 
 > **Length** — how many characters are **currently** present.
 > **Capacity** — how many characters the object **can hold** in total.
@@ -99,7 +99,7 @@ at 34 characters     34
 after the 35th       70
 ```
 
-**Exactly as stated**, including that adding the 16th character does *not* trigger growth — only the 17th does.
+**Exactly as stated**, including that adding the 16th character does **not** trigger growth — only the 17th does.
 
 > [!info] **Why this internal detail is worth knowing.** He mentions having felt, in regular classes, that explaining this much internal behaviour was wasting students' time — until a student came back from an interview where he had been asked precisely this: the default initial capacity, and what happens internally when a `StringBuffer` fills up. He answered it and the interviewer was visibly impressed. Sometimes the internals are the question.
 
@@ -253,7 +253,7 @@ System.out.println(sb.reverse());
 
 Measured: `agrud`.
 
-> [!info] **Only the *order* is reversed, not the characters themselves.** An `a` does not become a mirror-image `a`. The letters are unchanged; their positions are not.
+> [!info] **Only the order is reversed, not the characters themselves.** An `a` does not become a mirror-image `a`. The letters are unchanged; their positions are not.
 
 ## 10 · `public void setLength(int length)`
 

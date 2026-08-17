@@ -1,6 +1,6 @@
 # The importance of the String constant pool
 
-The last note established *where* objects are created. This one answers the question underneath it: **why does a special memory area exist for strings at all?**
+The last note established **where** objects are created. This one answers the question underneath it: **why does a special memory area exist for strings at all?**
 
 The whole argument rests on one claim, and it is worth taking seriously rather than accepting: **in any application, in any programming language, the most commonly used object is the `String` object.**
 
@@ -25,7 +25,7 @@ Picture an ordinary voter registration form and list its fields:
 
 Out of twelve or thirteen fields, **ten or eleven are strings**. And the form is not special — take a college application instead: college name, director name, principal name, every subject name, the roll number. All strings. Only the marks are numbers.
 
-> [!info] **The identification-mark field is not invented.** It is the one on the school certificate — *a mole on the right hand, a mole on the left eyebrow.* Two of them, and both are strings.
+> [!info] **The identification-mark field is not invented.** It is the one on the school certificate — a mole on the right hand, a mole on the left eyebrow. Two of them, and both are strings.
 
 So: string objects dominate any real application. That is the premise. Now the problem it creates.
 
@@ -47,7 +47,7 @@ voter 1 crore → "Hyderabad"   (object 1,00,00,000)
 
 **One crore identical string objects.** Object creation is costly, so performance falls; and memory is simply wasted, since every one of them holds the same characters.
 
-But the city name is the *same* for all of them. So why create it a crore times?
+But the city name is the **same** for all of them. So why create it a crore times?
 
 > [!important] **The rule this leads to.** If a `String` object is required repeatedly, it is **never recommended** to create a separate object for every requirement. Create **one** object and share it.
 
@@ -85,7 +85,7 @@ Every other voter's city name would change too. You would check your city in the
 
 The Java designers analysed exactly this and came up with immutability.
 
-> Once we create a `String` object, we are **not allowed to change its content**. If any person tries to change it, **with those changes a new object is created**, and only *that* reference is reassigned. All the remaining references still point at the original object.
+> Once we create a `String` object, we are **not allowed to change its content**. If any person tries to change it, **with those changes a new object is created**, and only **that** reference is reassigned. All the remaining references still point at the original object.
 
 ```mermaid
 flowchart LR
@@ -97,7 +97,7 @@ flowchart LR
 
 Voter 3 gets his change. Nobody else is touched.
 
-> [!important] **This is the causal chain, and it is the answer to "why are `String` objects immutable?"**
+> [!important] **This is the causal chain, and it is the answer to why are `String` objects immutable?**
 >
 > **SCP → the same object is shared by many references → one reference changing it would affect all of them → therefore `String` must be immutable.**
 >
@@ -109,7 +109,7 @@ Voter 3 gets his change. Nobody else is touched.
 
 ## 1. Why is SCP available only for `String` and not for `StringBuffer`?
 
-Suppose you go to the same bar every evening. One day you forget your wallet. Will they still serve you? Of course — you are a regular. *No problem sir, pay tomorrow, or settle it at month end.*
+Suppose you go to the same bar every evening. One day you forget your wallet. Will they still serve you? Of course — you are a regular. No problem sir, pay tomorrow, or settle it at month end.
 
 Now suppose you go **once a year**. You turn up, you have forgotten your money, and you ask for the same favour. You will be looked at from top to bottom, and refused.
 
@@ -144,7 +144,7 @@ Change the content through `s1` and there is no effect on anything else, **becau
 | A change through one reference would affect others | **yes** | no |
 | Therefore immutability is | **required** | not required |
 
-> [!important] **Answer it as a consequence, not as a pair of facts.** *"`String` is immutable because of the SCP; `StringBuffer` has no SCP, so every reference has its own object and there is nothing to protect."* That is one sentence and it explains both halves.
+> [!important] **Answer it as a consequence, not as a pair of facts.** `String` is immutable because of the SCP; `StringBuffer` has no SCP, so every reference has its own object and there is nothing to protect. That is one sentence and it explains both halves.
 
 ## 3. Besides `String`, are any other objects immutable in Java?
 

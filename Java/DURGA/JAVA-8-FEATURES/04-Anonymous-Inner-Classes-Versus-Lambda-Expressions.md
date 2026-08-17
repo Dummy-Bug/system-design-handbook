@@ -1,10 +1,8 @@
 # Lambda expressions on your own classes
 
-The earlier collections examples sorted `Integer` objects. The obvious worry — *is this only for
-built-in types?* — is answered first.
+The earlier collections examples sorted `Integer` objects. The obvious worry — is this only for built-in types? — is answered first.
 
-> **Lambda expressions are applicable to our own classes too.** Not just `Integer` and `String` —
-> `Employee` objects, `Student` objects, `Customer` objects, whatever your application has.
+> **Lambda expressions are applicable to our own classes too.** Not just `Integer` and `String` — `Employee` objects, `Student` objects, `Customer` objects, whatever your application has.
 
 ## The `Employee` class, and why `toString()` comes first
 
@@ -16,30 +14,25 @@ class Employee {
 }
 ```
 
-Now print an employee. **Whenever we try to print any object reference, `toString()` is called
-internally** — and `Employee` does not have one, so `Object`'s default implementation runs. Measured on
-JDK 25:
+Now print an employee. **Whenever we try to print any object reference, `toString()` is called internally** — and `Employee` does not have one, so `Object`'s default implementation runs. Measured on JDK 25:
 
 ```
 Emp2@1dbd16a6
 ```
 
-*"This type of thing I don't want. I want something meaningful."* So override it:
+This type of thing I don't want. I want something meaningful. So override it:
 
 ```java
 public String toString() { return eno + " : " + name; }
 ```
 
-> **If you want to print your own class object in a meaningful way, it is highly recommended to
-> override `toString()`.**
+> **If you want to print your own class object in a meaningful way, it is highly recommended to override `toString()`.**
 
 ## Sorting employees by employee number
 
-`Collections.sort(list, comparator)`, and the comparator contract is the one from the last part:
-**negative** if the first should come before, **positive** if after, **zero** if equal.
+`Collections.sort(list, comparator)`, and the comparator contract is the one from the last part: **negative** if the first should come before, **positive** if after, **zero** if equal.
 
-For ascending order of employee numbers: if `e1.eno < e2.eno` then `e1` comes first, so return
-negative.
+For ascending order of employee numbers: if `e1.eno < e2.eno` then `e1` comes first, so return negative.
 
 ```java
 import java.util.*;
@@ -80,28 +73,19 @@ The second sort needs no `if` at all:
 (e1, e2) -> e1.name.compareTo(e2.name)
 ```
 
-> **`String`'s `compareTo()` is already alphabetical order.** For numbers it is already ascending
-> order. That is the **default natural sorting order**, and it is implemented internally through
-> `Comparable.compareTo()`.
+> **`String`'s `compareTo()` is already alphabetical order.** For numbers it is already ascending order. That is the **default natural sorting order**, and it is implemented internally through `Comparable.compareTo()`.
 
-So `compareTo` already returns the negative / positive / zero that `Comparator.compare` needs — its
-result can be handed straight back.
+So `compareTo` already returns the negative / positive / zero that `Comparator.compare` needs — its result can be handed straight back.
 
 Read the output: Bunny, Chinny, Durga, Sunny, Vinny — B, C, D, S, V.
 
-> [!info] **Where lambdas fit in collections.** The functional interfaces in collections are
-> **`Comparable` and `Comparator`** — and both are about **sorting**. So: *wherever sorting is
-> required, lambda expressions can be used.*
+> [!info] **Where lambdas fit in collections.** The functional interfaces in collections are **`Comparable` and `Comparator`** — and both are about **sorting**. So: wherever sorting is required, lambda expressions can be used.
 
-> [!question]- **Deep dive — a question from the class: how would you find the second-highest salary?**
-> Asked mid-session, and his answer is worth keeping because it is a common interview question and the
-> reasoning is pure sorting.
+> [!question]- **Deep dive — a question from the class: how would you find the second-highest salary?** Asked mid-session, and his answer is worth keeping because it is a common interview question and the reasoning is pure sorting.
 >
-> In SQL you would write a query. In Java you have to write the logic yourself — and the logic is one
-> line of thought:
+> In SQL you would write a query. In Java you have to write the logic yourself — and the logic is one line of thought:
 >
-> **Sort by salary in descending order.** Then the highest-paid employee is at index 0, and the
-> **second element is the employee with the second-highest salary.** That is the whole algorithm.
+> **Sort by salary in descending order.** Then the highest-paid employee is at index 0, and the **second element is the employee with the second-highest salary.** That is the whole algorithm.
 >
 > (He leaves the code as practice, and notes it as a nice exercise for the reader.)
 
@@ -129,7 +113,7 @@ Thread t = new Thread() {
 };
 ```
 
-*What am I doing here?* Three things at once:
+What am I doing here? Three things at once:
 
 1. Writing a **class that extends `Thread`** — a child class of `Thread`.
 2. That child class has **no name**.
@@ -143,8 +127,7 @@ That is an anonymous inner class extending `Thread`.
 Runnable r = new Runnable();
 ```
 
-**Invalid** — `Runnable` is an interface; you cannot create an object of an interface. Measured on
-JDK 25:
+**Invalid** — `Runnable` is an interface; you cannot create an object of an interface. Measured on JDK 25:
 
 ```
 error: Runnable is abstract; cannot be instantiated
@@ -158,13 +141,9 @@ Runnable r = new Runnable() {
 };
 ```
 
-> [!important] **This is the sentence to get exactly right.** `new Runnable() { … }` does **not**
-> create a `Runnable` object. It creates an **implementation class of `Runnable`** that has **no
-> name**, and then an **object of that implementation class**. The words `new Runnable` are being used,
-> but the object is not a `Runnable` object — it is an object of its implementation class.
+> [!important] **This is the sentence to get exactly right.** `new Runnable() { … }` does **not** create a `Runnable` object. It creates an **implementation class of `Runnable`** that has **no name**, and then an **object of that implementation class**. The words `new Runnable` are being used, but the object is not a `Runnable` object — it is an object of its implementation class.
 >
-> **The semicolon is the whole difference.** `new Runnable();` tries to instantiate the interface and
-> fails. `new Runnable() { … }` declares an implementation and instantiates that.
+> **The semicolon is the whole difference.** `new Runnable();` tries to instantiate the interface and fails. `new Runnable() { … }` declares an implementation and instantiates that.
 
 ```mermaid
 flowchart TB
@@ -173,8 +152,7 @@ flowchart TB
     D --> E["✅ an object of <b>that</b> class"]
 ```
 
-> **An anonymous inner class must either extend a class or implement an interface** — one of the two
-> always happens.
+> **An anonymous inner class must either extend a class or implement an interface** — one of the two always happens.
 
 ## A thread written with an anonymous inner class
 
@@ -195,12 +173,9 @@ Count the activities packed into that one expression:
 2. Providing an implementation for `run()`
 3. Creating an object of that implementation class
 
-> **When should you go for an anonymous inner class?** *Wherever the functionality is required, there
-> only* — **for instant use.** Instead of writing a separate named implementation class somewhere else
-> in the file, you define it exactly at the point of use.
+> **When should you go for an anonymous inner class?** **Wherever the functionality is required, there only** — **for instant use.** Instead of writing a separate named implementation class somewhere else in the file, you define it exactly at the point of use.
 
-After `t.start()` there are **two threads** — main and child — and the output is **mixed**, exactly as
-in the previous part.
+After `t.start()` there are **two threads** — main and child — and the output is **mixed**, exactly as in the previous part.
 
 ## Replacing it with a lambda
 
@@ -232,8 +207,7 @@ interface A {
 }
 ```
 
-**Can this be implemented with a lambda expression?** No — a lambda applies only to functional
-interfaces, and this has two abstract methods. Measured on JDK 25:
+**Can this be implemented with a lambda expression?** No — a lambda applies only to functional interfaces, and this has two abstract methods. Measured on JDK 25:
 
 ```
 error: incompatible types: A is not a functional interface
@@ -268,13 +242,9 @@ m2 execution
 >
 > So anonymous inner classes are the more powerful of the two, and the replacement rule is narrow:
 >
-> > **Only if an anonymous inner class implements an interface that contains a single abstract method
-> > can it be replaced with a lambda expression.** Not every time.
+> > **Only if an anonymous inner class implements an interface that contains a single abstract method can it be replaced with a lambda expression.** Not every time.
 
-> [!info] **Where the misconception comes from.** Before 1.8 everybody feared anonymous inner classes,
-> so when lambdas arrived people assumed they had come to abolish them. **Anonymous inner class ≠
-> lambda expression.** Lambdas resolve the *complexity* of anonymous inner classes in the one case
-> where they apply; they do not replace the concept.
+> [!info] **Where the misconception comes from.** Before 1.8 everybody feared anonymous inner classes, so when lambdas arrived people assumed they had come to abolish them. **Anonymous inner class ≠ lambda expression.** Lambdas resolve the **complexity** of anonymous inner classes in the one case where they apply; they do not replace the concept.
 
 ## Everything an anonymous inner class can do that a lambda cannot
 
@@ -306,9 +276,7 @@ Abs2 x = () -> System.out.println("nope");
 error: incompatible types: Abs2 is not a functional interface
 ```
 
-> [!important] **Read that error closely — `Abs2` has exactly one abstract method.** It is still
-> rejected. **A lambda needs an *interface*, not merely a type with one abstract method.** "Functional
-> interface" means interface, literally.
+> [!important] **Read that error closely — `Abs2` has exactly one abstract method.** It is still rejected. **A lambda needs an interface, not merely a type with one abstract method.** Functional interface means interface, literally.
 
 ## `this` means different things in the two
 
@@ -364,21 +332,15 @@ Measured on JDK 25:
 777
 ```
 
-> **Inside an anonymous inner class, `this` always refers to the current anonymous inner class object.
-> Inside a lambda expression, `this` always refers to the current *outer* class object** — the
-> enclosing class in which the lambda is declared.
+> **Inside an anonymous inner class, `this` always refers to the current anonymous inner class object. Inside a lambda expression, `this` always refers to the current outer class object** — the enclosing class in which the lambda is declared.
 
-That is why the anonymous inner class needs `This2.this.x` to reach 777, while the lambda gets it from
-plain `this.x`. And notice the other half of it: the anonymous inner class **has its own instance
-variable** `x = 888`; the lambda's `x = 888` is just a **local variable**.
+That is why the anonymous inner class needs `This2.this.x` to reach 777, while the lambda gets it from plain `this.x`. And notice the other half of it: the anonymous inner class **has its own instance variable** `x = 888`; the lambda's `x = 888` is just a **local variable**.
 
-> **Inside a lambda expression we cannot declare instance variables.** Whatever variables you declare
-> inside a lambda are simply local variables.
+> **Inside a lambda expression we cannot declare instance variables.** Whatever variables you declare inside a lambda are simply local variables.
 
 ## Variables from outside
 
-From a lambda you can access enclosing class variables and enclosing method variables directly — but
-not identically:
+From a lambda you can access enclosing class variables and enclosing method variables directly — but not identically:
 
 ```java
 class Final1 {
@@ -410,8 +372,7 @@ Remove the `y = 999;` and it compiles and runs:
 x is now 888
 ```
 
-> **A local variable referenced from a lambda expression is implicitly final** — you cannot reassign
-> it, inside the lambda or after it. An **instance** variable has no such restriction.
+> **A local variable referenced from a lambda expression is implicitly final** — you cannot reassign it, inside the lambda or after it. An **instance** variable has no such restriction.
 
 ## The full comparison
 
@@ -427,15 +388,9 @@ x is now 888
 | Best choice when | you must handle **multiple methods** | the interface has a **single abstract method** |
 | At compile time | a separate `.class` file — `Outer$1.class` | **no** `.class` file — becomes a **private method** |
 
-> [!important] **Where each one actually lands in memory**, since this is the row people garble.
-> An anonymous inner class produces **a real loaded class**: its metadata goes into **Metaspace**
-> (native memory, outside the heap) and each instance goes on the **heap**, like any object. A lambda
-> produces **no class file at all** — the compiler emits a private method plus an `invokedynamic` call
-> site, and the implementation object is spun up at first execution.
+> [!important] **Where each one actually lands in memory**, since this is the row people garble. An anonymous inner class produces **a real loaded class**: its metadata goes into **Metaspace** (native memory, outside the heap) and each instance goes on the **heap**, like any object. A lambda produces **no class file at all** — the compiler emits a private method plus an `invokedynamic` call site, and the implementation object is spun up at first execution.
 >
-> Older material calls the metadata destination *"the permanent memory of the JVM (PermGen)"*.
-> **PermGen was removed in Java 8** (JEP 122) and replaced by Metaspace; the distinction the row is
-> drawing is right, but that is the wrong name for the place.
+> Older material calls the metadata destination the permanent memory of the JVM (PermGen). **PermGen was removed in Java 8** (JEP 122) and replaced by Metaspace; the distinction the row is drawing is right, but that is the wrong name for the place.
 
 ---
 
@@ -465,8 +420,7 @@ The session ends by running a quiz live, question by question. Every answer belo
 > 3. With lambda expressions we write concise code, so readability improves
 > 4. A functional interface reference can be used to hold a lambda expression
 >
-> **Answer: 1, 3 and 4.** Number 2 is false — *"it is applicable for every language, but very
-> unfortunately it came very late in Java."*
+> **Answer: 1, 3 and 4.** Number 2 is false — it is applicable for every language, but very unfortunately it came very late in Java.
 
 > [!question]- **Q4 — `interface Interf { public int product(int a, int b); }` — which lambdas are valid?**
 > - **First — invalid**, because the interface expects parameters and none were supplied.
@@ -492,32 +446,27 @@ The session ends by running a quiz live, question by question. Every answer belo
 > - The third — ✅ valid.
 > - The fourth — ✅ valid.
 >
-> A student asks about the single-parameter case: with **only one** argument the parentheses are
-> optional, which is why that one is fine without them.
+> A student asks about the single-parameter case: with **only one** argument the parentheses are optional, which is why that one is fine without them.
 
 > [!question]- **Q8 — `interface A { public void m1(); }` — which children are functional interfaces?**
 > - Child declaring **the same** `m1()` — ✅ functional interface.
-> - Child declaring a **new** abstract method — ❌ not functional: one method comes from the parent and
->   another is defined here, so the child has **two**.
+> - Child declaring a **new** abstract method — ❌ not functional: one method comes from the parent and another is defined here, so the child has **two**.
 > - The third — ✅ valid.
-> - "All of the above" — ❌, since the second one fails.
+> - All of the above — ❌, since the second one fails.
 
 > [!question]- **Q9 — `interface Interf { public int square(int n); }` — which lambdas are valid?**
-> - **First — invalid**: within curly braces every statement must end with a semicolon, and
->   `return n * n` has none.
+> - **First — invalid**: within curly braces every statement must end with a semicolon, and `return n * n` has none.
 > - **Second — valid.**
 > - **Third — invalid**: without curly braces you must not use `return`.
 > - **Fourth — invalid**: within curly braces `return` is compulsory.
 >
-> Note the two semicolons that must both be present: the one ending the statement *inside* the braces,
-> and the one ending the lambda expression itself.
+> Note the two semicolons that must both be present: the one ending the statement **inside** the braces, and the one ending the lambda expression itself.
 
 > [!question]- **Q10 — Which of the following are true?**
 > 1. Only for functional interfaces can we write a lambda expression implementation — ✅
 > 2. For any interface we can write a lambda expression — ❌
 > 3. A functional interface must be declared with the annotation — ❌ **optional**
-> 4. If any interface contains a single abstract method it is always a functional interface, whether
->    or not `@FunctionalInterface` is used — ✅
+> 4. If any interface contains a single abstract method it is always a functional interface, whether or not `@FunctionalInterface` is used — ✅
 
 **Score: 100 out of 100.**
 

@@ -20,7 +20,7 @@ try {
 > - The programmer is compulsorily required to close all opened resources, which **increases the complexity** of the programming.
 > - We must write the `finally` block explicitly, which **increases the length** of the code and reduces **readability**.
 
-And the declaration has to live *outside* the `try` — which is why it needs `= null`, and why the `finally` needs a null check before it can close anything.
+And the declaration has to live **outside** the `try` — which is why it needs `= null`, and why the `finally` needs a null check before it can close anything.
 
 ## The replacement
 
@@ -97,9 +97,9 @@ closed R3
 >
 > **Resources close in reverse order of declaration** — `R2` before `R1`. Which is what you want, since a later resource may depend on an earlier one.
 >
-> **They close *before* the catch block runs.** `closed R2` and `closed R1` both appear above `caught: boom`. So by the time your handler executes, the resources are already gone — you cannot use them in the `catch`.
+> **They close before the catch block runs.** `closed R2` and `closed R1` both appear above `caught: boom`. So by the time your handler executes, the resources are already gone — you cannot use them in the `catch`.
 >
-> **The body threw an exception and they closed anyway.** That is the "normally or abnormally" clause, demonstrated.
+> **The body threw an exception and they closed anyway.** That is the normally or abnormally clause, demonstrated.
 
 And conclusion 3, measured:
 
@@ -172,7 +172,7 @@ suppressed: java.lang.IllegalStateException: close failed
 
 > [!important] **Both survive.** The body's exception is the primary one, and the failure from `close()` is **attached to it** as a suppressed exception, retrievable with `getSuppressed()` and printed in the stack trace under a `Suppressed:` heading.
 >
-> That is the strongest argument for try-with-resources, and it is not about brevity at all. The hand-written `finally` version silently destroys the information you most need. **Say this if an interviewer asks why try-with-resources is preferred** — "it's shorter" is the weak answer; "it doesn't lose the original exception" is the real one.
+> That is the strongest argument for try-with-resources, and it is not about brevity at all. The hand-written `finally` version silently destroys the information you most need. **Say this if an interviewer asks why try-with-resources is preferred** — it's shorter is the weak answer; it doesn't lose the original exception is the real one.
 
 ---
 
@@ -238,7 +238,7 @@ catch (ArithmeticException | RuntimeException e) { }
 MC2.java:3: error: Alternatives in a multi-catch statement cannot be related by subclassing
 ```
 
-> [!important] **The reason is the same as the catch-ordering rule from part 4.** `RuntimeException` already covers every `ArithmeticException`, so naming both makes one of them redundant — and the compiler rejects alternatives it can prove are pointless. Listing a parent alongside its own child is exactly the *has already been caught* situation, expressed inside a single block.
+> [!important] **The reason is the same as the catch-ordering rule from part 4.** `RuntimeException` already covers every `ArithmeticException`, so naming both makes one of them redundant — and the compiler rejects alternatives it can prove are pointless. Listing a parent alongside its own child is exactly the **has already been caught** situation, expressed inside a single block.
 >
 > One more property worth knowing: in a multi-catch, the parameter is **implicitly final** — you cannot reassign `e` inside the block. With a single type you can.
 
