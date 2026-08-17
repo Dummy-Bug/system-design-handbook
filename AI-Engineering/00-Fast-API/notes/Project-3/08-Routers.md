@@ -12,7 +12,7 @@ project/
     └── reviews.py
 ```
 
-`__init__.py` is typically **empty** — its only job is telling Python **treat this folder as an importable package,** so `routes.reviews` works as an import path. Nothing is meant to be written inside it for this purpose; it's a marker file, not a place for logic.
+`__init__.py` is typically **empty** — its only job is telling Python **treat this folder as an importable package,** so `routes.reviews` works as an import path. Nothing is meant to be written inside it for this purpose; **it's a marker file**, not a place for logic.
 
 ---
 

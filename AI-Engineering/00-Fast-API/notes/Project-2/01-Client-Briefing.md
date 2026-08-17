@@ -1,8 +1,3 @@
-A second project, a second brief. The setup — venv, `requirements.txt`, a bare `main.py` with a title/description and a root route, running it with `uvicorn --reload` — is identical to project 1's and already covered in the Foundations notes. What's actually new starts here.
-
----
-
-## The client briefing
 
 A D2C (direct-to-consumer) brand — the kind of company selling straight to customers online, t-shirts and the like — wants their checkout form to **auto-fill city and state from a PIN code**. Type in a 6-digit PIN code, the rest of the address fills itself in. A familiar pattern from real checkout forms, now being built from the backend side.
 

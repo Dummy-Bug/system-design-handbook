@@ -1,6 +1,8 @@
 A plain type annotation (`pin_code: str`) validates **shape** — is this a string at all — but says nothing about **content**. **Exactly 6 characters, all digits** isn't something a type hint alone can express. That's what a **field validator** is for.
 
----
+These are two separate layers running in a fixed order, and the order matters: the type check goes first, and a field validator only runs on values that already survived it. Nothing that wasn't a string ever reaches the digit-counting code — it was rejected one layer earlier, with its own error message. So a validator never has to defend itself against wrong types; it can assume the annotation held and go straight to the rule it actually cares about.
+
+> [!note] The exception is `mode="before"`, which deliberately runs **ahead** of the type check to see the value exactly as it arrived. That mode exists for **transforming** raw input into something the type check will then accept — stripping stray whitespace, splitting a comma-joined string into a list — and not for skipping the check. The type check still runs afterward on whatever the before-validator returns, and still rejects it if it doesn't match.
 
 ## The pattern
 
@@ -19,15 +21,18 @@ class Request(BaseModel):
         return value
 ```
 
-Piece by piece:
 
 - **`@field_validator("code")`** — a decorator naming exactly which field this validator runs against. The string has to match the field name on the class.
-- **`@classmethod` stacked underneath it** — field validators are written as class methods, not instance methods, because they run **during** construction of the object, before there's a fully-built instance to call a normal method on.
-- **The method signature is `(cls, value)`** — `cls` is the class itself (standard for any classmethod), `value` is whatever was passed in for that field, prior to this validator running.
-- **Custom logic goes in the body**, checking whatever the plain type annotation couldn't express on its own.
-- **Failure is signaled by `raise ValueError(...)`** — not a custom exception, not `HTTPException`. Pydantic specifically watches for `ValueError` (along with `TypeError` and `AssertionError`) raised inside a validator, and converts it automatically into its own structured validation-error format. This is the same mechanism already responsible for the automatic `422` response whenever incoming request data fails to match a model's shape — a field validator's `ValueError` plugs into that exact pipeline, rather than requiring anything to be written by hand to produce the error response.
 
-> [!important] **The value has to be `return`ed at the end.** Skipping this isn't a silent no-op — whatever the validator was supposed to check gets validated, but the field's value is lost, because the validator's return value is what Pydantic actually keeps as the field's final value. A validator that checks everything correctly but forgets to `return value` still breaks the model.
+- **`@classmethod` stacked underneath it** — field validators are written as class methods, not instance methods, because they run **during** construction of the object, before there's a fully-built instance to call a normal method on.so if Error is raised inside @classmethod then no object of that class is created.
+
+- **The method signature is `(cls, value)`** — `cls` is the class itself (standard for any classmethod), and `value` is the data submitted for that one field. By default it has **already cleared the declared type check**, so `value: str` here is a guarantee rather than a hope: anything that wasn't a string was rejected before this function was ever called. The validator's job is the extra rule the type annotation couldn't express, not the type check itself.
+
+- **Custom logic goes in the body**, checking whatever the plain type annotation couldn't express on its own.
+
+- **Failure is signaled by `raise ValueError(...)`** — **not a custom exception**, not `HTTPException`. Pydantic specifically watches for `ValueError` (along with `TypeError` and `AssertionError`) raised inside a validator, and converts it automatically into its own structured validation-error format. This is the same mechanism already responsible for the automatic `422` response whenever incoming request data fails to match a model's shape — a field validator's `ValueError` plugs into that exact pipeline, rather than requiring anything to be written by hand to produce the error response.
+
+> [!important] **The value has to be `returned` at the end.** Skipping this isn't a silent no-op — whatever the validator was supposed to check gets validated, but the field's value is lost, because the validator's return value is what Pydantic actually keeps as the field's final value. A validator that checks everything correctly but forgets to `return value` still breaks the model.
 
 ---
 
@@ -35,7 +40,20 @@ Piece by piece:
 
 `self` is not magic — it's just the first argument of an instance method, filled in automatically with **whatever object the method was called on**. `obj.some_method()` is really shorthand for `SomeClass.some_method(obj)`: Python hands the object in as the first argument. For that to work at all, `obj` has to already exist as a real thing sitting in memory.
 
-A field validator runs at the exact moment Pydantic is still deciding whether raw incoming data is even allowed to **become** an attribute on a real object. When `validate_code` runs, there is no `self.code` to check yet — that's literally the question being answered. Pydantic validates the incoming values first, and only assembles the actual model instance once everything has passed. There is often no instance at all yet, not even a partially-built one.
+A field validator runs in one of two modes, and `cls` is required in both. The default, `mode="after"`, means after **that single field's type check** has passed — not after the model has been built. `mode="before"` runs earlier still, on the value exactly as it arrived, before any type check at all. Neither mode has an object to reach into, because Pydantic validates the fields one at a time and only assembles the instance once every one of them has passed. When `validate_code` runs there is no `self.code` — not because it's empty or because it failed, but because nothing has been constructed yet.
+
+> [!important] The word **after** is the trap here, because it sounds like the model already exists by then. It doesn't. `@field_validator(mode="after")` runs before any instance is built and takes `cls`; `@model_validator(mode="after")` runs once every field has passed and takes `self`. Same word, two different things it comes after — the single field in one case, the whole model in the other.
+
+Tracing a two-field model shows how little exists at that point:
+
+```
+field_validator a  mode=before  cls=M  got 'x'
+field_validator a  mode=after   cls=M  got 'x'  already-validated so far: {}
+field_validator b  mode=after   cls=M  got 'y'  already-validated so far: {'a': 'x'}
+model_validator    mode=after   self=M(a='x', b='y')  <- a real instance exists here
+```
+
+The **after**-mode validator for `a` runs with nothing recorded at all — not even `a` itself. Both field-validator lines receive `cls`. Only the last line, a different decorator entirely, receives `self`.
 
 > [!question]- A concrete image: filling out a form vs. holding an ID card
 > An instance method is something you can only do **with an ID card already in hand** — `self` is the ID card, already issued, already real. A field validator runs at the stage where you're still filling out the **application form**. The office reviewing your form isn't checking your ID card's photo, because you don't have one yet — that's what's being decided. What the office **does** have, reliably, the whole time, is their **rulebook** — the class itself, which existed the moment the code defining the class was loaded, long before this particular piece of data ever showed up. `cls` is a reference to that rulebook, not to your not-yet-issued ID.
@@ -97,7 +115,7 @@ class Something(BaseModel):
         return value
 ```
 
-`info.data` is a dict of whatever fields were **already validated before this one** — which is why `name` has to be declared **above** `pin_code` in the class for this to work at all. Fields validate top-to-bottom; a field can only see the ones that came before it, never ones declared after.
+`info.data` is a dict of whatever fields were **already validated before this one** — which is why `name` has to be declared **above** `pin_code` in the class for this to work at all. **Fields validate top-to-bottom**; a field can only see the ones that came before it, never ones declared after.
 
 **Option 2 — `@model_validator`, the more common tool for genuine cross-field checks:**
 

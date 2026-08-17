@@ -1,7 +1,5 @@
 Every model built so far has been pure Pydantic — validating data in memory, nothing more. SQLModel is the next layer: the same class definition can also **be** a database table. Worth building up from the actual problem before looking at any syntax.
 
----
-
 ## The problem, before any tooling
 
 A database like SQLite or Postgres speaks exactly one language: SQL. Storing a review means, at bottom, something like:
@@ -75,6 +73,22 @@ This single class definition:
 >
 > The consequence is worth stating plainly, because it is what makes the several-classes pattern below **necessary rather than tidy**: the only thing standing between a caller and a rating of `99` in the database is that every write goes through a non-table schema first. The table class is storage. The schemas are the validation.
 
+> [!note] Then what are the type annotations doing on a table class, if they aren't validating? They are **defining the columns**. The annotations are precisely what SQLModel hands to SQLAlchemy to build the table with:
+>
+> ```
+> CREATE TABLE reviewtable (
+> 	id INTEGER NOT NULL, 
+> 	play_name VARCHAR NOT NULL, 
+> 	rating INTEGER NOT NULL, 
+> 	created_at DATETIME NOT NULL, 
+> 	PRIMARY KEY (id)
+> )
+> ```
+>
+> `play_name: str` became `VARCHAR NOT NULL`, `rating: int` became `INTEGER`, `created_at: datetime` became `DATETIME`. Those `NOT NULL` constraints came from the annotations not being optional, and the database genuinely enforces them — `ReviewTable(play_name=None)` builds fine in Python and then fails at commit with `IntegrityError: NOT NULL constraint failed: reviewtable.play_name`. Enforcement didn't disappear; it moved to a later moment and a different layer.
+>
+> Which is exactly why `rating=99` survives and `play_name=None` doesn't. A type annotation has somewhere to go in SQL, so it becomes a column and keeps its teeth. `ge=1, le=5` has nowhere to go, so it evaporates. The same annotation therefore means two different things depending on one keyword: a **validation rule** without `table=True`, a **column definition** with it.
+
 It works against any relational database — SQLite, Postgres, MySQL, MariaDB — through Python objects and type annotations, without hand-written SQL for ordinary operations.
 
 ---
@@ -94,7 +108,7 @@ class Hero(SQLModel, table=True):
 
 Two completely different behaviors come out of the exact same base class, depending on one keyword:
 
-- **`table=True`** — this class becomes an actual **database table**. Every field becomes a column. Rows in the table correspond to instances of this class. Validation is off.
+- **`table=True`** — this class becomes an actual **database table**. Every field becomes a column, and its type annotation is what defines that column's SQL type and whether it accepts null. **Rows in the table correspond to instances of this class**. Validation is off.
 - **No `table=True`** — the class behaves like ordinary Pydantic: a validation shape, nothing persisted, every constraint enforced. This is the same `BaseModel`-style behavior seen in every earlier project.
 
 That single flag is what makes SQLModel double as both halves of the job — the same import, the same field syntax, radically different behavior depending on one keyword argument.
@@ -134,7 +148,8 @@ created_at: datetime = Field(default_factory=datetime.now)
 
 `default_factory` takes a **callable**, not a value — `datetime.now` here, not `datetime.now()`. The distinction matters a great deal:
 
-> [!important] Writing `Field(default=datetime.now())` — calling the function immediately, with parentheses — would evaluate `datetime.now()` **once**, at the moment the class body executes (when the module is first imported), and reuse that exact same frozen timestamp as the default for every single row ever created afterward. Every review would show the same **created at** time: whenever the server happened to start up. `default_factory=datetime.now` — no parentheses — instead hands SQLModel the function itself, to be called **fresh, every time a new row needs a default**, producing a genuinely different timestamp per row. This is the same category of trap as Python's well-known mutable-default-argument gotcha (`def f(x, lst=[])`), just showing up in a different place.
+> [!important] Writing `Field(default=datetime.now())` — calling the function immediately, with parentheses — would evaluate `datetime.now()` **once**, at the moment the class body executes (when the module is first imported), and reuse that exact same frozen timestamp as the default for every single row ever created afterward. 
+> Every review would show the same **created at** time: whenever the server happened to start up. `default_factory=datetime.now` — no parentheses — instead hands SQLModel the function itself, to be called **fresh, every time a new row needs a default**, producing a genuinely different timestamp per row. This is the same category of trap as Python's well-known mutable-default-argument gotcha (`def f(x, lst=[])`), just showing up in a different place.
 
 ---
 

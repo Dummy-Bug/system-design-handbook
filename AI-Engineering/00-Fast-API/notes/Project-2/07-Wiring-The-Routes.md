@@ -16,8 +16,7 @@ app = FastAPI()
 app.add_exception_handler(PinCodeNotFoundError, pincode_not_found_handler)
 app.add_exception_handler(InvalidPinCodeError, invalid_pincode_handler)
 ```
-
-This is the registration step the exceptions note ended on without resolving — the two custom exceptions and their handlers only start actually doing anything from this point on.
+****
 
 ---
 
@@ -41,7 +40,7 @@ def lookup_pincode(code: str):
 ```
 
 > [!important] Worth being precise about **why** this manual check exists here, since it's easy to assume it's redundant with the `field_validator` already written. **It isn't.** 
-> `PinCodeRequest`'s field validator only runs when a request body is validated against that model — and this route has no request body at all. `code: str` is a plain path parameter, exactly like `item_id: int` in the previous project: FastAPI extracts it and hands it over as-is, with no Pydantic model involved anywhere in that path. Nothing here has checked its shape before this line does. The manual `len(code) != 6` check isn't belt-and-suspenders caution — for this specific route, it's the **only** validation that exists.
+> `PinCodeRequest`'s field validator **only runs** **when a request body is validated against that model** — and this route has no request body at all. `code: str` is a plain path parameter, exactly like `item_id: int` in the previous project: FastAPI extracts it and hands it over as-is, with no Pydantic model involved anywhere in that path. Nothing here has checked its shape before this line does. The manual `len(code) != 6` check isn't belt-and-suspenders caution — for this specific route, it's the **only** validation that exists.
 
 The rest follows the same shape as `/menu/{item_id}` from the previous project: check the input is well-formed first (raising `InvalidPinCodeError` if not), then check it actually exists in the data (raising `PinCodeNotFoundError` if not), then return the match. `PINCODE_DB[code]` returns a plain dict — `response_model=LocationResponse` handles validating and shaping that dict into the declared response, the same conversion seen with `MenuResponse` in project 1.
 

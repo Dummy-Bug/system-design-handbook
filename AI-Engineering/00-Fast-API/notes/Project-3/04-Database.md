@@ -1,7 +1,3 @@
-Two pieces make the database actually usable from a FastAPI app: an **engine** (the thing that knows how to talk to the database at all) and a **session dependency** (the thing that hands each request a connection to work with, without every request opening a brand-new one).
-
----
-
 ## The engine
 
 ```python
@@ -13,13 +9,13 @@ engine = create_engine(DATABASE_URL, echo=True)
 
 `create_engine` takes a **database URL** and configures the connection. The URL's prefix identifies which database and driver to use — `sqlite:///` here, `postgresql://` for Postgres, and so on — the same **swap the database without rewriting the application** promise from the ORM note, made concrete: changing databases later is largely a matter of changing this one string.
 
-`echo=True` is a **development-only** flag: it prints every generated SQL statement to the console as it runs. Genuinely useful for seeing what SQLModel is actually doing behind the Python-object syntax — and something to turn off once an application is no longer being actively debugged, since it's pure log noise in production.
+`echo=True` is a **development-only** flag: **it prints every generated SQL statement to the console as it runs**. Genuinely useful for seeing what SQLModel is actually doing behind the Python-object syntax — and something to turn off once an application is no longer being actively debugged, since it's pure log noise in production.
 
 ### `engine` and `Session` are not the same kind of thing
 
 Worth being precise about the difference, since both get used constantly but play very different roles:
 
-- **`engine`** is built **once**, at module load, and lives for the entire running life of the app — every part of the app that needs the database imports and reuses this same one object. It's not an active connection to anything by itself; it's the configuration plus a managed pool of connections, kept ready.
+- **`engine`** is built **once**, at module load, and lives for the entire running life of the app — **every part of the app that needs the database imports and reuses this same one object.** It's not an active connection to anything by itself; it's the configuration plus a managed pool of connections, kept ready.
 - **`Session`** is created **fresh, per use** — one is opened, used to run some queries or stage some changes, and closed again, over and over, for as long as the app keeps running.
 
 The parallel worth holding onto, since it directly mirrors something already covered: `engine` is to the whole app what `app = FastAPI(...)` is — built once, alive for the app's entire lifetime. `Session` is to one unit of work what a single request being handled is — created fresh, does its one job, and finishes, repeatedly.
@@ -59,7 +55,11 @@ def create_review(review: ReviewCreate, session: Session = Depends(get_session))
 
 A few things worth being precise about:
 
-- **`yield`, not `return`.** This makes `get_session` a **generator-based dependency**, and FastAPI specifically recognizes this pattern. Code **before** the `yield` runs as setup, the **yielded value** is what gets injected into the route as `session`, and anything **after** the `yield` runs as cleanup — but not simply **once the route function returns.** Per FastAPI's own documentation, the exact order is: setup runs → the yielded value is injected → the route runs → **the response is fully prepared and sent to the client** → only then does the code after `yield` run. Cleanup is the very last thing that happens, strictly after the caller already has their response in hand.
+- **`yield`, not `return`.** This makes `get_session` a **generator-based dependency**, and FastAPI specifically recognizes this pattern. Code **before** the `yield` runs as setup, the **yielded value** is what gets injected into the route as `session`, and anything **after** the `yield` runs as cleanup — but not simply **once the route function returns.** Per FastAPI's own documentation, the exact order is:
+
+> setup runs → the yielded value is injected → the route runs → **the response is fully prepared and sent to the client** → only then does the code after `yield` run. Cleanup is the very last thing that happens, strictly after the caller already has their response in hand.
+
+
 - **`with Session(engine) as session:`** — the same context-manager pattern as opening a file. When the generator resumes past its `yield`, the `with` block's exit logic runs automatically, closing the session. No `try`/`finally` needs to be written by hand here — the context manager already handles it.
 - **`Depends(get_session)`** is what actually wires this dependency into a route — the concrete syntax behind the abstract **dependency resolution** stage covered much earlier, now doing real work: FastAPI calls `get_session()`, takes what it yields, and hands that to the route as the `session` parameter.
 
@@ -67,7 +67,7 @@ A few things worth being precise about:
 
 > [!important] This is not **a new connection for every single request.** Database connections are relatively expensive to open, so they're **pooled** — a limited set of connections shared across requests, handed out and returned rather than created fresh each time. `get_session` participates in that pooling; it doesn't bypass it. The `with` block ensures a session gets returned to the pool promptly once a request is done with it, rather than being held open indefinitely.
 
-The overall shape — a small amount of code producing a large amount of behavior — is intentional. Session lifecycle, connection pooling, and automatic cleanup are all happening underneath these two or three lines; the comments in the actual source exist specifically because so much is implied by so little code.
+The overall shape — a small amount of code producing a large amount of behavior — is intentional. **Session lifecycle**, **connection pooling**, and **automatic cleanup** are all happening underneath these two or three lines; the comments in the actual source exist specifically because so much is implied by so little code.
 
 ### The order, traced on a real request
 
@@ -100,8 +100,10 @@ Checked directly on a real object:
 ```
 just created, before add():
   transient = True  | pending = False  | persistent = False
+  
 after session.add(), before flush/commit:
   transient = False  | pending = True  | persistent = False
+  
 after session.commit():
   transient = False  | pending = False | persistent = True
 ```
@@ -112,5 +114,30 @@ after session.commit():
 
 `session.commit()` is really two things happening in sequence: it unconditionally performs a **flush** first, then commits. **Flush** is the moment the actual SQL — the real `INSERT` — gets generated and sent to the database. **Commit** is the separate step that finalizes the transaction, making it permanent.
 
-They're genuinely separable: calling `session.flush()` alone sends the `INSERT` and gets a real `id` assigned back — but calling `session.rollback()` afterward, instead of `commit()`, undoes it completely, as if it never happened. The SQL ran and was even answered by the database; without a commit, none of it survives.
+They're genuinely separable: calling `session.flush()` alone sends the `INSERT` and gets a real `id` assigned back — but calling `session.rollback()` afterward, instead of `commit()`, undoes it completely, as if it never happened. The SQL ran and was even answered by the database; **without a commit, none of it survives**.
+
+
+The engine-and-session pattern applied to this project — a `database.py` holding everything the rest of the app needs to actually talk to SQLite.
+
+```python
+from sqlmodel import SQLModel, Session, create_engine
+
+DATABASE_URL = "sqlite:///rangmanch.db"
+engine = create_engine(DATABASE_URL, echo=True)
+
+
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
+
+
+def get_session():
+    with Session(engine) as session:
+        yield session
+```
+
+`sqlite:///rangmanch.db` — the `sqlite://` protocol prefix, three slashes, then a filename. SQLite needs no separate server process or credentials to configure; this single line is enough to have a working database, and running the app will create `rangmanch.db` as an actual file in the project directory the first time the tables get created.
+
+`DATABASE_URL` is hardcoded directly in the file for now — fine for a local SQLite file during development, but worth flagging as a placeholder: a real deployment would keep this in an environment variable instead, so the actual connection string (especially for something like a hosted Postgres URL, which typically embeds credentials) never sits in version control. That move hasn't happened yet in this project; the code above is where it currently lives.
+
+Nothing else about this file is project-specific — `create_db_and_tables` and `get_session` are exactly the general pattern from the Foundations note, applied with this project's engine.
 

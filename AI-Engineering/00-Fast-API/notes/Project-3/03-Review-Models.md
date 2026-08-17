@@ -50,7 +50,7 @@ class ReviewUpdate(SQLModel):
 
 None of these three has `table=True` — they're pure validation shapes, exactly like every Pydantic model in the earlier projects, just built from `SQLModel` instead of `BaseModel` so the same import and `Field` syntax carries over without needing two separate libraries in the same file.
 
-**`ReviewCreate`** — what a client is allowed to submit to create a review. No `id`, no `created_at`: both are the database's responsibility, not the caller's. Sending either of those fields to this schema simply wouldn't validate against it — the schema itself is what enforces that a client can't invent its own id or backdate a review.
+**`ReviewCreate`** — what a client is allowed to submit to create a review. No `id`, no `created_at`: both are the database's responsibility, not the caller's. Sending either of those fields to this schema simply wouldn't validate against it — **the schema itself is what enforces that a client can't invent its own id or backdate a review**.
 
 **`ReviewRead`** — what comes back when a review is read. Now `id` and `created_at` **do** appear, because by the time something is being read, the database has already assigned both.
 

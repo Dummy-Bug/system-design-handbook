@@ -13,7 +13,7 @@ def create_something(item: SomethingCreate, session: Session = Depends(get_sessi
 
 `item` arrives as a `SomethingCreate` instance — the input-validation shape, holding only the fields a caller is allowed to submit. But what needs to be added to the database is a `SomethingTable` instance — a different class, with additional fields (`id`, timestamps) the create-schema deliberately excludes.
 
-**`item.model_dump()`** converts the validated Pydantic/SQLModel object back into a plain Python dictionary — `{"field": value, ...}` for every field on `item`. **`**item.model_dump()`** then unpacks that dictionary as keyword arguments into `SomethingTable(...)`.
+**`item.model_dump()`** converts the validated Pydantic/SQLModel object back into a plain Python dictionary — `{"field": value, ...}` for every field on `item`. **`**item.model_dump()`** then **unpacks that dictionary as keyword arguments** into `SomethingTable(...)`.
 
 > [!note] This works cleanly specifically **because** of how the schemas were designed in the first place. `SomethingCreate` and `SomethingTable` share the fields a caller submits (matching names, matching types) — those get filled in from `item`'s data. The fields `SomethingTable` has that `SomethingCreate` doesn't (an auto-assigned `id`, a `created_at` default) are simply absent from the unpacked dictionary — and because those fields were given defaults (`Field(default=None, primary_key=True)`, `Field(default_factory=datetime.now)`) back when the table model was defined, `SomethingTable(**item.model_dump())` doesn't error over their absence; it just falls back to those defaults. The multiple-schema pattern and this one line of unpacking are designed to fit together.
 

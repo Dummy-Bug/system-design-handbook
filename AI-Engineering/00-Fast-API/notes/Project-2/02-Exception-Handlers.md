@@ -12,7 +12,7 @@ class ResourceNotFoundError(Exception):
 
 A few things worth being precise about:
 
-- **It inherits from `Exception`**, not `HTTPException`. This class isn't an HTTP concept at all — it's a plain Python exception that happens to carry whatever data the eventual handler will need.
+- **It inherits from `Exception`**, not `HTTPException`. This class **isn't** an HTTP concept at all — it's a plain Python exception that happens to carry whatever data the eventual handler will need.
 - **The `__init__` stores data on `self`**, not for the exception's own sake, but so that **whatever catches this exception later** can read it back off — `self.resource_id = resource_id` here means anything handling this exception can access `exc.resource_id`.
 - **This class, by itself, does nothing when raised.** It doesn't know how to become an HTTP response, doesn't know a status code, doesn't format anything. All it does is carry data upward when raised. Turning it into an actual response is a separate job entirely — that's what the handler is for.
 
@@ -33,7 +33,7 @@ Same shape, just more attributes stored for the handler to use later.
 
 ## Part two: the exception handler
 
-A handler is what actually gets registered to catch a specific exception class and produce a response from it.
+> A **handler** is what actually **gets registered to catch a specific exception** class and **produce a response** from it.
 
 ```python
 from fastapi import Request
@@ -53,7 +53,8 @@ async def resource_not_found_handler(request: Request, exc: ResourceNotFoundErro
 
 What's different here from every route seen up to this point:
 
-> [!important] Every earlier route just `return`ed a plain dict, and FastAPI converted it to JSON automatically. **That automatic conversion doesn't happen inside a handler.** A handler has to explicitly build and return a `JSONResponse` — status code and JSON content both spelled out by hand. This is the actual reason `JSONResponse` needs importing at all: it's the manual version of something that's normally invisible.
+> [!important] Every earlier route just `returned` a plain dict, and FastAPI converted it to JSON automatically. **That automatic conversion doesn't happen inside a handler.** 
+> A handler has to explicitly build and return a `JSONResponse` — status code and JSON content both spelled out by hand. This is the actual reason `JSONResponse` needs importing at all: it's the manual version of something that's normally invisible.
 
 The two parameters are fixed in shape: **`request: Request`** (the request that triggered this, even if unused inside the handler body) and **`exc: ResourceNotFoundError`** — the **specific** exception class this handler is meant to catch, typed exactly, which is also how the data stored on it (`exc.resource_id`) becomes readable here.
 
@@ -75,11 +76,10 @@ async def invalid_input_handler(request: Request, exc: InvalidInputError):
 
 > [!note] Both handlers are written `async def` here, but neither actually does anything asynchronous — no `await` appears in either body. Per the sync-vs-async rule from earlier, that means plain `def` would be equally correct and arguably more consistent with **only use `async def` when there's a genuine `await`.** Both forms work for exception handlers; `async def` is just the more common convention shown here.
 
+
 ---
 
 Defining these classes and handlers doesn't connect them to anything yet — a class raised with `raise ResourceNotFoundError(...)` and a handler sitting in a file are still two disconnected pieces until something tells FastAPI **when this exception type is raised, run that handler.** That registration step is separate from writing the classes and handlers themselves.
-
----
 
 ## Part three: registering the handler
 
@@ -106,7 +106,8 @@ raise ResourceNotFoundError(resource_id)
 
 This line does exactly one thing: it stops normal execution of the current function and says **something went wrong — here's a `ResourceNotFoundError` object carrying `resource_id`.** That's the whole job. It doesn't build a response. It doesn't know a status code exists. It doesn't know what JSON is. By itself, this line has no idea what a `404` even means.
 
-> [!important] If `app.add_exception_handler(ResourceNotFoundError, resource_not_found_handler)` were never called, raising this exact same exception would **not** produce the formatted error body — it would produce a generic, unhandled `500 Internal Server Error`, because nothing in the app knows what to **do** with a `ResourceNotFoundError` when it sees one. Raising with nothing listening is just a crash. The custom response only exists because something is registered to catch it.
+> [!important] If `app.add_exception_handler(ResourceNotFoundError, resource_not_found_handler)` were never called, raising this exact same exception would **not** produce the formatted error body — 
+> It would produce a generic, unhandled `500 Internal Server Error`, because nothing in the app knows what to **do** with a `ResourceNotFoundError` when it sees one. Raising with nothing listening is just a crash. The custom response only exists because something is registered to catch it.
 
 The handler is the piece that's actually listening. `app.add_exception_handler(...)` means: **anywhere in this app, the instant a `ResourceNotFoundError` is raised — no matter which route, no matter how deep — call this specific handler with it.** That registration is the wire connecting a raise to a response.
 
