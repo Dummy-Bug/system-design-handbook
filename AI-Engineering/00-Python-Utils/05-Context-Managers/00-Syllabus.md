@@ -2,7 +2,7 @@
 
 # 05 · Context Managers — Syllabus
 
-12 concepts. **Generic** — the protocol, not any one library's managers.
+13 concepts. **Generic** — the protocol, not any one library's managers.
 
 > Smaller than its neighbours, and that's correct — this is a narrow protocol with wide reach. The reason it earns a folder rather than a paragraph is that **its async variant is load-bearing for everything else in this vault**: FastAPI lifespan, database sessions, HTTP client lifetimes, and every **acquire a connection, guarantee release** pattern in a concurrent service.
 
@@ -34,26 +34,29 @@ One `yield`, splitting setup from teardown. Everything before `yield` is `__ente
 **6. `try/finally` around the `yield`**
 Why teardown code sitting bare after `yield` does **not** run if the body raises, and what the correct form looks like. The single most common bug in hand-written context managers.
 
-**7. Multiple context managers**
+**7. When the decorator isn't needed at all**
+`with` only accepts an object implementing the protocol, which is the entire reason `@contextmanager` exists. But a caller that drives the generator **itself** — FastAPI's `Depends`, a `pytest` fixture with `yield` teardown — needs no wrapper, because nothing is calling `with` on it. Same generator, two kinds of consumer, and only one of them requires the decorator. The question to be able to answer: **who is driving this generator, and do they use `with`?**
+
+**8. Multiple context managers**
 Nesting, comma-separated form, and the 3.10+ parenthesised multi-line form.
 
 ## C · Async
 
-**8. `async with`, `__aenter__` / `__aexit__`**
+**9. `async with`, `__aenter__` / `__aexit__`**
 The async protocol — needed whenever acquisition or release itself involves I/O (opening a connection, committing a transaction, closing an HTTP session).
 
-**9. `@asynccontextmanager`**
+**10. `@asynccontextmanager`**
 The async twin of concept 5. **Already used in the FastAPI notes for the `lifespan` handler** — start-up before `yield`, shutdown after — again used without explanation.
 
-**10. Async cleanup under cancellation**
+**11. Async cleanup under cancellation**
 What runs when a task is cancelled mid-body, and why this is the subtle failure mode in long-lived streaming connections. Connects to backpressure/cancellation from folder 04 and cancellation in folder 08.
 
 ## D · The toolkit
 
-**11. `contextlib` helpers**
+**12. `contextlib` helpers**
 `suppress`, `closing`, `aclosing`, `redirect_stdout`, `nullcontext`. `nullcontext` in particular for the **conditionally use a context manager** case that otherwise duplicates a code block.
 
-**12. `ExitStack` / `AsyncExitStack`**
+**13. `ExitStack` / `AsyncExitStack`**
 Composing a dynamic, unknown-at-write-time number of context managers. The escape hatch when nesting won't do — e.g. opening N connections determined at runtime.
 
 ---
@@ -70,11 +73,13 @@ Composing a dynamic, unknown-at-write-time number of context managers. The escap
 
 ## Where this already shows up in these notes
 
-`00-Fast-API` — `get_session` (`yield` + teardown) and the `lifespan` handler (`@asynccontextmanager`) are both in the Project-3 notes, both correct, both explained by effect rather than mechanism. `08-Async` uses `async with` for task groups.
+`00-Fast-API` — `get_session` (`yield` + teardown) and the `lifespan` handler (`@asynccontextmanager`) are both in the Project-3 notes. The Project-3 engine-and-session note now carries the concept-7 comparison — why `lifespan` needs the decorator and `get_session` does not — but states it by effect; the protocol underneath it is concepts 1-2 here. `08-Async` uses `async with` for task groups.
 
 ## Interview hooks
 
 **How would you guarantee a database connection is returned to the pool even if the handler raises?** — a context manager, and being able to say why `try/finally` inside the generator is required rather than optional. Sarvam's §3 names connection pooling directly.
+
+**Why does FastAPI's `lifespan` need `@asynccontextmanager` when its `get_session` dependency doesn't?** — concept 7. The answer is about who drives the generator, not about async versus sync, which is what makes it a real question rather than a trivia one.
 
 ## Sources to verify against
 

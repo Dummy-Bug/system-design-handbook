@@ -1,4 +1,30 @@
-The SQLModel pattern applied to this project's actual data: one table, three validation schemas around it.
+The previous note argued that SQLModel merges the table class and the read schema into one. This note is what that leaves behind: the classes this project actually defines, and why there are four of them rather than one.
+
+## Why one concept needs several classes
+
+A table model and its schemas divide one idea — a review — along a line that matters: what actually gets **stored**, against what a **client is allowed to send or receive**. Two of the four are already settled. A **create** schema has to be separate from the table because leaving `id` and `created_at` out of it is the only thing stopping a client from sending them. A **read** schema is separate only when the shape going out genuinely differs from the shape stored — otherwise the table class serves as the `response_model` directly. Both were derived earlier, so the summary is just the shape of the pattern:
+
+| Class | `table=True`? | Purpose |
+|---|---|---|
+| The table model | Yes | The full column set — everything actually stored, including the fields no client ever sends: an auto-generated `id` and a server-set `created_at` |
+| A **create** schema | No | Only the fields a client should be allowed to submit when creating a new row — deliberately **excludes** the fields the server is responsible for filling in |
+| A **read** schema | No | The shape returned to a caller reading data back — needed only when it has to differ from the stored shape |
+| An **update** schema | No | Every field **optional**, since an update might only touch one of them |
+
+> [!note] The two excluded fields are excluded for **different reasons**, which is worth keeping straight. `id` is left out because **only the database can produce it** — it assigns the next number as the row is written, and Python has no way to know it in advance. `created_at` is left out because **a client must not be trusted to say when something happened**; nothing stops it technically, and this project fills the value in Python the moment the object is built, not in the database at all. Same exclusion, two different justifications.
+
+The last row is the one this project hasn't earned yet, and it differs from the others in **kind**. Every other class here describes a complete review. An update schema describes a **set of changes** — which is why every field on it is optional, and why it can't simply reuse the fields the others share.
+
+That connects directly back to the very first distinction drawn between `PUT` and `PATCH`: a `PATCH` request should be able to send just the one field being changed, leaving everything else untouched. An update schema with every field optional is the concrete Pydantic-level mechanism that makes that possible — a client sending only `{"rating": 4}` validates cleanly, because every other field is allowed to simply be absent.
+
+> [!note] Optional here means the caller may leave a field out, and nothing more. The earlier failure still applies: optional never means forbidden, so an update schema must not carry `id` or `created_at` as optional fields in the hope that nobody sends them.
+
+
+---
+
+## This project's four classes
+
+All four, as they actually appear in `models.py` — one table, three schemas around it.
 
 ```python
 from datetime import datetime
@@ -24,7 +50,7 @@ This is the actual database table — every field here becomes a column, and `ta
 
 ---
 
-## The three schemas around it
+### The three schemas around it
 
 ```python
 class ReviewCreate(SQLModel):
