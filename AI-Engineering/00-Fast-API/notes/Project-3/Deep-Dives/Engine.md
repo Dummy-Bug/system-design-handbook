@@ -189,3 +189,98 @@ throughput × latency = connections needed in flight
 The correct `pool_size` is the **smaller** of the two answers, and it is almost never the ceiling. Which reframes the original mistake: `pool_size=100` was not wrong merely because it exceeded what the server allows. It was wrong because nobody asked what the app needed — the number was chosen in the hope that bigger means faster. A pool sized above demand adds no throughput at all; it just holds idle connections that some other client cannot have.
 
 ---
+
+## What else is inside the engine
+
+Start from something odd. There is no `import sqlite3` anywhere in this project — not in `database.py`, not in `main.py`, not in `routes/reviews.py`. Yet `rangmanch.db` is unmistakably a real SQLite file being written by Python's `sqlite3` module. Something imported it, and something decided it should be `sqlite3` rather than anything else.
+
+That something is the URL. `create_engine` reads the prefix and hires **two** independent things from it:
+
+```
+sqlite:///rangmanch.db                       -> dialect sqlite     driver pysqlite
+postgresql://user:pw@localhost/mydb          -> dialect postgresql driver psycopg2
+postgresql+asyncpg://user:pw@localhost/mydb  -> dialect postgresql driver asyncpg
+mysql+pymysql://user:pw@localhost/mydb       -> dialect mysql      driver pymysql
+```
+
+The general form is `dialect+driver://`, and leaving the driver off just accepts a default. So the pool from earlier is only one of three parts. The full contents of an engine are a **dialect**, a **driver**, and a **pool**.
+
+### The dialect and the driver, in plain terms
+
+Two completely different jobs. Think about sending a letter to somebody in another country.
+
+**The dialect is the translator.** It knows the local language. You say what you want — give me rows 4 to 6 — and it writes that in the SQL this particular database actually understands. It is a set of rules for **what to say**.
+
+**The driver is the courier.** It has no interest in what the letter says. Its job is to physically get it there and bring the reply back: open the connection, push the bytes, wait. For SQLite the courier is Python's built-in `sqlite3` and delivery means writing to a file on disk. For Postgres it is a library like `psycopg2` and delivery means talking over a TCP socket.
+
+| | Job | Cares about |
+|---|---|---|
+| **Dialect** | writes the SQL | what this database's SQL looks like |
+| **Driver** | delivers it | sockets, files, bytes |
+
+Which is exactly why the URL has room for both. `postgresql+psycopg2` and `postgresql+asyncpg` are the **same language with two different couriers** — identical SQL, but one delivers the ordinary blocking way and the other using `async` and `await`. The courier can be replaced without changing a word of the letter.
+
+### What the dialect actually does, shown
+
+Take the pagination query from `11-Pagination-And-Filtering.md` — the same three lines of Python — and compile it for three different databases:
+
+```
+=== the route's query, exactly as written ===
+  sqlite      ... FROM reviewtable LIMIT ? OFFSET ?
+  postgresql  ... FROM reviewtable LIMIT %(param_1)s OFFSET %(param_2)s
+  mssql       REFUSED TO COMPILE: MSSQL requires an order_by when using an OFFSET or a non-simple LIMIT clause
+```
+
+SQL Server's dialect knows a rule the other two do not, and refuses the query outright — the same missing `ORDER BY` that note documents by reasoning about it. Add the one-line fix and all three compile, but look at what SQL Server produces:
+
+```
+  mssql  SELECT anon_1.id, ... FROM (SELECT reviewtable.id AS id, ...,
+         ROW_NUMBER() OVER (ORDER BY reviewtable.id) AS mssql_rn FROM reviewtable) AS anon_1
+         WHERE mssql_rn > :param_1 AND mssql_rn <= :param_2 + :param_1
+```
+
+It has no `LIMIT` or `OFFSET` at all, so the dialect **restructured the entire query** into a subquery with a row-number window function. Same Python, unrecognisably different SQL.
+
+Table definitions diverge just as far:
+
+```
+-- sqlite
+CREATE TABLE reviewtable ( id INTEGER NOT NULL, play_name VARCHAR NOT NULL, created_at DATETIME NOT NULL, PRIMARY KEY (id) )
+
+-- postgresql
+CREATE TABLE reviewtable ( id SERIAL NOT NULL, play_name VARCHAR NOT NULL, created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL, PRIMARY KEY (id) )
+
+-- mssql
+CREATE TABLE reviewtable ( id INTEGER NOT NULL IDENTITY, play_name VARCHAR(max) NOT NULL, created_at DATETIME NOT NULL, PRIMARY KEY (id) )
+```
+
+The auto-incrementing id is `INTEGER`, `SERIAL`, and `INTEGER IDENTITY` respectively. A datetime is `DATETIME` in two of them and `TIMESTAMP WITHOUT TIME ZONE` in the third. None of that was written by hand.
+
+### The blanks are the driver's, not the dialect's
+
+One difference in that output does **not** come from the translator. Look only at how values get slotted in — `?` for SQLite, `%(param_1)s` for Postgres, `:param_1` for SQL Server. Those are the courier's preference, and the proof is holding the dialect still while changing only the driver:
+
+```
+   sqlite+pysqlite        paramstyle = qmark
+   postgresql+psycopg2    paramstyle = pyformat
+   postgresql+asyncpg     paramstyle = numeric_dollar
+   mssql+pyodbc           paramstyle = named
+```
+
+Rows two and three are the same database and the same generated SQL, with a different blank. Swap `psycopg2` for `asyncpg` and `%(param_1)s` becomes `$1` while everything around it stays byte-for-byte identical.
+
+> [!important] That works because of a written agreement called **PEP 249**, the Python Database API. Every database driver that wants to be usable must publish certain things, one of which is a `paramstyle` attribute stating what shape of blank it expects — `sqlite3.paramstyle` is literally `qmark`. SQLAlchemy reads that attribute and formats accordingly. Nobody hardcoded any courier's preferences anywhere; they are asked at runtime, which is what makes couriers genuinely interchangeable.
+
+### So does the one-string swap promise hold?
+
+`02-SQLModel.md` promises the database can be swapped by changing one string, and for everything SQLAlchemy generates that is true — the SQL, the table definitions, and the parameter placeholders all adapt with nothing rewritten by hand.
+
+What that one line does **not** do is worth knowing before trusting it on a Friday:
+
+- **The data does not move.** `rangmanch.db` is a file sitting on disk; the new Postgres database starts empty.
+- **The driver is not installed.** Nothing in `requirements.txt` mentions `psycopg2`. The app fails at `create_engine`, which is the single moment it is not lazy — building the engine is when the courier gets imported.
+- **SQLite is loosely typed and Postgres is not.** Values SQLite quietly accepted with the wrong type are rejected outright. Combined with `table=True` skipping validation entirely, this is exactly where data that worked locally stops working in production.
+- **Hand-written SQL is not translated.** Anything inside `text("...")` is passed through untouched, so it means whatever it meant on the database it was written for.
+- **`create_all` is not a migration.** It creates tables that are missing and ignores tables that already exist. It will not alter a column whose type changed, which is a separate tool's job.
+
+---
