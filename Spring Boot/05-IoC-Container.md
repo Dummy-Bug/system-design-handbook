@@ -1,8 +1,6 @@
-Part `04` built dependency injection and inversion of control out of plain Java, with no Spring anywhere near the project. The conclusion it reached was that somebody other than `OrderService` has to create `OrderService`'s dependency and hand it in — and in that part, the somebody was `Main`. This part replaces `Main` with Spring.
+Part `04` built dependency injection and **inversion of control out of plain Java**, with no Spring anywhere near the project. The conclusion it reached was that somebody other than `OrderService` has to create `OrderService`'s dependency and hand it in — and in that part, the somebody was `Main`. This part replaces `Main` with Spring.
 
-**Everything the whole Spring Framework is built on is here.** Spring MVC, Spring Data, Spring Security, Spring Boot — all of them sit on top of Spring Core, and Spring Core is the IoC container, beans, and the annotations that drive them.
-
-> It is only going to be fun when we understand it deeply enough that we are never scared of the Spring Framework. We should know how things work from the inside. That does not mean we have to go inside every class and learn its methods. We just need to know the flow — how things actually work behind the scenes — so that when we write our own application we feel more confident.
+Everything the whole Spring Framework is built on is here. Spring MVC, Spring Data, Spring Security, Spring Boot — all of them sit on top of Spring Core, and **Spring Core is the IoC container, beans, and the annotations that drive them**.
 
 | Measured on | |
 |---|---|
@@ -115,7 +113,7 @@ Payment done
 Order placed
 ```
 
-**That is dependency injection**, and it is exactly where part `04` finished — the dependency `OrderService` needed was injected from outside, which in this case means from the main method, so that a class does not create its own dependency.
+**That is dependency injection**, and it is exactly where part `04` finished — the dependency `OrderService` needed was **injected from outside**, which in this case means from the main method, so that a class does not create its own dependency.
 
 ---
 
@@ -137,19 +135,17 @@ flowchart TB
 
 **The container creates the `PaymentService` object itself. It creates the `OrderService` object itself. And it wires the dependency between them itself.** Nothing is left for you to do.
 
-> How magical this sounds.
-
 ---
 
 # The one dependency you need
 
 **The empty `pom.xml` needs something in it before Spring can manage anything.** The question is which something.
 
-| Do you need | |
-|---|---|
-| **Spring Boot** | **No.** Spring Boot is there to do the configuration easily — it configures things automatically |
-| **Spring MVC** | **No.** This is not a web application, it is a console application |
-| **`spring-context`** | **Yes** — this is Spring Core, and it is the whole requirement |
+| Do you need          |                                                                                                      |
+| -------------------- | ---------------------------------------------------------------------------------------------------- |
+| **Spring Boot**      | **No.** Spring Boot is there to do the **configuration easily** — it configures things automatically |
+| **Spring MVC**       | **No.** This is not a web application, it is a console application                                   |
+| **`spring-context`** | **Yes** — this is Spring Core, and it is the whole requirement                                       |
 
 > I just need one basic dependency, and its name is spring-context. It brings me the basic things — the IoC container, which will manage the objects for me.
 
@@ -198,7 +194,7 @@ flowchart TB
 
 **Managing an object means the container creates it, injects its dependencies, and is responsible for its whole lifecycle.** And an object under that management has a different name in Spring.
 
-**An object that the Spring IoC container manages is called a bean.**
+> **An object that the Spring IoC container manages is called a bean.**
 
 > Every bean is an object. But not every object is a bean.
 
@@ -255,7 +251,7 @@ Class<Student> c1 = Student.class;
 
 **`c1` is not a `Student` object.** You do not write `c1.name` or `c1.age` on it.
 
-> This is a special reference variable that has the Student class's metadata stored in it.
+> This is a special reference variable that has the Student **class's metadata** stored in it.
 
 **What counts as metadata:** the name of the class, which fields it has and what their data types are, which constructors it has, which methods it has, which members are private and which are public — and, importantly, **which annotations are on it**.
 
@@ -360,10 +356,10 @@ public class AppConfig {
 }
 ```
 
-| Annotation | What it says |
-|---|---|
-| **`@Configuration`** | this is not an ordinary class, it is a special one — a source of configuration instructions and bean definitions |
-| **`@ComponentScan("in.coderarmy")`** | go through this package, find every class carrying `@Component`, and those are the ones you manage |
+| Annotation                           | What it says                                                                                                         |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| **`@Configuration`**                 | this is not an ordinary class, it is a special one — **a source of configuration instructions and bean definitions** |
+| **`@ComponentScan("in.coderarmy")`** | go through this package, **find every class carrying `@Component`, and those are the ones you manage**               |
 
 **`@ComponentScan` is the counterpart to `@Component`.** One marks a class as eligible; the other says where to search for the marks. Whichever classes have the mark are yours — you create their objects, the beans, and you manage them.
 
@@ -390,8 +386,6 @@ ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.cl
 **Strip `Main` back to nothing but the container.** By the time that one line has finished executing, the container is up, the rules have been read, the scan has happened, `OrderService` and `PaymentService` have been found, and both of their beans have been created.
 
 **To use one of them, you no longer write `new`.**
-
-> I do not have to create the order. I just have to use it.
 
 ```java
 package in.coderarmy;
@@ -465,7 +459,9 @@ public class AppConfig {
 }
 ```
 
-**This is legal and it works.** With no package named, Spring scans **the package the configuration class itself lives in**, plus its sub-packages. `AppConfig` sits in `in.coderarmy`, and so does everything else in this project, so the scan covers the same ground either way.
+**This is legal and it works.** 
+> With no package named, Spring scans **the package the configuration class itself lives in**, plus its sub-packages. 
+> `AppConfig` sits in `in.coderarmy`, and so does everything else in this project, so the scan covers the same ground either way.
 
 **It stops working the moment something moves out of that tree.** A `@Component` class in a sibling package such as `in.other` is not under `in.coderarmy`, so it is never found — and to include it you would have to name a parent package that contains both.
 
@@ -518,8 +514,6 @@ public class OrderService {
     }
 }
 ```
-
-> From the name Autowired you can tell — do the wiring by yourself.
 
 **Put on the constructor, it says: this class has a dependency, inject it through the constructor.** The container already has a `PaymentService` bean; the constructor is asking for one; so hand it over.
 
@@ -596,7 +590,7 @@ public class OrderService {
 }
 ```
 
-**This works, and it is possible only because Spring is involved.** Part `04` could not demonstrate field injection at all in plain Java — there is no way to reach a private field from outside without a constructor or a setter. Spring reaches it with reflection.
+**This works, and it is possible only because Spring is involved.** Part `04` could not demonstrate field injection at all in plain Java — there is no way to reach a private field from outside without a constructor or a setter. Spring reaches it with **reflection**.
 
 **IntelliJ flags it the moment you write it:** `Field injection is not recommended`. That is the IDE's inspection rather than anything Spring says, and it is right.
 
@@ -686,15 +680,15 @@ order.placeOrder();
 
 **Seven steps, from the single line in `Main` to a usable object.**
 
-| Step | |
-|---|---|
+| Step  |                                                                                             |
+| ----- | ------------------------------------------------------------------------------------------- |
 | **1** | `new AnnotationConfigApplicationContext(AppConfig.class)` — **Spring starts the container** |
-| **2** | **Spring reads `AppConfig`**, because its metadata was handed in |
-| **3** | **Spring processes `@ComponentScan`** and learns which packages to search |
-| **4** | **Spring finds the `@Component` classes** — `OrderService`, `PaymentService` |
-| **5** | **Spring creates bean definitions** |
-| **6** | **Spring starts creating objects**, resolving dependencies as it goes |
-| **7** | **Your application uses those beans** — `context.getBean(...)` |
+| **2** | **Spring reads `AppConfig`**, because its metadata was handed in                            |
+| **3** | **Spring processes `@ComponentScan`** and learns which packages to search                   |
+| **4** | **Spring finds the `@Component` classes** — `OrderService`, `PaymentService`                |
+| **5** | **Spring creates bean definitions**                                                         |
+| **6** | **Spring starts creating objects**, resolving dependencies as it goes                       |
+| **7** | **Your application uses those beans** — `context.getBean(...)`                              |
 
 ## Step 5 — bean definitions, and why they exist
 
@@ -769,7 +763,9 @@ OrderService order = new OrderService(payment);
 ```
 Exception in thread "main" org.springframework.beans.factory.UnsatisfiedDependencyException:
 Error creating bean with name 'orderService' defined in file [.../OrderService.class]:
+
 Unsatisfied dependency expressed through constructor parameter 0:
+
 No qualifying bean of type 'in.coderarmy.PaymentService' available:
 expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
 
@@ -858,15 +854,11 @@ No qualifying bean of type 'in.coderarmy.payment.PaymentService' available:
 expected single matching bean but found 2: cardPayment,upiPayment
 ```
 
-> I expected one bean. You gave me two beans. I am confused.
-
 **An interface can have many implementations, but at the moment an object is actually created some one implementation has to be passed.** So the container has to be told which.
 
 ---
 
 # `@Primary` and `@Qualifier`
-
-> Clear up its confusion.
 
 **Two annotations do that, and they answer slightly different questions.**
 
@@ -1031,7 +1023,9 @@ Added to cart
 
 # `@Bean` — creating the object yourself and handing it over
 
-**Spring's answer to both problems is the same.** The obstacle is only the first step: it cannot create the object. So create the object yourself and hand it over, and the container takes it from there — storing it, managing it, injecting it wherever it is needed.
+**Spring's answer to both problems is the same.** The obstacle is only the first step: 
+
+>**it cannot create the object**. **So create the object yourself and hand it over**, and the container takes it from there — storing it, managing it, injecting it wherever it is needed.
 
 **The place to do that is the configuration class, which has been empty until now.**
 
@@ -1365,4 +1359,4 @@ public OrderService createOrderService() {
 | Why `AppConfig` and not `main` | `main` is the entry point and should stay simple |
 | ⚠️ Dropping `@Configuration` | scanning and `@Bean` still work — what breaks is the **proxy**, so a `@Bean` method calling another builds a **new object** |
 | `ApplicationContext` vs `BeanFactory` | `ApplicationContext` **extends** `BeanFactory` and adds events, messages, resources |
-| Next | the same container, configured in **XML** |
+| Next | **circular dependency**, **bean scopes** and **eager vs lazy initialization** — XML configuration comes after |

@@ -49,9 +49,8 @@ Devops/
 └── 02-<Module-Name>/
 ```
 
-- **Folders are numbered by course order** (unlike `AI-Engineering/`, which numbers by learning
-  order). A live course arrives in sequence; there is no reason to reorder it.
-- **Concept notes are numbered to match their module syllabus item** — concept 7 → `07-Name.md`.
+- **Folders are numbered in READING order — the order he should study them in.** He renumbered them himself on 2026-08-20 (`01-Introduction-To-DevOps/`, `02-Linux/`, `03-Git/`) for exactly that reason: the number tells him what to read first. So far reading order and course order agree; **if the course ever teaches a subject out of the order it should be learned, the folder number follows the reading order and the note footers still record the class.**
+- **Notes INSIDE a folder stay in class order** — see the `[!important]` block near the end of this file. Folder number = what to read first; note number = which class it came from.
 - A folder is created when its module starts. Gaps in numbering mean a module not yet reached.
 - **Images are embedded by absolute vault path** — `![[Devops/01-Module/Images/file.png]]`. Any
   folder rename must rewrite every embed in the same operation.
@@ -168,15 +167,14 @@ telling him the command.
 
 ## Status
 
-**Three folders written**, through class 4 (2026-08-16):
+**Three folders written**, through class 5 (2026-08-20/21):
 
 - `01-Introduction-To-DevOps/` — 8 notes
-- `Linux/` — 7 notes, 2,723 lines. **Done.**
-- `Git/` — 6 notes, 2,221 lines. **Class 4 complete** (5 parts, ~2h 6m).
-  `01` why Git exists + Git vs GitHub · `02` the local loop (`init`→`add`→`commit`→`log`) ·
-  `03` remotes (`push`, `clone`, `pull` vs `fetch`, tokens) · `04` content addressing + blobs ·
-  `05` tree and commit objects · `06` the index and the rest of `.git`.
-  Note `03` spans parts 2–3; part 5 produced two notes. Otherwise one note per part.
+- `02-Linux/` — 7 notes, 2,723 lines. **Done.**
+- `03-Git/` — **12 notes, 3,936 lines.** Classes 4 and 5 both complete.
+  **Class 4** (5 parts, ~2h 6m) — `01` why Git exists + Git vs GitHub · `02` the local loop (`init`→`add`→`commit`→`log`) · `03` remotes (`push`, `clone`, `pull` vs `fetch`, tokens) · `04` content addressing + blobs · `05` tree and commit objects · `06` the index and the rest of `.git`.
+  **Class 5** (4 parts, ~2h 15m) — `07` branches (`refs/heads`, `HEAD`, `switch`) · `08` merging: fast-forward, three-way, conflicts · `09` rebase and force-push · `10` cherry-pick and stash · `11` `log`/`show`/`diff` and `reset`/`restore`/`revert` · `12` `git bisect`.
+  Note `03` spans class 4 parts 2–3 and note `08` spans class 5 parts 1–2; class 4 part 5 produced two notes and class 5 part 4 produced three. Otherwise one note per part.
 
 > [!tip] **Hashes in the internals notes are real and reproducible — keep doing this.**
 > Object IDs in notes `04`–`06` were computed, not invented: `sha1("blob <len>\0<content>")` for blobs,
@@ -186,20 +184,23 @@ telling him the command.
 > **Commit IDs cannot be reproduced** — they hash the author and timestamp too, so those are marked
 > illustrative in the notes. Say so rather than implying otherwise.
 
-**Git is being taught well past developer level**, and the internals are the most interview-valuable
-material in the vault so far. Still to come, named at the end of class 4: **branches, merge, rebase,
-cherry-picking**, then monorepo vs polyrepo and Git Flow.
+**Git is being taught well past developer level**, and the internals are the most interview-valuable material in the vault so far. Class 5 kept that up: rebase is derived from content addressing rather than asserted, and `git bisect` is taught as binary search with the O(n) → O(log n) argument made explicitly. **Next and last on Git: workflows**, named on air at the end of class 5 — then the course moves to **CI/CD**.
 
-> [!danger] **Class 4's recordings carry real credentials and PII — check before any frame grab.**
-> Part 2 shows the instructor's name and email in `git log` output and in `git config user.name`, plus
-> his GitHub username spoken aloud. **Part 3 is a live personal-access-token walkthrough with the token
-> on screen.** All of it was placeholdered on the way into the notes; none of it may be screenshotted.
+> [!tip] **Notes 07–12 carry more marked additions than any earlier class, and every one is load-bearing.**
+> `git merge --abort` · `git rebase --continue`/`--abort` · `--force-with-lease` over `-f` · `git stash list` and `apply` vs `pop` · `git restore --staged` · `git revert` · `git bisect reset` · `git bisect run <script>`.
+> The pattern worth repeating: **the class teaches the happy path of a dangerous command and omits the escape hatch.** Every one of those additions is what a reader needs at the moment the command goes wrong, so they are marked as beyond-lecture and kept.
+
+> [!danger] **Class 5 part 4 shows a `reset --soft` followed by a force push to `master`.**
+> That is precisely the shared-history rewrite note `09` warns against. It was kept in note `11` with a callout tying it back, rather than being shown as routine or silently dropped. **Where the instructor contradicts an earlier note, say so and reconcile it — do not quietly pick one.**
+
+> [!danger] **Classes 4 and 5 both carry real credentials and PII — check before any frame grab.**
+> **Class 4 part 2** shows the instructor's name and email in `git log` output and in `git config user.name`, plus his GitHub username spoken aloud. **Class 4 part 3 is a live personal-access-token walkthrough with the token on screen.** **Class 5 part 1 shows him pasting that token again from his notes**, about four minutes in, to push. All of it was placeholdered on the way into the notes; none of it may be screenshotted.
 
 All mermaid, no images yet. Classes run **Wednesday and Saturday, 9:00 pm, 2–2½ hours**.
 
-> [!important] **`Linux/` is flat and unnumbered by design, and it is the pattern to follow from here.**
+> [!important] **One flat folder per subject, and it is the pattern to follow from here.**
 >
-> It replaced three numbered folders (`02-Linux-Fundamentals`, `03-Linux-Filesystem-And-Deployment`,
+> `02-Linux/` replaced three numbered folders (`02-Linux-Fundamentals`, `03-Linux-Filesystem-And-Deployment`,
 > `04-Users-Permissions-And-Processes`) totalling 19 small notes, merged on 2026-08-14 into 7 substantial
 > ones. **The user's standing preferences, learned here:**
 >
