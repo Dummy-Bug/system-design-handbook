@@ -167,14 +167,15 @@ telling him the command.
 
 ## Status
 
-**Three folders written**, through class 5 (2026-08-20/21):
+**Three folders written**, through class 6 (2026-08-23). **Git is complete** — the course moves to networking, then CI/CD.
 
 - `01-Introduction-To-DevOps/` — 8 notes
 - `02-Linux/` — 7 notes, 2,723 lines. **Done.**
-- `03-Git/` — **12 notes, 3,936 lines.** Classes 4 and 5 both complete.
+- `03-Git/` — **18 notes, 4,903 lines. Done.** Classes 4, 5 and 6 all complete.
   **Class 4** (5 parts, ~2h 6m) — `01` why Git exists + Git vs GitHub · `02` the local loop (`init`→`add`→`commit`→`log`) · `03` remotes (`push`, `clone`, `pull` vs `fetch`, tokens) · `04` content addressing + blobs · `05` tree and commit objects · `06` the index and the rest of `.git`.
   **Class 5** (4 parts, ~2h 15m) — `07` branches (`refs/heads`, `HEAD`, `switch`) · `08` merging: fast-forward, three-way, conflicts · `09` rebase and force-push · `10` cherry-pick and stash · `11` `log`/`show`/`diff` and `reset`/`restore`/`revert` · `12` `git bisect`.
-  Note `03` spans class 4 parts 2–3 and note `08` spans class 5 parts 1–2; class 4 part 5 produced two notes and class 5 part 4 produced three. Otherwise one note per part.
+  **Class 6** (3 parts, ~2h 8m) — `13` pull requests and code review · `14` Git Flow · `15` GitHub Flow · `16` trunk-based development, feature flags, deploy vs release · `17` monorepo and polyrepo · `18` signed commits.
+  Note `03` spans class 4 parts 2–3, note `08` spans class 5 parts 1–2, and notes `13` and `15` span class 6 parts 1–3 and 2–3. Class 4 part 5 produced two notes, class 5 part 4 produced three, and class 6 part 3 fed four.
 
 > [!tip] **Hashes in the internals notes are real and reproducible — keep doing this.**
 > Object IDs in notes `04`–`06` were computed, not invented: `sha1("blob <len>\0<content>")` for blobs,
@@ -184,7 +185,10 @@ telling him the command.
 > **Commit IDs cannot be reproduced** — they hash the author and timestamp too, so those are marked
 > illustrative in the notes. Say so rather than implying otherwise.
 
-**Git is being taught well past developer level**, and the internals are the most interview-valuable material in the vault so far. Class 5 kept that up: rebase is derived from content addressing rather than asserted, and `git bisect` is taught as binary search with the O(n) → O(log n) argument made explicitly. **Next and last on Git: workflows**, named on air at the end of class 5 — then the course moves to **CI/CD**.
+**Git was taught well past developer level**, and the internals are the most interview-valuable material in the vault so far. Class 6 changed register completely: no new plumbing, all team process — branching strategies, review etiquette, repository layout. The notes carry that by deriving each strategy from the one before it rather than listing three of them, with the single idea underneath stated explicitly: **integration difficulty grows with the time two branches stay apart.** Git Flow pays that cost deliberately, GitHub Flow shortens it, trunk-based development attacks it — and feature flags are what make attacking it survivable.
+
+> [!tip] **The course repo's `Notes.pdf` is worth reading before writing, not after.**
+> For class 6 it was a 40-page written guide covering the whole subject properly, and it supplied things the recording did not carry cleanly: the full pull-request command sequence, what a release branch is for beyond testing, the review-comment labels, and `git commit -S`. **It is still a lesson plan rather than a record** — it went further than the class did in several places — so everything from it was checked against the transcript before being used, and anything the class did not reach stays out or gets marked. Ask for the lecture folder link if it has not been shared.
 
 > [!tip] **Notes 07–12 carry more marked additions than any earlier class, and every one is load-bearing.**
 > `git merge --abort` · `git rebase --continue`/`--abort` · `--force-with-lease` over `-f` · `git stash list` and `apply` vs `pop` · `git restore --staged` · `git revert` · `git bisect reset` · `git bisect run <script>`.
@@ -193,8 +197,9 @@ telling him the command.
 > [!danger] **Class 5 part 4 shows a `reset --soft` followed by a force push to `master`.**
 > That is precisely the shared-history rewrite note `09` warns against. It was kept in note `11` with a callout tying it back, rather than being shown as routine or silently dropped. **Where the instructor contradicts an earlier note, say so and reconcile it — do not quietly pick one.**
 
-> [!danger] **Classes 4 and 5 both carry real credentials and PII — check before any frame grab.**
+> [!danger] **Classes 4, 5 and 6 all carry real credentials or PII — check before any frame grab.**
 > **Class 4 part 2** shows the instructor's name and email in `git log` output and in `git config user.name`, plus his GitHub username spoken aloud. **Class 4 part 3 is a live personal-access-token walkthrough with the token on screen.** **Class 5 part 1 shows him pasting that token again from his notes**, about four minutes in, to push. All of it was placeholdered on the way into the notes; none of it may be screenshotted.
+> **Class 6 adds his employment history** — he names both companies he has worked for, in part 2, answering a student. That is his personal information, not course material, and it is out under the neutralise-named-examples rule. Student names appear in all three parts of class 6, roughly a dozen of them.
 
 All mermaid, no images yet. Classes run **Wednesday and Saturday, 9:00 pm, 2–2½ hours**.
 
