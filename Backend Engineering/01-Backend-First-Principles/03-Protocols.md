@@ -1,4 +1,3 @@
-
 # A protocol is a set of rules
 
 That is the definition, and it is not a technical one. A protocol is an agreed set of rules for how an interaction is conducted.

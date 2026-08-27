@@ -169,10 +169,10 @@ But notice the thing that makes this fixable: **everybody is being shown the sam
 
 ```mermaid
 flowchart LR
-    U["Very many users"] --> C{"Cache"}
-    C -- "hit: already have it" --> U
+    U["Very many users"] -- "request" --> C{"Cache"}
+    C -. "hit: already have it" .-> U
     C -- "miss: only then" --> D[("Database")]
-    D --> C
+    D -. "data" .-> C
 ```
 
 Deciding what to cache, for how long, and what to do when it goes stale is the backend engineer's call.

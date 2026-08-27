@@ -108,7 +108,7 @@ flowchart TD
         D["Database process"]
     end
     S -- "MySQL protocol, over TCP<br/>request shaped by the database's API" --> D
-    D -- "response" --> S
+    D -. "response" .-> S
 ```
 
 The same three ideas, one layer down. Two processes on different machines, a protocol to carry the conversation, an API to define what can be said. That repetition is the point of learning it from first principles — you will keep meeting the same shape.

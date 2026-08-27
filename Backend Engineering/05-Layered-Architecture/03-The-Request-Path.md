@@ -121,8 +121,8 @@ Compare this to MVC's controller and the difference is the point of the whole ex
 flowchart TD
     R["Routing<br/>which functions handle this?"] --> M["Middleware<br/>log, authenticate, authorize, validate"]
     M --> C["Controller<br/>hand it down, hand the answer back"]
-    C --> S["Service<br/>the actual logic"]
-    S --> C
+    C -- "request" --> S["Service<br/>the actual logic"]
+    S -. "response" .-> C
 ```
 
 **A controller that is doing anything more than that has absorbed a responsibility belonging elsewhere** — and that is the thing to notice when reading unfamiliar code.

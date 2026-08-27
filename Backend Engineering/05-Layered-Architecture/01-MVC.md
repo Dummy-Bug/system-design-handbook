@@ -73,10 +73,10 @@ MVC stands for **Model, View, Controller**, and each letter names a part of your
 
 ```mermaid
 flowchart LR
-    V["View<br/>what the user sees"] --> C["Controller<br/>accepts request,<br/>returns response"]
-    C --> M["Model<br/>business logic"]
-    M --> C
-    C --> V
+    V["View<br/>what the user sees"] -- "request" --> C["Controller<br/>accepts request,<br/>returns response"]
+    C -- "hand it down" --> M["Model<br/>business logic"]
+    M -. "result" .-> C
+    C -. "response" .-> V
 ```
 
 The controller mapping should feel familiar. A server is a process that accepts a request, processes it, and sends a response — so inside a server there must be code doing each of those three. **The controller is the part that accepts and responds.** The model is the part that processes.
