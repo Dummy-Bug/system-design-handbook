@@ -16,6 +16,35 @@ That extraction is an algorithm. Deciding what to do with the hashtags afterward
 
 A realistic service function for creating a post does several such things: parse the hashtags out of the text, create any hashtags that do not exist yet, create the post, associate the two, and return what was created. All of it is logic about what the application means by creating a post.
 
+## It orchestrates without doing
+
+A larger example makes the boundary clearer, because here the service coordinates several very different kinds of work while performing none of it itself.
+
+A ride-hailing company runs a fleet of autonomous vehicles owned by third parties — you put your cars on their platform and earn from the rides they take. One of the responsibilities of that system is handling a breakdown.
+
+When a vehicle breaks down, roughly this has to happen:
+
+```mermaid
+flowchart TD
+    A["Vehicle reports a breakdown"] --> B{"Is this a priority vehicle?"}
+    B --> C["Look up the location<br/>from a latitude and longitude"]
+    C --> D["Look up the owner's details"]
+    D --> E["Send the owner a notification"]
+```
+
+Now separate what each step actually is:
+
+| Step | What kind of work |
+|---|---|
+| Deciding whether the fleet is priority | **Algorithm** — a business rule |
+| Turning coordinates into a place name | A **third-party API** call, to a maps provider |
+| Fetching the owner's details | A **database** read |
+| Sending the notification | Another **third-party** service |
+
+> [!important] **All four steps are decided by the service layer. None of them are performed by it.** The service knows the order, the conditions and what the outcome should be. How to make a database query, how to call a maps provider, how to reach a notification service — none of that is its concern.
+
+A third example, smaller: in a chess application, working out whether a move puts the opponent in check is service-layer logic. **Storing that move** is not.
+
 # The problem with letting it touch the database
 
 Notice that the list above keeps saying create. Business logic almost always needs data — the chef needs ingredients from somewhere.
@@ -174,6 +203,37 @@ The reason the swap costs one string is that the service depends on `ITodoReposi
 > [!important] Depending on an interface means the service is written against **what a repository can do** — find things, save things — rather than against **how any particular repository does it.** Any implementation honouring that interface can be dropped in.
 
 Which is what makes swapping a database a contained change rather than a project-wide edit.
+
+# More than one store at a time
+
+Nothing says a project has one database, and at any real scale it will not.
+
+It is entirely normal to hold some data in a relational database, some in a document database, and a working copy in a cache such as Redis. Three stores, one application, chosen per use case.
+
+The pattern handles this without modification — each store gets its own repository interface:
+
+```java
+1  // one interface per kind of storage, each with its own implementations
+2  public class TodoService {
+3
+4      private ITodoRepository  todoRepository;   // the primary store
+5      private ICacheRepository cacheRepository;  // the cache
+6
+7      // ...
+8  }
+```
+
+The service depends on both interfaces and knows how neither is implemented. Swapping the primary store from relational to document, or swapping the cache, remains a contained change.
+
+> [!warning] **One thing to watch for.** If you find code deciding **which** repository to use with a growing chain of conditions:
+>
+> ```java
+> 1  if (condition1)      { useRepositoryA(); }
+> 2  else if (condition2) { useRepositoryB(); }
+> 3  else if (condition3) { useRepositoryC(); }
+> ```
+>
+> — and every new store adds another branch — that is a violation of the **open-closed principle**: code should be open to extension but closed to modification. Adding a store should not mean editing existing logic. When you see that chain growing, the selection itself needs restructuring rather than another `else if`.
 
 # The division, stated plainly
 

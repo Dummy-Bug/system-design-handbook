@@ -22,7 +22,7 @@ MVC assumes the view is part of the same application as the controller and the m
 
 > [!info] **Server-side rendering (SSR)** means the HTML you eventually see is computed on the server. Loading a profile page, the server works out the name, the image, the bio — assembles the HTML — and sends the finished page to the client.
 
-Under SSR, bundling the view with the backend is natural. The server is producing the pages, so the templates belong beside the code producing them. That is precisely the world MVC was designed for.
+Under SSR, bundling the view with the backend is natural. **The server is producing the pages, so the templates belong beside the code producing them.** That is precisely the world MVC was designed for.
 
 ## Client-side rendering
 
