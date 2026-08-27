@@ -98,7 +98,7 @@ A lookup splits the name into its parts and follows the branch. Resolving someth
 
 # A term you will see
 
-**Remote address** generally refers to the IP address of the remote machine you are connecting to. When it appears in developer tools next to a request, that is what it is showing.
+**Remote address** generally refers to the **IP address of the remote machine** you are connecting to. When it appears in developer tools next to a request, that is what it is showing.
 
 # Where this leaves the addressing story
 

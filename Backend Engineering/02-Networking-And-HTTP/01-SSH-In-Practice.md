@@ -2,7 +2,7 @@ A network protocol is a set of rules that lets two processes on two machines com
 
 # SSH
 
-**SSH** stands for Secure Shell, and it is a network protocol — so by definition it is a set of rules for one particular kind of communication.
+**SSH** stands for Secure Shell, and **it is a network protocol** — so by definition it is a **set of rules for one particular kind of communication.**
 
 The kind it handles: **logging into a remote machine and running commands on it, securely.**
 
@@ -44,7 +44,7 @@ Logging into any machine needs credentials. Your own laptop asks for a password;
 
 SSH handles this with a **key pair** rather than a password. You create one, and a file is downloaded to your machine. That file is now the thing that gets you in.
 
-The network setting to notice is the one allowing SSH traffic from anywhere. It means any machine on the internet may attempt to connect over SSH — but only one holding the key will succeed.
+The network setting to notice is the one allowing SSH traffic from anywhere. **It means any machine on the internet may attempt to connect over SSH — but only one holding the key will succeed.**
 
 ## Locking down the key file
 
@@ -85,7 +85,12 @@ With a running instance, a key file, and its permissions fixed:
 1  ssh -i sample-pair.pem ec2-user@<public-address-of-the-instance>
 ```
 
-Three pieces: `-i` names the key file to identify yourself with, then the user to log in as, then the address of the machine. The first connection asks you to confirm you trust the host; after that you are in.
+Three pieces: 
+1. `-i` names the key file to identify yourself with, 
+2. then the user to log in as, 
+3. then the address of the machine. 
+
+The first connection asks you to confirm you trust the host; after that you are in.
 
 The clearest proof that anything happened is to ask which machine you are on, before and after:
 

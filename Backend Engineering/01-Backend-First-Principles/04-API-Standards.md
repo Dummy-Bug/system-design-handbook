@@ -92,7 +92,7 @@ The most visible difference between these standards is the shape of the data on 
 13 }
 ```
 
-> [!info] **Verified.** The XML and JSON above were parsed successfully, and the `.proto` file compiles cleanly with `protoc`. The numbers after each field are field tags, not values — they are how the binary encoding identifies each field.
+> [!info]  The numbers after each field are field tags, not values — they are how the binary encoding identifies each field.
 
 # REST in a little more depth
 
@@ -125,7 +125,7 @@ sequenceDiagram
 
 RPC-style standards such as gRPC also use HTTP — but specifically **HTTP 2.0**, out of the box rather than as an option.
 
-For data they use protocol buffers, which are serialised in a very compact way. That compactness is the point: less data on the wire means faster transfer.
+For data they use **protocol buffers**, which are **serialised in a very compact way**. That compactness is the point: **less data on the wire means faster transfer**.
 
 > [!info] **A number for the compactness claim.** Encoding the identical reminder above in all three formats, as it would actually be sent:
 >
@@ -162,6 +162,6 @@ The moment you have written it, it stops being your choice and becomes everyone 
 
 # Where this leaves us
 
-Remindly can now accept requests. A client connects over a protocol, sends a request in a format we published, and gets a response.
+Remindly can now accept requests. **A client connects over a protocol, sends a request in a format we published, and gets a response.**
 
 And we still have not solved the problem that started all of this. When a user tells us to remember their flight on Friday, **where does that actually go?** We replaced the employee with a server process and the telephone with a protocol. Nothing at all has replaced the diary.

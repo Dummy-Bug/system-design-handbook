@@ -1,16 +1,29 @@
 # CLAUDE.md — Backend Engineering
 
-Turning the **AlgoCamp Backend Engineering (Spring Boot)** course into notes in this folder. Read `~/Desktop/Transcribe/PROMPT-FOR-CLAUDE.md` first for how the recording rig works, then `~/Desktop/Transcribe/tracks/backend.md` for what has already come through it.
+Turning the **AlgoCamp Backend Development in Springboot, AI & Micro Services 2026** material into notes in this folder. Read `~/Desktop/Transcribe/PROMPT-FOR-CLAUDE.md` first for how the recording rig works, then `~/Desktop/Transcribe/tracks/backend.md` for what has already come through it.
 
 **Scope: Java and Spring Boot backend engineering, and nothing else.** This folder is self-contained. It does not reference other tracks, other courses, or work outside it.
 
 ---
 
-## The course
+## The source
 
-- The **2025 recorded cohort**, so every video is available at once — there is no weekly release, and **modules can be watched out of order**.
-- **English**, recorded through OBS at **1.75× or 2×** playback, transcribed with `--track backend` (`-l en`). A recording is therefore roughly **half the source length** — scale before judging whether a capture is complete, and a long silent tail at the end is normal rather than a freeze. English audio on this rig has run ~15× realtime with effectively zero loop damage, but that figure was measured at 1× on a different course, so treat sped-up audio as unproven: check the first transcript for loops before assuming a second pass is unnecessary.
-- The syllabus PDF footer is dated **01/04/2025**, so it may describe a previous cohort. Treat the module list below as indicative and correct it against what the videos actually contain.
+- **Backend Development in Springboot, AI & Micro Services 2026**, on `courses.algocamp.io` — **306 lessons**, all available at once. There is no weekly release, so lessons can be watched in any order.
+- **These are recordings of live cohort sessions**, not a solo studio recording. Expect a chat, student questions answered by name, negotiated breaks, the occasional internet drop and re-share, and sign-offs referring to the next day. The live-session rules in the rig manual therefore apply: **questions are kept, names are stripped.**
+- A session arrives as **several recordings**, because OBS is stopped at each break. Parts of one lesson must be read together before any structure is proposed — the second half regularly moves where the note boundaries belong.
+- **English**, recorded through OBS at **1.75× or 2×**, transcribed with `--track backend` (`-l en`). A recording runs roughly half its source length; a long silent tail is normal rather than a freeze.
+- **Loop damage has been negligible** across the recordings so far — confined to the last five to ten seconds of a file, where the capture keeps rolling after the speaking stops. No second pass has been needed. Still count the top repeated lines before trusting a transcript, and check where the repeats sit: spread through the file means genuine repetition, bunched at one timestamp means a loop.
+
+### Screen capture
+
+The platform's own notes panel captures fine, and its diagrams are legible. Two things to know:
+
+- **The notes panel is watermarked with the account holder's email and phone, stamped mid-canvas over the diagrams, and it drifts between frames.** Any crop must be read before use, and neighbouring timestamps sampled until the watermark clears the region.
+- The canvas often runs **ahead of the audio** — concepts appear drawn on the board well before they are taught. Anything not yet covered by the audio stays out of the notes.
+
+### The code
+
+The repository used on screen is `https://github.com/singhsanket143/SpringDemoTodo` — Spring Boot 4.0.2 on Java 21, Gradle, Lombok, layered as controller → service → repository with the repository behind an interface. Code in notes comes from there or from official docs, and is run before it goes in.
 
 **Not the same track as `~/Desktop/wiki/Spring Boot/`.** That folder is the Coder Army YouTube series — Hindi, transcripts pasted into chat one video at a time, no rig involved. The two overlap on Spring Framework, Maven, dependency injection, the IoC container and the bean lifecycle, and they will disagree in places. Where they overlap, **link across rather than re-explaining**, and say which course a given treatment came from.
 
@@ -34,45 +47,59 @@ Turning the **AlgoCamp Backend Engineering (Spring Boot)** course into notes in 
 
 **Projects:** Uber Backend · Payment Wallet · Airbnb Booking · Quora Clone · Hotel Management
 
-**Not covered by the course:** Kubernetes, Go, Aerospike.
+**Not covered:** Kubernetes, Go, Aerospike.
+
+> The list above comes from a syllabus PDF footered **01/04/2025** and describes an earlier cohort. Treat it as indicative only.
+
+### What the platform actually lists
+
+Read off the syllabus panel while recording, so this is observed rather than inferred. Numbering is the platform's own.
+
+| # | Lesson | Notes here |
+|---|---|---|
+| 07 | Backend Engineering First Principles | `01-Backend-First-Principles/` |
+| 08 | Quiz for interactive article reading – APIs | — |
+| 09 | Understanding HTTP and REST APIs | `02-Networking-And-HTTP/` |
+| 10 | Computer networks, DNS, Torrents, TCP/UDP (24 lessons) | not yet |
+| 11 | What is Spring Boot, setting up env variables | not yet |
+| 12 | Understanding SOLID principles (9 lessons) | not yet |
+| 13 | Homework — working with an HTTP client | not yet |
+| 14 | Understanding MVC, repositories, services | not yet |
+| 15 | Exploring MVC with Spring Boot | not yet |
+| 16 | `@RestController`, `@RequestMapping`, `@Service` | not yet |
+| 17 | Understanding the Builder pattern (11 lessons) | not yet |
+| 18 | Integrating databases with Spring Boot | not yet |
+
+The platform's numbers are **not** the folder numbers here — folders are numbered by when they were made.
 
 ---
 
-## Viewing order
+## Naming comes from the content, never in advance
 
-Modules are being watched in this order rather than syllabus order. Build systems is in progress; the rest follows.
+There is **no fixed viewing order**, and folder names are not assigned ahead of time.
 
-1. Build systems
-2. LLD and design patterns
-3. Advanced Databases
-4. REST
-5. Redis and distributed locks
-6. Kafka
-7. Resilience4J
-8. Docker, GitHub Actions, Prometheus and Grafana
-9. Payment Wallet project
+The sequence is: a recording is handed over, it is transcribed, the transcript is read end to end, and **only then** is a folder name and a set of note names proposed — derived from what the material actually covers. Nothing is written until that proposal is approved.
+
+Folders are numbered in the order they were actually made, starting at `01`. A number reflects when something was watched, not where it sits in any published syllabus.
+
+**Keep file names short.** Two to four words. `04-API-Standards.md`, not `04-Standards-For-Writing-APIs.md`.
 
 ---
 
 ## Folder layout
 
-Module folders are numbered by the **viewing order above**, not the syllabus order. A folder is created when its module starts — a gap in the numbering is a module not yet reached, not a missing file.
+What exists right now:
 
 ```
 Backend Engineering/
-├── CLAUDE.md                 ← this file
-├── 00-Build-Systems/         ← Gradle, fat JARs, JVM memory, AOP
-├── 01-LLD-And-Design-Patterns/
-├── 02-Advanced-Databases/
-├── 03-REST/
-├── 04-Redis/
-├── 05-Kafka/
-├── 06-Resilience4J/
-├── 07-Ops-And-Observability/
-└── 08-Payment-Wallet/        ← project code, not a notes folder
+├── CLAUDE.md                        ← this file
+├── 01-Backend-First-Principles/     ← Remindly, processes, client/server, protocols, APIs, storage, the problem catalogue
+└── 02-Networking-And-HTTP/          ← SSH, HTTP anatomy, addressing and ports, DNS, JSON, REST conventions
 ```
 
-A module gets a `notes/` subfolder **only when there is code sitting beside it** (`snippets/`, `src/`); otherwise the notes sit flat at the module root. Cropped frames go in `<module>/Images/` and are embedded with absolute vault paths — `![[Backend Engineering/<module>/Images/<file>.png]]` — so **any future folder rename has to rewrite those links too**.
+A folder gets a `notes/` subfolder **only when there is code sitting beside it** (`snippets/`, `src/`); otherwise the notes sit flat at the folder root.
+
+**`Images/` is created only when something genuinely resists recreation** — a hand-drawn curve, a plotted shape, an annotated trace. Boxes, arrows, bullet lists and comparison tables are recreated as mermaid, which renders in both themes and stays searchable. Neither folder so far has needed one. When a crop is used, it goes in `<folder>/Images/` and is embedded by absolute vault path — `![[Backend Engineering/<folder>/Images/<file>.png]]` — so **any future folder rename has to rewrite those links in the same operation.**
 
 ---
 
@@ -92,7 +119,9 @@ A module gets a `notes/` subfolder **only when there is code sitting beside it**
 
 **No interview-framing callouts.** No `> [!tip] **Interview framing.**` blocks, no "if asked X, the weak answer is…", no viva or exam angles. Write the concept and stop. A point worth making belongs in the body of the note on its own terms. This does not touch material where the lecture itself raises an interview question as its subject — that is the source's content, not framing added on top.
 
-**Visuals both ways.** Recreate flows, architectures, pipelines and comparison tables as mermaid or markdown, leaning on mermaid as heavily as the material allows. Screenshot hand-drawn geometry and annotated diagrams, where recreating loses what made them worth looking at. **Read every crop before embedding it** — the PII-in-a-tooltip, stray-Claude-session and player-chrome hazards in the rig manual all apply here.
+**Visuals, mermaid first.** Recreate flows, architectures, pipelines and comparison tables as mermaid or markdown, leaning on mermaid as heavily as the material allows — it renders in both themes and stays searchable and copyable. Screenshot only what recreating would destroy: hand-drawn geometry, curves, annotated traces. **Read every crop before embedding it** — the watermark noted above, plus the stray-Claude-session and player-chrome hazards in the rig manual, all apply here. Avoid self-referencing mermaid edges (`B -. label .- B`); they render as dangling arcs. Put the label on the edge between two nodes instead.
+
+**Never mention the source inside a note.** No course, lecture, instructor, session, student, syllabus, recording, homework or dashboard. A note is a standalone piece of writing about the subject, not a record of someone teaching it. Write the concept and stop. Provenance worth knowing — a capture gap, something added beyond what was covered, a number that was measured rather than stated — is reported **in chat**, never left in the file.
 
 **Copyright.** Recordings and raw transcripts are never committed, published, or quoted verbatim at length. The notes are original explanations.
 

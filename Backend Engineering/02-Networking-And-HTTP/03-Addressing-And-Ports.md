@@ -104,8 +104,6 @@ Whatever acts as the client — a browser, an API testing tool, or code you wrot
 2   "category":"men's clothing","rating":{"rate":3.9,"count":120}}
 ```
 
-> [!info] **Verified.** That request returns HTTP 200 with the JSON above (abbreviated); requesting a path that does not exist on the same host returns 404.
-
 # When both ends are on your own machine
 
 This is the part that catches people out, and getting it wrong is avoidable.
@@ -121,20 +119,28 @@ If your application is not working locally, the internet is not the reason. That
 Since both processes share a machine, you do not need to state the machine's IP address. You substitute a name for it:
 
 ```text
-1  localhost:27017
-2  127.0.0.1:27017
+1  mongodb://localhost:27017
+2  mongodb://127.0.0.1:27017
 ```
 
-Both mean this machine. But notice what has **not** gone away — the **port is still required**, because your machine is still running many processes and the client still has to say which one it wants. The protocol is still required too.
+`localhost` and `127.0.0.1` both mean this machine, and either can stand in for the address.
+
+But look at what has **not** gone away. The **protocol is still there** — `mongodb://` in the lines above — and the **port is still there**, because your machine is still running many processes and the client still has to say which one it wants. Only the address was replaced.
+
+| | Away from your machine | On your machine |
+|---|---|---|
+| Protocol | required | **required** |
+| Address | the machine's IP | `localhost` or `127.0.0.1` |
+| Port | required | **required** |
 
 ```mermaid
 flowchart LR
     subgraph M["One machine"]
-        C["Client process"] -- "localhost:27017" --> S["Server process<br/>listening on port 27017"]
+        C["Client process"] -- "mongodb://localhost:27017" --> S["Server process<br/>listening on port 27017"]
     end
 ```
 
-A database GUI connecting to a database server on the same laptop does exactly this: protocol, then `localhost`, then `27017`. No IP address, no internet, and it connects.
+**A database GUI connecting to a database server on the same laptop does exactly this.** Its default connection string is `mongodb://localhost:27017` — protocol, then `localhost`, then the port. No IP address, no internet, and it connects.
 
 # The remaining gap
 

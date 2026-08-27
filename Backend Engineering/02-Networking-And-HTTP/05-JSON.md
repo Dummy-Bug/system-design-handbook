@@ -101,7 +101,7 @@ That inefficiency is a large part of why JSON displaced XML, and JSON is now amo
 
 # One practical note
 
-Stored in a file, JSON uses the `.json` extension, the same way plain text uses `.txt`.
+Stored in a file, JSON uses the `.json` extension, the same way plain text uses `.txt`
 
 # What it is for
 
@@ -111,4 +111,4 @@ flowchart LR
     S -- "response body: JSON" --> C
 ```
 
-A client needs to send structured data to a server and get structured data back, across a network, between programs that may be written in entirely different languages. JSON is unambiguous enough to parse reliably, compact enough not to waste bandwidth, and tied to no particular language.
+A client needs to send structured data to a server and get structured data back, across a network, between programs that may be written in entirely different languages. **JSON is unambiguous enough to parse reliably, compact enough not to waste bandwidth, and tied to no particular language.**

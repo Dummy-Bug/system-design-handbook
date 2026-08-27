@@ -70,18 +70,18 @@ Resource-oriented URLs create an immediate problem. Given `/orders`, what is bei
 
 Applied to a collection and to a single item:
 
-| Method and URL | What it means |
-|---|---|
-| `POST /customers` | Create a new customer |
-| `GET /customers` | Fetch all customers |
-| `PUT /customers` | Update the customers |
-| `DELETE /customers` | Delete all customers |
-| `POST /customers/1` | By convention, an error — you do not create a thing that already has an id |
-| `GET /customers/1` | Fetch the customer with id 1 |
-| `PUT /customers/1` | Update customer 1, if it exists |
-| `DELETE /customers/1` | Delete customer 1, if it exists |
+| Method and URL        | What it means                                                                  |
+| --------------------- | ------------------------------------------------------------------------------ |
+| `POST /customers`     | Create a new customer                                                          |
+| `GET /customers`      | Fetch all customers                                                            |
+| `PUT /customers`      | Update the customers                                                           |
+| `DELETE /customers`   | Delete all customers                                                           |
+| `POST /customers/1`   | **By convention, an error** — you do not create a thing that already has an id |
+| `GET /customers/1`    | Fetch the customer with id 1                                                   |
+| `PUT /customers/1`    | Update customer 1, if it exists                                                |
+| `DELETE /customers/1` | Delete customer 1, if it exists                                                |
 
-And resources combine, because some operations are genuinely about a relationship between two of them:
+**And resources combine**, because **some operations are genuinely about a relationship** between two of them:
 
 | Method and URL | What it means |
 |---|---|
@@ -193,4 +193,4 @@ One practical framing to end on. In a working team, the front-end developers com
 
 They do not ask what logic sits behind it, because that is not their concern and never was. **They need to know how to connect, not how it works.** That is the whole idea of an API, arriving as a normal Tuesday conversation.
 
-Which also makes reading other people's API documentation a skill worth practising deliberately. A backend engineer does not only publish APIs — they consume plenty of them, and the habit of working out someone else's contract from their docs pays off constantly.
+Which also makes reading other people's API documentation a skill worth practising deliberately. **A backend engineer does not only publish APIs — they consume plenty of them, and the habit of working out someone else's contract from their docs pays off constantly.**

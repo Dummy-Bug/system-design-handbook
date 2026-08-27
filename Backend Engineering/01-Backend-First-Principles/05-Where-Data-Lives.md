@@ -80,11 +80,11 @@ In the second exchange, which one is the client?
 > [!important] This is why people say **database server** and it is not a redundant phrase. It confuses people who believe there is one server in a system and that it is the thing they wrote. Any process capable of accepting a request is a server. Our Remindly process is a server to the user's app and a client to the database, at the same time, because **client and server are roles within an exchange, not permanent identities.**
 
 ```mermaid
-flowchart LR
-    A["User's app"] -- request --> B["Remindly process"]
-    B -- request --> C["Database process"]
-    B -. "server here" .- B
-    B -. "client here" .- B
+flowchart TD
+    A["User's app"] -- "request — Remindly is the server here" --> B["Remindly process"]
+    B -- "request — Remindly is the client here" --> C["Database process"]
+    C -. "response — stored" .-> B
+    B -. "response — your reminder is saved" .-> A
 ```
 
 # Which means the database needs a protocol and an API too
@@ -93,7 +93,7 @@ Follow the logic through, because it lands somewhere satisfying.
 
 The database process runs on a different machine from our server. Two processes, two machines. So they need a **network protocol** — the same requirement as before, for the same reason.
 
-Different databases use different protocols. MySQL publishes a client/server protocol specification describing exactly how a process may communicate with a MySQL database, and that protocol runs over **TCP** — the same foundation HTTP and WebSockets are built on.
+Different databases use different protocols. **MySQL publishes a client/server protocol specification** describing exactly how a process may communicate with a MySQL database, and that protocol runs over **TCP** — the same foundation HTTP and WebSockets are built on.
 
 And the database must also expose an **API**: a declaration of how to reach it, what requests it accepts, and what it returns. It has internals it does not show you — how rows are physically stored, how a query is planned and executed — and you neither see them nor need to.
 
