@@ -4,7 +4,7 @@ Two machines want to exchange data. Three questions have to be answered before a
 
 You cannot put an arbitrary volume of water through a pipe. The pipe has a capacity, and exceeding it does not make the water arrive faster. A railway track carries one train at a time regardless of how many are waiting.
 
-Networks are the same. There is a limit to what can be in flight, so data is not sent as one block.
+Networks are the same. **There is a limit to what can be in flight**, so data is not sent as one block.
 
 > [!important] Data to be sent is divided into smaller chunks called **packets**.
 
@@ -12,7 +12,7 @@ Three things follow from that:
 
 **Loss becomes survivable.** If a packet goes missing, one small piece is missing — and a small piece can be requested again. Lose one large transfer and there is nothing to recover from.
 
-**The network stays manageable.** Many small units can be scheduled, routed and interleaved. One enormous unit cannot.
+**The network stays manageable.** Many small units can be **scheduled**, **routed** and **interleaved**. One enormous unit cannot.
 
 **Capacity is used properly.** Small units keep the link busy rather than waiting on one large transfer to clear.
 

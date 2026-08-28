@@ -59,6 +59,20 @@ Now nothing can be reused. Every product needs a category that has not been load
 
 **Three products, four queries.** Generalise it: **N products, 1 + N queries.**
 
+```mermaid
+flowchart TB
+    APP["Application asks for<br/>the products"] --> Q1["Query 1<br/>SELECT * FROM products"]
+    Q1 --> R["3 rows come back — each one<br/>holding a category_id, not a category"]
+    R --> Q2["Query 2<br/>categories WHERE id = 1"]
+    R --> Q3["Query 3<br/>categories WHERE id = 2"]
+    R --> Q4["Query 4<br/>categories WHERE id = 3"]
+    Q2 --> OUT["Response assembled"]
+    Q3 --> OUT
+    Q4 --> OUT
+```
+
+The shape is the name. One query at the top, then a fan of N underneath it, one per row the first query returned.
+
 > [!important] **This is the N+1 query problem.** **One** query to fetch the parent rows, then **N** more — one per row — to fetch each row's association. N+1 round trips to assemble data a single join could have returned in one.
 
 # Why it matters
@@ -192,6 +206,17 @@ Then the service calls `getCategory()`. Touching the placeholder makes it load i
 > [!important] Read the `where c1_0.id=?` on line 1. **It already knew the id was 1** — it took that from `category_id`. What it never had was the name, because the column carrying the name was discarded.
 
 Which is the whole absurdity of this attempt: **the join fetched `electronics`, Hibernate discarded it because it did not fit, and then went back to the database to fetch `electronics` again** — this time in a shape it could use.
+
+
+```mermaid
+flowchart TB
+    J["Your join returns one row<br/>including category = electronics"] --> M["Hibernate maps the row<br/>onto the Product fields"]
+    M --> C1["id, title, price<br/>copied straight in"]
+    M --> C2["category_id = 1<br/>becomes a placeholder<br/>that knows only its id"]
+    M --> C3["category = electronics<br/>discarded — a string cannot<br/>go in a Category field"]
+    C2 --> T["Service calls getCategory()"]
+    T --> Q2["A second query fetches<br/>electronics all over again"]
+```
 
 The join was performed and thrown away.
 

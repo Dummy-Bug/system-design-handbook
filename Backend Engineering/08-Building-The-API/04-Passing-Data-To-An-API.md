@@ -14,6 +14,17 @@ A client has to get information to your endpoint, and HTTP offers three places t
 | **Path variable** | Embedded in the path | `@PathVariable` |
 | **Request param** | Key-value pairs after `?` | `@RequestParam` |
 
+```mermaid
+flowchart LR
+    U["/api/v1/products/42?inStock=true"] --> P["42<br/>path variable<br/>which resource"]
+    U --> R["inStock=true<br/>request param<br/>how to filter it"]
+    B["title, price, nested objects<br/>request body<br/>the structured payload"] --> S["Your controller method"]
+    P --> S
+    R --> S
+```
+
+The URL carries the two flat channels. Anything with shape has to travel separately, in the body.
+
 # Path variables
 
 ```java

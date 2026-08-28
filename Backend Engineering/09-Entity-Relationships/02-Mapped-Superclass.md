@@ -93,6 +93,17 @@ Which is exactly what the annotation is for.
 >
 > Not an entity means **no table**. Mappings inherited means the `@Id` and `@GeneratedValue` are picked up by every subclass as though written there.
 
+```mermaid
+flowchart TB
+    B["BaseEntity<br/>MappedSuperclass<br/>declares id"]
+    B -- extends --> C["Category<br/>Entity"]
+    B -- extends --> P["Product<br/>Entity"]
+    C -- creates --> TC[("categories<br/>id, name")]
+    P -- creates --> TP[("products<br/>id, title, price, category_id")]
+```
+
+Both child tables carry an `id` that neither child class declares. The parent has no box of its own on the database side, because it was never meant to be stored.
+
 Exactly the distinction the two failures were groping at. `@Entity` says store this. `@MappedSuperclass` says do not store this, **but do read the annotations inside it.**
 
 # Proof

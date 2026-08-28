@@ -17,6 +17,23 @@ Where does the link live? It cannot sensibly live on the category — a category
 
 > [!important] **The table on the many side holds a foreign key.** A foreign key is a column whose values are the primary key of another table. Here, `products` gains `category_id`, holding the `id` of a row in `categories`.
 
+```mermaid
+erDiagram
+    CATEGORIES ||--o{ PRODUCTS : "has many"
+    CATEGORIES {
+        bigint id PK
+        varchar name
+    }
+    PRODUCTS {
+        bigint id PK
+        varchar title
+        decimal price
+        bigint category_id FK
+    }
+```
+
+Read the crow's foot on the right-hand end: the many side is `products`, and that is the side carrying `category_id`.
+
 Worked through with actual rows:
 
 ```text
@@ -55,6 +72,14 @@ The string goes, and a reference to the entity replaces it:
 ```
 
 The field is called `category` and holds a whole `Category`. The **column** should be called `category_id` and hold a number. `@JoinColumn` bridges that difference.
+
+```mermaid
+flowchart LR
+    F["Java field<br/>private Category category<br/>holds a whole object"] -- "JoinColumn names the column" --> C["Database column<br/>category_id<br/>holds a number"]
+    F -- "ManyToOne says what it means" --> R["Relationship<br/>many products, one category"]
+```
+
+Two different jobs. One annotation says where the value is stored, the other says what the value signifies.
 
 `nullable = false` says a product must have a category — there is no such thing as an uncategorised product.
 
@@ -134,6 +159,8 @@ The reasoning is worth following. `ddl-auto: update` **altered the existing** `p
 The fix used here is to drop the database and recreate it, which is fine on a development machine and unthinkable anywhere else.
 
 > [!important] This is the clearest argument yet for **database migrations**. A migration is a deliberate, ordered, reviewable script — it can add the column as nullable, backfill sensible values, then apply the constraint. `ddl-auto` cannot, because it only compares the current classes against the current schema and has no idea what the intermediate steps should be.
+
+That argument is taken up properly in [[07-Database-Migrations]].
 
 # The DTO changes too
 

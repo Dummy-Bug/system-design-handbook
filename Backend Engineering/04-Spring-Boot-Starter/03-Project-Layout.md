@@ -27,6 +27,19 @@ SpringDemoTodo/
     └── test/
 ```
 
+How those pieces relate, since the tree alone does not show it:
+
+```mermaid
+flowchart LR
+    BG["build.gradle<br/>what to build, and with what"] --> G["Gradle<br/>driven by gradlew"]
+    REPO[("mavenCentral")] -- "downloaded into .gradle/" --> G
+    SRC["src/main/java<br/>your code"] --> G
+    RES["src/main/resources<br/>your configuration"] --> G
+    G --> OUT["build/<br/>compiled classes and jars"]
+```
+
+Only two of those boxes are yours to write. The rest is either configuration or generated output.
+
 # `.gitignore`
 
 **A list of paths that version control should ignore**, so they are never pushed to a **hosting platform**. Generated output and local caches belong here — they can always be rebuilt, and they would only bloat the repository.
@@ -139,6 +152,15 @@ The interesting part is `libs`, which holds what the build actually produced:
 ```
 
 > [!important] **Two jars, and the size difference is the point.** The plain jar is 8 KB — just your compiled code. The other is nearly 20 MB, because it packages your code **together with every dependency and an embedded web server**, so it can run on its own. That self-contained one is what gets deployed.
+
+```mermaid
+flowchart TB
+    SRC["Your compiled classes"] --> PLAIN["demo-0.0.1-SNAPSHOT-plain.jar<br/>8 KB"]
+    SRC --> FAT["demo-0.0.1-SNAPSHOT.jar<br/>19.7 MB"]
+    DEPS["Every declared dependency"] --> FAT
+    WS["An embedded web server"] --> FAT
+    FAT --> RUN["Runs on its own —<br/>this is the one that gets deployed"]
+```
 
 Like `.gradle/`, this folder is disposable. Delete it, rebuild, and it returns.
 

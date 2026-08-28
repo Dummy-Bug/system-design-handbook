@@ -1,10 +1,6 @@
 **The goal is small: open a browser, type a URL, see `Hello World`.** No syntax has been taught yet, so almost nothing in the code will make sense — and that is deliberate.
 
-> Even though we will not understand a thing there, I want us to find out **how simple it is to build a Spring Boot application** — how it automatically configures everything for you, so that we can start straight away with our business logic.
 
-**The point of this part is the speed, not the syntax.** Everything unexplained here is written down at the end as a list of open questions, and those questions are what the rest of the series answers.
-
----
 
 # The flow being built
 

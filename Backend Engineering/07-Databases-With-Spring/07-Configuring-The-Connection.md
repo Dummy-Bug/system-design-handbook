@@ -64,6 +64,18 @@ DML changes **data**. DDL changes **structure**.
 
 > [!important] Hibernate can read your entity classes, compare them against the database, and work out the DDL needed to reconcile the two. **`ddl-auto` decides how much of that it is allowed to actually do.**
 
+```mermaid
+flowchart TB
+    E["Entity classes<br/>what the code expects"] --> CMP{"Hibernate compares<br/>the two at startup"}
+    DB[("Current schema<br/>what the database has")] --> CMP
+    CMP --> D["A difference<br/>missing table, missing column"]
+    D --> A["ddl-auto decides what<br/>may be done about it"]
+    A --> N["none<br/>ignore it"]
+    A --> V["validate<br/>refuse to start"]
+    A --> U["update<br/>add what is missing"]
+    A --> C["create<br/>drop it all and rebuild"]
+```
+
 ## The options
 
 | Value         | Behaviour                                                                       |
@@ -148,6 +160,8 @@ Row count afterwards: **0**.
 
 > [!important] The mature arrangement is **`validate` plus schema migrations** — migrations make the structural changes deliberately and in a versioned, reviewable way, and `validate` confirms the code and the database agree before serving a request.
 
+That arrangement is set up in [[08-Flyway]] and shown catching real drift in [[09-Validate-Catches-Drift]].
+
 # When the connection is wrong
 
 Point the URL at a database that does not exist and it fails clearly:
@@ -180,5 +194,14 @@ Two things worth reading there.
 **Lines 1 to 3** are **HikariCP**, **a connection pool**, configured automatically.
 
 > [!info] **A connection pool holds a set of open connections and lends them out**, rather than opening and closing one per query. Since opening a connection is expensive and databases limit how many may exist, this addresses the manual lifecycle problem JDBC leaves you with — handled for you, with defaults, unless you configure pool size and timeouts yourself.
+
+```mermaid
+flowchart TB
+    S["Your code calls a repository method"] --> HB["Hibernate generates the SQL"]
+    HB --> POOL["HikariCP lends out one<br/>of its already-open connections"]
+    POOL --> DRV["MySQL Connector/J driver"]
+    DRV --> DB[("MySQL 9.5")]
+    DB -. "rows come back, get mapped to objects,<br/>and the connection is returned to the pool" .-> S
+```
 
 Which closes the loop the whole folder opened. **JDBC gave you a connection and made its management your problem.** Five layers up, the connection is pooled, the query is generated, the result is mapped, and the dialect is chosen — and the configuration for all of it is the dozen lines at the top of this note.

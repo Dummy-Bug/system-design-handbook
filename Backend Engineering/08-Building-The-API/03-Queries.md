@@ -125,7 +125,17 @@ But the SQL they generate is not the same:
 >
 > **Line 2 was generated.** Lowercased, with the `p1_0` alias Hibernate assigns and the column qualified against it. The JPQL was parsed, resolved against the entity mapping, and rendered as SQL for the configured dialect — which is exactly the step a native query skips.
 
-That single difference is the whole trade. Line 2 would come out differently against a different database, because it is produced rather than provided. Line 1 would come out identically, and would break wherever that SQL is not valid.
+```mermaid
+flowchart TB
+    D["Derived<br/>findByCategory(String category)"] --> GEN["Parsed, resolved against the entity<br/>mapping, rendered for the dialect"]
+    J["JPQL<br/>SELECT DISTINCT p.category FROM Product p"] --> GEN
+    GEN --> SQL1["Generated SQL<br/>select distinct p1_0.category from products p1_0"]
+    N["Native<br/>SELECT DISTINCT category FROM products"] --> SQL2["Your string, passed through unchanged"]
+    SQL1 --> DB[("Database")]
+    SQL2 --> DB
+```
+
+Two routes into the same database, and the only difference is whether anything stood in the middle. That single difference is the whole trade. Line 2 would come out differently against a different database, because it is produced rather than provided. Line 1 would come out identically, and would break wherever that SQL is not valid.
 
 ## All three, side by side
 
@@ -142,6 +152,15 @@ That single difference is the whole trade. Line 2 would come out differently aga
 Renaming the table makes the point concrete. Change `@Table(name = "products")` and the derived queries and the JPQL both keep working, because neither ever mentioned the table. The native query breaks, because it names `products` in a string nothing checks.
 
 # Choosing
+
+```mermaid
+flowchart TB
+    Q["A query you need"] --> A{"Can a method name<br/>express it?"}
+    A -- yes --> D["Derived query"]
+    A -- no --> B{"Must it still work<br/>on another database?"}
+    B -- yes --> J["JPQL"]
+    B -- no --> N["Native SQL"]
+```
 
 Reach for a **derived query** when the method name can express it — most simple filters and lookups.
 

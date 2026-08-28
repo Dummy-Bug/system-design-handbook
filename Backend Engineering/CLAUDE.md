@@ -12,7 +12,8 @@ Turning the **AlgoCamp Backend Development in Springboot, AI & Micro Services 20
 - **These are recordings of live cohort sessions**, not a solo studio recording. Expect a chat, student questions answered by name, negotiated breaks, the occasional internet drop and re-share, and sign-offs referring to the next day. The live-session rules in the rig manual therefore apply: **questions are kept, names are stripped.**
 - A session arrives as **several recordings**, because OBS is stopped at each break. Parts of one lesson must be read together before any structure is proposed — the second half regularly moves where the note boundaries belong.
 - **English**, recorded through OBS at **1.75× or 2×**, transcribed with `--track backend` (`-l en`). A recording runs roughly half its source length; a long silent tail is normal rather than a freeze.
-- **Loop damage has been negligible** across the recordings so far — confined to the last five to ten seconds of a file, where the capture keeps rolling after the speaking stops. No second pass has been needed. Still count the top repeated lines before trusting a transcript, and check where the repeats sit: spread through the file means genuine repetition, bunched at one timestamp means a loop.
+- **Loop damage was negligible for the first several recordings** — confined to the last five to ten seconds of a file, where the capture keeps rolling after the speaking stops. **That no longer holds.** One recording lost **6.5 minutes of speech mid-file** to a single repeated line, so a second pass is now sometimes necessary. Count the top repeated lines before trusting a transcript, and check where the repeats sit: spread through the file means genuine repetition, bunched at one timestamp means a loop.
+- **A bunched loop is not proof of silence — measure it.** `ffmpeg -ss <s> -t <n> -i <file> -af volumedetect -f null /dev/null` reports `mean_volume`. Speech on this rig sits at **−24 dB**; a break with background noise reads about **−37 dB**; true silence is −91 dB. A loop measuring at speech level ate content. Recover it by cutting that span to a wav (`-vn -ac 1 -ar 16000`) with a minute of margin either side and transcribing the clip on its own — in isolation the loop does not recur.
 
 ### Screen capture
 
@@ -84,6 +85,8 @@ Folders are numbered in the order they were actually made, starting at `01`. A n
 
 **Keep file names short.** Two to four words. `04-API-Standards.md`, not `04-Standards-For-Writing-APIs.md`.
 
+**Ordering is top-down through the stack, and stays consistent.** Inside `03-Computer-Networks/` the material runs foundations, then the application layer, then `10-Transport-Layer/`, then `11-IP-Addressing/` for the network layer. Within a folder, a note is placed where its prerequisites are already behind it — and **each note's opening line bridges from the note before it**, so moving a note means rewriting that line. A section inside a note follows the same rule: nothing is named before the section that defines it.
+
 ---
 
 ## Folder layout
@@ -94,10 +97,29 @@ What exists right now:
 Backend Engineering/
 ├── CLAUDE.md                        ← this file
 ├── 01-Backend-First-Principles/     ← Remindly, processes, client/server, protocols, APIs, storage, the problem catalogue
-└── 02-Networking-And-HTTP/          ← SSH, HTTP anatomy, addressing and ports, DNS, JSON, REST conventions
+├── 02-Networking-And-HTTP/          ← SSH, HTTP anatomy, addressing and ports, DNS, JSON, REST conventions
+├── 03-Computer-Networks/            ← foundations, then the application layer: DNS, HTTP and cookies, WebSockets, email, torrents
+│   ├── Images/                      ← two Commons diagrams, credited in Images/CREDITS.md
+│   ├── 10-Transport-Layer/          ← what transport does, reliable delivery, TCP
+│   └── 11-IP-Addressing/            ← why addresses need structure, classes, classless addressing, IPv6
+├── 04-Spring-Boot-Starter/          ← what Spring Boot is, the generator, project layout, configuration, first run
+├── 05-Layered-Architecture/         ← MVC and where it breaks, controller/service/repository, DTOs, the API layer
+├── 06-Spring-Dependency-Injection/  ← the IoC container, beans, component scan, injection styles, scopes
+├── 07-Databases-With-Spring/        ← JDBC upward, JPA, Hibernate, Spring Data JPA, connection configuration
+├── 08-Building-The-API/             ← entity to table, repositories, derived and native queries, request channels
+├── 09-Entity-Relationships/         ← Category, @MappedSuperclass, @ManyToOne, lazy loading, the N+1 problem
+├── 10-Many-To-Many-And-Soft-Delete/ ← join tables, the join entity, JPA auditing, soft delete, indexes and nulls, Flyway migrations
+├── 11-Writing-Data-Efficiently/     ← cart as a pending order, N+1 on writes, batching an update
+└── API-Responses-And-Errors/        ← ResponseEntity, exception advice, the response envelope, adapters and MapStruct
 ```
 
+**`API-Responses-And-Errors/` is deliberately unnumbered** — where it belongs in the sequence is not settled yet. Number it when that is decided, and rewrite any `Images/` links in the same operation.
+
+**Every folder carrying an `Images/` needs a `CREDITS.md` beside the files** naming source, author and licence for anything taken from the web.
+
 A folder gets a `notes/` subfolder **only when there is code sitting beside it** (`snippets/`, `src/`); otherwise the notes sit flat at the folder root.
+
+**A folder may hold numbered subfolders when one folder's subject grows past what a flat list can carry** — `03-Computer-Networks/10-Transport-Layer/` is inside folder 03 because it is the same subject continued, not a new one. Subfolder numbers carry on from the notes above them, so 01 to 09 are files and 10 onward are folders. **The top-level numbers stay reserved for genuinely new subjects**, in the order they were taken up.
 
 **`Images/` holds anything mermaid cannot carry** — a hand-drawn curve, a plotted shape, an annotated trace, or a good diagram found on the web. Boxes, arrows, bullet lists and comparison tables are recreated as mermaid, which renders in both themes and stays searchable. When an image is used, it goes in `<folder>/Images/` and is embedded by absolute vault path — `![[Backend Engineering/<folder>/Images/<file>.png]]` — so **any future folder rename has to rewrite those links in the same operation.**
 

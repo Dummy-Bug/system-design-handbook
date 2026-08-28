@@ -1,4 +1,4 @@
-Email predates the web and works nothing like it. Following a message from send to inbox explains why it behaves the way it does — including why it is noticeably slower than a chat message.
+Both protocols so far were built for the web, and both are recent by comparison with what comes next. Email predates the web and works nothing like it. Following a message from send to inbox explains why it behaves the way it does — including why it is noticeably slower than a chat message.
 
 # Three protocols, two directions
 

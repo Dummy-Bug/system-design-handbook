@@ -29,6 +29,15 @@ But the reason the schema layer exists points at a better route. **Your language
 
 > [!important] Given the class must exist anyway, and it already describes exactly the same shape as the table, **let the framework generate the table from the class.** One definition instead of two that must be kept in step.
 
+```mermaid
+flowchart LR
+    C["Product class<br/>fields plus annotations"] -- "read at startup" --> H["Hibernate"]
+    H -- "generates CREATE TABLE" --> T[("products table")]
+    T -. "rows come back as Product objects" .-> C
+```
+
+The class is the single definition. The table is derived from it, and the rows it returns are turned back into instances of the same class.
+
 # Building it up
 
 ```java
@@ -210,6 +219,29 @@ And the database agrees:
 ```
 
 > [!info] **Verified** against MySQL 9.5.0. Trace each annotation to its effect — `Long` became `bigint`, `@GeneratedValue` became `auto_increment`, `@Id` became `PRI`, both `nullable = false` columns are `NO`, `BigDecimal` became `decimal`, and `columnDefinition = "TEXT"` overrode what would otherwise have been `varchar(255)`.
+
+```mermaid
+flowchart LR
+    subgraph J["What you wrote"]
+        A1["Table name = products"]
+        A2["Id plus GeneratedValue IDENTITY"]
+        A3["Long id"]
+        A4["Column nullable = false"]
+        A5["columnDefinition = TEXT"]
+    end
+    subgraph D["What the database got"]
+        B1["create table products"]
+        B2["auto_increment, PRI"]
+        B3["bigint"]
+        B4["NOT NULL"]
+        B5["text, not varchar(255)"]
+    end
+    A1 --> B1
+    A2 --> B2
+    A3 --> B3
+    A4 --> B4
+    A5 --> B5
+```
 
 Line 1 is `ddl-auto: create` doing what it says — dropping before recreating. Fine here, catastrophic anywhere with data in it.
 

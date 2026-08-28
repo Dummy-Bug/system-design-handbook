@@ -1,4 +1,4 @@
-HTTP is an application-layer protocol, so it sits at the top of the stack and relies on everything beneath it. Two properties matter more than the rest: it is built on TCP, and it remembers nothing.
+A name has been resolved and there is an address to send to. For most of the web, what gets sent is HTTP — another application-layer protocol, relying on everything beneath it. Two properties matter more than the rest: it is built on TCP, and it remembers nothing.
 
 # It runs on TCP
 
@@ -13,7 +13,7 @@ flowchart LR
     B -. "3. HTTP response" .-> A
 ```
 
-Which is why the ordering from earlier material holds: a three-way handshake, then a TCP connection, then HTTP on top. The request you write is the last step of several.
+So the request you write is the last step of several. Establishing that connection is itself an exchange of messages between the two machines — a **handshake** — and it completes before a single byte of HTTP is sent. Every page you have ever loaded worked this way.
 
 > [!info] **Payload** is the term for the data being carried — the contents of the parcel rather than the addressing on it. A request payload is what the client is sending; a response payload is what comes back.
 
