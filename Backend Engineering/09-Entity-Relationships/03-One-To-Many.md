@@ -1,4 +1,4 @@
-Category is an entity with its own table. Product still holds a string. Connecting them is worth doing in the database first, because the annotations that follow are only a way of expressing something relational databases have always done.
+Now Category is an entity with its own table. Product still holds a string. Connecting them is worth doing in the database first, because the annotations that follow are only a way of expressing something relational databases have always done.
 
 # In the database, before any Java
 
@@ -45,7 +45,7 @@ The string goes, and a reference to the entity replaces it:
 1  private Category category;
 ```
 
-But a Java field is not a column. Two annotations are needed to say what it means in the database.
+**But a Java field is not a column**. Two annotations are needed to say what it means in the database.
 
 ## `@JoinColumn` — name the column
 
@@ -72,7 +72,7 @@ That alone is not enough:
 3  private Category category;
 ```
 
-`@JoinColumn` describes the column. `@ManyToOne` describes the **relationship**, and without it the framework knows where to put the key but not what it signifies.
+`@JoinColumn` **describes the column**. `@ManyToOne` **describes the** **relationship**, and without it the **framework knows where to put the key but not what it signifies.**
 
 > [!important] **Read the annotation left to right as a sentence about this class: many products can have one category.** That is also how you decide which class it belongs on. It goes on `Product`, because products are the many. Put it on `Category` and the sentence reads backwards.
 
@@ -110,24 +110,24 @@ The finished entity:
 # What it generates
 
 ```text
-1  Hibernate: create table products (price decimal(38,2) not null, category_id bigint not null,
-2             id bigint not null auto_increment, description TEXT, image varchar(255),
-3             rating varchar(255), title varchar(255) not null, primary key (id)) engine=InnoDB
-4  Hibernate: alter table products add constraint FKog2rp4qthbtt2lfyhfo32lsw9
-5             foreign key (category_id) references categories (id)
+Hibernate: create table products (price decimal(38,2) not null, category_id bigint not null,id bigint not null auto_increment, description TEXT, image varchar(255),
+rating varchar(255), title varchar(255) not null, primary key (id)) engine=InnoDB
+
+Hibernate: alter table products add constraint FKog2rp4qthbtt2lfyhfo32lsw9
+foreign key (category_id) references categories (id)
 ```
 
 > [!info] **Verified.** Line 1 shows `category_id bigint not null` — the column named by `@JoinColumn`, non-null as specified, typed to match the primary key it references. Lines 4 and 5 add the actual **foreign key constraint**, which is the database enforcing that every `category_id` corresponds to a real category.
 
 # A failure you will hit
 
-Adding this to a table that already has rows fails:
+**Adding this to a table that already has rows fails:**
 
 ```text
 1  Cannot add or update a child row: a foreign key constraint fails
 ```
 
-The reasoning is worth following. `ddl-auto: update` altered the existing `products` table to add `category_id` as `NOT NULL`. Existing rows needed a value, and got the default: **0**. Then the foreign key constraint was applied — and there is no category with id 0.
+The reasoning is worth following. `ddl-auto: update` **altered the existing** `products` table to add `category_id` as `NOT NULL`. Existing rows needed a value, and got the default: **0**. Then the foreign key constraint was applied — and there is no category with id 0.
 
 > [!warning] **Existing data and a new non-null foreign key do not mix.** The framework cannot invent a sensible category for rows written before categories existed.
 
@@ -161,4 +161,4 @@ The field holds a `Category`, not a number. So the category has to be **fetched 
 6      .build();
 ```
 
-> [!info] That extra fetch is visible in the logs — creating a product fires `select c1_0.id, c1_0.name from categories c1_0 where c1_0.id=?` before the insert. Which is the first hint that associations cost queries, and that is about to become the main event.
+> [!info] That extra fetch is visible in the logs — creating a product runs `select c1_0.id, c1_0.name from categories c1_0 where c1_0.id=?` before the insert. Which is the first hint that associations cost queries, and that is about to become the main event.

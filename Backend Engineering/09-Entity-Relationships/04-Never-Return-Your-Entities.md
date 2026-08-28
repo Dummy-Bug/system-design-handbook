@@ -1,20 +1,83 @@
 The association works. Fetching products now also fetches their categories — which you did not ask for, and which turns out to be caused by something other than the association itself.
 
-# Fetching a product fetches its category
+# The code as it stands
 
-`GET /api/v1/products` returns the products, and each one arrives with its full category nested inside. The logs explain why:
+Three pieces, and the behaviour below follows from them.
 
-```text
-1  Hibernate: select p1_0.id,p1_0.category_id,... from products p1_0
-2  Hibernate: select c1_0.id,c1_0.name from categories c1_0 where c1_0.id=?
-3  Hibernate: select c1_0.id,c1_0.name from categories c1_0 where c1_0.id=?
+**The entity**, with the association added in the previous note:
+
+```java
+1  // src/main/java/com/example/FakeCommerce/schema/Product.java
+2  @Entity
+3  @Table(name = "products")
+4  public class Product extends BaseEntity {
+5
+6      private String title;
+7      private BigDecimal price;
+8
+9      @ManyToOne
+10     @JoinColumn(name = "category_id", nullable = false)
+11     private Category category;
+12 }
 ```
 
-**Three products, two distinct categories — one product query and two category queries.**
+**The service**, returning what the repository gives it:
 
-> [!info] **Verified.** The count follows the distinct categories, not the products. Three products sharing two categories produced exactly two extra queries.
+```java
+1  // src/main/java/com/example/FakeCommerce/services/ProductService.java
+2  public List<Product> getAllProducts() {
+3      return productRepository.findAll();
+4  }
+```
 
-Nothing asked for this. It happens because of a default.
+**The controller**, returning that straight out:
+
+```java
+1  // src/main/java/com/example/FakeCommerce/controllers/ProductController.java
+2  @GetMapping
+3  public List<Product> getAllProducts() {
+4      return productService.getAllProducts();
+5  }
+```
+
+Nothing here mentions categories. `findAll()` on line 3 of the service is a `SELECT` from `products` and nothing else.
+
+# But fetching products fetches categories
+
+With three products in the database — two of them electronics, one kitchenware — calling the endpoint gives you this:
+
+```json
+ [
+   { "id": 1, "title": "iPhone 17",     "category": { "id": 1, "name": 
+   "electronics" } },
+
+  { "id": 2, "title": "iPhone 17 Pro", "category": { "id": 1, "name": 
+  "electronics" } },
+  
+   { "id": 3, "title": "Plates",        "category": { "id": 2, "name": 
+   "kitchenware" } }
+   
+  ]
+```
+
+Every product arrives with its **full category nested inside**, which nothing in the three files above asked for.
+
+And the log shows what it cost:
+
+```text
+Hibernate: select p1_0.id,p1_0.category_id,p1_0.description,p1_0.image,p1_0.price,
+           p1_0.rating,p1_0.title from products p1_0
+           
+Hibernate: select c1_0.id,c1_0.name from categories c1_0 where c1_0.id=?
+
+Hibernate: select c1_0.id,c1_0.name from categories c1_0 where c1_0.id=?
+```
+
+**Three queries for one endpoint call.** Line 1 is the `findAll()` you wrote. Lines 3 and 4 are extra — one per **distinct** category.
+
+> [!info] **Verified.** The count follows the distinct categories, not the products. Three products sharing two categories produced exactly two extra queries — not three.
+
+So the question is where those two queries came from, given that no code requested them. The answer is a default.
 
 # Eager and lazy
 
@@ -23,8 +86,8 @@ Nothing asked for this. It happens because of a default.
 ```
 
 > [!important] **Eager means load the association immediately, along with the thing that owns it.** Fetch a product, get its category too, whether or not you wanted it.
->
-> **Lazy means do not load it until something asks.** Fetch a product, get only the product; the category is retrieved if and when you touch it.
+
+> [!important] **Lazy means do not load it until something asks.** Fetch a product, get only the product; the category is retrieved if and when you touch it.
 
 Eager is the default for `@ManyToOne`, which is why the extra queries appeared without anyone requesting them.
 
@@ -44,7 +107,7 @@ Restart, hit the endpoint, and the queries are still there. Worse, the response 
 1  {
 2    "title": "iPhone 17",
 3    "price": 80000.00,
-4    "category": { "name": "electronics", "hibernateLazyInitializer": {}, "id": 1 },
+4   "category": { "name": "electronics", "hibernateLazyInitializer": {}, "id": 1 },
 5    "image": "",
 6    "rating": "4.8",
 7    "id": 1
@@ -55,26 +118,71 @@ Restart, hit the endpoint, and the queries are still there. Worse, the response 
 
 `LAZY` was set correctly. The category was loaded anyway. Why?
 
-# Because the controller returns the entity
+# Because the entity gets serialised
+
+Look at what your code actually does:
 
 ```java
-1  @GetMapping
+1  // the service
 2  public List<Product> getAllProducts() {
-3      return productService.getAllProducts();
+3      return productRepository.findAll();
 4  }
 ```
 
-That returns `Product` objects. Spring hands them to **Jackson** to turn into JSON — and Jackson serialises everything it finds.
-
-```mermaid
-flowchart LR
-    A["Controller returns Product"] --> B["Jackson serialises every field"]
-    B --> C["Reaches the category field"]
-    C --> D["Touches it, which triggers the lazy load"]
-    D --> E["Category query fires anyway"]
+```java
+1  // the controller
+2  @GetMapping
+3  public List<Product> getAllProducts() {
+4      return productService.getAllProducts();
+5  }
 ```
 
-> [!important] **Lazy loading means load it when something asks. Jackson asked.** By walking the object to build JSON, it accessed the category — and access is exactly the trigger. The setting worked perfectly; the serialiser defeated the purpose of it.
+> [!important] **Neither one touches the category.** The service returns what the repository gave it. The controller returns what the service gave it. Search both files and the word `category` does not appear.
+>
+> Which is exactly why this is hard to diagnose. You read your code, nothing requests the category, and the extra queries run anyway.
+
+The access happens **after your controller has returned**. Spring takes the returned object and hands it to **Jackson**, the default library for turning objects into JSON — and Jackson's job is to read every property.
+
+```mermaid
+flowchart TD
+    A["Controller returns List of Product"] --> B["Spring passes it to Jackson"]
+    B --> C["Jackson reads every property"]
+    C --> D["Reaches the category property"]
+    D --> E["Reading it resolves the proxy"]
+    E --> F["Category query runs"]
+```
+
+> [!important] **Lazy means the load happens at first access, wherever that is. Jackson accessed it.** The setting worked exactly as specified; the first thing to touch the field simply happened to be a library running after your code finished.
+
+The serialiser is not special here. **Anything** touching the field does the same thing — had the service logged `product.getCategory().getName()`, the queries would have run there instead, with no serialiser involved.
+
+## How Jackson reaches the field
+
+It does not read private fields directly. It discovers properties **reflectively, by finding and calling the getters** — and `getCategory()` is one of them, generated for you by Lombok's `@Data`. Jackson has no idea that getter is backed by a lazy proxy; it is another property to read, and calling it resolves the proxy.
+
+> [!info] **You never added Jackson.** It arrives with the web starter, three levels down:
+>
+> ```text
+> spring-boot-starter-web
+>   └── spring-boot-starter-jackson
+>         └── spring-boot-jackson
+>               └── jackson-databind
+> ```
+>
+> Spring Boot then sees it on the classpath and auto-configures it as the JSON converter. Which is worth noticing: the library that triggers your lazy loads is one you never chose and never configured.
+
+## Why this succeeds rather than crashing
+
+A lazy load needs the Hibernate session still open when it happens — and by default in Spring Boot it is, because `spring.jpa.open-in-view` is enabled. The startup log announces it:
+
+```text
+1  spring.jpa.open-in-view is enabled by default. Therefore, database queries may be
+2  performed during view rendering.
+```
+
+That keeps the persistence context alive through response rendering, which is what allows a field touched during serialisation to still reach the database.
+
+> [!warning] Disable it and this same code throws `LazyInitializationException` instead — session closed, proxy unresolvable. Worth recognising, because it is among the most common errors in this area, and the cause is exactly this: a lazy field accessed after the session ended.
 
 Which exposes the real problem. It is not the fetch type.
 
@@ -100,7 +208,7 @@ The answer is the layer already used for incoming data, applied to outgoing:
 13 }
 ```
 
-**No category field.** So nothing ever touches the association, nothing triggers a lazy load, and no proxy internals can leak.
+**No category field.** So nothing ever touches the association, nothing triggers a lazy load, and **no proxy internals can leak.**
 
 Mapping the entity to it, in the service:
 
@@ -124,11 +232,8 @@ Mapping the entity to it, in the service:
 ## The result
 
 ```text
-1  Hibernate: select p1_0.id,p1_0.category_id,p1_0.description,p1_0.image,p1_0.price,
-2             p1_0.rating,p1_0.title from products p1_0
+Hibernate: select p1_0.id,p1_0.category_id,p1_0.description,p1_0.image, p1_0.price ,p1_0.rating,p1_0.title from products p1_0
 ```
-
-> [!info] **Verified.** One query. No category queries at all, and no `hibernateLazyInitializer` in the response — because nothing ever reached the category.
 
 # `@SuperBuilder`
 
@@ -142,7 +247,7 @@ A detailed response DTO extending the basic one:
 3  }
 ```
 
-With `@Builder` on both, the build fails — Lombok's ordinary builder does not handle inheritance, because the generated builder for the child knows nothing about the parent's fields.
+With `@Builder` on both, the build fails — **Lombok's ordinary builder does not handle inheritance**, because the generated builder for the child knows nothing about the parent's fields.
 
 ```java
 1  @SuperBuilder   // from lombok.experimental

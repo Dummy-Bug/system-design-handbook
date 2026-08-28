@@ -84,7 +84,7 @@ Which is exactly what the annotation is for.
 12 public class BaseEntity {
 13
 14     @Id
-15     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment specially for mysql
+15     @GeneratedValue(strategy = GenerationType.IDENTITY) 
 16     private Long id;
 17 }
 ```
@@ -93,7 +93,7 @@ Which is exactly what the annotation is for.
 >
 > Not an entity means **no table**. Mappings inherited means the `@Id` and `@GeneratedValue` are picked up by every subclass as though written there.
 
-Exactly the distinction the two failures were groping at. `@Entity` says store this. `@MappedSuperclass` says do not store this, but do read the annotations inside it.
+Exactly the distinction the two failures were groping at. `@Entity` says store this. `@MappedSuperclass` says do not store this, **but do read the annotations inside it.**
 
 # Proof
 

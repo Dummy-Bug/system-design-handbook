@@ -1,14 +1,30 @@
-The product table has a `category` column holding a string — "electronics", "kitchenware". It works, the API returns the right things, and it is the wrong design. Seeing why is worth more than the fix, because the reasoning applies well beyond this one column.
+The product table has a `category` column holding a string — `electronics`, `kitchenware`. It works, the API returns the right things, and it is the wrong design. Seeing why is worth more than the fix, because the reasoning applies well beyond this one column.
+
+# What the table looks like
+
+```text
+1  products
+2  id | title          | price  | category
+3  ---+----------------+--------+-------------
+4  1  | iPhone 17      | 80000  | electronics
+5  2  | iPhone 17 Pro  | 130000 | electronics
+6  3  | Plates         | 12000  | kitchenware
+7  4  | AirPods        | 25000  | electronics
+```
+
+Look at the `category` column. **The word `electronics` is stored three times**, once per product that happens to be in it. Nothing anywhere records that electronics exists as a thing — it exists only as a value repeated across rows.
+
+That is the entire problem, and everything below follows from it.
 
 # Two requirements that break it
 
-**Run a sale on a category.** Thirty percent off all electronics. With category as a string on each product, the only way to find those products is to scan every product and compare its string. There is nothing to attach a sale to, because the category is not a thing — it is a repeated label.
+**Run a sale on a category.** Thirty percent off all electronics. With category as a string on each product, the only way to find those products is to scan every product and compare its string. **There is nothing to attach a sale to**, because the category is not a thing — **it is a repeated label**.
 
 **Discontinue a category.** Every product in it should go too. Same problem: no category exists to discontinue. You would walk the products, check each string, and act on the matches.
 
 > [!important] Both failures have one cause. **A category has properties of its own** — whether it is on sale, whether it is active — and a string cannot carry properties. The moment a concept needs attributes, it needs to be an entity with a table.
 
-There is a second, quieter problem. The string is repeated on every product, so a rename means updating every row, and a typo creates a category that silently exists.
+There is a second, quieter problem. The string is repeated on every product, so a **rename means updating every row**, and a typo creates a category that silently exists.
 
 # The design question underneath
 
@@ -28,7 +44,7 @@ The design changes with the technology. A relational database, a key-value store
 
 Which is exactly what went wrong above: the schema was fine for storing a product, and impossible for the query **give me everything in this category**.
 
-Other questions matter and come later — which fields are read together, which are read often, how deletion should behave, what needs backing up. The two above come first.
+Other questions matter and come later — which fields are **read together**, which are **read often**, **how deletion should behave**, **what needs backing up**. The two above come first.
 
 # The relationship
 
