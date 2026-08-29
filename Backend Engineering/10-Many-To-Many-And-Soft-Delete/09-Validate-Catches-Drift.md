@@ -11,9 +11,51 @@ flowchart TB
     DB -. "validate compares them at startup" .-> E
 ```
 
-**Nothing keeps those in step automatically.** Write a migration adding a column and forget the field, or add a field and forget the migration, and the two drift apart. Under `ddl-auto: update` this could not happen, because the classes were the only description and the database was derived from them. That safety came at the cost of everything in the previous two notes.
+**Nothing keeps those in step automatically.** Write a migration adding a column and forget the field, or add a field and forget the migration, and the two drift apart. Under `ddl-auto: update` this could not happen, **because the classes were the only description and the database was derived from them.** That safety came at the cost of everything in the previous two notes.
 
 > [!important] **`validate` is what buys the safety back.** At startup it compares every entity against the real tables and **refuses to start** if they disagree. It changes nothing — it only reports.
+
+# The order this happens in
+
+Which raises a question the setting alone does not answer: if Flyway creates the tables and Hibernate checks them, what stops Hibernate checking before Flyway has built anything?
+
+> [!important] **Flyway runs first, and finishes, before Hibernate starts.** Spring Boot makes the entity manager depend on the Flyway initializer, so the migrations are fully applied before a single entity is looked at.
+
+The startup log shows it plainly:
+
+```log
+  12:28:25.397  o.f.core.internal.command.DbMigrate  : Current version of schema `lab`: << Empty Schema >>
+  12:28:25.406  o.f.core.internal.command.DbMigrate  : Migrating schema `lab` to version "1 - create products table"
+  12:28:25.442  o.f.core.internal.command.DbMigrate  : Successfully applied 1 migration to schema `lab`, now at version v1
+  12:28:25.496  org.hibernate.orm.jpa                : HHH008540: Processing PersistenceUnitInfo [name: default]
+```
+
+Flyway finishes at `.442`; Hibernate begins at `.496`. **Schema first, then the check.**
+
+> [!info] `<< Empty Schema >>` is Flyway naming the state it found — a database with no history table and nothing applied. It is what a genuinely fresh database looks like, and it appears exactly once in a project's life.
+
+That ordering is what makes a particular failure readable:
+
+> [!warning] **`Schema validation: missing table [products]` almost never means the entity is wrong.** Hibernate is the last thing in the chain, so it is the thing that complains — but it is reporting reality accurately. Something was supposed to create that table and did not.
+
+> [!important] So the first thing to inspect is **`flyway_schema_history`**, not the entity. **Absent** means Flyway never ran at all — usually the dependency is missing from the build, or the migrations are in a folder Flyway does not look in. **Present but missing your version** means Flyway ran and found no file to apply — usually a filename that does not match `V<VERSION>__<NAME>.sql`. **Present with `success = 0`** is the failed-migration case, and that is [[10-When-A-Migration-Fails]].
+
+# One word, two mechanisms
+
+There is a trap in the log worth defusing before it costs an hour.
+
+```log
+  12:28:25.383  o.f.core.internal.command.DbValidate  : Successfully validated 1 migration
+```
+
+> [!warning] **That is not `ddl-auto: validate`.** It is Flyway validating its own work — comparing the migrations recorded as applied against the files now on disk, which is the checksum verification from [[08-Flyway]]. Two entirely different checks share one word, and both run in the same startup.
+
+| | Compares | Fails when |
+|---|---|---|
+| **Flyway's validate** | Applied migrations against the files on disk | A migration file was edited after it ran |
+| **Hibernate's `ddl-auto: validate`** | Entity classes against the real tables | The schema and the code disagree |
+
+> [!important] Notice which one is silent. **Flyway announces its success; Hibernate says nothing when it passes.** So a startup log showing `Successfully validated 1 migration` proves the migration files are intact — and proves nothing whatsoever about whether your entities match the schema. **The only evidence for that is the application starting.**
 
 # Two failures, immediately
 
@@ -23,6 +65,7 @@ Starting the application after the migrations ran did not work, twice, and both 
 
 ```text
 1  Schema-validation: wrong column type encountered in column [name] in table [categories]
+
 2      found [varchar (Types#VARCHAR)], but expecting [varchar (Types#VARCHAR)] to be not-null
 ```
 
@@ -59,8 +102,6 @@ Same shape, different table:
 ```
 
 `V1` declared `quantity INT NOT NULL`. The entity had a plain `Integer`.
-
-> [!info] **Verified.** Both failures were genuine disagreements between the migration and the entity, and the application started only once both were corrected. Neither would have been noticed under `ddl-auto: update`, because the classes would simply have produced nullable columns and nothing would have objected.
 
 # Why failing at startup is the point
 
@@ -105,7 +146,9 @@ The reviews table is a complete example, and it shows the order the two files ha
 14 );
 ```
 
-**A review is tied to an order, not just a product.** Lines 4 and 5 are both `NOT NULL`, which encodes a business rule in the schema: you may only review a product you actually ordered. Without the order reference, anyone could review anything.
+**A review is tied to an order, not just a product.** Lines 4 and 5 are both `NOT NULL`, which is the schema reaching for a business rule: a review has to name a purchase, not merely a product. Without the order reference, anyone could review anything.
+
+> [!warning] It reaches, and does not quite arrive. The two foreign keys **guarantee** that the order exists and that the product exists. They do **not guarantee that the product was in that order** — each key is checked against its own table, so a review of product 9 attached to an order containing only product 4 satisfies both. A single foreign key to `order_products` would enforce it, because a row there **is** a product-in-an-order. There is also no unique constraint on the pair, so one purchase can carry unlimited reviews.
 
 **`rating` is `DECIMAL(3, 1)`**, matching what `V2` changed products to. **`comment` is nullable**, because a rating on its own is a legitimate review.
 
@@ -156,9 +199,35 @@ flowchart TB
 
 `Review` holds a foreign key to an order and a foreign key to a product, with columns of its own. **That is exactly the shape of `OrderProducts`** — a join table between the same two entities, carrying different facts about the pairing.
 
-> [!important] Products and orders are already in a many-to-many relationship, and **a many-to-many can have more than one through table.** `OrderProducts` records what was bought and how many. `Review` records what the buyer thought of it. Both describe the same pairing and neither belongs on the other, because a line in an order and an opinion about it are different things with different lifetimes.
+> [!important] Products and orders are already in a many-to-many relationship, and **a many-to-many can have more than one through table.** 
+> `OrderProducts` records what was bought and how many. `Review` records what the buyer thought of it. Both describe the same pairing and neither belongs on the other, because a line in an order and an opinion about it are different things with different lifetimes.
 
 Which is why the two `@ManyToOne` mappings on `Review` are identical to the ones on `OrderProducts`. The relationship is the same; only the extra columns differ.
+
+## Why the columns are not simply added to `order_products`
+
+Which raises the obvious simplification. `order_products` already holds the order and the product, so add `rating` and `comment` to it and skip the second table entirely.
+
+```mermaid
+flowchart TB
+    subgraph M["Merged — one row per line item"]
+        OP2["order_products<br/>order_id, product_id, quantity<br/>rating, comment<br/>deleted_at"]
+    end
+    subgraph S["Split — as built"]
+        OP3["order_products<br/>order_id, product_id<br/>quantity, deleted_at"]
+        RV["reviews<br/>order_id, product_id<br/>rating, comment, deleted_at"]
+    end
+```
+
+Two things break in the merged version, and both are consequences of decisions made earlier in this folder.
+
+> [!important] **One `deleted_at` cannot carry two meanings.** Soft delete gave every table exactly one deleted-at column, so merging puts a single column in charge of two unrelated decisions. Removing an abusive review would also erase the record that the product was ever bought, and keeping the purchase record would mean keeping the review. **Two facts that must be deletable independently have to be rowed independently** — see [[05-Soft-Delete]].
+
+> [!important] **Almost no line item is ever reviewed.** Review rates on shopping sites run to a few percent, so `rating` and `comment` would be null on the overwhelming majority of rows — precisely the column shape [[06-Indexes]] showed is a poor thing to index. Asking for every review of a product would then mean searching a table holding every line item ever sold, and discarding almost all of it. As its own table, `reviews` contains reviews and nothing else, and the same question is asked of a far smaller thing.
+
+A third difference is smaller but points the same way: **a line item records what happened and never changes, while a review is written later, edited, and sometimes moderated.** Merging turns a settled row into a mutable one.
+
+> [!important] The general rule underneath all three. **Columns written together, read together and deleted together belong in one row.** These are written apart, read apart and deleted apart, so they get two.
 
 # Running it
 

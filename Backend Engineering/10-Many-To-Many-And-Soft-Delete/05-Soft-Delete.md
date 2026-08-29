@@ -4,7 +4,8 @@ Creation and modification are now recorded automatically. Deletion is the third 
 
 Somebody asks what happened with order 4471. If that order was deleted, there is no answer. Not a partial answer — nothing. The row is gone, and with it the record that it ever existed.
 
-> [!important] **Deleting a row destroys evidence.** In a system of any size that is not an inconvenience, it is the loss of the ability to explain what the business did. Auditing, investigating a complaint, reconciling accounts, answering a regulator — all of them assume the history is still there.
+> [!important] **Deleting a row destroys evidence.** In a system of any size that is not an inconvenience, it is the loss of the ability to explain what the business did. 
+> Auditing, investigating a complaint, reconciling accounts, answering a regulator — all of them assume the history is still there.
 
 Which leads to a convention that sounds like a workaround and is actually the norm.
 
@@ -44,7 +45,7 @@ flowchart LR
     F --> R
 ```
 
-> [!warning] It is not free. Approach two has a real performance cost that shows up at scale, and it comes from that column being null for almost every row. That is [[06-Indexes-And-Nulls]], and it is worth reading before choosing this for a large table.
+> [!warning] It is not free. Approach two has a real performance cost that shows up at scale, and it comes from that column being null for almost every row. That is [[06-Indexes]], and it is worth reading before choosing this for a large table.
 
 # The column
 
@@ -121,42 +122,38 @@ Marked rows are still in the table, so `SELECT * FROM categories` still returns 
 **A read, before deleting anything:**
 
 ```text
-1  GET /api/v1/categories
+  GET /api/v1/categories
 ```
 
-```text
-1  Hibernate: select c1_0.id, c1_0.created_at, c1_0.deleted_at, c1_0.name, c1_0.updated_at
-2             from categories c1_0 where c1_0.deleted_at is null
+```log
+  Hibernate: select c1_0.id, c1_0.created_at, c1_0.deleted_at, c1_0.name, c1_0.updated_at 
+  from categories c1_0 where c1_0.deleted_at is null
 ```
-
-> [!info] **Verified.** Nothing in the repository method asked for that filter. `where c1_0.deleted_at is null` on line 2 was appended by `@SQLRestriction`.
 
 **Now delete it:**
 
 ```text
-1  DELETE /api/v1/categories/1
-2  → 200 OK
+  DELETE /api/v1/categories/1
+  → 200 OK
 ```
 
 ```text
-1  Hibernate: UPDATE categories SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?
+  Hibernate: UPDATE categories SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?
 ```
-
-> [!info] **Verified.** The response is a success and no `DELETE` was issued. `@SQLDelete` substituted the update.
 
 **The row is still there:**
 
 ```text
-1  select * from categories;
-2  id | name        | created_at          | updated_at          | deleted_at          |
-3  1  | electronics | 2026-02-22 11:14:07 | 2026-02-22 11:14:07 | 2026-02-22 11:31:04 |
+  select * from categories;
+  id | name        | created_at          | updated_at          | deleted_at          |
+  1  | electronics | 2026-02-22 11:14:07 | 2026-02-22 11:14:07 | 2026-02-22 11:31:04 |
 ```
 
 **And the API no longer returns it:**
 
 ```text
-1  GET /api/v1/categories
-2  → []
+  GET /api/v1/categories
+  → []
 ```
 
 > [!important] Both halves are working at once. **The data survived and the application cannot see it** — which is exactly what soft delete is for.

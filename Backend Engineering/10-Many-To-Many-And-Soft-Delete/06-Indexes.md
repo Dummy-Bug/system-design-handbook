@@ -5,14 +5,14 @@ Soft delete works. Every read now carries `WHERE deleted_at IS NULL`, and that c
 Fetching available products is no longer a plain select:
 
 ```sql
-1  SELECT * FROM products WHERE deleted_at IS NULL
+  SELECT * FROM products WHERE deleted_at IS NULL
 ```
 
 And a query that already had conditions gains one more:
 
 ```sql
-1  SELECT * FROM products
-2  WHERE deleted_at IS NULL AND price > 10000
+  SELECT * FROM products
+  WHERE deleted_at IS NULL AND price > 10000
 ```
 
 > [!important] **`deleted_at IS NULL` is attached to every read, forever.** Not most reads — all of them, on every soft-deleted table, for the life of the system.
@@ -111,11 +111,12 @@ Newer PostgreSQL and MySQL do support index lookups involving nulls, so this spe
 
 > [!important] A **query optimiser** is the part of a database that decides how to run a query — which index to use, or whether to use one at all. It estimates the cost of each plan and picks the cheapest.
 
-Using an index is two steps: search the index, then jump to the actual rows it points at. Those jumps are not free.
+Using an index is two steps: 
+> **search the index**, **then jump to the actual rows it points at**. Those jumps are not free.
 
 **When few rows match, the index wins easily.** If 2% of rows have `deleted_at IS NULL`, the index finds those few and fetches them — far cheaper than reading everything.
 
-**When most rows match, it loses.** If 80% of rows are null, the index returns 80% of the table, and the database then makes that many separate jumps to fetch them.
+**When most rows match, it loses.** If 80% of rows are null, the index returns 80% of the table, and the database then makes **that many separate jumps to fetch them.**
 
 > [!important] At that point the optimiser concludes that **scanning the table straight through is cheaper than using the index**, and does exactly that. The index exists, is perfectly valid, and is ignored.
 

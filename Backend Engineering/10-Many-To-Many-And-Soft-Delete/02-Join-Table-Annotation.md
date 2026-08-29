@@ -67,7 +67,7 @@ flowchart LR
     P["Product<br/>the other side"] -- "inverseJoinColumns<br/>product_id" --> JT
 ```
 
-Move the annotation to `Product` instead and the two swap over. The words are relative to where you are standing, which is why they are not simply called first and second.
+Move the annotation to `Product` instead **and the two swap over**. The words are relative to where you are standing, which is why they are not simply called first and second.
 
 > [!info] Both take an **array** of columns, not a single one. That is for a composite key — a table whose primary key spans several columns needs several foreign key columns to reference it.
 
@@ -76,30 +76,33 @@ Move the annotation to `Product` instead and the two swap over. The words are re
 No class was written for `order_products`. Starting the application produces it anyway:
 
 ```text
-1  Hibernate: create table order_products (order_id bigint not null, product_id bigint not null) engine=InnoDB
-2  Hibernate: create table orders (id bigint not null auto_increment, status varchar(255), primary key (id)) engine=InnoDB
-3  Hibernate: alter table order_products add constraint FK... foreign key (product_id) references products (id)
-4  Hibernate: alter table order_products add constraint FK... foreign key (order_id) references orders (id)
+Hibernate: create table order_products (order_id bigint not null, product_id bigint not null) engine=InnoDB
+
+Hibernate: create table orders (id bigint not null auto_increment, status varchar(255), primary key (id)) engine=InnoDB
+
+Hibernate: alter table order_products add constraint FK... foreign key (product_id) references products (id)
+
+Hibernate: alter table order_products add constraint FK... foreign key (order_id) references orders (id)
 ```
 
 And the database agrees:
 
 ```text
-1  Tables_in_fakecommerce
-2  categories
-3  order_products
-4  orders
-5  products
+  Tables_in_fakecommerce
+
+	categories
+	order_products
+	orders
+	products
 ```
 
 ```text
-1  describe order_products;
-2  Field       Type    Null  Key
-3  order_id    bigint  NO    MUL
-4  product_id  bigint  NO    MUL
+ describe order_products;
+ 
+ Field       Type    Null  Key
+ order_id    bigint  NO    MUL
+ product_id  bigint  NO    MUL
 ```
-
-> [!info] **Verified.** Line 1 of the DDL creates the join table with exactly the two columns named in the annotation. Lines 3 and 4 add the foreign key constraints in both directions, so the database itself will refuse a row referencing an order or product that does not exist.
 
 **Two columns. Nothing else.** That is the whole of what this mechanism produces, and it is the point at which it stops being enough.
 
@@ -109,7 +112,10 @@ The field was declared `List<Product>`. It could have been `Set<Product>`, and t
 
 > [!important] A **`List` permits the same product twice.** A **`Set` does not** — it is the collection type whose job is uniqueness.
 
-Which is right depends on what a repeat is supposed to mean. If ordering two of the same phone is expressed by adding it to the list twice, a `List` is required. If a repeat is meaningless because quantity will be its own column, a `Set` is the honest type.
+Which is right depends on what a repeat is supposed to mean.
+> **If ordering two of the same phone is expressed by adding it to the list twice, a `List` is required.** 
+
+> If a repeat is meaningless **because quantity will be its own column**, a `Set` is the honest type.
 
 > [!warning] **A `Set` needs to be able to compare products.** Deciding whether two entries are the same object means `equals` and `hashCode`, and a `Set` of entities with the defaults may behave in ways you did not intend. Lombok's `@Data` generates both from all fields, which is rarely what you want for an entity whose identity is its id.
 

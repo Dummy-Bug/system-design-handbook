@@ -1,4 +1,4 @@
-`@JoinTable` produced a table with two columns and no way to add a third. The alternative is to stop treating the join table as generated plumbing and write it as an entity like any other.
+`@JoinTable` **produced a table with two columns and no way to add a third.** The alternative is to stop treating the join table as generated plumbing and write it as an entity like any other.
 
 # The observation that makes it simple
 
@@ -16,7 +16,8 @@ Order 3 appears three times. **Many rows of `order_products` belong to one order
 
 That is a many-to-one, and it is the same one-to-many shape from the previous folder — a foreign key on the many side, pointing at the one side.
 
-> [!important] **A many-to-many is two many-to-ones with a table in the middle.** Once the join table is an entity, there is no new relationship type to learn. `OrderProducts` has a many-to-one to `Order` and a many-to-one to `Product`, and both were solved already.
+> [!important] **A many-to-many is two many-to-ones with a table in the middle.** 
+> Once the join table is an entity, there is no new relationship type to learn. `OrderProducts` has a many-to-one to `Order` and a many-to-one to `Product`, and both were solved already.
 
 ```mermaid
 flowchart LR
@@ -62,9 +63,9 @@ flowchart LR
 
 Every annotation on it has appeared before.
 
-**Line 20 — `extends BaseEntity`.** The join table gets a primary key of its own. It costs nothing, and it means a specific line of an order can be referred to directly — which is what the appointment id in the hospital example was.
+**Line 20 — `extends BaseEntity`.** **The join table gets a primary key of its own.** It costs nothing, and **it means a specific line of an order can be referred to directly** — which is what the appointment id in the hospital example was.
 
-**Lines 22 and 26 — `fetch = FetchType.LAZY`.** Loading an order line should not drag in the whole order and the whole product unless they are asked for. This is the same default-is-eager trap from the previous folder.
+**Lines 22 and 26 — `fetch = FetchType.LAZY`.** Loading an order line should not drag in the whole order and the whole product **unless they are asked for**. This is the same **default-is-eager trap** from the previous folder.
 
 **Line 30 — `quantity`.** The column that had nowhere to go. Here it is an ordinary field, because this is now an ordinary class.
 
@@ -75,9 +76,9 @@ Every annotation on it has appeared before.
 Switching from one mechanism to the other while the tables already existed produced this:
 
 ```text
-1  Error executing DDL "alter table order_products add column id bigint not null auto_increment"
-2  Caused by: java.sql.SQLSyntaxErrorException:
-3      Incorrect table definition; there can be only one auto column and it must be defined as a key
+Error executing DDL "alter table order_products add column id bigint not null auto_increment"
+ Caused by: java.sql.SQLSyntaxErrorException:
+ Incorrect table definition; there can be only one auto column and it must be defined as a key
 ```
 
 Follow what was being attempted. `@JoinTable` had already created `order_products` with two columns and no primary key. The new class extends `BaseEntity`, so Hibernate tried to **add an auto-increment id to the existing table** — and MySQL refuses to add an auto-increment column unless it is a key, which `ALTER TABLE ... ADD COLUMN` alone does not make it.
@@ -87,24 +88,23 @@ Follow what was being attempted. `@JoinTable` had already created `order_product
 The fix on a development machine is to drop the database and let it be built once from the finished classes:
 
 ```text
-1  Hibernate: create table order_products (id bigint not null auto_increment, quantity integer,
-2             order_id bigint not null, product_id bigint not null, primary key (id)) engine=InnoDB
+Hibernate: create table order_products (id bigint not null auto_increment, 
+quantity integer,order_id bigint not null, product_id bigint not null, 
+primary key (id)) engine=InnoDB
 ```
 
 ```text
-1  describe order_products;
-2  Field       Type     Null  Key  Extra
-3  id          bigint   NO    PRI  auto_increment
-4  quantity    int      YES
-5  order_id    bigint   NO    MUL
-6  product_id  bigint   NO    MUL
+describe order_products;
+Field       Type     Null  Key  Extra
+id          bigint   NO    PRI  auto_increment
+quantity    int      YES
+order_id    bigint   NO    MUL
+product_id  bigint   NO    MUL
 ```
 
-> [!info] **Verified.** Compare against the two-column table `@JoinTable` produced. The same relationship now has a primary key of its own and a `quantity` column, because the table is described by a class rather than inferred from an annotation.
 
-> [!warning] Dropping the database is available exactly once — on a machine whose data you can lose. This is the second time a schema change has been unresolvable by `ddl-auto`, and both times the escape was destroying the data. **That is what migrations exist to prevent**: a deliberate, ordered, reviewable script can add a column, backfill it, and add the key, which is precisely the sequence `ddl-auto` cannot invent.
-
-See [[07-Database-Migrations]] and [[08-Flyway]], where that is what actually happens.
+> [!warning] Dropping the database is available exactly once — on a machine whose data you can lose. 
+> This is the second time a schema change has been unresolvable by `ddl-auto`, and both times the escape was destroying the data. **That is what migrations exist to prevent**: a deliberate, ordered, reviewable script can add a column, backfill it, and add the key, which is precisely the sequence `ddl-auto` cannot invent.
 
 # Choosing between them
 

@@ -46,6 +46,63 @@ Press Generate, save the zip, extract it, and open the folder in whatever editor
 
 That is the entire setup procedure, and it is the same every time — for a new project, a new microservice, anything.
 
+# It is a reference, not only a starting point
+
+The generator looks like something used once and abandoned. It is more useful than that, and the reason is worth understanding before the first time you need it.
+
+> [!important] **A dependency line is not knowledge to be searched for. It is output to be generated.** The generator knows what is correct **for the version you selected**, because it is maintained alongside the framework. A search result carries no version at all, and you cannot tell from a page which one it was written against.
+
+## Explore rather than download
+
+Pressing **Explore** — or `Ctrl+Space` — opens the generated files in the browser instead of downloading a zip. The complete `build.gradle` is right there, and nothing is created on disk.
+
+```mermaid
+flowchart LR
+    A["Set the version"] --> B["Add every dependency<br/>the project has"]
+    B --> C["Explore"]
+    C --> D["Compare against<br/>your build.gradle"]
+```
+
+> [!important] **This works for a project that already exists.** Set the version you are actually on, tick everything you actually use, and compare the result against your own build file. Anything that differs is either something you are missing or something that has been renamed.
+
+## Select the whole stack, never one at a time
+
+The mistake that makes this fail is checking dependencies individually.
+
+> [!warning] **The output depends on the combination, not on each dependency separately.** Some pairs require a bridging module that exists only because both are present — a library that adapts one to the other. Select either alone and that module never appears, however carefully you read the result.
+
+So the unit of work is the whole stack. Ticking one box to answer one question will silently give an incomplete answer, and the missing piece is invisible because nothing reports it.
+
+## Artifact names change between major versions
+
+The second reason to generate rather than search.
+
+> [!warning] **An artifact that exists in one major version may not exist in the previous one.** Names get changed, split apart, or moved between groups when a major version lands. An article written against the older version names something that will not resolve at all, and the error you get points at the missing artifact rather than at the article.
+
+> [!important] This is at its worst precisely when it hurts most — **on a version that has just been released.** Articles, forum answers and accumulated search results all describe the previous one, because they were written before this one existed. **The newer your version, the less the web is worth**, and the more the generator is.
+
+## The same thing without the browser
+
+The generator answers plain HTTP, which is convenient when you want the file rather than the page:
+
+```text
+1  curl "https://start.spring.io/build.gradle?type=gradle-project&language=java2  &bootVersion=4.1.1&javaVersion=21&dependencies=web,data-jpa,lombok"
+```
+
+`dependencies` takes the short identifiers, comma-separated. The full list of what is available:
+
+```text
+1  curl -H "Accept: application/vnd.initializr.v2.2+json" https://start.spring.io/metadata/client
+```
+
+> [!info] That metadata also lists which Spring Boot versions are currently offered, which is a quick way to see whether the version you are on is still supported.
+
+## Where the generator is not the answer
+
+It gives dependencies. It does not give configuration.
+
+> [!important] For a **property name** — anything written in `application.yml` — the source is the **Common Application Properties** appendix in the reference documentation, read at the version you are on. Property names get renamed between major versions exactly as artifact names do, and an old property is worse than a missing one: it does not fail, it is simply ignored.
+
 # Maven or Gradle
 
 The one choice above that deserves more than a line, because the difference is real.

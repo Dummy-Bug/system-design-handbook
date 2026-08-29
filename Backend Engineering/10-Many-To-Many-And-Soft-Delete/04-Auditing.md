@@ -29,7 +29,7 @@ There is already a class every entity extends, holding what every entity has.
 9  }
 ```
 
-`@MappedSuperclass` means the mappings inside are inherited by every entity extending it, without the parent becoming a table of its own. Fields added here appear on every table.
+`@MappedSuperclass` **means the mappings inside are inherited by every entity extending it, without the parent becoming a table of its own.** Fields added here appear on every table.
 
 # Three pieces
 
@@ -55,7 +55,7 @@ Auditing needs all three, and each does a different job.
 15 }
 ```
 
-`@EnableJpaAuditing` switches the feature on for the application. Without it the annotations below are read and nothing happens.
+`@EnableJpaAuditing` **switches the feature on for the application. Without it the annotations below are read and nothing happens.**
 
 ## Mark the fields
 
@@ -71,7 +71,7 @@ Auditing needs all three, and each does a different job.
 
 **`@CreatedDate`** — set this once, when the row is first saved.
 
-**`@LastModifiedDate`** — set this every time the row is saved, including the first.
+**`@LastModifiedDate`** — set this every time the row is **saved**, including the first.
 
 > [!important] **Line 2 carries `updatable = false`, and that is the interesting part.** It tells the database this column may never be changed by an update. Creation time is a fact about an event that already happened; making it unwritable means no later bug can quietly rewrite history.
 
@@ -79,7 +79,7 @@ Auditing needs all three, and each does a different job.
 
 ## Attach the listener
 
-The annotations describe intent. Something has to act on it.
+**The annotations describe intent. Something has to act on it.**
 
 ```java
 1  @Data
@@ -88,7 +88,8 @@ The annotations describe intent. Something has to act on it.
 4  public class BaseEntity {
 ```
 
-> [!important] **`@EntityListeners` registers a class whose methods run at points in an entity's life** — before it is inserted, before it is updated. `AuditingEntityListener` is the one Spring Data provides, and it is where the actual work lives: on insert it calls the current time and writes it into whatever field carries `@CreatedDate`, and on update it does the same for `@LastModifiedDate`.
+> [!important] **`@EntityListeners` registers a class whose methods run at points in an entity's life** — before it is inserted, before it is updated. 
+> `AuditingEntityListener` is the one Spring Data provides, and it is where the actual work lives: on insert it calls the current time and writes it into whatever field carries `@CreatedDate`, and on update it does the same for `@LastModifiedDate`.
 
 ```mermaid
 flowchart TB
@@ -146,14 +147,14 @@ flowchart TB
 Because this is the parent of every entity, restarting alters every table at once:
 
 ```text
-1  Hibernate: alter table categories add column created_at datetime(6) not null
-2  Hibernate: alter table categories add column updated_at datetime(6)
-3  Hibernate: alter table order_products add column created_at datetime(6) not null
-4  Hibernate: alter table order_products add column updated_at datetime(6)
-5  Hibernate: alter table orders add column created_at datetime(6) not null
-6  Hibernate: alter table orders add column updated_at datetime(6)
-7  Hibernate: alter table products add column created_at datetime(6) not null
-8  Hibernate: alter table products add column updated_at datetime(6)
+  Hibernate: alter table categories add column created_at datetime(6) not null
+  Hibernate: alter table categories add column updated_at datetime(6)
+  Hibernate: alter table order_products add column created_at datetime(6) not null
+  Hibernate: alter table order_products add column updated_at datetime(6)
+  Hibernate: alter table orders add column created_at datetime(6) not null
+  Hibernate: alter table orders add column updated_at datetime(6)
+  Hibernate: alter table products add column created_at datetime(6) not null
+  Hibernate: alter table products add column updated_at datetime(6)
 ```
 
 Four tables, eight statements, from two fields written once.
@@ -162,29 +163,29 @@ Four tables, eight statements, from two fields written once.
 
 Creating a category through the API, with nothing in the service touching timestamps:
 
-```text
-1  POST /api/v1/categories
-2  { "name": "electronics" }
+```json
+  POST /api/v1/categories
+  { 
+	  "name": "electronics" 
+  }
 ```
 
-```text
-1  {
-2    "id": 1,
-3    "name": "electronics",
-4    "createdAt": "2026-02-22T11:14:07.482",
-5    "updatedAt": "2026-02-22T11:14:07.482"
-6  }
+```json
+  {
+    "id": 1,
+    "name": "electronics",
+    "createdAt": "2026-02-22T11:14:07.482",
+    "updatedAt": "2026-02-22T11:14:07.482"
+  }
 ```
 
 And in the table:
 
 ```text
-1  select * from categories;
-2  id | name        | created_at          | updated_at          |
-3  1  | electronics | 2026-02-22 11:14:07 | 2026-02-22 11:14:07 |
+  select * from categories;
+  id | name        | created_at          | updated_at          |
+  1  | electronics | 2026-02-22 11:14:07 | 2026-02-22 11:14:07 |
 ```
-
-> [!info] **Verified.** Both timestamps are set and identical, because a newly created row was also just modified. On a later update only `updated_at` moves, and the gap between them becomes the record's history.
 
 > [!important] Nothing in the service, controller or repository mentions time. **The behaviour is declared once on a class nobody instantiates**, and every entity in the application acquired it.
 

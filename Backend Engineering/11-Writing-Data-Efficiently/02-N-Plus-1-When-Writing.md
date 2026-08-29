@@ -76,8 +76,8 @@ That warning is the whole reason for the next step.
 ## Build a lookup
 
 ```java
-1  Map<Long, Product> productMap = products.stream()
-2          .collect(Collectors.toMap(Product::getId, Function.identity()));
+  Map<Long, Product> productMap = products.stream()
+  .collect(Collectors.toMap(Product::getId, Function.identity()));
 ```
 
 > [!important] `Collectors.toMap` takes two functions: **what to use as the key**, and **what to use as the value**. `Product::getId` makes the id the key. `Function.identity()` is a function returning its own argument, so the value is the product itself.

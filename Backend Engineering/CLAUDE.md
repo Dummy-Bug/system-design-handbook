@@ -108,8 +108,12 @@ Backend Engineering/
 ├── 07-Databases-With-Spring/        ← JDBC upward, JPA, Hibernate, Spring Data JPA, connection configuration
 ├── 08-Building-The-API/             ← entity to table, repositories, derived and native queries, request channels
 ├── 09-Entity-Relationships/         ← Category, @MappedSuperclass, @ManyToOne, lazy loading, the N+1 problem
-├── 10-Many-To-Many-And-Soft-Delete/ ← join tables, the join entity, JPA auditing, soft delete, indexes and nulls, Flyway migrations
+├── 10-Many-To-Many-And-Soft-Delete/ ← join tables, the join entity, JPA auditing, soft delete, indexes and nulls, Flyway migrations, failed migrations and repair
 ├── 11-Writing-Data-Efficiently/     ← cart as a pending order, N+1 on writes, batching an update
+├── 12-Observability/                ← monitoring vs observability, the Java agent, reading traces and percentiles
+├── 13-Operating-In-Production/      ← completing the order API, deleting at scale, incidents and logging
+├── 14-Scaling-Reads/                ← monolith vs microservices, EXPLAIN, composite indexes, selectivity, clustered indexes, creating them safely
+├── 15-Caching-With-Redis/           ← why cache, where it lives, Redis data structures, TTL locks, when not to cache, caching patterns, eviction, then the Spring integration
 └── API-Responses-And-Errors/        ← ResponseEntity, exception advice, the response envelope, adapters and MapStruct
 ```
 

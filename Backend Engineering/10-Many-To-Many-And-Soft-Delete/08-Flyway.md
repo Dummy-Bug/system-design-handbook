@@ -1,4 +1,4 @@
-Migrations are ordered scripts plus a record of what has run. Flyway is the tool that provides both, and wiring it in is mostly a matter of handing over a responsibility Hibernate currently holds.
+**Migrations are ordered scripts plus a record of what has run.** Flyway is the tool that provides both, and wiring it in is mostly a matter of handing over a responsibility Hibernate currently holds.
 
 # The dependencies
 
@@ -10,17 +10,13 @@ Migrations are ordered scripts plus a record of what has run. Flyway is the tool
 5  }
 ```
 
-**Line 4 is the database driver.** Flyway supports MySQL, PostgreSQL, SQLite and many others, and needs to know how to speak to yours. Whichever database you use, add its matching Flyway module.
+> [!warning] **Line 4 is not the JDBC driver.** `com.mysql:mysql-connector-j` is the driver, it is already in the build, and it stays exactly as it is. `flyway-mysql` is a different thing: **Flyway's own MySQL support**, teaching Flyway this database's dialect. Since Flyway 10 each database lives in its own module, so whichever one you use, add its matching Flyway module alongside the driver you already have.
 
-**Line 3 is the one that will cost you an evening if you get it wrong.**
+Both lines are also worth deriving rather than copying, because each carries a trap.
 
-> [!warning] **On Spring Boot 4, `flyway-core` alone is silently ignored.** Add only `org.flywaydb:flyway-core` and the application starts, no error appears, no migration runs, and no table is created. Nothing announces that Flyway is not participating.
->
-> Spring Boot 4 split the single auto-configuration jar into per-feature modules. Under Spring Boot 3, having the Flyway jar on the classpath was enough to trigger auto-configuration; under 4, **the auto-configuration lives in its own module that the starter brings in.** Without the starter, the jar is present and nothing wires it up.
+> [!warning] **Line 3 does not exist before Spring Boot 4.** On Boot 2 and 3 the dependency was `org.flywaydb:flyway-core`, which is what effectively every article and forum answer still says. Searching for the name above finds nothing, and following what you do find gives you an artifact your build will not resolve.
 
-That change is recent enough that most articles, tutorials and answers still say `flyway-core`. They were correct when written.
-
-> [!info] The symptom is not an error but an absence — the application fails somewhere later, complaining about a missing table, and the real cause is that the tool responsible for creating it never ran. **If Flyway appears to do nothing at all, check the dependency before checking anything else.**
+> [!important] **Line 4 appears only when Flyway and MySQL are selected together.** Generate a project with Flyway alone and it is absent; with MySQL alone, likewise. It is a bridging module, so it exists only when both halves are present — which is why checking one dependency at a time silently produces an incomplete answer. The method for getting both lines right is in `04-Spring-Boot-Starter/02-First-Project.md`.
 
 # Handing over the schema
 
@@ -46,8 +42,6 @@ That change is recent enough that most articles, tutorials and answers still say
 > [!important] **`validate` means Hibernate stops writing the schema and starts checking it.** It compares the entities against the tables at startup and refuses to start if they disagree — but it changes nothing. Editing an entity no longer alters the database. Structure is Flyway's job now.
 
 **Lines 12 to 14 turn Flyway on** and say where the scripts live. `classpath:db/migration` resolves to `src/main/resources/db/migration`.
-
-> [!warning] **The path is matched exactly.** A folder named `migrations` will not be found by a configuration pointing at `migration`, and the failure is silent in the same way as the wrong dependency — Flyway finds no scripts, runs nothing, and says nothing.
 
 > [!info] Flyway reuses the `spring.datasource` settings to connect, so there is no second set of credentials to configure.
 
@@ -191,6 +185,13 @@ With an empty database and the configuration above:
 8  Successfully applied 2 migrations
 ```
 
-**Line 4** is the history table being created on first use. **Lines 6 and 7** apply the two scripts in version order. Restart with no new scripts and Flyway reports the schema is up to date and does nothing.
+One line in that output alarms people the first time and should not:
 
-> [!info] **Verified** against MySQL 9.5 with `spring-boot-starter-flyway` on Spring Boot 4.
+```log
+  WARN o.f.c.internal.database.base.Database : Using MySQL 9.5 which is newer than
+       the version Flyway has been verified with. The latest verified version of MySQL is 9.4.
+```
+
+> [!info] **This is not a compatibility problem.** Flyway tests against database versions up to a point and warns when it meets a newer one — here a single minor version ahead. It is a statement about Flyway's test matrix, not about your database. It disappears when Flyway next releases, and it appears on every startup until then.
+
+**Line 4** is the history table being created on first use. **Lines 6 and 7** apply the two scripts in version order. Restart with no new scripts and Flyway reports the schema is up to date and does nothing.

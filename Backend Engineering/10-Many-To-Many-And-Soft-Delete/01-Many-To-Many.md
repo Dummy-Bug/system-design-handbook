@@ -107,7 +107,7 @@ Several at once is the same statement with one operator changed:
 
 # The part that makes it genuinely better
 
-Storing the relationship separately means the relationship can have properties of its own.
+**Storing the relationship separately means the relationship can have properties of its own.**
 
 You want two iPhones and two chargers, not one of each. Under the list design there is nowhere to put that. Here it is a column:
 
@@ -122,9 +122,92 @@ You want two iPhones and two chargers, not one of each. Under the list design th
 
 > [!important] **Quantity is a fact about the pairing, not about either side.** It does not belong on the product — the product does not have a quantity, an order line does. It does not belong on the order either. It belongs exactly where the join table puts it.
 
-The hospital example makes the same point more forcefully. The join table between doctors and patients naturally carries an **appointment date**, and an **appointment id** of its own, because an appointment is a real thing in the business, not just a link between two rows.
+The hospital example makes the same point more forcefully, because there the extra columns are not an optimisation — they are the reason the row exists.
+
+```text
+ doctors                      patients
+ id | name        | dept      id | name      | dob
+ ---+-------------+------     ---+-----------+------------
+ 1  | Dr Mehra    | ENT       1  | Anita     | 1991-03-02
+ 2  | Dr Iyer     | Cardio    2  | Rakesh    | 1978-11-19
+ 3  | Dr Bose     | ENT       3  | Priya     | 2003-07-25
+
+ appointments
+ id  | doctor_id | patient_id | scheduled_at        | status
+ ----+-----------+------------+---------------------+-----------
+ 101 | 1         | 1          | 2026-09-02 10:30    | COMPLETED
+ 102 | 1         | 2          | 2026-09-02 11:00    | COMPLETED
+ 103 | 2         | 1          | 2026-09-05 09:15    | SCHEDULED
+ 104 | 3         | 3          | 2026-09-05 16:45    | CANCELLED
+ 105 | 1         | 1          | 2026-09-19 10:30    | SCHEDULED
+```
+
+Read rows 101 and 105. **The same doctor and the same patient, twice.** Anita saw Dr Mehra on the 2nd and is booked again on the 19th — two different appointments that happen to share both foreign keys.
+
+> [!important] That is the difference between the two designs stated plainly. **A list of doctor ids on the patient row cannot express this at all** — it can only record that Anita and Dr Mehra are related, not that they met on Tuesday and will meet again a fortnight later.
+
+And `id 101` is doing real work. It is the number on the appointment card, what the reminder message references, what a cancellation names, what a prescription is attached to.
+
+> [!important] **The pairing has become a thing you can point at**, which is exactly what the `quantity` column hinted at and this makes obvious.
 
 > [!info] Which is a useful test when modelling. **If the pairing has facts of its own, the join table is not plumbing — it is an entity you have not named yet.** An appointment, an order line, an enrolment, a booking.
+
+## The same shape, twice more
+
+Both of these are students-to-courses and guests-to-rooms — plainly many-to-many — and in both the join table turns out to be the thing the business actually talks about.
+
+**An enrolment.**
+
+```text
+ students                     courses
+ id | name      | year        id | code     | title
+ ---+-----------+------       ---+----------+---------------------
+ 1  | Anita     | 2           1  | CS201    | Databases
+ 2  | Rakesh    | 1           2  | CS310    | Distributed Systems
+ 3  | Priya     | 2           3  | MA110    | Linear Algebra
+
+ enrolments
+ id  | student_id | course_id | enrolled_on | grade | status
+ ----+------------+-----------+-------------+-------+-----------
+ 501 | 1          | 1         | 2026-01-08  | F     | FAILED
+ 502 | 1          | 2         | 2026-01-08  | NULL  | ACTIVE
+ 503 | 2          | 1         | 2026-01-09  | NULL  | ACTIVE
+ 504 | 3          | 1         | 2026-01-08  | NULL  | WITHDRAWN
+ 505 | 1          | 1         | 2026-08-04  | NULL  | ACTIVE
+```
+
+**The grade is the giveaway.** A grade is not a property of the student — they have several. It is not a property of the course — it has hundreds. It belongs to one student taking one course, which is the pairing.
+
+Rows 501 and 505 are the repeat, and the reason is the point: **Anita failed Databases in January and is retaking it in August.** Nobody re-enrols in a course they passed — the second attempt exists precisely because the first one has an outcome recorded against it.
+
+> [!important] Which is why a list of course ids on the student row would be worse than merely inelegant. It would say Anita is related to Databases, once, with no way to record that she took it twice and got different results. **The list cannot hold the attempt, and the attempt is the thing the registrar cares about.**
+
+> [!info] Row 504 has no grade because Priya withdrew. **A withdrawal is a status, not a mark**, and leaving `grade` null is how the schema says so — the same nullable-means-not-applicable reasoning as `deleted_at`.
+
+**A booking.**
+
+```text
+ guests                       rooms
+ id | name      | phone       id | number | type
+ ---+-----------+--------     ---+--------+----------
+ 1  | Anita     | ...         1  | 101    | DELUXE
+ 2  | Rakesh    | ...         2  | 102    | STANDARD
+ 3  | Priya     | ...         3  | 201    | SUITE
+
+ bookings
+ id  | guest_id | room_id | check_in   | check_out  | rate    | status
+ ----+----------+---------+------------+------------+---------+-----------
+ 901 | 1        | 1       | 2026-09-02 | 2026-09-05 | 4200.00 | CHECKED_OUT
+ 902 | 2        | 1       | 2026-09-06 | 2026-09-08 | 4200.00 | CONFIRMED
+ 903 | 3        | 3       | 2026-09-06 | 2026-09-11 | 9500.00 | CANCELLED
+ 904 | 1        | 2       | 2026-10-14 | 2026-10-16 | 2800.00 | CONFIRMED
+```
+
+**`rate` is the one worth stopping on.** The room has a price today; this booking has the price it was sold at. Those are different facts, and putting the rate on the room would mean a price change silently rewrites what past guests paid.
+
+> [!important] Notice what all four tables have in common. **Two foreign keys, an identity of its own, and at least one column describing the event rather than either participant.** Quantity, appointment time, grade, rate — none of them belongs on either side.
+
+> [!important] And each one has a **name in the business.** Nobody at a hotel says the guest-room link. They say booking. **When the pairing has a name people already use, it was always an entity** — the many-to-many was just how it looked from the database side.
 
 # The rule
 

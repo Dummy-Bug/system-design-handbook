@@ -16,6 +16,65 @@ Line 3 brings Spring Data JPA, and Hibernate with it. Line 4 is the **driver** �
 
 > [!info] The generator offers a Spring Data project per store — MongoDB, Redis, Elasticsearch, Couchbase, Neo4j — and a driver per database. You pick one of each.
 
+## Two things about those two lines
+
+**Neither carries a version number, and that is not an omission.**
+
+> [!important] The Spring dependency-management plugin holds a set of library versions **known to work together** for your Spring Boot version. Declaring a Spring dependency without a version is what opts into that set.
+
+Pinning one yourself opts that single module out of it, and the result is not a clean failure:
+
+```groovy
+1  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+2  implementation 'org.springframework:spring-jdbc:6.0.8'   // do not do this
+```
+
+```text
+1  java.lang.IllegalStateException: Error processing condition on
+2      ...PersistenceExceptionTranslationAutoConfiguration.persistenceExceptionTranslationPostProcessor
+3  Caused by: java.lang.NoClassDefFoundError: org/springframework/jdbc/core/simple/JdbcClient
+4  Caused by: java.lang.ClassNotFoundException: org.springframework.jdbc.core.simple.JdbcClient
+```
+
+> [!warning] **The error names a class you never wrote, in a module you did not think you were configuring.** Line 2 above forced `spring-jdbc` to an old version while the rest of the framework stayed current, and `JdbcClient` — added in Spring Framework 6.1 — does not exist in the older jar. Auto-configuration references it, the classloader cannot find it, and startup dies before a single bean of yours is built.
+>
+> The tell is in the stack trace: every other frame reports a much newer version. **A missing class in a Spring package almost always means version skew, not a missing dependency.** The fix is to delete the version, not to add another library.
+
+**And `runtimeOnly` on line 4 is deliberate.** Your code never imports the driver — it is named as a string in configuration and loaded by reflection. `runtimeOnly` puts it on the runtime classpath and keeps it off the compile classpath, so nothing can accidentally import a MySQL class and quietly tie your code to one database.
+
+> [!warning] Omit the driver entirely and the application starts, builds the web context, and fails much later while constructing the connection pool:
+>
+> ```text
+> 1  org.springframework.beans.factory.BeanCreationException: Error creating bean with name
+> 2      'entityManagerFactory' defined in class path resource [HibernateJpaConfiguration.class]:
+> 3      Failed to initialize dependency 'dataSourceScriptDatabaseInitializer' of
+> 4      LoadTimeWeaverAware bean 'entityManagerFactory':
+> 5  Error creating bean with name 'dataSourceScriptDatabaseInitializer' ...
+> 6      Unsatisfied dependency expressed through method 'dataSourceScriptDatabaseInitializer'
+> 7      parameter 0:
+> 8  Error creating bean with name 'dataSource' defined in class path resource
+> 9      [DataSourceConfiguration$Hikari.class]:
+> 10     Failed to instantiate [com.zaxxer.hikari.HikariDataSource]:
+> 11     Factory method 'dataSource' threw exception with message:
+> 12     Cannot load driver class: com.mysql.cj.jdbc.Driver
+> ```
+>
+> **The exception type is `BeanCreationException`, and the useful line is the last one.** Everything above it is Spring reporting the chain of beans that could not be built because the one underneath them failed — `entityManagerFactory` needed `dataSourceScriptDatabaseInitializer`, which needed `dataSource`, which could not be constructed. Line 12 is the actual cause.
+>
+> `driver-class-name` in the configuration names a class; that class has to be on the classpath for something to load. **How far into startup a failure appears is a useful signal** — this one gets as far as the pool, meaning everything above it wired up correctly.
+
+> [!important] **Read a `BeanCreationException` from the bottom up.** Spring reports the failure at every level as it unwinds, so the first bean named is the outermost victim and the last `Caused by` is what actually went wrong. Reading top-down sends you to investigate `entityManagerFactory`, which is working perfectly.
+
+Three failures, three exception types, three places in startup:
+
+| Missing or wrong | Exception | Fails during |
+|---|---|---|
+| A pinned Spring version causing skew | `IllegalStateException`, wrapping `NoClassDefFoundError` then `ClassNotFoundException` | Condition evaluation, before any of your beans exist |
+| The driver dependency | `BeanCreationException`, ending in `Cannot load driver class` | Connection pool construction |
+| The database itself | `SQLSyntaxErrorException: Unknown database` | The pool's first connection attempt |
+
+> [!info] The third row is the next one you meet, and it is worth knowing that **Spring will not create the database for you.** The URL names one that has to already exist; `ddl-auto` creates tables inside a database, never the database itself.
+
 # The configuration
 
 ```yaml

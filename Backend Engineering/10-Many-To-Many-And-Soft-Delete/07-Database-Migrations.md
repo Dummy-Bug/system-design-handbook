@@ -30,7 +30,7 @@ That does work. A pulls, restarts, and `ddl-auto` creates the table. The problem
 
 > [!important] The schema change is **a side effect of a Java class edit**. Nothing records that the database changed, when, or why. Looking at a column and asking who added this has no answer except reading every commit that touched that entity.
 
-Worse for a column that was added and later removed — the current entity shows no trace of it having existed at all.
+Worse for a column that was added and later removed — **the current entity shows no trace of it having existed at all.**
 
 ## Some things cannot be expressed as entities
 
