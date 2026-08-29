@@ -110,15 +110,20 @@ Backend Engineering/
 ├── 09-Entity-Relationships/         ← Category, @MappedSuperclass, @ManyToOne, lazy loading, the N+1 problem
 ├── 10-Many-To-Many-And-Soft-Delete/ ← join tables, the join entity, JPA auditing, soft delete, indexes and nulls
 ├── 11-Database-Migrations/          ← why migrations, Flyway, validate catching drift, failed migrations and repair
-├── 12-Writing-Data-Efficiently/     ← cart as a pending order, N+1 on writes, batching an update
-├── 13-API-Responses-And-Errors/     ← ResponseEntity, exception advice, the response envelope, adapters and MapStruct
+├── 12-API-Responses-And-Errors/     ← ResponseEntity, exception advice, the response envelope, adapters and MapStruct
+├── 13-Writing-Data-Efficiently/     ← cart as a pending order, N+1 on writes, batching an update
 ├── 14-Observability/                ← monitoring vs observability, the Java agent, reading traces and percentiles
 ├── 15-Operating-In-Production/      ← completing the order API, deleting at scale, incidents and logging
 ├── 16-Scaling-Reads/                ← monolith vs microservices, EXPLAIN, composite indexes, selectivity, clustered indexes, creating them safely
-└── 17-Caching-With-Redis/           ← why cache, where it lives, Redis data structures, TTL locks, when not to cache, caching patterns, eviction, then the Spring integration
+├── 17-Caching-With-Redis/           ← why cache, where it lives, Redis data structures, TTL locks, when not to cache, caching patterns, eviction, the Spring integration, index vs cache
+├── 18-Testing/                      ← where testing sits, unit tests and mocking, the kinds of test, then Mockito service tests, H2 repository tests, MockMvc controller tests, and a full integration test
+├── Full-Text-Search/                ← prefix/suffix/substring, why substring defeats indexes, Postgres full-text, the inverted index, TF-IDF and BM25
+└── MongoDB/                         ← NoSQL families, JSON and BSON, the shell, querying, updating, indexes and explain, aggregation pipelines
 ```
 
-**Every folder is numbered.** `13-API-Responses-And-Errors/` sits where it does because `04-Adapters-And-MapStruct.md` needs the Order entity and its line items, which do not exist until `12-Writing-Data-Efficiently/`.
+**Numbered folders follow the course repository's commit history** — the record of the sequence the material was actually built in. `12-API-Responses-And-Errors/` precedes `13-Writing-Data-Efficiently/` because the response-and-adapter commits precede the order-API commits; the `Order` entity itself arrived far earlier, with the many-to-many work in folder 10. **When a folder's placement is uncertain, read the commit messages** rather than reasoning about prerequisites — that reasoning has been wrong before.
+
+**A folder with no commits behind it stays unnumbered.** `Full-Text-Search/` and `MongoDB/` are subjects taught with their own tooling and no code in `SpringDemoTodo`, so the commit history says nothing about where they belong. Numbering them would break the contiguity of the folders that do follow it — testing sits at `18` because its commits come directly after Redis's. They get numbers when the project that uses them appears; until then they sort alphabetically after the numbered run.
 
 **Every folder carrying an `Images/` needs a `CREDITS.md` beside the files** naming source, author and licence for anything taken from the web.
 

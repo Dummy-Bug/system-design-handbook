@@ -120,6 +120,44 @@ Several things are worth reading here, because this is what was previously being
 
 **Foreign keys are named.** `fk_product_category` rather than the `FKog2rp4qthbtt2lfyhfo32lsw9` that Hibernate generated. A constraint violation now reports a name that means something.
 
+## Reading a foreign key constraint
+
+Written out on its own, the parts are easier to see:
+
+```sql
+1  ALTER TABLE products
+2      ADD CONSTRAINT fk_product_category
+3      FOREIGN KEY (category_id)
+4      REFERENCES categories (id);
+```
+
+| Line | |
+|---|---|
+| 1 | The table being changed |
+| 2 | **A name you invent.** MySQL attaches no meaning to it |
+| 3 | The column **in this table** that points away |
+| 4 | The table and column it points **at** |
+
+> [!important] Read as a sentence: **in `products`, the column `category_id` must always hold a value that exists in `categories.id`.**
+
+The name follows a convention that makes it readable in an error message months later:
+
+```text
+  fk_<table with the column>_<table being pointed at>
+
+        fk_product_category
+           ↑        ↑
+      products   categories
+```
+
+> [!info] Singular or plural is a style choice — `fk_products_categories` is equally common. What matters is that the name says which relationship it is.
+
+> [!warning] **Omit the name and MySQL invents one:** `products_ibfk_1`, then `products_ibfk_2` as more are added. Functional, and useless when you need to drop one — which is the only time you ever type a constraint name:
+>
+> `ALTER TABLE products DROP FOREIGN KEY fk_product_category;`
+
+> [!info] The name appears again in `SHOW INDEX FROM products`, because InnoDB creates an index for the constraint and gives it the same name — the automatic index described in `16-Scaling-Reads/06-Clustered-And-Secondary.md`.
+
 > [!info] **One table per script is the usual convention**, so each version does one thing and can be reasoned about alone. Four tables in `V1` is a reasonable exception for an initial schema being brought under Flyway's control in one go.
 
 # The schema history table

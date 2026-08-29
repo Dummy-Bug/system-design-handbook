@@ -127,3 +127,66 @@ flowchart TB
 > [!important] **Write-around with invalidation on write is the sensible default.** It keeps the database authoritative, keeps writes fast, and bounds staleness by an explicit TTL. Write-through is the specialisation for when misses genuinely hurt; write-behind is for a narrow class of data where throughput matters more than any individual write does.
 
 > [!important] And the choice is per kind of data, not per system. **One application will reasonably use write-around for a product catalogue and write-behind for view counters**, because those two things fail differently and are worth different amounts.
+
+# How the cache actually gets updated
+
+The patterns above say when the cache is written. They do not say by what, and the three available answers have very different failure modes.
+
+## Write both, from the application
+
+```mermaid
+flowchart TB
+    A["Application"] --> D[("Database")]
+    A --> R[("Cache")]
+```
+
+The obvious one, and the one with a name.
+
+> [!warning] **Two writes to two systems with no transaction across them.** Write the database, then the cache, and the second can fail after the first committed. Fire them in parallel and the cache can succeed while the database fails — now the cache holds something that was never stored.
+
+> [!important] This is the **distributed transaction** problem, and it has no cheap solution. What makes it tolerable in the write-through case is the asymmetry stated earlier: **the database write decides, the cache write is best effort**, and a failure there degrades to a miss.
+
+> [!info] Where a retry is the answer, it needs **exponential backoff** — each attempt waiting longer than the last. Retrying at a fixed interval turns one failure into a burst of traffic against something already struggling.
+
+## Let the database announce the change
+
+```mermaid
+flowchart LR
+    A["Application"] --> D[("Database — source of truth")]
+    D --> K["Stream"]
+    K --> E["Executor"]
+    E --> R[("Cache")]
+```
+
+> [!important] The application writes **only** to the database. The database emits a change notification onto a stream, and a consumer updates the cache from it.
+
+> [!important] **The distributed transaction disappears**, because there is only one write. The application succeeds or fails on the database alone, and the cache catches up separately.
+
+The cost is that it catches up **later** — milliseconds usually, longer under load. That is eventual consistency, chosen deliberately rather than suffered.
+
+> [!info] The notification mechanism is **change data capture**, from `08-Beyond-Key-Value`. Worth distinguishing from database triggers, which do the same job **synchronously** — inside your transaction, making your write slower and failing it if they fail. **CDC is asynchronous and outside it**, which is the whole reason it is preferred.
+
+## Write the cache first
+
+```mermaid
+flowchart LR
+    A["Application"] --> R[("Cache")]
+    R --> C["CDC"]
+    C --> D[("Database — later")]
+```
+
+Write-behind, with CDC as the transport to the database.
+
+> [!warning] The fastest writes and the one place the earlier warning applies in full: **the cache is the source of truth until the database catches up.** For a payment this is disqualifying — money recorded in a cache while a balance check reads the database shows the customer a wrong number for as long as the gap lasts.
+
+## Choosing
+
+| | Consistency | Write latency | Complexity |
+|---|---|---|---|
+| **Application writes both** | Two writes that can disagree | Slowest | Low |
+| **Database announces** | **Eventual, and correct** | **Normal** | A stream and a consumer |
+| **Cache first** | **Cache is the truth, briefly** | **Fastest** | A stream, and real risk |
+
+> [!important] **The middle one is the default worth reaching for at scale.** It keeps the database authoritative, keeps writes fast, and turns a two-system consistency problem into a one-system write plus a pipeline that can be monitored and replayed.
+
+> [!warning] And it earns its complexity only at scale. **A stream and a consumer is real infrastructure** — for an application where an invalidating delete on write is sufficient, this is a great deal of machinery to avoid a problem you do not have.
