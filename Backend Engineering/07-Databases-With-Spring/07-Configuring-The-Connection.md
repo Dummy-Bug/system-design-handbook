@@ -219,7 +219,7 @@ Row count afterwards: **0**.
 
 > [!important] The mature arrangement is **`validate` plus schema migrations** — migrations make the structural changes deliberately and in a versioned, reviewable way, and `validate` confirms the code and the database agree before serving a request.
 
-That arrangement is set up in [[08-Flyway]] and shown catching real drift in [[09-Validate-Catches-Drift]].
+That arrangement is set up in [[02-Flyway]] and shown catching real drift in [[03-Validate-Catches-Drift]].
 
 # When the connection is wrong
 

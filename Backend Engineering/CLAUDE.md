@@ -71,7 +71,7 @@ Read off the syllabus panel while recording, so this is observed rather than inf
 | 17 | Understanding the Builder pattern (11 lessons) | not yet |
 | 18 | Integrating databases with Spring Boot | not yet |
 
-The platform's numbers are **not** the folder numbers here — folders are numbered by when they were made.
+The platform's numbers are **not** the folder numbers here — folders are numbered by where a subject sits in the teaching order.
 
 ---
 
@@ -81,7 +81,7 @@ There is **no fixed viewing order**, and folder names are not assigned ahead of 
 
 The sequence is: a recording is handed over, it is transcribed, the transcript is read end to end, and **only then** is a folder name and a set of note names proposed — derived from what the material actually covers. Nothing is written until that proposal is approved.
 
-Folders are numbered in the order they were actually made, starting at `01`. A number reflects when something was watched, not where it sits in any published syllabus.
+Folders are numbered by **teaching order** — where a subject sits in the sequence a stranger would read it, starting at `01`. A folder is still created only after its material has been watched and read, so in practice new subjects usually land at the end; but when one turns out to belong earlier, **renumbering is allowed.** Reordering means renaming folders in descending order so numbers never collide, and rewriting every reference in the same operation: `[[wiki-links]]` survive a folder move because Obsidian resolves them by filename, but any note **renumbered** inside its folder breaks them, and plain-text paths and absolute `Images/` links break on any rename.
 
 **Keep file names short.** Two to four words. `04-API-Standards.md`, not `04-Standards-For-Writing-APIs.md`.
 
@@ -108,16 +108,17 @@ Backend Engineering/
 ├── 07-Databases-With-Spring/        ← JDBC upward, JPA, Hibernate, Spring Data JPA, connection configuration
 ├── 08-Building-The-API/             ← entity to table, repositories, derived and native queries, request channels
 ├── 09-Entity-Relationships/         ← Category, @MappedSuperclass, @ManyToOne, lazy loading, the N+1 problem
-├── 10-Many-To-Many-And-Soft-Delete/ ← join tables, the join entity, JPA auditing, soft delete, indexes and nulls, Flyway migrations, failed migrations and repair
-├── 11-Writing-Data-Efficiently/     ← cart as a pending order, N+1 on writes, batching an update
-├── 12-Observability/                ← monitoring vs observability, the Java agent, reading traces and percentiles
-├── 13-Operating-In-Production/      ← completing the order API, deleting at scale, incidents and logging
-├── 14-Scaling-Reads/                ← monolith vs microservices, EXPLAIN, composite indexes, selectivity, clustered indexes, creating them safely
-├── 15-Caching-With-Redis/           ← why cache, where it lives, Redis data structures, TTL locks, when not to cache, caching patterns, eviction, then the Spring integration
-└── API-Responses-And-Errors/        ← ResponseEntity, exception advice, the response envelope, adapters and MapStruct
+├── 10-Many-To-Many-And-Soft-Delete/ ← join tables, the join entity, JPA auditing, soft delete, indexes and nulls
+├── 11-Database-Migrations/          ← why migrations, Flyway, validate catching drift, failed migrations and repair
+├── 12-Writing-Data-Efficiently/     ← cart as a pending order, N+1 on writes, batching an update
+├── 13-API-Responses-And-Errors/     ← ResponseEntity, exception advice, the response envelope, adapters and MapStruct
+├── 14-Observability/                ← monitoring vs observability, the Java agent, reading traces and percentiles
+├── 15-Operating-In-Production/      ← completing the order API, deleting at scale, incidents and logging
+├── 16-Scaling-Reads/                ← monolith vs microservices, EXPLAIN, composite indexes, selectivity, clustered indexes, creating them safely
+└── 17-Caching-With-Redis/           ← why cache, where it lives, Redis data structures, TTL locks, when not to cache, caching patterns, eviction, then the Spring integration
 ```
 
-**`API-Responses-And-Errors/` is deliberately unnumbered** — where it belongs in the sequence is not settled yet. Number it when that is decided, and rewrite any `Images/` links in the same operation.
+**Every folder is numbered.** `13-API-Responses-And-Errors/` sits where it does because `04-Adapters-And-MapStruct.md` needs the Order entity and its line items, which do not exist until `12-Writing-Data-Efficiently/`.
 
 **Every folder carrying an `Images/` needs a `CREDITS.md` beside the files** naming source, author and licence for anything taken from the web.
 

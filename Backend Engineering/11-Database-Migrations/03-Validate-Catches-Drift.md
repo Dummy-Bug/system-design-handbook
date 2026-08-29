@@ -38,7 +38,7 @@ That ordering is what makes a particular failure readable:
 
 > [!warning] **`Schema validation: missing table [products]` almost never means the entity is wrong.** Hibernate is the last thing in the chain, so it is the thing that complains — but it is reporting reality accurately. Something was supposed to create that table and did not.
 
-> [!important] So the first thing to inspect is **`flyway_schema_history`**, not the entity. **Absent** means Flyway never ran at all — usually the dependency is missing from the build, or the migrations are in a folder Flyway does not look in. **Present but missing your version** means Flyway ran and found no file to apply — usually a filename that does not match `V<VERSION>__<NAME>.sql`. **Present with `success = 0`** is the failed-migration case, and that is [[10-When-A-Migration-Fails]].
+> [!important] So the first thing to inspect is **`flyway_schema_history`**, not the entity. **Absent** means Flyway never ran at all — usually the dependency is missing from the build, or the migrations are in a folder Flyway does not look in. **Present but missing your version** means Flyway ran and found no file to apply — usually a filename that does not match `V<VERSION>__<NAME>.sql`. **Present with `success = 0`** is the failed-migration case, and that is [[04-When-A-Migration-Fails]].
 
 # One word, two mechanisms
 
@@ -48,7 +48,7 @@ There is a trap in the log worth defusing before it costs an hour.
   12:28:25.383  o.f.core.internal.command.DbValidate  : Successfully validated 1 migration
 ```
 
-> [!warning] **That is not `ddl-auto: validate`.** It is Flyway validating its own work — comparing the migrations recorded as applied against the files now on disk, which is the checksum verification from [[08-Flyway]]. Two entirely different checks share one word, and both run in the same startup.
+> [!warning] **That is not `ddl-auto: validate`.** It is Flyway validating its own work — comparing the migrations recorded as applied against the files now on disk, which is the checksum verification from [[02-Flyway]]. Two entirely different checks share one word, and both run in the same startup.
 
 | | Compares | Fails when |
 |---|---|---|

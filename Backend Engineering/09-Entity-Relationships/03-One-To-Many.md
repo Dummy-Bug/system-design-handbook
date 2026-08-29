@@ -160,7 +160,7 @@ The fix used here is to drop the database and recreate it, which is fine on a de
 
 > [!important] This is the clearest argument yet for **database migrations**. A migration is a deliberate, ordered, reviewable script — it can add the column as nullable, backfill sensible values, then apply the constraint. `ddl-auto` cannot, because it only compares the current classes against the current schema and has no idea what the intermediate steps should be.
 
-That argument is taken up properly in [[07-Database-Migrations]].
+That argument is taken up properly in [[01-Database-Migrations]].
 
 # The DTO changes too
 

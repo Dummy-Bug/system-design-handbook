@@ -133,7 +133,7 @@ Restart, and Flyway applies it:
 
 > [!info] **Verified.** The index the annotation could not create, created by a migration, and recorded in the history table.
 
-> [!important] Which is the arrangement `08-Flyway.md` argued for, now paying off on something other than tables. **An index is a schema change**, so it belongs where schema changes live — reviewable in a diff, applied in order, recorded once per database.
+> [!important] Which is the arrangement `11-Database-Migrations/02-Flyway.md` argued for, now paying off on something other than tables. **An index is a schema change**, so it belongs where schema changes live — reviewable in a diff, applied in order, recorded once per database.
 
 And it is the only route that lets you write the SQL that matters:
 

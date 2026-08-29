@@ -146,6 +146,6 @@ It is four commands, and it turns a one-shot into something you can get wrong re
 
 One consequence that cuts the other way, and is useful.
 
-> [!important] `08-Flyway` establishes that an applied migration is frozen — its checksum is recorded and verified on every startup, so editing it breaks validation. **A migration that failed was never applied**, so there is no successful checksum to violate. Fix the file in place, clear the failed row, and run it again.
+> [!important] `02-Flyway` establishes that an applied migration is frozen — its checksum is recorded and verified on every startup, so editing it breaks validation. **A migration that failed was never applied**, so there is no successful checksum to violate. Fix the file in place, clear the failed row, and run it again.
 
 The freeze begins the moment a migration succeeds, not the moment it is written.
