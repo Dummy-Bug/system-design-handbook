@@ -117,13 +117,14 @@ Backend Engineering/
 ├── 16-Scaling-Reads/                ← monolith vs microservices, EXPLAIN, composite indexes, selectivity, clustered indexes, creating them safely
 ├── 17-Caching-With-Redis/           ← why cache, where it lives, Redis data structures, TTL locks, when not to cache, caching patterns, eviction, the Spring integration, index vs cache
 ├── 18-Testing/                      ← where testing sits, unit tests and mocking, the kinds of test, then Mockito service tests, H2 repository tests, MockMvc controller tests, and a full integration test
+├── Docker/                          ← why containers, images and containers, the command layer, Dockerfiles, ports, bind mounts and volumes, networking, Compose, publishing
 ├── Full-Text-Search/                ← prefix/suffix/substring, why substring defeats indexes, Postgres full-text, the inverted index, TF-IDF and BM25
 └── MongoDB/                         ← NoSQL families, JSON and BSON, the shell, querying, updating, indexes and explain, aggregation pipelines
 ```
 
 **Numbered folders follow the course repository's commit history** — the record of the sequence the material was actually built in. `12-API-Responses-And-Errors/` precedes `13-Writing-Data-Efficiently/` because the response-and-adapter commits precede the order-API commits; the `Order` entity itself arrived far earlier, with the many-to-many work in folder 10. **When a folder's placement is uncertain, read the commit messages** rather than reasoning about prerequisites — that reasoning has been wrong before.
 
-**A folder with no commits behind it stays unnumbered.** `Full-Text-Search/` and `MongoDB/` are subjects taught with their own tooling and no code in `SpringDemoTodo`, so the commit history says nothing about where they belong. Numbering them would break the contiguity of the folders that do follow it — testing sits at `18` because its commits come directly after Redis's. They get numbers when the project that uses them appears; until then they sort alphabetically after the numbered run.
+**A folder with no commits behind it stays unnumbered.** `Docker/`, `Full-Text-Search/` and `MongoDB/` are subjects taught with their own tooling and no code in the course project, so the commit history says nothing about where they belong. Docker's demos live in throwaway repositories of their own; the project's `docker-compose.yml` arrives later, with the ELK commit, not with the Docker material itself. Numbering them would break the contiguity of the folders that do follow it — testing sits at `18` because its commits come directly after Redis's. They get numbers when the project that uses them appears; until then they sort alphabetically after the numbered run.
 
 **Every folder carrying an `Images/` needs a `CREDITS.md` beside the files** naming source, author and licence for anything taken from the web.
 
