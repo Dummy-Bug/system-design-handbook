@@ -149,3 +149,111 @@ Two lines of substance. The id, its generation strategy and its primary-key stat
 > [!info] `@MappedSuperclass` is the right tool when the parent is a **convenience for developers** rather than a concept in the domain. When the parent is a real thing — a user that is sometimes a customer and sometimes a seller — you want one of the actual inheritance strategies instead, and a table to go with it.
 
 This also scales in a way that matters later. Fields almost every table wants — created and updated timestamps, a soft-delete flag — go on `BaseEntity` once and appear everywhere.
+
+# What inheriting does to equality
+
+Extending a parent class has one consequence that is easy to miss, and the compiler says so out loud:
+
+```text
+1  warning: Generating equals/hashCode implementation but without a call to superclass,
+2  even though this class does not extend java.lang.Object. If this is intentional,
+3  add '@EqualsAndHashCode(callSuper=false)' to your type.
+4  @Data
+```
+
+**`@Data` generates `equals` and `hashCode` from the fields declared in the class itself, and only those.** Java's default is that two objects are equal when they are the same object in memory; Lombok replaces that with a field-by-field comparison. Inherited fields are not part of it.
+
+```mermaid
+flowchart TB
+    subgraph CAT["Category"]
+        N["name"]
+    end
+    subgraph BASE["BaseEntity"]
+        I["id"]
+        C["createdAt"]
+        U["updatedAt"]
+    end
+    CAT --> IN["compared by equals"]
+    BASE --> OUT["ignored by equals"]
+```
+
+Which means **`id` is excluded** — the one field that says which row this is.
+
+# The two ways that bites
+
+**Different rows compare as equal.** Nothing stops two categories sharing a name unless a unique constraint says so:
+
+```text
+1  id = 2   name = Books
+2  id = 7   name = Books
+```
+
+Two rows, two distinct categories. Comparing only `name` reports them as the same object, so `List.contains` matches the wrong one, a `Set` silently keeps one and drops the other, and a `Map` overwrites.
+
+**The hash changes as the object changes.** This one is worse, because entities are mutable by design:
+
+```java
+1  Set<Product> selected = new HashSet<>();
+2  selected.add(product);        // hashed on the current title and price
+3  product.setPrice(newPrice);   // the hash is now a different number
+4  selected.contains(product);   // false
+```
+
+The object is in the set, and the set cannot find it — it was filed under the old hash and is being looked for under the new one. Saving a new entity does the same damage in reverse: `id` goes from null to a real value, and anything already keyed on that object is stranded.
+
+# Identity belongs to the id
+
+A row is identified by its primary key. Basing equality on anything else is guessing, so the parent should decide it once for everyone:
+
+```java
+1  // src/main/java/com/example/FakeCommerce/schema/BaseEntity.java
+2  @Getter
+3  @Setter
+4  @MappedSuperclass
+5  public class BaseEntity {
+6
+7      @Id
+8      @GeneratedValue(strategy = GenerationType.IDENTITY)
+9      private Long id;
+10
+11     @Override
+12     public boolean equals(Object o) {
+13         if (this == o) return true;
+14         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+15         BaseEntity other = (BaseEntity) o;
+16         return id != null && id.equals(other.id);
+17     }
+18
+19     @Override
+20     public int hashCode() {
+21         return Hibernate.getClass(this).hashCode();
+22     }
+23 }
+```
+
+**Line 14 uses `Hibernate.getClass` rather than `getClass`.** A lazily-loaded association is a proxy — a generated subclass standing in for the real entity until something touches it. Plain `getClass()` on a proxy returns that generated class, so a proxy and a loaded instance of the very same row would compare as different. `Hibernate.getClass` unwraps the proxy and reports the real entity class. It also keeps a `Product` with id 1 from equalling a `Category` with id 1.
+
+**Line 16 requires a non-null id.** An entity not yet saved has no identity to compare, so it is equal only to itself — which line 13 already handles.
+
+**Line 21 returns the same hash for every instance of a type.** That is deliberate: a constant cannot change when a field is edited or when an id is assigned on save, which is exactly the instability being fixed. Every entity of a type landing in one bucket costs nothing at the sizes entity collections actually reach.
+
+For this to take effect the subclasses must stop generating their own. `@Data` bundles `@Getter`, `@Setter`, `@ToString`, `@EqualsAndHashCode` and a constructor together, so replacing it with the three that are wanted leaves the inherited implementation in place:
+
+```java
+1  // src/main/java/com/example/FakeCommerce/schema/Category.java
+2  @Getter
+3  @Setter
+4  @ToString
+5  @AllArgsConstructor
+6  @NoArgsConstructor
+7  @Builder
+8  @Entity
+9  @Table(name = "categories")
+10 public class Category extends BaseEntity {
+11
+12     @Column(nullable = false)
+13     private String name;
+14 }
+```
+
+> [!warning] `@EqualsAndHashCode(callSuper = false)` is what the warning text suggests, and it only silences the message — the behaviour above is unchanged. `callSuper = true` does bring `id` into the comparison, but keeps every mutable field in it too, so the unstable hash survives. Neither is a fix. **Added beyond what was covered.**

@@ -24,7 +24,14 @@ The platform's own notes panel captures fine, and its diagrams are legible. Two 
 
 ### The code
 
-The repository used on screen is `https://github.com/singhsanket143/SpringDemoTodo` — Spring Boot 4.0.2 on Java 21, Gradle, Lombok, layered as controller → service → repository with the repository behind an interface. Code in notes comes from there or from official docs, and is run before it goes in.
+**There are two repositories on screen, not one, and the second replaces the first.** Both are Spring Boot 4.0.2 on Java 21, Gradle, Lombok, layered as controller → service → repository with the repository behind an interface. Code in notes comes from whichever one the material is currently in, or from official docs, and is run before it goes in.
+
+| Repository | Package | Folders |
+|---|---|---|
+| `https://github.com/singhsanket143/SpringDemoTodo` | `com.example.demo` | 04 to 07 |
+| `https://github.com/singhsanket143/FakeCommerceSpring` | `com.example.FakeCommerce` | 08 onward |
+
+The todo project carries the starter, layering and dependency-injection material. Everything from `08-Building-The-API/` on is the commerce project, and **its commit history is the one the folder numbering follows** — so when a folder's placement is uncertain, that is the history to read.
 
 **Not the same track as `~/Desktop/wiki/Spring Boot/`.** That folder is the Coder Army YouTube series — Hindi, transcripts pasted into chat one video at a time, no rig involved. The two overlap on Spring Framework, Maven, dependency injection, the IoC container and the bean lifecycle, and they will disagree in places. Where they overlap, **link across rather than re-explaining**, and say which course a given treatment came from.
 
@@ -117,12 +124,13 @@ Backend Engineering/
 ├── 16-Scaling-Reads/                ← monolith vs microservices, EXPLAIN, composite indexes, selectivity, clustered indexes, creating them safely
 ├── 17-Caching-With-Redis/           ← why cache, where it lives, Redis data structures, TTL locks, when not to cache, caching patterns, eviction, the Spring integration, index vs cache
 ├── 18-Testing/                      ← where testing sits, unit tests and mocking, the kinds of test, then Mockito service tests, H2 repository tests, MockMvc controller tests, and a full integration test
+├── 19-Self-Hosted-Observability/    ← OpenTelemetry, managed vs self-hosted, micrometer, the ELK stack, running it with Compose, wiring Spring logs in, searching in Kibana, then Actuator, Grafana and Prometheus, logs into Loki, building a dashboard, alerts and on-call
 ├── Docker/                          ← why containers, images and containers, the command layer, Dockerfiles, ports, bind mounts and volumes, networking, Compose, publishing
 ├── Full-Text-Search/                ← prefix/suffix/substring, why substring defeats indexes, Postgres full-text, the inverted index, TF-IDF and BM25
 └── MongoDB/                         ← NoSQL families, JSON and BSON, the shell, querying, updating, indexes and explain, aggregation pipelines
 ```
 
-**Numbered folders follow the course repository's commit history** — the record of the sequence the material was actually built in. `12-API-Responses-And-Errors/` precedes `13-Writing-Data-Efficiently/` because the response-and-adapter commits precede the order-API commits; the `Order` entity itself arrived far earlier, with the many-to-many work in folder 10. **When a folder's placement is uncertain, read the commit messages** rather than reasoning about prerequisites — that reasoning has been wrong before.
+**Numbered folders follow the commit history of `FakeCommerceSpring`** — the record of the sequence the material was actually built in. `12-API-Responses-And-Errors/` precedes `13-Writing-Data-Efficiently/` because the response-and-adapter commits precede the order-API commits; the `Order` entity itself arrived far earlier, with the many-to-many work in folder 10. **When a folder's placement is uncertain, read the commit messages** rather than reasoning about prerequisites — that reasoning has been wrong before.
 
 **A folder with no commits behind it stays unnumbered.** `Docker/`, `Full-Text-Search/` and `MongoDB/` are subjects taught with their own tooling and no code in the course project, so the commit history says nothing about where they belong. Docker's demos live in throwaway repositories of their own; the project's `docker-compose.yml` arrives later, with the ELK commit, not with the Docker material itself. Numbering them would break the contiguity of the folders that do follow it — testing sits at `18` because its commits come directly after Redis's. They get numbers when the project that uses them appears; until then they sort alphabetically after the numbered run.
 

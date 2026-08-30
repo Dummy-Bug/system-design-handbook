@@ -252,3 +252,49 @@ A third difference is smaller but points the same way: **a line item records wha
 > [!info] **Verified.** One migration applied, the table matches the script exactly, and the application started — which under `validate` is itself the confirmation that the entity and the table agree.
 
 The startup succeeding is the whole signal. **Under `validate`, a clean start is a proof**, not merely an absence of errors.
+
+# The edge of that proof
+
+A clean start proves a specific set of things, and it is worth knowing exactly which — because the gaps are where a false sense of safety comes from.
+
+> [!important] **Guarantees:** every table an entity maps to exists, every mapped column exists on it, and the column types are compatible. **Does not guarantee:** that nullability agrees, that constraints match, that indexes exist, or that anything in the database which no entity maps to is correct.
+
+Nullability is the one that surprises people, because it looks like it is being checked.
+
+```java
+1  @Column(nullable = false)
+2  private Integer quantity;
+```
+
+Against a column that is still nullable:
+
+```text
+1  Field     Type  Null  Key  Extra
+2  quantity  int   YES
+```
+
+**The application starts cleanly.** The column exists and its type is right, which is all `validate` compares. The disagreement about whether it may be empty goes unmentioned.
+
+# Two enforcers, and only one of them is here
+
+The reason that gap is easy to misread is that `nullable = false` sounds like a database instruction. It is really doing two unrelated jobs, and under `validate` only one of them is live.
+
+```mermaid
+flowchart TB
+    E["@Column(nullable = false)"]
+    E --> A["Generates NOT NULL
+    when Hibernate writes the schema
+    — never happens under validate"]
+    E --> B["Rejects a null value at flush,
+    before any SQL is sent"]
+    M["The migration"] --> C["Makes the column NOT NULL
+    so the database itself refuses"]
+```
+
+**Hibernate rejects it first.** Saving an entity whose `quantity` is null throws before a statement reaches MySQL, so during ordinary application use the annotation alone does appear to work.
+
+**The database rejects it only if the column says so**, and the column only says so because a migration made it. That is the difference between a rule your application happens to follow and a rule the data cannot break.
+
+The distinction stops being academic the moment anything writes to that table other than the application — a backfill inside a migration, a script, an import job, a second service sharing the database, or somebody at a MySQL prompt. None of them go through Hibernate, so none of them see the annotation. A `NOT NULL` column is the only version of the rule they are subject to.
+
+> [!warning] Change the entity and the schema together. An annotation without its migration is a constraint that exists only in Java, and a migration without its annotation is a constraint the application will trip over at runtime with no warning at startup. `validate` catches neither of these, because neither is a type or an existence problem. **Added beyond what was covered.**

@@ -100,10 +100,10 @@ Which is the right answer when you do not want the category. It is no answer at 
 Step outside the framework for a second. Asked in plain SQL for products with their categories, nobody would write N+1 queries:
 
 ```sql
-1  SELECT p.*, c.*
-2  FROM products p
-3  JOIN categories c ON p.category_id = c.id
-4  WHERE p.id = ?
+  SELECT p.*, c.*
+  FROM products p
+  JOIN categories c ON p.category_id = c.id
+  WHERE p.id = ?
 ```
 
 Reading it a line at a time, because every part matters later.
@@ -131,9 +131,9 @@ One query. The database does the matching, which is what a relational database i
 # Attempt one: a native join
 
 ```java
-1  @Query(nativeQuery = true, value =
-2      "SELECT p.*, c.* FROM products p JOIN categories c ON p.category_id = c.id WHERE p.id = :id")
-3  List<Product> findProductWithDetailsById(Long id);
+  @Query(nativeQuery = true, value =
+      "SELECT p.*, c.* FROM products p JOIN categories c ON p.category_id = c.id WHERE p.id = :id")
+  List<Product> findProductWithDetailsById(Long id);
 ```
 
 Which fails:

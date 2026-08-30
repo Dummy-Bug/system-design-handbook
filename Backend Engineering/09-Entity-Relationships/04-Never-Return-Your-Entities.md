@@ -173,11 +173,11 @@ It does not read private fields directly. It discovers properties **reflectively
 
 ## Why this succeeds rather than crashing
 
-A lazy load needs the Hibernate session still open when it happens — and by default in Spring Boot it is, because `spring.jpa.open-in-view` is enabled. The startup log announces it:
+> A lazy load **needs the Hibernate session still open** when it happens — and by default in Spring Boot it is, because `spring.jpa.open-in-view` is enabled. The startup log announces it:
 
 ```text
-1  spring.jpa.open-in-view is enabled by default. Therefore, database queries may be
-2  performed during view rendering.
+spring.jpa.open-in-view is enabled by default. Therefore, database queries may be
+performed during view rendering.
 ```
 
 That keeps the persistence context alive through response rendering, which is what allows a field touched during serialisation to still reach the database.
@@ -232,7 +232,9 @@ Mapping the entity to it, in the service:
 ## The result
 
 ```text
-Hibernate: select p1_0.id,p1_0.category_id,p1_0.description,p1_0.image, p1_0.price ,p1_0.rating,p1_0.title from products p1_0
+Hibernate: select p1_0.id,p1_0.category_id, 
+p1_0.description,p1_0.image, p1_0.price ,
+p1_0.rating,p1_0.title from products p1_0
 ```
 
 # `@SuperBuilder`
