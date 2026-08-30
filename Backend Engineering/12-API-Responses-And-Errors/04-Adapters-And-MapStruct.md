@@ -1,4 +1,4 @@
-The envelope settles the outer shape of every response. What goes in `data` is still an open question, and for anything with relationships the answer is not the entity.
+The envelope settles the outer shape of every response. What goes in `data` is still an open question, and for **anything with relationships the answer is not the entity.**
 
 # Why an order cannot return itself
 
@@ -134,15 +134,41 @@ flowchart LR
 
 **Line 26 — `this::mapToGetOrderResponseDto`.** A method reference to the single-order function, so the list version is one line and there is one definition of the conversion.
 
-## Why it is a bean
+## Static helper, or a bean?
 
-Line 32 is the interesting one. Getting the items means a query, because an `Order` has no reference to its `OrderProducts`.
+A class that exists only to turn one object into another can be built two ways, and it is worth being explicit about both before saying which one this is.
 
-> [!important] A repository is needed, so the adapter cannot be a class of static methods. **It becomes a `@Component` with the repository injected**, which is why lines 24, 30 and 44 are instance methods and why the service injects an `OrderAdapter` rather than calling a static utility.
+| | Static utility | Spring bean |
+|---|---|---|
+| Instances | none is ever created | one, built at startup |
+| Methods | carry `static` | plain instance methods |
+| Call site | `OrderAdapter.mapToGetOrderResponseDto(order)` | `orderAdapter.mapToGetOrderResponseDto(order)`, on an injected field |
+| Can hold a repository | no | yes, through its constructor |
 
-That is a general point about this pattern. **An adapter that only rearranges fields can be static. One that has to fetch anything is a bean**, and the moment a conversion needs data the object does not already hold, it acquires dependencies like any other collaborator.
+The static shape is the simpler of the two, and for most adapters it is all that is needed. Copying `order.getId()` into `.id(...)` requires nothing beyond the argument that was handed in, so there is nothing to inject and no reason for Spring to manage the object at all.
 
-> [!info] The alternative was to give `Order` a lazily-loaded list of its `OrderProducts` and read it directly. That works, and it moves the query into the mapping rather than removing it.
+**Line 32 is where the simple shape stops being enough.**
+
+An `Order` carries `id`, `status`, `createdAt` and `updatedAt`, and nothing else. It holds no list of its own line items, because the link between the two is one-directional: every `OrderProducts` row points at its order through a `@ManyToOne`, and the `Order` points back at nothing. So an adapter that is handed an `Order` and asked for a response containing the items cannot find them in what it was given. It has to go and ask the database, which is exactly what line 32 does.
+
+A `static` method has no way to do that. Spring injects dependencies into instances, so a static field never receives a repository, and there are only two ways around it: pass the repository in as an extra parameter on every call, which moves the problem onto every caller, or park it in a static field assigned once during startup, which is a piece of global mutable state and a reliable way to get a null on the first request that arrives before the assignment has run.
+
+> [!important] Needing a repository is what fixes the shape of the class. It gets a constructor-injected field, a field means a real instance, and an instance that Spring hands out means `@Component` and `@RequiredArgsConstructor` — which is why lines 24, 30 and 44 carry no `static`, and why `OrderService` declares `private final OrderAdapter orderAdapter;` instead of calling a static utility.
+
+That generalises past this one class. **An adapter that only rearranges fields can be static. One that has to fetch anything is a bean.** The moment a conversion needs data the object does not already hold, it has a dependency, and it acquires that dependency the same way any other collaborator does.
+
+```mermaid
+flowchart TD
+    A["A conversion is asked for"] --> B{"Is everything it needs already<br/>inside the object it was handed?"}
+    B -- yes --> C["Rearranging fields only"]
+    C --> D["Static methods are enough"]
+    B -- no --> E["It has to fetch something"]
+    E --> F["That means a repository"]
+    F --> G["A repository can only be<br/>injected into an instance"]
+    G --> H["@Component plus constructor injection:<br/>the adapter is a bean"]
+```
+
+> [!info] The alternative was to give `Order` a lazily-loaded list of its `OrderProducts` and read it directly, which would need no repository and would let the adapter go back to being static. It works, but it does not remove the query — it only moves it. Hibernate still goes to the database, at the moment the list is first touched rather than on a line anybody wrote.
 
 ## The service becomes trivial
 

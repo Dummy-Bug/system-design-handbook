@@ -1,11 +1,11 @@
-Successes return a domain object. Failures return a string. Both carry a correct status code, and that is where the consistency ends — which makes writing a client harder than it needs to be.
+**Successes return a domain object. Failures return a string.** Both carry a correct status code, and that is where the consistency ends — which makes writing a client harder than it needs to be.
 
 # The problem, from the client's side
 
 ```text
-1  201  { "id": 1, "name": "electronics" }
-2  404  Category with id 100 not found
-3  500  Something went wrong
+  201  { "id": 1, "name": "electronics" }
+  404  Category with id 100 not found
+  500  Something went wrong
 ```
 
 Three responses, three shapes. Code consuming this API has to branch on the status code before it can even parse the body, and every endpoint returning a different object means that logic is written again per endpoint.
@@ -13,12 +13,12 @@ Three responses, three shapes. Code consuming this API has to branch on the stat
 > [!important] What is wanted is a **response envelope** — one outer structure every response uses, whatever happened. The payload varies; the wrapper never does.
 
 ```json
-1  {
-2    "success": true,
-3    "message": "Category created successfully",
-4    "data": { "id": 1, "name": "electronics" },
-5    "error": null
-6  }
+  {
+    "success": true,
+    "message": "Category created successfully",
+    "data": { "id": 1, "name": "electronics" },
+    "error": null
+  }
 ```
 
 | Field | | |
@@ -125,42 +125,42 @@ This is the half that matters. An envelope only helps if failures use it too.
 
 > [!important] **`ApiResponse<Void>` is the envelope with no payload.** `Void` is the type used when a generic parameter is required and there is nothing to put there — which is exactly a failure, where `data` is null by construction.
 
-Note which argument goes where. `error` gets the specific detail — the exception's own message, naming the missing id. `message` gets the general category of failure. The client can show one and log the other.
+Note which argument goes where. `error` gets the specific detail — **the exception's own message, naming the missing id.** `message` gets the general category of failure. The client can show one and log the other.
 
 # What comes out
 
 **A success:**
 
-```text
-1  POST /api/v1/categories
-2  { "name": "clothing" }
+```http
+  POST /api/v1/categories
+  { "name": "clothing" }
 ```
 
-```text
-1  201 Created
-2  {
-3    "success": true,
-4    "message": "Category created successfully",
-5    "error": null,
-6    "data": { "id": 3, "name": "clothing", "createdAt": "...", "updatedAt": "..." }
-7  }
+```json
+  201 Created
+  {
+    "success": true,
+    "message": "Category created successfully",
+    "error": null,
+    "data": { "id": 3, "name": "clothing", "createdAt": "..", "updatedAt": ".." }
+  }
 ```
 
 **A failure:**
 
-```text
-1  POST /api/v1/categories
-2  {}
+```http
+  POST /api/v1/categories
+  {}
 ```
 
-```text
-1  500 Internal Server Error
-2  {
-3    "success": false,
-4    "message": "Internal server error",
-5    "error": "Something went wrong",
-6    "data": null
-7  }
+```json
+  500 Internal Server Error
+  {
+    "success": false,
+    "message": "Internal server error",
+    "error": "Something went wrong",
+    "data": null
+  }
 ```
 
 > [!info] **Verified.** The two bodies have identical structure. Only which fields are populated differs, and `success` says which to read without inspecting anything else.
@@ -197,6 +197,6 @@ Every method gets the same treatment:
 
 **A client can be written once.** Parse the envelope, check `success`, read `data` or `error`. That logic is identical for every endpoint in the application, including ones added later.
 
-**Messages reach the user for free.** The `message` field is the text a UI shows after an action, chosen by the code that knows what happened rather than assembled in the client from a status code.
+> **Messages reach the user for free.** The `message` field is the text a UI shows after an action, chosen by the code that knows what happened rather than assembled in the client from a status code.
 
 **Failures stop being a special case.** They come back through the same shape, so client code has one path instead of two.

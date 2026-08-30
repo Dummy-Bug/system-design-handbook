@@ -3,22 +3,24 @@ A controller method that returns an object works. The object is serialised to JS
 # What returning an object gives away
 
 ```java
-1  @PostMapping
-2  public Category createCategory(@RequestBody CreateCategoryRequestDto requestDto) {
-3      return categoryService.createCategory(requestDto);
-4  }
+  @PostMapping
+  public Category createCategory(@RequestBody CreateCategoryRequestDto requestDto) {
+      return categoryService.createCategory(requestDto);
+  }
 ```
 
 Call it and the response is correct:
 
-```text
-1  POST /api/v1/categories
-2  { "name": "electronics" }
+**Request**
+```json
+  POST /api/v1/categories
+  { "name": "electronics" }
 ```
 
-```text
-1  200 OK
-2  { "id": 1, "name": "electronics", "createdAt": "...", "updatedAt": "..." }
+**Response**
+```json
+  200 OK
+  { "id": 1, "name": "electronics", "createdAt": "...", "updatedAt": "..." }
 ```
 
 > [!info] The Java object did not travel. A **serialisation** library converted it to JSON on the way out, and does the reverse for incoming request bodies. That happens whether or not you think about it.
@@ -30,12 +32,13 @@ Call it and the response is correct:
 # `ResponseEntity`
 
 ```java
-1  @PostMapping
-2  public ResponseEntity<Category> createCategory(@RequestBody CreateCategoryRequestDto requestDto) {
-3      return ResponseEntity
-4              .status(HttpStatus.CREATED)
-5              .body(categoryService.createCategory(requestDto));
-6  }
+  @PostMapping
+  public ResponseEntity<Category> createCategory(@RequestBody   
+                  CreateCategoryRequestDto requestDto) {
+      return ResponseEntity
+              .status(HttpStatus.CREATED)
+              .body(categoryService.createCategory(requestDto));
+  }
 ```
 
 > [!important] **`ResponseEntity` is an object representing the complete HTTP response** — body, status code and headers together. Returning one means the method describes the whole response rather than a fragment of it.
@@ -65,14 +68,14 @@ Two types are available and either works.
 
 # What it produces
 
-```text
-1  POST /api/v1/categories
-2  { "name": "kitchenware" }
+```json
+  POST /api/v1/categories
+  { "name": "kitchenware" }
 ```
 
-```text
-1  201 Created
-2  { "id": 2, "name": "kitchenware", "createdAt": "...", "updatedAt": "..." }
+```json
+  201 Created
+  { "id": 2, "name": "kitchenware", "createdAt": "...", "updatedAt": "..." }
 ```
 
 > [!info] **Verified.** The body is unchanged. The status went from `200 OK` to `201 Created` because the method now describes it.
@@ -82,16 +85,16 @@ Two types are available and either works.
 Headers work the same way, and are how you set anything the protocol carries outside the body — content type, cache directives, a `Location` pointing at the resource just created, or headers of your own.
 
 ```java
-1  HttpHeaders headers = new HttpHeaders();
-2  headers.add("X-Custom-Header", "some-value");
-3
-4  return new ResponseEntity<>(body, headers, HttpStatus.CREATED);
+  HttpHeaders headers = new HttpHeaders();
+  headers.add("X-Custom-Header", "some-value");
+
+  return new ResponseEntity<>(body, headers, HttpStatus.CREATED);
 ```
 
 For the ordinary case there is a shorter form:
 
 ```java
-1  return ResponseEntity.ok(categories);
+  return ResponseEntity.ok(categories);
 ```
 
 > [!important] **`.ok(body)` is `.status(HttpStatus.OK).body(body)`.** Worth using where 200 is genuinely what you mean, and worth not using where the explicit status is the point — a `201` written out says something a bare `.ok()` cannot.

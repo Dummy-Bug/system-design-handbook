@@ -4,9 +4,9 @@ Success responses are under control. Failures are not — and a failing endpoint
 
 Send a create request with the required field missing:
 
-```text
-1  POST /api/v1/categories
-2  {}
+```json
+  POST /api/v1/categories
+  {}
 ```
 
 What comes back is the framework's default: a long JSON error carrying a timestamp, the exception class name, and a stack trace running through the framework's internals.
@@ -41,12 +41,12 @@ Nothing in the controller changes. It throws; the advice answers.
 # A handler
 
 ```java
-1  @ExceptionHandler(Exception.class)
-2  public ResponseEntity<String> handleAllGeneralExceptions(Exception ex) {
-3      return ResponseEntity
-4              .status(HttpStatus.INTERNAL_SERVER_ERROR)
-5              .body("Something went wrong");
-6  }
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<String> handleAllGeneralExceptions(Exception ex) {
+      return ResponseEntity
+              .status(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body("Something went wrong");
+  }
 ```
 
 **`@ExceptionHandler` names the exception type this method deals with.** `Exception.class` is the root of the hierarchy, so this catches everything.
@@ -58,20 +58,20 @@ Nothing in the controller changes. It throws; the advice answers.
 Now the same failing request:
 
 ```text
-1  POST /api/v1/categories
-2  {}
+  POST /api/v1/categories
+  {}
 ```
 
-```text
-1  500 Internal Server Error
-2  Something went wrong
+```json
+  500 Internal Server Error
+  Something went wrong
 ```
 
 > [!info] **Verified.** No stack trace, no class names, no framework internals. A status code the client can branch on and a message a human can read.
 
 # Exceptions worth naming
 
-A catch-all is a floor, not a design. Every failure returning `500` is wrong — a request for a category that does not exist is not a server error, it is a `404`, and the client should be able to tell those apart.
+**A catch-all is a floor, not a design.** Every failure returning `500` is wrong — a request for a category that does not exist is not a server error, it is a `404`, and the client should be able to tell those apart.
 
 Which requires an exception type that means the thing:
 
@@ -105,26 +105,24 @@ Previously this threw a bare `RuntimeException`, which the catch-all would have 
 And a handler for it:
 
 ```java
-1  @ExceptionHandler(ResourceNotFoundException.class)
-2  public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
-3      return ResponseEntity
-4              .status(HttpStatus.NOT_FOUND)
-5              .body(ex.getMessage());
-6  }
+  @ExceptionHandler(ResourceNotFoundException.class)
+  public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
+      return ResponseEntity
+              .status(HttpStatus.NOT_FOUND)
+              .body(ex.getMessage());
+  }
 ```
 
 The message written at the throw site is what reaches the client, so the useful detail — which id was missing — survives the journey.
 
-```text
-1  GET /api/v1/categories/100
+```http
+  GET /api/v1/categories/100
 ```
 
-```text
-1  404 Not Found
-2  Category with id 100 not found
+```json
+  404 Not Found
+  Category with id 100 not found
 ```
-
-> [!info] **Verified** against a database holding two categories, neither with id 100.
 
 # Which handler wins
 
@@ -191,11 +189,11 @@ Line 22 uses that: `ex.getValue()` is what arrived, `ex.getName()` the parameter
 By default an advice covers every controller. It can be scoped:
 
 ```java
-1  @RestControllerAdvice(assignableTypes = { CategoryController.class })
+  @RestControllerAdvice(assignableTypes = { CategoryController.class })
 ```
 
 ```java
-1  @RestControllerAdvice(basePackages = "com.example.FakeCommerce.controllers.admin")
+  @RestControllerAdvice(basePackages = "com.example.FakeCommerce.controllers.admin")
 ```
 
 `assignableTypes` limits it to named controllers; `basePackages` to everything in a package. Useful when one part of an API should fail differently from another — a public surface and an internal one, say.
