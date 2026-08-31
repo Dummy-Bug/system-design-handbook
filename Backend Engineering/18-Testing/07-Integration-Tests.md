@@ -135,6 +135,8 @@ flowchart TB
 
 > [!important] Ending with the deletions is deliberate. It **tests the delete endpoints** and leaves the database as it was found, so the test does not depend on running first or alone.
 
+> [!info] **`MockMvc` is not the only way to drive this.** It calls into the application without going over the network, which keeps the test fast and in-process. The alternative is to start the application for real and hit it with an HTTP client — Spring's own `WebClient`, a library like Retrofit, or a script in another language entirely. **The choice of client changes nothing about the logic**: exercise the flow end to end, point it at a test database rather than a real one, and clean up whatever you created. What an external client buys you is that the network and the serialisation are real too; what it costs is a running application and a slower test.
+
 # Where each kind of test loads
 
 The whole progression, in one place:

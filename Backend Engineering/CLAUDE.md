@@ -111,7 +111,7 @@ Backend Engineering/
 │   └── 11-IP-Addressing/            ← why addresses need structure, classes, classless addressing, IPv6
 ├── 04-Spring-Boot-Starter/          ← what Spring Boot is, the generator, project layout, configuration, first run
 ├── 05-Layered-Architecture/         ← MVC and where it breaks, controller/service/repository, DTOs, the API layer
-├── 06-Spring-Dependency-Injection/  ← the IoC container, beans, component scan, injection styles, scopes
+├── 06-Spring-Dependency-Injection/  ← dependency injection by hand, dependency inversion, component scan, injection styles, choosing an implementation
 ├── 07-Databases-With-Spring/        ← JDBC upward, JPA, Hibernate, Spring Data JPA, connection configuration
 ├── 08-Building-The-API/             ← entity to table, repositories, derived and native queries, request channels
 ├── 09-Entity-Relationships/         ← Category, @MappedSuperclass, @ManyToOne, lazy loading, the N+1 problem

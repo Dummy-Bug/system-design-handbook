@@ -107,6 +107,39 @@ On a small application, how you arrange the code barely matters. You can find ev
 
 The calculation changes as the project grows, because the number of moving pieces grows with it. A realistic backend has to fetch data from a database, manipulate it according to business rules, call third-party services, manage configuration, and shape responses. Once all of that is present, arranging it deliberately is what keeps any single change from touching everything.
 
+# Libraries and frameworks are not the same thing
+
+Two words appear constantly in any discussion of architecture, and they are not interchangeable. The difference is easiest to see away from code entirely.
+
+You have to cook dinner. **The most involved option is to grow the vegetables yourself** — learn to farm, plant potatoes, wait. It is entirely possible and it is an enormous amount of work for something that is not the meal. So instead you go to a market and buy them, because somebody with actual expertise in farming has already solved that problem, and their solving it once means nobody else has to.
+
+Software has the same shape. Almost every backend ever written has to talk to a database. You could write your own code to open a connection, send a query and parse what comes back — or you could use the work of people who specialise in exactly that.
+
+> [!important] **A library is a piece of code that solves one or two specific problems for you.** It is small, focused and light. You call it when you want it, and the rest of the program is yours.
+
+| Library | The one problem it solves |
+|---|---|
+| **React** | Building UI out of components |
+| **Hibernate** | Talking to a database from Java in Java's own terms rather than in SQL |
+| **Sequelize** | The same job for JavaScript — `users.findAll()` instead of `SELECT * FROM users` |
+| **Express** | Routing HTTP requests to handlers |
+
+**Now the other way to eat.** You buy a ready-to-eat packet — boil it, make some rice, done. That has not solved one problem, it has solved a whole chain of them: sourcing, preparation, seasoning, proportions. The convenience is enormous and it comes with a condition, which is that the nutrition on that packet is the nutrition you are getting. You cannot adjust it.
+
+> [!important] **A framework solves a bigger problem, and usually is a collection of libraries doing it.** It does far more heavy lifting, and in exchange it decides things on your behalf.
+
+**Ruby on Rails**, **Angular** and **Spring Boot** are frameworks. Working in one, a great deal happens from very little code, and that is precisely why it can feel like magic — a lot is being done that you did not write and cannot see.
+
+```mermaid
+flowchart LR
+    A["Library<br/>React, Hibernate, Express"] --> B["Solves one problem<br/>You write more code<br/>You keep control"]
+    C["Framework<br/>Rails, Angular, Spring Boot"] --> D["Solves many problems<br/>You write less code<br/>It makes decisions for you"]
+```
+
+> [!important] **The trade is convenience against control, and it runs in both directions.** A library leaves you writing more code and able to shape all of it. A framework writes a great deal for you and hands back less room to disagree. Neither is the better answer; they answer different questions.
+
+This matters here because the architecture a framework assumes is one of the decisions it makes for you.
+
 # A framework built around it
 
 MVC is not just a diagram — some frameworks are constructed around it and will arrange your project for you.

@@ -235,7 +235,7 @@ And they change for different reasons, which is the SRP test applied: your datab
 
 Several others worth knowing by name:
 
-- **Seeders.** Code that inserts sample data into your database, so there is something to develop and test against.
+- **Seeders.** Code that inserts sample data into your database, so there is something to develop and test against. They also answer a question that comes up with configuration-shaped tables — a table holding exactly one row that never changes does not need a create endpoint, an update endpoint or a controller. **Write the schema, write a seeder, and the row exists.** Exposing CRUD for a value nobody is going to change is API surface with nothing behind it.
 - **Producers and consumers.** When work is handled asynchronously rather than during the request, the code that puts jobs onto a queue and the code that takes them off get their own layers.
 - **Templates.** If your application sends emails, the email templates live together rather than inside whatever logic happens to send them.
 - **Configuration for a specific library.** Wiring up a cache or a message queue is configuration, and it goes in the config layer — one of the many things MVC has nothing to say about.

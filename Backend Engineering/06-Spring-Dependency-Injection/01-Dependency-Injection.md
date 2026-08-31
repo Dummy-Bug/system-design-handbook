@@ -120,6 +120,89 @@ And because it arrived through a constructor, this is specifically **constructor
 
 Note what has not happened: the service never calls `new TodoRepository()`. It states what it needs and receives it. That separation is the whole idea, and it is what makes swapping the implementation possible later.
 
+# The class it depends on is the wrong class to depend on
+
+It runs now, and the design still has a problem serious enough to have a name.
+
+Look at what `TodoService` says about itself. Its field is a `TodoRepository`, its constructor takes a `TodoRepository`, and the type is written into the class three times. The service has committed, in its own source code, to one specific way of storing todos.
+
+> [!important] That is a violation of the **Dependency Inversion Principle** — the D in SOLID. It says a high-level module should not depend on a low-level one; both should depend on an abstraction.
+
+In this pair, the service is the high-level module: it holds the rules about what happens to todos. The repository is the low-level one: it knows where the bytes go. Right now the rules name the storage.
+
+**Break it and the cost is obvious.** The list lives in memory today; tomorrow it lives in MySQL. That is entirely a storage decision, and nothing about the rules for todos has changed. But `TodoService` names `TodoRepository`, so a new storage class means editing the service — a class that does not care where data is kept and should never have had to be opened.
+
+The fix is to have the service depend on a description of what it needs rather than on the thing that provides it.
+
+```java
+1  // ITodoRepository.java
+2  public interface ITodoRepository {
+3
+4      List<Todo> findAll();
+5  }
+```
+
+```java
+1  // InMemoryTodoRepository.java
+2  public class InMemoryTodoRepository implements ITodoRepository {
+3
+4      private List<Todo> todos = new ArrayList<>();
+5
+6      @Override
+7      public List<Todo> findAll() {
+8          return todos;
+9      }
+10 }
+```
+
+```java
+1  // TodoService.java
+2  public class TodoService {
+3
+4      private ITodoRepository todoRepository;
+5
+6      public TodoService(ITodoRepository r) {
+7          this.todoRepository = r;
+8      }
+9
+10     public List<Todo> getAllTodos() {
+11         return todoRepository.findAll();
+12     }
+13 }
+```
+
+**The rename is doing real work and is easy to skim past.** The old name, `TodoRepository`, claimed to be the repository for todos, as though there could only be one. `InMemoryTodoRepository` says which kind it is, which leaves room for `MySqlTodoRepository` to exist beside it rather than replace it.
+
+> [!info] The `I` prefix on an interface is a .NET convention that some Java codebases borrow. It is not universal and the Spring ecosystem generally does not use it; it appears here only to make the interface obvious at a glance.
+
+Nothing about the wiring changes. `main` still creates the object and still passes it in — it just names the concrete class in the one place that is allowed to know it:
+
+```java
+1  // Main.java
+2  public static void main(String[] args) {
+3      ITodoRepository r = new InMemoryTodoRepository();
+4      TodoService ts = new TodoService(r);
+5      ts.getAllTodos();
+6  }
+```
+
+What moved is the direction of the dependency.
+
+```mermaid
+flowchart TB
+    subgraph BEFORE["Before — the rules depend on the storage"]
+        S1["TodoService"] --> R1["TodoRepository<br/>a concrete class"]
+    end
+    subgraph AFTER["After — both depend on the abstraction"]
+        S2["TodoService"] --> I2["ITodoRepository<br/>an interface"]
+        R2["InMemoryTodoRepository"] -.implements.-> I2
+    end
+```
+
+> [!important] **Swapping storage is now an edit to `main` and a new class.** `TodoService` does not change, does not recompile against a different type, and does not need re-reading. That is the whole return on the interface, and it is why the type appears as `ITodoRepository` from here on.
+
+And it creates a question that did not exist a moment ago. An interface cannot be instantiated, so once something else is doing the wiring, that something has to decide **which** implementation to hand over.
+
 # The observation that motivates everything else
 
 Now go back and look at a Spring Boot project doing the same job.

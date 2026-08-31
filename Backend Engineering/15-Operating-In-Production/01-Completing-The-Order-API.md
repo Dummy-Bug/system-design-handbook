@@ -161,3 +161,11 @@ Once the shape is familiar, the mechanical parts of this go quickly with a codin
 > [!important] **If a tool writes an N+1 query for you and you have never fixed one, you will not recognise it.** The whole value of the previous folder was seeing 21 queries become 3 — and that only registered because the naive version was written first, run, and measured.
 
 Which is the honest rule: **write it manually while you are learning what can go wrong.** The productivity argument applies to work whose failure modes you can already spot.
+
+Two practical points sit alongside that.
+
+> [!important] **Plenty of interviews still forbid it.** Whatever the working world settles on, a large share of companies currently expect code written without assistance in front of them. Skill you only have with a tool in the room is skill you cannot demonstrate in a room that has banned the tool.
+
+> [!info] Most assistants offer a mode that answers without editing files, as against one that goes ahead and changes them. **While learning, the answering mode is the better setting** — you read the explanation and then type the code, which is the part that puts it in your hands. The editing mode skips exactly the step you are there to practise.
+
+Once the shape is genuinely familiar, the calculation flips, and the work that goes fastest is the work you could already have done: a fourth CRUD resource identical to the three you wrote by hand, a response DTO whose fields you can list, a mechanical refactor you can already picture. Being specific is what makes that work — naming the files to follow for conventions, listing the fields you want rather than leaving them to be invented, and reading the result as you would review a colleague's.

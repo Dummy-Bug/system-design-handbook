@@ -1,4 +1,4 @@
-Depending on an interface rather than a concrete class is the right instinct, and it raises an immediate practical problem: an interface cannot be instantiated. Something has to decide which implementation gets injected — and when there is more than one candidate, Spring will not guess.
+Inverting the dependency solved one problem and created another: an interface cannot be instantiated. Something has to decide which implementation gets injected — and when there is more than one candidate, Spring will not guess.
 
 # Spring resolves an interface on its own
 
