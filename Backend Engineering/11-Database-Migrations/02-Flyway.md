@@ -156,7 +156,7 @@ The name follows a convention that makes it readable in an error message months 
 >
 > `ALTER TABLE products DROP FOREIGN KEY fk_product_category;`
 
-> [!info] The name appears again in `SHOW INDEX FROM products`, because InnoDB creates an index for the constraint and gives it the same name — the automatic index described in `16-Scaling-Reads/06-Clustered-And-Secondary.md`.
+> [!info] The name appears again in `SHOW INDEX FROM products`, because InnoDB creates an index for the constraint and gives it the same name — the automatic index described in `16-Scaling-Reads/07-Secondary-Indexes.md`.
 
 > [!info] **One table per script is the usual convention**, so each version does one thing and can be reasoned about alone. Four tables in `V1` is a reasonable exception for an initial schema being brought under Flyway's control in one go.
 

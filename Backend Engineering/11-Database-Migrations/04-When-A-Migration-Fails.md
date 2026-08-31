@@ -71,7 +71,7 @@ flowchart TB
 | History row left behind | **None** | `success = 0` |
 | To retry | Fix the file, restart | **Undo by hand, then repair** |
 
-> [!important] On PostgreSQL the history insert happens inside the same transaction as the DDL, so a failure rolls back the schema change **and** the record of it. There is nothing to clean up and nothing to learn. **MySQL makes you learn this**, and the mechanism is the same one behind `07-Creating-Indexes-Safely` in the indexing material: MySQL's DDL is not something you can wrap and abandon.
+> [!important] On PostgreSQL the history insert happens inside the same transaction as the DDL, so a failure rolls back the schema change **and** the record of it. There is nothing to clean up and nothing to learn. **MySQL makes you learn this**, and the mechanism is the same one behind `08-Hash-Indexes` in the indexing material: MySQL's DDL is not something you can wrap and abandon.
 
 # What repair actually does
 
