@@ -75,7 +75,7 @@ Two fields, and both choices matter.
 
 **A product id, not a product.** The client sends the id of something that already exists; the server looks it up. A client cannot invent a product by describing one.
 
-**`Integer`, not `int`.** Quantity is **optional** — a client saying add this product without saying how many means one. A primitive cannot express absent, so the wrapper type is required. This is the same `Long` versus `long` trap from the entity mapping, in a third place.
+**`Integer`, not `int`.** Quantity is **optional** — a client saying add this product without saying how many **means one**. A primitive cannot express absent, so the wrapper type is required. This is the same `Long` versus `long` trap from the entity mapping, in a third place.
 
 > [!info] Notice what the request does **not** carry: no price, no subtotal, no product name. All of those are read from the product at the point the order is assembled. A client that could send a price could send its own price.
 

@@ -14,12 +14,12 @@ Creating an order means turning a list of product ids into a list of rows. Writt
 9          for (var itemDto : requestDto.getOrderItems()) {
 10
 11             Product product = productRepository.findById(itemDto.getProductId())
-12                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+12                 .orElseThrow(() -> new ResourceNotFoundException("not found"));
 13
 14             OrderProducts orderProduct = OrderProducts.builder()
 15                 .order(order)
 16                 .product(product)
-17                 .quantity(itemDto.getQuantity() != null ? itemDto.getQuantity() : 1)
+17                 .quantity(itemDto.getQuantity()!=null?itemDto.getQuantity() : 1)
 18                 .build();
 19
 20             orderproductsRepository.save(orderProduct);
@@ -56,15 +56,15 @@ The loop asks for one product at a time because that is how the loop is shaped. 
 ## Collect the ids
 
 ```java
-1  List<Long> productIds = requestDto.getOrderItems().stream()
-2          .map(item -> item.getProductId())
-3          .collect(Collectors.toList());
+  List<Long> productIds = requestDto.getOrderItems().stream()
+          .map(item -> item.getProductId())
+          .collect(Collectors.toList());
 ```
 
 ## Fetch them in one query
 
 ```java
-1  List<Product> products = productRepository.findAllById(productIds);
+  List<Product> products = productRepository.findAllById(productIds);
 ```
 
 `findAllById` is provided by `JpaRepository` and issues a single `WHERE id IN (...)`. Ten reads become one.
@@ -87,11 +87,11 @@ The result is an in-memory index of everything the database returned — a looku
 ## Detect what is missing
 
 ```java
-1  for (Long id : productIds) {
-2      if (!productMap.containsKey(id)) {
-3          throw new ResourceNotFoundException("Product not found with id: " + id);
-4      }
-5  }
+  for (Long id : productIds) {
+      if (!productMap.containsKey(id)) {
+          throw new ResourceNotFoundException("Product not found id :" + id);
+      }
+  }
 ```
 
 Every id that was asked for is checked against what came back. **This is what recovers the error reporting that `findAllById` threw away**, and it names the specific id that failed rather than reporting that something went wrong.
@@ -198,7 +198,7 @@ The order is saved. Then products are fetched. Then lines are written. **If the 
 
 ## What Spring actually does
 
-The annotation is not read by your code. Spring wraps the bean in a **proxy** — an object with the same interface that runs extra steps around the real method.
+**The annotation is not read by your code.** Spring wraps the bean in a **proxy** — an object with the same interface that runs extra steps around the real method.
 
 ```mermaid
 flowchart TB
