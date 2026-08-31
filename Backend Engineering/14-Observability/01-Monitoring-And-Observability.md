@@ -44,7 +44,10 @@ flowchart LR
     Q1 -- "an alert fires" --> Q2
 ```
 
-**They are two halves of one loop.** Monitoring tells you something is wrong. Observability is what lets you find out why. An alert saying CPU is above threshold, with no way to investigate further, has told you almost nothing — you knew that already, and the useful question is what is consuming it.
+They are two halves of one loop. 
+
+> Monitoring tells you **something is wrong**. Observability is **what lets you find out why**. 
+> An alert saying CPU is above threshold, **with no way to investigate further, has told you almost nothing** — you knew that already, and the useful question is what is consuming it.
 
 # The three pillars
 
@@ -62,7 +65,9 @@ And they need to be **ingested** somewhere central and searchable. Logs sitting 
 
 Numbers over time. Request rate, error rate, queue depth, latency percentiles.
 
-A good example that is not about CPU at all. A pipeline runs at each month end and takes about an hour to write a file:
+Those arrive for free. The machine is already counting requests and already knows how much memory it is holding, so nobody had to decide those numbers were worth having. That is also their limit: **every one of them can look perfect while the thing the business actually needs is broken.** Every server at twenty percent CPU, no errors anywhere, every health check green, and the report finance needs on the first of the month does not exist. No machine metric can see that, because nothing about it is a machine problem.
+
+So here is a metric with no CPU in it anywhere. A pipeline runs at each month end, takes about an hour, and its entire purpose is to produce one file:
 
 ```text
 2026/
@@ -70,9 +75,31 @@ A good example that is not about CPU at all. A pipeline runs at each month end a
     data.txt
 ```
 
-> [!important] The metric is: **by 23:30 on the last day of the month, `2026/April/data.txt` should exist and be larger than zero bytes.** Miss either condition and something upstream failed.
+Nobody cares what the job did while it ran. The only thing that matters is what is sitting on disk afterwards, which makes the success condition easy to write down:
 
-That is a metric about a business process, not a machine, and it demonstrates the general shape — **decide what true looks like, measure whether it is true, alert when it stops being true.**
+> [!important] By 23:30 on the last day of the month, `2026/April/data.txt` exists and is larger than zero bytes. Miss either condition and something upstream failed.
+
+Three deliberate choices are packed into that sentence.
+
+**Exists** catches the job never starting, or dying before it wrote anything — a scheduler that did not fire, an expired credential, an upstream feed that never arrived.
+
+**Larger than zero bytes** catches a failure the first check cannot see at all. Most programs create the output file up front and write into it as they go, so a job that opens the file and then dies leaves a real, present, entirely empty file behind. The existence check says yes. The data is still gone. Size is what separates started from finished.
+
+**By 23:30** is what turns a wish into something checkable. The job takes an hour, so half past eleven leaves margin and still lands inside the month. Without a deadline there is no moment at which anyone is entitled to say it failed — the answer is always that it might still be coming.
+
+Written down that way it stops being a one-off look at a folder and becomes a number over time, which is what a metric is. Sample the file size once a night and it reads zero for most of the month and jumps to a few million on the last day; the alert is then a threshold on that number, using exactly the same machinery that watches CPU.
+
+That is the general shape, and it holds for anything worth watching.
+
+```mermaid
+flowchart LR
+    A["Decide what true looks like<br/>a condition specific enough to be wrong"] --> B["Measure whether it is true<br/>check it on a schedule, record the answer"]
+    B --> C["Alert when it stops being true<br/>a threshold on that recorded number"]
+```
+
+The first step is the one that has to be done by hand. Request rate and memory exist whether anybody thinks about them or not; a metric about a business process exists only because somebody sat down and wrote the sentence.
+
+> [!info] Notice what the check does not say. It reports that the outcome is wrong, not which of the stages upstream broke — the words are that something upstream failed, and no more than that. Which is monitoring doing its job, and exactly where logs and traces have to take over.
 
 ## Traces
 
@@ -119,6 +146,20 @@ Two things worth knowing when choosing.
 > [!important] **Self-hosted is not free, it is differently expensive.** The software costs nothing; the servers it runs on cost money, and so does the team maintaining it. Wanting an AI feature in your dashboard means somebody builds it. For a small company that is overhead with no relationship to the product.
 
 Which is why hosted tools dominate at startups and large companies build their own — at sufficient scale, and under compliance rules about where data may be stored, the trade reverses.
+
+The comparison is sharper than the table suggests, because the two columns are not the same product with different price tags.
+
+| | Prometheus with Grafana | A hosted platform |
+|---|---|---|
+| **Where it runs** | On servers you provision and maintain | On theirs |
+| **Metrics** | Yes, and it is very good at them | Yes |
+| **Dashboards** | Grafana, with many pre-built | Included, with many pre-built |
+| **Notifications** | Not in Prometheus itself — a separate component | Built in, wired to email, Slack, on-call tools |
+| **Getting started** | Config files and containers before the first chart | An account and an agent |
+
+> [!important] **The notification gap is the one that decides it for a first attempt.** Prometheus collects and stores; it does not, on its own, wake anybody up. Getting from a threshold being crossed to a person being told requires assembling another piece — which is entirely doable, and is one more thing to install and understand before the exercise has taught you anything about observability itself.
+
+Which is the argument for learning on a hosted tool and not a statement about which is better. **The concepts are the same in both**, and the one that gets you to a working alert fastest is the one that teaches them soonest.
 
 # What to actually take from this
 

@@ -119,7 +119,7 @@ Backend Engineering/
 ├── 11-Database-Migrations/          ← why migrations, Flyway, validate catching drift, failed migrations and repair
 ├── 12-API-Responses-And-Errors/     ← ResponseEntity, exception advice, the response envelope, adapters and MapStruct
 ├── 13-Writing-Data-Efficiently/     ← cart as a pending order, N+1 on writes, batching an update
-├── 14-Observability/                ← monitoring vs observability, the Java agent, reading traces and percentiles
+├── 14-Observability/                ← monitoring vs observability, the Java agent, reading traces and percentiles, dashboards and host monitoring, then load testing
 ├── 15-Operating-In-Production/      ← completing the order API, deleting at scale, incidents and logging
 ├── 16-Scaling-Reads/                ← monolith vs microservices, EXPLAIN, composite indexes, selectivity, clustered indexes, creating them safely
 ├── 17-Caching-With-Redis/           ← why cache, where it lives, Redis data structures, TTL locks, when not to cache, caching patterns, eviction, the Spring integration, index vs cache

@@ -2,10 +2,10 @@ Logs, metrics and traces all require the application to emit them. The interesti
 
 # Two ways in
 
-| Approach | What it is |
-|---|---|
+| Approach         | What it is                                                                           |
+| ---------------- | ------------------------------------------------------------------------------------ |
 | **A Java agent** | A jar attached to the JVM at startup, which instruments the application from outside |
-| **Micrometer** | A library added as a dependency, which the application uses to publish metrics |
+| **Micrometer**   | A library added as a dependency, which the application uses to publish metrics       |
 
 Micrometer is a metrics facade — you add it, and it collects and forwards. The agent approach is what vendors typically recommend, and it is the one worth understanding first because of what it demonstrates.
 
@@ -74,8 +74,8 @@ The obvious move is to paste the licence key into `newrelic.yml`. Do not.
 The agent reads environment variables, which is the way around it:
 
 ```bash
-1  export NEW_RELIC_LICENSE_KEY=your-key-here
-2  export NEW_RELIC_APP_NAME=spring-boot-fakecommerce
+  export NEW_RELIC_LICENSE_KEY=your-key-here
+  export NEW_RELIC_APP_NAME=spring-boot-fakecommerce
 ```
 
 > [!important] **Configuration that varies by environment or must stay secret does not belong in a file you commit.** The same reasoning applies to database passwords, API keys and anything else that differs between your machine and production.
@@ -87,9 +87,9 @@ The agent reads environment variables, which is the way around it:
 The only change to the project. In `build.gradle`:
 
 ```groovy
-1  tasks.named('bootRun') {
-2      jvmArgs = ['-javaagent:newrelic/newrelic.jar']
-3  }
+  tasks.named('bootRun') {
+      jvmArgs = ['-javaagent:newrelic/newrelic.jar']
+  }
 ```
 
 Now `./gradlew bootRun` starts the JVM with the agent attached.
@@ -125,3 +125,17 @@ The agent knows about frameworks. It does not know about your business.
 > [!important] It can tell you `POST /api/v1/orders` took 400 ms. It cannot tell you **how many orders were placed**, what they were worth, or how many failed payment — because those are facts about your domain, and nothing in the bytecode identifies them as interesting.
 
 Domain metrics need deliberate instrumentation: Micrometer counters, or the vendor's API called from your own code. Which is the natural division — **the agent handles the infrastructure layer for free, and you write the part only you could know.**
+
+There are three routes across that boundary, and they are worth knowing before reaching for the first one.
+
+| | |
+|---|---|
+| **Micrometer** | A dependency and a counter or timer in your code, published through a registry |
+| **The vendor's API** | Their client library, called directly from your code |
+| **Plain HTTP** | A `POST` of a metric payload to an ingest endpoint, authenticated with the same licence key |
+
+> [!important] The third one matters more than it looks. **A metric endpoint that accepts an authenticated HTTP request can be called by anything** — a shell script, a cron job, a service written in a language the vendor has no agent for. The month-end pipeline check from the first note is exactly this shape: something that is not your application, reporting a number your application could never know.
+
+Most of these platforms also expose REST and GraphQL APIs for reading back what they hold, which is what makes it possible to script a report or wire a metric into something else.
+
+> [!info] The pattern generalises past this one vendor. **An observability tool that can only be fed by its own agent is a tool you will eventually fight**; one with an open ingest endpoint can be fed by whatever you already have.
