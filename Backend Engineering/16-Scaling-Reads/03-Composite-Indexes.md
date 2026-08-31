@@ -3,8 +3,8 @@ One index per column would be simple and is not what anybody does. Real queries 
 # One index, several columns
 
 ```sql
-1  CREATE INDEX idx_price_rating_category
-2  ON products (created_at, price, rating, category_id);
+  CREATE INDEX idx_price_rating_category
+  ON products (created_at, price, rating, category_id);
 ```
 
 > [!important] A **composite index** orders rows by several columns in sequence — by `created_at` first, then by `price` within each `created_at`, then by `rating`, then by `category_id`.
@@ -46,22 +46,22 @@ flowchart TB
 Same index throughout. Only the query changes.
 
 ```sql
-1  EXPLAIN SELECT * FROM products WHERE created_at = NOW();
-2  -- Index lookup
+  EXPLAIN SELECT * FROM products WHERE created_at = NOW();
+  -- Index lookup
 ```
 
 Leading column constrained. Works.
 
 ```sql
-1  EXPLAIN SELECT * FROM products WHERE created_at = NOW() AND price > 80;
-2  -- Index range scan
+  EXPLAIN SELECT * FROM products WHERE created_at = NOW() AND price > 80;
+  -- Index range scan
 ```
 
 First two columns. Works.
 
 ```sql
-1  EXPLAIN SELECT * FROM products WHERE rating = 3;
-2  -- Table scan
+  EXPLAIN SELECT * FROM products WHERE rating = 3;
+  -- Table scan
 ```
 
 **`rating` is the third column.** No `created_at`, no entry point, full scan — despite `rating` being right there in the index definition.
@@ -80,9 +80,9 @@ Two indexed columns, neither of them the first. **Still a full scan.**
 One thing that is **not** required:
 
 ```sql
-1  -- both use the index
-2  SELECT * FROM products WHERE created_at = NOW() AND price > 80;
-3  SELECT * FROM products WHERE price > 80 AND created_at = NOW();
+  -- both use the index
+  SELECT * FROM products WHERE created_at = NOW() AND price > 80;
+  SELECT * FROM products WHERE price > 80 AND created_at = NOW();
 ```
 
 > [!important] **The optimiser reorders conditions.** `WHERE` is a set of conditions, not a sequence, so writing them in a different order from the index makes no difference. What matters is **which columns** are constrained, not the order you typed them in.
@@ -94,16 +94,16 @@ One thing that is **not** required:
 There is one more behaviour, and it explains an output that otherwise looks like it breaks the rule.
 
 ```sql
-1  EXPLAIN SELECT * FROM products
-2  WHERE created_at >= '2026-08-28 10:00:00' AND rating > 3;
+  EXPLAIN SELECT * FROM products
+  WHERE created_at >= '2026-08-28 10:00:00' AND rating > 3;
 ```
 
 `created_at` and `rating` — the first and third columns, skipping `price`. That is **not** a valid prefix. Yet:
 
 ```text
-1  -> Index range scan on products using idx_price_rating_category
-2     over (created_at >= '2026-08-28 10:00:00'),
-3     with index condition: (products.rating > 3.0)
+  -> Index range scan on products using idx_price_rating_category
+     over (created_at >= '2026-08-28 10:00:00'),
+     with index condition: (products.rating > 3.0)
 ```
 
 It used the index. Two things are happening, and line 3 names the second.

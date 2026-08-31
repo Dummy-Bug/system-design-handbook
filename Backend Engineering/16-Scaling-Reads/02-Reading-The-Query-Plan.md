@@ -29,7 +29,7 @@ Nothing about this is free, and both costs are worth stating plainly.
 The database will describe its plan for a query rather than running it.
 
 ```sql
-1  EXPLAIN SELECT * FROM products WHERE price > 80;
+  EXPLAIN SELECT * FROM products WHERE price > 80;
 ```
 
 Two phrases in the output carry most of the meaning:
@@ -48,12 +48,12 @@ A `products` table loaded with **1,000 rows**, of which **301** have `price > 80
 ## Without an index
 
 ```sql
-1  EXPLAIN SELECT * FROM products WHERE price > 80;
+  EXPLAIN SELECT * FROM products WHERE price > 80;
 ```
 
 ```text
-1  -> Filter: (products.price > 80)  (cost=104 rows=334)
-2      -> Table scan on products  (cost=104 rows=1002)
+  -> Filter: (products.price > 80)  (cost=104 rows=334)
+      -> Table scan on products  (cost=104 rows=1002)
 ```
 
 **Read it bottom-up.** Line 2 is a table scan over **1,002 rows** — everything. Line 1 filters those down to an estimated 334.
@@ -72,13 +72,13 @@ flowchart LR
 ## With an index
 
 ```sql
-1  CREATE INDEX idx_price ON products (price);
+  CREATE INDEX idx_price ON products (price);
 ```
 
 Same query, same result set, different plan:
 
 ```text
-1  -> Index range scan on products using idx_price  (cost=136 rows=301)
+  -> Index range scan on products using idx_price  (cost=136 rows=301)
 ```
 
 > [!important] **301 rows.** Not 1,002. Because the index is ordered by price, the database can find where values above 80 begin and read from there — it never touches the rows that do not qualify.
@@ -103,11 +103,11 @@ Which is a practical warning for the lab: **generate enough data that the differ
 # An index only helps its own columns
 
 ```sql
-1  EXPLAIN SELECT * FROM products WHERE rating > 3;
+  EXPLAIN SELECT * FROM products WHERE rating > 3;
 ```
 
 ```text
-1  -> Table scan on products
+  -> Table scan on products
 ```
 
 The index on `price` is present and irrelevant. Nothing in it is ordered by rating.

@@ -5,11 +5,11 @@ The index exists, the query filters on its leading column, and the plan still sa
 The index is on `created_at`, a timestamp. The query looks correct:
 
 ```sql
-1  EXPLAIN SELECT * FROM products WHERE created_at >= '2026-08-28 10:00:00';
+  EXPLAIN SELECT * FROM products WHERE created_at >= '2026-08-28 10:00:00';
 ```
 
 ```text
-1  -> Table scan on products
+  -> Table scan on products
 ```
 
 The leading column is constrained. The index is ignored anyway.
@@ -21,24 +21,24 @@ The index orders rows by timestamp. **The query is comparing against a string**,
 Give it an actual timestamp and the index comes back:
 
 ```sql
-1  EXPLAIN SELECT * FROM products WHERE created_at = NOW();
-2  -- Index lookup
+  EXPLAIN SELECT * FROM products WHERE created_at = NOW();
+  -- Index lookup
 ```
 
 Or convert explicitly, so the conversion happens **once** rather than per row:
 
 ```sql
-1  EXPLAIN SELECT * FROM products
-2  WHERE created_at >= CONVERT_TZ('2026-08-28 10:00:00', '+00:00', '+05:30');
-3  -- Index range scan
+  EXPLAIN SELECT * FROM products
+  WHERE created_at >= CONVERT_TZ('2026-08-28 10:00:00', '+00:00', '+05:30');
+  -- Index range scan
 ```
 
 > [!important] The general form is worth memorising: **an index on a column is unusable if the column has to be transformed before comparison.** Implicit type conversion is one case. So is wrapping the column in a function:
 >
 > ```sql
-> 1  WHERE DATE(created_at) = '2026-08-28'   -- no index
-> 2  WHERE created_at >= '2026-08-28 00:00:00'
-> 3    AND created_at <  '2026-08-29 00:00:00'   -- index used
+>   WHERE DATE(created_at) = '2026-08-28'   -- no index
+>   WHERE created_at >= '2026-08-28 00:00:00'
+>     AND created_at <  '2026-08-29 00:00:00'   -- index used
 > ```
 >
 > **Transform the value you are comparing against, never the column.** The index holds raw column values; anything applied to the column has to be applied to every row to find out what it produces.
@@ -57,8 +57,8 @@ flowchart TB
 Second case, and this one is the optimiser being right.
 
 ```sql
-1  EXPLAIN SELECT * FROM products WHERE created_at <= NOW();
-2  -- Table scan
+  EXPLAIN SELECT * FROM products WHERE created_at <= NOW();
+  -- Table scan
 ```
 
 The column is indexed, the type is correct, the leading column is constrained. Still a full scan.
@@ -68,8 +68,8 @@ The column is indexed, the type is correct, the leading column is constrained. S
 Change the condition so it matches a small fraction and the choice flips:
 
 ```sql
-1  EXPLAIN SELECT * FROM products WHERE created_at = NOW();
-2  -- Index lookup
+  EXPLAIN SELECT * FROM products WHERE created_at = NOW();
+  -- Index lookup
 ```
 
 > [!important] **Selectivity is the fraction of rows a condition matches, and it is what the optimiser decides on.** Few rows: use the index, fetch them individually. Most rows: skip the index, read sequentially — sequential reads are far cheaper per row than random ones.
@@ -93,8 +93,8 @@ flowchart LR
 The third case, covered in the previous note and listed here for completeness:
 
 ```sql
-1  EXPLAIN SELECT * FROM products WHERE price = 80 AND rating = 3;
-2  -- Table scan
+  EXPLAIN SELECT * FROM products WHERE price = 80 AND rating = 3;
+  -- Table scan
 ```
 
 Both columns are in the index. Neither is the first. **There is no way to enter it.**

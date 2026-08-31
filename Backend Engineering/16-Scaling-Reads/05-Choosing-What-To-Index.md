@@ -45,7 +45,7 @@ Worked through on a `users` table with **1,000,000 rows**:
 
 > [!important] Filtering a million rows down to five hundred thousand has achieved nothing useful. **O(n/2) is O(n)** — you still read a huge number of rows, and you paid for an index traversal first.
 
-And the optimiser knows. It has statistics on column distribution, so it can see that using this index means walking most of the index and then fetching most of the table individually — more work than reading the table straight through.
+And the **optimiser** knows. It **has statistics on column distribution**, so it can see that using this index means walking most of the index and then fetching most of the table individually — more work than reading the table straight through.
 
 ```mermaid
 flowchart LR
