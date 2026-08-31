@@ -121,7 +121,7 @@ Backend Engineering/
 ├── 13-Writing-Data-Efficiently/     ← cart as a pending order, N+1 on writes, batching an update
 ├── 14-Observability/                ← monitoring vs observability, the Java agent, reading traces and percentiles, dashboards and host monitoring, then load testing
 ├── 15-Operating-In-Production/      ← completing the order API, deleting at scale, incidents and logging
-├── 16-Scaling-Reads/                ← monolith vs microservices, EXPLAIN, composite indexes, selectivity, clustered indexes, creating them safely
+├── 16-Scaling-Reads/                ← monolith vs microservices, EXPLAIN, composite indexes, selectivity, clustered and secondary indexes, choosing a primary key, hash indexes and creating them safely
 ├── 17-Caching-With-Redis/           ← why cache, where it lives, Redis data structures, TTL locks, when not to cache, caching patterns, eviction, the Spring integration, index vs cache
 ├── 18-Testing/                      ← where testing sits, unit tests and mocking, the kinds of test, then Mockito service tests, H2 repository tests, MockMvc controller tests, and a full integration test
 ├── 19-Self-Hosted-Observability/    ← OpenTelemetry, managed vs self-hosted, micrometer, the ELK stack, running it with Compose, wiring Spring logs in, searching in Kibana, then Actuator, Grafana and Prometheus, logs into Loki, building a dashboard, alerts and on-call

@@ -6,14 +6,14 @@ The primary key is one index and the table is stored inside it. Every other inde
 
 Take the clustered table from before, four products in `id` order:
 
-```
+```text
 (1, Mug, 12)   (2, Lamp, 45)   (3, Desk, 120)   (4, Pen, 5)
 ```
 
 and add an index on price:
 
 ```sql
-CREATE INDEX idx_price ON products(price);
+1  CREATE INDEX idx_price ON products(price);
 ```
 
 Here is the entire thing that gets built:
@@ -54,7 +54,7 @@ The obvious thing to store in that pointer column is a location — the slot the
 
 Give the four products ids with gaps, so there is room between them. The rows sit in a line in `id` order, because that is what clustered means:
 
-```
+```text
 slot 1          slot 2           slot 3            slot 4
 (10, Mug, 12)   (20, Lamp, 45)   (30, Desk, 120)   (40, Pen, 5)
 ```
@@ -70,7 +70,7 @@ A price index storing slot numbers would say:
 
 All four correct. Now insert one product, `(25, Cup, 30)`. Where does it go? Between 20 and 30 — it has no choice, because the line is in id order and 25 belongs there.
 
-```
+```text
 slot 1          slot 2           slot 3          slot 4            slot 5
 (10, Mug, 12)   (20, Lamp, 45)   (25, Cup, 30)   (30, Desk, 120)   (40, Pen, 5)
 ```
@@ -100,7 +100,7 @@ A real products table does not carry one index. Say it has three — on price, o
 |---|---|
 | price | Desk, Pen |
 | name | Desk, Pen |
-| created_at | Desk, Pen |
+| `created_at` | Desk, Pen |
 
 Six entries to go and fix, from inserting one cup. And that is four rows and three indexes. Insert into the middle of a million-row table and everything after the insertion point shifts, so every index has to be corrected for every row that moved. That is not a slow write, it is an unusable database.
 
@@ -108,7 +108,7 @@ Six entries to go and fix, from inserting one cup. And that is four rows and thr
 
 Something that does not change when the row slides. Look at the Desk before and after:
 
-```
+```text
 before:  slot 3   (30, Desk, 120)
 after:   slot 4   (30, Desk, 120)
 ```
@@ -149,7 +149,7 @@ Storing the key rather than the location buys the write path everything above. I
 
 The table after the insert:
 
-```
+```text
 slot 1          slot 2           slot 3          slot 4            slot 5
 (10, Mug, 12)   (20, Lamp, 45)   (25, Cup, 30)   (30, Desk, 120)   (40, Pen, 5)
 ```
@@ -196,51 +196,163 @@ The size is not only a disk figure. A bigger index is more of it to read through
 
 # Indexes you did not create
 
-Worth knowing, because your table has more indexes than you wrote.
+Take a table nobody has ever run `CREATE INDEX` against:
 
 ```sql
-  SHOW INDEX FROM products;
+1  CREATE TABLE products (
+2      id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+3      sku_code    VARCHAR(20) UNIQUE,
+4      name        VARCHAR(50),
+5      category_id BIGINT,
+6      FOREIGN KEY (category_id) REFERENCES category(id)
+7  );
 ```
 
-On a table with no `CREATE INDEX` ever run against it:
+Then ask what indexes it has:
 
-```text
-1  PRIMARY                  BTREE   -- the clustered index
-2  FK_product_category      BTREE   -- from the foreign key
+```sql
+1  SHOW INDEX FROM products;
 ```
 
-> [!important] Databases create indexes on their own behalf. A **primary key** creates the clustered index. A **unique constraint** creates a secondary index — it is how uniqueness is enforced without scanning. A **foreign key** creates one in InnoDB, because the constraint has to be checked on every write to the referencing table.
+Three come back, and none of them was asked for:
 
-> [!info] `SHOW INDEX` also reports **cardinality** — the estimated number of distinct values, which is the raw material for the selectivity calculation. It is an estimate from sampled statistics, not an exact count.
+| declared as | index created | kind |
+|---|---|---|
+| `PRIMARY KEY` on `id` | `PRIMARY` | clustered |
+| `UNIQUE` on `sku_code` | one on `sku_code` | secondary |
+| `FOREIGN KEY` on `category_id` | one on `category_id` | secondary |
 
-Two practical consequences:
+## The primary key
 
-> [!warning] **A column may already be indexed.** Adding an index to a foreign key column can duplicate one InnoDB created, paying the write cost twice for one benefit.
+The clustered index, already covered — declaring a primary key is declaring where the rows live.
 
-**And index count grows without you.** A table with a primary key, two unique constraints and three foreign keys carries six indexes before anyone deliberately adds one.
+## The unique constraint
+
+Ask how the database could enforce `UNIQUE` without an index. On every insert it has to answer whether this `sku_code` already exists. With nothing to search, that means reading every row in the table: on a million rows, one insert reads a million rows, and so does the next one. The constraint would make writes unusable.
+
+With an index it is one search.
+
+> [!important] The index is not an optimisation someone added alongside the constraint. **The index is how the constraint is enforced.** `UNIQUE` and build me an index are the same instruction.
+
+## The foreign key
+
+This one is worth slowing down on, because the obvious reason is the wrong one.
+
+The obvious reason is that inserting a product has to check the category exists. That much is true — but the check searches `category` for a given `id`, which is already the primary key over there. It needs nothing on the products side.
+
+The real reason runs in the opposite direction. Somebody deletes a category. Before that can go through, the database has to answer whether any products still point at it — which is find the rows in products where `category_id` is 7. Without an index on `products.category_id`, answering that means scanning the whole products table, every time anyone touches a category.
+
+```mermaid
+flowchart TB
+    I["insert a product<br/>with category_id = 7"] --> IC["does category 7 exist?"] --> IX["searches category.id,<br/>already the primary key there"]
+    D["delete category 7"] --> DC["do any products<br/>still point at it?"] --> DX["searches products.category_id<br/>— this is the index InnoDB builds"]
+```
+
+> [!important] InnoDB will not allow a foreign key without an index on the referencing column. **If you do not provide one, it creates one.**
+
+## What follows from that
+
+> [!warning] **The column may already be indexed.** Seeing that `category_id` is a foreign key and gets filtered on constantly, you add `CREATE INDEX idx_category ON products(category_id)`. The table now carries two indexes on one column, both updated on every insert, update and delete — double the write cost for no extra read benefit. Run `SHOW INDEX` before adding anything.
+
+**And the count grows without you.** A table with a primary key, two unique constraints and three foreign keys carries six indexes before anyone deliberately adds one.
+
+> [!info] `SHOW INDEX` also reports **cardinality** — the estimated number of distinct values in the index, which is the raw material for the selectivity calculation. It comes from sampled statistics rather than an exact count, so treat it as approximate.
 
 # Other databases arrange this differently
 
-This is InnoDB's design, not a universal truth.
+Everything above is InnoDB's design, not a universal truth. **PostgreSQL stores rows in an unordered heap** — a new row goes wherever there is room. There is no clustered index at all, and the primary key is an ordinary secondary index pointing into the heap, so even a primary-key lookup is two steps there.
 
-> [!important] **PostgreSQL stores rows in an unordered heap.** The primary key is an ordinary secondary index pointing into it. There is no clustered index — every index lookup is two steps, including the primary key.
+Neither is better outright:
 
-Neither approach is better outright:
+| | InnoDB | PostgreSQL |
+|---|---|---|
+| Where rows live | inside the primary-key index | an unordered heap |
+| Primary-key lookup | one search | two, like any other index |
+| Secondary index holds | the primary key value | a location in the heap |
+| Cost of a wide primary key | inflates every other index | none, indexes do not store it |
+| Cost of an insert | must land in its sorted position | goes wherever there is room |
 
-**InnoDB's clustering** makes primary-key lookups and ranges over the primary key very fast, and makes every secondary index pay the size of the primary key.
-
-**PostgreSQL's heap** makes all indexes uniform and inserts cheap — a new row goes wherever there is room, rather than into a specific position.
-
-> [!important] Which is the general warning for everything in these notes. **Index behaviour is engine-specific.** MySQL, PostgreSQL, SQL Server and every NoSQL store make different choices, and the reasoning transfers while the specifics do not. Check the documentation for the database you are actually using.
+> [!important] **Index behaviour is engine-specific.** The reasoning transfers; the specifics do not. Advice written for PostgreSQL can be exactly wrong on MySQL, so check the documentation for the database you are actually using.
 
 # Designing the primary key
 
-If the primary key determines physical order, choosing it is a storage decision.
+The primary key decides where rows live, so choosing it is a storage decision rather than a naming one. Two properties matter, and both are visible on the line of rows.
 
-> [!important] **A sequential primary key means new rows are appended in order** — each insert lands at the end of the B+ tree, which is cheap. An auto-increment id does this by construction.
+## Does the next key land at the end, or in the middle?
 
-> [!warning] **A random primary key scatters inserts throughout the tree**, forcing page splits and fragmentation. Clustering on a random UUID is a known cause of write degradation on large InnoDB tables, precisely because clustering means the row's position is dictated by that value.
+With `AUTO_INCREMENT`, every new id is larger than every id already there. Take this line, with the next insert getting id 50:
 
-> [!info] Keeping the primary key **small** matters for the same structural reason: every secondary index stores a copy of it, so a wide primary key inflates every other index on the table.
+```text
+(10, Mug)   (20, Lamp)   (30, Desk)   (40, Pen)
+```
 
-Which retroactively justifies something from much earlier. `@GeneratedValue(strategy = GenerationType.IDENTITY)` producing a `bigint auto_increment` is not merely a convention — **it is small, sequential, and therefore the right shape for the structure the rows are stored in.**
+50 is bigger than 40, so it goes on the end:
+
+```text
+(10, Mug)   (20, Lamp)   (30, Desk)   (40, Pen)   (50, Cup)
+```
+
+Nothing moved. No row was pushed along, and the insert touched exactly one place.
+
+Now key the same table by a random value. The keys have no relationship to insertion time, so they sit in whatever order the random values sort into:
+
+```text
+(a1f9, Mug)   (c42b, Lamp)   (f20e, Desk)
+```
+
+The next insert generates `b7c3`, which sorts between `a1f9` and `c42b` — and that is where it has to go, because the line stays in key order:
+
+```text
+(a1f9, Mug)   (b7c3, Cup)   (c42b, Lamp)   (f20e, Desk)
+```
+
+Two rows pushed along. The next insert will land somewhere else entirely, and the one after that somewhere else again.
+
+That has a consequence which bites hard at scale. With a sequential key, **every insert touches the same end of the table**, and that end stays in memory however large the table grows. With a random key, every insert touches a different part of the table, so once the table outgrows memory the database goes to disk for a different region on every single insert.
+
+> [!warning] Clustering on a random value is a known cause of write performance collapsing on large InnoDB tables. It is not that the values are slow — **it is that clustering means the key dictates the row's position, and a random key dictates a random position.**
+
+## How wide is it?
+
+Every secondary index stores a copy of the primary key, as established above. So width is not a property of one column; it is a multiplier on every index the table carries. Eight bytes against thirty-six, three secondary indexes, a million rows: 24 MB against 108 MB in copies of the key alone.
+
+```mermaid
+flowchart TB
+    K["the clustering key"]
+    K --> S["sequential?<br/>inserts land at one end,<br/>which stays in memory"]
+    K --> W["narrow?<br/>every secondary index<br/>carries a copy of it"]
+```
+
+## Judging the candidates
+
+`AUTO_INCREMENT` meets both, which is why it is the default answer. It also needs a single writer — two database instances handing out ids independently will both issue 5. The moment more than one node generates ids, the counter has to go, and the two properties above become the criteria for what replaces it.
+
+| key | generated where | sequential | width |
+|---|---|---|---|
+| `BIGINT AUTO_INCREMENT` | the database, single writer only | yes | 8 bytes |
+| Snowflake id | any service, no coordination | yes, time-prefixed | 8 bytes |
+| UUIDv7 | anywhere | yes, time-prefixed | 16 bytes |
+| UUIDv4 | anywhere | no, fully random | 16 bytes |
+
+**A Snowflake id meets both.** It is 64 bits split into a timestamp, a machine identifier and a per-millisecond counter, with the timestamp in the high bits — so ids generated on different nodes still sort roughly in time order, and the whole thing fits in the same eight bytes as a `BIGINT`. Distributed generation with no loss on either property. The cost is operational: every node needs a distinct machine identifier, and something has to assign them.
+
+**UUIDv7 buys the first property and not the second.** Its time-ordered prefix stops inserts scattering, but it is sixteen bytes rather than eight, copied into every secondary index. Its advantage is that it is an ordinary UUID, so it works anywhere a UUID works, with no custom generator and no machine identifiers to hand out.
+
+**UUIDv4 fails both**, which is the case broken above.
+
+> [!warning] A UUID is sixteen bytes of data. Stored as `CHAR(36)` it occupies thirty-six — and that inflation is copied into every secondary index on the table. **Store it as `BINARY(16)`.**
+
+## Where this shows up in the code
+
+```java
+1  // src/main/java/com/example/FakeCommerce/schema/Product.java
+2  @Id
+3  @GeneratedValue(strategy = GenerationType.IDENTITY)
+4  private Long id;
+```
+
+That produces a `bigint auto_increment` column: small, and sequential. Not merely the conventional choice — **it is the right shape for the structure the rows are stored in.**
+
+> [!important] The rule is not use auto-increment. It is that **the clustering key should be time-ordered and as narrow as you can make it.** Auto-increment is simply the cheapest way to get that when a single database is doing the writing.
+
+And if a public identifier is what you actually need — an id safe to expose in a URL, or one generated before the row reaches the database — that is not a reason to give up the clustering key. Keep the narrow sequential key as the primary key and add the public identifier as a separate `UNIQUE` column. The clustering stays sequential, and the wide value is copied into one index rather than all of them.

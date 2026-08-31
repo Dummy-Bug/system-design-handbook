@@ -17,7 +17,7 @@ Six products make the difference visible. Here they are in the order they were i
 
 Two things exist on disk. The rows sit where they were written and never move:
 
-```
+```text
 block 1:  (7, Lamp, 45)   (3, Desk, 120)
 block 2:  (9, Chair, 80)  (1, Mug, 12)
 block 3:  (5, Shelf, 60)  (2, Pen, 5)
@@ -40,7 +40,7 @@ It is sorted, and it contains no product. Every entry is a price and an address.
 
 One thing exists on disk. The rows were physically placed in `id` order as they were written, and stay that way:
 
-```
+```text
 block 1:  (1, Mug, 12)    (2, Pen, 5)
 block 2:  (3, Desk, 120)  (5, Shelf, 60)
 block 3:  (7, Lamp, 45)   (9, Chair, 80)
@@ -90,7 +90,7 @@ Read the index page, land on `id = 5`, take the address, then read block 3 to ge
 
 In arrangement B, bisect the table:
 
-```
+```text
 block 1:  (1, Mug, 12)    (2, Pen, 5)
 block 2:  (3, Desk, 120)  (5, Shelf, 60)
 block 3:  (7, Lamp, 45)   (9, Chair, 80)
@@ -117,7 +117,7 @@ Four random jumps across three blocks, one of them visited twice. The index was 
 
 In arrangement B the four rows are physically next to one another:
 
-```
+```text
 block 2:  (3, Desk, 120)  (5, Shelf, 60)     <- both match
 block 3:  (7, Lamp, 45)   (9, Chair, 80)     <- both match
 ```
@@ -146,7 +146,7 @@ Three consequences follow, and they explain properties of primary keys that othe
 
 Four products, and on disk they are one line of rows, one after another. Clustered on `id`, that line looks like this:
 
-```
+```text
 (1, Mug, 12)   (2, Lamp, 45)   (3, Desk, 120)   (4, Pen, 5)
 ```
 
@@ -154,7 +154,7 @@ Read the id column left to right: 1, 2, 3, 4. Sorted. That is all clustered on `
 
 So say you want price clustered as well. There is one way to get it: physically move the rows.
 
-```
+```text
 (4, Pen, 5)   (1, Mug, 12)   (2, Lamp, 45)   (3, Desk, 120)
 ```
 
@@ -176,7 +176,7 @@ You can have one or the other, never both — the same way a shelf of books can 
 
 The same line of rows answers the other two.
 
-```
+```text
 (1, Mug, 12)   (2, Lamp, 45)   (3, Desk, 120)   (4, Pen, 5)
 ```
 
@@ -186,7 +186,7 @@ Compare that with a separate index on `price`. If a product had no price the ind
 
 Now try to insert a duplicate — `(2, Clock, 20)`, when `(2, Lamp, 45)` is already there.
 
-```
+```text
 (1, Mug, 12)   (2, Lamp, 45)   ???   (3, Desk, 120)   (4, Pen, 5)
                                 ^ where does (2, Clock, 20) go?
 ```
@@ -212,10 +212,10 @@ flowchart TB
 ## If you do not define one
 
 ```sql
-CREATE TABLE products (
-    name  VARCHAR(50),
-    price DECIMAL(10,2)
-);
+1  CREATE TABLE products (
+2      name  VARCHAR(50),
+3      price DECIMAL(10,2)
+4  );
 ```
 
 No primary key anywhere. Everything above still holds, though: the rows have to be stored, and storing them in InnoDB means storing them inside a clustered structure, which needs a key. So InnoDB picks one, in two steps.
@@ -223,18 +223,18 @@ No primary key anywhere. Everything above still holds, though: the rows have to 
 **Step 1: look for a column that could have been the primary key.** It scans the table's unique indexes and takes the first one whose columns are all `NOT NULL`. So this table:
 
 ```sql
-CREATE TABLE products (
-    product_code VARCHAR(20) NOT NULL UNIQUE,
-    name         VARCHAR(50),
-    price        DECIMAL(10,2)
-);
+1  CREATE TABLE products (
+2      product_code VARCHAR(20) NOT NULL UNIQUE,
+3      name         VARCHAR(50),
+4      price        DECIMAL(10,2)
+5  );
 ```
 
 gets clustered on `product_code`. Nothing was declared a primary key, but `product_code` satisfies both requirements above — never blank, never tied — so it can serve as the address. The rows lie in `product_code` order, and `WHERE product_code = 'A-114'` still lands straight on the row.
 
 **Step 2: if nothing qualifies, invent one.** Back to the first table, with no unique index at all. InnoDB adds a hidden 6-byte column of its own, an ever-increasing counter, and clusters on that:
 
-```
+```text
 [1] (Mug, 12)   [2] (Lamp, 45)   [3] (Desk, 120)   [4] (Pen, 5)
  ^ hidden counter: not in the CREATE TABLE, not in SELECT *, not usable in WHERE
 ```

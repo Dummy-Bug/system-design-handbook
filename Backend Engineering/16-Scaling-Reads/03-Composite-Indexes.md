@@ -3,8 +3,8 @@ One index per column would be simple and is not what anybody does. Real queries 
 # One index, several columns
 
 ```sql
-  CREATE INDEX idx_price_rating_category
-  ON products (created_at, price, rating, category_id);
+1  CREATE INDEX idx_price_rating_category
+2  ON products (created_at, price, rating, category_id);
 ```
 
 > [!important] A **composite index** orders rows by several columns in sequence — by `created_at` first, then by `price` within each `created_at`, then by `rating`, then by `category_id`.
@@ -40,7 +40,7 @@ Fourteen products, sitting in whatever order they were inserted:
 
 A **separate structure**, stored apart from the table, holding only the four indexed columns plus a pointer back to the row — and kept sorted:
 
-```json
+```text
        created_at   price   rating   cat      → row
        ----------   -----   ------   ---      ----
     1  Aug 26          20      1.2     2      →  9   Pad   ┐ same date and price,
@@ -302,22 +302,22 @@ The plan calls this an **index range scan**: seek to a position, then read a con
 Same index throughout. Only the query changes.
 
 ```sql
-  EXPLAIN SELECT * FROM products WHERE created_at = NOW();
-  -- Index lookup
+1  EXPLAIN SELECT * FROM products WHERE created_at = NOW();
+2  -- Index lookup
 ```
 
 Leading column constrained. Works.
 
 ```sql
-  EXPLAIN SELECT * FROM products WHERE created_at = NOW() AND price > 80;
-  -- Index range scan
+1  EXPLAIN SELECT * FROM products WHERE created_at = NOW() AND price > 80;
+2  -- Index range scan
 ```
 
 First two columns. Works.
 
 ```sql
-  EXPLAIN SELECT * FROM products WHERE rating = 3;
-  -- Table scan
+1  EXPLAIN SELECT * FROM products WHERE rating = 3;
+2  -- Table scan
 ```
 
 **`rating` is the third column.** No `created_at`, no entry point, full scan — despite `rating` being right there in the index definition.
@@ -336,9 +336,9 @@ Two indexed columns, neither of them the first. **Still a full scan.**
 One thing that is **not** required:
 
 ```sql
-  -- both use the index
-  SELECT * FROM products WHERE created_at = NOW() AND price > 80;
-  SELECT * FROM products WHERE price > 80 AND created_at = NOW();
+1  -- both use the index
+2  SELECT * FROM products WHERE created_at = NOW() AND price > 80;
+3  SELECT * FROM products WHERE price > 80 AND created_at = NOW();
 ```
 
 > [!important] **The optimiser reorders conditions.** `WHERE` is a set of conditions, not a sequence, so writing them in a different order from the index makes no difference. What matters is **which columns** are constrained, not the order you typed them in.
@@ -491,6 +491,15 @@ Two supporting heuristics:
 **Equality before range.** A column tested with `=` narrows to one point in the ordering, leaving the next column still usefully sorted. A range leaves you spread across many values, so columns after a range condition are much less useful.
 
 **High selectivity early**, where the access pattern allows. A column that splits the data finely eliminates more rows per level.
+
+```mermaid
+flowchart TB
+    A["filtered in every query?"] -- yes --> P1["position 1"]
+    A -- no --> B["tested with = rather<br/>than a range?"]
+    B -- yes --> P2["earlier"]
+    B -- no --> C["range or sort column"]
+    C --> P3["later — everything<br/>after it loses its ordering"]
+```
 
 > [!info] **One well-ordered composite index can replace several single-column ones**, because every prefix of it is itself usable. `(a, b, c)` serves queries on `a`, on `a, b`, and on `a, b, c` — three indexes' worth of coverage for one index's write cost.
 
