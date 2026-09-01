@@ -5,12 +5,19 @@ A shared cache instance is the arrangement worth having, and Redis is what almos
 > [!important] **Redis keeps its data in RAM.** Not as an optimisation on top of disk storage, the way a database buffer pool works — RAM is the primary and normal location of every value Redis holds.
 
 ```mermaid
-flowchart LR
+flowchart TB
     subgraph T["Traditional database"]
-        TR["RAM — a cache of recent pages"] --> TD[("Disk — where the data lives")]
+        direction TB
+        TQ["read a value"] --> TC{"already in RAM?"}
+        TC -- "hit" --> TA["return it"]
+        TC -- "miss" --> TD[("disk — where the value lives<br/>locate the page, seek, read")]
+        TD --> TA
     end
     subgraph R["Redis"]
-        RR[("RAM — where the data lives")] -.-> RD["Disk — optional copy"]
+        direction TB
+        RQ["read a value"] --> RR[("RAM — where the value lives<br/>go straight to the address")]
+        RR --> RA["return it"]
+        RR -. "background snapshot,<br/>never on this path" .-> RD["disk"]
     end
 ```
 

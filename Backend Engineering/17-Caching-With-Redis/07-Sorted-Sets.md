@@ -1,4 +1,4 @@
-A set gives uniqueness and loses order. A list gives order and loses uniqueness. The sorted set gives both, and the ordering comes from a number you supply rather than from insertion.
+**A set gives uniqueness and loses order**. **A list gives order and loses uniqueness.** The sorted set gives both, and the ordering comes from a number you supply rather than from insertion.
 
 # What it is
 
@@ -17,23 +17,25 @@ flowchart LR
 ```text
   127.0.0.1:6379> ZADD leaderboard 20 sanket
   (integer) 1
+  
   127.0.0.1:6379> ZADD leaderboard 15 sarthak
   (integer) 1
+  
   127.0.0.1:6379> ZADD leaderboard 25 tanmay
   (integer) 1
 ```
 
-> [!info] **Verified** against Redis 8.2.3, as is every command in this note.
-
-The score comes before the member. Adding a member that already exists updates its score and returns 0 rather than 1 — **the same call both inserts and re-ranks**, which is why maintaining a live leaderboard needs no special handling for players already on it.
+**The score comes before the member.** Adding a member that already exists updates its score and returns 0 rather than 1 — **the same call both inserts and re-ranks**, which is why maintaining a live leaderboard needs no special handling for players already on it.
 
 # Ranks
 
 ```text
   127.0.0.1:6379> ZRANK leaderboard sarthak
   (integer) 0
+  
   127.0.0.1:6379> ZRANK leaderboard sanket
   (integer) 1
+  
   127.0.0.1:6379> ZRANK leaderboard tanmay
   (integer) 2
 ```
@@ -56,13 +58,14 @@ The one you usually want:
   1) "sarthak"
   2) "sanket"
   3) "tanmay"
+     
   127.0.0.1:6379> ZRANGE leaderboard 0 -1 WITHSCORES
-  1) "sarthak"
-  2) "15"
-  3) "sanket"
-  4) "20"
-  5) "tanmay"
-  6) "25"
+  4) "sarthak"
+  5) "15"
+  6) "sanket"
+  7) "20"
+  8) "tanmay"
+  9) "25"
 ```
 
 `0 -1` is the whole thing, the same idiom as a list. **`WITHSCORES` interleaves each score after its member** — a flat array again, read two at a time.
@@ -95,8 +98,10 @@ That is the argument for sorted sets in one line. Producing a top-ten from a rel
 ```text
   127.0.0.1:6379> ZSCORE leaderboard sanket
   "20"
+  
   127.0.0.1:6379> ZINCRBY leaderboard 7 sanket
   "27"
+  
   127.0.0.1:6379> ZREVRANGE leaderboard 0 -1 WITHSCORES
   1) "sanket"
   2) "27"
@@ -112,7 +117,37 @@ That is the argument for sorted sets in one line. Producing a top-ten from a rel
 
 # By score rather than position
 
-Ranges can also be taken over the scores themselves:
+`ZRANGE` takes two numbers, and one keyword decides what those numbers are measured in. That is the whole of this section, and it is worth being explicit about, because the two readings look identical on the page.
+
+The set as it now stands, stored ascending by score:
+
+```text
+  position 0    sarthak   15
+  position 1    tanmay    25
+  position 2    sanket    27
+```
+
+Used earlier, the two numbers were **positions**:
+
+```text
+  127.0.0.1:6379> ZRANGE leaderboard 0 -1
+```
+
+0 is the first slot and -1 is the last. Scores play no part in it.
+
+Add `BYSCORE` and the same two slots become **scores**:
+
+```text
+  127.0.0.1:6379> ZRANGE leaderboard 15 25 BYSCORE
+  1) "sarthak"
+  2) "tanmay"
+```
+
+That reads as everyone scoring between 15 and 25. The 15 and the 25 are not slot numbers any more.
+
+> [!important] `BYSCORE` does one thing: it changes the unit the two arguments are measured in. **Positions by default, score values with the keyword.**
+
+Two more modifiers complete the form. **`REV` reverses the direction of the walk** — without it a range runs low to high, so the smaller bound is written first; with it the walk runs high to low, so the **larger bound comes first**. And **`LIMIT offset count` slices the result**, existing only on the `BYSCORE` form.
 
 ```text
   127.0.0.1:6379> ZRANGE leaderboard +inf -inf BYSCORE REV LIMIT 0 2
@@ -120,7 +155,34 @@ Ranges can also be taken over the scores themselves:
   2) "tanmay"
 ```
 
-`BYSCORE` switches the two arguments from positions to score bounds, `REV` reads downward, and `LIMIT offset count` takes a slice. `+inf` and `-inf` are the open ends.
+```text
+  ZRANGE leaderboard  +inf -inf  BYSCORE  REV  LIMIT 0 2
+                      |          |        |    |
+                      |          |        |    +- skip 0, take 2
+                      |          |        +------ walk downward
+                      |          +--------------- these are scores, not positions
+                      +-------------------------- from above everything, to below everything
+```
+
+`+inf` and `-inf` are simply no bound at either end, so the range is the whole set, read from the top.
+
+> [!warning] With `REV` the bounds must be written **largest first**. `ZRANGE leaderboard -inf +inf BYSCORE REV` returns an empty list rather than an error — it was asked to walk downward starting from the bottom, and there is nothing below the bottom.
+
+## When the simpler form is enough
+
+For the query above, all of that is the long way round. This does the same job:
+
+```text
+  127.0.0.1:6379> ZRANGE leaderboard 0 1 REV
+  1) "sanket"
+  2) "tanmay"
+```
+
+Positions again — the first two slots, read from the top.
+
+> [!important] `BYSCORE` earns its place when the bound is genuinely a score and **the position is the thing you do not know**:
+>
+> `ZRANGE leaderboard +inf 20 BYSCORE REV` returns everyone who scored 20 or more. Positions cannot express that, because writing it that way would mean already knowing how many players sit above 20 — which is exactly what the query is asking.
 
 > [!info] Older material uses `ZREVRANGEBYSCORE` for this. It still works and is deprecated in favour of the `ZRANGE ... BYSCORE REV` form, which absorbed all the range variants into one command.
 

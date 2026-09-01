@@ -16,17 +16,18 @@ Four operations, named for the end they act on:
 ```text
   127.0.0.1:6379> LPUSH user:queue 1
   (integer) 1
+  
   127.0.0.1:6379> LPUSH user:queue 2
   (integer) 2
+  
   127.0.0.1:6379> LPUSH user:queue 3
   (integer) 3
+  
   127.0.0.1:6379> LRANGE user:queue 0 -1
   1) "3"
   2) "2"
   3) "1"
 ```
-
-> [!info] **Verified** against Redis 8.2.3, as is every command in this note.
 
 The return value of a push is the length after it. The ordering is the point: pushing 1, then 2, then 3 **from the left** puts 3 at the left end, so the list reads 3, 2, 1.
 
@@ -37,8 +38,10 @@ The return value of a push is the length after it. The ordering is the point: pu
 ```text
   127.0.0.1:6379> LPOP user:queue
   "3"
+  
   127.0.0.1:6379> RPOP user:queue
   "1"
+  
   127.0.0.1:6379> LRANGE user:queue 0 -1
   1) "2"
 ```
@@ -59,17 +62,21 @@ A pop on a key that does not exist is not an error:
 ```text
   127.0.0.1:6379> RPUSH user:queue 10
   (integer) 2
+  
   127.0.0.1:6379> RPUSH user:queue 11
   (integer) 3
+  
   127.0.0.1:6379> LLEN user:queue
   (integer) 3
+  
   127.0.0.1:6379> LRANGE user:queue 0 1
   1) "2"
   2) "10"
+     
   127.0.0.1:6379> LRANGE user:queue 0 -1
-  1) "2"
-  2) "10"
-  3) "11"
+  3) "2"
+  4) "10"
+  5) "11"
 ```
 
 > [!important] `LRANGE` takes a start and a stop index, **both inclusive**. Negative indices count from the end, so **`-1` is the last element** and `0 -1` is the whole list. That idiom appears constantly.
@@ -81,10 +88,13 @@ A pop on a key that does not exist is not an error:
 ```text
   127.0.0.1:6379> SADD unique:users user1
   (integer) 1
+  
   127.0.0.1:6379> SADD unique:users user2
   (integer) 1
+  
   127.0.0.1:6379> SADD unique:users user3
   (integer) 1
+  
   127.0.0.1:6379> SADD unique:users user3
   (integer) 0
 ```
@@ -98,12 +108,16 @@ A pop on a key that does not exist is not an error:
   1) "user1"
   2) "user2"
   3) "user3"
+     
   127.0.0.1:6379> SCARD unique:users
   (integer) 3
+  
   127.0.0.1:6379> SREM unique:users user3
   (integer) 1
+  
   127.0.0.1:6379> SISMEMBER unique:users user2
   (integer) 1
+  
   127.0.0.1:6379> SISMEMBER unique:users user3
   (integer) 0
 ```

@@ -24,7 +24,7 @@ This is worth knowing for two reasons. It explains why the same query is slow on
 The cheapest possible cache is a hash map in the running process.
 
 ```java
-1  private final Map<Long, Product> cache = new ConcurrentHashMap<>();
+  private final Map<Long, Product> cache = new ConcurrentHashMap<>();
 ```
 
 Data already in that map is read at memory speed with **no network hop at all** — faster than any external cache can be, because the fastest network request is still a network request.

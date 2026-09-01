@@ -7,6 +7,7 @@ The basic pair of operations.
 ```text
   127.0.0.1:6379> SET user:1 sanket
   OK
+  
   127.0.0.1:6379> GET user:1
   "sanket"
 ```
@@ -34,7 +35,7 @@ A single string is limiting when the thing being cached is an object. The direct
   "{\"id\":1,\"name\":\"sanket\"}"
 ```
 
-Redis stores the JSON as an ordinary string, without parsing or understanding it. The application serialises on the way in and deserialises on the way out, into a Java object or whatever the language provides.
+**Redis stores the JSON as an ordinary string**, without parsing or understanding it. The application serialises on the way in and deserialises on the way out, into a Java object or whatever the language provides.
 
 > [!important] **This is the most common way applications cache objects**, and it is entirely reasonable. The cost is that the value is opaque to Redis: reading one field means transferring the whole document and parsing it in the application, and changing one field means read, parse, modify, serialise, write.
 
@@ -64,6 +65,12 @@ flowchart LR
 
 The `(integer) 2` returned by `HSET` is the number of **new** fields created. Setting a field that already exists returns 0, because it was updated rather than added.
 
+## Updating the value
+
+```text
+127.0.0.1:6379> HSET user:3 id 5
+(integer) 0
+```
 ## Reading it back
 
 One field at a time with `HGET`, or all of it:
@@ -73,7 +80,7 @@ One field at a time with `HGET`, or all of it:
   1) "name"
   2) "sanket"
   3) "id"
-  4) "1"
+  4) "5"
 ```
 
 > [!warning] **`HGETALL` returns a flat array, not pairs.** Field, value, field, value — the client library reassembles it into a map. Reading the raw output means reading it two entries at a time.
@@ -93,11 +100,11 @@ A field that does not exist returns nothing rather than an error:
 | Update one field | Read, parse, modify, write back | **`HSET` on that field** |
 | Read the whole object | **One `GET`, one parse** | `HGETALL`, then reassemble |
 | Nested structures | **Any depth** | Flat only — no nesting |
-| Expiry | Per key | **Per key only, never per field** |
+| Expiry | Per key | Per key, **or per field** |
 
 > [!important] **Hashes win when the object is flat and fields are read or written individually.** A user's profile where the display name changes independently of everything else is a good fit. **JSON strings win when the object is nested, or when it is always read whole** — which describes most cached API responses.
 
-> [!warning] The expiry row is the one that catches people out. A hash expires as a single key. **There is no way to give one field of a hash a shorter lifetime than the rest**, so a mixture of long-lived and short-lived data in one hash cannot be managed with expiry at all.
+> [!warning] The expiry row is the one that catches people out, and it has two settings rather than one. A hash can expire **as a whole key**, taking every field with it, or **field by field**, so that a short-lived value sits beside permanent ones. Which to reach for, and the trap when both are set at once, is worked through in `05-Expiry-And-Locks.md`.
 
 # Types are enforced
 
@@ -106,8 +113,10 @@ A key has one type, decided when it is created, and operations from the wrong fa
 ```text
   127.0.0.1:6379> TYPE user:1
   string
+  
   127.0.0.1:6379> TYPE user:3
   hash
+  
   127.0.0.1:6379> GET user:3
   (error) WRONGTYPE Operation against a key holding the wrong kind of value
 ```

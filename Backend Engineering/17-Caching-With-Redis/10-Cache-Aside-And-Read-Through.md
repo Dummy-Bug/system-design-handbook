@@ -34,7 +34,7 @@ Four steps, all in the application:
 
 **Ask the cache.** If it is there, return it and stop.
 
-**On a miss, query the database.**
+**On a miss,** query the database.
 
 **Write what came back into the cache**, so the next request for it hits.
 
@@ -44,15 +44,19 @@ Four steps, all in the application:
 
 ## What is good about it
 
-> [!important] **Only requested data occupies memory.** Cache a million products in advance and most of that memory holds things nobody wanted; with cache-aside, the cache converges on whatever is actually popular without anyone deciding what that is.
+> [!important] **Only requested data occupies memory.** 
+> Cache a million products in advance and most of that memory holds things nobody wanted; with cache-aside, **the cache converges on whatever is actually popular** without anyone deciding what that is.
 
-> [!important] **A cache failure is survivable.** If Redis is unreachable, every lookup is a miss, and a miss already has a defined path — go to the database. The system gets slower and keeps working. That property is worth a great deal, and not every pattern has it.
+> [!important] **A cache failure is survivable.** If Redis is unreachable, every lookup is a miss, and a miss already has a defined path — go to the database. 
+> The system gets slower and keeps working. That property is worth a great deal, and not every pattern has it.
 
 ## What is not
 
-> [!warning] **Every piece of data is slow exactly once.** The first request for any key pays the full database latency plus the cache write. On a cold cache after a restart, that is every request at once — and the database receives a burst of traffic precisely when it is least prepared for it.
+> [!warning] **Every piece of data is slow exactly once.** 
+> The first request for any key pays the full database latency plus the cache write. On a cold cache after a restart, that is every request at once — and the database receives a burst of traffic precisely when it is least prepared for it.
 
-> [!warning] **The application owns all of it.** Every read path has to implement the check-miss-fetch-store sequence, and every one of them has to do it the same way. Inconsistent key naming or a forgotten store step degrades the hit rate silently.
+> [!warning] **The application owns all of it.** 
+> Every read path has to implement the check-miss-fetch-store sequence, and every one of them has to do it the same way. Inconsistent key naming or a forgotten store step degrades the hit rate silently.
 
 ## The staleness problem
 
@@ -72,7 +76,10 @@ flowchart TB
 
 Which makes TTL the safety net rather than merely a cleanup mechanism:
 
-> [!important] **The TTL is the maximum staleness you have agreed to.** A five-minute TTL is a decision that a five-minute-old price is acceptable. That is a business judgement expressed as a configuration value, and it deserves to be made deliberately rather than copied from an example.
+> [!important] **The TTL is the maximum staleness you have agreed to.** 
+> A five-minute TTL is a decision that a five-minute-old price is acceptable. That is a business judgement expressed as a configuration value, and it deserves to be made deliberately rather than copied from an example.
+
+---
 
 # Read-through
 

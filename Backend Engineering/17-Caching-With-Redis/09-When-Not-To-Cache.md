@@ -34,7 +34,7 @@ That distinction is the general one. **Cache the fast-moving coordination, never
 
 # Heavy writes with few reads
 
-A cache is a read optimisation. Inverting the ratio removes the reason it exists.
+**A cache is a read optimisation**. Inverting the ratio removes the reason it exists.
 
 > [!warning] **If data is written constantly and read rarely, a cache is pure cost.** Every write pays to update it, and the reads that would have repaid that never arrive. You have added a component, a failure mode and a consistency problem to make nothing faster.
 

@@ -88,7 +88,8 @@ flowchart TB
 
 ## What it buys
 
-> [!important] **Writes at cache speed** — a fraction of a millisecond instead of tens. For a workload absorbing a very high write rate, this is the difference between coping and not. Writes can also be batched or coalesced before reaching the database, so a value updated fifty times might be written once.
+> [!important] **Writes at cache speed** — a fraction of a millisecond instead of tens. For a workload absorbing a very high write rate, this is the difference between coping and not. 
+> Writes can also be batched or coalesced before reaching the database, so a value updated fifty times might be written once.
 
 ## What it costs
 
@@ -100,9 +101,11 @@ flowchart TB
 
 ## Where it is legitimate
 
-> [!important] Where **losing some writes is genuinely acceptable** and the volume justifies it. Metrics, logs, view counters, telemetry — data whose value is aggregate, where losing a few seconds of a stream changes no decision.
+> [!important] Where **losing some writes is genuinely acceptable** and the volume justifies it.
+>  Metrics, logs, view counters, telemetry — data whose value is aggregate, where losing a few seconds of a stream changes no decision.
 
-> [!important] The underlying idea is **eventual consistency**: the system does not promise the database is current right now, only that it will catch up. Fine for how much memory a machine was using. Not fine for a payment.
+> [!important] The underlying idea is **eventual consistency**: 
+> The system does not promise the database is current right now, only that it will catch up. Fine for how much memory a machine was using. Not fine for a payment.
 
 # Side by side
 
@@ -124,10 +127,13 @@ flowchart TB
     Q -- "write volume above all,<br/>losses tolerable" --> C["Write-behind"]
 ```
 
-> [!important] **Write-around with invalidation on write is the sensible default.** It keeps the database authoritative, keeps writes fast, and bounds staleness by an explicit TTL. Write-through is the specialisation for when misses genuinely hurt; write-behind is for a narrow class of data where throughput matters more than any individual write does.
+> **Write-around with invalidation** on write is the sensible default. It keeps the database authoritative, keeps writes fast, and bounds staleness by an explicit TTL. 
+>  **Write-through** is the specialisation for when misses genuinely hurt
+>  **Write-behind** is for a narrow class of data where throughput matters more than any individual write does.
 
 > [!important] And the choice is per kind of data, not per system. **One application will reasonably use write-around for a product catalogue and write-behind for view counters**, because those two things fail differently and are worth different amounts.
 
+---
 # How the cache actually gets updated
 
 The patterns above say when the cache is written. They do not say by what, and the three available answers have very different failure modes.
