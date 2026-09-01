@@ -43,7 +43,7 @@ The second difference shows up sooner and stings more: **dashboards**. A managed
 
 The pattern is not specific to observability, and it may be more familiar from infrastructure.
 
-If you want Redis on AWS, you can provision ElastiCache — a managed service that installs Redis, configures it sensibly, and handles the surrounding operational work. Or you can rent a plain machine, install Redis on it yourself, configure it yourself, and maintain it yourself: watch it, replace it when it dies, stand up a secondary, wire up replication, and keep all of that working.
+If you want Redis on AWS, you can provision **ElastiCache** — a managed service that installs Redis, configures it sensibly, and **handles the surrounding operational work**. Or you can rent a plain machine, install Redis on it yourself, configure it yourself, and maintain it yourself: watch it, replace it when it dies, stand up a secondary, wire up replication, and keep all of that working.
 
 ```mermaid
 flowchart LR

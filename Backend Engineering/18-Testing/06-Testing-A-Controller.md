@@ -31,7 +31,8 @@ So the test needs something that speaks HTTP without a real server.
 10 }
 ```
 
-> [!important] **`@WebMvcTest(CategoryController.class)` loads the web slice for one controller.** Routing, JSON conversion, validation and exception handlers — and no services, no repositories, no database.
+> [!important] **`@WebMvcTest(CategoryController.class)` loads the web slice for one controller.** 
+> Routing, JSON conversion, validation and exception handlers — and no services, no repositories, no database.
 
 Naming the controller matters: without it Spring loads every controller in the application, and each one's dependencies then need mocking.
 

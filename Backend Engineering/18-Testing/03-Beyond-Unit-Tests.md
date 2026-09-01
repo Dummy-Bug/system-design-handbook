@@ -31,6 +31,7 @@ Each of those steps has its own unit test. **The integration test is that the se
 
 > [!info] There are tools for automating browser and device flows, and QA teams use them. **They are usually not a developer's responsibility**, and it is entirely normal to build a career writing unit and integration tests without ever touching one.
 
+---
 # Load and stress tests
 
 > [!important] **Load and stress tests answer whether the system survives traffic**, rather than whether it is correct. Correctness is assumed; capacity is the question.
@@ -64,6 +65,7 @@ Everything above happens before release. These are release, to a restricted audi
 
 > [!warning] **A purely backend change often cannot have an alpha or beta.** If no user action triggers your code path, there is nothing for a tester to do differently. This applies whenever the feature is not reachable from an interface.
 
+---
 # Bug bash
 
 > [!important] A **bug bash** is a scheduled session where the whole team spends an hour deliberately doing unreasonable things to the product.

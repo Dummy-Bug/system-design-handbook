@@ -43,15 +43,14 @@ All three programs have to be running before any of this works, and installing a
 
 ```mermaid
 flowchart LR
-    subgraph BYHAND["Installed by hand"]
-        M["macOS steps"]
-        L["Linux steps"]
-        W["Windows steps"]
-    end
-    subgraph VIACONTAINERS["Run as containers"]
-        I["One image per program
-        same on every machine"]
-    end
+    P["Elasticsearch
+    Logstash
+    Kibana"]
+    P -->|installed by hand| BY["Different steps on
+    macOS, Linux and Windows
+    and different again per version"]
+    P -->|run as containers| CO["One image per program
+    the same command everywhere"]
 ```
 
 Containers remove that variance entirely: the image already contains a correct installation, so starting the program is the same command everywhere. All three also need to talk to each other, and a Docker network gives them a private space in which to do it — the machinery covered in [[08-Container-Networking]].

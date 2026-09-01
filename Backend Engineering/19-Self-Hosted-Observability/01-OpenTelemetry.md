@@ -18,7 +18,7 @@ Moving from one to another is not a matter of changing a hostname. The agent is 
 
 # What OpenTelemetry is
 
-OpenTelemetry is an open-source observability framework, and it is abbreviated **OTel**. What it contributes is **vendor neutrality**: a single common way to produce and move observability data, which every compliant tool on the receiving end understands.
+OpenTelemetry is an open-source observability framework, and it is abbreviated as **OTel**. What it contributes is **vendor neutrality**: a single common way to produce and move observability data, which every compliant tool on the receiving end understands.
 
 ```mermaid
 flowchart LR
@@ -45,11 +45,11 @@ Logs and metrics are already familiar. A **trace** is the one worth pausing on: 
 
 ```mermaid
 flowchart LR
-    REQ["One request"] --> GW["Gateway"] --> SVC["Order service"] --> DB[("Database")]
-    GW -.-> T["One trace stitches
-    the whole path together"]
-    SVC -.-> T
-    DB -.-> T
+    REQ["One request"] --> GW
+    subgraph TRACE["One trace — every step, stitched together"]
+        direction LR
+        GW["Gateway"] --> SVC["Order service"] --> DB[("Database")]
+    end
 ```
 
 # The three layers, and which one OTel owns
@@ -61,12 +61,12 @@ flowchart TB
     S["Semantic layer
     what data to collect
     your application, your server"]
-    P["Protocol layer
+    P["Protocol layer — this is OpenTelemetry
     how it is shaped and moved"]
     ST["Storage layer
     where it lands"]
-    S --> P --> ST
-    P -.- NOTE["OpenTelemetry lives here"]
+    S -->|emits| P -->|writes to| ST
+    style P fill:#1b4332,color:#ffffff,stroke:#40916c,stroke-width:2px
 ```
 
 **The semantic layer** is where data originates — your application deciding what is worth recording.
@@ -85,7 +85,7 @@ The shape of the problem is not unique to observability, and it may be easier to
 
 A language model with the ability to use tools has to talk to software outside itself — a mail and calendar suite, a messaging tool, a payments service, a weather API. Every one of those exposes its own API, designed without any thought for the model that wants to call it, and there are millions of such tools. Wiring the model separately to each one does not scale, and it is why a model built by one company tends to integrate smoothly with that company's own products and awkwardly with everyone else's.
 
-The Model Context Protocol solves that by inverting the burden. Rather than the caller learning every tool, each tool exposes itself through one common protocol, and the caller only has to speak that.
+The **Model Context Protocol** solves that by inverting the burden. Rather than the caller learning every tool, each tool exposes itself through one common protocol, and the caller only has to speak that.
 
 ```mermaid
 flowchart LR
@@ -122,7 +122,11 @@ flowchart LR
 
 **The receiver** knows how to accept data from the client. **The processor** does whatever work happens in between — aggregating, filtering, reshaping. **The exporter** knows how to write into a particular storage backend.
 
-The collector is optional. Data can be sent straight to a backend that is capable of receiving it, and the collector earns its place when you want aggregation or filtering to happen outside the application.
+Named concretely, receivers and exporters are things like OTLP, Jaeger, Prometheus and OpenSearch — and the same protocol can sit on both sides, since a collector is free to accept OTLP and forward OTLP onward.
+
+![[Backend Engineering/19-Self-Hosted-Observability/Images/otel-collector-pipeline.png]]
+
+**The collector is optional**. Data can be sent straight to a backend that is capable of receiving it, and the collector earns its place when you want aggregation or filtering to happen outside the application.
 
 In practice you rarely assemble these parts by hand. Tools built on top of OTel — the stacks in the notes that follow — already have them wired up.
 
@@ -130,13 +134,13 @@ In practice you rarely assemble these parts by hand. Tools built on top of OTel 
 
 The protocol itself is **OTLP**, the OpenTelemetry Protocol. It is what makes the standard concrete: it specifies both how the data is carried and how it is encoded.
 
-| Concern | What OTLP specifies |
-|---|---|
-| What it carries | The three pillars: traces, metrics, logs |
-| Transport | gRPC by default, which runs on HTTP/2 and allows multiplexed, persistent connections |
-| Encoding | Protocol Buffers, or JSON |
+| Concern         | What OTLP specifies                                                                  |
+| --------------- | ------------------------------------------------------------------------------------ |
+| What it carries | The three pillars: traces, metrics, logs                                             |
+| Transport       | gRPC by default, which runs on HTTP/2 and allows multiplexed, persistent connections |
+| Encoding        | Protocol Buffers, or JSON                                                            |
 
-The reason for the choice is throughput. Shipping telemetry means a constant stream of network calls, so a persistent connection that carries many messages at once beats opening a new one each time.
+The reason for the choice is throughput. **Shipping telemetry means a constant stream of network calls, so a persistent connection that carries many messages at once beats opening a new one each time.**
 
 This is internal machinery. Once a stack is integrated you see dashboards and search results rather than protocol buffers, and the only reason to know it is there is to understand what is being agreed on when a tool advertises itself as OTel-compliant.
 

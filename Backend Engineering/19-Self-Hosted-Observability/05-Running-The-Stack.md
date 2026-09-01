@@ -193,15 +193,17 @@ There are other drivers, and it is worth knowing they exist so the choice reads 
 
 ```mermaid
 flowchart TB
+    HOSTP["Your machine"]
     subgraph NET["elk-network (bridge)"]
         ES["elasticsearch"]
         KB["kibana"]
         LS["logstash"]
     end
-    VOL[("elasticsearch_data
-    named volume")] --- ES
-    HOSTP["Your machine
-    9200 · 5601 · 5044"] --- NET
+    HOSTP -->|9200| ES
+    HOSTP -->|5601| KB
+    HOSTP -->|5044| LS
+    ES -->|stores data in| VOL[("elasticsearch_data
+    named volume")]
 ```
 
 # Restart policy, and what it hides

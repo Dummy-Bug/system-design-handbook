@@ -15,8 +15,8 @@ Mocking and arrange-act-assert are the shape of a unit test. This is that shape 
 # The two dependencies you already have
 
 ```groovy
-1  testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
-2  testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+  testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
+  testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
 ```
 
 Between them these bring JUnit 5, Mockito, AssertJ and the Spring test slices. Nothing else is needed for a service test.
@@ -38,20 +38,23 @@ Between them these bring JUnit 5, Mockito, AssertJ and the Spring test slices. N
 
 Three annotations, and each answers a question raised in `02-Unit-Tests`.
 
-> [!important] **`@Mock` creates the stand-in.** A fake `CategoryRepository` with every method present and every method doing nothing until told otherwise. **No database connection is opened**, so running the test cannot touch or pollute real data.
+> [!important] **`@Mock` creates the stand-in.** 
+> A fake `CategoryRepository` with every method present and every method doing nothing until told otherwise. **No database connection is opened**, so running the test cannot touch or pollute real data.
 
-> [!important] **`@InjectMocks` creates the real thing.** An actual `CategoryService`, constructed by calling its real constructor — and Mockito supplies the mocks as the arguments. The class under test is genuine; only its dependencies are not.
+> [!important] **`@InjectMocks` creates the real thing.** 
+> An actual `CategoryService`, constructed by calling its real constructor — and Mockito supplies the mocks as the arguments. The class under test is genuine, only its dependencies are not.
 
-> [!important] **`@ExtendWith(MockitoExtension.class)` keeps Spring out of it.** It wires the two annotations above and nothing else. **No component scan, no context, no connection pool** — just a Java object constructed with fakes.
+> [!important] **`@ExtendWith(MockitoExtension.class)` keeps Spring out of it.** 
+> It wires the two annotations above and nothing else. **No component scan, no context, no connection pool** — just a Java object constructed with fakes.
 
-That last one is the performance decision. Starting a Spring context takes seconds; constructing one object takes microseconds, and a suite of hundreds runs in the time one context load would take.
+That last one is the performance decision. Starting a Spring context takes seconds, constructing one object takes microseconds, and a suite of hundreds runs in the time one context load would take.
 
 # Stubbing
 
 A mock returns null for everything until told what to do.
 
 ```java
-1  when(categoryRepository.save(any(Category.class))).thenReturn(testCategory);
+  when(categoryRepository.save(any(Category.class))).thenReturn(testCategory);
 ```
 
 > [!important] Read as: **when anyone calls `save` with any `Category`, return this object.** `when(...).thenReturn(...)` is the whole stubbing vocabulary for most tests.
@@ -85,12 +88,41 @@ A mock returns null for everything until told what to do.
 ## The naming convention
 
 ```text
+  method _ [condition _] expected result
+```
+
+Two parts are always present — **what was called** and **what should happen**. The condition sits between them and is **optional**, appearing only when the method has more than one path:
+
+```text
   createCategory_savesAndReturnsCategory
   getCategoryById_whenFound_returnsCategory
   getCategoryById_whenNotFound_throwsResourceNotFoundException
 ```
 
-> [!important] **Method, condition, expected result.** A test name is read in a failure report by someone who did not write it, and this shape tells them what broke without opening the file.
+| name | underscores | why |
+|---|---|---|
+| `createCategory_savesAndReturnsCategory` | 1 | one path, so there is no case to distinguish |
+| `getCategoryById_whenFound_returnsCategory` | 2 | one of two paths |
+| `getCategoryById_whenNotFound_throwsResourceNotFoundException` | 2 | the other path |
+
+> [!important] A test name is almost never read in the file it lives in. **It is read in a failure report by someone who did not write it**, with no surrounding context — and `CategoryServiceTest > getCategoryById_whenNotFound_throwsResourceNotFoundException FAILED` names the class, the method, the scenario and the expectation in one line, without anybody opening anything.
+
+Which is what the alternatives lose:
+
+| name | what the failure report gives you |
+|---|---|
+| `test1` | nothing |
+| `testCreate` | something about creating |
+| `testCreateCategory` | the method, but not the scenario or the expectation |
+| `shouldCreateCategory` | reads well, still no scenario |
+
+> [!info] The mix of underscores and camelCase looks wrong for Java, and is deliberate. **Underscores separate the parts, camelCase runs inside each part.** This is the one place the convention is bent, because legibility in a failure report matters more here than consistency with the rest of the codebase.
+
+> [!warning] No `test` prefix. `testCreateCategory` is JUnit 3 residue, from when the framework located tests by looking for methods whose names began with `test`. `@Test` states it now, so the prefix is noise repeated in every report.
+
+> [!info] `@DisplayName("returns the category when it exists")` puts a real sentence in the report, but only in the report — grep, IDE navigation, stack traces and build logs all still show the method name. It is an addition to a good name, never a replacement for one.
+
+A side effect worth noticing: a test class where every name carries a single underscore is saying the service has no branches. Which is either true, or a sign the failure paths were never tested.
 
 ## One test per branch
 
@@ -125,7 +157,8 @@ The obvious objection: you wrote the code, then wrote a test arranged so the cod
 
 > [!important] **TDD writes the tests first.** Define inputs and expected outputs for the good and bad cases before implementing anything. Every test fails at the start, and the implementation progresses by making them pass one at a time.
 
-> [!warning] **It is much less common in practice than in writing about practice.** The usual order is implementation first, tests after — and the reason is visible in the test above. **You cannot write the stubs until you know what the method calls**, so a test-first attempt on non-trivial code becomes a cycle of writing a test, discovering a dependency, mocking it, returning to the logic, and discovering another.
+> [!warning] **It is much less common in practice than in writing about practice.** 
+> The usual order is implementation first, tests after — and the reason is visible in the test above. **You cannot write the stubs until you know what the method calls**, so a test-first attempt on non-trivial code becomes a cycle of writing a test, discovering a dependency, mocking it, returning to the logic, and discovering another.
 
 > [!important] Which does not make the test worthless. **Tests are reviewed** — a test that does not genuinely exercise the branch it names should not get through review. And its value was never in proving the code correct today; it is in **failing tomorrow, when someone changes something and does not realise what it touched.**
 

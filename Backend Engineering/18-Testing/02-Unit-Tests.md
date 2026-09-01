@@ -2,7 +2,8 @@ Unit tests are the ones written daily, and their central idea is not the asserti
 
 # What a unit is
 
-> [!important] A **unit test** tests a very small piece of code — usually a single function, sometimes a short flow across two or three. Each test is itself a function containing the logic that does the checking.
+> [!important] A **unit test** tests a very small piece of code — usually a single function, sometimes a short flow across two or three.
+>  Each test is itself a function containing the logic that does the checking.
 
 > [!important] **The focus is deliberately narrow.** One test asks one question. Not does the feature work, but does this specific piece behave correctly given this specific input.
 
@@ -19,7 +20,8 @@ You want to test that **orders are summed correctly.** That is function 2's job.
 
 > [!warning] **Now the test can fail for reasons that have nothing to do with what it tests.** The network is down. The API is slow. The remote data changed. Your summing logic is perfect and the test is red.
 
-> [!important] Worse than a wrong answer, this is an **unreliable** one. A test that sometimes passes and sometimes fails, for reasons outside the code, is called **flaky** — and a flaky test is worse than no test, because people learn to ignore it and then ignore it on the day it is right.
+> [!important] Worse than a wrong answer, this is an **unreliable** one. A test that sometimes passes and sometimes fails, for reasons outside the code, is called **flaky**. 
+> A flaky test is worse than no test, because people learn to ignore it and then ignore it on the day it is right.
 
 ## The isolation rule
 
@@ -67,9 +69,11 @@ Every unit test has the same three parts, in the same order.
 11 }
 ```
 
-> [!info] **Unverified** — illustrative of the shape rather than run against the project. The specific syntax depends on the library; the three parts do not.
+> [!important] The order is not a style preference. 
 
-> [!important] The order is not a style preference. **Arrange establishes the conditions under which the answer is predictable; act produces the answer; assert compares it to what those conditions imply.** A test missing the arrange step is testing whatever state happened to be lying around.
+
+> **Arrange** establishes the conditions under which the answer is predictable **Act** produces the answer **Assert** compares it to what those conditions imply.
+>   A test missing the arrange step is testing whatever state happened to be lying around.
 
 # The shape this takes in a Spring application
 
