@@ -1,4 +1,4 @@
-Two techniques now exist for the same complaint. An index makes a query faster; a cache avoids running it. They are not interchangeable, and the choice between them is decided by the shape of the query rather than by preference.
+Two techniques now exist for the same complaint. **An index makes a query faster; a cache avoids running it.** They are not interchangeable, and the choice between them is decided by the shape of the query rather than by preference.
 
 # The easy half
 

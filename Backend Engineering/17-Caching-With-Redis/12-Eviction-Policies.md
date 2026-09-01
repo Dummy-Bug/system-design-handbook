@@ -20,12 +20,11 @@ flowchart TB
   127.0.0.1:6379> CONFIG GET maxmemory
   1) "maxmemory"
   2) "0"
+     
   127.0.0.1:6379> CONFIG GET maxmemory-policy
-  1) "maxmemory-policy"
-  2) "noeviction"
+  3) "maxmemory-policy"
+  4) "noeviction"
 ```
-
-> [!info] **Verified** against Redis 8.2.3. Those are the defaults on a fresh installation, and both deserve attention.
 
 > [!warning] **`maxmemory` of 0 means no limit.** Redis will keep allocating until the operating system stops it, and what happens then is not a policy you chose — it is the kernel killing the process or the machine swapping to disk, which destroys the performance the cache existed to provide. **Set a limit on any Redis holding real data.**
 
@@ -34,6 +33,7 @@ Changing them:
 ```text
   127.0.0.1:6379> CONFIG SET maxmemory 2gb
   OK
+  
   127.0.0.1:6379> CONFIG SET maxmemory-policy allkeys-lru
   OK
 ```
@@ -44,8 +44,9 @@ Changing them:
 
 Redis rejects an invalid value with the complete list, which is a convenient way to see all eight:
 
-```text
+```
   127.0.0.1:6379> CONFIG SET maxmemory-policy bogus
+  
   (error) ERR CONFIG SET failed - argument(s) must be one of the following:
   volatile-lru, volatile-lfu, volatile-random, volatile-ttl,
   allkeys-lru, allkeys-lfu, allkeys-random, noeviction

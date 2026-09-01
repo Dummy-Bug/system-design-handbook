@@ -13,7 +13,8 @@ flowchart LR
 
 For that to work the application needs code that knows how to speak Redis.
 
-> [!important] A **client library** does three things: opens and manages the connection, packs a request into the wire format Redis understands, and parses the reply back into something the language can use. Without one you would be writing bytes onto a socket by hand.
+> [!important] A **client library** does three things: opens and manages the connection, packs a request into the wire format Redis understands, and parses the reply back into something the language can use. 
+> Without one you would be writing bytes onto a socket by hand.
 
 # The libraries
 
@@ -60,9 +61,9 @@ Which is a structure already seen:
 # The dependencies
 
 ```groovy
-1  // build.gradle
-2  implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-3  implementation 'redis.clients:jedis:7.2.0'
+  // build.gradle
+  implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+  implementation 'redis.clients:jedis:7.2.0'
 ```
 
 > [!info] The starter alone is enough, since it brings Lettuce. Adding Jedis explicitly selects it as the driver instead.
@@ -70,12 +71,12 @@ Which is a structure already seen:
 # The configuration
 
 ```yaml
-1  # src/main/resources/application.yml
-2  spring:
-3    data:
-4      redis:
-5        host: localhost
-6        port: 6379
+  # src/main/resources/application.yml
+  spring:
+    data:
+      redis:
+        host: localhost
+        port: 6379
 ```
 
 `6379` is the Redis default port. A running server can be confirmed before the application ever starts:
@@ -90,11 +91,11 @@ Which is a structure already seen:
 There is an older form of this configuration, it appears widely in articles, and on a current Spring Boot it is inert.
 
 ```yaml
-1  # WRONG on Spring Boot 3 and later
-2  spring:
-3    redis:
-4      host: localhost
-5      port: 6379
+  # WRONG on Spring Boot 3 and later
+  spring:
+    redis:
+      host: localhost
+      port: 6379
 ```
 
 > [!warning] **`spring.redis.*` was replaced by `spring.data.redis.*` in Spring Boot 3.0**, and it is not merely discouraged — it is not read at all.
@@ -102,11 +103,11 @@ There is an older form of this configuration, it appears widely in articles, and
 Reading the configuration metadata shipped inside `spring-boot-data-redis-4.0.2.jar`:
 
 ```json
-1  "spring.redis.host" -> {
-2      "level": "error",
-3      "replacement": "spring.data.redis.host",
-4      "since": "3.0.0"
-5  }
+  "spring.redis.host" -> {
+      "level": "error",
+      "replacement": "spring.data.redis.host",
+      "since": "3.0.0"
+  }
 ```
 
 > [!important] **Deprecation level `error` means the property is not bound.** Writing it has the same effect as writing nothing.
@@ -114,13 +115,11 @@ Reading the configuration metadata shipped inside `spring-boot-data-redis-4.0.2.
 And here is why that is dangerous rather than merely wrong:
 
 ```json
-1  "spring.data.redis.host" default: "localhost"
-2  "spring.data.redis.port" default: 6379
+  "spring.data.redis.host" default: "localhost"
+  "spring.data.redis.port" default: 6379
 ```
 
 > [!warning] **The defaults are exactly the values people write.** An application configured the old way connects to `localhost:6379` and works perfectly — not because the configuration was read, but because it was ignored in favour of defaults that happen to match. **Point Redis at another host or port and the setting is still ignored**, the application still connects to localhost, and the failure appears far from its cause.
-
-> [!info] **Verified** by extracting `META-INF/spring-configuration-metadata.json` from the Spring Boot 4.0.2 artifact rather than from documentation. A configuration that works on a developer machine and fails in every other environment is the exact shape of bug this produces.
 
 # What this is and is not
 

@@ -16,32 +16,63 @@ flowchart LR
 
 # RedisTemplate
 
-> [!important] **`RedisTemplate` is Spring Data Redis's main entry point.** Instead of raw commands it exposes typed operations, grouped by the structure they act on — `opsForValue()` for strings, `opsForHash()`, `opsForList()`, `opsForSet()`, `opsForZSet()`.
+> [!important] **`RedisTemplate` is Spring Data Redis's main entry point.** Instead of raw commands it exposes typed operations, grouped by the structure they act on.
 
-The grouping maps directly onto the structures from earlier notes, so `opsForZSet().add(...)` is `ZADD` under a Java name.
+The grouping is not tidiness. Redis's data types have **command sets that do not overlap** — `GET` and `SET` belong to strings, `HGET` and `HSET` to hashes, `LPUSH` and `RPOP` to lists. Putting all of them on one class would mean a few hundred methods and nothing preventing `lPush` being called on a key holding a string, which is the `WRONGTYPE` error from the types note, discovered at runtime.
+
+So each family sits behind its own accessor:
+
+| accessor | returns | Redis type | commands behind it |
+|---|---|---|---|
+| `opsForValue()` | `ValueOperations` | string | `GET`, `SET`, `INCR`, `APPEND` |
+| `opsForHash()` | `HashOperations` | hash | `HGET`, `HSET`, `HGETALL` |
+| `opsForList()` | `ListOperations` | list | `LPUSH`, `RPOP`, `LRANGE` |
+| `opsForSet()` | `SetOperations` | set | `SADD`, `SMEMBERS`, `SINTER` |
+| `opsForZSet()` | `ZSetOperations` | sorted set | `ZADD`, `ZRANGE`, `ZINCRBY` |
+| `opsForStream()` | `StreamOperations` | stream | `XADD`, `XREAD`, `XRANGE` |
+
+So `opsForZSet().add(...)` is `ZADD` under a Java name, and the mapping holds all the way down.
+
+> [!info] The name is `ValueOperations` rather than `StringOperations` because that is Redis's own vocabulary — a string key holds one opaque **value**, and its commands are described as acting on that value.
+
+## Operations that belong to no type
+
+`DEL` does not care what a key holds; it removes strings, hashes, lists and everything else. The same is true of `EXISTS`, `EXPIRE` and `KEYS`.
+
+> [!important] **Type-agnostic commands live directly on the template**, not behind an `opsForX()` — `delete`, `hasKey`, `expire`, `keys`. Anything type-specific sits behind an accessor. Seeing `stringRedisTemplate.delete(key)` with no `opsForValue()` in front of it is that rule, not an inconsistency.
 
 ## StringRedisTemplate
 
 > [!important] **`StringRedisTemplate` is `RedisTemplate` with both key and value fixed as `String`.** Nothing more — a subclass with its serialisers preset to the string serialiser.
 
-That is the right choice here precisely because the values are JSON text. **Redis stores a string; the application converts it.** Handing the conversion to the template as well would mean two serialisation mechanisms doing the same job.
+That is the right choice here precisely because the values are **JSON text**. **Redis stores a string; the application converts it.** Handing the conversion to the template as well would mean two serialisation mechanisms doing the same job.
+
+> [!warning] Two different things carry the word string here, and they are on separate axes. **`StringRedisTemplate` decides how bytes are encoded** — plain UTF-8 rather than Java's binary format, which is why a cached value is readable from `redis-cli` instead of arriving as `\xac\xed\x00\x05` noise. **`opsForValue()` decides which commands are reachable.** Neither implies the other.
+
+> [!important] The choice also runs the opposite way round from how it looks. It is not that the value happens to be a `String` so the string template follows. It is that **the bytes in Redis were wanted as readable text**, and the value was made a `String` to match.
 
 ## When you want something else
 
 A custom template is a bean with different serialisers:
 
 ```java
-1  @Bean
-2  public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
-3      RedisTemplate<String, Object> template = new RedisTemplate<>();
-4      template.setConnectionFactory(factory);
-5      template.setKeySerializer(RedisSerializer.string());
-6      template.setValueSerializer(RedisSerializer.json());
-7      return template;
-8  }
+  @Bean
+  public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
+      RedisTemplate<String, Object> template = new RedisTemplate<>();
+      template.setConnectionFactory(factory);
+      template.setKeySerializer(RedisSerializer.string());
+      template.setValueSerializer(RedisSerializer.json());
+      return template;
+  }
 ```
 
 > [!info] `RedisSerializer` offers several — `string()`, `json()`, `byteArray()`, and Java serialisation. A JSON value serialiser moves the conversion into the template, so application code passes objects directly. **Unverified** — this pattern is from the Spring Data Redis documentation and was not run.
+
+That removes the `ObjectMapper` calls from the cache class, and it is not free.
+
+> [!warning] A JSON value serialiser typically writes the **Java class name into the stored value**, so the entry becomes `{"@class":"com.example.dtos.GetProductResponseDto","id":1,...}`. The cache now knows the application's package structure. Move or rename that class and every cached entry becomes undeserialisable — and they do not fail at startup, they fail on read, one key at a time, until the TTLs age them out.
+
+> [!important] Which is the argument for converting by hand. Serialising with an injected `ObjectMapper` and storing a plain string means **Redis holds JSON that any language can read and a human can eyeball**, at the cost of a few lines of try and catch. Serialise deliberately, then use the template that stores what was produced without touching it.
 
 > [!warning] Keys should stay string-serialised whatever the values do. A key serialised any other way is unreadable from `redis-cli`, which makes diagnosing a cache problem far harder than it needs to be.
 
