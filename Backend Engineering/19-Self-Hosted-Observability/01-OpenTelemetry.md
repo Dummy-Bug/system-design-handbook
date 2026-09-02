@@ -83,7 +83,11 @@ flowchart TB
 
 The shape of the problem is not unique to observability, and it may be easier to recognise in a setting where the same fix was applied.
 
-A language model with the ability to use tools has to talk to software outside itself — a mail and calendar suite, a messaging tool, a payments service, a weather API. Every one of those exposes its own API, designed without any thought for the model that wants to call it, and there are millions of such tools. Wiring the model separately to each one does not scale, and it is why a model built by one company tends to integrate smoothly with that company's own products and awkwardly with everyone else's.
+**A language model with agentic capabilities** — meaning it can use tools and carry out tasks rather than only answering — has to talk to software outside its own ecosystem. Google Suite, meaning Gmail and Calendar. Slack, a messaging tool. Discord. AWS. Some weather service. Every one of those exposes its own set of APIs, designed with no thought at all for the model that wants to call it.
+
+**The reason they are not designed for it is incentives, not oversight.** Google has no reason to care how somebody else's model connects to Google Suite. Slack has no reason to care either. A vendor invests in that integration when the model is their own — which is why **Gemini has a strong integration with Google Suite out of the box and a much weaker one with Slack.** Not because Slack is harder, but because Slack is a different company with a different set of APIs, and nobody on either side was paid to bridge them.
+
+Now multiply that. There are millions of such tools. You cannot configure a model to speak to Slack one way, Discord another way, Google Suite a third way, AWS a fourth, a weather app a fifth, and keep doing that forever.
 
 The **Model Context Protocol** solves that by inverting the burden. Rather than the caller learning every tool, each tool exposes itself through one common protocol, and the caller only has to speak that.
 
@@ -102,7 +106,11 @@ flowchart LR
     end
 ```
 
-OTel is that same move for telemetry. Data may be produced in Java, Python or C#, and may be destined for a time-series database, a log store or a paid service run by someone else. A middleman in between says to the application: do not worry where this is going, just hand it to me in my shape. And it says to the storage: do not worry where this came from, it will arrive in a shape you can read.
+OTel is that same move for telemetry. Data may be produced in Java, Python or C#. It may be destined for a time-series database, a log store, or a paid service run by someone else — and those destinations are maintained by entirely separate organisations. New Relic is one company, Datadog is another, and a great many of the open-source tools have nothing to do with either.
+
+Make it concrete. **You have a Python application writing metrics into Prometheus, and you decide to move to New Relic.** Without a common standard, that migration means finding every place the application talks to Prometheus and rewriting it against a different vendor's client. With one, the application keeps emitting exactly what it emitted before and the destination changes in configuration.
+
+What makes that possible is a middleman. It says to the application: do not worry where this is going, just hand it to me according to my receivers. And it says to the storage: do not worry where this came from, it will be prepared according to my exporters. In between, it does whatever processing the two ends need.
 
 # The collector
 

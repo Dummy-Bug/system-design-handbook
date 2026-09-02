@@ -17,6 +17,14 @@ flowchart TB
 
 This is the trace pillar doing its job — the path of one request through the layers, with the time attributed to each.
 
+## The same view when something fails
+
+A separate **distributed tracing** view lists recent requests as traces rather than as timings, and it is the one to open when a request failed rather than merely took a while.
+
+Opening a failed one and clicking **expand all** shows every span the request produced, in order, with the failure sitting at whichever one threw. A trace that reads as the Spring Boot application making one call to MySQL and that call failing has already answered the question — the fault is at the database boundary, not in the controller, and no log searching was needed to establish it.
+
+> [!important] **The transaction trace answers where the time went. The distributed trace answers where the request died.** Same data, two questions, and reaching for the wrong view is why a failure investigation sometimes starts by staring at a latency breakdown that has nothing to say.
+
 # Generating traffic to look at
 
 One request produces one trace. Understanding behaviour under load needs load, and simulating it is a tool feature rather than something to build.
@@ -95,6 +103,8 @@ That loop is the useful one. **Starting from a blank query editor means learning
 Each request is assigned an identifier, and it appears on every log line that request produced.
 
 > [!important] That identifier is what connects the pillars. **From a log line you can reach the trace it belongs to, and from a trace you can reach every log line it produced** — turning one error message into the full story of the request that caused it.
+
+That link is a button rather than a query you write. A log line offers **show surrounding logs**, which opens the lines written either side of it by the same request, and a trace offers the reverse. Worth knowing it exists, because the alternative — copying a trace id and pasting it into a search box — is what most people do first and is several steps longer.
 
 > [!warning] It does not always resolve. Traces are **sampled** — agents cap how many they store per interval, so a log line's trace may simply not have been kept. A log written outside a request has no trace to link to at all. **Failing to find a trace by id is not proof the request did not happen.**
 

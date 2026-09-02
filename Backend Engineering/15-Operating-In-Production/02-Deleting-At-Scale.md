@@ -87,6 +87,17 @@ Both of the above need a way to walk the data in pieces:
 
 Which sidesteps the original problem. The scan was expensive because the filter had no index; the primary key always has one.
 
+Worth making concrete, because the instinct is to write the filter into the query. Say the rows to remove are ids 5, 10, 15, 20 and so on, with scattered exceptions — 49 as well, for some reason the data has and you do not. The tempting version is to look each one up:
+
+```sql
+1  SELECT * FROM transactions WHERE id = 5;
+2  SELECT * FROM transactions WHERE id = 10;
+```
+
+> [!warning] **That is the unindexed lookup you were trying to avoid, run once per row.** Nothing has improved; the same missing index costs the same full scan, now repeated a million times.
+
+The batching version never asks for the rows it wants. It takes the next thousand in primary-key order, whatever they are, decides in application code which of those thousand match, and deletes those. **The filter moves out of the database and into memory** — which is affordable precisely because the batch is small and the walk is indexed.
+
 > [!info] Large `OFFSET` values get slow, because the database still walks past the skipped rows. Remembering the last id seen and using `WHERE id > :lastId LIMIT 1000` is the version that stays fast to the end.
 
 # How to choose

@@ -40,19 +40,19 @@ Actuator is the **data source** for everything in the notes that follow. It prod
 With the starter added and the application restarted, this still fails:
 
 ```text
-1  GET http://localhost:8080/actuator/metrics
-2  → 500 Internal Server Error
+  GET http://localhost:8080/actuator/metrics
+  → 500 Internal Server Error
 ```
 
 That is deliberate. These endpoints report on the internals of a running system, so **none of them are reachable over HTTP until named explicitly.** Anything you have not asked for is not there to be found.
 
 ```yaml
-1  # src/main/resources/application.yml
-2  management:
-3    endpoints:
-4      web:
-5        exposure:
-6          include: health, metrics, prometheus
+  # src/main/resources/application.yml
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health, metrics, prometheus
 ```
 
 Each name in that list turns on one endpoint.
@@ -84,11 +84,11 @@ Which is exactly what an external checker wants: something to call on a schedule
 By default that is the whole answer. One more setting makes it useful to a human:
 
 ```yaml
-1  # src/main/resources/application.yml
-2  management:
-3    endpoint:
-4      health:
-5        show-details: always
+  # src/main/resources/application.yml
+  management:
+    endpoint:
+      health:
+       show-details: always
 ```
 
 Now the response breaks down by component — whether MySQL is reachable, how much disk space remains, and the state of anything else the application depends on. The difference matters: `UP` tells you the process is running, while the detail tells you whether it can actually do its job.
@@ -97,4 +97,4 @@ Now the response breaks down by component — whether MySQL is reachable, how mu
 
 **`/actuator/prometheus`** is the one the rest of this folder depends on. It publishes the same metrics in the text format Prometheus expects, which is what makes them collectable by something outside the application.
 
-> [!info] Under a managed observability service, all of this arrives on its own — the vendor's agent instruments the application and starts reporting. Self-hosted, the application has to be told to produce the data and told where to publish it. This is the first concrete instance of the extra effort that choice costs.
+> [!info] With New Relic, all of this arrived on its own — the agent instrumented the application and started reporting, and nothing had to be added to produce the numbers. Self-hosted, the application has to be told to produce the data and told where to publish it. Actuator is the first concrete instance of the extra effort that choice costs.

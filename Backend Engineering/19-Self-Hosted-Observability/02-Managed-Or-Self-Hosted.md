@@ -13,9 +13,9 @@ The fourth letter of LGTM moves around — Mimir and Prometheus both fill the me
 
 Both are built on top of OpenTelemetry, which is exactly the point of the previous note. Neither is a world of its own; they are backends that speak the standard.
 
-# What a managed service does instead
+# What New Relic does instead
 
-A managed observability product is the same picture with the ownership line drawn somewhere else. You pay, you integrate, and the running of it is not your problem.
+**New Relic is the managed side of this comparison, and it is the one already used on this project.** It is the same picture with the ownership line drawn somewhere else: you pay, you integrate, and the running of it is not your problem.
 
 ```mermaid
 flowchart TB
@@ -35,9 +35,11 @@ flowchart TB
     end
 ```
 
-The difference is not capability. A managed service is also built on OTel underneath, so the data and the concepts are the same on both sides. What you are buying is somebody else's operational attention — when the log ingestion pipeline is congested because traffic spiked, that is their pager, not yours.
+**The difference is not capability, and this is the part worth being clear about. New Relic runs on OpenTelemetry too.** It ingests logs, metrics and traces over the same standard the ELK and LGTM stacks use, so the data and the concepts are identical on both sides. Nothing is available to a paying customer that is unavailable to somebody assembling it themselves.
 
-The second difference shows up sooner and stings more: **dashboards**. A managed service arrives with a great deal already drawn. A self-hosted stack gives you the raw data and an empty canvas, and every panel you want is a panel you build.
+What you are buying is **somebody else's operational attention**. New Relic hosts it, New Relic maintains it, and New Relic scales it — when their log ingestion pipeline is congested because traffic spiked, that is their problem to solve at their own expense. That is the thing the bill is for.
+
+The second difference shows up sooner and stings more: **dashboards**. New Relic arrives with a great deal already drawn, and is noticeably more advanced out of the box. A self-hosted stack gives you the raw data and an empty canvas, and every panel you want is a panel you build.
 
 # The same trade, one layer down
 
@@ -63,8 +65,8 @@ There is no correct answer, only a trade that different teams price differently.
 
 **Reasons a team self-hosts.** They want control over configuration that a managed product does not expose. They are unwilling to pay per-seat or per-gigabyte pricing at their volume. Or the choice is not theirs at all — a company running **bare metal**, meaning without a public cloud provider, has to set up everything itself by definition.
 
-**Reasons a team buys.** Moving fast matters more than control, and every hour spent maintaining a log pipeline is an hour not spent on the product. A common path is to start on a managed service and migrate to a self-hosted stack later, once the volume makes the bill hurt and the team is large enough to absorb the maintenance.
+**Reasons a team buys.** Moving fast matters more than control, and every hour spent maintaining a log pipeline is an hour not spent shipping features. Plenty of new startups go straight to New Relic for exactly that reason, and migrate to their own stack later — once the volume makes the bill hurt and the team is large enough to absorb the maintenance. Both patterns are common: startups that want granular control run Grafana and Prometheus from the start, and startups that want speed do not.
 
 > [!info] The cloud providers also collect this data themselves — AWS CloudWatch gathers logs and metrics directly for anything running on AWS. It is another point on the same line: convenient, tied to one provider, and not an option at all if you are not on that provider.
 
-The notes that follow take the self-hosted path, because it is the one where you have to understand every piece. Building the stack by hand makes visible what a managed service is doing for you, which is worth knowing whichever you eventually pay for.
+The notes that follow take the self-hosted path, because it is the one where you have to understand every piece. Building the stack by hand makes visible what New Relic was quietly doing all along, which is worth knowing whichever you eventually pay for.

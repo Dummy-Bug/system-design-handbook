@@ -125,3 +125,26 @@ flowchart LR
 **Choose Elasticsearch** when you need to search the content of the messages themselves, and the storage is worth it.
 
 The stacks are not mutually exclusive in practice, and the distinction is worth holding onto because it explains why two tools that both appear to be log viewers are priced and sized so differently.
+
+# What this stack did not use
+
+Worth stating plainly now that the whole thing works, because it is easy to assume otherwise having read the opening notes of this folder.
+
+**Nothing in the ELK stack went through OpenTelemetry.** No OTLP, no collector, no `spring-boot-starter-opentelemetry`. A log line travelled from your code to SLF4J, to Logback, out through the encoder as JSON over a TCP socket, into Logstash, and on to Elasticsearch. That path is entirely Logback's own machinery talking to Logstash directly.
+
+**And Micrometer was never involved either.** Micrometer is a metrics facade — it counts and it times. This stack carries **logs only**, so there was nothing for it to do.
+
+```mermaid
+flowchart LR
+    C["Your code"] --> S["SLF4J"] --> L["Logback"]
+    L -->|"logstash-logback-encoder"| LS["Logstash"]
+    LS --> ES[("Elasticsearch")] --> KB["Kibana"]
+```
+
+That was deliberate: it is the shortest route to a working log pipeline, and it keeps every piece visible before more machinery is stacked on top.
+
+Which means everything from the next note onward is a second pass over the same ground with different tooling. **Actuator** arrives first, because until something counts, there are no metrics to move. Then the **OpenTelemetry starter** and **Micrometer's Prometheus registry**, at which point metrics and traces begin flowing over OTLP to a collector — automatically, because Spring produces them.
+
+> [!important] **Logs are the exception, and that asymmetry is the reason a later note exists at all.** Metrics and traces route themselves through OpenTelemetry once the starter is present. Logs do not, because Logback predates all of it and has no idea OpenTelemetry exists. So a log line needs an appender wired by hand for each destination — one for Logstash here, and another for OpenTelemetry later.
+
+The end state is **three appenders on the root logger**: console, Logstash, and OpenTelemetry. The same line lands in Elasticsearch and in Loki, which is what makes it possible to compare the two stacks on identical data rather than on two different sets of logs.

@@ -45,6 +45,16 @@ The controller test already had something that makes HTTP calls in Java.
 
 > [!important] **`webEnvironment = MOCK` means no real HTTP server.** The servlet environment is simulated, so nothing binds to port 8080 and the test cannot collide with a running application.
 
+It is a choice among three, and the other two are worth knowing:
+
+| Value | |
+|---|---|
+| **`MOCK`** | A simulated servlet environment, no port bound. What `MockMvc` needs |
+| `NONE` | No web environment at all — for a context that has no web layer to exercise |
+| `RANDOM_PORT` | **A real server on a free port.** Required when the test drives the application over actual HTTP with a real client |
+
+> [!info] `RANDOM_PORT` rather than a fixed one because a fixed port is a machine-wide resource — two test runs, or a running application, would collide. The port chosen is injectable into the test so the client knows where to connect.
+
 > [!warning] **`@AutoConfigureMockMvc` is easy to forget.** `@WebMvcTest` configures `MockMvc` for you; `@SpringBootTest` does not, because it has no idea you intend to make web calls. Without this line the `MockMvc` injection fails.
 
 # What is still mocked, and why
@@ -52,14 +62,19 @@ The controller test already had something that makes HTTP calls in Java.
 Not everything can run for real.
 
 ```java
-1  @MockitoBean
-2  private ProductRedisCache productRedisCache;
+1  @Autowired
+2  private ObjectMapper objectMapper;
 3
-4  @BeforeEach
-5  void setUp() {
-6      when(productRedisCache.getSummary(anyLong())).thenReturn(Optional.empty());
-7  }
+4  @MockitoBean
+5  private ProductRedisCache productRedisCache;
+6
+7  @BeforeEach
+8  void setUp() {
+9      when(productRedisCache.getSummary(anyLong())).thenReturn(Optional.empty());
+10 }
 ```
+
+> [!info] **`ObjectMapper` is injected rather than constructed** because it is a bean the context already provides, and because `ProductRedisCache` depends on one itself — the cache serialises what it stores. Taking the container's instance means the test serialises requests exactly the way the application does, rather than with a separately configured mapper that might differ on dates or nulls.
 
 > [!important] **There is no test Redis, so the cache is mocked to always miss.** `Optional.empty()` is a cache miss, which sends every read down the path that queries the database — the path the test exists to exercise.
 
@@ -67,7 +82,7 @@ That is a deliberate choice with a clear justification:
 
 > [!important] **Mocking the cache tests the slower, more interesting path every time.** A real cache would make the second request skip the database, so the test would exercise less on each run and depend on ordering. **Forcing a miss makes it deterministic.**
 
-> [!info] The alternative is a test Redis instance, the same way H2 is a test database. Reasonable, and more setup — an embedded Redis or a container, plus flushing between runs.
+> [!info] The alternative is a test Redis instance, the same way H2 is a test database. Reasonable, and more setup — an embedded Redis or a container, plus flushing between runs. **Worth doing as an exercise**: stand one up, point the test configuration at it, drop the mock, and the cache path becomes real too. The interesting part is what it forces you to confront — that a cache which persists between tests makes them order-dependent unless something clears it.
 
 ## The exclusion list, and a bug in it
 
@@ -135,7 +150,43 @@ flowchart TB
 
 > [!important] Ending with the deletions is deliberate. It **tests the delete endpoints** and leaves the database as it was found, so the test does not depend on running first or alone.
 
-> [!info] **`MockMvc` is not the only way to drive this.** It calls into the application without going over the network, which keeps the test fast and in-process. The alternative is to start the application for real and hit it with an HTTP client — Spring's own `WebClient`, a library like Retrofit, or a script in another language entirely. **The choice of client changes nothing about the logic**: exercise the flow end to end, point it at a test database rather than a real one, and clean up whatever you created. What an external client buys you is that the network and the serialisation are real too; what it costs is a running application and a slower test.
+## Generating it, and reading what came back
+
+A test of this shape is eleven near-identical `MockMvc` calls differing in verb, path and body — mechanical work of exactly the kind worth handing to an assistant. Two things about doing that are worth recording.
+
+> [!important] **For anything this long, ask for the plan before the code.** A short prompt describing a nine-step journey leaves most of the decisions unstated; a planning pass turns it into an explicit list — create the category, verify by retrieval, create three products, and so on — that you read and correct **before** any code exists. The plan is largely the assistant expanding your prompt into the detailed one you should have written, and approving it is cheaper than reviewing the result.
+
+> [!warning] Planning writes its working out to files as it goes. **Those belong in `.gitignore`.** They are scratch notes for one task, and committing them bloats the repository with documents nobody will read again.
+
+And then read the output as a review, because a passing test is not evidence it tested what you meant:
+
+> [!warning] **The first version created products by calling the service directly** rather than going through the controller, while using the controller for everything else. The test passed. It was also no longer end to end at that step — the layer under test had been skipped for convenience, which is precisely the thing an integration test exists to not do.
+
+> [!info] Worth noting how it looked once corrected: the fix extracted a `createProduct` helper that goes through `MockMvc`, called three times. **A helper is not the same as a shortcut** — the distinction is whether it still passes through every layer, and that is what to check rather than the presence of a private method.
+
+> [!info] **`MockMvc` is not the only way to drive this.** It calls into the application without going over the network, which keeps the test fast and in-process. The alternative is to start the application for real — `webEnvironment = RANDOM_PORT` — and hit it with an HTTP client: Spring's own `WebClient`, a library like Retrofit, a script in another language entirely, or, at most companies of any size, an internal library built for the purpose. **The choice of client changes nothing about the logic**: exercise the flow end to end, point it at a test database rather than a real one, and clean up whatever you created. What an external client buys you is that the network and the serialisation are real too; what it costs is a running application and a slower test.
+
+# What this looks like at scale
+
+The test above drives one Spring application through `MockMvc`. That is the small end of a range worth seeing the far end of, because the shape stays the same and only the surface area grows.
+
+**A payments team at Google tested Google Pay this way.** The integration test began by starting **mobile simulators, one Android and one iOS**, because the application behaves differently across devices and operating systems — that half built and maintained by the mobile team rather than the backend one. From there the script ran the whole journey:
+
+```mermaid
+flowchart TB
+    A["Start a simulator<br/>Android and iOS"] --> B["Boot the OS"]
+    B --> C["Sign in with an account"]
+    C --> D["Install the build about to go live"]
+    D --> E["Set up a payments account<br/>against an internal fake bank"]
+    E --> F["Send a payment to another fake account"]
+    F --> G["Verify every step of the flow"]
+```
+
+> [!important] **The fake bank is the piece worth noticing.** A real payment cannot be part of an automated test, so the organisation built a bank internally — registered numbers, accounts, the lot — that behaves like the real one and moves no money. It is the same move as H2 standing in for MySQL, at the scale of an entire external institution.
+
+> [!warning] **And manual testing continued regardless.** Google Pay is critical infrastructure in the Indian payments ecosystem, and no amount of automation was considered sufficient on its own. **An integration test suite reduces manual testing; on a system where being wrong is unacceptable, it does not replace it.**
+
+The other end of the range is just as real. At a small startup, updating the integration tests was **not even mandatory** — the cost of maintaining them was judged higher than the risk they covered. Both positions are defensible, and which one applies is a question about consequences rather than about testing.
 
 # Where each kind of test loads
 

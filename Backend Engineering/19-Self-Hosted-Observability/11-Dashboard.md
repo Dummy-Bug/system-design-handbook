@@ -112,6 +112,32 @@ Changing `0.90` to `0.99` gives P99. That single number is usually the more hone
 
 > [!warning] Without `percentiles-histogram` enabled for `http.server.requests`, the `_bucket` series does not exist and this query silently returns nothing — the same empty panel as a wrong metric name, from a different cause.
 
+# More panels worth having
+
+The four above are the ones built from scratch here because each teaches something different. A fuller dashboard for a Spring Boot service usually carries these as well:
+
+| Panel | What it tells you |
+|---|---|
+| Heap usage percent | How close the JVM is to its memory ceiling |
+| Active threads | Whether request handling is backing up |
+| CPU usage | Whether the machine, rather than the code, is the limit |
+| Requests per second | Throughput, the `rate` query above |
+| Error rate | Whether requests are failing, 5xx or 4xx-and-5xx |
+| P99 latency | The same histogram query with `0.99` instead of `0.90` |
+| Uptime | How long the service has been running, which makes restarts visible |
+
+None of these need new configuration. Actuator already measures all of them; the work is knowing the metric name and choosing the visualisation.
+
+# Traces need no dashboard
+
+Metrics are the pillar you build panels for. Traces are not — Grafana has a view of its own for them, and there is nothing to construct.
+
+Opening it lists recent traces, one row per request. Opening one shows **the complete lifecycle of that single request**: the URL, the HTTP method, every step it passed through, how long each step took, and the exception if it threw one. This is the pillar from the very first note in this folder, arriving as something you can actually look at.
+
+The reason it needs no setup is that the tracing configuration from earlier already did the work. `sampling.probability: 1.0` means every request produces a trace, and the traces export sends them to the same collector as everything else.
+
+> [!info] These same traces were in New Relic, arriving without anyone asking for them. They look the same here. The difference is that here you configured the sampling, the endpoint and the export switch yourself, and can therefore change any of them.
+
 # Generating load to see any of it
 
 An idle application produces flat panels. A load test in an API client — a fixed number of virtual users hitting a few endpoints for a few minutes — fills them.

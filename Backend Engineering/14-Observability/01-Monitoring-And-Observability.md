@@ -145,6 +145,12 @@ Two things worth knowing when choosing.
 
 > [!important] **Self-hosted is not free, it is differently expensive.** The software costs nothing; the servers it runs on cost money, and so does the team maintaining it. Wanting an AI feature in your dashboard means somebody builds it. For a small company that is overhead with no relationship to the product.
 
+The paid tiers make the same point from the other end. A free allowance of **100 GB of data a month** is generous for learning and irrelevant to a company at the scale of Swiggy, which will exceed it and pay. Choose the open-source stack instead and the bill does not disappear — it moves to AWS, because that infrastructure has to run somewhere.
+
+> [!important] **Nothing is free.** It is the same arithmetic as a video on YouTube: somebody spent their time making it, Google is paying to serve it, and the money comes out of you one way or another. Open-source observability is free to license and not free to operate.
+
+And running it locally is not the same as running it. **A CTO at Zomato does not want each engineer starting Prometheus on their laptop** — there has to be one central deployment the whole company reads from, which is a system somebody owns, upgrades and is woken up by.
+
 Which is why hosted tools dominate at startups and large companies build their own — at sufficient scale, and under compliance rules about where data may be stored, the trade reverses.
 
 The comparison is sharper than the table suggests, because the two columns are not the same product with different price tags.
@@ -158,6 +164,8 @@ The comparison is sharper than the table suggests, because the two columns are n
 | **Getting started** | Config files and containers before the first chart | An account and an agent |
 
 > [!important] **The notification gap is the one that decides it for a first attempt.** Prometheus collects and stores; it does not, on its own, wake anybody up. Getting from a threshold being crossed to a person being told requires assembling another piece — which is entirely doable, and is one more thing to install and understand before the exercise has taught you anything about observability itself.
+
+A commercial platform ships that half already built. New Relic sends alerts into **Slack, Microsoft Teams and Telegram** out of the box, among others, so the path from a crossed threshold to a person reading a message is configuration rather than construction. That is a large part of what the bill buys: not better data, but fewer pieces to assemble before the data reaches somebody.
 
 Which is the argument for learning on a hosted tool and not a statement about which is better. **The concepts are the same in both**, and the one that gets you to a working alert fastest is the one that teaches them soonest.
 

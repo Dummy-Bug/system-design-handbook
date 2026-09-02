@@ -46,7 +46,7 @@ Two problems follow from tenants sharing hardware.
 
 **The first is what one tenant can see.** Virtual machines on the same host share the machine's resources. If they can reach each other at all, then two customers who have no relationship are one mistake away from reading each other's data.
 
-**The second is what one tenant can do.** Consider a site that accepts code from users and runs it — a competitive programming judge, for instance. Its whole job is to take a submission, execute it, and show the output. Somebody submits a fork bomb, or a query crafted to attack the database behind the judge. The code was not caught on the way in, so it runs. The virtual machine executing it falls over.
+**The second is what one tenant can do.** Some services exist to run code submitted by strangers — LeetCode, for instance. Its whole job is to receive your code, execute it, and show you the output. That is the product, not a weakness in it. So somebody submits a fork bomb, or a query crafted to pull data out of the database sitting behind the judge. Nothing caught it on the way in, and now it is running on LeetCode's own machine. The virtual machine executing it falls over.
 
 On shared hardware, that is not confined to the attacker. If several virtual machines sit on one physical box and one of them takes the box down with it, every other customer on that box goes down too — through no fault of their own.
 

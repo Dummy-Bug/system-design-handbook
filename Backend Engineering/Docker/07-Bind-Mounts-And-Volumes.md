@@ -133,4 +133,14 @@ Because it does not live inside the container, it **survives the container being
 
 A volume can also be **shared between containers**, which is the other reason they exist.
 
+Volumes are managed independently of any container, so they are listed and removed on their own:
+
+```bash
+1  docker volume ls
+2  docker volume rm <volume>
+3  docker volume create <volume>
+```
+
+They also survive more than you might expect. `docker system prune -a` removes them along with everything else, so a project that depends on named volumes needs them recreated afterwards — which is a good argument for declaring them somewhere the project remembers rather than in your shell history.
+
 > [!important] **A bind mount and a volume solve opposite halves of the same problem.** The bind mount exists so the container sees the host's files. The volume exists so one directory inside the container is protected from exactly that.

@@ -27,14 +27,22 @@ Four ports, because four things are running inside it.
 
 The last two are the collector from the first note in this folder, made concrete. It accepts telemetry on both transports, and which one you use is a configuration choice rather than a difference in what arrives.
 
+That gives the full path a metric takes, end to end, with a named component at every step:
+
 ```mermaid
 flowchart LR
-    APP["Your application"] -->|OTLP over HTTP, 4318| COL["Collector"]
+    ACT["Actuator
+    produces the numbers"] --> MM["Micrometer
+    shapes them"]
+    MM -->|OTLP over HTTP, 4318| COL["Collector
+    receives"]
     COL --> PROM[("Prometheus
-    9090")]
+    stores, 9090")]
     PROM --> GRAF["Grafana
-    3000"]
+    draws, 3000"]
 ```
+
+**Actuator measures, Micrometer shapes, the collector receives, Prometheus stores, Grafana draws.** Five pieces, each replaceable, because the joins between them are the standard rather than a private arrangement.
 
 # Three dependencies
 
@@ -51,7 +59,7 @@ flowchart LR
 
 **The Prometheus registry** is the Micrometer piece that shapes metrics for Prometheus specifically. Micrometer collects; a registry decides what the collected numbers look like on the way out.
 
-**`spring-boot-docker-compose`** is a convenience: it detects the project's compose file and brings the containers up when the application starts, so `docker compose up` is no longer a separate step.
+**`spring-boot-docker-compose`** is a convenience introduced in **Spring Boot 3.1** for local development. It automates the bridge between the application and its containers: it detects the project's compose file and brings the containers up when the application starts, so `docker compose up` is no longer a separate step you have to remember, and so are the environment variables and connection details that would otherwise be wired by hand.
 
 > [!warning] The docker-compose integration did not start the containers in practice, even with the dependency present and the configuration below in place. Running `docker compose up` by hand works and is what the rest of these notes assume. Treat the automatic route as a convenience to verify rather than to rely on.
 

@@ -17,7 +17,7 @@ Queries run against that representation rather than the raw text, which is what 
 
 > [!info] **Unverified.** The output above is from the PostgreSQL documentation; this material was not run, since the project here uses MySQL. MySQL has its own full-text indexes with `MATCH ... AGAINST`, which are less capable but exist.
 
-# Four reasons this is the right answer more often than people think
+# Five reasons this is the right answer more often than people think
 
 **No new infrastructure.** The single largest one, and it is not really about search at all.
 
@@ -43,6 +43,8 @@ flowchart TB
 
 **A simpler architecture.** One fewer component, one fewer failure mode, one fewer thing a new engineer has to learn.
 
+**And you keep everything else the database does.** Search is not bought at the cost of transactions, joins, constraints or any other Postgres feature — the searchable column sits in the same table as the rest of the row, so a query can filter on search relevance and on a price range and on a foreign key in one statement. A separate engine holds only what you copied into it.
+
 # Where the ceiling is
 
 Not a general-purpose answer, and the boundary is roughly measurable.
@@ -53,9 +55,19 @@ Not a general-purpose answer, and the boundary is roughly measurable.
 | Hundreds of thousands | Usually still fine, with attention to indexing |
 | Hundreds of millions to billions | **A dedicated engine** |
 
-> [!important] The upper end is not hypothetical. **A log search across a company like Google or Microsoft is billions of documents**, generated continuously, and no single relational instance holds that — which is where a system built to spread documents across many machines becomes necessary.
+> [!important] The upper end is not hypothetical. **A log search across a company like Meta, Microsoft or Google is billions of documents**, generated continuously, and no single relational instance holds that — which is where a system built to spread documents across many machines becomes necessary.
 
-> [!info] The threshold is not only document count. Fuzzy matching, misspelling tolerance, faceting and relevance tuning are things a dedicated engine does well and a database does not do at all. Needing those can justify the move at a much smaller scale.
+> [!info] The threshold is not only document count. Faceting, relevance tuning and fuzzy matching are things a dedicated engine does well and a database does not do at all. Needing one of those can justify the move at a much smaller scale.
+
+**Fuzzy search** is the one worth naming properly, because it is often the actual reason a team moves.
+
+> [!important] **A fuzzy search matches text that is close to the query rather than equal to it**, so a misspelling still finds what the user meant — type `Googel` and the documents containing `Google` still come back. No amount of tokenizing and stemming inside a database gives you that; matching an approximate spelling is a different operation from matching a normalised word.
+
+# The hard part is not the integration
+
+> [!warning] **Wiring Elasticsearch into an application is straightforward. Deciding whether the problem needs it is not.** The integration is a client library and some configuration, and it is rarely where time goes. The judgment — is this a few-thousand-document problem the existing database already solves, or does it genuinely need fuzzy matching and a billion documents — is the part that is actually difficult and the part worth being able to defend.
+
+In practice this decision is often already made by the time you arrive: on most established projects the search infrastructure is standing before you get there, and the work is using it rather than choosing it. Which is exactly why the reasoning matters when the choice does land on you.
 
 # The decision
 

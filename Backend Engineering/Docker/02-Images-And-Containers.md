@@ -56,7 +56,7 @@ flowchart TB
 
 > [!info] **The window is convenient and the commands are the ones to learn.** Containers can be started, paused and deleted from it, but the moment the work happens over SSH on a server there is no window — only a terminal. Everything below is done with commands for that reason.
 
-**Docker Hub** is the registry — a large pool of ready-made images, the equivalent for containers of what npm is for Node.js packages. Some are **official images** maintained by the organisation behind the software itself, which come with clear documentation and follow current practice. Others are published by third parties. Anyone with an account can publish their own.
+**Docker Hub** is the registry — a large pool of ready-made images. Two comparisons both fit: it is what npm is to Node.js packages, a pool somebody else filled that you pull from; and it is GitHub for images, in that you push your own up to it as well. Some are **official images** maintained by the organisation behind the software itself, which come with clear documentation and follow current practice. Others are published by third parties. Anyone with an account can publish their own.
 
 There is an image for nearly anything worth running: Node.js, Python, MySQL, MongoDB, Ruby on Rails, and complete operating systems such as Ubuntu and Alpine Linux. Pull one and Docker can start a container in which that software is already installed and configured.
 

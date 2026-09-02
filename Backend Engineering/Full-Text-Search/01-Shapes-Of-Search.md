@@ -13,9 +13,13 @@ Numbers are the easy case, and worth naming to set them aside:
 
 Both are already familiar from indexing. **Text is where the interesting problems are**, and it is what almost anyone means when they ask for a search feature.
 
+> [!info] Text search also has a client-side half that this folder sets aside. A search box that fires a request on every keystroke will melt a backend regardless of how the backend is built, so the front end throttles that traffic — **debouncing**, which waits until typing pauses before sending anything, and **throttling**, which caps how often a request may be sent at all. Worth knowing they exist and are somebody's problem; everything below is the server side.
+
 # Three shapes, and they are not equally hard
 
-Before choosing anything, the question to ask is what the match looks like.
+**Build me a search feature is not yet a specification.** It is the opening of a conversation, and the work that decides everything is the clarifying questions asked before any solution is proposed — what is being searched, how much of it there is, and what counts as a match. Answer those wrongly and the rest is wasted.
+
+The first of them: what does the match look like?
 
 ```mermaid
 flowchart TB
@@ -108,6 +112,7 @@ MySQL uses a variant of Boyer-Moore. The classical algorithms and their real com
 | Algorithm | Worst case |
 |---|---|
 | **KMP** | O(n + m) |
+| **Z-algorithm** | O(n + m) |
 | **Boyer-Moore** | O(nm) — O(n + m) with the Galil rule |
 | **Rabin-Karp** | **O(nm)** — O(n + m) on average, degrading on hash collisions |
 

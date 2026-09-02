@@ -33,6 +33,8 @@ That is also its limitation. **It can only instrument what it recognises.** Anyt
 
 Four steps, and only one touches the project's build.
 
+> [!warning] **The account is created in one of two regions, US or Europe, and the choice is made at signup.** Logging in afterwards redirects to whichever you picked — `one.eu.newrelic.com` rather than `one.newrelic.com` for a European account. Nothing is wrong when the URL does not match the one in the documentation, but it is worth recognising rather than assuming a redirect has gone astray.
+
 ## Get the agent
 
 Download and unzip the vendor's agent archive. Two files matter:

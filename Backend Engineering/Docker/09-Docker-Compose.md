@@ -108,6 +108,28 @@ Declaring them in the file is the better answer for the same reason as the netwo
 
 > [!info] A `depends_on` entry can be added to a service to say it should not start before another one, and an `environment` block can set environment variables — useful when they are not already coming from the Dockerfile or a `.env` file.
 
+# One .gitignore for the whole set
+
+Pushing this project means pushing several services at once, and each one has its own `.env` sitting beside its code. A single `.gitignore` at the root of the repository covers all of them:
+
+```text
+1  # .gitignore
+2  API-Gateway/.env
+3  Flights/.env
+4  Flights-Booking-Service/.env
+5  node_modules
+```
+
+Check it did what you think **before** the push, not after:
+
+```bash
+1  git status
+```
+
+No `.env` should appear in the list. It is worth actually looking, because the cost of getting this wrong is not a broken build — it is credentials published to a public repository, and a push cannot be taken back by deleting the file afterwards.
+
+Anyone cloning the result gets every service, every Dockerfile, and the compose file, and starts the whole thing with one command. What they do not get is the secrets, which is exactly the intended split.
+
 # Bringing it up and down
 
 ```bash

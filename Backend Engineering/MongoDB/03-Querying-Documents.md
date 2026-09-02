@@ -78,6 +78,14 @@ Equality is one comparison. Everything else is an operator, written as a nested 
 
 > [!important] **`$exists` has no relational equivalent**, because in a table every row has every column. Here a field may simply be absent, which is a different thing from being null — and only a schemaless store needs a way to ask about it.
 
+Those are the comparison and element operators, and they are the ones in daily use. Three further families exist and are worth knowing by name so you can look for them when the shape of the data calls for it:
+
+| Family | For |
+|---|---|
+| **Array** | Querying inside an array field — `$all` requires every listed value to be present, `$elemMatch` requires one array element to satisfy several conditions at once |
+| **Geospatial** | Coordinates — proximity and containment queries |
+| **Bitwise** | Matching against individual bits of a numeric field |
+
 `$in` takes an array and matches any of them:
 
 ```text
@@ -132,6 +140,8 @@ Two conditions in one object are an implicit AND, but only across **different** 
 ```text
   > db.temp.find({}, { name: 1, minimum_nights: 1 }).sort({ minimum_nights: -1 }).limit(1)
 ```
+
+The answer is worth looking at rather than assuming. **The listing at the top demands a minimum stay of 96 nights** — over three months — and the one behind it 90. Sorting descending on a field nobody thinks about surfaces the far end of the distribution immediately, and the far end is usually where the surprising data is.
 
 > [!important] **`1` is ascending, `-1` is descending** — the same convention as projection's include and exclude, which is an unfortunate collision worth being deliberate about.
 

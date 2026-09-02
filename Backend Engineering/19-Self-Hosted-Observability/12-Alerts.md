@@ -68,7 +68,9 @@ A notification carries a message you write, and it should contain the current va
 
 Alerts are the input to on-call: the arrangement where somebody is responsible, at any hour, for responding when something breaks.
 
-**Incident management software is where that lives.** PagerDuty is the common one — sometimes called ICM, for incident and change management — and it holds the on-call rotation, decides who is currently responsible, escalates when they do not respond, and keeps the record of what happened. Tickets in it are not raised by people; they are raised by exactly the kind of alert built above.
+**Incident management software is where that lives.** PagerDuty is the common one — sometimes called ICM, for incident and change management, and sometimes just called on-call — and it holds the on-call rotation, decides who is currently responsible, escalates when they do not respond, and keeps the record of what happened. Open it and you see the currently open on-call tickets. Those tickets are not raised by people; they are raised by exactly the kind of alert built above, whether that alert came from a stack you run or from a managed service.
+
+Grafana has its own product in this space as an alternative to PagerDuty, so the choice of alerting stack does not force the choice of on-call tool.
 
 ```mermaid
 flowchart LR
@@ -79,6 +81,16 @@ flowchart LR
 ```
 
 This is the honest answer to why the observability stack was worth building. Dashboards are for investigating. **Alerts are the part that runs when nobody is watching**, and the setup only starts paying for itself once something is watching on your behalf.
+
+# The paid alternatives, and why teams still pick them
+
+New Relic is not the only managed option. **Datadog** is the other name that comes up constantly, and it covers the same ground — observability dashboards, alerting, the lot — for a bill.
+
+The reason to name it is a difference that has appeared recently and is easy to miss. **These vendors are building AI capabilities directly into their products**, so a paying team gets them out of the box: anomaly detection, natural-language querying, automated root-cause suggestions, whatever the vendor has shipped this quarter.
+
+A self-hosted stack does not. Getting comparable behaviour out of Grafana and Prometheus means building custom integrations yourself, or waiting for the open-source projects to ship their own equivalents. That is a genuine reason teams choose to pay, and it is a newer reason than cost or convenience — it did not exist a few years ago and it will keep moving.
+
+> [!info] This cuts the same way as everything else in this folder. The gap is not in the data — both sides are collecting the same three pillars over the same standard. The gap is in what has been built on top of that data, and that is the part you either buy or build.
 
 # The cost that only appears later
 
@@ -95,4 +107,6 @@ flowchart TB
     and someone to own it"]
 ```
 
-Which is the trade from the start of this folder, arriving with a number attached. A managed service is a bill; a self-hosted stack is a bill plus somebody's attention, permanently. The reasonable default for a small team is to buy it and revisit once the cost stops making sense or the control starts mattering — and the reason to have built it once by hand is that you now know exactly what you would be buying.
+Which is the trade from the start of this folder, arriving with a number attached. A managed service is a bill. A self-hosted stack is a bill plus somebody's attention, permanently — the machines it runs on, the storage it fills, and a person who owns it when the observability stack is itself the thing that broke.
+
+With a managed product none of that exists. You create accounts for the people who need access, and they have dashboards.

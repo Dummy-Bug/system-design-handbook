@@ -1,5 +1,7 @@
 Past the scale a database handles, the answer is Elasticsearch — and it earns its reputation with two ideas rather than magic. This note is the first: the structure that makes searching billions of documents possible by never searching a document at all.
 
+> [!info] **This note and the next cover Elasticsearch algorithmically, as it behaves on a single node.** How it spreads a billion documents across many machines — sharding, replication, how a query is answered from partial indexes — is a separate subject and is not here. Everything below explains what the engine does with a document and a query; none of it explains how it stays up at that size.
+
 # Two phases, and the expensive one is not the search
 
 > [!important] Work splits into **index time**, when a document is added, and **query time**, when somebody searches. Elasticsearch does a great deal at index time so that query time has almost nothing left to do.

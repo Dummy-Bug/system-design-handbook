@@ -124,7 +124,8 @@ Backend Engineering/
 ├── 16-Scaling-Reads/                ← monolith vs microservices, EXPLAIN, composite indexes, selectivity, clustered and secondary indexes, choosing a primary key, hash indexes and creating them safely
 ├── 17-Caching-With-Redis/           ← why cache, where it lives, Redis data structures, TTL locks, when not to cache, caching patterns, eviction, the Spring integration, index vs cache
 ├── 18-Testing/                      ← where testing sits, unit tests and mocking, the kinds of test, then Mockito service tests, H2 repository tests, MockMvc controller tests, and a full integration test
-├── 19-Self-Hosted-Observability/    ← OpenTelemetry, managed vs self-hosted, micrometer, the ELK stack, running it with Compose, wiring Spring logs in, searching in Kibana, then Actuator, Grafana and Prometheus, logs into Loki, building a dashboard, alerts and on-call
+├── 19-Self-Hosted-Observability/    ← OpenTelemetry, managed vs self-hosted, micrometer, the ELK stack, running it with Compose, wiring Spring logs in, searching in Kibana, then Actuator, Grafana and Prometheus, logs into Loki, building a dashboard, alerts and on-call, and what of it transfers
+│   └── Images/                      ← one web diagram, credited in Images/CREDITS.md
 ├── Docker/                          ← why containers, images and containers, the command layer, Dockerfiles, ports, bind mounts and volumes, networking, Compose, publishing
 ├── Full-Text-Search/                ← prefix/suffix/substring, why substring defeats indexes, Postgres full-text, the inverted index, TF-IDF and BM25
 └── MongoDB/                         ← NoSQL families, JSON and BSON, the shell, querying, updating, indexes and explain, aggregation pipelines

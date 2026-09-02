@@ -6,6 +6,8 @@ The name is unhelpful — it sounds like a rejection of a query language when it
 
 > [!important] **NoSQL is a category of databases that do not store data in tables and do not use SQL to query it.** Both halves matter, and the first is the cause of the second: without tables there are no rows and columns for `SELECT` to address.
 
+There is a second, softer reason these databases went looking for a different language: **SQL is not especially intuitive to read.** `SELECT * FROM products` could as easily have been written `PRINT FROM products`, and the vocabulary was settled decades ago by people solving a different problem. On a simple query it hardly matters. On a long one — nested subqueries, several joins, a `HAVING` clause — the syntax stops describing what you want and starts hiding it. The document databases were free to choose something else and did.
+
 > [!info] There are exceptions in both directions. Some products store data non-relationally and still expose a SQL-like interface over it, precisely because so many people already know SQL.
 
 ## Four families, and they are not variations on each other
@@ -70,6 +72,8 @@ Where it shows up:
 
 > [!important] The reason it took over is that it describes **an object rather than a scalar.** A product is not a number or a string — it is a name, a price, a discount and more, together. JSON carries that shape across a network in text a human can read.
 
+Made concrete: **you open the Zomato app and it shows you restaurants.** The app sent a request to a server, possibly carrying details of its own — your location, a filter — and the server sent a response back. Both directions are JSON. Neither side knows or cares what language the other is written in; they agreed on a text format that describes an object, and that is the whole contract.
+
 ## BSON
 
 > [!important] **BSON — Binary JSON — is JSON's binary encoding**, and it stores things plain JSON leaves implicit: the length of each value, its type, and the total size of the document.
@@ -90,12 +94,16 @@ flowchart LR
 
 Everything relational has a counterpart, and the words are all different.
 
-| Relational | MongoDB | |
+Take a Twitter-like application, where the database is `twitterDev`:
+
+| Relational | MongoDB | In `twitterDev` |
 |---|---|---|
-| **Table** | **Collection** | The real-world entity — users, orders |
-| **Row** | **Document** | One record |
-| **Column** | **Field** | An attribute, a key inside the document |
+| **Table** | **Collection** | `users`, `tweets`, `comments`, `likes`, `hashtags` — one per real-world entity |
+| **Row** | **Document** | One user, one tweet, one comment |
+| **Column** | **Field** | `email`, `password` — a key inside the document |
 | **Primary key** | **`_id`** | Present on every document, generated if not supplied |
+
+So a single tweet is a document; every tweet together is the `tweets` collection; and the fields of that document are what columns would have been.
 
 > [!important] The names differ because the things differ. **A table enforces that every row has the same columns; a collection enforces nothing of the kind.** Calling a collection a table would import an expectation that does not hold.
 

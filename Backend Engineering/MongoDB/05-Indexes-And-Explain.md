@@ -91,6 +91,8 @@ flowchart TB
   > db.weatherdata.createIndex({ type: "text" })
 ```
 
+**Geospatial**, for coordinates — `2dsphere` for points on a globe, `2d` for a flat plane. They exist because proximity is a question a B-tree cannot answer: nearest to me is not a range on any single ordered value.
+
 ## The text index trap
 
 Creating it changes nothing on the query you were already running:

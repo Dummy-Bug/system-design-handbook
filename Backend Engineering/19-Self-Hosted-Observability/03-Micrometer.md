@@ -2,7 +2,7 @@ Having chosen to run the stack yourself, the application still has to produce th
 
 # Micrometer
 
-**Micrometer is a vendor-neutral observability facade.** A facade here means a single interface your code writes against, behind which the actual destination can be swapped without the code noticing — the same idea as OpenTelemetry, implemented as a library inside the Spring ecosystem.
+**Micrometer is a vendor-neutral observability facade.** A facade here means a single interface your code writes against, behind which the actual destination can be swapped without the code noticing — **the same idea as OpenTelemetry, implemented as a library inside the Spring ecosystem.**
 
 It is easiest to describe as Spring's take on OpenTelemetry: it collects telemetry and processes it in a form compliant with the standard, so that whatever backend you point it at can read it.
 
@@ -37,7 +37,7 @@ flowchart TB
     C --> N
 ```
 
-**The Java agent** is a jar attached when the JVM starts, which instruments the application from the outside without any change to its code. This is the mechanism behind the vendor agents — attaching a vendor's jar and letting it collect everything is exactly this route.
+**The Java agent** is a jar attached when the JVM starts, which instruments the application from the outside without any change to its code. This is the mechanism behind the vendor agents — attaching a vendor's jar and letting it collect everything is exactly this route. We used this when we configured **New-Relic**
 
 **A third-party starter** was for a long time the way to do it inside the build file rather than at the command line.
 
@@ -50,7 +50,7 @@ flowchart TB
 4  }
 ```
 
-No version is given because the Spring Boot Gradle plugin manages it.
+No version is given because the **Spring Boot Gradle plugin manages it**.
 
 > [!warning] This is available from Spring Boot 4.0 onward and not before. A project below 4.0 still has to take one of the two older routes — the Java agent, or a third-party starter.
 

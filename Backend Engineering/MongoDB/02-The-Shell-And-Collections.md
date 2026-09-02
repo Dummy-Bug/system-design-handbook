@@ -39,7 +39,7 @@ Except it does not appear yet:
 
 > [!warning] **A database with no collections does not exist on disk.** `use` sets where your commands are aimed; nothing is written until there is something to write. The database becomes real, and visible, when its first collection is created.
 
-> [!warning] **Names are case-sensitive.** `newdb` and `newDB` are two different databases, and using the wrong case silently creates a second empty one rather than failing.
+> [!warning] **Case in a database name is not a way to tell two databases apart.** You cannot have both `salesData` and `SalesData` — they are not two databases. And once one exists, every later reference has to use the same capitalization; `salesdata` is not a valid way to reach `salesData`. Get the case wrong and the shell objects rather than quietly giving you a second, empty database.
 
 # Collections
 
@@ -54,11 +54,11 @@ Except it does not appear yet:
 
 ```mermaid
 flowchart LR
-    A["db"] --> B["temp"]
-    B --> C["insertOne(...)"]
-    A -.- D["the current database"]
-    B -.- E["the collection"]
-    C -.- F["the operation"]
+    A["db
+    the current database"] -->|"."| B["temp
+    the collection"]
+    B -->|"."| C["insertOne(...)
+    the operation"]
 ```
 
 > [!info] `show collections` lists collections in the current database; `show dbs` lists databases. Confusing the two is common early on — one is a level above the other.

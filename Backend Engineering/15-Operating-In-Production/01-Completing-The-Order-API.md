@@ -59,6 +59,8 @@ Every one has the same shape by now.
 
 > [!info] Which fields belong here is a **business question, not a technical one.** Total items and total price are guesses at what a client needs; the real answer comes from whoever is building the screen. A response shape is a contract with another team.
 
+A reasonable thing to ask at this point is whether the summary should carry the order's review as well. It can — as an **optional** field, and the optionality is the whole of the answer. A review is written after the order arrives, so at the moment an order is placed there is nothing to include, and a response shape that requires one would be wrong for every order in its first week. Worth adding as an exercise once the rest works.
+
 ## Building it
 
 ```java
@@ -169,3 +171,11 @@ Two practical points sit alongside that.
 > [!info] Most assistants offer a mode that answers without editing files, as against one that goes ahead and changes them. **While learning, the answering mode is the better setting** — you read the explanation and then type the code, which is the part that puts it in your hands. The editing mode skips exactly the step you are there to practise.
 
 Once the shape is genuinely familiar, the calculation flips, and the work that goes fastest is the work you could already have done: a fourth CRUD resource identical to the three you wrote by hand, a response DTO whose fields you can list, a mechanical refactor you can already picture. Being specific is what makes that work — naming the files to follow for conventions, listing the fields you want rather than leaving them to be invented, and reading the result as you would review a colleague's.
+
+> [!warning] **Read it as a review, not as output — including what it removed.** During one such refactor a `@Transactional` annotation disappeared from a method, unmentioned and unasked for. Nothing failed. The code compiled, the application started, and the method now ran without a transaction, which is a correctness change that surfaces only under concurrency or a partial failure. **A diff that adds what you asked for can also quietly drop something you never thought to check.**
+
+Two tasks sit slightly apart from writing code, and are where an assistant is least likely to cost you anything.
+
+**Verifying endpoints.** Pointed at a running server and asked to exercise every route with `curl`, it works out what the API needs before it can call it — fetching the existing products and orders first, then creating a review, reading it back by id and by product, and deleting it. That is a genuine smoke test of six endpoints, and it is checking work rather than producing it.
+
+**Writing the README.** A project's feature list, its endpoints and its setup instructions all already exist in the code. Generating that document is summarising what is there, which is exactly the kind of work where having read the whole repository is an advantage and inventing anything is not.

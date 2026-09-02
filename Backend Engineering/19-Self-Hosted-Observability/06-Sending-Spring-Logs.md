@@ -2,7 +2,7 @@ The stack is running and empty. Three things now have to be written: a dependenc
 
 # The encoder dependency
 
-Spring Boot logs through SLF4J, which is an interface, backed by Logback, which is the implementation that actually writes the lines out. Logback can write to a console or a file out of the box. It cannot send structured records over a network socket, and that is what this stack needs.
+Spring Boot logs through **SLF4J**, which is an **interface**, backed by **Logback**, which is the implementation that actually writes the lines out. Logback can write to a **console** or a **file** **out of the box**. It **cannot** **send** structured **records over a network socket**, and that is what this stack needs.
 
 ```groovy
 1  // build.gradle
@@ -11,7 +11,7 @@ Spring Boot logs through SLF4J, which is an interface, backed by Logback, which 
 4  }
 ```
 
-This library adds Logback encoders, layouts and appenders that emit JSON and the other formats Jackson supports. In plain terms: it teaches the logging framework already in the project how to produce structured output and push it to Logstash.
+This library adds **Logback encoders**, **layouts and appenders that emit JSON** and the other formats Jackson supports. In plain terms: it **teaches** the **logging framework** already in the project **how to produce structured output and push it to Logstash**.
 
 # The logging configuration
 
@@ -40,9 +40,9 @@ Logback is configured with an XML file placed in the resources directory. Spring
 
 **An appender is a destination for log lines.** A configuration can declare several, and every line goes to all of the ones the root refers to.
 
-**`LOGSTASH`** on line 3 is a TCP socket appender. It opens a connection to `localhost:5044` and writes each record through it, encoded as JSON by `LogstashEncoder`.
+**`LOGSTASH`** on line 3 is a **TCP socket appender**. It opens a connection to `localhost:5044` and writes each record through it, encoded as JSON by `LogstashEncoder`.
 
-**`CONSOLE`** on line 8 is the ordinary console output, kept so that logs still appear in the terminal while you work. Its pattern is the format of each printed line: timestamp, then level padded to five characters, then the logger name shortened to 36, then the message and a newline.
+**`CONSOLE`** on line 8 is the **ordinary console output, kept so that logs still appear in the terminal while you work**. Its pattern is the format of each printed line: timestamp, then level padded to five characters, then the logger name shortened to 36, then the message and a newline.
 
 **`root level="INFO"`** sets the threshold — anything at INFO or above is emitted — and the two `appender-ref` lines send it to both destinations at once.
 
@@ -52,10 +52,10 @@ Logback is configured with an XML file placed in the resources directory. Spring
 
 The two configuration files each name a host and a port, and they do not match. This is the detail most likely to cause confusion, so it is worth setting out directly.
 
-| Written in | Address | Why |
-|---|---|---|
-| `logback-spring.xml` | `localhost:5044` | The Spring application runs on your machine, outside Docker. It reaches Logstash through the port published to the host |
-| `logstash.conf` | `http://elasticsearch:9200` | Logstash runs inside the Docker network. It reaches Elasticsearch by service name, without leaving that network |
+| Written in           | Address                     | Why                                                                                                                         |
+| -------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `logback-spring.xml` | `localhost:5044`            | The Spring application runs on your machine, outside Docker. **It reaches Logstash through the port published to the host** |
+| `logstash.conf`      | `http://elasticsearch:9200` | Logstash runs inside the Docker network. It reaches Elasticsearch by service name, without leaving that network             |
 
 ```mermaid
 flowchart LR
@@ -67,7 +67,7 @@ flowchart LR
     end
 ```
 
-The rule underneath is the one from [[08-Container-Networking]]: service names resolve only inside the Docker network, and anything outside it has to come in through a published port.
+The rule underneath is the one from [[08-Container-Networking]]: **service names resolve only inside the Docker network, and anything outside it has to come in through a published port.**
 
 # The Logstash pipeline
 
@@ -90,7 +90,7 @@ Logstash needs two things defined: how data comes in, and where it goes out.
 14 }
 ```
 
-**The input block** opens a TCP listener on 5044 and expects each message to be JSON — which is exactly what `LogstashEncoder` on the other end produces. Logstash can also read from files, and TCP is the better choice here because it is a persistent connection rather than something polling a file on disk.
+**The input block** opens a TCP listener on 5044 and **expects each message to be JSON** — which is exactly what `LogstashEncoder` on the other end produces. Logstash can **also read from files**, and TCP is the better choice here because it is a persistent connection rather than something polling a file on disk.
 
 **The output block** writes to Elasticsearch, and `index` decides which index each record lands in. `logs-%{+YYYY.MM.dd}` expands to a name like `logs-2026.08.30`, so a new index is created each day.
 
@@ -119,7 +119,7 @@ Both failures below are worth walking through, because neither error message poi
 
 `-x test` skips the tests, which are not what is being checked here.
 
-**Logstash crash-looped on a trailing comma.** With the application running and Kibana open, no logs arrived. Elasticsearch answered on 9200, so storage was fine. Kibana loaded, so the dashboard was fine. Checking the containers showed Logstash starting, exiting, and starting again — the bridge between the application and Elasticsearch was never up long enough to carry anything.
+**Logstash crash-looped on a trailing comma.** With the application running and Kibana open, no logs arrived. Elasticsearch answered on 9200, so storage was fine. Kibana loaded, so the dashboard was fine. Checking the containers showed Logstash starting, exiting, and starting again — **the bridge between the application and Elasticsearch was never up long enough to carry anything**.
 
 The cause was a stray comma inside the output block of `logstash.conf`. That file is not YAML or JSON and does not want commas between settings; one left in is a syntax error, and Logstash exits on a configuration it cannot parse.
 
