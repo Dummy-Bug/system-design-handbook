@@ -132,7 +132,7 @@ flowchart LR
 
 Named concretely, receivers and exporters are things like OTLP, Jaeger, Prometheus and OpenSearch — and the same protocol can sit on both sides, since a collector is free to accept OTLP and forward OTLP onward.
 
-![[Backend Engineering/19-Self-Hosted-Observability/Images/otel-collector-pipeline.png]]
+![[otel-collector-pipeline.png]]
 
 **The collector is optional**. Data can be sent straight to a backend that is capable of receiving it, and the collector earns its place when you want aggregation or filtering to happen outside the application.
 

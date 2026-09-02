@@ -167,7 +167,7 @@ telling him the command.
 
 ## Status
 
-**Three folders written**, through class 6 (2026-08-23). **Git is complete** — the course moves to networking, then CI/CD.
+**Four folders written**, through class 8 (2026-09-02). **Networking is complete** — CI/CD starts with the next class.
 
 - `01-Introduction-To-DevOps/` — 8 notes
 - `02-Linux/` — 7 notes, 2,723 lines. **Done.**
@@ -176,6 +176,11 @@ telling him the command.
   **Class 5** (4 parts, ~2h 15m) — `07` branches (`refs/heads`, `HEAD`, `switch`) · `08` merging: fast-forward, three-way, conflicts · `09` rebase and force-push · `10` cherry-pick and stash · `11` `log`/`show`/`diff` and `reset`/`restore`/`revert` · `12` `git bisect`.
   **Class 6** (3 parts, ~2h 8m) — `13` pull requests and code review · `14` Git Flow · `15` GitHub Flow · `16` trunk-based development, feature flags, deploy vs release · `17` monorepo and polyrepo · `18` signed commits.
   Note `03` spans class 4 parts 2–3, note `08` spans class 5 parts 1–2, and notes `13` and `15` span class 6 parts 1–3 and 2–3. Class 4 part 5 produced two notes, class 5 part 4 produced three, and class 6 part 3 fed four.
+- `04-Networking/` — **13 notes, 2,002 lines, 55 mermaid diagrams. Done.** Classes 7 and 8, both recorded on 2026-09-02.
+  **Class 7** (2 parts, ~1h 55m) — `01` how a request finds a server: methods, endpoints, IPv4/IPv6, one server hosting many applications, ports, well-known ports, listening, sockets, MAC vs IP · `02` reverse proxy: the 443-to-8080 gap, the mapping table, nginx wearing several hats · `03` TCP, UDP and the layer model: OSI, three-way handshake, guarantees, the payment failure, packet loss, connection lifetime · `04` DNS resolution: browser cache → resolver → root → TLD → authoritative, TTL, registrar vs authoritative · `05` DNS records: A, AAAA, CNAME, TXT, MX, NS, subdomains, `www` is not the apex, where each record is written · `06` scaling and load balancers: vertical vs horizontal, public/private IP, routing algorithms, sticky sessions vs a shared session store, health checks, layer 4 vs layer 7.
+  Note `05` spans both parts; part 2 fed `05` and `06`.
+  **Class 8** (1 part, ~2h 27m) — `07` API gateway: microservices, routing by endpoint, gateway versus load balancer, authentication and rate limiting · `08` HTTPS and what it guarantees: HTTP is plaintext, man-in-the-middle, confidentiality/integrity/authentication · `09` symmetric and asymmetric keys: the speed-versus-secret trade, the key-exchange problem · `10` certificates and trust: the public-key substitution attack, digital signatures, certificate authorities, chaining, the root store · `11` the TLS handshake: seven steps end to end · `12` Diffie-Hellman key exchange: the colour analogy, the arithmetic, ECDHE and ephemeral keys · `13` certificate management: Let's Encrypt, ACME, Certbot, and TLS termination at the reverse proxy.
+  **Note `02` was rewritten and renamed by class 8** — class 7 promised forward-versus-reverse proxy and never reached it, so note `02` carried a marked beyond-lecture callout. Class 8 taught it properly, so the callout was replaced with real lecture material and the file became `02-Forward-And-Reverse-Proxies.md`. **Merging into the existing note rather than adding a new one is the right call when a later class returns to the same concept.**
 
 > [!tip] **Hashes in the internals notes are real and reproducible — keep doing this.**
 > Object IDs in notes `04`–`06` were computed, not invented: `sha1("blob <len>\0<content>")` for blobs,
@@ -186,6 +191,8 @@ telling him the command.
 > illustrative in the notes. Say so rather than implying otherwise.
 
 **Git was taught well past developer level**, and the internals are the most interview-valuable material in the vault so far. Class 6 changed register completely: no new plumbing, all team process — branching strategies, review etiquette, repository layout. The notes carry that by deriving each strategy from the one before it rather than listing three of them, with the single idea underneath stated explicitly: **integration difficulty grows with the time two branches stay apart.** Git Flow pays that cost deliberately, GitHub Flow shortens it, trunk-based development attacks it — and feature flags are what make attacking it survivable.
+
+**Networking is taught deliberately narrow, and the notes hold that line.** The framing given at the top of class 7 is that a DevOps engineer needs enough networking to deploy and debug, not a network engineer's education — and four topics are explicitly pushed to system design: API gateway internals, consistent hashing, how balancer health monitoring really works, and distribution mechanics. The notes stop where he stopped and say so rather than filling the gap. The spine underneath them is a single question asked repeatedly: **an address gets you to the machine, and then what?** Ports answer it for one machine hosting several applications, a reverse proxy answers it when the public port and the application's port differ, DNS answers it when all you have is a name, and a load balancer answers it once one machine is not enough — at which point hiding the machines becomes the whole benefit, and anything a server remembers privately becomes a bug.
 
 > [!tip] **The course repo's `Notes.pdf` is worth reading before writing, not after.**
 > For class 6 it was a 40-page written guide covering the whole subject properly, and it supplied things the recording did not carry cleanly: the full pull-request command sequence, what a release branch is for beyond testing, the review-comment labels, and `git commit -S`. **It is still a lesson plan rather than a record** — it went further than the class did in several places — so everything from it was checked against the transcript before being used, and anything the class did not reach stays out or gets marked. Ask for the lecture folder link if it has not been shared.
@@ -200,6 +207,11 @@ telling him the command.
 > [!danger] **Classes 4, 5 and 6 all carry real credentials or PII — check before any frame grab.**
 > **Class 4 part 2** shows the instructor's name and email in `git log` output and in `git config user.name`, plus his GitHub username spoken aloud. **Class 4 part 3 is a live personal-access-token walkthrough with the token on screen.** **Class 5 part 1 shows him pasting that token again from his notes**, about four minutes in, to push. All of it was placeholdered on the way into the notes; none of it may be screenshotted.
 > **Class 6 adds his employment history** — he names both companies he has worked for, in part 2, answering a student. That is his personal information, not course material, and it is out under the neutralise-named-examples rule. Student names appear in all three parts of class 6, roughly a dozen of them.
+> **Classes 7 and 8 are taught entirely on his own live domains** — the course site and a second site of his, used as the running example for DNS, subdomains, ports and load balancing across roughly 200 lines of transcript, plus example mail addresses at them. All of it was replaced with an invented brand on the way into the notes. Student names appear in both parts, about a dozen again, and he is addressed by an honorific throughout — all stripped.
+
+
+> [!tip] **The placeholder conventions settled for `04-Networking/` — reuse them, do not reinvent them.**
+> Every domain in these notes is one invented brand with its subdomains (`api.`, `admin.`, `manager.`, `blog.`), chosen so the notes read as one continuous example rather than a different placeholder per note. Example IP addresses keep the shape used on the board but with **legal octets** — the ones taught had values above 255, which is a real error to publish. Ports came from `/etc/services` rather than the recording, because the spoken numbers included at least one slip. **A later networking class continues this subject, so the same brand and the same addresses must carry over.**
 
 All mermaid, no images yet. Classes run **Wednesday and Saturday, 9:00 pm, 2–2½ hours**.
 

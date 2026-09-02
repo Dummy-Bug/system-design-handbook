@@ -67,7 +67,7 @@ flowchart LR
     end
 ```
 
-The rule underneath is the one from [[08-Container-Networking]]: **service names resolve only inside the Docker network, and anything outside it has to come in through a published port.**
+The rule underneath is the one from [[12-Container-Networking]]: **service names resolve only inside the Docker network, and anything outside it has to come in through a published port.**
 
 # The Logstash pipeline
 
