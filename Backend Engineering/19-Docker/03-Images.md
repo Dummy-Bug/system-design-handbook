@@ -14,7 +14,7 @@ An **image** is a **complete root filesystem** — the whole contents of a **mac
 └── var/     logs and anything else that changes as the machine runs
 ```
 
-A working machine, in other words, **minus the hardware** and **minus the kernel**. The kernel is left out because it is the thing an image runs on rather than anything an image could carry — [[05-The-Shared-Kernel]] takes up what follows from that.
+A working machine, in other words, **minus the hardware** and **minus the kernel**. The kernel is left out because it is the thing an image runs on rather than anything an image could carry — [[05-Kernel]] takes up what follows from that.
 
 The application is not what the image is made of. It is the last thing placed inside it, along with the **runtime that executes it** and a note of **which command to start.**
 

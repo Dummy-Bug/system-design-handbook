@@ -16,8 +16,8 @@ Both usually want the same query. Building a stat and a time series from one exp
 The first query will probably return nothing, and the reason is a name:
 
 ```promql
-1  http_server_requests_seconds_count      # returns nothing
-2  http_server_requests_milliseconds_count # returns data
+  http_server_requests_seconds_count      # returns nothing
+  http_server_requests_milliseconds_count # returns data
 ```
 
 Micrometer exporting over OTLP records durations in **milliseconds**, and the unit is part of the metric name. The same metric scraped directly from Actuator's Prometheus endpoint would be in seconds. Nothing warns you; the query is valid, it just matches no series.
@@ -27,7 +27,7 @@ Micrometer exporting over OTLP records durations in **milliseconds**, and the un
 # Counters, and why you rarely graph them raw
 
 ```promql
-1  http_server_requests_milliseconds_count
+  http_server_requests_milliseconds_count
 ```
 
 This is a **counter**: a number that only ever goes up, counting every request since the application started. Graphed raw it produces a line climbing forever, which answers how many requests have ever been served and almost nothing else.
@@ -39,7 +39,7 @@ The interesting questions are about change, and PromQL has two functions for tha
 # `rate` — how fast is it happening
 
 ```promql
-1  sum(rate(http_server_requests_milliseconds_count[5m]))
+  sum(rate(http_server_requests_milliseconds_count[5m]))
 ```
 
 Read from the inside out.
@@ -76,7 +76,7 @@ flowchart TB
 # `increase` — how many in this period
 
 ```promql
-1  increase(http_server_requests_milliseconds_count[5m])
+  increase(http_server_requests_milliseconds_count[5m])
 ```
 
 Where `rate` gives a per-second slope, `increase` gives the total growth across the window — how many requests arrived in the last five minutes. It is the natural answer when the question is a count over a period rather than a speed.
@@ -84,9 +84,9 @@ Where `rate` gives a per-second slope, `increase` gives the total growth across 
 # Error rate
 
 ```promql
-1  sum(rate(http_server_requests_milliseconds_count{status=~"5.."}[5m]))
-2  /
-3  sum(rate(http_server_requests_milliseconds_count[5m])) * 100
+  sum(rate(http_server_requests_milliseconds_count{status=~"5.."}[5m]))
+  /
+  sum(rate(http_server_requests_milliseconds_count[5m])) * 100
 ```
 
 Failed requests over all requests, as a percentage. Two details carry it.
@@ -100,8 +100,8 @@ Deleting a product that does not exist repeatedly is a quick way to drive the nu
 # Latency percentiles
 
 ```promql
-1  histogram_quantile(0.90,
-2    sum(rate(http_server_requests_milliseconds_bucket[1m])) by (le))
+  histogram_quantile(0.90,
+    sum(rate(http_server_requests_milliseconds_bucket[1m])) by (le))
 ```
 
 This is the query the histogram configuration from the earlier note exists for. Note `_bucket` rather than `_count` — a different series, recording how many requests fell into each duration band.

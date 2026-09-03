@@ -5,15 +5,15 @@ Actuator is producing metrics and publishing them at an endpoint. Nothing is col
 The other stack could be assembled the way ELK was, a container per component. There is a shorter route: a single image with the whole thing already wired together.
 
 ```yaml
-1  # docker-compose.yml
-2  services:
-3    grafana-lgtm:
-4      image: 'grafana/otel-lgtm:latest'
-5      ports:
-6        - 3000:3000
-7        - 9090:9090
-8        - 4317:4317
-9        - 4318:4318
+  # docker-compose.yml
+  services:
+    grafana-lgtm:
+      image: 'grafana/otel-lgtm:latest'
+      ports:
+        - 3000:3000
+        - 9090:9090
+        - 4317:4317
+        - 4318:4318
 ```
 
 Four ports, because four things are running inside it.
@@ -47,12 +47,12 @@ flowchart LR
 # Three dependencies
 
 ```groovy
-1  // build.gradle
-2  dependencies {
-3      implementation 'org.springframework.boot:spring-boot-starter-opentelemetry'
-4      implementation 'io.micrometer:micrometer-registry-prometheus'
-5      implementation 'org.springframework.boot:spring-boot-docker-compose'
-6  }
+  // build.gradle
+  dependencies {
+      implementation 'org.springframework.boot:spring-boot-starter-opentelemetry'
+      implementation 'io.micrometer:micrometer-registry-prometheus'
+      implementation 'org.springframework.boot:spring-boot-docker-compose'
+  }
 ```
 
 **The OpenTelemetry starter** is the one from earlier in this folder — it sets up the export machinery so telemetry can leave in OTLP shape.
@@ -64,12 +64,12 @@ flowchart LR
 > [!warning] The docker-compose integration did not start the containers in practice, even with the dependency present and the configuration below in place. Running `docker compose up` by hand works and is what the rest of these notes assume. Treat the automatic route as a convenience to verify rather than to rely on.
 
 ```yaml
-1  # src/main/resources/application.yml
-2  spring:
-3    docker:
-4      compose:
-5        enabled: true
-6        file: docker-compose.yml
+  # src/main/resources/application.yml
+  spring:
+    docker:
+      compose:
+        enabled: true
+        file: docker-compose.yml
 ```
 
 # Telling the application where to send things
@@ -144,8 +144,3 @@ flowchart TB
 
 With the containers up and the application running, Prometheus answers at `http://localhost:9090` and Grafana at `http://localhost:3000`. Grafana arrives with some dashboards already built, several of them for the JVM.
 
-Two things are worth knowing before the next note, because both cost time here.
-
-**Small configuration mistakes fail silently.** A misspelled key is not rejected — it is simply a key nothing reads, so the export it was meant to configure never happens and no error says so. Two such typos, one in the histogram flavour and one in a tracing key, each produced the same symptom: an application that starts perfectly and a dashboard with no data.
-
-**Grafana's built-in dashboards stayed empty even once data was arriving.** A panel built by hand against the same Prometheus data source drew immediately. So an empty built-in dashboard is not evidence that the pipeline is broken, and checking with a panel of your own is the faster diagnosis.

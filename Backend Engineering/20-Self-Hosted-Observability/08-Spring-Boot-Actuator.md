@@ -52,7 +52,7 @@ That is deliberate. These endpoints report on the internals of a running system,
     endpoints:
       web:
         exposure:
-          include: health, metrics, prometheus
+          include: health, metrics, info
 ```
 
 Each name in that list turns on one endpoint.

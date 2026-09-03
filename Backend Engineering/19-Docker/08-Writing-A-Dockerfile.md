@@ -11,47 +11,260 @@
 
 **`FROM` sets the base image.** Almost nothing is built from nothing: the Node.js image is itself Debian with Node.js installed on top, and this file takes that whole thing as its starting point and adds to it.
 
-**`CMD` sets the command a container runs when it starts.** It takes an array — the program, then each argument as its own element. Here `node -e "console.log(100)"` runs a single JavaScript statement without opening a prompt or writing a file.
+**`CMD` sets the command a container runs when it starts.** It takes an array, and the rule for filling it in is short: the first element is the program, every element after it is an argument handed to that program. Splitting is your job — no shell reads this line, so nothing downstream will break a string apart on your behalf.
+
+| Element | What it is |
+| --------------------- | ------------------------------------------------------- |
+| `node` | the program to start |
+| `-e` | an argument, read by `node` itself |
+| `console.log(100)` | another argument, the code that `-e` asks for |
 
 > [!important] **Only one `CMD` takes effect.** A Dockerfile may contain several, but the last one wins, so writing more than one is a way to confuse yourself rather than a way to run two commands.
 
 > [!info] Instruction keywords are written in capitals by convention — `FROM`, `CMD`, `COPY`. Everything else is ordinary text and its case matters where the underlying command cares.
 
-# Building and running it
+---
+
+# Building it
 
 ```bash
-1  docker build -t my-basic-image .
-2  docker run -it my-basic-image:latest
+1  docker build .
 ```
 
-`-t` gives the image a tag, so it appears under a name you chose instead of no name at all. The trailing dot is the **build context** — the directory Docker reads the Dockerfile and the files from. A dot means the current directory; a path can be given instead.
+Two moving parts: the subcommand `build`, and one positional argument, the dot. What it does is go to that folder, find the file named `Dockerfile` inside it, read it top to bottom, carry out each instruction, and save the result as an image. The dot is the **build context** — the folder handed over to the builder, which is the only place `COPY` can read from. A dot means the folder you are standing in; a path can be given instead.
+
+The output is numbered, and each number maps onto something in the file:
+
+```text
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 87B done
+
+#2 [internal] load metadata for docker.io/library/node:latest
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+
+#4 [1/1] FROM docker.io/library/node:latest@sha256:f5d1cc40abc1…
+#4 CACHED
+
+#5 exporting to image
+#5 exporting layers done
+#5 exporting config sha256:1864bb253585…
+#5 naming to moby-dangling@sha256:a1765d802202…
+```
+
 
 ```mermaid
 flowchart LR
-    DF["Dockerfile"] -->|"docker build -t"| IMG["Image"]
-    IMG -->|"docker run"| CTR["Container"]
+    DF["Dockerfile — text on disk"] -->|"docker build"| IMG["Image"]
+    IMG -->|"docker run"| CTR["Container — the process actually running"]
 ```
 
-Enter that container with `bash` and `cat /etc/issue` reports Debian, because the base image is Node.js and the Node.js image is built on Debian. What was added is the command it runs.
+**Building never runs your application.** It produces an image and stops. Starting it is a separate command.
+
+# An image with no name
+
+Read the last line of that build output again:
+
+```text
+#5 naming to moby-dangling@sha256:a1765d802202…
+```
+
+`moby-dangling` is not a name you can use. It is Docker's internal word for an image with nothing written on it, and it is what you get when you build without saying what to call the result. The listing agrees:
+
+```text
+docker images
+
+REPOSITORY   TAG       IMAGE ID   SIZE
+```
+
+Empty — while a finished 1.78 GB image sits on the disk. `docker images` lists **named** **images**, so this one has to be asked for specifically:
+
+```text
+docker images -a
+
+REPOSITORY   TAG       IMAGE ID       SIZE
+<none>       <none>    142eafa2ce3a   1.78GB
+```
+
+> [!important] **Every image is addressable by its id, always.** That is the floor, and it is unusable on its own: twelve random characters, to be read off `docker images -a` before every run.
+
+# Giving it a name
+
+Same Dockerfile, same folder, one flag added:
+
+```bash
+  docker build -t my-basic-image .
+```
+
+```text
+#5 naming to docker.io/library/my-basic-image:latest done
+```
+
+Docker had a name to write down this time, so it wrote that instead of falling back to `moby-dangling`, and the image turns up in the ordinary listing.
+
+**The name is not made of the image — it is stuck onto it.** So it can be stuck on afterwards, to an image that already exists. The unnamed one from the section above was still sitting there:
+
+```text
+docker tag 142eafa2ce3a rescued-image
+
+REPOSITORY       TAG       IMAGE ID       SIZE
+<none>           <none>    a1765d802202   1.78GB
+my-basic-image   latest    a8cc88463e08   1.78GB
+rescued-image    latest    142eafa2ce3a   1.78GB
+```
+
+`142eafa2ce3a`, the same id as before, the same 1.78 GB. Nothing was copied and nothing was rebuilt — it has a name now, and the name works:
+
+```text
+docker run --rm rescued-image
+
+100
+```
+
+That is the same `docker tag` from [[07-Working-With-Containers]], arriving from the other side. **`-t` is `docker tag` folded into the build**, so it does not have to be a second step.
+
+> [!info]- **Why three builds of one file produced three different ids**
+> Building that Dockerfile three times gave `142eafa2ce3a`, `a1765d802202` and `a8cc88463e08`, which looks like three different images. They are not. All three report the same layers, the same creation timestamp, the same `Cmd` and the same architecture, and every build printed the identical `exporting config sha256:1864bb253585…`.
+>
+> What moved is a wrapper. Alongside the image, each build also writes an **attestation** — a record of who built it, when, and from what — and that line reads `exporting attestation manifest sha256:…` with a different digest every time, because it contains a build timestamp. The ID column shows the digest of the bundle holding image plus attestation, so the bundle moves even when the image inside does not.
+>
+> Turning it off makes that visible. `docker build --provenance=false` twice over produced `d0c27b2e64ee` both times — one id, two builds. The build is reproducible; the attestation is what was changing.
+
+# One name holds one image
+
+Change the Dockerfile to print `200` instead of `100`, then rebuild under the name it already had:
+
+```text
+docker build -t my-basic-image .
+
+REPOSITORY       TAG       IMAGE ID
+<none>           <none>    a1765d802202
+my-basic-image   latest    9a943008b0a7
+```
+
+```text
+docker run --rm my-basic-image
+
+200
+```
+
+The build that printed `100` is not in that listing under any name. **A name points at exactly one image, so pointing it somewhere new means it stops pointing where it was** — and nothing else was holding the old one, so it went.
+
+That is the problem to solve. Both builds are wanted, and one name cannot carry them.
+
+**So the label has two halves, separated by a colon.**
+
+```bash
+1  docker build -t my-basic-image:v1 .
+2  docker build -t my-basic-image:v2 .
+```
+
+```text
+REPOSITORY       TAG       IMAGE ID
+my-basic-image   latest    9a943008b0a7
+my-basic-image   v2        8d484bfad122
+my-basic-image   v1        a5b4f77694af
+```
+
+```text
+docker run --rm my-basic-image:v1
+100
+
+docker run --rm my-basic-image:v2
+200
+```
+
+| Half | In `my-basic-image:v1` | What it is |
+| ---------- | ---------------- | ----------------------------------------------------------------- |
+| Repository | `my-basic-image` | The name of the thing. Every version of it sits under this prefix. |
+| Tag        | `v1`             | Which version.                                                     |
+
+**A repository is not a folder and not a place on disk.** It is the grouping half of the label, which is what the `REPOSITORY` column has been showing all along — three rows, one repository, three tags. `node:22` and `ubuntu:24.04` from [[06-Hub-And-Tags]] are the same shape: `node` is the repository, `22` is the tag.
+
+A tag is a plain string. `v1`, `2.1.7`, `debian`, `friday-build` — Docker attaches no meaning to any of them.
+
+# What latest actually is
+
+Nobody typed `latest` anywhere above, and it keeps appearing. It is the word Docker fills in when the tag half is left blank:
+
+```text
+docker run --rm my-basic-image
+200
+
+docker run --rm my-basic-image:latest
+200
+```
+
+Identical instruction. The same fill-in happens on the build side, which is why `-t my-basic-image` produced a row reading `latest`.
+
+> [!warning] **`latest` does not mean newest.** It is an ordinary tag with no special power, and nothing keeps it current. Point it at an older build and it stays there:
+>
+> ```text
+> docker tag my-basic-image:v1 my-basic-image:latest
+>
+> REPOSITORY       TAG       IMAGE ID
+> my-basic-image   v2        8d484bfad122
+> my-basic-image   latest    a5b4f77694af
+> my-basic-image   v1        a5b4f77694af
+> ```
+>
+> ```text
+> docker run --rm my-basic-image
+> 100
+> ```
+>
+> `v2` is still there and still newer. `latest` now resolves to the older build, and a bare `my-basic-image` prints `100`. Docker raised no objection, because to it `latest` is a five-letter string like any other. The only reason it usually does point at the newest thing is that people tag their newest release that way by hand.
+
+That listing shows one more thing. `latest` and `v1` both read `a5b4f77694af` — **one image wearing two labels**, which is what `docker tag` produced back in [[07-Working-With-Containers]]. And the row for `9a943008b0a7` is gone, because `latest` was the only label on it and moving that label away left nothing holding it.
+
+---
 
 # A real application
 
 A bare command is not an application. The rest of a Dockerfile is about getting a project inside the image and installing what it needs.
 
+The project is a small FastAPI application. Three files, and no framework machinery beyond the one route:
+
+```python
+1  # main.py
+2  from fastapi import FastAPI
+3
+4  app = FastAPI()
+5
+6
+7  @app.get("/")
+8  def home():
+9      return {"message": "hello from inside the container"}
+```
+
+```toml
+1  # pyproject.toml
+2  [project]
+3  name = "app"
+4  version = "0.1.0"
+5  requires-python = ">=3.13"
+6  dependencies = ["fastapi[standard]"]
+```
+
+`uv lock` turns that dependency list into a `uv.lock` recording the exact version of every package, direct and indirect. Those three files are what the image needs.
+
 ```dockerfile
 1  # Dockerfile
-2  FROM node
+2  FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
 3
-4  WORKDIR /developer/nodejs/node-bind-mount-project
+4  WORKDIR /app
 5
 6  COPY . .
 7
-8  RUN npm ci
+8  RUN uv sync --locked
 9
 10 ENV PORT=3000
 11
-12 CMD ["npm", "start"]
+12 CMD ["uv", "run", "fastapi", "run", "main.py", "--port", "3000"]
 ```
+
+**Line 2 is a base image with `uv` already in it**, published by uv's own authors. `FROM python` would work too, but then installing `uv` becomes the first thing every build has to do.
 
 **`WORKDIR` sets the directory to work in, inside the container.** If it does not exist it is created, and every instruction after it runs from there.
 
@@ -63,11 +276,27 @@ A bare command is not an application. The rest of a Dockerfile is about getting 
 
 > [!info] `ENV PORT=3000` is the documented form. Older files write `ENV PORT 3000` with a space, which still works but is the legacy syntax.
 
-# Why npm ci rather than npm install
+It is built and named exactly as the two-line one was:
 
-`npm install` resolves the dependency versions afresh and may pick up something newer. `npm ci` performs a clean install from `package-lock.json`, reproducing exactly the versions recorded there.
+```bash
+1  docker build -t my-fastapi-server .
+```
 
-For an image, exact reproduction is the point — the entire reason for building one is that everybody gets the same environment. `npm ci` is the better default.
+`my-fastapi-server` is the name [[09-Ports-And-Signals]] goes on to use.
+
+# Why --locked
+
+`uv sync` on its own is allowed to update the lockfile. If `pyproject.toml` asks for something the lock does not cover, it resolves the dependency afresh and writes a new lock — which means the image you build today may not contain what the image you built last week contained.
+
+**`--locked` forbids that.** It installs strictly what `uv.lock` records, and if the lockfile does not match `pyproject.toml` it stops rather than improvising:
+
+```text
+error: The lockfile at `uv.lock` needs to be updated, but `--locked` was provided.
+
+hint: To update the lockfile, run `uv lock`.
+```
+
+For an image, exact reproduction is the whole point — the reason to build one at all is that everybody gets the same environment. A build that silently resolves a different version defeats it, so `--locked` is the right default and the error above is the flag doing its job.
 
 # RUN and CMD happen at different times
 
@@ -85,45 +314,33 @@ flowchart LR
 
 **`CMD` is start time.** It is what the container does when it comes up, and it runs afresh for every container.
 
-# When the working directory and the copy disagree
-
-Setting `WORKDIR` to one directory and copying the project into a subdirectory of it produces a build failure that looks unrelated to either instruction. `npm ci` complains that it can only install with an existing `package-lock.json`.
-
-The cause is that `RUN` executes in the working directory, and the project is not there — it is one level down, in the folder `COPY` was told to create. Opening a shell in the built image and listing the working directory shows an empty folder beside the project folder, which is exactly what was described.
-
-> [!important] **Make the working directory the directory you copy into.** Line 4 and line 6 above have to agree, or every instruction after them runs somewhere the project is not.
-
 # The same shape in another language
 
-Nothing above is specific to Node.js. A Flask application is the same file with different names in it.
-
-```python
-1  # app.py
-2  from flask import Flask
-3
-4  app = Flask(__name__)
-5
-6  @app.route('/home')
-7  def execute():
-8      return 'hello'
-9
-10 if __name__ == '__main__':
-11     app.run(host='0.0.0.0', port=3005)
-```
+Nothing above is specific to Python. A Node.js project is the same file with different names in it, and it is the one [[10-Building-From-A-Repository]] and [[11-Bind-Mounts-And-Volumes]] go on to use.
 
 ```dockerfile
 1  # Dockerfile
-2  FROM python
+2  FROM node
 3
-4  WORKDIR /developer/pythonproject/flask-app
+4  WORKDIR /developer/nodejs/node-bind-mount-project
 5
 6  COPY . .
 7
-8  RUN pip install --no-cache-dir flask
+8  RUN npm ci
 9
-10 CMD ["python3", "app.py"]
+10 ENV PORT=3000
+11
+12 CMD ["npm", "start"]
 ```
 
-`FROM python` instead of `FROM node`, `pip install` instead of `npm ci`, `python3 app.py` instead of `npm start`. The structure — base image, working directory, copy, install, start command — does not change.
+Built and named the same way, as `my-node-server`:
 
-> [!info] **On line 11 of `app.py`, the host is `0.0.0.0` rather than `localhost`.** A server bound to `localhost` inside a container accepts connections only from inside that container, which makes it unreachable from the machine running it. Binding to `0.0.0.0` accepts them on every interface. How that connection is made at all is the subject of the next note.
+```bash
+1  docker build -t my-node-server .
+```
+
+`FROM node` instead of a uv base image, `npm ci` instead of `uv sync --locked`, `npm start` instead of `uv run`. The structure — base image, working directory, copy, install, start command — does not change.
+
+**`npm ci` is the same idea as `--locked`.** `npm install` resolves versions afresh and may pick up something newer; `npm ci` performs a clean install from `package-lock.json`, reproducing exactly what is recorded there. Every ecosystem has this pair, and for an image you always want the second one.
+
+> [!info] **A server inside a container must bind to `0.0.0.0`, not `localhost`.** Bound to `localhost` it accepts connections only from inside that container, which makes it unreachable from the machine running it. `0.0.0.0` accepts them on every interface. FastAPI's `fastapi run` already binds that way; a hand-written server usually has to be told. How the connection is made at all is the subject of [[09-Ports-And-Signals]].
