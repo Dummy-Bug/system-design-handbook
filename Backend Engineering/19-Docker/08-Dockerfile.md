@@ -282,7 +282,7 @@ It is built and named exactly as the two-line one was:
 1  docker build -t my-fastapi-server .
 ```
 
-`my-fastapi-server` is the name [[09-Ports-And-Signals]] goes on to use.
+`my-fastapi-server` is the name [[09-Ports]] goes on to use.
 
 # Why --locked
 
@@ -343,4 +343,4 @@ Built and named the same way, as `my-node-server`:
 
 **`npm ci` is the same idea as `--locked`.** `npm install` resolves versions afresh and may pick up something newer; `npm ci` performs a clean install from `package-lock.json`, reproducing exactly what is recorded there. Every ecosystem has this pair, and for an image you always want the second one.
 
-> [!info] **A server inside a container must bind to `0.0.0.0`, not `localhost`.** Bound to `localhost` it accepts connections only from inside that container, which makes it unreachable from the machine running it. `0.0.0.0` accepts them on every interface. FastAPI's `fastapi run` already binds that way; a hand-written server usually has to be told. How the connection is made at all is the subject of [[09-Ports-And-Signals]].
+> [!info] **A server inside a container must bind to `0.0.0.0`, not `localhost`.** Bound to `localhost` it accepts connections only from inside that container, which makes it unreachable from the machine running it. `0.0.0.0` accepts them on every interface. FastAPI's `fastapi run` already binds that way; a hand-written server usually has to be told. How the connection is made at all is the subject of [[09-Ports]].

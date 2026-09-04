@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Laxit Rana — Resume</title>
+<style>
+  @page { size: A4; margin: 8mm 11mm; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { font-family: Georgia, "Times New Roman", serif; color: #1b1b1b; }
+  body { font-size: 9.3pt; line-height: 1.18; }
+  a { color: #1a5fc4; text-decoration: none; }
+
+  header { margin-bottom: 5pt; }
+  h1 { font-size: 20pt; font-weight: 700; letter-spacing: 1.6pt; text-transform: uppercase; color: #111; }
+  .headline { font-size: 9.8pt; color: #333; margin-top: 2pt; }
+  .contact { font-size: 9.3pt; color: #444; margin-top: 3pt; }
+  .contact span + span::before { content: "  ·  "; color: #999; }
+
+  section { margin-top: 4.5pt; }
+  h2 {
+    font-size: 9.7pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1.3pt;
+    color: #111; border-bottom: 1.2px solid #111; padding-bottom: 1.5pt; margin-bottom: 4pt;
+  }
+  .summary { font-size: 9.3pt; }
+  .skills p { margin-bottom: 1.5pt; }
+  .skills b { color: #111; }
+
+  .role-line { display: flex; justify-content: space-between; align-items: baseline; }
+  .company { font-size: 10pt; font-weight: 700; color: #1a5fc4; }
+  .role { font-size: 9.6pt; font-weight: 700; color: #111; margin-top: 1pt; }
+  .dates { font-size: 9.2pt; color: #555; white-space: nowrap; }
+  .entry-gap { margin-top: 5pt; }
+
+  .project { display: flex; justify-content: space-between; align-items: baseline; margin-top: 4.5pt; }
+  .project-name { font-size: 9.5pt; font-weight: 700; color: #1a5fc4; }
+  .project-meta { font-size: 9pt; color: #555; white-space: nowrap; }
+
+  ul { margin: 1.5pt 0 0 11pt; }
+  li { margin-bottom: 1.6pt; }
+  li b { font-weight: 700; color: #111; }
+
+  .edu-line { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5pt; }
+  .edu-title { font-weight: 700; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Laxit Rana</h1>
+  <div class="headline">AI &amp; Backend Engineer — Python · LLM Agents · Java</div>
+  <div class="contact">
+    <span>Bangalore, India</span>
+    <span>+91-8284805624</span>
+    <span><a href="mailto:laxit.rana.dev@gmail.com">laxit.rana.dev@gmail.com</a></span>
+    <span><a href="https://www.linkedin.com/in/laxitrana/">linkedin.com/in/laxitrana</a></span>
+  </div>
+</header>
+
+<section>
+  <h2>Summary</h2>
+  <p class="summary">Backend engineer with 3 years building production systems in Python and Java. Architected a <b>stateful, multi-tenant workflow platform</b> for an enterprise HRMS — durable checkpointing, tenant-scoped persistence, authorization boundaries and streaming execution, with LLM agents as the workload.</p>
+</section>
+
+<section class="skills">
+  <h2>Skills</h2>
+  <p><b>Languages:</b> Python, Java, SQL</p>
+  <p><b>AI &amp; LLM Systems:</b> LangGraph, LangChain, tool calling and function calling, structured outputs with Pydantic, Model Context Protocol (MCP), human-in-the-loop workflows, agent orchestration, context engineering, Server-Sent Events streaming, OpenAI Whisper</p>
+  <p><b>Backend:</b> FastAPI, Spring Boot, REST APIs, Spring Data JPA, Spring Retry, Flyway</p>
+  <p><b>Data &amp; Infrastructure:</b> MySQL, Amazon DynamoDB, Redis, Docker, Docker Compose</p>
+  <p><b>Testing &amp; Observability:</b> JUnit 5, Mockito, Locust, Micrometer, Prometheus, Grafana, Loki, OpenTelemetry</p>
+</section>
+
+<section>
+  <h2>Experience</h2>
+
+  <div class="role-line">
+    <span class="company">Repute Network Pvt. Ltd. — Bangalore</span>
+    <span class="dates">Jan 2024 – Present</span>
+  </div>
+  <div class="role">Software Engineer</div>
+
+  <div class="project">
+    <span class="project-name">AI Assistant Platform for an Enterprise HRMS</span>
+    <span class="project-meta">Nov 2025 – Present</span>
+  </div>
+  <ul>
+    <li><b>Architected and independently built</b> a production LLM agent platform on <b>FastAPI</b> and <b>LangGraph</b> — natural-language HR, payroll and leave workflows for separate admin and employee audiences, each served by its own <b>tool registry</b>, with execution streamed to the client over <b>Server-Sent Events</b></li>
+    <li>Engineered an <b>interrupt-driven human-in-the-loop</b> workflow that suspends execution on an ambiguous employee match, surfaces ranked candidates, and deterministically resumes the original thread — backed by <b>pluggable durable checkpoints</b> (in-memory or DynamoDB with TTL)</li>
+    <li>Enforced <b>multi-tenant isolation</b> end to end — tenant identity flows from the caller's token through request context into structured logs and into <b>composite DynamoDB partition keys</b> (HRMS, company, employee), so one company's cached data cannot collide with another's</li>
+    <li>Designed <b>defence-in-depth authorization</b> across the entire tool surface — every tool validates caller identity against the target record before execution, so a request can only ever reach the requester's own data</li>
+  </ul>
+
+  <div class="project">
+    <span class="project-name">Verification &amp; Data Ingestion Platforms</span>
+    <span class="project-meta">Jul 2023 – Nov 2025</span>
+  </div>
+  <ul>
+    <li>Re-architected a payments partner's authentication from web credentials to <b>mobile OTP</b>, raising end-to-end verification completion from <b>27% to 80%</b></li>
+    <li>Delivered <b>20+ third-party and government integrations</b> — <b>EPFO, ESIC</b>, payroll and HRMS platforms, and UPI payment providers; raised a delivery partner's driver-verification success from <b>60% to 85%</b></li>
+    <li>Onboarded <b>1,500+ sellers daily</b> (~50% of seller traffic) through a <b>Spring Boot</b> integration with a leading UPI business-payments provider</li>
+    <li>Replaced scattered per-controller error handling with a centralised Spring <b>@ControllerAdvice</b> and a typed exception hierarchy; added <b>exponential-backoff retry</b> with typed recovery against flaky upstream APIs</li>
+  </ul>
+
+  <div class="role-line entry-gap">
+    <span class="company">Repute Network Pvt. Ltd. — Bangalore</span>
+    <span class="dates">Jul 2023 – Jan 2024</span>
+  </div>
+  <div class="role">Software Developer Intern</div>
+  <ul>
+    <li>Automated payroll-portal login and data-extraction flows with <b>Selenium</b>; built a reusable data-normalisation utility that cut invalid fields by <b>90%</b> before client delivery</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Projects</h2>
+  <div class="project" style="margin-top:0">
+    <span class="project-name">PerformanceLab — Spring Boot Performance &amp; Observability Lab</span>
+    <span class="project-meta">2026</span>
+  </div>
+  <ul>
+    <li>Built a layered test strategy across the full pyramid — persistence slices with <b>@DataJpaTest</b>, mocked service units with <b>Mockito</b>, and API contract tests with <b>@WebMvcTest</b></li>
+    <li>Evolved the relational model through <b>11 versioned Flyway migrations</b> — promoting a join table to a first-class entity, adding soft deletes and audit columns, and introducing a targeted index; added <b>cache-aside Redis caching</b> with TTL and poisoned-key eviction</li>
+    <li>Instrumented the service with <b>Micrometer</b> and <b>OpenTelemetry</b> — metrics to <b>Prometheus</b>, structured logs to <b>Loki</b>, surfaced in <b>Grafana</b> and orchestrated with <b>Docker Compose</b></li>
+  </ul>
+</section>
+
+<section>
+  <h2>Education</h2>
+  <div class="edu-line">
+    <span class="edu-title">Scaler — Data Structures, Algorithms &amp; Backend Development</span>
+    <span class="dates">2022 – 2023</span>
+  </div>
+  <div class="edu-line">
+    <span class="edu-title">Diploma in Artificial Intelligence &amp; Machine Learning — University of Hyderabad</span>
+    <span class="dates">2021 – 2022</span>
+  </div>
+  <div class="edu-line">
+    <span class="edu-title">B.Tech, Computer Science &amp; Engineering — Jaypee University of Information Technology</span>
+    <span class="dates">2016 – 2020</span>
+  </div>
+</section>
+
+</body>
+</html>

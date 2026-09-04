@@ -1,15 +1,15 @@
 **Four services now run correctly, and starting them takes four commands like this one:**
 
 ```bash
-1  docker run -it --init -p 3001:3001 \
-2    --name api-gateway \
-3    --network microservice-network \
-4    -v "$(pwd)":/developer/nodejs/api-gateway \
-5    -v api-gateway-node-modules:/developer/nodejs/api-gateway/node_modules \
-6    api-gateway:latest
+  docker run -it --init -p 3001:3001 \
+    --name api-gateway \
+    --network microservice-network \
+    -v "$(pwd)":/developer/nodejs/api-gateway \
+    -v api-gateway-node-modules:/developer/nodejs/api-gateway/node_modules \
+    api-gateway:latest
 ```
 
-Each has to be typed in the right directory, with the right ports, the right mounts and the right network. Detaching them with `-dit` gets the terminals back but does not make the arrangement any smaller. Every port, every volume and every network lives in somebody's shell history rather than in the project.
+Each has to be typed in the right **directory**, with the right **ports**, the right **mounts** and the right **network**. Detaching them with `-dit` gets the terminals back but does not make the arrangement any smaller. Every port, every volume and every network lives in somebody's shell history rather than in the project.
 
 # One file instead
 
@@ -67,13 +67,13 @@ Docker Compose describes the whole set in a single configuration file, and bring
 
 Every flag from the run commands has a home in it.
 
-**`services`** lists the containers to start. Each one gets a name, which is also the name it answers to on the network — the same name that was passed as `--name`.
+`services` lists the **containers** to start. Each one gets a name, which is also the name it answers to on the network — the same name that was passed as `--name`.
 
-**`build`** is the path to the directory holding that service's Dockerfile. Compose finds the file itself, so the directory is enough.
+`build` is the **path to the directory holding that service's Dockerfile**. Compose finds the file itself, so the directory is enough.
 
-**`ports`** is `--publish`, in the same host-then-container order.
+`ports` is `--publish`, in the same **host-then-container** order.
 
-**`volumes`** carries both mounts from the previous note: line 17 is the bind mount, line 18 is the named volume over `node_modules`. The relative path replaces `$(pwd)`, which Compose no longer needs because it resolves paths from the file's own location.
+`volumes` carries both mounts from the previous note: line 17 is the **bind mount**, line 18 is the **named volume** over `node_modules`. The relative path replaces `$(pwd)`, which Compose no longer needs because **it resolves paths from the file's own location.**
 
 **`networks`** is `--network`.
 
@@ -94,14 +94,14 @@ flowchart LR
 
 # The two top-level blocks
 
-**`networks` at line 2 declares the network itself**, with the bridge driver. Because it is declared here, Compose creates it if it does not exist — so the setup no longer depends on somebody having run `docker network create` first.
+`networks` at line 2 declares the network itself, with the **bridge driver**. Because it is declared here, Compose **creates it if it does not exist** — so the setup no longer depends on somebody having run `docker network create` first.
 
-**`volumes` at line 6 declares the named volumes** the services refer to. Without this block, bringing the project up fails with a complaint about a missing volume, and the volumes have to be created by hand:
+`volumes` at line 6 declares the named volumes the services refer to. Without this block, bringing the project up fails with a complaint about a missing volume, and the volumes have to be created by hand:
 
 ```bash
-1  docker volume create api-gateway-node-modules
-2  docker volume create flights-service-node-modules
-3  docker volume create booking-service-node-modules
+  docker volume create api-gateway-node-modules
+  docker volume create flights-service-node-modules
+  docker volume create booking-service-node-modules
 ```
 
 Declaring them in the file is the better answer for the same reason as the network: it moves a piece of required setup out of somebody's memory and into the project.
@@ -123,7 +123,7 @@ Pushing this project means pushing several services at once, and each one has it
 Check it did what you think **before** the push, not after:
 
 ```bash
-1  git status
+  git status
 ```
 
 No `.env` should appear in the list. It is worth actually looking, because the cost of getting this wrong is not a broken build — it is credentials published to a public repository, and a push cannot be taken back by deleting the file afterwards.
@@ -133,8 +133,8 @@ Anyone cloning the result gets every service, every Dockerfile, and the compose 
 # Bringing it up and down
 
 ```bash
-1  docker compose up -d
-2  docker compose down
+  docker compose up -d
+  docker compose down
 ```
 
 **`-d`** starts everything detached, the same as `-dit` on an individual container. Compose builds each image, creates the network and the volumes, and starts all four services — apparently in parallel, judging by the interleaved output.
@@ -142,8 +142,6 @@ Anyone cloning the result gets every service, every Dockerfile, and the compose 
 Once it is up, every service answers on its published port, and the calls between them work exactly as they did when each was started by hand.
 
 **`docker compose down`** stops and removes them all.
-
-> [!warning] **`version:` at the top of the file is obsolete.** Older compose files begin with `version: "3"`, and current versions of Compose ignore it and warn that it should be removed. New files leave it out.
 
 # What Compose is not for
 

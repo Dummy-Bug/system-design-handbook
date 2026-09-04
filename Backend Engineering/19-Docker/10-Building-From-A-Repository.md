@@ -14,7 +14,7 @@ The base image has whatever its publisher put in it and nothing more. The Node.j
 7
 8  RUN git clone https://github.com/singhsanket143/Dockerizing_node_project.git .
 9
-10 ENV PORT=3000
+10 ENV PORT=7000
 11
 12 RUN npm ci
 13
@@ -38,6 +38,9 @@ flowchart TB
 
 Nothing from the machine running the build ends up in this image. Handing somebody the Dockerfile alone is enough.
 
+---
+
+
 # Environment variables the clone does not carry
 
 The application reads its port from an environment variable, loaded from a `.env` file by a library such as dotenv:
@@ -50,7 +53,7 @@ The application reads its port from an environment variable, loaded from a `.env
 5  const app = express();
 6
 7  app.get('/home', (req, res) => {
-8      return res.json({ message: 'home coming' });
+8      return res.json({message: 'OK'});;
 9  });
 10
 11 app.listen(process.env.PORT, () => {
@@ -67,11 +70,13 @@ Which creates a gap: the clone inside the image has no `.env`, so `process.env.P
 To confirm it took effect, open a shell in the container and ask:
 
 ```bash
-1  docker exec -it <container> bash
-2  env
+  docker exec -it <container> bash
+  env
 ```
 
-The listing includes `PORT=3000`.
+The listing includes `PORT=7000`.
+
+---
 
 # The build cache will serve you stale code
 
@@ -79,7 +84,9 @@ This is the trap in the whole arrangement.
 
 Push a change to the repository, rebuild the image, start a container, and read the file inside it — and it is the old version. Nothing about the build reported an error.
 
-Docker caches each instruction as a layer and reuses the cached layer when it believes the instruction has not changed. The text of `RUN git clone ...` has not changed, so Docker reuses the layer it built last time, along with the code that clone brought down. It has no way of knowing the remote repository moved on.
+Docker caches each instruction as a layer and reuses the cached layer when it believes the instruction has not changed. 
+
+> The **text** of `RUN git clone ...` has not changed, so Docker **reuses the layer it built last time**, along with the code that clone brought down. It has no way of knowing the remote repository moved on.
 
 ```mermaid
 flowchart LR
@@ -94,7 +101,7 @@ flowchart LR
 ```
 
 ```bash
-1  docker system prune -a
+  docker system prune -a
 ```
 
 This clears the images and the build cache, and the next build genuinely runs the clone again — visibly, because it also has to pull the base image afresh. The container then holds the current code.

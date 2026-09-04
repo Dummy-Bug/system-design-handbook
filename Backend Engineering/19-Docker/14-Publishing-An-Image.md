@@ -3,7 +3,7 @@
 # Signing in
 
 ```bash
-1  docker login
+  docker login
 ```
 
 It asks for a username and a password.
@@ -15,8 +15,8 @@ The command reports that login succeeded.
 # The push that gets refused
 
 ```bash
-1  docker image ls
-2  docker push app-setup-from-github
+  docker image ls
+  docker push app-setup-from-github
 ```
 
 The push starts and then stops:
@@ -43,8 +43,8 @@ singhsanket143/github-app
 The image already exists under its local name, so the fix is to give it a second name in the right shape:
 
 ```bash
-1  docker tag app-setup-from-github singhsanket143/github-app
-2  docker push singhsanket143/github-app
+  docker tag app-setup-from-github singhsanket143/github-app
+  docker push singhsanket143/github-app
 ```
 
 **`docker tag <existing image> <new name>`** does not rebuild or copy anything. It attaches another name to the image that is already there.
@@ -73,9 +73,9 @@ Pushing without a tag publishes it as `latest`.
 From any machine with Docker installed and no access to the source:
 
 ```bash
-1  docker pull singhsanket143/github-app
-2  docker run -it singhsanket143/github-app bash
-3  cat index.js
+  docker pull singhsanket143/github-app
+  docker run -it singhsanket143/github-app bash
+  cat index.js
 ```
 
 The file inside is the one that went into the image. The whole environment — the base operating system, the runtime, the dependencies, the application — arrives set up, with nothing to install and nothing to configure.

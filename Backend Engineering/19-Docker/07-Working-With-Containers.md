@@ -121,7 +121,7 @@ Four rows where `docker ps` showed two. The same two running containers are at t
 | `COMMAND`      | The command it was started with, truncated.                                                                                                                         |
 | `CREATED`      | When the container was **made**, which is not when it stopped                                                                                                       |
 | `STATUS`       | `Up …` while running, `Exited (n) …` after. The number in brackets is the exit code of the main process, and **`0` means it finished normally** rather than crashed |
-| `PORTS`        | Empty until something is **published**, which is [[09-Ports-And-Signals]]                                                                                           |
+| `PORTS`        | Empty until something is **published**, which is [[09-Ports]]                                                                                           |
 | `NAMES`        | An adjective and a scientist, invented by Docker unless you supply your own                                                                                         |
 
 > [!important] **`--rm` is what prevents that accumulation.** Exiting a container ends its process, and ending the process is not removal — the container is still there, writable layer and all, holding whatever disk it was holding a second earlier. Ten runs without `--rm` leave ten of them behind, and this listing is where they become visible.

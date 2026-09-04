@@ -1,4 +1,4 @@
-**The image from [[08-Writing-A-Dockerfile]] builds, and a container started from it reports that the server is listening.** Open a browser at that port on the host machine and there is nothing there. The language inside the container is beside the point here — everything below is about Docker, and would read the same with any application in the image.
+**The image from [[08-Dockerfile]] builds, and a container started from it reports that the server is listening.** Open a browser at that port on the host machine and there is nothing there. The language inside the container is beside the point here — everything below is about Docker, and would read the same with any application in the image.
 
 # The container is not on your machine's network
 
@@ -144,7 +144,7 @@ flowchart TB
     Q -->|"no — Node.js among others"| I["The kernel applies no default action to PID 1, so nothing happens"]
 ```
 
-**`--init` is the fix for the second row**, so it has to be shown against an image that actually has the problem — the Node.js one from [[08-Writing-A-Dockerfile]], not the FastAPI image this note has been using:
+**`--init` is the fix for the second row**, so it has to be shown against an image that actually has the problem — the Node.js one from [[08-Dockerfile]], not the FastAPI image this note has been using:
 
 ```bash
 1  docker run -it --init my-node-server:latest
