@@ -103,10 +103,10 @@ The client now has to **replace** what it was showing rather than continue it �
 
 > **Replay knows where you were. Re-derive only knows where you ended up.**
 
-```text
-1  replay      exact continuation, and a store of frames to maintain
-2  re-derive   the whole answer again, and no new storage at all
-```
+| | what the client gets | what it costs |
+|---|---|---|
+| **replay** | exact continuation | a store of frames to size, expire and clean |
+| **re-derive** | the whole answer again | nothing extra — but fidelity |
 
 Replay costs storage: every frame sent has to be held somewhere, per stream, until it expires — which needs a size, an expiry and something to do the cleaning up.
 

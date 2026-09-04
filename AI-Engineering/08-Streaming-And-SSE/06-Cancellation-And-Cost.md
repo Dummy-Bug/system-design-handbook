@@ -70,10 +70,10 @@ The generator should not wait to be stopped by a buffer filling. It can ask dire
 
 One check per iteration, and what it reads is the operating system's own record of the connection. When a browser closes a tab properly, the packet it sends marks that record closed — so the check returns true on the very next token rather than 1,600 frames later.
 
-```text
-1  without the check   ~1,600 frames, then suspend, then wait for the timeout
-2  with the check      1 frame, then stop, then release everything
-```
+| | what happens after the tab closes |
+|---|---|
+| **without the check** | ~1,600 frames, then suspend, then wait out the timeout |
+| **with the check** | 1 frame, then stop, then release everything |
 
 > [!warning] It cannot detect a connection that simply vanished
 > A closed lid or a tunnel sends nothing at all, so there is nothing for the operating system to record and nothing for the check to read. It returns false the entire time, exactly as it should, because from where it is sitting the connection is fine.
@@ -168,10 +168,10 @@ Stopping is then short:
 
 **Cancelling** raises an error inside the running task, at whatever point it is currently waiting — the write to the socket, or the wait for the next token from the model. The function stops there for good, and whatever cleanup it has runs on the way out.
 
-```text
-1  suspended   paused at a wait, will continue, keeps its place
-2  cancelled   an error appears at that same wait, and the function ends
-```
+| | what it means |
+|---|---|
+| **suspended** | paused at a wait, will continue, keeps its place |
+| **cancelled** | an error appears at that same wait, and the function ends |
 
 The `async for` loop over model output is abandoned mid-iteration. No more tokens are requested, and the generation stops.
 

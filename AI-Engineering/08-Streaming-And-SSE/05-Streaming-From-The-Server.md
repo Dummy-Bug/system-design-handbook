@@ -77,12 +77,12 @@ A model does not produce its answer all at once. It produces **tokens** — the 
 
 Concretely:
 
-```text
-1  model produces          50 tokens per second
-2  each frame              about 40 bytes
-3  so the server produces  about 2 KB per second
-4  send buffer             64 KB
-```
+| | |
+|---|---|
+| the model produces | 50 tokens per second |
+| each frame is | about 40 bytes |
+| so the server produces | **about 2 KB per second** |
+| the send buffer holds | **64 KB** |
 
 If the teacher is on a laptop with a normal connection, the operating system drains that buffer far faster than 2 KB per second. The buffer never fills, every write completes instantly, and nothing interesting happens.
 

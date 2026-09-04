@@ -13,6 +13,16 @@ An HTTP response begins with a status line, then headers, then the body. In that
 4  data: ...                          ← sent over the next twenty seconds
 ```
 
+```mermaid
+flowchart LR
+    A["t=0<br/>200 OK sent<br/>success promised"] --> B["t=0 to 20s<br/>the answer is generated"]
+    B --> C["t=12<br/>a tool call fails"]
+    C --> D["the status line<br/>left twelve seconds ago"]
+    style A fill:#238636,color:#fff
+    style D fill:#da3633,color:#fff
+    linkStyle default stroke:#7d8590,stroke-width:2px
+```
+
 For an ordinary response this ordering is invisible, because the whole thing is assembled and sent together — the server knows whether it succeeded before it writes anything.
 
 A stream cannot work that way. The headers have to go out at the beginning, so the client knows a stream is starting and can begin listening. **At that moment nothing has been generated, no tool has been called, and nothing is known about whether any of it will work.**
@@ -71,11 +81,11 @@ Without it, a client cannot tell the difference between an **answer that finishe
 
 With it, three outcomes become distinguishable:
 
-```text
-1  done frame arrives     → finished properly
-2  error frame arrives    → failed, and here is why
-3  neither, stream ends   → the connection died
-```
+| what the client sees | what it means |
+|---|---|
+| a **done** frame arrives | finished properly |
+| an **error** frame arrives | failed, and here is why |
+| neither — the stream simply ends | the connection died |
 
 # Failing before the stream starts is easier
 
@@ -96,6 +106,16 @@ Which makes that line a genuine design boundary. **Anything that can be validate
 # The other limit: how many streams a browser will open
 
 A browser will not open unlimited connections to one domain. Over HTTP/1.1 the cap is six, and **an open stream occupies one of them for its entire life.**
+
+```mermaid
+flowchart LR
+    T1["tab 1"] --> C1["connection 1<br/>streaming"]
+    T2["tab 2"] --> C2["connection 2<br/>streaming"]
+    T6["tabs 3–6"] --> C6["connections 3–6<br/>streaming"]
+    T7["tab 7"] -.->|"no connection free"| Q["queued in the browser<br/>never sent"]
+    style Q fill:#da3633,color:#fff
+    linkStyle default stroke:#7d8590,stroke-width:2px
+```
 
 > Six tabs of the same application, each with a stream open, and the seventh tab does not get a slow response. It gets nothing at all — **the request is never sent**, because **there is no connection available** to send it on.
 

@@ -2,7 +2,7 @@
 
 # 08 · Streaming and SSE — Syllabus
 
-**8 notes, 103 rungs.** Generic — the protocol and its production failure modes, not Xarvis's implementation, which is mapped at the bottom.
+**9 notes, 124 rungs.** Generic — the protocol and its production failure modes, not Xarvis's implementation, which is mapped at the bottom.
 
 > A rung is the **smallest thing that has to be understood before the next thing makes sense** — `COPY` runs once, therefore the edit does nothing, therefore there are two files, therefore the container is running a photograph. Rungs are not topics and not section headings. Eight to fifteen of them build one note.
 >
@@ -218,6 +218,38 @@
 
 ---
 
+## Note 9 · Streaming Structured Output
+
+21 rungs. **Break:** run a JSON parser on a single delta and watch it fail on every one of them.
+
+1. Text streams naturally because half a sentence is still worth showing — a partially rendered word is fine.
+2. A tool call is not text. It is JSON, and half a JSON object is not valid JSON.
+3. `{"location": "Ban` cannot be parsed by anything, ever, no matter how lenient.
+4. So the ordinary parser cannot run per delta, which is what makes this different from streaming an answer.
+5. Providers therefore send tool arguments as a **stream of string fragments**, not as objects.
+6. Anthropic names this explicitly — a delta of type `input_json_delta` carrying a `partial_json` field.
+7. The fragments are concatenated in arrival order to rebuild the argument string.
+8. And they **do not respect JSON boundaries** — a fragment can end mid-key, mid-value, or mid-string.
+9. So the only safe rule is to buffer everything and parse once, at the end.
+10. Which requires a signal for the end — `content_block_stop`, a separate event from the deltas themselves.
+11. One response can contain **several tool calls**, and their deltas are interleaved rather than sequential.
+12. So a single buffer is wrong. It would concatenate fragments from different calls into one corrupt string.
+13. Every delta therefore carries an **index**, the position of the content block it belongs to, and buffering is per index.
+14. The failure when this is missed is not an error — it is arguments from two different tool calls silently merged.
+15. OpenAI-compatible responses split along a different seam: the call's `id` and its `function.name` can arrive in **separate chunks**.
+16. So accumulating arguments is not sufficient — the identity of the call is itself assembled over time.
+17. This is a real and repeated production bug, not a hypothetical, with issues filed against multiple agent frameworks.
+18. Showing structured output as it arrives — a form filling in field by field — needs a **lenient parser** that tolerates an unterminated object.
+19. Which forces a product decision about what half an object means: render what exists, or wait for the whole thing.
+20. Schema **validation is end-only**. Validating a partial object is meaningless, because absent fields are indistinguishable from not-yet-arrived fields.
+21. And a partially streamed tool call must not execute twice on a retry, which makes idempotency a streaming concern rather than only a networking one.
+
+> **Recall:** Why can a lenient parser not rescue you from parsing per delta? · What does `index` prevent, and what is the symptom when it is ignored? · Why is validating a partial object meaningless rather than merely premature?
+>
+> **Stop:** Do not learn every provider's event vocabulary. Two shapes — fragments plus a terminator, and an index for interleaving — cover all of them.
+
+---
+
 ## Coverage
 
 Nothing written yet. Note files are numbered to match this list — note 4 becomes `04-Streams-Die-In-The-Middle.md`.
@@ -232,6 +264,7 @@ Nothing written yet. Note files are numbered to match this list — note 4 becom
 | 6 · Cancellation And Cost | 12 | — |
 | 7 · Errors And Limits | 14 | — |
 | 8 · Resumption | 13 | — |
+| 9 · Streaming Structured Output | 21 | — |
 
 ---
 

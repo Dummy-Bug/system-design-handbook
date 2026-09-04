@@ -82,12 +82,12 @@ flowchart LR
 
 The same job is being done at every scale between a browser and a server:
 
-```text
-1  a home router        a few devices behind one address
-2  a mobile provider    thousands of phones behind one address
-3  a company proxy      all employee traffic leaving through one exit
-4  a load balancer      many users routed to one of several servers
-```
+| the box | what it is sharing |
+|---|---|
+| a home router | a few devices behind one address |
+| a mobile provider | thousands of phones behind one address |
+| a company proxy | all employee traffic leaving through one exit |
+| a load balancer | many users routed to one of several servers |
 
 Different sizes, identical requirement: **anything that has to decide where the next packet goes must remember the conversation.**
 
@@ -139,12 +139,12 @@ A line beginning with `:` is a comment. The parser skips it, no event fires, the
 
 There is no correct number. The interval has to be smaller than **the shortest idle timeout anywhere in the path**, and that value is a property of the deployment rather than of SSE.
 
-```text
-1  AWS ALB                      60s default
-2  nginx proxy_read_timeout     60s default
-3  mobile carrier equipment     often far less, and not published
-4  corporate proxies            anything at all
-```
+| where | idle timeout |
+|---|---|
+| AWS ALB | 60s default |
+| nginx `proxy_read_timeout` | 60s default |
+| mobile carrier equipment | often far less, and not published |
+| corporate proxies | anything at all |
 
 Which means the number is not chosen, it is **discovered** — by reading the configuration of whatever sits in front of the application, and taking the smallest.
 
@@ -211,13 +211,11 @@ flowchart TD
 
 All three of these present identically to a user — a screen that shows nothing — and they have different causes.
 
-```text
-1  missing terminator   nothing ever arrives, connection stays open, server keeps writing
-
-2  zombie connection    nothing arrives, both ends think the connection is fine, it is not
-
-3  proxy buffering      nothing arrives, then everything arrives at once at the end
-```
+| cause | what the screen does |
+|---|---|
+| **missing terminator** | nothing ever arrives; the connection stays open and the server keeps writing |
+| **zombie connection** | nothing arrives; both ends believe the connection is fine, and it is not |
+| **proxy buffering** | nothing arrives, then **everything arrives at once** at the end |
 
 The third distinguishes itself by waiting: if the whole answer appears in one lump when the agent finishes, it was buffered. If nothing ever appears at all, it is one of the first two.
 

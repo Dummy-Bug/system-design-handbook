@@ -97,10 +97,10 @@ Line 6 is **author-controlled**. It exists only because some code asked for it.
 
 `EventSource` never hands you the request, so nothing on line 6 is possible. The browser's own headers are untouched, because they were never yours to begin with.
 
-```text
-1  Cookie          browser's job    → still sent by EventSource
-2  Authorization   your job         → no way to send it
-```
+| header | whose job | with `EventSource` |
+|---|---|---|
+| `Cookie` | the browser's | **still sent** |
+| `Authorization` | yours | **no way to send it** |
 
 A **JWT** is a signed piece of text holding who you are, which a server can verify on its own without looking anything up. A **bearer token** is any credential sent in the `Authorization` header — named that way because whoever holds it can use it, with nothing further asked.
 
@@ -116,26 +116,25 @@ The browser offers two ways to make an HTTP request, and they differ in how much
 
 **`fetch` is a generalist.** It makes any HTTP request — any method, any headers — and it has never heard of SSE. Hand it a URL and it hands back **bytes**, delivered a piece at a time through something called a `ReadableStream`.
 
-```text
-1                      EventSource        fetch
-2  speaks SSE          yes                no
-3  gives you           parsed messages    raw bytes
-4  can POST            no                 yes
-5  can set headers     no                 yes
-```
+| | `EventSource` | `fetch` |
+|---|---|---|
+| speaks SSE | **yes** | no |
+| gives you | parsed messages | raw bytes |
+| can POST | no | **yes** |
+| can set headers | no | **yes** |
 
 > A straight trade. **One understands the protocol but can barely make a request; the other makes any request and understands nothing.**
 
 So choosing `fetch` for the POST also dismisses the only thing that was parsing SSE. Nobody is doing it any more, which means all of this becomes application code:
 
-```text
-1  buffering partial reads      → yours
-2  scanning for the terminator  → yours
-3  splitting fields             → yours
-4  dispatching by event name    → yours
-5  reconnecting after a drop    → yours
-6  tracking Last-Event-ID       → yours
-```
+| the job | with `EventSource` | with `fetch` |
+|---|---|---|
+| buffering partial reads | free | **yours** |
+| scanning for the terminator | free | **yours** |
+| splitting fields | free | **yours** |
+| dispatching by event name | free | **yours** |
+| reconnecting after a drop | free | **yours** |
+| tracking `Last-Event-ID` | free | **yours** |
 
 ```mermaid
 flowchart TD

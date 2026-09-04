@@ -395,10 +395,10 @@ Streaming raw tokens with the field:
 
 `data` is the string `Hello`. Nothing more. Now remove the field and try to carry the label in the payload — the payload has to become an object to hold it:
 
-```text
-1  with event:      data: Hello                              11 bytes
-2  without event:   data: {"type":"token","text":"Hello"}    37 bytes
-```
+| | the frame | bytes |
+|---|---|---|
+| **with `event:`** | `data: Hello` | **11** |
+| **without it** | `data: {"type":"token","text":"Hello"}` | **37** |
 
 **Three times the bytes on every token**, for a label that never changes, plus a JSON parse per token instead of appending a string.
 
@@ -425,13 +425,13 @@ That looks redundant and is not. Clients released before the change switch on th
 
 Take a plausible set of event types for a tool-calling agent, and what each carries:
 
-```text
-1  step_update    id, label, status, error               → structured. needs JSON.
-2  choose_one     ranked candidates to pick from         → structured. needs JSON.
-3  progress       a sentence like "Looking up salary"    → a string. does not.
-4  answer         the final response                     → depends on the response.
-5  done           nothing at all                         → nothing.
-```
+| event | what it carries | needs an object? |
+|---|---|---|
+| `step_update` | id, label, status, error | **yes** |
+| `choose_one` | ranked candidates to pick from | **yes** |
+| `progress` | a sentence like Looking up salary | no — a string |
+| `answer` | the final response | depends on the response |
+| `done` | nothing at all | no — nothing |
 
 Two genuinely need an object and two do not. And if `done` carries nothing, wrapping it in the same envelope as the rest forces an empty object through purely to satisfy a rule — which is usually the point at which a special case gets added to escape the envelope, and that special case is the tell that one blanket rule never fitted.
 
@@ -504,13 +504,13 @@ This is what `EventSourceResponse`'s 15-second default ping emits — a comment 
 
 # The complete format
 
-```text
-1  data:    the payload, repeated for multiple lines
-2  event:   which kind of message this is
-3  id:      a position, for resuming after a drop
-4  retry:   how long the client waits before reconnecting
-5  :        a comment — bytes that mean nothing
-6            ← blank line: the message is over
-```
+| field | what it is for |
+|---|---|
+| `data:` | the payload, repeated for multiple lines |
+| `event:` | which kind of message this is |
+| `id:` | a position, for resuming after a drop |
+| `retry:` | how long the client waits before reconnecting |
+| `:` | a comment — bytes that mean nothing |
+| **blank line** | **the message is over** |
 
 Five fields and a terminator, carried inside the body of an ordinary HTTP response that never finishes.
