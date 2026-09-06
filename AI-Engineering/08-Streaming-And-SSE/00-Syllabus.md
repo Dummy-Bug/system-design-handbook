@@ -2,7 +2,7 @@
 
 # 08 · Streaming and SSE — Syllabus
 
-**9 notes, 124 rungs.** Generic — the protocol and its production failure modes, not Xarvis's implementation, which is mapped at the bottom.
+**10 notes, 134 rungs.** Generic — the protocol and its production failure modes, not Xarvis's implementation, which is mapped at the bottom.
 
 > A rung is the **smallest thing that has to be understood before the next thing makes sense** — `COPY` runs once, therefore the edit does nothing, therefore there are two files, therefore the container is running a photograph. Rungs are not topics and not section headings. Eight to fifteen of them build one note.
 >
@@ -265,6 +265,7 @@ Nothing written yet. Note files are numbered to match this list — note 4 becom
 | 7 · Errors And Limits | 14 | — |
 | 8 · Resumption | 13 | — |
 | 9 · Streaming Structured Output | 21 | — |
+| 10 · The Proxy Chain | 10 | — |
 
 ---
 

@@ -83,6 +83,17 @@ become a second source to merge, not a fallback.**
 
 **Claims about how Spring behaves are checked by building and running a real project, not recalled.**
 
+### Definitions count as claims (added 2026-09-05)
+
+**The rule covers prose, not only code blocks.** A definition is an assertion about behaviour, and it gets the same treatment — the failure mode is a sentence that sounds right, reads fluently, and is wrong in a way nobody notices until it matters.
+
+Precedent from the camp vault: `__file__` was written up as the path of the file **currently being executed**, present in **every module**. Both halves false, and a two-file test settles it in seconds. The wrong sentence sat two paragraphs above a callout stating the fact that contradicted it.
+
+**Print the actual value rather than grepping the source.** Stale comments outlive the behaviour they describe — `transformers` still carries comments saying `max_length` defaults to 20, long after v5 removed that default. Grepping confirmed the wrong answer; reading the attribute gave the right one.
+
+**When something genuinely cannot be run**, say so in the note and label what is measured versus what is reconstructed. Never present an untested claim in the same voice as a tested one.
+
+
 ### The environment
 
 | | |

@@ -102,3 +102,21 @@ Before any solution is logged as done, it must pass the standard in `extendedCla
 - **Step 3 — list 3-5 named edge cases.**
 
 Claude must **refuse to engage with code until Steps 2 and 3 are visible.** Every WA-then-AC in the 1450-1850 audit traces back to skipping these two. Full ritual, modularization rules, and the recurring-bug pre-submit checklist are in `extendedClaude.md`. Every WA gets a greppable `**WA-cause [<tag>]:**` line (vocab in `extendedClaude.md`).
+
+## Verify by running it, never from recall
+
+**Any claim about how a language, library or tool behaves gets executed before it is written down.** Not recalled, not inferred from the name, not taken from a search result, and not copied from the source material. Run it, read the output, put the measured result in the note.
+
+This applies to **definitions**, not only to code examples. A definition is a claim about behaviour and is checked the same way — the failure mode is a sentence that sounds right, reads fluently, and is wrong in a way nobody notices until it matters.
+
+**Worked example of the failure.** `__file__` was written up as a string holding the path of the file **currently being executed**, present in **every module**. Both halves are false, and a two-file test settles it in seconds: run `main.py`, which imports `helper.py`, and inside `helper.py` the value is `helper.py` — it is the module's own file, not the entry point. Separately, `hasattr(sys, "__file__")` is `False`, because C built-ins have no file on disk. The wrong version had been written into the same note that already contained the contradicting fact two paragraphs later.
+
+**How to check, in order of preference:**
+
+1. **Run it in the project's own environment** — `uv run python -c ...`, or the venv's interpreter directly. The installed version is the authority, not the latest docs.
+2. **Print the actual attribute** rather than grepping the source. Stale comments outlive the behaviour they describe: `transformers` still carries comments saying `max_length` defaults to 20 long after v5 removed it.
+3. **Read the docs only to find out what to test**, then test it.
+
+**Version drift is the common case, not the exception.** A recording is always older than the installed library. When the two differ, say both and name the versions — never silently pick one.
+
+**When something genuinely cannot be run** — no API key, no hardware, code that was never pushed — say so in the note, and label what is measured versus what is reconstructed. Never present an untested claim in the same voice as a tested one.

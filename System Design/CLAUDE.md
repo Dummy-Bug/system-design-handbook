@@ -218,3 +218,21 @@ Each file uses this style:
   - **Always use maths and numbers to justify rejection of any approach — never just say "this doesn't work".** Show the exact numbers: how many users, how much bandwidth, how many requests, what the limit is, where it breaks. "The NIC saturates at 400 users (10,000 Mbps / 25 Mbps = 400)" is correct. "This won't scale" is not acceptable. This is highest priority — every rejected approach must have a number attached to its failure.
 
   - **For each new case study, follow the structure of the Pastebin case study** — same checkpoint order, same folder layout, same file naming convention, same depth of reasoning in notes.
+
+## Verify by running it, never from recall
+
+**Any claim about how a language, library or tool behaves gets executed before it is written down.** Not recalled, not inferred from the name, not taken from a search result, and not copied from the source material. Run it, read the output, put the measured result in the note.
+
+This applies to **definitions**, not only to code examples. A definition is a claim about behaviour and is checked the same way — the failure mode is a sentence that sounds right, reads fluently, and is wrong in a way nobody notices until it matters.
+
+**Worked example of the failure.** `__file__` was written up as a string holding the path of the file **currently being executed**, present in **every module**. Both halves are false, and a two-file test settles it in seconds: run `main.py`, which imports `helper.py`, and inside `helper.py` the value is `helper.py` — it is the module's own file, not the entry point. Separately, `hasattr(sys, "__file__")` is `False`, because C built-ins have no file on disk. The wrong version had been written into the same note that already contained the contradicting fact two paragraphs later.
+
+**How to check, in order of preference:**
+
+1. **Run it in the project's own environment** — `uv run python -c ...`, or the venv's interpreter directly. The installed version is the authority, not the latest docs.
+2. **Print the actual attribute** rather than grepping the source. Stale comments outlive the behaviour they describe: `transformers` still carries comments saying `max_length` defaults to 20 long after v5 removed it.
+3. **Read the docs only to find out what to test**, then test it.
+
+**Version drift is the common case, not the exception.** A recording is always older than the installed library. When the two differ, say both and name the versions — never silently pick one.
+
+**When something genuinely cannot be run** — no API key, no hardware, code that was never pushed — say so in the note, and label what is measured versus what is reconstructed. Never present an untested claim in the same voice as a tested one.

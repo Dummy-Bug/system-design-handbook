@@ -92,6 +92,17 @@ The videos are ~Java 6/7 era. JDK 25 is at `/usr/bin/java`; JDK sources are at
 Compile and run the examples in the scratchpad and put the **measured** output in the notes, not the
 remembered one. Where reality has moved, add a `[!warning]` naming the JDK version checked.
 
+### Definitions count as claims (added 2026-09-05)
+
+**The rule covers prose, not only code blocks.** A definition is an assertion about behaviour, and it gets the same treatment — the failure mode is a sentence that sounds right, reads fluently, and is wrong in a way nobody notices until it matters.
+
+Precedent from the camp vault: `__file__` was written up as the path of the file **currently being executed**, present in **every module**. Both halves false, and a two-file test settles it in seconds. The wrong sentence sat two paragraphs above a callout stating the fact that contradicted it.
+
+**Print the actual value rather than grepping the source.** Stale comments outlive the behaviour they describe — `transformers` still carries comments saying `max_length` defaults to 20, long after v5 removed that default. Grepping confirmed the wrong answer; reading the attribute gave the right one.
+
+**When something genuinely cannot be run**, say so in the note and label what is measured versus what is reconstructed. Never present an untested claim in the same voice as a tested one.
+
+
 ## Rule 4 — One file per transcript
 
 **One video = one transcript = one note file.** Do not split a video across several files.
