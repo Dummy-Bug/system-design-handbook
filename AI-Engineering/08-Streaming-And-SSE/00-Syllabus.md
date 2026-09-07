@@ -2,7 +2,7 @@
 
 # 08 · Streaming and SSE — Syllabus
 
-**10 notes, 134 rungs.** Generic — the protocol and its production failure modes, not Xarvis's implementation, which is mapped at the bottom.
+**11 notes, 152 rungs.** Generic — the protocol and its production failure modes, not Xarvis's implementation, which is mapped at the bottom.
 
 > A rung is the **smallest thing that has to be understood before the next thing makes sense** — `COPY` runs once, therefore the edit does nothing, therefore there are two files, therefore the container is running a photograph. Rungs are not topics and not section headings. Eight to fifteen of them build one note.
 >
@@ -250,22 +250,51 @@
 
 ---
 
+## Note 10 · Reconnection And Termination
+
+15 rungs, plus a 3-rung appendix on event dispatch. **Break:** let a stream finish normally, then do nothing for thirty seconds. This note is a lab — it is built and run, not read.
+
+1. A generator that finishes returns and the response ends. On the server this is a success: no exception, nothing logged, nothing wrong.
+2. Milliseconds later the client reports an **error**, because a stream that finished and a stream that was cut produce the same thing on the wire — the bytes stop.
+3. SSE has **no end-of-stream marker**, so there is no signal the client could examine to separate them, and `EventSource` assumes the worse of the two.
+4. It then reconnects by itself, repeatedly, and would continue until the tab is closed.
+5. Nothing in the client asks for this. Search the page for reconnection logic and there is none — this is the browser's own machinery.
+6. The delay comes from **`retry:`**, a wire field the server sends and the browser stores. An endpoint that sends none gets the browser's own default of **3000ms**.
+7. `onopen` fires on reconnects that deliver zero frames, because it asserts only that the **headers arrived** — 200 with `text/event-stream`. Open is not working.
+8. Those empty reconnects are **correct**: the browser attaches `Last-Event-ID` unprompted, and the server reads it and finds nothing left to send.
+9. That header is the `id:` field coming home, and the client's own copy of it is readable as `event.lastEventId`.
+10. An endpoint that sends no `id:` and accepts no header **re-delivers everything** on every reconnect, because it holds no information that would let it skip.
+11. So the mechanism is a **pair** — an `id:` nobody reads back is as useless as a header nobody sends.
+12. And perfect resumption still looks broken, because `Last-Event-ID` answers where to start, not **whether** to start.
+13. Resumption and termination are two different problems, and solving the first flawlessly leaves the second untouched.
+14. A terminal frame is **not enough on its own** — the browser assigns the word no meaning, so it dispatches the frame and reconnects exactly as before.
+15. Only **`es.close()`** in the client's handler ends the loop, which makes termination a two-sided contract of which the server owns one half.
+
+**Appendix — event dispatch, 3 rungs.** A named `event:` routes to a listener registered under that name; an absent one routes to the default event, called `message`. So a named frame can never reach `onmessage`. And `raw_data` is not the cause though it looks like it — it controls JSON encoding only.
+
+> **Recall:** A stream ends successfully — why does the client report an error, and why can it not do better? · Two endpoints reconnected at 5013ms and 3011ms; where did each number come from? · Resumption worked perfectly and the client still looked broken — why are those separate problems?
+>
+> **Stop:** Do not try to suppress the reconnect from the server. It cannot be done, and the time is better spent on the client half of the contract.
+
+---
+
 ## Coverage
 
-Nothing written yet. Note files are numbered to match this list — note 4 becomes `04-Streams-Die-In-The-Middle.md`.
+All written as of 2026-09-07. Note files are numbered to match this list — note 4 is `04-Streams-Die-In-The-Middle.md`.
 
 | Note | Rungs | Written |
 |---|---|---|
-| 1 · Why Stream At All | 11 | — |
-| 2 · The Wire Format | 13 | — |
-| 3 · The Browser Client | 12 | — |
-| 4 · Streams Die In The Middle | 16 | — |
-| 5 · Streaming From The Server | 12 | — |
-| 6 · Cancellation And Cost | 12 | — |
-| 7 · Errors And Limits | 14 | — |
-| 8 · Resumption | 13 | — |
-| 9 · Streaming Structured Output | 21 | — |
-| 10 · The Proxy Chain | 10 | — |
+| 1 · Why Stream At All | 11 | yes |
+| 2 · The Wire Format | 13 | yes |
+| 3 · The Browser Client | 12 | yes |
+| 4 · Streams Die In The Middle | 16 | yes |
+| 5 · Streaming From The Server | 12 | yes |
+| 6 · Cancellation And Cost | 12 | yes |
+| 7 · Errors And Limits | 14 | yes |
+| 8 · Resumption | 13 | yes |
+| 9 · Streaming Structured Output | 21 | yes |
+| 10 · Reconnection And Termination | 15 + 3 | yes — lab, run 2026-09-07 |
+| The Proxy Chain | 10 | yes — lives in `Understanding-Tests/`, outside the numbered sequence |
 
 ---
 
