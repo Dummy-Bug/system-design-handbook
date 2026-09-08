@@ -159,6 +159,8 @@ Written up as [[05-Fixtures]].
 
 ## Note 6 · Async Changes The Rules
 
+Written up as [[06-Async]].
+
 12 rungs. **Break:** call an async function in a sync test and assert on what comes back.
 
 1. An `async def` function called without awaiting returns a **coroutine object** and runs nothing.
@@ -169,7 +171,7 @@ Written up as [[05-Fixtures]].
 6. FastAPI's own documentation uses **`@pytest.mark.anyio`**, because Starlette is built on anyio rather than raw asyncio.
 7. And `pytest-asyncio`'s **auto mode conflicts with the anyio plugin** in the same session, so this is a choice rather than an accumulation.
 8. It also cannot drive anyio-native primitives — `TaskGroup`, `CancelScope` — which is decisive for any code using them.
-9. An async fixture needs the same treatment, and a fixture that forgets it hands the test a coroutine rather than a value.
+9. `anyio_backend` is **not required** — anyio ships one parametrised over every backend it finds installed, so writing your own is a **pin** rather than a requirement, and anyio's is **module-scoped** while a plain `@pytest.fixture` override is not. An async fixture needs the same plumbing an async test does, and current pytest **errors loudly** when a sync test requests one rather than handing over a coroutine.
 10. Event-loop scope is a second, independent lifetime from fixture scope, and mismatching them produces `attached to a different loop`.
 11. That error names the loop and never names the fixture that caused it, which is why it is hard.
 12. **The safe default is one loop per test**, widened only when a fixture genuinely cannot be rebuilt.
@@ -485,7 +487,7 @@ Note files are numbered to match this list and named as briefly as the subject a
 | 3 · The Vacuous Test | 12 | [[03-Vacuous-Tests]] |
 | 4 · pytest's Model | 11 | [[04-Pytest-Model]] |
 | 5 · Fixtures, And Where State Leaks | 14 | [[05-Fixtures]] |
-| 6 · Async Changes The Rules | 12 | — |
+| 6 · Async Changes The Rules | 12 | [[06-Async]] |
 | 7 · Test Doubles, Named Precisely | 13 | — |
 | 8 · Testing A FastAPI Endpoint | 14 | — |
 | 9 · The Database, And What H2 Has No Equivalent Of | 12 | — |
