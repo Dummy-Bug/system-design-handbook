@@ -108,16 +108,18 @@ Written up as [[03-The-Vacuous-Test]].
 
 ## Note 4 · pytest's Model
 
+Written up as [[04-pytests-Model]].
+
 11 rungs. **Break:** put two tests in one file that pass alone and fail together.
 
 1. pytest **collects before it runs** — it imports every matching file first, then executes. So an import error in one file can stop tests in a different file from running at all.
-2. A test that raises anything other than `AssertionError` is an **error**, not a failure, and the distinction is the first thing to read off a report: a failure means the code was wrong, an error means the test never got far enough to find out.
+2. **Failed means the test ran; errored means it never got the chance** — an exception inside the test body is a failure whatever its type, while a fixture raising during setup or teardown, or a file failing to import, is an error. Read the errors first, because an errored test produced no information at all.
 3. Every test in a run shares **one process**, so anything global — a module-level cache, a registry, a `contextvar` — survives from one test into the next.
 4. Which produces the classic pair: two tests that pass alone and fail together.
 5. Collection order is alphabetical by file and top-to-bottom within a file, and it is stable enough that an order dependence can sit undetected for months before a rename exposes it.
 6. **Isolation is therefore something you arrange, not something pytest provides.**
 7. `-p no:randomly` and its inverse exist because order dependence is common enough that deliberate shuffling is the standard way to expose it.
-8. `--lf` reruns only what failed last time, which is the flag that changes the inner loop most.
+8. `--lf` reruns only what failed last time and `--ff` reruns everything with the failures first — and stacked with `-x`, **`--ff -x` is the better default**, since the two are identical while broken and only `--ff` confirms the whole suite the moment the fix lands.
 9. Configuration lives in `pyproject.toml` under `[tool.pytest.ini_options]`, and a project without it relies on defaults that differ across versions.
 10. `testpaths` and `addopts` are the two settings worth having on day one — where to look, and what flags to apply every time.
 11. A `conftest.py` is found automatically and never imported by name, which is the mechanism the next note is built on.
@@ -479,7 +481,7 @@ Note files are numbered to match this list, with short filenames rather than the
 | 1 · What Tests Are For | 11 | [[01-What-Tests-Are-For]] |
 | 2 · Your First Python Test | 12 | [[02-Your-First-Python-Test]] |
 | 3 · The Vacuous Test | 12 | [[03-The-Vacuous-Test]] |
-| 4 · pytest's Model | 11 | — |
+| 4 · pytest's Model | 11 | [[04-pytests-Model]] |
 | 5 · Fixtures, And Where State Leaks | 14 | — |
 | 6 · Async Changes The Rules | 12 | — |
 | 7 · Test Doubles, Named Precisely | 13 | — |
