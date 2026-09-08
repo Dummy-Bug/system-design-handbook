@@ -184,6 +184,8 @@ Written up as [[06-Async]].
 
 ## Note 7 · Test Doubles, Named Precisely
 
+Written up as [[07-Doubles]].
+
 13 rungs. **Break:** stub a method that is never called and watch the test pass anyway.
 
 1. Test double is the family; mock, stub, fake and spy are members with different jobs.
@@ -488,7 +490,7 @@ Note files are numbered to match this list and named as briefly as the subject a
 | 4 · pytest's Model | 11 | [[04-Pytest-Model]] |
 | 5 · Fixtures, And Where State Leaks | 14 | [[05-Fixtures]] |
 | 6 · Async Changes The Rules | 12 | [[06-Async]] |
-| 7 · Test Doubles, Named Precisely | 13 | — |
+| 7 · Test Doubles, Named Precisely | 13 | [[07-Doubles]] |
 | 8 · Testing A FastAPI Endpoint | 14 | — |
 | 9 · The Database, And What H2 Has No Equivalent Of | 12 | — |
 | 10 · External Services | 11 | — |
