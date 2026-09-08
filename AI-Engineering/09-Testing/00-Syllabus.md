@@ -34,7 +34,7 @@
 
 ## Note 1 · What Tests Are For
 
-Written up as [[01-What-Tests-Are-For]].
+Written up as [[01-Why-Test]].
 
 11 rungs. No break — this is framing.
 
@@ -58,7 +58,7 @@ Written up as [[01-What-Tests-Are-For]].
 
 ## Note 2 · Your First Python Test
 
-Written up as [[02-Your-First-Python-Test]].
+Written up as [[02-First-Test]].
 
 12 rungs. **Break:** take a passing test, change the expected value, run it, and read every line pytest prints.
 
@@ -83,7 +83,7 @@ Written up as [[02-Your-First-Python-Test]].
 
 ## Note 3 · The Vacuous Test
 
-Written up as [[03-The-Vacuous-Test]].
+Written up as [[03-Vacuous-Tests]].
 
 12 rungs. **Break:** write a test, delete the body of the function it tests, and watch it still pass.
 
@@ -108,7 +108,7 @@ Written up as [[03-The-Vacuous-Test]].
 
 ## Note 4 · pytest's Model
 
-Written up as [[04-pytests-Model]].
+Written up as [[04-Pytest-Model]].
 
 11 rungs. **Break:** put two tests in one file that pass alone and fail together.
 
@@ -131,6 +131,8 @@ Written up as [[04-pytests-Model]].
 ---
 
 ## Note 5 · Fixtures, And Where State Leaks
+
+Written up as [[05-Fixtures]].
 
 14 rungs. **Break:** give a fixture returning a mutable list `scope="session"` and mutate it in one test.
 
@@ -474,15 +476,15 @@ Written up as [[04-pytests-Model]].
 
 ## Coverage
 
-Note files are numbered to match this list, with short filenames rather than the full heading — note 1 is `01-What-Tests-Are-For.md`.
+Note files are numbered to match this list and named as briefly as the subject allows, never the full heading — note 1 is `01-Why-Test.md`.
 
 | Note | Rungs | Written |
 |---|---|---|
-| 1 · What Tests Are For | 11 | [[01-What-Tests-Are-For]] |
-| 2 · Your First Python Test | 12 | [[02-Your-First-Python-Test]] |
-| 3 · The Vacuous Test | 12 | [[03-The-Vacuous-Test]] |
-| 4 · pytest's Model | 11 | [[04-pytests-Model]] |
-| 5 · Fixtures, And Where State Leaks | 14 | — |
+| 1 · What Tests Are For | 11 | [[01-Why-Test]] |
+| 2 · Your First Python Test | 12 | [[02-First-Test]] |
+| 3 · The Vacuous Test | 12 | [[03-Vacuous-Tests]] |
+| 4 · pytest's Model | 11 | [[04-Pytest-Model]] |
+| 5 · Fixtures, And Where State Leaks | 14 | [[05-Fixtures]] |
 | 6 · Async Changes The Rules | 12 | — |
 | 7 · Test Doubles, Named Precisely | 13 | — |
 | 8 · Testing A FastAPI Endpoint | 14 | — |
