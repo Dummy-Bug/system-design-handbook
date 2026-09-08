@@ -83,6 +83,8 @@ Written up as [[02-Your-First-Python-Test]].
 
 ## Note 3 · The Vacuous Test
 
+Written up as [[03-The-Vacuous-Test]].
+
 12 rungs. **Break:** write a test, delete the body of the function it tests, and watch it still pass.
 
 1. A test asserts something about a result, so the result has to come from the code under test for the assertion to mean anything.
@@ -476,7 +478,7 @@ Note files are numbered to match this list, with short filenames rather than the
 |---|---|---|
 | 1 · What Tests Are For | 11 | [[01-What-Tests-Are-For]] |
 | 2 · Your First Python Test | 12 | [[02-Your-First-Python-Test]] |
-| 3 · The Vacuous Test | 12 | — |
+| 3 · The Vacuous Test | 12 | [[03-The-Vacuous-Test]] |
 | 4 · pytest's Model | 11 | — |
 | 5 · Fixtures, And Where State Leaks | 14 | — |
 | 6 · Async Changes The Rules | 12 | — |
