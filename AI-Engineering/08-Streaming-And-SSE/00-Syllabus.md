@@ -258,7 +258,7 @@
 2. Milliseconds later the client reports an **error**, because a stream that finished and a stream that was cut produce the same thing on the wire — the bytes stop.
 3. SSE has **no end-of-stream marker**, so there is no signal the client could examine to separate them, and `EventSource` assumes the worse of the two.
 4. It then reconnects by itself, repeatedly, and would continue until the tab is closed.
-5. Nothing in the client asks for this. Search the page for reconnection logic and there is none — this is the browser's own machinery.
+5. Nothing in the client asks for this. Search the page for reconnection logic and there is none — and it is **`EventSource`'s** machinery specifically, not the protocol's. Read the identical stream with any other client and none of it happens.
 6. The delay comes from **`retry:`**, a wire field the server sends and the browser stores. An endpoint that sends none gets the browser's own default of **3000ms**.
 7. `onopen` fires on reconnects that deliver zero frames, because it asserts only that the **headers arrived** — 200 with `text/event-stream`. Open is not working.
 8. Those empty reconnects are **correct**: the browser attaches `Last-Event-ID` unprompted, and the server reads it and finds nothing left to send.
