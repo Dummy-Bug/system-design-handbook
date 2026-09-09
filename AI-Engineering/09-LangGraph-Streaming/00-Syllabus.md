@@ -62,7 +62,7 @@ The graph needs exactly three things and no more: **a node that returns state**,
 6. **Break the assumption that there is one obvious thing to yield** — full state, only the changes, model tokens, and your own progress messages are four different answers, all reasonable.
 7. So there is a `stream_mode` parameter rather than a single stream shape.
 8. The modes are not alternatives: `stream_mode` accepts a list, and each yielded item is tagged with which mode produced it.
-9. The unit is the **step**, not the node — nodes running in parallel belong to one step, and their updates arrive separately within it.
+9. The unit is the **step**, not the node — a step is the set of nodes with nothing left to wait for, so wiring decides how many there are, and updates from one step arrive separately within it.
 10. It is a generator, so nothing runs until something consumes it, and abandoning the loop abandons the run.
 
 > **Recall:** What does `invoke` discard that streaming keeps? · Why is there a mode parameter instead of one stream shape? · What is the unit of a step, and why is it not the node?
@@ -273,7 +273,7 @@ None written yet. Note files are numbered to match this list — note 3 is `03-C
 | 2 · values And updates | 11 | **yes** |
 | 3 · custom, The Channel You Control | 10 | **yes** |
 | 4 · tasks, checkpoints And debug | 4 | **yes** |
-| 5 · Not For The Client | 9 | no |
+| 5 · Not For The Client | 9 | **yes** |
 | 6 · Combining Modes, And Reading The Chunk | 12 | no |
 | 7 · Where The Interrupt Arrives | 10 | no |
 | 8 · Lab — Every Mode, Side By Side | 10 | no |

@@ -20,11 +20,19 @@ The previous note looked like it broke that pattern, and it half did. `custom` d
 
 One node, two seconds of work, the same graph streamed twice with nothing changed but the mode.
 
-`src/langgraph_lab/note04/a_tasks_fires_twice.py`:
+```mermaid
+flowchart LR
+    S([START]) --> P["look_up_priya<br/>two seconds"] --> E([END])
+    style P fill:#1f4f7a,color:#fff
+    style S fill:#2d333b,color:#fff
+    style E fill:#2d333b,color:#fff
+```
+
+`src/langgraph_lab/note04/a_fires_twice.py`:
 
 ```python
 import time
-from typing import TypedDict
+from typing import Any, TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
@@ -50,6 +58,12 @@ builder.add_edge(START, "look_up_priya")
 builder.add_edge("look_up_priya", END)
 graph = builder.compile()
 
+
+def short_id(item: Any) -> dict[str, Any]:
+    readable = dict(item)
+    readable["id"] = readable["id"][:8]
+    return readable
+
 START_STATE: DeskState = {"asked_by": "reception", "priya_leave": 0}
 
 
@@ -62,7 +76,7 @@ if __name__ == "__main__":
     print("\n--- stream_mode='tasks'")
     started = time.monotonic()
     for item in graph.stream(START_STATE, stream_mode="tasks"):
-        print(f"{time.monotonic() - started:5.2f}s  {item}")
+        print(f"{time.monotonic() - started:5.2f}s  {short_id(item)}")
 ```
 
 ```
@@ -70,8 +84,8 @@ if __name__ == "__main__":
  2.01s  {'look_up_priya': {'priya_leave': 12}}
 
 --- stream_mode='tasks'
- 0.00s  {'id': 'a30933a7-e735-1aac-9af4-b06c40f85e3e', 'name': 'look_up_priya', 'input': {'asked_by': 'reception', 'priya_leave': 0}, 'triggers': ('branch:to:look_up_priya',)}
- 2.01s  {'id': 'a30933a7-e735-1aac-9af4-b06c40f85e3e', 'name': 'look_up_priya', 'error': None, 'result': {'priya_leave': 12}, 'interrupts': []}
+ 0.00s  {'id': 'e58401c3', 'name': 'look_up_priya', 'input': {'asked_by': 'reception', 'priya_leave': 0}, 'triggers': ('branch:to:look_up_priya',)}
+ 2.01s  {'id': 'e58401c3', 'name': 'look_up_priya', 'error': None, 'result': {'priya_leave': 12}, 'interrupts': []}
 ```
 
 **One node, one item under `updates`, two under `tasks`.** The extra one is not extra detail about the finish — it lands at 0.00s, two full seconds before the node has done anything at all.
@@ -110,7 +124,7 @@ Set the two items side by side and the interesting part is not what the second o
 
 ```mermaid
 flowchart LR
-    T["one task<br/>id a30933a7"] --> S["start record<br/>input · triggers"]
+    T["one task<br/>one id"] --> S["start record<br/>input · triggers"]
     T --> F["finish record<br/>result · error · interrupts"]
     style T fill:#2d333b,color:#fff
     style S fill:#1f4f7a,color:#fff
@@ -134,10 +148,10 @@ flowchart LR
 
 Both halves in one file — the loop that crashes, then the loop that does not.
 
-`src/langgraph_lab/note04/b_reading_the_two_records.py`:
+`src/langgraph_lab/note04/b_two_records.py`:
 
 ```python
-from langgraph_lab.note04.a_tasks_fires_twice import START_STATE, graph
+from langgraph_lab.note04.a_fires_twice import START_STATE, graph
 
 if __name__ == "__main__":
     print("--- reading every item as if it were a finish record")
@@ -199,7 +213,7 @@ What happens if you leave the checkpointer off comes next. It is not what the ot
 
 ## Three checkpoints, one node
 
-`src/langgraph_lab/note04/c_checkpoints_and_get_state.py`:
+`src/langgraph_lab/note04/c_get_state.py`:
 
 ```python
 from typing import TypedDict
@@ -345,7 +359,7 @@ So the useful version of the claim is narrower than it first sounds.
 
 The section above added a checkpointer and a `thread_id` in the same breath, as though they were one piece of setup. They are not. Take each away in turn and the two absences behave nothing alike.
 
-`src/langgraph_lab/note04/d_what_the_setup_needs.py`:
+`src/langgraph_lab/note04/d_setup_needs.py`:
 
 ```python
 from typing import TypedDict
@@ -515,6 +529,12 @@ builder.add_edge("look_up_priya", END)
 plain = builder.compile()
 saved = builder.compile(checkpointer=InMemorySaver())
 
+
+def short_id(item: Any) -> dict[str, Any]:
+    readable = dict(item)
+    readable["id"] = readable["id"][:8]
+    return readable
+
 START_STATE: DeskState = {"asked_by": "reception", "priya_leave": 0}
 CONFIG: RunnableConfig = {"configurable": {"thread_id": "desk-1"}}
 CONFIG_FRESH: RunnableConfig = {"configurable": {"thread_id": "desk-2"}}
@@ -522,22 +542,22 @@ CONFIG_FRESH: RunnableConfig = {"configurable": {"thread_id": "desk-2"}}
 
 if __name__ == "__main__":
     print("--- stream_mode='debug'")
-    for chunk in saved.stream(START_STATE, stream_mode="debug", config=CONFIG):
-        print(f"    step {chunk['step']:>2}  type={chunk['type']}")
-    print(f"    and every one of them has the same four keys: {sorted(chunk)}")
+    for item in saved.stream(START_STATE, stream_mode="debug", config=CONFIG):
+        print(f"    step {item['step']:>2}  type={item['type']}")
+    print(f"    and every one of them has the same four keys: {sorted(item)}")
 
     print("\n--- one run, asking for debug and the two modes it is made of")
-    debug_chunks: list[Any] = []
+    debug_items: list[Any] = []
     originals: list[Any] = []
     for mode, data in saved.stream(START_STATE, stream_mode=["debug", "tasks", "checkpoints"], config=CONFIG):
         if mode == "debug":
-            debug_chunks.append(data)
+            debug_items.append(data)
         else:
             originals.append(data)
 
     payloads = []
-    for chunk in debug_chunks:
-        payloads.append(chunk["payload"])
+    for item in debug_items:
+        payloads.append(item["payload"])
 
     print(f"    {len(payloads)} debug payloads, {len(originals)} items from tasks and checkpoints")
     print(f"    identical: {payloads == originals}")
@@ -552,22 +572,22 @@ if __name__ == "__main__":
             wrapped.append(data)
 
     start_record = bare[0]
-    start_chunk = wrapped[2]
-    print(f"    tasks gave  {start_record}")
-    print(f"    debug gave  step={start_chunk['step']}  type={start_chunk['type']}  timestamp={start_chunk['timestamp']}")
-    print(f"    and its payload is that same record: {start_chunk['payload'] == start_record}")
+    start_item = wrapped[2]
+    print(f"    tasks gave  {short_id(start_record)}")
+    print(f"    debug gave  step={start_item['step']}  type={start_item['type']}  timestamp={start_item['timestamp']}")
+    print(f"    and its payload is that same record: {start_item['payload'] == start_record}")
 
     print("\n--- the envelope timestamp is not the checkpoint's own")
-    debug_chunks = list(saved.stream(START_STATE, stream_mode="debug", config=CONFIG))
-    last_checkpoint = debug_chunks[-1]
+    debug_items = list(saved.stream(START_STATE, stream_mode="debug", config=CONFIG))
+    last_checkpoint = debug_items[-1]
     snapshot = saved.get_state(CONFIG)
     print(f"    debug timestamp    {last_checkpoint['timestamp']}")
     print(f"    get_state created  {snapshot.created_at}")
     print(f"    equal: {last_checkpoint['timestamp'] == snapshot.created_at}")
 
     print("\n--- stream_mode='debug', on the graph with no checkpointer")
-    for chunk in plain.stream(START_STATE, stream_mode="debug"):
-        print(f"    step {chunk['step']:>2}  type={chunk['type']}")
+    for item in plain.stream(START_STATE, stream_mode="debug"):
+        print(f"    step {item['step']:>2}  type={item['type']}")
 ```
 
 ```
@@ -609,8 +629,8 @@ One run, both modes on at once, printing the node's start record as each of them
 
 ```
 --- one record, bare and wrapped, from a single run
-    tasks gave  {'id': '20d92b4f-51d7-60cc-7128-a663ffa64779', 'name': 'look_up_priya', 'input': {'asked_by': 'reception', 'priya_leave': 0}, 'triggers': ('branch:to:look_up_priya',)}
-    debug gave  step=1  type=task  timestamp=2026-09-09T09:29:27.084960+00:00
+    tasks gave  {'id': '0f5d39a7', 'name': 'look_up_priya', 'input': {'asked_by': 'reception', 'priya_leave': 0}, 'triggers': ('branch:to:look_up_priya',)}
+    debug gave  step=1  type=task  timestamp=2026-09-09T12:24:43.291898+00:00
     and its payload is that same record: True
 ```
 

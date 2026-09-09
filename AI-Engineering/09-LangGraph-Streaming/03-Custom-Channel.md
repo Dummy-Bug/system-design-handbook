@@ -83,7 +83,7 @@ flowchart LR
 
 Everything before this note used the bottom arrow only. `return` is a node's one exit, it fires once, and it fires last. The writer is a second door that opens as often as the node likes, whenever the node likes, while the first one is still shut.
 
-`src/langgraph_lab/note03/a_writer_emits_midnode.py`:
+`src/langgraph_lab/note03/a_writer_midnode.py`:
 
 ```python
 import time
@@ -260,10 +260,10 @@ flowchart LR
 
 No new graph is needed — the same three-lookup node from above, streamed twice, with nothing different but the mode list.
 
-`src/langgraph_lab/note03/b_writer_needs_the_mode.py`:
+`src/langgraph_lab/note03/b_mode_required.py`:
 
 ```python
-from langgraph_lab.note03.a_writer_emits_midnode import START_STATE, graph
+from langgraph_lab.note03.a_writer_midnode import START_STATE, graph
 
 if __name__ == "__main__":
     print("--- stream_mode='updates', with 'custom' left off the list")

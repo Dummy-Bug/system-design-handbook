@@ -182,7 +182,7 @@ That is the problem the rest of this folder exists to solve.
 
 The `print` was carrying the whole run. Remove it, give each lap real work to be slow at, and time the call from outside so the measurement does not come from inside the thing being measured.
 
-`src/langgraph_lab/note01/b_invoke_is_silent.py`:
+`src/langgraph_lab/note01/b_invoke_silent.py`:
 
 ```python
 import time
@@ -299,7 +299,7 @@ The same graph, unchanged. Only the call changes.
 ```python
 import time
 
-from langgraph_lab.note01.b_invoke_is_silent import START_STATE, graph
+from langgraph_lab.note01.b_invoke_silent import START_STATE, graph
 
 if __name__ == "__main__":
     started = time.monotonic()
@@ -354,7 +354,7 @@ A dictionary keyed by **node name**, holding **what that node returned**. Not th
 
 `stream` does not start the graph. It hands back a **generator**, and a generator does nothing until somebody pulls on it.
 
-`src/langgraph_lab/note01/d_stream_is_a_generator.py`:
+`src/langgraph_lab/note01/d_generator.py`:
 
 ```python
 import time
@@ -463,10 +463,10 @@ So: the run's life is the reader's life. That saves money when they leave, and i
 
 The shape that came back was chosen. Ask the same graph for a different one and it obliges.
 
-`src/langgraph_lab/note01/e_mode_changes_shape.py`:
+`src/langgraph_lab/note01/e_mode_shape.py`:
 
 ```python
-from langgraph_lab.note01.b_invoke_is_silent import START_STATE, graph
+from langgraph_lab.note01.b_invoke_silent import START_STATE, graph
 
 if __name__ == "__main__":
     print("--- stream_mode='updates'")
@@ -516,7 +516,7 @@ Nothing forces a choice between them. `stream_mode` takes a list, and asking for
 `src/langgraph_lab/note01/f_modes_combine.py`:
 
 ```python
-from langgraph_lab.note01.b_invoke_is_silent import START_STATE, graph
+from langgraph_lab.note01.b_invoke_silent import START_STATE, graph
 
 if __name__ == "__main__":
     print("--- one mode, passed as a string")
@@ -597,6 +597,140 @@ Which also accounts for the very first line of the run:
 No node had run yet, so that is the state you passed in — the balance before any deposit. It is also why `values` produced four items against `updates` three. `values` reports the starting point as well, and `updates` has nothing to report until something has actually been returned.
 
 ---
+
+## A step is a round, not a node
+
+A run is not a sequence of nodes. It is a sequence of **rounds**, and each round is a step.
+
+At the start of a round the graph asks one question: **which nodes have everything they need right now?** Whatever the answer is, that set is the step. They are started together, and the step is over when the **slowest** of them finishes.
+
+```mermaid
+flowchart TD
+    subgraph chain["three nodes in a line — three steps"]
+        direction LR
+        A1[look_up_priya] --> A2[look_up_rahul] --> A3[write_answer]
+    end
+    subgraph side["two nodes off START — one step"]
+        direction LR
+        B0([START]) --> B1[look_up_priya]
+        B0 --> B2[look_up_rahul]
+    end
+    style A1 fill:#1f4f7a,color:#fff
+    style A2 fill:#1f4f7a,color:#fff
+    style A3 fill:#1f4f7a,color:#fff
+    style B1 fill:#1f6f3f,color:#fff
+    style B2 fill:#1f6f3f,color:#fff
+    style B0 fill:#2d333b,color:#fff
+```
+
+**Chained nodes are three steps of one node each**, because the second cannot start until the first has produced what it reads. **Two nodes wired off `START` are one step holding both**, because neither waits for the other.
+
+So the count is decided by the wiring, not by how many nodes there are. Three nodes can be three steps or one, depending on what depends on what.
+
+| | Nodes | Steps |
+|---|---|---|
+| a line of three | 3 | 3 |
+| three off `START` | 3 | **1** |
+| a self-loop run three times | 1 | 3 |
+
+### The same three nodes, counted twice
+
+Take three lookups and wire them two ways, changing nothing else. `values` fires once per step that wrote something, plus the starting state, so counting its items counts the steps.
+
+`src/langgraph_lab/note01/h_steps_not_nodes.py`:
+
+```python
+from typing import TypedDict
+
+from langgraph.graph import END, START, StateGraph
+
+
+class DeskState(TypedDict):
+    asked_by: str
+    priya_leave: int
+    rahul_leave: int
+    sana_leave: int
+
+
+class DeskUpdate(TypedDict, total=False):
+    priya_leave: int
+    rahul_leave: int
+    sana_leave: int
+
+
+def look_up_priya(state: DeskState) -> DeskUpdate:
+    return {"priya_leave": 12}
+
+
+def look_up_rahul(state: DeskState) -> DeskUpdate:
+    return {"rahul_leave": 5}
+
+
+def look_up_sana(state: DeskState) -> DeskUpdate:
+    return {"sana_leave": 8}
+
+
+in_a_line = StateGraph(DeskState)  # ty: ignore[invalid-argument-type]
+in_a_line.add_node("look_up_priya", look_up_priya)
+in_a_line.add_node("look_up_rahul", look_up_rahul)
+in_a_line.add_node("look_up_sana", look_up_sana)
+in_a_line.add_edge(START, "look_up_priya")
+in_a_line.add_edge("look_up_priya", "look_up_rahul")
+in_a_line.add_edge("look_up_rahul", "look_up_sana")
+in_a_line.add_edge("look_up_sana", END)
+chained = in_a_line.compile()
+
+all_at_once = StateGraph(DeskState)  # ty: ignore[invalid-argument-type]
+all_at_once.add_node("look_up_priya", look_up_priya)
+all_at_once.add_node("look_up_rahul", look_up_rahul)
+all_at_once.add_node("look_up_sana", look_up_sana)
+all_at_once.add_edge(START, "look_up_priya")
+all_at_once.add_edge(START, "look_up_rahul")
+all_at_once.add_edge(START, "look_up_sana")
+all_at_once.add_edge("look_up_priya", END)
+all_at_once.add_edge("look_up_rahul", END)
+all_at_once.add_edge("look_up_sana", END)
+parallel = all_at_once.compile()
+
+START_STATE: DeskState = {"asked_by": "reception", "priya_leave": 0, "rahul_leave": 0, "sana_leave": 0}
+
+
+if __name__ == "__main__":
+    print("--- three nodes in a line")
+    for item in chained.stream(START_STATE, stream_mode="values"):
+        print("   ", item)
+
+    print("\n--- the same three nodes, all wired off START")
+    for item in parallel.stream(START_STATE, stream_mode="values"):
+        print("   ", item)
+```
+
+```
+--- three nodes in a line
+    {'asked_by': 'reception', 'priya_leave': 0, 'rahul_leave': 0, 'sana_leave': 0}
+    {'asked_by': 'reception', 'priya_leave': 12, 'rahul_leave': 0, 'sana_leave': 0}
+    {'asked_by': 'reception', 'priya_leave': 12, 'rahul_leave': 5, 'sana_leave': 0}
+    {'asked_by': 'reception', 'priya_leave': 12, 'rahul_leave': 5, 'sana_leave': 8}
+```
+
+**Four items: the starting state, then one per node.** Priya's lookup lands alone, then Rahul's, then Sana's — each node is its own step because each waits for the one before it, even though not one of them actually reads what the previous node wrote.
+
+```
+--- the same three nodes, all wired off START
+    {'asked_by': 'reception', 'priya_leave': 0, 'rahul_leave': 0, 'sana_leave': 0}
+    {'asked_by': 'reception', 'priya_leave': 12, 'rahul_leave': 5, 'sana_leave': 8}
+```
+
+**Two items: the starting state, then everything at once.** All three lookups landed in the same snapshot, because all three were in the same step.
+
+| | Nodes | `values` items | Steps |
+|---|---|---|---|
+| in a line | 3 | 4 | **3** |
+| off `START` | 3 | 2 | **1** |
+
+Same three functions, same three results, same final state. **The wiring alone decided whether that run had three steps or one.**
+
+**The state is merged between steps, never inside one.** That single rule accounts for most of what follows.
 
 ## Two nodes, one step
 
@@ -699,7 +833,7 @@ So the two series are counting different things.
 
 The second row carries a condition that is easy to miss here, because every step in this note writes. A step whose nodes all return nothing produces `updates` items and **no** `values` item at all, so the two counts stop tracking each other.
 
-> A step is a **batch of nodes with nothing left to wait for**. They are started together, and the step settles when the **slowest** of them finishes. One step here, two nodes in it, and rahul idle for two thirds of it.
+One step here, two nodes in it, and rahul idle for two thirds of it.
 
 > [!important] A node cannot see what its sibling wrote
 > `look_up_rahul` received the state as it stood at the start of the step, so `priya_leave` was still 0 inside it. The merge happens after both have returned, never between them. Anything you write assuming a sibling has already run is reading the past.

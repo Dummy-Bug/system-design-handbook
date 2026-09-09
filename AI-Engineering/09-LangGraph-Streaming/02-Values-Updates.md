@@ -76,7 +76,7 @@ That annotation tells the graph **how to combine what a node returns with what i
 
 ## What each one hands you
 
-`src/langgraph_lab/note02/b_the_two_shapes.py`:
+`src/langgraph_lab/note02/b_two_shapes.py`:
 
 ```python
 from langgraph_lab.note02.a_desk_graph import START_STATE, graph
@@ -396,7 +396,7 @@ flowchart LR
     style E fill:#2d333b,color:#fff
 ```
 
-`src/langgraph_lab/note02/f_the_node_is_the_floor.py` builds a sentence a word at a time, printing from inside so the interior is visible:
+`src/langgraph_lab/note02/f_node_is_floor.py` builds a sentence a word at a time, printing from inside so the interior is visible:
 
 ```python
 import time
