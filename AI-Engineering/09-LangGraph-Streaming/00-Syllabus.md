@@ -2,7 +2,7 @@
 
 # 09 · LangGraph Streaming — Syllabus
 
-**10 notes, 108 rungs.** Framework-specific by design — this is one library's API, and it is the folder that will rot first.
+**10 notes, 111 rungs.** Framework-specific by design — this is one library's API, and it is the folder that will rot first.
 
 > A rung is the **smallest thing that has to be understood before the next thing makes sense** — a node returns only when it finishes, therefore a slow node emits nothing, therefore progress must be guessed from outside, therefore the node needs its own channel. Rungs are not topics and not section headings. Eight to fifteen of them build one note.
 >
@@ -20,11 +20,11 @@
 **Two halves, and the lab is the point.** Notes 1 to 6 are non-token streaming — every mode that works whether or not a model is involved — and note 7 runs them all side by side. Notes 8 and 9 are token streaming through the framework, and note 10 runs that. **Notes 8 to 10 assume folder 10 notes 1 to 3**, because `messages` mode cannot be understood before a token is.
 
 > [!important] Version decides the shape of every example here
-> `stream_version` defaults to **v1**, which yields `(mode, data)` tuples. **v2**, requiring 1.1 or later, yields `StreamPart` dicts you switch on with `chunk["type"]`. Typed projections arrive in 1.2 and supersede both.
+> `astream` takes a `version` parameter. It defaults to **v1**, which yields `(mode, data)` tuples. **v2** yields typed `StreamPart` dicts you switch on with `chunk["type"]` — `ValuesStreamPart`, `UpdatesStreamPart` and five more.
 >
-> So the same three-line loop is written three different ways depending on a version you may not have chosen deliberately. **Check yours before running any rung in note 5.**
+> The parameter **does not exist at all before 1.1.0**, released 2026-03-10. On the whole 1.0 line there is no choice to make and no v2 to reach for, so crossing that boundary adds an option rather than changing a default. **Check your version before running any rung in note 5.**
 
-**Currency check (2026-09-08):** written against **langgraph 1.0.5**, which is v1-default. Latest is 1.2.11. Re-verify before relying on: whether `stream_version` still defaults to v1, whether `get_stream_writer()` still needs Python 3.11 for async, and whether the `nostream` tag still exists.
+**Currency check (2026-09-09):** written against **langgraph 1.0.10**, which has no `version` parameter at all. Latest is 1.2.11, where it defaults to v1. Verified today against both wheels: `TAG_NOSTREAM` still exists, and `get_stream_writer()` still carries the Python 3.11 restriction in async code. Re-verify whether `version` still defaults to v1 before relying on note 5.
 
 ---
 
@@ -80,14 +80,14 @@ The graph needs exactly three things and no more: **a node that returns state**,
 5. **Break `updates`** — it tells you what the node returned, not what the state became, so a reducer that merges or appends means the two disagree.
 6. That disagreement is the entire distinction: `values` is state, `updates` is intent.
 7. Multiple updates within one step arrive as separate items rather than merged.
-8. A node returning nothing produces an update with an empty payload, which is not the same as no update at all.
+8. A node returning nothing still produces an update, so the item count follows the nodes rather than the changes — but the payload is `None`, and a node returning `{}` is normalised to `None` too, so a consumer that indexes into the payload crashes on both.
 9. **Neither mode carries model tokens** — both fire only when a node has finished.
 10. So a system built entirely on `updates` delivers whole messages, which is exactly what most agents ship first and why they feel like they are not streaming.
 11. `values` suits a UI that re-renders from state; `updates` suits one that reacts to what a node did.
 
 > **Recall:** What does `updates` give you that `values` does not, and vice versa? · When do the two disagree, and why? · Why does a system built on `updates` feel unstreamed?
 >
-> **Stop:** No reducer semantics or channel internals — that is state design, not streaming.
+> **Stop:** One appending reducer is used as apparatus and never explained past what the demonstration needs. No catalogue of reducers, no channel internals, no designing them — that is state design, not streaming.
 
 ---
 
@@ -113,7 +113,7 @@ The graph needs exactly three things and no more: **a node that returns state**,
 
 ## Note 4 · tasks, checkpoints And debug
 
-10 rungs. **Break:** raise an exception inside a node and watch which mode shows it.
+13 rungs. **Break:** raise an exception inside a node and watch which mode shows it.
 
 1. `tasks` fires at task start and finish, carrying results and errors.
 2. `checkpoints` fires at checkpoint boundaries, in the same shape `get_state()` returns.
@@ -122,11 +122,14 @@ The graph needs exactly three things and no more: **a node that returns state**,
 5. **Break the assumption that these are more of the same** — they are not for the client, they are for you.
 6. An exception inside a node is visible in `tasks` before any error handling has decided what the user sees.
 7. `checkpoints` is what a resumable UI would be built on, because it exposes the same object a resume reads.
-8. `debug` is a firehose: right for one bug, unusable as a habit, and expensive to leave on.
-9. So the modes split by audience — `values`, `updates`, `messages`, `custom` face the client; `tasks`, `checkpoints`, `debug` face the operator.
-10. Which is also a security line: operator modes carry internal names and payloads that must never be forwarded to a browser.
+8. A node's output is written the moment that node **returns**, not when the step commits — so a step killed halfway keeps the part that finished, and a resume replays it marked as cached rather than running it again.
+9. **Break the assumption that this is a guarantee** — it is a setting. `durability` defaults to `"async"`, and `"exit"` writes only on a clean finish, so a process that is killed leaves nothing at all behind.
+10. And it only ever protects **return values**: a side effect a node performed before dying is invisible to the checkpoint, so the resume runs that node again from the top and does it twice.
+11. `debug` is a firehose: right for one bug, unusable as a habit, and expensive to leave on.
+12. So the modes split by audience — `values`, `updates`, `messages`, `custom` face the client; `tasks`, `checkpoints`, `debug` face the operator.
+13. Which is also a security line: operator modes carry internal names and payloads that must never be forwarded to a browser.
 
-> **Recall:** Which two modes need a checkpointer, and what do they yield without one? · Where does a node's exception first become visible? · What is the audience split, and why is it also a security boundary?
+> **Recall:** Which two modes need a checkpointer, and what do they yield without one? · Where does a node's exception first become visible? · A step is killed with one of its two nodes finished — what survives, and what must `durability` be for that to hold? · What is the audience split, and why is it also a security boundary?
 
 ---
 
@@ -137,7 +140,7 @@ The graph needs exactly three things and no more: **a node that returns state**,
 1. `stream_mode` accepts a list, and every item comes back tagged.
 2. In **v1** each item is a `(mode, data)` tuple, unpacked positionally.
 3. In **v2** each item is a `StreamPart` dict — `{"type", "ns", "data"}` — switched on by `chunk["type"]`.
-4. **Break your consumer** — the loop is written differently for each, and `stream_version` defaults to v1, so the shape depends on a choice you may never have made.
+4. **Break your consumer** — the loop is written differently for each, and `version` defaults to v1, so the shape depends on a choice you may never have made, or on one your version does not offer.
 5. Which means an upgrade can change the streaming loop while nothing else in the code moves.
 6. `ns` is the namespace: an empty tuple means the root graph.
 7. A graph can contain subgraphs, and by default their interior is invisible.
@@ -220,13 +223,13 @@ The graph needs exactly three things and no more: **a node that returns state**,
 3. `astream_events` yields **lifecycle events for every runnable** in the run — model starts, tool starts, chain ends.
 4. So one is a small set of curated projections and the other is a firehose you filter.
 5. Token streaming exists in both: `messages` mode, or the `on_chat_model_stream` event.
-6. `version="v2"` is required for graphs, and v1 returns empty parent ids.
+6. It takes a `version` of its own, unrelated to `astream`'s and with different values — `v1`, `v2`, and `v3` on newer `langchain-core`. It already defaults to `v2`, so the widely copied `version="v2"` is usually saying nothing.
 7. **Break the late switch** — the two consumers look nothing alike, so choosing wrongly means rewriting rather than adjusting.
 8. The rule of thumb: if the graph's own views answer your question, use `astream`; reach for events only when you need something no mode exposes.
-9. In 1.2 and later, typed projections supersede both, giving independent iterators per projection instead of one branching loop.
+9. So two different parameters named `version` now sit on the two APIs, taking overlapping values and meaning unrelated things — the kind of collision that makes a wrong answer sound plausible.
 10. Therefore this choice has a shelf life, and the reason for it should be written down where the next person will see it.
 
-> **Defend:** Your UI needs tokens, tool starts, and a progress bar. Argue for one API over the other. · You are on 1.0.5 today and 1.2 is coming. Which do you pick, and what do you write down?
+> **Defend:** Your UI needs tokens, tool starts, and a progress bar. Argue for one API over the other. · You are on 1.0.10 today and 1.2 is coming. Which do you pick, and what do you write down? · Somebody's code passes `version="v2"`. Which API is it calling, and does the argument change anything?
 
 ---
 
@@ -256,10 +259,10 @@ None written yet. Note files will be numbered to match this list — note 3 beco
 
 | Note | Rungs | Written |
 |---|---|---|
-| 1 · The Graph Does Not Return, It Emits | 10 | no |
-| 2 · values And updates | 11 | no |
+| 1 · The Graph Does Not Return, It Emits | 10 | **yes** |
+| 2 · values And updates | 11 | **yes** |
 | 3 · custom, The Channel You Control | 11 | no |
-| 4 · tasks, checkpoints And debug | 10 | no |
+| 4 · tasks, checkpoints And debug | 13 | no |
 | 5 · Combining Modes, And Reading The Chunk | 12 | no |
 | 6 · Where The Interrupt Arrives | 10 | no |
 | 7 · Lab — Every Mode, Side By Side | 10 | no |
@@ -294,7 +297,7 @@ The admin agent ran on `stream_mode="updates"` alone from the beginning, which i
 
 **Note 6 rung 7 was verified rather than trusted**, because the disambiguation interrupt is the most distinctive behaviour in the system and a missed one is indistinguishable from a hang.
 
-**Note 5 is the upgrade.** The stack is 1.0.5 and v1, so the loop unpacks tuples. Moving to 1.2.11 changes that loop and nothing else, which is recorded in `Current-Standing/TODO/05-Streaming-Build.md` phase 1.
+**Note 5 is the upgrade.** The stack is 1.0.10, which has no `version` parameter, so the loop unpacks tuples because nothing else is on offer. Moving to 1.2.11 makes v2 available, changing that loop and nothing else, which is recorded in `Current-Standing/TODO/05-Streaming-Build.md` phase 1.
 
 ---
 
@@ -314,5 +317,4 @@ The design question: **when would you use `astream_events` over `astream`** (not
 - [LangGraph `astream` reference](https://reference.langchain.com/python/langgraph/pregel/main/Pregel/astream)
 - [`astream_events` reference](https://reference.langchain.com/python/langchain-core/runnables/base/Runnable/astream_events)
 - [LangGraph 1.0 general availability](https://changelog.langchain.com/announcements/langgraph-1-0-is-now-generally-available) for the version boundaries
-- [Typed projections over a content-block protocol](https://vadim.blog/langgraph-v3-event-streaming-typed-projections) for note 9 rung 9
 - [Issue 4853 — tool call name and id across chunks](https://github.com/langchain-ai/langgraph/issues/4853) for note 8 rungs 11 and 12

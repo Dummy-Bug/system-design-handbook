@@ -130,6 +130,67 @@ The upgrade is not required for token streaming. Everything the build needs was 
 
 What 1.2.11 would add is the `version="v2"` StreamPart shape and the service shrink that follows from it. Real, but not load-bearing, and taking it now would put an unrelated framework jump in the same deploy as the streaming change — a phase 2 bug and an upgrade bug would look identical.
 
+### Security — two CVEs against the installed version · found 2026-09-09
+
+Surfaced by the IDE dependency scan while pinning `langgraph-lab` to match production. Both are filed against `langgraph==1.0.5`.
+
+| CVE | What it is | Reaches Xarvis? |
+|---|---|---|
+| CVE-2026-28277 · 6.8 | Checkpoint loading deserialises msgpack extension types by reconstructing Python objects, effectively `getattr(importlib.import_module(module), name)(args)` | **Yes.** Production compiles with `DynamoDBSaver` at `checkpointing/factory.py:46`, so write access to that table becomes code execution inside the app process |
+| CVE-2026-27794 · 6.6 | `BaseCache` falls back to `pickle` when msgpack deserialisation fails | **No.** Requires `cache=` on `compile()` plus a node opting in via `CachePolicy`; neither string appears anywhere in `src/` |
+
+Neither is a front door. 28277 needs privileged write access to the persistence layer before it is worth anything, which makes it a blast-radius problem rather than an entry point: it converts a database compromise into an application compromise, with whatever the process can reach — environment variables, the task IAM role.
+
+> [!warning] 1.0.5 cannot be patched in place
+> The fix ships in `langgraph-checkpoint>=4.0.0`. `langgraph==1.0.5` pins `langgraph-checkpoint<4.0.0,>=2.1.0`, so its ceiling sits below the fixed version. `langgraph==1.0.10` widens that to `<5.0.0`. Moving off 1.0.5 is the fix, and there is no patch-only option.
+
+### The cheap path, resolved 2026-09-09
+
+The 1.2.11 upgrade below is not required to close this. `1.0.10` sits inside the `langgraph>=1.0.2,<1.1.0` ceiling that `langchain==1.0.5` imposes, so the LangChain family does not have to move at all.
+
+Two blockers surfaced in order, each from a real `uv pip compile` run against Python 3.11:
+
+```
+Because langgraph==1.0.10 depends on langgraph-prebuilt>=1.0.8,<1.1.0
+and you require langgraph-prebuilt==1.0.2, we can conclude that your
+requirements are unsatisfiable.
+```
+
+```
+Because langgraph-checkpoint-redis==0.2.1 depends on
+langgraph-checkpoint>=3.0.0,<4.0.0 and you require langgraph-checkpoint>=4.0.0,
+we can conclude that your requirements are incompatible.
+```
+
+The second one is the finding. **The package that nothing in `src/` imports is what stands between this codebase and a security fix.** It was already on the drop list below for distorting the full upgrade; it is now the direct blocker to the small one.
+
+With `langgraph-prebuilt` allowed to move and the same three unused packages dropped, it resolves clean:
+
+| Package | From | To |
+|---|---|---|
+| `langgraph` | 1.0.5 | 1.0.10 |
+| `langgraph-checkpoint` | 3.0.1 | 4.2.0 |
+| `langgraph-prebuilt` | 1.0.2 | 1.0.10 |
+
+What does **not** move is the point: `langchain` stays 1.0.5, `langchain-core` stays 1.2.6, `langgraph-sdk` stays 0.3.1, `langgraph_dynamodb_checkpoint` stays 0.2.6.4, `orjson` stays 3.11.4. No `sse-starlette` returns and no `redis` is pulled in.
+
+**The streaming loop shipped in phases 2 to 6 does not move either.** Verified against both wheels: `1.0.10` has no `version` parameter on `astream` and no `StreamPart` type, so it is the same v1 `(mode, data)` tuple API that phase 2 was written against. `version="v2"` and `StreamPart` were introduced in **1.1.0**, released 2026-03-10, not in 1.2 as recorded elsewhere.
+
+### Which upgrade to take
+
+| | Minimal · 1.0.10 | Full · 1.2.11 |
+|---|---|---|
+| Closes both CVEs | yes | yes |
+| Packages moved | 3, plus 3 dropped | 11, plus 3 dropped |
+| `langchain` moves | no | 1.0.5 to 1.4.0 |
+| Streaming loop rewritten | no | yes, to `version="v2"` |
+| Service shrink from typed parts | no | yes |
+| New failure surface in the same deploy | small | large |
+
+**Decision 2026-09-09: deferred to the next Xarvis session**, where the upgrade is taken as one piece rather than split into a security bump now and a framework bump later. Nothing in the repository was changed. The lab at `~/Desktop/projects/langgraph-lab` is pinned to `1.0.10` so that it stays both patched and API-identical to what production will be.
+
+Advisories: [GHSA-g48c-2wqr-h844](https://github.com/advisories/GHSA-g48c-2wqr-h844) and [GHSA-mhr3-j7m5-c7c9](https://github.com/advisories/GHSA-mhr3-j7m5-c7c9), with the exploitation chain written up at [Check Point Research](https://research.checkpoint.com/2026/from-sqli-to-rce-exploiting-langgraphs-checkpointer/).
+
 ### What the resolver found, when the upgrade is picked up again
 
 Resolved with `uv pip compile` against Python 3.11, matching `python:3.11.12-slim-bullseye` in the Dockerfile.
