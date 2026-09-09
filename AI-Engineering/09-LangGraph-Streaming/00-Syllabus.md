@@ -2,7 +2,7 @@
 
 # 09 · LangGraph Streaming — Syllabus
 
-**10 notes, 111 rungs.** Framework-specific by design — this is one library's API, and it is the folder that will rot first.
+**10 notes, 110 rungs.** Framework-specific by design — this is one library's API, and it is the folder that will rot first.
 
 > A rung is the **smallest thing that has to be understood before the next thing makes sense** — a node returns only when it finishes, therefore a slow node emits nothing, therefore progress must be guessed from outside, therefore the node needs its own channel. Rungs are not topics and not section headings. Eight to fifteen of them build one note.
 >
@@ -93,7 +93,7 @@ The graph needs exactly three things and no more: **a node that returns state**,
 
 ## Note 3 · custom, The Channel You Control
 
-11 rungs. **Break:** put a three-second sleep inside a node and watch the stream stay silent.
+10 rungs. **Break:** put a three-second sleep inside a node and watch the stream stay silent.
 
 1. Both state modes fire when a node **returns**.
 2. **Break it** — a node making three API calls over eight seconds emits nothing for eight seconds, then everything at once.
@@ -103,11 +103,10 @@ The graph needs exactly three things and no more: **a node that returns state**,
 6. `writer({"status": "fetching"})` reaches the consumer before the node has returned anything.
 7. So the code that knows what it is doing says so, instead of being guessed at from outside.
 8. The payload has no schema — it is whatever dictionary you pass, which is freedom and a versioning problem in equal measure.
-9. **Break it on old Python** — in async code below 3.11 `get_stream_writer()` does not work, and the node must accept `writer: StreamWriter` as a parameter instead.
-10. `custom` must be among the requested modes or the writes are silently discarded.
-11. This is the correct home for a closed status vocabulary, because the mapping from work to user-visible code is made where the work happens.
+9. `custom` must be among the requested modes or the writes are silently discarded.
+10. This is the correct home for a closed status vocabulary, because the mapping from work to user-visible code is made where the work happens.
 
-> **Recall:** What does a slow node emit before it returns, and what follows from that? · What does `get_stream_writer` change about where progress is decided? · What are the two ways a `writer` call can silently produce nothing?
+> **Recall:** What does a slow node emit before it returns, and what follows from that? · What does `get_stream_writer` change about where progress is decided? · When does a `writer` call silently produce nothing?
 
 ---
 
@@ -117,8 +116,8 @@ The graph needs exactly three things and no more: **a node that returns state**,
 
 1. `tasks` fires at task start and finish, carrying results and errors.
 2. `checkpoints` fires at checkpoint boundaries, in the same shape `get_state()` returns.
-3. Both **require a checkpointer** and yield nothing without one.
-4. `debug` combines both and adds metadata.
+3. `checkpoints` **requires a checkpointer** and yields nothing whatsoever without one. `tasks` does not — it works on a bare `compile()`.
+4. `debug` combines both and adds metadata, so without a checkpointer it does not fail either — it silently drops to the half it can still produce.
 5. **Break the assumption that these are more of the same** — they are not for the client, they are for you.
 6. An exception inside a node is visible in `tasks` before any error handling has decided what the user sees.
 7. `checkpoints` is what a resumable UI would be built on, because it exposes the same object a resume reads.
@@ -129,7 +128,7 @@ The graph needs exactly three things and no more: **a node that returns state**,
 12. So the modes split by audience — `values`, `updates`, `messages`, `custom` face the client; `tasks`, `checkpoints`, `debug` face the operator.
 13. Which is also a security line: operator modes carry internal names and payloads that must never be forwarded to a browser.
 
-> **Recall:** Which two modes need a checkpointer, and what do they yield without one? · Where does a node's exception first become visible? · A step is killed with one of its two nodes finished — what survives, and what must `durability` be for that to hold? · What is the audience split, and why is it also a security boundary?
+> **Recall:** Which mode needs a checkpointer, what does it yield without one, and what does `debug` do instead of failing? · Where does a node's exception first become visible? · A step is killed with one of its two nodes finished — what survives, and what must `durability` be for that to hold? · What is the audience split, and why is it also a security boundary?
 
 ---
 
@@ -261,8 +260,8 @@ None written yet. Note files will be numbered to match this list — note 3 beco
 |---|---|---|
 | 1 · The Graph Does Not Return, It Emits | 10 | **yes** |
 | 2 · values And updates | 11 | **yes** |
-| 3 · custom, The Channel You Control | 11 | no |
-| 4 · tasks, checkpoints And debug | 13 | no |
+| 3 · custom, The Channel You Control | 10 | **yes** |
+| 4 · tasks, checkpoints And debug | 13 | in progress |
 | 5 · Combining Modes, And Reading The Chunk | 12 | no |
 | 6 · Where The Interrupt Arrives | 10 | no |
 | 7 · Lab — Every Mode, Side By Side | 10 | no |

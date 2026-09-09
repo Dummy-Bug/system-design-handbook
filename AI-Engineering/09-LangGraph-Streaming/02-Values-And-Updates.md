@@ -82,10 +82,13 @@ That annotation tells the graph **how to combine what a node returns with what i
 from langgraph_lab.note02.a_desk_graph import START_STATE, graph
 
 if __name__ == "__main__":
-    for mode in ("values", "updates"):
-        print(f"--- stream_mode={mode!r}")
-        for item in graph.stream(START_STATE, stream_mode=mode):
-            print("   ", item)
+    print("--- stream_mode='values'")
+    for item in graph.stream(START_STATE, stream_mode="values"):
+        print("   ", item)
+
+    print("\n--- stream_mode='updates'")
+    for item in graph.stream(START_STATE, stream_mode="updates"):
+        print("   ", item)
 ```
 
 ```
@@ -94,6 +97,7 @@ if __name__ == "__main__":
     {'asked_by': 'reception', 'notes': ['Priya has 12 days left']}
     {'asked_by': 'reception', 'notes': ['Priya has 12 days left', 'Rahul has 5 days left']}
     {'asked_by': 'reception', 'notes': ['Priya has 12 days left', 'Rahul has 5 days left', 'answered using 2 lookups']}
+
 --- stream_mode='updates'
     {'look_up_priya': {'notes': ['Priya has 12 days left']}}
     {'look_up_rahul': {'notes': ['Rahul has 5 days left']}}
@@ -216,11 +220,15 @@ START_STATE: DeskState = {"asked_by": "reception", "lookups": 0}
 
 
 if __name__ == "__main__":
-    for mode in ("updates", "values"):
-        items = list(graph.stream(START_STATE, stream_mode=mode))
-        print(f"--- stream_mode={mode!r}   {len(items)} items for 3 nodes")
-        for item in items:
-            print("   ", item)
+    items = list(graph.stream(START_STATE, stream_mode="updates"))
+    print(f"--- stream_mode='updates'   {len(items)} items for 3 nodes")
+    for item in items:
+        print("   ", item)
+
+    items = list(graph.stream(START_STATE, stream_mode="values"))
+    print(f"\n--- stream_mode='values'   {len(items)} items for 3 nodes")
+    for item in items:
+        print("   ", item)
 ```
 
 ```
@@ -228,6 +236,7 @@ if __name__ == "__main__":
     {'counts_a_lookup': {'lookups': 1}}
     {'returns_none': None}
     {'returns_empty': None}
+
 --- stream_mode='values'   2 items for 3 nodes
     {'asked_by': 'reception', 'lookups': 0}
     {'asked_by': 'reception', 'lookups': 1}
@@ -307,7 +316,10 @@ graph = builder.compile()
 
 def bytes_streamed(mode: StreamMode, lookups: int) -> int:
     start: DeskState = {"asked_by": "reception", "lookups_wanted": lookups, "notes": []}
-    return sum(len(json.dumps(item)) for item in graph.stream(start, stream_mode=mode))
+    total = 0
+    for item in graph.stream(start, stream_mode=mode):
+        total += len(json.dumps(item))
+    return total
 
 
 if __name__ == "__main__":
@@ -315,7 +327,8 @@ if __name__ == "__main__":
     for lookups in (3, 10, 20, 40):
         sent_updates = bytes_streamed("updates", lookups)
         sent_values = bytes_streamed("values", lookups)
-        print(f"{lookups:>8} {sent_updates:>10,} {sent_values:>10,} {sent_values / sent_updates:>6.1f}x")
+        ratio = sent_values / sent_updates
+        print(f"{lookups:>8} {sent_updates:>10,} {sent_values:>10,} {ratio:>6.1f}x")
 ```
 
 ### Reading it
@@ -465,3 +478,41 @@ Six intermediate answers existed, half a second apart, each one a complete and s
 The choice is not really about data. It is about which of the two questions your interface is built to ask. A view that redraws itself from whatever the state currently is wants `values` and does not care what changed. A view that appends a line saying looked up Priya wants `updates` and cannot get the node name from `values` at all.
 
 And they are not exclusive — note 1 established that asking for both costs nothing except the item type. In practice most systems take `updates` for the events and reach for `values` only where the accumulated total is genuinely what the screen needs.
+
+---
+
+## `stream` or `astream` makes no difference here
+
+Worth settling before it becomes a background worry, because it changes nothing in this note.
+
+`src/langgraph_lab/note02/g_stream_or_astream.py`:
+
+```python
+import asyncio
+
+from langgraph_lab.note02.a_desk_graph import START_STATE, graph
+
+
+async def collect_async() -> list[object]:
+    return [item async for item in graph.astream(START_STATE, stream_mode=["updates", "values"])]
+
+
+if __name__ == "__main__":
+    from_stream = list(graph.stream(START_STATE, stream_mode=["updates", "values"]))
+    from_astream = asyncio.run(collect_async())
+
+    print(f"stream  gave {len(from_stream)} items")
+    print(f"astream gave {len(from_astream)} items")
+    print(f"identical: {from_stream == from_astream}")
+```
+
+```
+stream  gave 7 items
+astream gave 7 items
+identical: True
+```
+
+Same items, same order, same values. The timings match too, including on a graph with parallel nodes — `astream` running ordinary synchronous node functions still executes them at the same time, because those go to a thread pool rather than the event loop.
+
+> [!tip] Async is not what buys you concurrency
+> A graph of plain `def` nodes parallelises under both. What async actually decides arrives later, when a node calls a model: whether the model produces the incremental output that a different mode exists to intercept. Until then, either call works.

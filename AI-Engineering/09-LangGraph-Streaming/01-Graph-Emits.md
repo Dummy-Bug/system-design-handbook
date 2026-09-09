@@ -319,6 +319,9 @@ if __name__ == "__main__":
 
 Three items, one per lap, each arriving **as its lap ended** rather than after all of them. The same three seconds now has three timestamps in it instead of none.
 
+> [!note] The documentation calls these chunks
+> Same object, different word. This folder says item throughout, because `chunk` is also what `langchain-core` names the fragments a model produces — `AIMessageChunk`, `ToolCallChunk`, `ToolMessageChunk` — and one of those eventually arrives **inside** one of these. Keeping the two words apart is what lets a later note say a message chunk arrived without having to ask which kind was meant.
+
 > [!important] Streaming did not make anything faster
 > Both runs finish just past three seconds. The work is identical, the total is identical, and no lap got quicker. What moved is when the **first** evidence arrives: 3.02s under `invoke`, 1.00s under `stream`. Streaming trades nothing for latency — it converts a wait into a sequence.
 
@@ -396,7 +399,7 @@ if __name__ == "__main__":
     time.sleep(0.5)
     print(f"{time.monotonic() - started:5.2f}s  half a second later, nothing has run")
 
-    print("--- consumed once, then abandoned")
+    print("\n--- consumed once, then abandoned")
     started = time.monotonic()
     for item in graph.stream(START_STATE):
         print(f"{time.monotonic() - started:5.2f}s  got {item}")
@@ -407,6 +410,7 @@ if __name__ == "__main__":
 ```
 --- created but never consumed
  0.51s  half a second later, nothing has run
+
 --- consumed once, then abandoned
          node run_one_lap ran, laps=0
  1.01s  got {'run_one_lap': {'laps': 1}}
@@ -465,10 +469,13 @@ The shape that came back was chosen. Ask the same graph for a different one and 
 from langgraph_lab.note01.b_invoke_is_silent import START_STATE, graph
 
 if __name__ == "__main__":
-    for mode in ("updates", "values"):
-        print(f"--- stream_mode={mode!r}")
-        for item in graph.stream(START_STATE, stream_mode=mode):
-            print("   ", item)
+    print("--- stream_mode='updates'")
+    for item in graph.stream(START_STATE, stream_mode="updates"):
+        print("   ", item)
+
+    print("\n--- stream_mode='values'")
+    for item in graph.stream(START_STATE, stream_mode="values"):
+        print("   ", item)
 ```
 
 ```
@@ -476,6 +483,7 @@ if __name__ == "__main__":
     {'run_one_lap': {'laps': 1}}
     {'run_one_lap': {'laps': 2}}
     {'run_one_lap': {'laps': 3}}
+
 --- stream_mode='values'
     {'laps': 0, 'asked_by': 'reception'}
     {'laps': 1, 'asked_by': 'reception'}
@@ -515,7 +523,7 @@ if __name__ == "__main__":
     for item in graph.stream(START_STATE, stream_mode="updates"):
         print(f"    {type(item).__name__:5}  {item}")
 
-    print("--- two modes, passed as a list")
+    print("\n--- two modes, passed as a list")
     for item in graph.stream(START_STATE, stream_mode=["updates", "values"]):
         print(f"    {type(item).__name__:5}  {item}")
 ```
@@ -525,6 +533,7 @@ if __name__ == "__main__":
     dict   {'run_one_lap': {'laps': 1}}
     dict   {'run_one_lap': {'laps': 2}}
     dict   {'run_one_lap': {'laps': 3}}
+
 --- two modes, passed as a list
     tuple  ('values', {'laps': 0, 'asked_by': 'reception'})
     tuple  ('updates', {'run_one_lap': {'laps': 1}})
