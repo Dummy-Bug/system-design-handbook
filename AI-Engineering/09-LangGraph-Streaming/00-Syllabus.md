@@ -2,7 +2,7 @@
 
 # 09 · LangGraph Streaming — Syllabus
 
-**10 notes, 110 rungs.** Framework-specific by design — this is one library's API, and it is the folder that will rot first.
+**11 notes, 110 rungs.** Framework-specific by design — this is one library's API, and it is the folder that will rot first.
 
 > A rung is the **smallest thing that has to be understood before the next thing makes sense** — a node returns only when it finishes, therefore a slow node emits nothing, therefore progress must be guessed from outside, therefore the node needs its own channel. Rungs are not topics and not section headings. Eight to fifteen of them build one note.
 >
@@ -17,14 +17,14 @@
 >
 > Read in that order. This folder is deliberately the one that ages, so the other two do not have to.
 
-**Two halves, and the lab is the point.** Notes 1 to 6 are non-token streaming — every mode that works whether or not a model is involved — and note 7 runs them all side by side. Notes 8 and 9 are token streaming through the framework, and note 10 runs that. **Notes 8 to 10 assume folder 10 notes 1 to 3**, because `messages` mode cannot be understood before a token is.
+**Two halves, and the lab is the point.** Notes 1 to 7 are non-token streaming — every mode that works whether or not a model is involved — and note 8 runs them all side by side. Notes 9 and 10 are token streaming through the framework, and note 11 runs that. **Notes 9 to 11 assume folder 10 notes 1 to 3**, because `messages` mode cannot be understood before a token is.
 
 > [!important] Version decides the shape of every example here
 > `astream` takes a `version` parameter. It defaults to **v1**, which yields `(mode, data)` tuples. **v2** yields typed `StreamPart` dicts you switch on with `chunk["type"]` — `ValuesStreamPart`, `UpdatesStreamPart` and five more.
 >
-> The parameter **does not exist at all before 1.1.0**, released 2026-03-10. On the whole 1.0 line there is no choice to make and no v2 to reach for, so crossing that boundary adds an option rather than changing a default. **Check your version before running any rung in note 5.**
+> The parameter **does not exist at all before 1.1.0**, released 2026-03-10. On the whole 1.0 line there is no choice to make and no v2 to reach for, so crossing that boundary adds an option rather than changing a default. **Check your version before running any rung in note 6.**
 
-**Currency check (2026-09-09):** written against **langgraph 1.0.10**, which has no `version` parameter at all. Latest is 1.2.11, where it defaults to v1. Verified today against both wheels: `TAG_NOSTREAM` still exists, and `get_stream_writer()` still carries the Python 3.11 restriction in async code. Re-verify whether `version` still defaults to v1 before relying on note 5.
+**Currency check (2026-09-09):** written against **langgraph 1.0.10**, which has no `version` parameter at all. Latest is 1.2.11, where it defaults to v1. Verified today against both wheels: `TAG_NOSTREAM` still exists, and `get_stream_writer()` still carries the Python 3.11 restriction in async code. Re-verify whether `version` still defaults to v1 before relying on note 6.
 
 ---
 
@@ -34,7 +34,7 @@
 
 **This folder is run, not read.** Every mode here produces output you can print. A rung claiming what a mode yields, believed rather than observed, is worth nothing — the shapes differ from the documentation often enough that the run is the source of truth.
 
-**Notes 7 and 10 are labs and are not optional.** They are where the modes stop being a list and become a shape you recognise.
+**Notes 8 and 11 are labs and are not optional.** They are where the modes stop being a list and become a shape you recognise.
 
 **Recall is per note, from memory, file closed.** Recognising an answer does not count.
 
@@ -112,27 +112,38 @@ The graph needs exactly three things and no more: **a node that returns state**,
 
 ## Note 4 · tasks, checkpoints And debug
 
-13 rungs. **Break:** raise an exception inside a node and watch which mode shows it.
+4 rungs. **Break:** stream `checkpoints` on a graph compiled without a checkpointer and count what comes out.
 
 1. `tasks` fires at task start and finish, carrying results and errors.
 2. `checkpoints` fires at checkpoint boundaries, in the same shape `get_state()` returns.
 3. `checkpoints` **requires a checkpointer** and yields nothing whatsoever without one. `tasks` does not — it works on a bare `compile()`.
 4. `debug` combines both and adds metadata, so without a checkpointer it does not fail either — it silently drops to the half it can still produce.
-5. **Break the assumption that these are more of the same** — they are not for the client, they are for you.
-6. An exception inside a node is visible in `tasks` before any error handling has decided what the user sees.
-7. `checkpoints` is what a resumable UI would be built on, because it exposes the same object a resume reads.
-8. A node's output is written the moment that node **returns**, not when the step commits — so a step killed halfway keeps the part that finished, and a resume replays it marked as cached rather than running it again.
-9. **Break the assumption that this is a guarantee** — it is a setting. `durability` defaults to `"async"`, and `"exit"` writes only on a clean finish, so a process that is killed leaves nothing at all behind.
-10. And it only ever protects **return values**: a side effect a node performed before dying is invisible to the checkpoint, so the resume runs that node again from the top and does it twice.
-11. `debug` is a firehose: right for one bug, unusable as a habit, and expensive to leave on.
-12. So the modes split by audience — `values`, `updates`, `messages`, `custom` face the client; `tasks`, `checkpoints`, `debug` face the operator.
-13. Which is also a security line: operator modes carry internal names and payloads that must never be forwarded to a browser.
 
-> **Recall:** Which mode needs a checkpointer, what does it yield without one, and what does `debug` do instead of failing? · Where does a node's exception first become visible? · A step is killed with one of its two nodes finished — what survives, and what must `durability` be for that to hold? · What is the audience split, and why is it also a security boundary?
+> **Recall:** What are the two records `tasks` emits for one node, and what joins them? · Which mode needs a checkpointer, what does it yield without one, and what does `debug` do instead of failing? · What does the `debug` envelope carry that neither of the other two does?
+>
+> **Stop:** This note is the three shapes and nothing else. What the modes are for, where an exception surfaces, and what survives a crash all belong to the next one.
 
 ---
 
-## Note 5 · Combining Modes, And Reading The Chunk
+## Note 5 · Not For The Client
+
+9 rungs. **Break:** raise an exception inside a node and watch which mode shows it.
+
+1. **Break the assumption that these are more of the same** — they are not for the client, they are for you.
+2. An exception inside a node is visible in `tasks` before any error handling has decided what the user sees.
+3. `checkpoints` is what a resumable UI would be built on, because it exposes the same object a resume reads.
+4. A node's output is written the moment that node **returns**, not when the step commits — so a step killed halfway keeps the part that finished, and a resume replays it marked as cached rather than running it again.
+5. **Break the assumption that this is a guarantee** — it is a setting. `durability` defaults to `"async"`, and `"exit"` writes only on a clean finish, so a process that is killed leaves nothing at all behind.
+6. And it only ever protects **return values**: a side effect a node performed before dying is invisible to the checkpoint, so the resume runs that node again from the top and does it twice.
+7. `debug` is a firehose: right for one bug, unusable as a habit, and expensive to leave on.
+8. So the modes split by audience — `values`, `updates`, `messages`, `custom` face the client; `tasks`, `checkpoints`, `debug` face the operator.
+9. Which is also a security line: operator modes carry internal names and payloads that must never be forwarded to a browser.
+
+> **Recall:** Where does a node's exception first become visible? · A step is killed with one of its two nodes finished — what survives, and what must `durability` be for that to hold? · What is the audience split, and why is it also a security boundary?
+
+---
+
+## Note 6 · Combining Modes, And Reading The Chunk
 
 12 rungs. **Break:** request two modes, print the raw item, and see whether it is a tuple or a dict.
 
@@ -153,7 +164,7 @@ The graph needs exactly three things and no more: **a node that returns state**,
 
 ---
 
-## Note 6 · Where The Interrupt Arrives
+## Note 7 · Where The Interrupt Arrives
 
 10 rungs. **Break:** interrupt a graph, print the raw chunk, and look for where it landed.
 
@@ -172,7 +183,7 @@ The graph needs exactly three things and no more: **a node that returns state**,
 
 ---
 
-## Note 7 · Lab — Every Mode, Side By Side
+## Note 8 · Lab — Every Mode, Side By Side
 
 10 rungs. **This note is entirely a run.** One script, one graph, one question, seven printed outputs.
 
@@ -191,7 +202,7 @@ The graph needs exactly three things and no more: **a node that returns state**,
 
 ---
 
-## Note 8 · messages Mode
+## Note 9 · messages Mode
 
 13 rungs. Assumes folder 10 notes 1 to 3. **Break:** point the node at a non-streaming model call and watch the mode go quiet.
 
@@ -213,7 +224,7 @@ The graph needs exactly three things and no more: **a node that returns state**,
 
 ---
 
-## Note 9 · astream Versus astream_events
+## Note 10 · astream Versus astream_events
 
 10 rungs. Judgement — defend the choice, do not recall it.
 
@@ -232,20 +243,20 @@ The graph needs exactly three things and no more: **a node that returns state**,
 
 ---
 
-## Note 10 · Lab — Tokens Through The Graph
+## Note 11 · Lab — Tokens Through The Graph
 
-11 rungs. **This note is entirely a run**, and it is where notes 8 and folder 10 meet.
+11 rungs. **This note is entirely a run**, and it is where notes 9 and folder 10 meet.
 
 1. Point the model node at the streaming call. Confirm `messages` produces many items rather than one.
 2. Count items against the reported output-token count. They will not match.
 3. Print `type(msg).__name__` for every item and find the one that is not a chunk.
 4. Sum the text of the fragments, then compare against the length of that non-chunk item. Equal means you have found the duplicate.
 5. Add a tool call and watch `ToolMessage` arrive on the same channel.
-6. Apply the conjunction filter from note 8 rung 10 and confirm all three exclusions at once.
+6. Apply the conjunction filter from note 9 rung 10 and confirm all three exclusions at once.
 7. Fold the fragments into one message, then check `type(...)` and the message-kind field on the result.
 8. Check `usage_metadata` on the folded result. If you rebuilt the message, check it again.
 9. Request `["updates", "messages"]` together and confirm the ordering: every fragment for a node arrives before that node's update.
-10. Trigger the interrupt with both modes on and confirm it still arrives where note 6 says.
+10. Trigger the interrupt with both modes on and confirm it still arrives where note 7 says.
 11. Write down the item count, the number of copies of the answer, and the ordering rule. **That is the note.**
 
 > **Recall:** How many copies of the answer exist and on which channels? · What does the fold return, and what is wrong with it? · What ordering does a node's update have relative to its fragments?
@@ -254,20 +265,21 @@ The graph needs exactly three things and no more: **a node that returns state**,
 
 ## Coverage
 
-None written yet. Note files will be numbered to match this list — note 3 becomes `03-Custom-Channel.md`.
+None written yet. Note files are numbered to match this list — note 3 is `03-Custom-Channel.md`.
 
 | Note | Rungs | Written |
 |---|---|---|
 | 1 · The Graph Does Not Return, It Emits | 10 | **yes** |
 | 2 · values And updates | 11 | **yes** |
 | 3 · custom, The Channel You Control | 10 | **yes** |
-| 4 · tasks, checkpoints And debug | 13 | in progress |
-| 5 · Combining Modes, And Reading The Chunk | 12 | no |
-| 6 · Where The Interrupt Arrives | 10 | no |
-| 7 · Lab — Every Mode, Side By Side | 10 | no |
-| 8 · messages Mode | 13 | no |
-| 9 · astream Versus astream_events | 10 | no |
-| 10 · Lab — Tokens Through The Graph | 11 | no |
+| 4 · tasks, checkpoints And debug | 4 | **yes** |
+| 5 · Not For The Client | 9 | no |
+| 6 · Combining Modes, And Reading The Chunk | 12 | no |
+| 7 · Where The Interrupt Arrives | 10 | no |
+| 8 · Lab — Every Mode, Side By Side | 10 | no |
+| 9 · messages Mode | 13 | no |
+| 10 · astream Versus astream_events | 10 | no |
+| 11 · Lab — Tokens Through The Graph | 11 | no |
 
 ---
 
@@ -288,15 +300,15 @@ None written yet. Note files will be numbered to match this list — note 3 beco
 
 The admin agent ran on `stream_mode="updates"` alone from the beginning, which is note 2 rung 10 exactly — whole messages, and a fake typing animation in front of them to make it look otherwise.
 
-**Note 8 is the expensive one.** The node called the non-streaming method, so `messages` mode would have yielded a single item and the honest conclusion would have been that token streaming does not work in this framework. Rung 3 is that mistake, avoided by reading the provider adapter first.
+**Note 9 is the expensive one.** The node called the non-streaming method, so `messages` mode would have yielded a single item and the honest conclusion would have been that token streaming does not work in this framework. Rung 3 is that mistake, avoided by reading the provider adapter first.
 
-**Note 8 rungs 8 to 10 were paid for in production code.** The answer arrived three times — fragments, then the republished complete message on the same channel, then a third copy through `updates`. The conjunction filter is what fixed it.
+**Note 9 rungs 8 to 10 were paid for in production code.** The answer arrived three times — fragments, then the republished complete message on the same channel, then a third copy through `updates`. The conjunction filter is what fixed it.
 
 **Note 3 is unbuilt and should be.** Progress is still synthesised from tool names in `sse_events.py` rather than emitted by the node that knows. `get_stream_writer()` is the correct home for the status vocabulary already specified in `Current-Standing/TODO/03-Stream-Contract.md`.
 
-**Note 6 rung 7 was verified rather than trusted**, because the disambiguation interrupt is the most distinctive behaviour in the system and a missed one is indistinguishable from a hang.
+**Note 7 rung 7 was verified rather than trusted**, because the disambiguation interrupt is the most distinctive behaviour in the system and a missed one is indistinguishable from a hang.
 
-**Note 5 is the upgrade.** The stack is 1.0.10, which has no `version` parameter, so the loop unpacks tuples because nothing else is on offer. Moving to 1.2.11 makes v2 available, changing that loop and nothing else, which is recorded in `Current-Standing/TODO/05-Streaming-Build.md` phase 1.
+**Note 6 is the upgrade.** The stack is 1.0.10, which has no `version` parameter, so the loop unpacks tuples because nothing else is on offer. Moving to 1.2.11 makes v2 available, changing that loop and nothing else, which is recorded in `Current-Standing/TODO/05-Streaming-Build.md` phase 1.
 
 ---
 
@@ -304,9 +316,9 @@ The admin agent ran on `stream_mode="updates"` alone from the beginning, which i
 
 The one that separates people who have used it from people who have read about it: **how do you show progress from inside a node that takes eight seconds** (note 3, and the answer is a writer, not a heuristic over tool names).
 
-The one that catches everybody: **if you turn on two stream modes, how many times does the answer arrive** (note 8, and the answer is three).
+The one that catches everybody: **if you turn on two stream modes, how many times does the answer arrive** (note 9, and the answer is three).
 
-The design question: **when would you use `astream_events` over `astream`** (note 9, and a good answer includes that the choice has a shelf life).
+The design question: **when would you use `astream_events` over `astream`** (note 10, and a good answer includes that the choice has a shelf life).
 
 ---
 
@@ -316,4 +328,4 @@ The design question: **when would you use `astream_events` over `astream`** (not
 - [LangGraph `astream` reference](https://reference.langchain.com/python/langgraph/pregel/main/Pregel/astream)
 - [`astream_events` reference](https://reference.langchain.com/python/langchain-core/runnables/base/Runnable/astream_events)
 - [LangGraph 1.0 general availability](https://changelog.langchain.com/announcements/langgraph-1-0-is-now-generally-available) for the version boundaries
-- [Issue 4853 — tool call name and id across chunks](https://github.com/langchain-ai/langgraph/issues/4853) for note 8 rungs 11 and 12
+- [Issue 4853 — tool call name and id across chunks](https://github.com/langchain-ai/langgraph/issues/4853) for note 9 rungs 11 and 12

@@ -299,13 +299,9 @@ That is the whole reason the object exists in this shape — **it is not a recor
 
 ## Nearly the object `get_state` returns
 
-`get_state(CONFIG)` asks the checkpointer for the **latest snapshot on a thread** — the same thing a resume reads. So the streamed item and the fetched one should be the same object, and the file above tests it rather than assuming it. The remaining two blocks of that same run:
+`get_state(CONFIG)` asks the checkpointer for the **latest snapshot on a thread** — the same thing a resume reads. So the streamed item and the fetched one should be the same object, and the file above tests it rather than assuming it, field by field:
 
 ```
---- the container is not the same container
-    from the stream: dict
-    from get_state:  StateSnapshot
-
 --- field by field, last checkpoint against get_state()
     values         identical: True
     config         identical: True
@@ -325,6 +321,14 @@ That is the whole reason the object exists in this shape — **it is not a recor
 | `tasks` | `[]` | `()` | list against tuple |
 | `created_at` | absent | a timestamp | the stream does not carry it |
 | `interrupts` | absent | `()` | the stream does not carry it |
+
+That accounts for the fields. **The container they arrive in is a separate difference**, and the same run reports it:
+
+```
+--- the container is not the same container
+    from the stream: dict
+    from get_state:  StateSnapshot
+```
 
 > [!failure] Same fields, different container, and only one of them takes a dot
 > **`get_state` returns a `StateSnapshot`, so `snapshot.values` is how you read it.** A streamed checkpoint is a plain `dict`, so that same line raises `AttributeError` and the working one is `item["values"]`.
@@ -418,10 +422,6 @@ if __name__ == "__main__":
 --- a checkpointer and a thread_id
         look_up_priya really ran
     3 items
-
---- tasks, on the graph with no checkpointer
-        look_up_priya really ran
-    2 items
 ```
 
 | What the call had | `checkpoints` yields |
@@ -433,7 +433,15 @@ if __name__ == "__main__":
 
 **A `thread_id` on its own does nothing.** The first two rows are identical, because the config key only matters once there is a checkpointer for it to address.
 
-**And `tasks` needs no checkpointer of its own.** The last block runs it on the graph that has none and gets its usual two items, the same count it produces on the graph that has one.
+**And `tasks` needs no checkpointer of its own.** The last block of the file runs it on the graph that has none:
+
+```
+--- tasks, on the graph with no checkpointer
+        look_up_priya really ran
+    2 items
+```
+
+Two items — the same count it produces on the graph that has one.
 
 ## One requirement shouts and the other whispers
 
