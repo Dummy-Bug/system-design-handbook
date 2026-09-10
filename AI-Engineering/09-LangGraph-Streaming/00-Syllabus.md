@@ -2,7 +2,7 @@
 
 # 09 · LangGraph Streaming — Syllabus
 
-**11 notes, 110 rungs.** Framework-specific by design — this is one library's API, and it is the folder that will rot first.
+**11 notes, 111 rungs.** Framework-specific by design — this is one library's API, and it is the folder that will rot first.
 
 > A rung is the **smallest thing that has to be understood before the next thing makes sense** — a node returns only when it finishes, therefore a slow node emits nothing, therefore progress must be guessed from outside, therefore the node needs its own channel. Rungs are not topics and not section headings. Eight to fifteen of them build one note.
 >
@@ -12,7 +12,7 @@
 > | Folder | What it owns | Shelf life |
 > |---|---|---|
 > | [[../08-Streaming-And-SSE/00-Syllabus\|08 · Streaming and SSE]] | the **pipe** — framing, heartbeats, proxies, reconnection | portable, decades old |
-> | **09 · LangGraph Streaming** (this) | the **framework** — modes, writers, chunk shapes, interrupts | perishable, moves every minor release |
+> | **09 · LangGraph Streaming** (this) | the **framework** — modes, writers, item shapes, interrupts | perishable, moves every minor release |
 > | [[../10-Token-Streaming/00-Syllabus\|10 · Token Streaming]] | the **payload** — what a token is, and what streaming costs you | portable, survives a framework swap |
 >
 > Read in that order. This folder is deliberately the one that ages, so the other two do not have to.
@@ -22,9 +22,9 @@
 > [!important] Version decides the shape of every example here
 > `astream` takes a `version` parameter. It defaults to **v1**, which yields `(mode, data)` tuples. **v2** yields typed `StreamPart` dicts you switch on with `chunk["type"]` — `ValuesStreamPart`, `UpdatesStreamPart` and five more.
 >
-> The parameter **does not exist at all before 1.1.0**, released 2026-03-10. On the whole 1.0 line there is no choice to make and no v2 to reach for, so crossing that boundary adds an option rather than changing a default. **Check your version before running any rung in note 6.**
+> The parameter **does not exist at all before 1.1.0**, released 2026-03-10. On the whole 1.0 line there is no choice to make and no v2 to reach for, so crossing that boundary adds an option rather than changing a default. **This is why the shape material is not taught in note 6** — none of it can be run on the installed stack, so it waits for the upgrade and gets its own note there.
 
-**Currency check (2026-09-09):** written against **langgraph 1.0.10**, which has no `version` parameter at all. Latest is 1.2.11, where it defaults to v1. Verified today against both wheels: `TAG_NOSTREAM` still exists, and `get_stream_writer()` still carries the Python 3.11 restriction in async code. Re-verify whether `version` still defaults to v1 before relying on note 6.
+**Currency check (2026-09-09):** written against **langgraph 1.0.10**, which has no `version` parameter at all. Latest is 1.2.11, where it defaults to v1. Verified today against both wheels: `TAG_NOSTREAM` still exists, and `get_stream_writer()` still carries the Python 3.11 restriction in async code. Re-verify whether `version` still defaults to v1 when the upgrade note is written.
 
 ---
 
@@ -143,60 +143,67 @@ The graph needs exactly three things and no more: **a node that returns state**,
 
 ---
 
-## Note 6 · Combining Modes, And Reading The Chunk
+## Note 6 · Combining Modes, And Reading The Item
 
-12 rungs. **Break:** request two modes, print the raw item, and see whether it is a tuple or a dict.
+9 rungs. **Break:** request two modes, print the raw item, and see whether it is a dict or a tuple.
 
-1. `stream_mode` accepts a list, and every item comes back tagged.
-2. In **v1** each item is a `(mode, data)` tuple, unpacked positionally.
-3. In **v2** each item is a `StreamPart` dict — `{"type", "ns", "data"}` — switched on by `chunk["type"]`.
-4. **Break your consumer** — the loop is written differently for each, and `version` defaults to v1, so the shape depends on a choice you may never have made, or on one your version does not offer.
-5. Which means an upgrade can change the streaming loop while nothing else in the code moves.
-6. `ns` is the namespace: an empty tuple means the root graph.
-7. A graph can contain subgraphs, and by default their interior is invisible.
-8. **Break it** — a subgraph doing all the work streams nothing, and the parent looks like it hangs.
-9. `subgraphs=True` includes them, and `ns` identifies which one, as a tuple of node and task id.
-10. Combining modes is additive, never merged: two modes produce two independent series of items interleaved in time.
-11. So requesting more modes never changes what an existing mode yields — which is what makes adding one a safe change.
-12. Therefore the migration shape is always the same: add the new mode, ignore it, then start using it.
+1. `stream_mode` accepts a list, and every item comes back tagged — a list of **one** already changes the shape, so it is the brackets and not the count that does it.
+2. **Break your consumer** — string against list is not a mode change, and the same typo raises on `updates` while unpacking silently on `values`, because one is keyed by node and the other by state field.
+3. A graph can contain another compiled graph, wired in as an ordinary node.
+4. **Break it** — the subgraph does all the work and streams one item named after the node it is wired in as, so its interior is invisible from outside.
+5. `subgraphs=True` includes that interior, prefixing every item with a namespace.
+6. The namespace is a tuple — `()` is the root graph, `('lookup:<task id>',)` is the node the subgraph is running under.
+7. So an item's arity is decided by two independent flags: one element, two, or three, and neither flag mentions the other in its own documentation.
+8. Combining modes is additive, never merged: two modes produce two independent series of items interleaved in time, each series exactly what it would have been alone.
+9. So requesting more modes never changes what an existing mode yields, which makes the migration shape always the same — add the new mode, ignore it, then start using it.
 
-> **Recall:** What are the two chunk shapes and which version gives which? · What is invisible without `subgraphs=True`, and what does it look like from outside? · Why is adding a mode a safe change?
+> **Recall:** Why does a list of one mode change the item shape? · What is invisible without `subgraphs=True`, and what does it look like from outside? · Why is adding a mode a safe change?
+
+> [!note] The v1 and v2 item shapes are deliberately not here
+> An earlier draft of this note taught the `(mode, data)` tuple against the `StreamPart` dict, switched on by a `version` parameter. The installed stack is 1.0.10, which has no `version` parameter and no `StreamPart` anywhere in the package, so none of it could be run. It moves to its own note, written alongside the Xarvis LangGraph upgrade, where the change is real and testable rather than described.
 
 ---
 
 ## Note 7 · Where The Interrupt Arrives
 
-10 rungs. **Break:** interrupt a graph, print the raw chunk, and look for where it landed.
+13 rungs. **Break:** interrupt a graph, print the raw item, and look for where it landed.
 
 1. An interrupt pauses the graph **inside** a node, before it has returned.
-2. It is not an exception and not a return value, so neither error handling nor node output will show it.
-3. In **v1** it surfaces in `updates` under the key `__interrupt__`.
-4. **Break the node-name consumer** — code that reads the first key as a node name sees `__interrupt__` as if it were one.
-5. In **v2** it moves, arriving in `values` under an `interrupts` field.
-6. So the interrupt is the single most version-sensitive thing in this folder, and it is also the most valuable to get right.
-7. Requesting several modes does **not** change where it arrives — worth verifying rather than trusting, because a missed interrupt looks like a hung stream.
-8. Once it arrives, **the stream ends**. Nothing further comes down that connection.
-9. Resuming is a new run with a resume command, producing a new stream from the start.
-10. So a paused turn is two streams rather than one interrupted stream, and any per-stream counter starts again.
+2. It is not a return value, and the exception it does raise never reaches the caller — so neither error handling nor node output will show it.
+3. **Break it from inside the node** — `GraphInterrupt` inherits from `Exception`, so a defensive `except Exception` around the `interrupt()` call swallows the pause and completes the turn with a wrong answer and no symptom.
+4. It surfaces in `updates` under the key `__interrupt__`, as an item of its own.
+5. **Break the node-name consumer** — code that reads the first key as a node name sees `__interrupt__` as if it were one, and the payload under it is a tuple rather than an update dict.
+6. It arrives in `values` too, under the same key, but riding on a state item rather than alone — so the key is stable across modes and the shape around it is not.
+7. The payload is a **tuple** of `Interrupt` objects, each carrying `.value` and `.id`, so reaching the question a node asked is two unwrappings deep and neither is suggested by the key.
+8. Requesting several modes does not move it — it arrives in **every** mode that carries it, twice over for `updates` plus `values`, with one shared `.id` that is the only way to dedupe.
+9. Once it arrives, **the stream ends**, while the graph still has a pending task — so the interrupt item is the only thing distinguishing a pause from a completed turn.
+10. Resuming is a new run with a resume command, and it does not replay: the new stream picks up at the pending node.
+11. So a paused turn is two streams rather than one interrupted stream, and every per-stream quantity starts again.
+12. **Break the tuple intuition** — two nodes interrupting in the same step produce **two items of length 1**, not one item of length 2.
+13. And with two pending, `Command(resume=value)` **raises**: the answers must be a map from interrupt id to value, which is what `.id` is really for.
 
-> **Recall:** Why do neither error handling nor node output reveal an interrupt? · Where does it arrive in v1, and in v2? · What happens to the stream after it, and what does that mean for a resume?
+> **Recall:** Why do neither error handling nor node output reveal an interrupt? · What key does it arrive under, and how does its shape differ between `updates` and `values`? · What are the two jobs `.id` does, and which one is mandatory?
+
+> [!note] The `interrupts` field is not part of this note either
+> An earlier draft had the interrupt moving to a `values` field named `interrupts` under a v2 item shape. Measured on 1.0.10, it is already in `values`, under `__interrupt__`, the same key `updates` uses — nothing moved and no `interrupts` field exists here. Whatever the later versions do with it belongs in the upgrade note, alongside the v1 and v2 shapes cut from note 6.
 
 ---
 
 ## Note 8 · Lab — Every Mode, Side By Side
 
-10 rungs. **This note is entirely a run.** One script, one graph, one question, seven printed outputs.
+11 rungs. **This note is entirely a run.** One graph held still, five questions, six modes, five tables.
 
-1. Build the three-node graph — state node, model node, interrupt node.
-2. Run it seven times, once per mode, printing every item raw and unmodified.
-3. Record, per mode: how many items, when the first arrives, and the shape of one item.
-4. Confirm `values` grows and `updates` does not.
-5. Confirm both are silent while a node with a sleep is running, and that `custom` is not.
-6. Confirm `tasks` and `checkpoints` yield nothing without a checkpointer, then add one and confirm they do.
-7. Raise inside a node; find which modes carry it and which stay silent.
-8. Request `["updates", "custom"]` and confirm each item is tagged and neither series is altered.
-9. Add a subgraph, run without `subgraphs=True`, then with it, and compare.
-10. Write the seven shapes down in one table. **That table is the note.**
+1. One graph, three nodes, half a second of work each, writer calls in the first and third — the value of the note is entirely in the controls.
+2. Run it once per mode and record items, first arrival, last arrival and bytes.
+3. `updates` is the **only** mode silent while the first node works; every other mode has something on the wire before any node returns.
+4. The cost order is the reverse of the usefulness order on a screen — `custom` is the cheapest at 102 bytes and the only mode carrying words written for a human.
+5. Every item is a `dict`, and the keys are the mode: three keyed by names you chose, three keyed by the framework.
+6. `checkpoints` yields **zero** without a checkpointer and `debug` silently halves; `tasks`, `values`, `updates` and `custom` need nothing.
+7. **Break every mode at once** — a node throws, and not one of the six carries the error.
+8. Set a `step_timeout` and only `tasks` and `debug` gain the error record; no client mode ever does.
+9. Every mode loses items at a subgraph boundary, `custom` most starkly at zero against one.
+10. Write it all down in one table. **That table is the note.**
+11. `messages` is the seventh mode and the one this note cannot measure, because it yields nothing unless a node calls a model.
 
 > **Recall:** From the table alone, name the mode for: a progress bar · a resumable UI · reacting to one node · debugging a node that throws.
 
@@ -265,7 +272,7 @@ The graph needs exactly three things and no more: **a node that returns state**,
 
 ## Coverage
 
-None written yet. Note files are numbered to match this list — note 3 is `03-Custom-Channel.md`.
+Note files are numbered to match this list — note 3 is `03-Custom-Channel.md`.
 
 | Note | Rungs | Written |
 |---|---|---|
@@ -274,9 +281,9 @@ None written yet. Note files are numbered to match this list — note 3 is `03-C
 | 3 · custom, The Channel You Control | 10 | **yes** |
 | 4 · tasks, checkpoints And debug | 4 | **yes** |
 | 5 · Not For The Client | 9 | **yes** |
-| 6 · Combining Modes, And Reading The Chunk | 12 | no |
-| 7 · Where The Interrupt Arrives | 10 | no |
-| 8 · Lab — Every Mode, Side By Side | 10 | no |
+| 6 · Combining Modes, And Reading The Item | 9 | **yes** |
+| 7 · Where The Interrupt Arrives | 13 | **yes** |
+| 8 · Lab — Every Mode, Side By Side | 11 | **yes** |
 | 9 · messages Mode | 13 | no |
 | 10 · astream Versus astream_events | 10 | no |
 | 11 · Lab — Tokens Through The Graph | 11 | no |
@@ -306,9 +313,11 @@ The admin agent ran on `stream_mode="updates"` alone from the beginning, which i
 
 **Note 3 is unbuilt and should be.** Progress is still synthesised from tool names in `sse_events.py` rather than emitted by the node that knows. `get_stream_writer()` is the correct home for the status vocabulary already specified in `Current-Standing/TODO/03-Stream-Contract.md`.
 
-**Note 7 rung 7 was verified rather than trusted**, because the disambiguation interrupt is the most distinctive behaviour in the system and a missed one is indistinguishable from a hang.
+**Note 7 rung 5 is already paid for in the onboarding driver.** `_graph_driver` unwraps the payload with `isinstance(raw_interrupt, (list, tuple))` and then `hasattr(raw_interrupt, "value")` — two guards that are exactly the tuple and the `Interrupt` object, written by someone who met them the hard way rather than from the docs.
 
-**Note 6 is the upgrade.** The stack is 1.0.10, which has no `version` parameter, so the loop unpacks tuples because nothing else is on offer. Moving to 1.2.11 makes v2 available, changing that loop and nothing else, which is recorded in `Current-Standing/TODO/05-Streaming-Build.md` phase 1.
+**Note 7 rung 3 is an open question there.** Any node that calls `interrupt()` inside a broad `except Exception` swallows the pause, and the turn completes with no symptom. Worth a grep during the upgrade session rather than an assumption.
+
+**The upgrade gets its own note, written when it happens.** The stack is 1.0.10, so the loop unpacks tuples because nothing else is on offer, and the v2 item shape cannot be demonstrated on anything installed here. Moving the version is recorded in `Current-Standing/TODO/05-Streaming-Build.md` phase 1, and the note comes with it.
 
 ---
 
