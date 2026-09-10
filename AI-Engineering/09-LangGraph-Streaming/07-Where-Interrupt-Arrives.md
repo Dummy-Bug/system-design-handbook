@@ -738,14 +738,7 @@ Both arrive before the stream ends, so a consumer that stops reading at the firs
     RuntimeError: When there are multiple pending interrupts, you must specify the interrupt id when resuming.
 ```
 
-**`Command(resume=value)` raises.** The form that has worked in every earlier section is refused, because a bare value cannot say which question it answers. `_loop.py` checks the count and gives up rather than guessing:
-
-```python
-if len(self._pending_interrupts()) > 1:
-    raise RuntimeError(
-        "When there are multiple pending interrupts, you must specify the interrupt id when resuming. "
-    )
-```
+**`Command(resume=value)` raises.** The form that has worked in every earlier section is refused, and the refusal is deliberate rather than a missing feature — a bare value cannot say which of the two questions it answers, so the count is checked and the run gives up rather than guessing.
 
 The answers have to be addressed, which means reading the pending ids off the state:
 
@@ -765,15 +758,6 @@ One call, two nodes resumed, each with its own answer.
 > [!important] This is what `.id` is actually for
 > Deduplicating two copies of one interrupt is the incidental use. The load-bearing one is this: with more than one pause outstanding, the id is the only thing that connects an answer to the question it answers, and there is no positional or node-name alternative.
 
-The two shapes are told apart by the keys, not by a flag. `_loop.py` treats a dict as a resume map only when every key is a hash of the right form:
-
-```python
-if resume_is_map := (
-    isinstance(resume, dict)
-    and all(is_xxh3_128_hexdigest(k) for k in resume)
-):
-```
-
-So a dict that is someone's answer to a single question still resumes as a plain value, because its keys are not interrupt ids. The two cases never collide, and neither one needs to declare itself.
+The two shapes are told apart by the keys themselves, not by a flag you set. A dict counts as a map of answers only when **every** key looks like an interrupt id, so a dict that is somebody's answer to a single question still resumes as a plain value. The two cases never collide, and neither one has to declare itself.
 
 **Which means an interrupt consumer has two modes of operation, decided by a count it does not control.** One pending pause and a bare value works; two and the same code raises at the top of the next run, before any node executes. A graph that gains a parallel branch acquires that behaviour without a single line of the streaming code changing.

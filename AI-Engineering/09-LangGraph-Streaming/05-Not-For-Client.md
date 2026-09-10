@@ -320,27 +320,13 @@ So the `error` field — the entire reason to reach for this mode when something
 | was alone, with a `step_timeout` set | the same — both records |
 | was alone, with no `step_timeout` | start record only, naming it and its input |
 
-The cause is a shortcut inside the runner, and it is worth knowing because nothing about it is documented as a behaviour difference.
+The cause is a shortcut, and it is worth knowing because nothing about it is documented as a behaviour difference.
 
-**Running a step normally means handing every node to a thread pool and then sitting in a wait loop**, taking each result as it lands. `langgraph/pregel/_runner.py` says what it does with them:
+**Normally a step hands every node to a thread pool and then waits, taking each result as it lands and reporting it.** A task that finishes by raising is still a task that finished, so its record goes out, and the exception is re-raised afterwards.
 
-```python
-# execute tasks, and wait for one to fail or all to finish.
-# each task is independent from all other concurrent tasks
-# yield updates/debug output as each task finishes
-```
+**With exactly one node and no step timeout, all of that machinery is waste, so it is skipped.** The node is called directly, and on failure the error is recorded and raised immediately — before anything turns that record into a stream item.
 
-Output goes out **as each task finishes**, and a task that finishes by raising is still a task that finished. **So its record is emitted**, and the exception is re-raised afterwards.
-
-**With exactly one node and no step timeout, all of that machinery is waste, so it is skipped:**
-
-```python
-elif len(tasks) == 1 and timeout is None and get_waiter is None:
-```
-
-That branch calls the function directly, **and on failure it records the error and raises immediately** — before anything turns that record into a stream item.
-
-The condition is testable. Setting a step timeout disqualifies the shortcut, and on the same graph with the same failure the record comes back:
+That is a claim with a test attached, and the test is the second condition: setting a step timeout disqualifies the shortcut. Same graph, same failure, one attribute:
 
 `src/langgraph_lab/note05/c_the_fast_path.py`:
 

@@ -2,7 +2,7 @@
 
 # 09 · LangGraph Streaming — Syllabus
 
-**11 notes, 111 rungs.** Framework-specific by design — this is one library's API, and it is the folder that will rot first.
+**11 notes, 114 rungs.** Framework-specific by design — this is one library's API, and it is the folder that will rot first.
 
 > A rung is the **smallest thing that has to be understood before the next thing makes sense** — a node returns only when it finishes, therefore a slow node emits nothing, therefore progress must be guessed from outside, therefore the node needs its own channel. Rungs are not topics and not section headings. Eight to fifteen of them build one note.
 >
@@ -211,40 +211,42 @@ The graph needs exactly three things and no more: **a node that returns state**,
 
 ## Note 9 · messages Mode
 
-13 rungs. Assumes folder 10 notes 1 to 3. **Break:** point the node at a non-streaming model call and watch the mode go quiet.
+13 rungs. Needs a provider. **Break:** point the node at a model with streaming disabled and watch the mode collapse to one item.
 
-1. `messages` yields 2-tuples of `(message_chunk, metadata)`.
-2. It works by **intercepting model callbacks**, not by reading what a node returned.
-3. **Break it** — a node calling the non-streaming method produces no callbacks, so the mode yields one item containing everything, and looks merely coarse rather than broken.
-4. So `messages` is the only mode whose output depends on how the node calls the model, not on the graph.
-5. `metadata["langgraph_node"]` says which node produced the chunk.
-6. `metadata["tags"]` carries tags set on the model call, so a tag can select or exclude a source.
-7. The `nostream` tag suppresses a call's tokens while the call still runs and still produces output.
-8. **Break the node filter** — filtering on node name alone also admits every `ToolMessage` from the tools node, putting raw internal output in front of the user.
-9. And it admits the complete message the framework republishes on the same channel after the fragments, which renders the answer twice.
-10. So the filter is a conjunction: right node **and** right object type, tested with `isinstance` against the chunk class.
-11. Tool arguments stream too, as `tool_call_chunks`, with name and id complete on the first chunk.
-12. **Break the index assumption** — `index` may be `None` rather than `0`, so grouping fragments by index needs a fallback.
-13. Therefore `messages` is the mode that most rewards printing before believing.
+1. `messages` yields 2-tuples of `(message_chunk, metadata)` — a tuple with a **single** mode requested, unlike every other mode.
+2. The answer is the fragments concatenated in arrival order; no index, no reassembly.
+3. On a reasoning model the first fragments carry **empty** `content`, with the words in `additional_kwargs["reasoning_content"]`.
+4. **Break the assumption that the node decides** — a node calling `invoke` still streams, because requesting the mode attaches a `_StreamingCallbackHandler` and `chat_models.py` checks for exactly that.
+5. **Break it properly** — `disable_streaming=True` on the model yields **one** item, and an `AIMessage` rather than an `AIMessageChunk`, while `updates` is identical either way.
+6. `metadata["langgraph_node"]` says which node, `metadata["tags"]` says which call — 13 keys repeated on every fragment.
+7. The `nostream` tag suppresses a call's fragments at the source while the call still runs and still produces output, which beats filtering at the consumer.
+8. `messages` has a **second source**: the handler also emits node outputs, deduped by message id.
+9. **Break the dedupe** — a node returning a newly built `AIMessage` has an id nothing has seen, so the complete answer is republished and renders twice, invisibly to every other mode.
+10. **Break the node filter** — a `ToolMessage` from the tools node is a message, so raw internal output renders in front of the user.
+11. So the filter is a conjunction: right node **and** right object type, because node name admits the republished message and type admits the wrong node's fragments.
+12. Tool calls arrive here too, and **how** they fragment is the provider's choice — Groq sends one chunk with complete `args` and `index` of `0`.
+13. Therefore accumulate with `+` and read `tool_calls` off the sum, which is correct for one chunk or forty, and never touches `index`.
 
-> **Recall:** Why is `messages` the only mode that depends on how the node calls the model? · What are the two things a node-name filter wrongly admits? · What is complete on the first tool chunk and what streams?
+> **Recall:** Why does asking for the mode change how a node's `invoke` runs? · What are the two things a node-name filter wrongly admits, and why does each defeat a different single condition? · Which parts of this note are LangGraph's and which are the provider's?
 
 ---
 
 ## Note 10 · astream Versus astream_events
 
-10 rungs. Judgement — defend the choice, do not recall it.
+12 rungs. Judgement — defend the choice, do not recall it.
 
-1. There is a second streaming API, and it is not a variant of the first.
-2. `astream` yields the **graph's own views**, selected by mode.
-3. `astream_events` yields **lifecycle events for every runnable** in the run — model starts, tool starts, chain ends.
-4. So one is a small set of curated projections and the other is a firehose you filter.
-5. Token streaming exists in both: `messages` mode, or the `on_chat_model_stream` event.
-6. It takes a `version` of its own, unrelated to `astream`'s and with different values — `v1`, `v2`, and `v3` on newer `langchain-core`. It already defaults to `v2`, so the widely copied `version="v2"` is usually saying nothing.
-7. **Break the late switch** — the two consumers look nothing alike, so choosing wrongly means rewriting rather than adjusting.
-8. The rule of thumb: if the graph's own views answer your question, use `astream`; reach for events only when you need something no mode exposes.
-9. So two different parameters named `version` now sit on the two APIs, taking overlapping values and meaning unrelated things — the kind of collision that makes a wrong answer sound plausible.
-10. Therefore this choice has a shelf life, and the reason for it should be written down where the next person will see it.
+1. There is a second streaming API, and it is not a variant of the first — different method, different shape, different loop.
+2. An `astream` item is a tuple; an event is a **dict of seven keys**, an envelope with `event`, `data` and where it came from.
+3. `astream_events` yields lifecycle events for **every runnable** in the run — measured, 3 `updates` items against **83 events** on one turn.
+4. Everything callable is a runnable, including your conditional edge function, which reports a start and an end.
+5. Both carry the same tokens, and **no line of the consumer survives the move** between them.
+6. **Break the late switch** — the unpacking, the type test and the payload path all differ, so choosing wrongly means rewriting rather than adjusting.
+7. The one thing only events give: a **tool start, by name and arguments, before the tool returns**. No mode exposes that.
+8. The `version` parameter defaults to `v2`, so the widely copied `version="v2"` changes nothing; `v1` warns that it is deprecated.
+9. **Break v3** — it raises on a graph, and the message names `CompiledGraph` as supported while `compile()` hands you a `CompiledStateGraph`.
+10. `stream_events` refuses `v1` and `v2` and points at `v3`, which a graph cannot use, so **on a graph, events are asynchronous or nothing**.
+11. So two parameters named `version` sit on the two APIs, taking values that look alike and meaning unrelated things.
+12. Therefore the choice has a shelf life, and the **reason** for it goes in a comment next to the consumer, naming what the other API could not give.
 
 > **Defend:** Your UI needs tokens, tool starts, and a progress bar. Argue for one API over the other. · You are on 1.0.10 today and 1.2 is coming. Which do you pick, and what do you write down? · Somebody's code passes `version="v2"`. Which API is it calling, and does the argument change anything?
 
@@ -252,21 +254,22 @@ The graph needs exactly three things and no more: **a node that returns state**,
 
 ## Note 11 · Lab — Tokens Through The Graph
 
-11 rungs. **This note is entirely a run**, and it is where notes 9 and folder 10 meet.
+12 rungs. **This note is entirely a run**, and it is where notes 9 and folder 10 meet.
 
-1. Point the model node at the streaming call. Confirm `messages` produces many items rather than one.
-2. Count items against the reported output-token count. They will not match.
-3. Print `type(msg).__name__` for every item and find the one that is not a chunk.
-4. Sum the text of the fragments, then compare against the length of that non-chunk item. Equal means you have found the duplicate.
-5. Add a tool call and watch `ToolMessage` arrive on the same channel.
-6. Apply the conjunction filter from note 9 rung 10 and confirm all three exclusions at once.
-7. Fold the fragments into one message, then check `type(...)` and the message-kind field on the result.
-8. Check `usage_metadata` on the folded result. If you rebuilt the message, check it again.
-9. Request `["updates", "messages"]` together and confirm the ordering: every fragment for a node arrives before that node's update.
-10. Trigger the interrupt with both modes on and confirm it still arrives where note 7 says.
-11. Write down the item count, the number of copies of the answer, and the ordering rule. **That is the note.**
+1. One graph carrying every problem at once — a tool call, a model, a deliberate duplicate.
+2. **Three kinds of object on one channel**: `AIMessageChunk`, `AIMessage`, `ToolMessage`, from two nodes.
+3. Five counts that are all different: items, fragments, fragments with text, characters, billed tokens.
+4. Most fragments carry **no text** — the reasoning pass, billed and invisible, which is why a stream looks slow at the start.
+5. Find a duplicate you did not write: assemble the fragments, compare against every whole message from that node.
+6. Fold the fragments and the result is still an `AIMessageChunk`.
+7. **Break the obvious filter** — `AIMessageChunk` subclasses `AIMessage`, so `isinstance(x, AIMessage)` is `True` for both and discriminates nothing.
+8. **Break the fold** — across two model calls it concatenates strings, turning `finish_reason` into `tool_callsstop` and the model name into itself twice.
+9. A rebuilt `AIMessage` loses `usage_metadata` and `response_metadata`, so cost tracking records nothing and it looks like zero rather than an error.
+10. With both modes on, **every fragment for a node arrives before that node's update**, which makes the update a usable end-of-node marker.
+11. An interrupt with both modes on lands on `updates` and `messages` yields nothing, so interrupt handling cannot live in the fragment consumer.
+12. Write down the copies of the answer and the ordering rule. **That is the note.**
 
-> **Recall:** How many copies of the answer exist and on which channels? · What does the fold return, and what is wrong with it? · What ordering does a node's update have relative to its fragments?
+> **Recall:** How many copies of the answer exist and in what shapes? · What does the fold return, and what are the two things wrong with it? · What ordering does a node's update have relative to its fragments, and why?
 
 ---
 
@@ -284,9 +287,9 @@ Note files are numbered to match this list — note 3 is `03-Custom-Channel.md`.
 | 6 · Combining Modes, And Reading The Item | 9 | **yes** |
 | 7 · Where The Interrupt Arrives | 13 | **yes** |
 | 8 · Lab — Every Mode, Side By Side | 11 | **yes** |
-| 9 · messages Mode | 13 | no |
-| 10 · astream Versus astream_events | 10 | no |
-| 11 · Lab — Tokens Through The Graph | 11 | no |
+| 9 · messages Mode | 13 | **yes** |
+| 10 · astream Versus astream_events | 12 | **yes** |
+| 11 · Lab — Tokens Through The Graph | 12 | **yes** |
 
 ---
 

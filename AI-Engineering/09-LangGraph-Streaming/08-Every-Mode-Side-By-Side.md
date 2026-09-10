@@ -356,8 +356,8 @@ if __name__ == "__main__":
     report("checkpoints", "t5")
     report("debug", "t6")
 
-    # a step_timeout disqualifies the single-task shortcut in _runner.py, so the
-    # failing task is run through the pooled path and gets to report before the raise
+    # a step_timeout rules out the single-node shortcut, so the failing node runs
+    # the long way round and gets to report itself before the exception is raised
     graph.step_timeout = 30
 
     print("\n--- the same graph again, with a step_timeout set")
