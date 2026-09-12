@@ -310,7 +310,7 @@ Note files are numbered to match this list — note 3 is `03-Custom-Channel.md`.
 
 The admin agent ran on `stream_mode="updates"` alone from the beginning, which is note 2 rung 10 exactly — whole messages, and a fake typing animation in front of them to make it look otherwise.
 
-**Note 9 is the expensive one.** The node called the non-streaming method, so `messages` mode would have yielded a single item and the honest conclusion would have been that token streaming does not work in this framework. Rung 3 is that mistake, avoided by reading the provider adapter first.
+**Note 9 rung 4 is the expensive one, and it was learned the hard way twice.** The admin node calls the non-streaming method, and the build doc concluded from that — plus a true reading of the provider, whose two methods share nothing — that `messages` mode could produce no tokens. Measured on 2026-09-10: the check is one layer above the provider and turns purely on whether a handler is attached, so the call streams the moment the mode is requested. A single item on the mode is not evidence either way, because rung 8's second source produces exactly one with no tokens involved.
 
 **Note 9 rungs 8 to 10 were paid for in production code.** The answer arrived three times — fragments, then the republished complete message on the same channel, then a third copy through `updates`. The conjunction filter is what fixed it.
 

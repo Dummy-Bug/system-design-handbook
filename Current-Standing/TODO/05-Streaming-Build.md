@@ -13,7 +13,7 @@ Implementation tasks for [[02-Token-Streaming]] against [[03-Stream-Contract]] �
 
 Read on 2026-09-08 against `src/xarvis/`. Five things change the plan in [[02-Token-Streaming]].
 
-### The node calls `ainvoke`, so there are no tokens to stream
+### The node calls `ainvoke`, and that is enough — requesting the mode is what makes it stream
 
 `orchestration/admin/nodes/chatbot.py` lines 73 to 76:
 
@@ -24,19 +24,27 @@ response = await asyncio.wait_for(
 )
 ```
 
-`stream_mode="messages"` intercepts token callbacks from a streaming model call. `ainvoke` on `langchain-google-genai` calls the non-streaming endpoint, so there is nothing to intercept.
+`ainvoke` does not choose an endpoint by itself. `BaseChatModel._agenerate_with_cache` consults `_should_stream` first and, when the answer is true, iterates `self._astream` and fires `on_llm_new_token` for every chunk, never reaching the provider's `_agenerate` at all. `_should_stream` returns true as soon as a streaming callback handler is attached to the run, and LangGraph's `StreamMessagesHandler` is one. **Requesting `stream_mode=["updates","messages"]` is therefore itself what makes the model stream**, with no change to the node required.
 
-Verified by inspecting `ChatGoogleGenerativeAI` at 4.1.2 rather than assuming it: `_generate`, `_agenerate`, `_stream` and `_astream` are all defined separately on the class, and **`_agenerate` does not delegate to `_astream`**. So `ainvoke` genuinely reaches the non-streaming endpoint and fires no token callbacks.
+Measured on 2026-09-10 against the installed stack, with no API call, by asking `_should_stream` directly:
 
-> [!important] A fake model will tell you the opposite, and it is not lying
-> A graph node calling `ainvoke` on `GenericFakeChatModel` **does** produce token chunks in `messages` mode, because that class implements only `_stream` and the base class aggregates it. Any test harness built on a fake model will therefore show streaming working before a single line of the node has changed.
+| What | Value |
+|---|---|
+| `disable_streaming` | `False`, so the instance-level switch does not fire |
+| `_astream` overridden | `True`, so the not-implemented bail-out does not fire |
+| what `bind_tools` carries down | `['tools']`, which matters only when `disable_streaming` is `"tool_calling"` |
+| `_should_stream(async_api=True)` with LangGraph's handler attached | **True** |
+| the same call with no handler attached | **False** |
+
+> [!important] The earlier reading checked the wrong layer, and that lesson generalises
+> This section previously concluded the opposite, on the evidence that `ChatGoogleGenerativeAI` defines `_generate`, `_agenerate`, `_stream` and `_astream` separately and that `_agenerate` does not delegate to `_astream`. Both facts are true and neither decides the question, because `ainvoke` never calls `_agenerate` directly. The dispatch lives in `BaseChatModel`, one layer above the provider — which is exactly where nobody looks, because the provider is the part that seems to differ between models.
 >
-> Gemini does not work that way. Do not let a green fake-model test stand in for this.
+> The same mistake produced the note that used to sit here about `GenericFakeChatModel`. The fake streams under `messages` mode for the same reason Gemini does, a handler being attached, and not because it implements only `_stream`.
 
-> [!important] The probe in [[02-Token-Streaming]] would have produced a false negative
-> Running `stream_mode=["updates","messages"]` against the graph as it stands yields one message-mode chunk carrying the whole response, which looks identical to what `updates` already gives. The honest conclusion from that probe is that token streaming does not work — and it would be wrong.
+> [!important] One message-mode item does not prove the model did not stream
+> `StreamMessagesHandler` collects from two sources, and its own docstring says so: chat model stream events, and node outputs. A node returning a message produces exactly one message-mode item by itself, with no token callbacks involved anywhere. So an observation of one item carrying the whole response is what both explanations predict, and it settles nothing.
 >
-> The first real change is in the node, not in the streaming service.
+> The end-to-end confirmation is thirty seconds of work: run with `ADMIN_TOKEN_FRAMES=true` and `ADMIN_BUDGET_FIRST_CHUNK_ONLY=false`, and count the `text_delta` frames.
 
 ### The 10-second timeout changes meaning under streaming
 
@@ -72,7 +80,7 @@ Installed, and staying installed. The upgrade is deferred, so these are the vers
 | `langgraph` | **1.0.5** | dual-mode streaming verified working |
 | `langchain` | 1.0.5 | pins `langgraph>=1.0.2,<1.1.0` — the reason the upgrade widens |
 | `langchain-core` | **1.2.6** | `content_blocks` verified present |
-| `langchain-google-genai` | 4.1.2 | `_agenerate` does not delegate to `_astream` — see phase 2 |
+| `langchain-google-genai` | 4.1.2 | streams under `messages` mode without a node change — `disable_streaming` is `False` and `_astream` is overridden |
 | `langgraph-checkpoint` | 3.0.1 | |
 | `langgraph-prebuilt` | 1.0.2 | |
 | `langgraph-sdk` | 0.3.1 | |
@@ -303,19 +311,19 @@ Two of three tool calls carried no model text at all. The Gemini guard is load-b
 
 ---
 
-## Phase 2 — Make the model actually stream
+## Phase 2 — Make the timeout survive streaming
 
-Nothing in this phase touches the streaming service or the wire format. The output of the phase is that tokens exist.
+Nothing in this phase touches the streaming service or the wire format. Tokens already exist the moment phase 5 requests the mode; what does not survive that on its own is the 10 second budget. The output of this phase is a first-chunk timeout instead of a total-generation one.
 
-**2.1** — In `orchestration/admin/nodes/chatbot.py`, add a module-level flag so every change in this phase is switchable without a deploy.
+**2.1** — In `orchestration/admin/nodes/chatbot.py`, add a module-level flag so every change in this phase is switchable without a deploy. Named for what it does: it decides what the timeout is measured against, not whether tokens exist. It was called `ADMIN_STREAM_PRIMARY` until 2026-09-10, which claimed the opposite.
 
 ```python
-STREAM_PRIMARY = os.getenv("ADMIN_STREAM_PRIMARY", "false").lower() == "true"
+BUDGET_FIRST_CHUNK_ONLY = os.getenv("ADMIN_BUDGET_FIRST_CHUNK_ONLY", "false").lower() == "true"
 ```
 
 Default off. Every step below runs behind it.
 
-**2.2** — Add a streaming branch alongside the existing `ainvoke` call. **Do not replace the existing call.** Both paths exist; the flag chooses.
+**2.2** — Add a streaming branch alongside the existing `ainvoke` call. **Do not replace the existing call.** Both paths exist; the flag chooses. The branch is not there to produce tokens, which `ainvoke` produces on its own once the mode is requested — it is there so the timeout can be applied to the first chunk rather than to the whole generation, which task 2.3 does.
 
 The streaming branch consumes `admin_llm.astream(base_window)` and accumulates the chunks with LangChain's chunk addition, which is verified to work: `AIMessageChunk(content="Pri") + AIMessageChunk(content="ya")` gives `'Priya'`.
 
@@ -377,7 +385,7 @@ failure:  chunk count == 1 means the model is still not streaming
 
 **2.9** — With the flag on, verify the **hard-fail** path still returns its constructed `AIMessage`.
 
-**Revert:** set `ADMIN_STREAM_PRIMARY=false`. No code removal needed.
+**Revert:** set `ADMIN_BUDGET_FIRST_CHUNK_ONLY=false`. No code removal needed — but only with `ADMIN_TOKEN_FRAMES` off as well, since tokens reach the browser either way and the whole-generation budget discards answers the user is already watching.
 
 ### Result — 2026-09-08, all nine done
 
@@ -795,7 +803,7 @@ Not part of the same release.
 
 **7.2** — Delete `tool_progress_message()` and `TOOL_PROGRESS_OVERRIDES` from `sse_events.py`.
 
-**7.3** — Remove the `ADMIN_TOKEN_FRAMES` and `ADMIN_STREAM_PRIMARY` flags and the `ainvoke` branch in the node.
+**7.3** — Remove the `ADMIN_TOKEN_FRAMES` and `ADMIN_BUDGET_FIRST_CHUNK_ONLY` flags and the `ainvoke` branch in the node.
 
 **7.4** — Keep the Gemini comment at `admin_streaming_service.py` lines 92 to 95 even though the branch it guards is no longer interesting. It records why the code is ordered as it is.
 

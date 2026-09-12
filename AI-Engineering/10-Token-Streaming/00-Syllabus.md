@@ -21,7 +21,7 @@
 
 **Two halves, trained differently.** Notes 1 through 7 are mechanism — what the model and the framework actually do — and respond to retrieval practice, so the rungs are the recall unit. Notes 8 through 10 are design judgement, and the evidence says retrieval drills do **not** transfer to problem-solving, so they are worked as positions defended against changed constraints rather than recalled.
 
-**Currency check (2026-09-08):** provider chunking is undocumented and changes without notice — the measurements in note 3 are from `gemini-3.6-flash` on 2026-09-08 and must be re-taken rather than trusted. Re-verify before relying on: whether your provider's non-streaming call is implemented separately from its streaming one (note 4), whether reasoning summaries are enabled by default (note 7), and what your framework's accumulated chunk type is called (note 5).
+**Currency check (2026-09-08):** provider chunking is undocumented and changes without notice — the measurements in note 3 are from `gemini-3.6-flash` on 2026-09-08 and must be re-taken rather than trusted. Re-verify before relying on: whether requesting the streaming mode is enough to make your provider's finished-answer call stream, which it was on 2026-09-10 (note 4), whether reasoning summaries are enabled by default (note 7), and what your framework's accumulated chunk type is called (note 5).
 
 ---
 
@@ -107,22 +107,22 @@
 
 ## Note 4 · The Model Is Not The Stream
 
-12 rungs. **Break:** run the probe before changing anything, see one chunk, then make the call stream and see many.
+12 rungs. **Break:** run the probe, see a single item, conclude that token streaming does not work, then find out the call had been streaming the whole time.
 
 1. A client library usually offers two calls — one that returns the finished answer, one that yields it in pieces.
 2. The obvious assumption is that these are the same request with a flag, so either can be adapted into the other.
-3. **Break it** — they frequently hit different endpoints, and the non-streaming one has no tokens to hand out at any layer above it.
-4. So a framework that streams by intercepting token callbacks receives nothing at all when the underlying call was the non-streaming one.
-5. And **nothing fails**. The stream yields a single item containing the whole answer, which is indistinguishable from a working stream with very coarse chunking.
-6. Therefore the first thing to verify is never the transport — it is whether the model call itself is streaming.
-7. Verify it by reading the provider adapter for whether the non-streaming method delegates to the streaming one, or is implemented separately.
-8. **Break the test harness** — a fake model that implements only the streaming method will produce tokens under the non-streaming call too, because the base class aggregates it.
-9. So a green test against a fake proves your harness works and says nothing whatsoever about the provider.
-10. Providers genuinely differ here: some implement the non-streaming path by consuming their own stream, others implement both separately and share nothing.
-11. Which one you have is a five-minute source read that settles the question permanently.
-12. Therefore verify in order — provider adapter, then framework, then transport — because a failure at any of the three looks identical from the browser.
+3. **Break it** — they are two different requests, and for some providers two different endpoints, and only one of them produces anything before the answer is complete.
+4. So a framework that streams by intercepting token callbacks receives nothing at all when the underlying request was the non-streaming one.
+5. And **nothing fails**. The stream yields a single item carrying the whole answer, which is indistinguishable from a working stream with very coarse chunking.
+6. **Break the assumption that your code chose which request was made** — it usually did not. The framework chooses, at call time, and the finished-answer method routes itself to the streaming request whenever anything is listening for tokens.
+7. Which means asking the framework for its streaming mode is itself what makes the model stream, and the call inside your node may not need to change at all.
+8. **Break the provider investigation** — reading whether the provider's finished-answer method delegates to its streaming one answers a question nobody asked. That dispatch lives one layer above the provider, and the provider supplies only two yes-or-no facts: does a streaming method exist on this class, and has streaming been disabled on this instance.
+9. So the whole check collapses to one predicate, which can be asked directly with no API call and no key.
+10. **Break the test harness** — a fake model produces tokens under the finished-answer call for exactly the same reason a real one does, something being attached to listen. A green fake test is not the trap it looks like; the trap is concluding anything about the provider from either result.
+11. Therefore verify in the order the dispatch actually runs — is streaming disabled on this instance, does a streaming method exist, is anything listening — because it is decided in that order and stops at the first no.
+12. And **a single-item stream is not evidence of a non-streaming call**, because a framework that also republishes whole messages returned by nodes produces exactly one item with no tokens involved anywhere. One item is what both explanations predict.
 
-> **Recall:** Why does a framework's streaming mode produce nothing when the model call is non-streaming? · What will a fake model wrongly tell you, and why? · In what order do you verify the three layers, and why that order?
+> **Recall:** Why can a call that returns one finished answer still emit tokens along the way? · What question does reading the provider's adapter fail to answer, and where does the answer actually live? · Why is a stream of exactly one item evidence of nothing?
 >
 > **Stop:** No provider SDK archaeology beyond the one method. You are answering a yes-or-no question, not learning the library.
 
@@ -293,7 +293,7 @@ None written yet. Note files will be numbered to match this list — note 4 beco
 
 Every rung in notes 4, 5 and 6 was paid for on 2026-09-08 while wiring token streaming into the admin agent, and the sequence is in `Current-Standing/TODO/05-Streaming-Build.md`.
 
-**Note 4** is the one that would have wasted a day: the node called the non-streaming method, so the probe would have shown a single chunk and the honest conclusion would have been that token streaming does not work. The provider implements both methods separately and neither delegates. A fake model streamed under the non-streaming call and would have confirmed the wrong answer.
+**Note 4** did waste a day, in the other direction. The build doc concluded that the node's finished-answer call could not stream, having checked that the provider implements both methods separately and neither delegates — a true fact about the wrong layer. Measured on 2026-09-10 with no API call: the predicate that decides it returns true as soon as the framework's streaming handler is attached, so the call had been streaming from the moment the mode was requested, and the node rewrite built on that premise was never needed for tokens. It earns its keep for a different reason, which is where the timeout is measured.
 
 **Note 5** cost two silent bugs. The accumulated fragment is a chunk type whose kind field reads differently, so the streaming service skipped it and the answer vanished with no exception. Then the rebuilt message dropped `usage_metadata`, and every streamed turn reported zero tokens — a number, not a gap.
 
