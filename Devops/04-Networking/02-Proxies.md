@@ -20,9 +20,16 @@ flowchart LR
     P -->|"request, appearing to come<br/>from the proxy"| S["Server on the internet"]
     S -->|"response"| P
     P -->|"response"| C
+    style C fill:#2d333b,color:#fff
+    style P fill:#1f4f7a,color:#fff
+    style S fill:#2d333b,color:#fff
 ```
 
 This is a **forward proxy**, also called a front proxy. The client cannot reach the internet without passing through it.
+
+![[Devops/04-Networking/Images/forward-proxy.png]]
+
+The dashed boundary is the part to hold on to. The proxy is drawn **inside** the **client's own networ**k, and the site being visited is out in the internet beyond it. Everything the user sends leaves that boundary through the proxy and nowhere else.
 
 Notice what each end believes. The server on the internet thinks it is talking to a real client — it never sees the actual one, only the proxy, and the address it sees is the proxy's. The client thinks it is talking to the internet, when it is really talking to its own proxy. Both are half-right, and that is the entire trick.
 
@@ -37,11 +44,15 @@ flowchart LR
     C["Client requests<br/>a blocked site"] --> P{"Forward proxy<br/>checks its rules"}
     P -->|"site is allowed"| NET["Forwarded to the internet"]
     P -->|"site is blocked"| DENY["Access denied<br/>returned to the client"]
+    style C fill:#2d333b,color:#fff
+    style P fill:#1f4f7a,color:#fff
+    style NET fill:#1f6f3f,color:#fff
+    style DENY fill:#7a1f1f,color:#fff
 ```
 
 The request never reaches the internet. Whatever the site is, the answer comes back as access denied, and the server on the far side never learns anyone asked.
 
-> [!info] A forward proxy is optional.
+> [!note] A forward proxy is optional.
 > Not every architecture has one or needs one. It appears where somebody wants control over outbound traffic — a company, a school, a filtered network. Plenty of systems have none at all.
 
 ## Reverse proxy — standing in front of the server
@@ -56,9 +67,16 @@ flowchart LR
         S -->|"response"| RP
     end
     RP -->|"response"| C
+    style C fill:#2d333b,color:#fff
+    style RP fill:#1f4f7a,color:#fff
+    style S fill:#1f6f3f,color:#fff
 ```
 
 The belief structure is the mirror image. The client thinks it is talking to the real server; it is talking to the server's proxy. The server sends its responses to the proxy, and the proxy is responsible for talking to the client.
+
+![[Devops/04-Networking/Images/reverse-proxy.png]]
+
+Compare that with the forward proxy picture above and the only thing that moved is the dashed boundary. There it enclosed the user and their proxy; here it encloses the proxy and the web server. Notice in particular where the domain name is written in each: in the forward proxy picture it names the far-off site the user is trying to reach, and here it names the boundary itself — the proxy and the server together are what the world calls `bookcart.in`.
 
 > [!important] The clean way to hold the difference: a forward proxy belongs to the client's architecture, a reverse proxy belongs to the server's.
 > Draw a box around the client and its proxy — that whole box is what the outside world calls the client. Draw a box around the server and its proxy — that whole box is what the outside world calls the server. Neither box has any business knowing what is inside the other.
@@ -78,21 +96,23 @@ flowchart LR
         P443
         APP["Bookshop application<br/>listening on port 8080"]
     end
+    style C fill:#2d333b,color:#fff
+    style P443 fill:#7a1f1f,color:#fff
+    style APP fill:#3a3a3a,color:#fff
 ```
 
 Nobody claimed `443`, so nothing receives the packet. The application that should have answered is sitting on `8080` with no idea a request happened.
 
-You could deploy the application on `443` directly and skip the problem. That works exactly once. The moment a second application needs to serve HTTPS from the same machine you are stuck again — `443` can be claimed by one listener and one only.
+> You could deploy the application on `443` directly and skip the problem. That works exactly once. The moment a second application needs to serve HTTPS from the same machine you are stuck again — `443` **can be claimed by one listener and one only.**
 
 The reverse proxy is what closes it. It claims `443`, and it rewrites both halves of the destination as it forwards:
 
-| The request arrives as | The proxy forwards it as |
-|---|---|
-| Proxy's address, port `443` | Server's real address, port `8080` |
-| Proxy's address, port `80` | Server's real address, port `8191` |
-| Proxy's address, port `22` | Server's real address, port `9090` |
+| The request arrives as      | The proxy forwards it as                 |
+| --------------------------- | ---------------------------------------- |
+| Proxy's address, port `443` | The bookshop's real address, port `8080` |
+| Proxy's address, port `80`  | The bookshop's real address, port `8080` |
 
-Not just the port — the address too, because the address the client had was the proxy's all along.
+Not just the port — the address too, **because the address the client had was the proxy's all along.** Both public ports are mapped to the same application here, which is the ordinary arrangement: a visitor arriving on plain `80` and a visitor arriving on encrypted `443` both want the bookshop, and the proxy sends both to the one place it is running.
 
 > [!important] One incoming port maps to one application, and there is no way around that.
 > If `443` is mapped to the bookshop, `443` cannot also be mapped to the ticket site on the same machine. The proxy has taken the restriction off the applications and onto itself, but it still exists. Two applications that both genuinely need the same public port need two servers, or they need to be told apart by something other than the port.
@@ -114,7 +134,7 @@ server {
 
 Three directives carry the whole idea. `listen` says which port this block answers on. `location` says which request paths the block applies to, with `/` meaning everything. `proxy_pass` says where to forward them.
 
-> [!info] Why `localhost` in the `proxy_pass` line?
+> [!question] Why `localhost` in the `proxy_pass` line?
 > Because in the ordinary deployment, nginx and the application are on the **same machine**. If you deploy your application on a cloud server and put nginx on that same server, then from nginx's point of view the application is not somewhere across a network — it is right here. `localhost` is a machine's name for itself, so `localhost:8080` means the thing listening on port 8080 on this very machine. Split them across two machines and this line would carry the other machine's address instead.
 
 nginx is also not only a reverse proxy. The same program is routinely configured as a **load balancer**, and it can take on **API gateway** work as well. That is not three products; it is one process doing a different job, or several at once.
@@ -138,5 +158,3 @@ The reverse proxy has bought a clean separation. Applications no longer have to 
 Be clear about the limit, though. In this form the reverse proxy solves an addressing problem and nothing else. It does not make the application faster, it does not make it survive a crash, and it does not help when one machine stops being enough.
 
 It does turn out to have a second job, and a considerably more important one — but that only becomes visible once there is encryption in the picture, because the reverse proxy is where the encryption gets undone.
-
-*Source: class 7 — 2 September 2026, recording part 1; class 8 — 2 September 2026.*

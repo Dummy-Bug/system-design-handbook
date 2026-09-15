@@ -18,6 +18,8 @@
 
 **Where a rung says break, it is run, not read.** Every note has a lab folder in `~/Desktop/projects/config-lab/src/config_lab/`, `note01/` for note 1 and so on, and the point of the lab is that the outputs quoted in the notes are reproducible rather than taken on faith.
 
+**All six notes are written, and this is the method that produced them.** Keep it for the next folder built this way: the rung in the terminal first, the response, then that one section appended — and every output in every note came from a run before it was written.
+
 **This is craft, not recall.** Nobody is going to ask you to recite precedence order. The test of whether it landed is whether the next service you set up has one file that says what it needs and refuses to start when it does not.
 
 ---
@@ -47,11 +49,11 @@ Written up as [[01-Declared-Not-Fetched]].
 12. A value is now findable in four places, checked in order: constructor argument, real environment variable, the `.env` file, the default in the class.
 13. The first match wins and the rest are never consulted.
 14. Ranks 2 and 3 are the pair that matters — a real environment variable beats the file.
-15. `load_dotenv()` moves values from rank 3 to rank 2 by setting them as real environment variables, and within that process it cannot be undone.
+15. `load_dotenv()` moves values from rank 3 to rank 2 by setting them as real environment variables, and within that process it cannot be undone — which is the opposite of what the settings class does, since reading `env_file` fills the object and leaves `os.environ` untouched, so a library looking up its own key there finds nothing until something exports it deliberately.
 16. Once promoted, pointing settings at a different file cannot dislodge them: the other file is rank 3 and loses silently, producing an answer that looks right and is not.
 17. The same ordering is the deploy story — stable settings baked into the image, per-run settings passed in as real environment variables that win without a rebuild.
 
-Rungs 15 and 16 are the `load_dotenv()` promotion, which needs a second environment file — `staging.env` at the lab root.
+Rungs 15 and 16 are the `load_dotenv()` promotion, run by `g_load_dotenv_promotes.py` and `h_the_file_that_loses.py`, which need a second environment file — `staging.env` at the lab root, alongside `.env`. `i_the_file_never_reaches_the_environment.py` is the other half of rung 15: the settings class reading the same file and leaving the environment alone.
 
 > **Recall:** Why is the happy path not an argument for either mechanism? · What does `input_value` tell you that `KeyError` cannot? · Where does the contract live in the by-hand version? · Name the four sources in order. · What exactly does `load_dotenv()` change, and why is it invisible? · Why does rank 2 beating rank 3 make containers work rather than break them?
 
@@ -61,7 +63,7 @@ Rungs 15 and 16 are the `load_dotenv()` promotion, which needs a second environm
 
 Written up as [[02-Names-And-Types]].
 
-8 rungs. **Break:** rename a field and watch the environment variable it reads change with it.
+8 rungs. **Break:** rename a field and watch the environment variable it reads change with it, then pin it with an alias and watch the rename stop mattering.
 
 1. The field name and the environment variable name are two different things, and the library maps between them.
 2. The default map is the field name itself, with case ignored — `JWT_SECRET`, `jwt_secret` and `Jwt_Secret` all match — which means renaming a field silently renames the variable your deployment has to set.
@@ -97,6 +99,8 @@ Written up as [[03-Refuse-To-Start]].
 
 ## Note 4 · Secrets Are Not Config
 
+Written up as [[04-Secrets-Not-Config]].
+
 8 rungs. **Break:** log the whole settings object, then log one secret deliberately, and compare.
 
 1. Configuration and secrets both arrive as environment variables, which is why they get treated as one thing, and their lifecycles are not the same.
@@ -114,6 +118,8 @@ Written up as [[03-Refuse-To-Start]].
 
 ## Note 5 · A Flag Per Capability
 
+Written up as [[05-Flag-Per-Capability]].
+
 8 rungs. **Break:** take a gate written as "not production" and give one non-production environment the feature it was hiding.
 
 1. A service that runs in more than one place needs one setting naming which place, constrained to a fixed set so a typo cannot invent a fifth environment.
@@ -130,6 +136,8 @@ Written up as [[03-Refuse-To-Start]].
 ---
 
 ## Note 6 · Baked In Or Passed In
+
+Written up as [[06-Baked-Or-Passed-In]]. Rungs 1 and 2 were taught inside note 4 and moved here, which is why that note's rung 8 depends on them.
 
 7 rungs. **Break:** change one setting without rebuilding the image.
 
@@ -149,14 +157,18 @@ Written up as [[03-Refuse-To-Start]].
 
 Note files are numbered to match this list — note 3 is `03-Refuse-To-Start.md`.
 
-| Note | Rungs | Break |
-|---|---|---|
-| 1 · Declared, Not Fetched | 17 | two bad settings, count the reports; promote a value, then redirect the file |
-| 2 · Names And Types | 8 | rename a field |
-| 3 · Refuse To Start | 8 | type-correct and impossible |
-| 4 · Secrets Are Not Config | 8 | log the object, then the value |
-| 5 · A Flag Per Capability | 8 | invert a "not prod" gate |
-| 6 · Baked In Or Passed In | 7 | change a setting without rebuilding |
+| Note | Rungs | Sections | Lab files | Break |
+|---|---|---|---|---|
+| 1 · Declared, Not Fetched | 17 | 13 | 9 | two bad settings, count the reports; promote a value, then redirect the file |
+| 2 · Names And Types | 8 | 10 | 10 | rename a field, then pin it with an alias |
+| 3 · Refuse To Start | 8 | 8 | 8 | type-correct and impossible |
+| 4 · Secrets Are Not Config | 8 | 7 | 3 | log the object, then the value |
+| 5 · A Flag Per Capability | 8 | 4 | 3 | invert a "not prod" gate |
+| 6 · Baked In Or Passed In | 7 | 6 | 5 plus two Dockerfiles | change a setting without rebuilding |
+
+**Two notes have sections with no lab file**, and deliberately so: a committed secret cannot be demonstrated without committing one, so note 4 gives the git commands for a throwaway repository instead. Note 6 is run against a real image built from the lab: its first section reads the baked file back out with `docker history` and `docker save`, and its last builds a second image to contrast a startup check against a first-use one.
+
+**Note 4 rung 8 and note 6 overlap by design.** Rung 8 is the mount and the manager, which is about secrets and stays in note 4. The image mechanics it depends on — what a layer is, why a rebuild is the cost of a change — were taught inside note 4 and then moved to note 6, where they are that note's first two rungs.
 
 ---
 
@@ -178,11 +190,27 @@ Note files are numbered to match this list — note 3 is `03-Refuse-To-Start.md`
 
 **The second half of note 1 is the one that was paid for.** The promotion trap invalidated four separate measurements during the migration, each of which looked plausible and was wrong, because an earlier import had already moved one environment's values to rank 2.
 
-**Note 5 is the load-bearing one here.** Three gates were written as `if env not in {"prod"}` on the assumption that production is the most-featured environment, and for the onboarding agent the opposite is true — production is the one deployment without it. That is rung 4 of that note, in this codebase, found by reading rather than by failing.
+**Note 5 is the load-bearing one here.** Three gates were written as `if env not in {"prod"}` on the assumption that production is the most-featured environment, and for the onboarding agent the opposite is true — production is the one deployment without it. That is rungs 3 to 5 of that note, in this codebase, found by reading rather than by failing.
 
 **Note 4 has a live example.** An authorisation code was being logged at INFO on every real handshake, invisible until the field became a secret type and the log line started printing a mask.
 
-**Note 3 maps onto two rules that now refuse at startup:** a storage mode selected with no table name, and a database URL set with no password. Both were previously crashes on first use.
+**Note 2 is the whole naming layer there.** Nearly every field carries a `validation_alias`, one block carries `env_prefix="SESSION_"`, and `_Block` sets `extra="ignore"` — which necessarily switches off the leftover-key net, because each nested block reads the whole `.env` and would otherwise reject every other block's keys. The aliases are therefore the only protection against a rename, exactly as the note says. `_Block` also carried `populate_by_name=True` until it was removed on 2026-09-12, for the reason recorded below.
+
+**Note 3 maps onto three rules that refuse at startup**, checked against the file on 2026-09-12: a storage mode with no table, a database URL with no password, and `SKIP_SESSION_AUTH=true` outside local and dev. The first two were previously crashes on first use; the third could never have crashed at all.
+
+**The checkpointer rule is the note's warning, already avoided.** Its two fields read different families — `CHECKPOINTER_MODE` and `DYNAMODB_TABLE` — and the message names each correctly. The note imagines somebody adding that alias later and leaving the message behind; this file is already in that state and did not.
+
+**`Neo4jSettings` is note 3's last two sections verbatim:** a `configured` property of one comparison, plus the password rule that lets it stay one comparison. Grep confirms the point holds — `.configured` has one call site, `uses_stub_user` has one, and no raw `uri is not None` re-derivation exists anywhere.
+
+**One place the note is ahead of the code.** The `log_level` field rule is `value.upper()` with no `.strip()`, so `LOG_LEVEL=" info "` is refused with a message listing five words that the value looks like it already matches. A one-word fix.
+
+**And one deliberate gap:** nothing catches `ValidationError` or `SettingsError` around the settings load. Every handler in the codebase is request-time. `settings = Settings()` runs at import, so a bad variable is a raw traceback at startup — fine for a container, and worth knowing it is a choice.
+
+**`populate_by_name=True` was removed from `_Block`, 2026-09-12.** It had been reopening every aliased field to its own name, so `TABLE`, `MODE`, `USERNAME`, `PASSWORD` and `DATABASE` — names that platforms and CI systems set for unrelated reasons — could fill `checkpointer.table`, `checkpointer.mode` and the Neo4j credentials. Demonstrated by setting exactly those variables against a copy of the real classes, which switched the checkpointer to dynamodb pointing at someone else's table. The flag exists to allow construction by field name in Python; grep found nothing in `src/` doing that and no test directory at all, so it was pure exposure. Verified after removal by importing the real module with those variables set: `mode=memory`, `table=None`, `username=neo4j`. The documentation's narrow alternative, if a second spelling is ever needed, is `AliasChoices` on the one field that needs it. Written up as the note 2 section [[02-Names-And-Types]] gained the same day.
+
+**What this folder changed there, 2026-09-12.** `DYNAMODB_TABLE` was set in all three environment files while only production ran `dynamodb`, so the two dead copies were deleted — dev and staging, including a commented one in staging that would have been the obvious thing to uncomment. Staging moves to DynamoDB within weeks, and the value it held was production's table name, so the deletion converts a silent collision into a startup refusal: `CHECKPOINTER_MODE=dynamodb requires DYNAMODB_TABLE to be set`, which forces whoever flips the mode to choose a staging-specific name.
+
+**`uses_stub_user` is a second named question**, and its docstring carries what the code cannot: staging is inside that set while `skip_session_auth` excludes staging. Two properties over one `env`, with deliberately different sets — which is note 5's subject.
 
 ---
 

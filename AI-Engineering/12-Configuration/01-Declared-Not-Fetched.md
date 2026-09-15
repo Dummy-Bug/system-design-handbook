@@ -523,6 +523,73 @@ after load_dotenv()
 
 The defence is to have nothing promote values behind your back — no `load_dotenv()` anywhere, and one settings class that reads the file itself, so rank 3 stays rank 3.
 
+## The file never reaches the environment
+
+The section above is about what `load_dotenv()` does. This one is about what the settings class does **not** do, and it is the difference the two mechanisms are built on.
+
+`src/config_lab/note01/i_the_file_never_reaches_the_environment.py`:
+
+```python
+import os
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class SessionSettings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env")
+
+    jwt_secret: str
+    ttl_seconds: int = 900
+
+
+settings = SessionSettings()
+
+print("the object has it            ->", settings.jwt_secret)
+print("os.environ has it            ->", os.environ.get("JWT_SECRET"))
+print("a library reading os.environ ->", os.environ.get("JWT_SECRET"))
+
+os.environ.setdefault("JWT_SECRET", settings.jwt_secret)
+
+print("after exporting it on purpose->", os.environ.get("JWT_SECRET"))
+```
+
+```
+$ uv run python src/config_lab/note01/i_the_file_never_reaches_the_environment.py
+the object has it            -> from-the-dotenv-file
+os.environ has it            -> None
+a library reading os.environ -> None
+after exporting it on purpose-> from-the-dotenv-file
+```
+
+**The value is in the object and nowhere else.** The file was read, the field was filled, and the process environment never learned the name existed. Compare that with the run in the previous section, where one call to `load_dotenv()` put the same file's values into `os.environ` for everything in the process to see.
+
+| | `load_dotenv()` | a settings class with `env_file` |
+|---|---|---|
+| What it reads | the `.env` file | the `.env` file |
+| Where the values land | `os.environ`, the process environment | the object, and nowhere else |
+| Who can see them afterwards | everything in the process, and anything it starts | whatever holds the object |
+| What rank they become | 2, indistinguishable from a real variable | 3, so a real variable still beats them |
+
+Three things follow from that one difference, and they run in both directions.
+
+**The trap in the previous section cannot happen without `load_dotenv()`.** Promotion is what makes a file's values unbeatable; reading a file into an object promotes nothing, so pointing a second class at a second file works exactly as written.
+
+**A library that reads the environment for itself finds nothing.** The third line of the run is the one to remember: a client library looking up its own key in `os.environ` sees `None`, while your `.env` plainly contains it and your settings object holds it. Nothing is broken and nothing reports anything — the library simply fails later for want of a key that is sitting one object away.
+
+**So those few names have to be put there deliberately**, and the second run shows the care that takes:
+
+```
+$ JWT_SECRET=from-the-shell uv run python src/config_lab/note01/i_the_file_never_reaches_the_environment.py
+the object has it            -> from-the-shell
+os.environ has it            -> from-the-shell
+after exporting it on purpose-> from-the-shell
+```
+
+`setdefault` writes only when the name is absent, so a real environment variable set by the deployment is never overwritten by a file value — the ranking of the previous sections, preserved by hand across the one place it has to be crossed.
+
+> [!important] Exporting is narrow on purpose
+> Copying the whole file into `os.environ` would be `load_dotenv()` again, with the trap and everything else that follows. Copying the two or three names a library insists on reading for itself is a different thing: a short, named list, each one a decision.
+
 ## The same rule is your deploy story
 
 Rank 2 beating rank 3 is not a quirk to work around. It is the feature that makes containers work.

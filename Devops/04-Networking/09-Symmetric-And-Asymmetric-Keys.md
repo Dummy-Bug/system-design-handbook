@@ -24,6 +24,9 @@ decrypt("qw123", "ABC123") → "hello"
 flowchart LR
     C["Client<br/>holds key ABC123"] -->|"encrypt with ABC123"| NET["qw123<br/>travelling over the internet"]
     NET -->|"decrypt with ABC123"| S["Server<br/>holds key ABC123"]
+    style C fill:#1f4f7a,color:#fff
+    style NET fill:#3a3a3a,color:#fff
+    style S fill:#1f4f7a,color:#fff
 ```
 
 An attacker in the middle sees `qw123`. They cannot turn it back into `hello`, because turning it back requires the key, and the key exists only at the two ends.
@@ -57,6 +60,9 @@ The public key is meant to be distributed. Publish it to the world; hand it to a
 flowchart LR
     C["Client<br/>has the server's public key"] -->|"encrypt with the PUBLIC key"| NET["encrypted message<br/>in transit"]
     NET -->|"decrypt with the PRIVATE key"| S["Server<br/>holds the private key alone"]
+    style C fill:#7a5a1f,color:#fff
+    style NET fill:#3a3a3a,color:#fff
+    style S fill:#1f6f3f,color:#fff
 ```
 
 Written the same way as before:
@@ -66,7 +72,7 @@ encrypt(message, server's public key)  → encrypted message
 decrypt(encrypted message, server's private key) → message
 ```
 
-> [!important] The public key cannot undo its own work. This is the entire point.
+> [!tip] The public key cannot undo its own work. This is the entire point.
 > Encrypting with the public key is a **one-way** operation. Having the public key does not let you decrypt what was encrypted with it — for that you need the private key, and only the server has that. So an attacker holding the public key, which they are welcome to, can encrypt messages to the server and can do absolutely nothing with anyone else's.
 
 This is **asymmetric key cryptography**, and it removes the failure mode symmetric encryption has. There is no shared secret sitting at both ends waiting to be stolen. The only secret is the private key, it exists in exactly one place, and the client never has a copy — so compromising the client gains an attacker nothing.
@@ -101,6 +107,9 @@ So send it:
 flowchart LR
     C["Client<br/>picks ABC123"] -->|"here is my key: ABC123"| H["Attacker in the middle<br/>reads it and keeps a copy"]
     H -->|"here is my key: ABC123"| S["Server<br/>agrees to use ABC123"]
+    style C fill:#2d333b,color:#fff
+    style H fill:#7a1f1f,color:#fff
+    style S fill:#2d333b,color:#fff
 ```
 
 The client sends the key in the clear. The server receives it and agrees. And the attacker sitting in the middle has read it on the way past and stored it.
@@ -124,14 +133,20 @@ flowchart TD
         M1["Every request encrypted with ABC123"] --> M2["Every response encrypted with ABC123"]
     end
     S4 --> M1
+    style S1 fill:#7a5a1f,color:#fff
+    style S2 fill:#7a5a1f,color:#fff
+    style S3 fill:#7a5a1f,color:#fff
+    style S4 fill:#1f6f3f,color:#fff
+    style M1 fill:#1f4f7a,color:#fff
+    style M2 fill:#1f4f7a,color:#fff
 ```
 
 Trace what the attacker sees now. The public key goes past — fine, it is public. Then an encrypted blob goes past, which is the secret key wrapped in the server's public key. They cannot open it: decrypting requires the private key, the private key is on the server, and the client does not have a copy either. So the secret key arrives at the server and nowhere else, and every message from that point is symmetric, fast, and unreadable to anyone without `ABC123`.
 
 Both problems solved. The slow technique runs once, on one small piece of data. The fast technique runs on everything else.
 
-> [!info] A JWT is not this.
-> Tokens and secret keys get conflated because both are opaque strings that grant access to something. They belong to different stages: a secret key here is for encrypting and decrypting traffic, while a JWT is issued **after** authentication and is signed rather than encrypted. Different mechanism, different purpose, different point in the flow.
+> [!warning] A JWT is not this.
+> Tokens and secret keys get conflated because both are opaque strings that grant access to something, and the login token met earlier in these notes is the usual source of the confusion. They belong to different stages and do different jobs. A secret key here exists to **encrypt and decrypt traffic**, and it is created during the setup of a connection, before any real message has been sent. A token is issued **after** a user has proved who they are, and it is not encrypted at all — anyone holding it can read what it says. What protects it is a stamp proving it has not been tampered with, which is a different mechanism from hiding the contents and is the subject of the note after next.
 
 ## The problem that remains
 
@@ -140,5 +155,3 @@ The scheme above has a hole in it, and it is in the very first step.
 The server sends its public key to the client. That message travels over the same hostile network as everything else, and an attacker in the middle can do more than read — they can **replace**. Which means the client has no way of knowing whether the public key it received is really the server's.
 
 That is the next problem, and it is what certificates exist to solve.
-
-*Source: class 8 — 2 September 2026.*

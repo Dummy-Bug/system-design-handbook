@@ -119,9 +119,16 @@ sample size                    = ____ turns
 
 ---
 
-## Phase 1 — Upgrade LangGraph · DEFERRED 2026-09-08
+## Phase 1 — Upgrade LangGraph · ~~DEFERRED 2026-09-08~~ · **LANDED, verified 2026-09-12**
 
-Not done, deliberately. The build runs on the stack already installed. This section records why, and what the resolver found, so the work is not repeated when the upgrade does happen.
+> [!important] The full upgrade was taken, not the minimal one
+> `requirements.txt` now pins `langgraph==1.2.11`, `langgraph-checkpoint==4.2.0`, `langchain-core==1.6.2`, `langgraph-prebuilt==1.1.0`, `langgraph-sdk==0.4.4` and `langchain-protocol`, with `langchain-google-genai` at 4.4.0 rather than the 4.2.1 the resolver predicted. `pyproject.toml` carries the matching floors.
+>
+> **Both CVEs are closed.** The fix for CVE-2026-28277 ships in `langgraph-checkpoint>=4.0.0` and the installed version is 4.2.0, so the checkpoint-deserialisation path that turned DynamoDB write access into code execution is no longer reachable. The three never-imported packages went with it — no `langgraph-checkpoint-redis`, no `langgraph-runtime-inmem`, no `redisvl`, and `sse-starlette` did not return.
+>
+> So the decision recorded below — take it as one piece in a later session rather than splitting it — is what happened. Everything from here down is kept as the record of how it was resolved, not as outstanding work.
+
+The original deferral reasoning follows. The build ran on the older stack; this section records why, and what the resolver found.
 
 ### Why it was deferred
 
@@ -815,7 +822,7 @@ Not part of the same release.
 |---|---|
 | Employee agent | Strict subset of admin — no interrupt path. Port after admin is proven, mechanically |
 | Onboarding agent | Different mechanism entirely (`RequestContext.emit`, `StreamEvent`). Out of scope for the build plan |
-| **Deduplicating the two services** | [[02-Token-Streaming]] put this first. **Now it goes last.** Deduping before the frame shape settles means building a shared generator against the old contract and then rewriting it. Dedupe when both audiences are converted and the shared shape is known rather than guessed |
+| ~~**Deduplicating the two services**~~ · **DONE, verified 2026-09-12** | Deferred here so the shared shape would be known rather than guessed, and that is how it landed. Both `admin_streaming_service.py` and `employee_streaming_service.py` no longer exist. In their place: `streaming/readers/admin_reader.py` and `employee_reader.py` yield a `TurnEvent` stream, and one `streaming/frame_writer.py::write_turn` turns that into contract frames for both audiences. The reader imports langgraph and knows nothing about the wire; the writer knows the wire and never imports langgraph. **Onboarding was not converted** and still drives the graph itself — see [[08-Composition-And-Lifecycle]] |
 | Reasoning frames | Gemini thought summaries are off by default. The channel is in the contract; turning it on is a config change, not this build |
 | Explicit stop endpoint | Open question back to the frontend, contract decision 7 |
 

@@ -265,14 +265,19 @@ Six of nine self-reported zeros in [[01-Self-Reported-Skill-Audit]] turned out t
 
 ## Open items
 
-- [ ] **Fix the dead `allowed_emails` check** — a live authorization hole under my strongest resume bullet
-- [ ] Remove `field-level` from the access-control bullet until something implements it
-- [ ] Change NDJSON to SSE on the resume
-- [ ] Reword the checkpointing claim to the factory and TTL, not the saver
-- [ ] Rotate the committed credentials and purge them from history
-- [ ] Fix the `NotImplementedError` naming Postgres in the Redis branch
-- [ ] Write the first real test suite on the system I own outright — nothing blocks this but me
-- [ ] **Keep multi-tenancy on the resume** — verified in code, worded as composite tenant-scoped keys
-- [ ] Keep RBAC cut; say audience segregation instead
-- [ ] Reframe workflow prediction as completed design work, not an initiative in flight
-- [ ] All four audits are done. Next file is the rewrite: `06-Resume-Rewrite.md`
+Re-verified against `refactor` on **2026-09-12**. Most of this list closed without being ticked.
+
+- [x] ~~**Fix the dead `allowed_emails` check**~~ — **fixed.** The set moved to `services/constants/admin_access.py` as `is_allowed_admin()`, the vacuous `if email and email.lower()` is gone, and denials are logged as `ADMIN_NOT_ALLOWLISTED`. It is now called from both `tool_access_helper.py` and `server/routes/chat.py`, which the module docstring records had drifted apart by one address while only one of them actually compared anything.
+- [x] ~~Remove `field-level` from the access-control bullet~~ — gone from `09-Resume.html`
+- [x] ~~Change NDJSON to SSE on the resume~~ — the resume says Server-Sent Events
+- [x] ~~Reword the checkpointing claim to the factory and TTL~~ — reads as pluggable durable checkpoints, in-memory or DynamoDB with TTL
+- [x] ~~Fix the `NotImplementedError` naming Postgres in the Redis branch~~ — **the whole branch is gone.** `checkpointing/factory.py` is now 35 lines, memory or DynamoDB, nothing else
+- [x] ~~**Keep multi-tenancy on the resume**~~ — kept, as composite DynamoDB partition keys
+- [x] ~~Keep RBAC cut~~ — cut, no role language anywhere on the page
+- [x] ~~Reframe workflow prediction~~ — cut entirely rather than reframed
+- [x] ~~Next file is the rewrite~~ — **done, as `09-Resume.html`.** Four files in this folder each point forward to a rewrite under a different number; all of them mean that file.
+- [~] Rotate the committed credentials — **half done.** The two test files carrying live bearer tokens against `app.hralign.repute.net` no longer exist, and a repo-wide search for a hardcoded token now returns nothing. The three `.env.python.*` files are still tracked, and rotation still cannot be verified from source.
+- [ ] Write the first real test suite — **still zero.** No test file exists anywhere outside `.venv` except `graph_pipeline/ingest/smoke_test.py`. This is now the only original finding from this audit still fully open, and [[TODO/08-Composition-And-Lifecycle]] argues it is blocked on the composition root rather than on effort.
+
+> [!important] The eight hardcoded emails are still eight hardcoded emails
+> They moved from `tool_access_helper.py` into `admin_access.py` and became load-bearing rather than decorative, which is the fix. But cross-employee access for the whole product is still a `frozenset` literal in source, so adding an HR admin is a commit, a review and a deploy — and the list still contains `abc@gmail.com` and two personal Gmail addresses.

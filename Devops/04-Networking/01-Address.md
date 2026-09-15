@@ -8,19 +8,19 @@ A client sends a request to a server. The server sends a response back. The clie
 
 The request is not just a name. It carries a **method**, which says what kind of operation you are asking for:
 
-| Method | What it asks for |
-|---|---|
-| `GET` | Give me this thing |
-| `POST` | Here is something new, store it |
-| `PATCH` | Change part of something that already exists |
-| `DELETE` | Remove this thing |
+| Method   | What it asks for                             |
+| -------- | -------------------------------------------- |
+| `GET`    | Give me this thing                           |
+| `POST`   | Here is something new, store it              |
+| `PATCH`  | Change part of something that already exists |
+| `DELETE` | Remove this thing                            |
 
 And it carries an address in two halves. Suppose the site is an online bookshop at `bookcart.in`. A visitor who wants the catalogue is asking for `bookcart.in/books`. That splits into:
 
 - **Host name** — `bookcart.in`. Which machine, or more precisely which site.
 - **Endpoint** — `/books`. Which part of that site.
 
-An endpoint is just a named section of the application. A bookshop has a catalogue, a reviews section, a profile page, a home page. On the backend, each of those is an endpoint:
+**An endpoint is just a named section of the application.** A bookshop has a catalogue, a reviews section, a profile page, a home page. On the backend, each of those is an endpoint:
 
 | URL | Endpoint | The section it reaches |
 |---|---|---|
@@ -35,6 +35,8 @@ So a full request reads as a method plus an endpoint plus a host — a `GET` for
 flowchart LR
     C["Client<br/>(browser)"] -->|"GET /books<br/>host: bookcart.in"| S["Server<br/>running the application"]
     S -->|"Response<br/>(the catalogue page)"| C
+    style C fill:#2d333b,color:#fff
+    style S fill:#1f4f7a,color:#fff
 ```
 
 That much is the shape of every web request ever made. The interesting question is how the request found `S` at all.
@@ -43,7 +45,7 @@ That much is the shape of every web request ever made. The interesting question 
 
 If you want to send something to a house, you need its address — house number, street, area, postcode. Nothing about the delivery works without it. Machines are the same: to move data from A to B, A must know B's address.
 
-That address is the **IP address**, where IP stands for **Internet Protocol**. It is a standard for giving every device on a network an identifier that other devices can aim at.
+That address is the **IP address**, where IP stands for **Internet Protocol**. It is a **standard** for giving **every device on a network an identifier** that other devices can aim at.
 
 There are two versions in use, and the reason the second exists is worth understanding because it is a straightforward counting problem.
 
@@ -67,21 +69,35 @@ Roughly **4.3 billion**. That sounds enormous until you count devices rather tha
 
 **IPv6** is a **128-bit** address, which raises the ceiling to 2^128 — a number large enough that exhaustion stops being a concern anyone plans around.
 
+It is written as **eight groups of four hexadecimal digits**, separated by colons rather than dots:
+
+```
+2001:0db8:0000:0000:0000:0000:0000:0001
+```
+
+Two shorthands are used almost universally, and without them the addresses you actually meet will not appear to have eight groups at all. **Leading zeros in a group are dropped**, so `0db8` is written `db8` and `0000` is written `0`. And **one run of all-zero groups may be replaced by a double colon**, `::`, which stands for **as many zero groups as are needed to bring the total back to eight**. The address above is therefore normally written:
+
+```
+2001:db8::1
+```
+
+That has three visible groups and a `::`. The `::` is standing in for the five zero groups between them. It may appear only once in an address, because two of them would leave no way to work out how many zeros each one meant.
+
 The important practical point is that **this was not a migration that finished**. Both versions are live right now. A site that supports IPv6 uses it; a site that does not is still reachable over IPv4, and a very large number of sites are still only on IPv4. You will meet both, and as you will see when addresses get written into DNS configuration, they are stored in different places precisely because they are different things.
 
 | | IPv4 | IPv6 |
 |---|---|---|
 | Size | 32 bits | 128 bits |
-| Written as | Four decimal numbers, dot-separated | Eight groups of hex, colon-separated |
+| Written as | Four decimal numbers, dot-separated | Eight groups of hexadecimal, colon-separated, usually abbreviated |
 | Total addresses | ~4.3 billion | 2^128 |
 | Status | Still dominant | Supported where sites have adopted it |
 
-> [!info] A server is not a special kind of machine.
+> [!note] A server is not a special kind of machine.
 > It is a computer. The client is also a computer. Both have IP addresses for exactly the same reason, and the word server describes a role — the machine that answers — rather than a category of hardware.
 
-**Does every device really get its own address?** Yes, in the sense that every device on a network is individually addressable. But if you have several devices at home behind one router, they do not each present a separate address to the outside world — they share the router's outward-facing one, while the router keeps them apart internally. That splits addresses into two kinds with two different jobs, and that distinction becomes load-bearing later on, once there is more than one server to talk to.
+**Does every device really get its own address?** Yes, in the sense that every device on a network is individually addressable. But if you have several devices at home behind one router, they do not each present a separate address to the outside world — **they share the router's outward-facing one, while the router keeps them apart internally.** That splits addresses into two kinds with two different jobs, and that distinction becomes load-bearing later on, once there is more than one server to talk to.
 
-> [!info] A MAC address is a different thing, and the two get confused constantly.
+> [!warning] A MAC address is a different thing, and the two get confused constantly.
 > The MAC address is the machine's own hardware address, burned into the network interface, and it does not change. An IP address is assigned to a device on a network and changes whenever the network does — move your laptop to a different network and it gets a different IP while its MAC address stays exactly as it was. One identifies the hardware; the other identifies where that hardware currently sits.
 
 ## The problem the address does not solve
@@ -101,6 +117,9 @@ flowchart LR
         A1["bookcart.in<br/>the bookshop"]
         A2["ticketline.in<br/>a ticket site"]
     end
+    style C fill:#2d333b,color:#fff
+    style A1 fill:#1f4f7a,color:#fff
+    style A2 fill:#7a5a1f,color:#fff
 ```
 
 Both applications are on the same machine, so **both have the same IP address**. The client sends a request to `143.45.156.67` and the address alone cannot say which of the two it wants. The address got the request to the right building. It has nothing to say about which door.
@@ -122,7 +141,7 @@ So a request aimed at a specific application on a specific machine looks like an
 
 Same machine, same address, different applications, told apart by the port.
 
-> [!info] An address and a port together are called a **socket**.
+> [!tip] An address and a port together are called a **socket**.
 > When you see the word socket in networking material, that pairing is what it means — the combination of an IP address and a port number, which together identify one endpoint of a connection rather than just one machine.
 
 ### The well-known ports
@@ -144,9 +163,9 @@ The first four are registered assignments — the same table your own machine co
 
 ### What listening on a port actually means
 
-A port is not a physical thing on the machine. It is a number an application claims, and the claim happens when the application starts.
+A port is not a physical thing on the machine. **It is a number an application claims, and the claim happens when the application starts.**
 
-When you deploy the bookshop and tell it to run on port `8080`, the application announces to the operating system that it wants to receive anything arriving for port `8080`. This is called **listening**. The ticket site does the same for `8191`. From then on:
+When you deploy the bookshop and tell it to run on port `8080`, the application announces **to the operating system** that it wants to receive anything arriving for port `8080`. This is called **listening**. The ticket site does the same for `8191`. From then on:
 
 ```mermaid
 flowchart TD
@@ -156,9 +175,13 @@ flowchart TD
     end
     R -->|"port 8080 was claimed by"| A1["Bookshop application<br/>listening on 8080"]
     R -.->|"would go here if the<br/>port were 8191"| A2["Ticket site application<br/>listening on 8191"]
+    style NET fill:#2d333b,color:#fff
+    style R fill:#1f4f7a,color:#fff
+    style A1 fill:#1f6f3f,color:#fff
+    style A2 fill:#3a3a3a,color:#fff
 ```
 
-The operating system holds the mapping from port number to application and hands each incoming packet to whoever registered for that port. Two applications cannot both claim the same port on the same machine — the number identifies exactly one listener, which is the whole point of it. If you need two things answering on the same port number, you need two machines.
+> The **operating system** holds the mapping from **port number to application** and hands each incoming packet to whoever registered for that port. Two applications cannot both claim the same port on the same machine — the number identifies exactly one listener, which is the whole point of it. If you need two things answering on the same port number, you need two machines.
 
 ## What is still missing
 
@@ -169,5 +192,3 @@ Two separate gaps, then, and each gets its own answer.
 The first — turning a name into an address — is what the domain name system exists to do.
 
 The second is subtler and easy to miss. A browser making an encrypted request does not aim at port `8080`. It aims at `443`, because that is the fixed, conventional port for HTTPS and the browser has no way of knowing the application chose something else. So the request arrives at the right machine, on port `443`, and the application that should answer it is listening on `8080` and never hears a thing. Something has to sit in between and translate one to the other.
-
-*Source: class 7 — 2 September 2026, recording part 1.*

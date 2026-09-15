@@ -183,7 +183,7 @@ session_ttl = 900
 
 **The first run read `TTL_SECONDS` into a field that is not called that.** The field is `session_ttl`, the variable is `TTL_SECONDS`, and the alias is why the two are connected.
 
-**The second run shows the field's own name no longer finds anything.** `SESSION_TTL` would have matched before the alias existed. Now it is ignored, and the default comes back. The alias replaces the name worked out from the field; it does not add a second one.
+**The second run shows the field's own name no longer finds anything.** `SESSION_TTL` would have matched before the alias existed. Now it is ignored, and the default comes back. The alias replaces the name worked out from the field; it does not add a second one — unless the class asks for one, which is the next section.
 
 | Where the variable name comes from | Rename the field, and the variable |
 |---|---|
@@ -191,6 +191,70 @@ session_ttl = 900
 | written in `validation_alias` | stays exactly where it is |
 
 So the two names are now each written down once, in the same line, and changing one no longer changes the other. The same tool covers the other common case: a variable whose name you do not get to choose — one a library reads for itself, like `GOOGLE_API_KEY`, or one your deployment platform injects.
+
+## A second accepted name, if the class asks for one
+
+There is one line that undoes the rule above, and it is worth knowing because it is easy to add for a reason that has nothing to do with environment variables.
+
+`populate_by_name=True` exists so an object can be built in Python using field names: `HrmsSettings(base_url="http://localhost")`, which the previous section's class refuses. What is easy to miss is that it also reopens the field name to the **environment**, for every aliased field in the class at once.
+
+`src/config_lab/note02/j_a_second_accepted_name.py`:
+
+```python
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class AliasOnly(BaseSettings):
+    base_url: str = Field("unset", validation_alias="HRMS_BASE_URL")
+
+
+class AliasAndFieldName(BaseSettings):
+    model_config = SettingsConfigDict(populate_by_name=True)
+
+    base_url: str = Field("unset", validation_alias="HRMS_BASE_URL")
+
+
+print("  the alias only          ->", AliasOnly().base_url)
+print("  populate_by_name=True   ->", AliasAndFieldName().base_url)
+```
+
+```
+$ HRMS_BASE_URL=from-alias uv run python src/config_lab/note02/j_a_second_accepted_name.py
+  the alias only          -> from-alias
+  populate_by_name=True   -> from-alias
+
+$ BASE_URL=from-field-name uv run python src/config_lab/note02/j_a_second_accepted_name.py
+  the alias only          -> unset
+  populate_by_name=True   -> from-field-name
+
+$ BASE_URL=from-field-name HRMS_BASE_URL=from-alias uv run python src/config_lab/note02/j_a_second_accepted_name.py
+  the alias only          -> from-alias
+  populate_by_name=True   -> from-alias
+```
+
+| What the shell set | Alias only | With `populate_by_name=True` |
+|---|---|---|
+| `HRMS_BASE_URL` | `from-alias` | `from-alias` |
+| `BASE_URL` | ignored, the default | **`from-field-name`** |
+| both | `from-alias` | `from-alias`, the alias still wins |
+
+The middle row is the whole section. **A field that was reachable by one name is now reachable by two**, and only one of them is written anywhere.
+
+> [!danger] It opens every aliased field in the class, and field names are generic
+> Set the flag on a base class and every block inherits it. A field called `table` then answers to `TABLE`, `mode` to `MODE`, `username` to `USERNAME`, `password` to `PASSWORD`, `database` to `DATABASE` — names that platforms, images and CI systems set for entirely unrelated reasons.
+>
+> Nothing warns you. The value arrives, the types pass, and a storage mode can switch itself on pointing at a table somebody else named.
+
+The documentation's own recommendation is the narrow version: `AliasChoices` lists, per field, exactly which names are accepted —
+
+```python
+base_url: str = Field("unset", validation_alias=AliasChoices("HRMS_BASE_URL", "BASE_URL"))
+```
+
+— so a second name is a decision made once, on the field that needs it, and visible where the field is declared. `populate_by_name` is a decision made once for every field at the same time, and visible nowhere.
+
+**The rule to carry:** if a class needs to be constructed by field name in Python, reach for that one line knowingly and read it as opening the environment too. If only some fields need a second spelling, name those spellings on those fields.
 
 ## A `.env` file catches the leftover name
 

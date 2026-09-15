@@ -1,4 +1,4 @@
-The handshake in the previous note ends on a weakness: the secret key is sent across the network, wrapped in the server's public key, so anyone who ever obtains the server's private key can unwrap every secret that was ever sent. This note is about the technique that removes that dependency entirely, by not sending the secret at all.
+The previous note ended by naming what replaced its own step 5: a mechanism in which the shared secret is never transmitted, because both sides work it out independently. This note is that mechanism. It is the reason TLS 1.3 was able to delete key transport, and it is what every secure connection you make now runs on.
 
 ## The idea
 
@@ -11,6 +11,10 @@ That sounds impossible until you see it done with colours.
 ## The colour version
 
 Take a colour that everybody knows, including any attacker. Call it the public colour: **yellow**.
+
+![[Devops/04-Networking/Images/diffie-hellman-paint-analogy.png]]
+
+That is the whole exchange in one picture, and the paragraphs below walk through it. Two conventions in it are worth naming first. The two parties are labelled **Alice** and **Bob** — in writing about cryptography the participants are almost always given those names rather than being called sender and receiver, and here they are simply the client and the server. And the crossing arrows in the middle are labelled **public transport**, meaning only that those two mixtures travel over the open network where anyone may see them.
 
 Each side then picks a colour it tells nobody:
 
@@ -25,6 +29,8 @@ Each side mixes its private colour into the public one, and sends the mixture ac
 flowchart LR
     C["Client<br/>yellow + red"] -->|"sends yellow+red"| S["Server<br/>yellow + blue"]
     S -->|"sends yellow+blue"| C
+    style C fill:#7a1f1f,color:#fff
+    style S fill:#1f4f7a,color:#fff
 ```
 
 Now each side adds its own private colour to what it received:
@@ -42,7 +48,7 @@ And they are stuck, because paint does not come apart. Given yellow+red you cann
 
 The best they can do is combine the two mixtures they saw — which gives them yellow twice over plus red plus blue, a different result from the one both legitimate parties reached. Close, and useless.
 
-> [!important] Notice what did not happen: no asymmetric encryption, and no secret in transit.
+> [!tip] Notice what did not happen: no asymmetric encryption, and no secret in transit.
 > Nothing was encrypted at any point in that exchange. The messages were sent in the clear and the attacker read all of them. The secret is safe not because it was hidden but because it was **never sent** — it only ever existed as something each side computed for itself.
 
 ## The same thing with numbers
@@ -77,18 +83,26 @@ flowchart LR
     SB -->|"B"| CC
     CC --> SHARED["Both hold G x a x b<br/>— the shared secret"]
     SC --> SHARED
+    style CA fill:#7a1f1f,color:#fff
+    style CC fill:#7a1f1f,color:#fff
+    style SB fill:#1f4f7a,color:#fff
+    style SC fill:#1f4f7a,color:#fff
+    style SHARED fill:#1f6f3f,color:#fff
 ```
 
 `G × b × a` and `G × a × b` are the same value. Both sides hold it, and it never crossed the network.
 
 The attacker saw **G**, **A** and **B**. They know A is G combined with some private value, and B likewise. To build G × a × b they need `a` or `b` individually, and neither was ever sent.
 
-> [!important] The whole thing rests on the operation being one-way.
+> [!warning] The whole thing rests on the operation being one-way.
 > Written as ordinary multiplication, the attacker simply divides A by G and recovers `a`, and the scheme collapses. Real implementations do not use multiplication. They use an operation where going forward is easy and going backward is computationally infeasible — you can combine G with `a`, but you cannot start from the result and work out what `a` was. Everything depends on that asymmetry, and `a` and `b` are very large numbers rather than the small symbols used here for legibility.
 
 ## What is actually used
 
-The real operation comes from **elliptic curve** geometry, and the algorithm is **ECDHE** — Elliptic Curve Diffie–Hellman Ephemeral. It is the modern choice and it is what TLS 1.3 uses.
+The real operation comes from **elliptic curve** geometry, and the algorithm is **ECDHE** — Elliptic Curve Diffie–Hellman Ephemeral.
+
+> [!important] This is not one option among several. In TLS 1.3 it is the only kind of key exchange permitted.
+> The specification removed every mechanism that does not produce forward secrecy, which means key transport is gone and an ephemeral Diffie–Hellman exchange is what remains. So the choice a modern server makes is not whether to do this but which curve to do it on. Everything in the previous note's step 5 has been replaced by the exchange described here.
 
 Two parts of that name carry meaning worth separating:
 
@@ -97,7 +111,7 @@ Two parts of that name carry meaning worth separating:
 
 The point of ephemeral is the failure the previous note ended on. If the client and server generate fresh private values for each session, then no long-lived key exists whose compromise would open past traffic. An attacker who obtains the server's private key today gains nothing retrospectively, because yesterday's session secret was never derived from it and was never transmitted in any form.
 
-> [!info] The certificate is still needed. This does not replace it.
+> [!warning] The certificate is still needed. This does not replace it.
 > Diffie–Hellman solves key agreement, and it solves it against an attacker who only watches. It does not tell the client **who** it is agreeing a key with — an attacker who intercepts and substitutes could still run the whole exchange while impersonating the server. Identity remains the certificate's job. The two mechanisms sit side by side in the handshake: the certificate establishes who the server is, and Diffie–Hellman establishes a shared secret with it.
 
 ## When new keys are generated
@@ -110,10 +124,11 @@ New key material is generated when a **session** is created. That session's traf
 flowchart LR
     S1["Session 1<br/>fresh private values<br/>secret 1"] --> S2["Session 2<br/>fresh private values<br/>secret 2"]
     S2 --> S3["Session 3<br/>fresh private values<br/>secret 3"]
+    style S1 fill:#1f6f3f,color:#fff
+    style S2 fill:#1f6f3f,color:#fff
+    style S3 fill:#1f6f3f,color:#fff
 ```
 
 So the keys rotate naturally, without any explicit rotation mechanism. If a session's secret is somehow compromised, the exposure is bounded by that session — the next one is derived from values that did not exist when the old secret was in use.
 
 That is the property worth taking away. Earlier designs put the secrecy of every conversation on one key staying safe indefinitely. This one puts each conversation's secrecy on values that exist briefly and are then thrown away.
-
-*Source: class 8 — 2 September 2026.*

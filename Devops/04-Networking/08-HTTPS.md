@@ -28,6 +28,9 @@ flowchart LR
     H --> S["Server"]
     S --> H
     H --> C
+    style C fill:#2d333b,color:#fff
+    style H fill:#7a1f1f,color:#fff
+    style S fill:#2d333b,color:#fff
 ```
 
 Intercepting means reading — both the request travelling one way and the response coming back. With the login above, the attacker now has a working username and password, and nothing stops them going to the server themselves and signing in as that user.
@@ -46,6 +49,9 @@ flowchart LR
     H -->|"encrypted request"| S["Server"]
     S -->|"encrypted response"| H
     H -->|"encrypted response"| C
+    style C fill:#2d333b,color:#fff
+    style H fill:#3a3a3a,color:#fff
+    style S fill:#1f6f3f,color:#fff
 ```
 
 The attacker is still there. They can still see traffic passing. What they cannot do is understand it — a request whose body reads `hello` goes past as something like `qw123`, and without the means to reverse it, that string tells them nothing.
@@ -59,10 +65,10 @@ The attacker is still there. They can still see traffic passing. What they canno
 
 Before a client and a server exchange a single message of real content, they perform a **TLS handshake**. This is a negotiation that establishes a secure channel between them. Once it completes, both sides know the connection is secure and can start sending.
 
-> [!info] The TLS handshake is not the TCP handshake.
+> [!warning] The TLS handshake is not the TCP handshake.
 > TCP's three-way handshake, with its synchronise and acknowledge messages, establishes that a connection exists. It has nothing to do with security. The TLS handshake happens **after** it, over the connection TCP just built, and its job is to make that connection private. Two handshakes, in sequence, for two entirely different purposes.
 
-> [!info] TLS does not care what is underneath it.
+> [!question] TLS does not care what is underneath it.
 > A reasonable objection: if TLS secures the transport layer and video streaming uses UDP rather than TCP, how does any of this work for a streaming site? The answer is that the two are separate concerns. Whatever transport a given piece of traffic uses, TLS secures the connection to the website itself. Loading the page, signing in, and every request the application makes go over TCP and are secured normally. What the video stream does underneath is its own business.
 
 ## What HTTPS guarantees
@@ -94,6 +100,10 @@ flowchart TD
     C["Client intends to reach<br/>bookcart.in"] --> Q{"Which server is<br/>actually answering?"}
     Q -->|"the real one"| REAL["bookcart.in<br/>the genuine server"]
     Q -->|"an impostor"| FAKE["bookcart.com<br/>a convincing fake"]
+    style C fill:#2d333b,color:#fff
+    style Q fill:#7a5a1f,color:#fff
+    style REAL fill:#1f6f3f,color:#fff
+    style FAKE fill:#7a1f1f,color:#fff
 ```
 
 Confidentiality is worthless here — the connection to the attacker is perfectly encrypted. What is needed is a way for the client to establish that the server on the other end **is** the server it meant to reach, and it needs to establish that before sending anything.
@@ -107,5 +117,3 @@ Two of these three are, at bottom, an encryption problem — scramble the messag
 The third is not an encryption problem at all. It is a **trust** problem. Before any encryption can help you, the two parties have to agree on a secret, over a network where an attacker is listening to everything and can modify anything in flight. Every part of that sentence is hostile: you cannot simply send the secret, and you cannot simply believe what comes back.
 
 The next notes take that apart in order — first the encryption techniques available, then what breaks when you try to use them over an open network, and then what a certificate is and why it closes the gap.
-
-*Source: class 8 — 2 September 2026.*

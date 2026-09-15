@@ -10,6 +10,9 @@ Suppose the attacker has generated their own key pair — a hacker public key an
 flowchart LR
     S["Server sends<br/>SERVER public key"] --> H["Attacker replaces it with<br/>HACKER public key"]
     H --> C["Client receives<br/>HACKER public key<br/>and believes it is the server's"]
+    style S fill:#1f6f3f,color:#fff
+    style H fill:#7a1f1f,color:#fff
+    style C fill:#7a5a1f,color:#fff
 ```
 
 The client has no reason for suspicion. It received a public key, it was expecting a public key, and one public key looks like another.
@@ -20,6 +23,9 @@ So the client does what it was going to do: it encrypts the secret `ABC123` usin
 flowchart LR
     C["Client encrypts ABC123<br/>with the HACKER public key"] --> H2["Attacker decrypts it<br/>with the HACKER private key<br/>and now has ABC123"]
     H2 --> S2["Server cannot decrypt it —<br/>wrong key — and discards it"]
+    style C fill:#7a5a1f,color:#fff
+    style H2 fill:#7a1f1f,color:#fff
+    style S2 fill:#3a3a3a,color:#fff
 ```
 
 The server, receiving a message encrypted with a key that is not its own, cannot decrypt it and probably discards it. That is a separate malfunction and beside the point. **The attacker has the secret key.** Every symmetric message that follows is readable, and the encryption has been defeated at its foundation.
@@ -83,9 +89,12 @@ A hash is one-way: you cannot reconstruct the inputs from `h`. Then that hash is
 flowchart LR
     IN["domain name<br/>public key<br/>related info"] -->|"hash function"| H["h"]
     H -->|"sign with a private key"| SIG["Digital signature<br/>placed into the certificate"]
+    style IN fill:#2d333b,color:#fff
+    style H fill:#7a5a1f,color:#fff
+    style SIG fill:#1f4f7a,color:#fff
 ```
 
-> [!important] Signing is not encryption, and confusing the two makes the rest incomprehensible.
+> [!warning] Signing is not encryption, and confusing the two makes the rest incomprehensible.
 > Encrypting something hides it. Signing something does not hide it at all — the certificate's contents are perfectly readable to anyone. What signing produces is a value that is bound to those exact contents. Change any of them and the signature no longer matches, and anyone checking will get back not verified. It is a tamper-detector, not a lock.
 
 When the client receives the certificate, it performs the corresponding check:
@@ -129,6 +138,12 @@ flowchart TD
     CH --> T{"Does the value appear?"}
     T -->|"yes — the applicant controls the domain"| ISSUE["Certificate issued and signed"]
     T -->|"no"| REFUSE["Refused"]
+    style REQ fill:#2d333b,color:#fff
+    style CA fill:#1f4f7a,color:#fff
+    style CH fill:#7a5a1f,color:#fff
+    style T fill:#7a5a1f,color:#fff
+    style ISSUE fill:#1f6f3f,color:#fff
+    style REFUSE fill:#7a1f1f,color:#fff
 ```
 
 Request a certificate for a domain you do not own and you simply cannot complete the challenge — you have no way to make anything appear on somebody else's server. The request fails.
@@ -139,7 +154,7 @@ Every browser and operating system ships with a built-in list of **root certific
 
 So when a certificate arrives naming its issuer, the client asks whether that issuer traces back to one of the authorities it already knows about.
 
-> [!important] The client verifies locally. It does not contact the certificate authority to ask.
+> [!tip] The client verifies locally. It does not contact the certificate authority to ask.
 > This is worth being explicit about, because the natural assumption is that the browser phones the CA and asks whether a certificate is genuine. It does not. It already holds the root authorities' details, and it checks the certificate against what it has. No network call, nobody to impersonate in the middle of it.
 
 ### Certificate chaining
@@ -150,6 +165,9 @@ One complication makes this more robust rather than less. A root authority does 
 flowchart TD
     ROOT["Root certificate authority<br/>its private key is kept maximally protected"] -->|"signs"| INT["Intermediate certificate authority"]
     INT -->|"signs"| WEB["Your website's certificate"]
+    style ROOT fill:#7a5a1f,color:#fff
+    style INT fill:#1f4f7a,color:#fff
+    style WEB fill:#1f6f3f,color:#fff
 ```
 
 The root signs **intermediate** authorities, and intermediates sign the certificates that actually go on websites. The chain can run deeper than two levels.
@@ -165,6 +183,12 @@ flowchart LR
     R --> Q{"Is this root in the client's<br/>pre-installed trust store?"}
     Q -->|"yes"| OK["Certificate accepted"]
     Q -->|"no"| NO["Rejected — unknown authority"]
+    style W fill:#1f6f3f,color:#fff
+    style I fill:#1f4f7a,color:#fff
+    style R fill:#7a5a1f,color:#fff
+    style Q fill:#7a5a1f,color:#fff
+    style OK fill:#1f6f3f,color:#fff
+    style NO fill:#7a1f1f,color:#fff
 ```
 
 ### What this catches
@@ -183,5 +207,3 @@ They cannot get a real one either. A CA would put them through the ownership cha
 At the end of all this, a client that has received and validated a certificate knows something it could not know before: the public key it is holding genuinely belongs to the server it meant to reach.
 
 Which is precisely the missing precondition. The key exchange from the previous note can now proceed safely, because the key it starts from can be trusted. What remains is the exact order in which all of this happens on a real connection.
-
-*Source: class 8 — 2 September 2026.*

@@ -14,6 +14,10 @@ Network communication is described as a stack of layers, each responsible for on
 | 2 | Data link | Moving frames between directly connected devices |
 | 1 | Physical | The actual signal on the wire or the air |
 
+![[Devops/04-Networking/Images/osi-seven-layer-model.png]]
+
+The picture adds one column the table does not: the name given to a chunk of data at each level. The same content is called **data** in the top three layers, **segments** once the transport layer has divided it up, **packets** once the network layer has attached addresses, **frames** at the data link layer, and finally **bits** on the wire. It is one body of content being wrapped and renamed on the way down, and unwrapped on the way back up. The split down the side is a common grouping rather than part of the standard: the upper four are the concern of the machines at each end, and the lower three are the concern of whatever carries the traffic between them.
+
 Each layer has its own protocols. You do not need to hold all seven in your head to do this job, but you do need two of them, because the two protocols that matter most to you live one layer apart and the relationship between them explains a great deal.
 
 **HTTP is an application-layer protocol** — layer 7. It is what your code speaks when it makes a request. **TCP is a transport-layer protocol** — layer 4. It is what HTTP is built on top of.
@@ -33,11 +37,15 @@ flowchart TD
     H -->|"is carried by"| T
     T -->|"is carried by"| I
     U -->|"is carried by"| I
+    style H fill:#1f4f7a,color:#fff
+    style T fill:#1f6f3f,color:#fff
+    style U fill:#7a5a1f,color:#fff
+    style I fill:#2d333b,color:#fff
 ```
 
 So when you make an HTTPS call, you are using an application-layer protocol that hands its work to a transport-layer protocol that hands its work to the network layer. You write one line of code and four layers do something about it.
 
-> [!info] HTTPS is HTTP with the contents encrypted, and it sits in exactly the same place in the stack.
+> [!note] HTTPS is HTTP with the contents encrypted, and it sits in exactly the same place in the stack.
 > Both are application-layer protocols, and both are built on TCP. The `S` changes what a watcher on the wire can read. It does not change which layer the protocol lives at or which transport carries it.
 
 ## TCP — the protocol that promises
@@ -85,6 +93,9 @@ Imagine transferring money without it. User A sends ₹10,000 to user B. The pac
 flowchart LR
     A["User A<br/>₹10,000 deducted"] -->|"transfer instruction"| X["Packet lost<br/>in transit"]
     X -.->|"never arrives"| B["User B<br/>receives nothing"]
+    style A fill:#7a5a1f,color:#fff
+    style X fill:#7a1f1f,color:#fff
+    style B fill:#7a1f1f,color:#fff
 ```
 
 Money has left A and has not reached B, and nothing in the system knows. There is no acknowledgement missing to notice, because nothing was expecting one. There is no way to revert A's deduction, because nothing recorded that the instruction failed rather than succeeded. The money is simply gone.
@@ -129,7 +140,7 @@ The same holds for a video call. If the connection stutters and a moment of the 
 
 A reasonable question at this point: if packets get lost, how do you stop that happening?
 
-You largely do not. Packet loss is a property of the network, not a setting. What you can influence is **bandwidth** — how much data the connection can carry at once. Greater bandwidth means more packets in flight simultaneously, which is why bandwidth is the number that dominates any discussion of streaming quality. Packets will still be lost; the loss depends on connection speed and a long list of other factors you do not control.
+You largely do not. Packet loss is a property of the network, not a setting. What you can influence is **bandwidth** — how much data the connection can carry at once. **Greater bandwidth means more packets in flight simultaneously,** which is why bandwidth is the number that dominates any discussion of streaming quality. Packets will still be lost; the loss depends on connection speed and a long list of other factors you do not control.
 
 Under TCP, loss costs you time, because the missing packet is sent again. Under UDP, loss costs you a fragment of the stream, and that is the deal you accepted when you chose it.
 
@@ -141,9 +152,7 @@ No. Once a connection is established, **multiple messages can travel over it**. 
 
 The connection stays open until it is lost, and one way it gets lost is a **timeout**. If no message is sent for a certain period, the connection is closed, and the next message has to establish a new one.
 
-> [!info] You do not manage any of this yourself.
+> [!tip] You do not manage any of this yourself.
 > You make an HTTP call. TCP is a lower-level protocol that your HTTP client sits on top of, and the handshake, the acknowledgements, the retransmissions and the connection lifetime are all handled below the line you wrote. What you need to know is which transport is in play and why — that a page load or an API call rides on TCP and gets its guarantees, and that a streaming application rides on UDP and does not.
 
 That knowledge is not decoration. The next time something in your system is slow, the question of whether you are paying for a handshake on every single request is a real one, and it is only askable if you know the handshake exists.
-
-*Source: class 7 — 2 September 2026, recording part 1.*

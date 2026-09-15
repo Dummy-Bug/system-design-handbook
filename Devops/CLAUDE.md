@@ -49,7 +49,7 @@ Devops/
 └── 02-<Module-Name>/
 ```
 
-- **Folders are numbered in READING order — the order he should study them in.** He renumbered them himself on 2026-08-20 (`01-Introduction-To-DevOps/`, `02-Linux/`, `03-Git/`) for exactly that reason: the number tells him what to read first. So far reading order and course order agree; **if the course ever teaches a subject out of the order it should be learned, the folder number follows the reading order and the note footers still record the class.**
+- **Folders are numbered in READING order — the order he should study them in.** He renumbered them himself on 2026-08-20 (`01-Introduction-To-DevOps/`, `02-Linux/`, `03-Git/`) for exactly that reason: the number tells him what to read first. So far reading order and course order agree; **if the course ever teaches a subject out of the order it should be learned, the folder number follows the reading order and the class mapping lives in this file rather than in the note.**
 - **Notes INSIDE a folder stay in class order** — see the `[!important]` block near the end of this file. Folder number = what to read first; note number = which class it came from.
 - A folder is created when its module starts. Gaps in numbering mean a module not yet reached.
 - **Images are embedded by absolute vault path** — `![[Devops/01-Module/Images/file.png]]`. Any
@@ -180,6 +180,8 @@ telling him the command.
   **Class 7** (2 parts, ~1h 55m) — `01` how a request finds a server: methods, endpoints, IPv4/IPv6, one server hosting many applications, ports, well-known ports, listening, sockets, MAC vs IP · `02` reverse proxy: the 443-to-8080 gap, the mapping table, nginx wearing several hats · `03` TCP, UDP and the layer model: OSI, three-way handshake, guarantees, the payment failure, packet loss, connection lifetime · `04` DNS resolution: browser cache → resolver → root → TLD → authoritative, TTL, registrar vs authoritative · `05` DNS records: A, AAAA, CNAME, TXT, MX, NS, subdomains, `www` is not the apex, where each record is written · `06` scaling and load balancers: vertical vs horizontal, public/private IP, routing algorithms, sticky sessions vs a shared session store, health checks, layer 4 vs layer 7.
   Note `05` spans both parts; part 2 fed `05` and `06`.
   **Class 8** (1 part, ~2h 27m) — `07` API gateway: microservices, routing by endpoint, gateway versus load balancer, authentication and rate limiting · `08` HTTPS and what it guarantees: HTTP is plaintext, man-in-the-middle, confidentiality/integrity/authentication · `09` symmetric and asymmetric keys: the speed-versus-secret trade, the key-exchange problem · `10` certificates and trust: the public-key substitution attack, digital signatures, certificate authorities, chaining, the root store · `11` the TLS handshake: seven steps end to end · `12` Diffie-Hellman key exchange: the colour analogy, the arithmetic, ECDHE and ephemeral keys · `13` certificate management: Let's Encrypt, ACME, Certbot, and TLS termination at the reverse proxy.
+  **Reviewed end to end as a stranger on 2026-09-12, and eleven findings were fixed.** Three were correctness errors, and they are the ones worth remembering. **A JWT was described as held server-side** in note `06`, inside the very section arguing that a stored session breaks under a load balancer — a token is held by the client and is in fact a third answer to that problem, so the note now gives all three. **Note `11` described RSA key transport while naming TLS 1.3**, which removed that mechanism outright; the seven steps are kept because the failure they lead to motivates Diffie–Hellman, but the note now states plainly that this is the pre-1.3 form and shows the real one-round-trip sequence. And **note `05` used a live Google IPv6 address**, replaced with the documentation range `2001:db8::/32` from RFC 3849, with `::` compression now explained in note `01` where eight groups is first claimed. The other eight were clarity: a missing whole-architecture diagram, a status code used before introduction, a term used a note before its definition, an uncounted number, an SSH port mapped to a web app, and a code-block header naming a file that did not exist.
+
   **Note `02` was rewritten and renamed by class 8** — class 7 promised forward-versus-reverse proxy and never reached it, so note `02` carried a marked beyond-lecture callout. Class 8 taught it properly, so the callout was replaced with real lecture material and the file became `02-Forward-And-Reverse-Proxies.md`. **Merging into the existing note rather than adding a new one is the right call when a later class returns to the same concept.**
 
 > [!tip] **Hashes in the internals notes are real and reproducible — keep doing this.**
@@ -213,7 +215,14 @@ telling him the command.
 > [!tip] **The placeholder conventions settled for `04-Networking/` — reuse them, do not reinvent them.**
 > Every domain in these notes is one invented brand with its subdomains (`api.`, `admin.`, `manager.`, `blog.`), chosen so the notes read as one continuous example rather than a different placeholder per note. Example IP addresses keep the shape used on the board but with **legal octets** — the ones taught had values above 255, which is a real error to publish. Ports came from `/etc/services` rather than the recording, because the spoken numbers included at least one slip. **A later networking class continues this subject, so the same brand and the same addresses must carry over.**
 
-All mermaid, no images yet. Classes run **Wednesday and Saturday, 9:00 pm, 2–2½ hours**.
+Classes run **Wednesday and Saturday, 9:00 pm, 2–2½ hours**.
+
+> [!important] **The visual standard for this vault — set on 2026-09-12 and applied to `04-Networking/` first.**
+> The reference implementation is `~/Desktop/wiki/AI-Engineering/09-LangGraph-Streaming/04-Tasks-Checkpoints-Debug.md`. **Every mermaid flowchart carries `style` lines**, using one palette consistently so a colour means the same thing in every diagram in the vault: `#1f4f7a` blue for the mechanism being explained, `#1f6f3f` green for the working or correct outcome, `#7a1f1f` red for the broken one or the attacker, `#7a5a1f` amber for a caution or an intermediate stage, `#2d333b` dark grey for a neutral actor, `#3a3a3a` grey for something inert. Always with `color:#fff`. Sequence diagrams take no node styling and are left alone.
+> **Callouts are varied rather than uniform.** The vault uses `[!important]`, `[!warning]`, `[!tip]`, `[!note]`, `[!question]`, `[!bug]`, `[!failure]` and `[!info]`. Before this pass `04-Networking/` used only two types across 49 callouts, which reads flat; a folder should spread across five or more. `[!warning]` is still reserved for genuine danger or a real trap.
+> **DevOps notes carry no code blocks unless a command is genuinely being taught** — this course has almost none so far, so config and shell fences stay rare and every one must still come from a verified source.
+
+**`04-Networking/Images/` is the first images folder in this track.** Five diagrams from Wikimedia Commons, all public domain or CC0, all downloaded locally rather than hot-linked, each opened and read before embedding, with source, author, licence and any modification recorded in `Images/CREDITS.md`. Two were edited: the proxy pair had their non-English language variants stripped and their example domain relabelled to the folder's running brand, and the Diffie–Hellman analogy had its secret colours changed to the red and blue the note text uses. **Prefer an image where it beats a diagram** — a widely reproduced standard illustration such as the OSI stack, or a real timeline with measurements on it such as the TLS 1.3 handshake — and keep mermaid for anything specific to this folder's own running example.
 
 > [!important] **One flat folder per subject, and it is the pattern to follow from here.**
 >
@@ -226,10 +235,9 @@ All mermaid, no images yet. Classes run **Wednesday and Saturday, 9:00 pm, 2–2
 >   they belong to.
 > - **Merge rather than split.** A 500–700 line note is fine; a 60-line one is not. "500 is not that much
 >   to read."
-> - **Notes are numbered in CLASS ORDER, not learning order — until he says otherwise.** He needs to be
->   able to map a note back to the recording it came from while he is still revising. Every note carries
->   a `*Source: class N — date, recording parts X–Y.*` footer for exactly that reason. **Resequencing for
+> - **Notes are numbered in CLASS ORDER, not learning order — until he says otherwise.** The number is what maps a note back to the class it came from while he is still revising. **Resequencing for
 >   pedagogy is a separate, later decision, and it is his to make** — do not pre-empt it.
+> - **No source footer. Removed from every note on 2026-09-12, at his instruction.** Notes used to end with `*Source: class N — date, recording parts X–Y.*`. They no longer do, and new notes must not add one. **A note ends on its last real idea and mentions no course, class, date, recording or lecture anywhere in it** — the general no-provenance rule now has no exception. Which class fed which note is recorded in this file and in the track file, where it belongs.
 > - **When merging, remove duplication only.** Never compress an explanation to save space — breadth and
 >   depth must survive the merge intact.
 

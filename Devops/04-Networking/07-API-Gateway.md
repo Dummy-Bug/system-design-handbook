@@ -11,6 +11,10 @@ flowchart LR
     F["Frontend application"] --> U["User service<br/>own server"]
     F --> O["Order service<br/>own server"]
     F --> P["Payment service<br/>own server"]
+    style F fill:#2d333b,color:#fff
+    style U fill:#1f6f3f,color:#fff
+    style O fill:#1f6f3f,color:#fff
+    style P fill:#1f6f3f,color:#fff
 ```
 
 Each is a real, independent deployment. And each needs an address the frontend can reach, which is a problem already solved: give each one a subdomain.
@@ -39,6 +43,10 @@ flowchart LR
     F["Frontend<br/>must know all three addresses<br/>and which owns what"] --> U["user.bookcart.in"]
     F --> O["order.bookcart.in"]
     F --> P["payment.bookcart.in"]
+    style F fill:#7a1f1f,color:#fff
+    style U fill:#2d333b,color:#fff
+    style O fill:#2d333b,color:#fff
+    style P fill:#2d333b,color:#fff
 ```
 
 That is a great deal of backend structure leaking into a place it does not belong. Split a service in two and the frontend has to change. Rename one and the frontend has to change. Add a fourth and the frontend has to change.
@@ -56,6 +64,11 @@ flowchart LR
     G -->|"/api/users/*"| U["User service"]
     G -->|"/api/orders/*"| O["Order service"]
     G -->|"/api/payment/*"| P["Payment service"]
+    style F fill:#1f6f3f,color:#fff
+    style G fill:#1f4f7a,color:#fff
+    style U fill:#2d333b,color:#fff
+    style O fill:#2d333b,color:#fff
+    style P fill:#2d333b,color:#fff
 ```
 
 The frontend now knows exactly one address — `api.bookcart.in` — and nothing else. It sends everything there. The gateway reads the request path and decides where it goes:
@@ -70,7 +83,7 @@ The `*` means anything following, so `/api/orders/detail` and `/api/orders/histo
 
 Add a fourth service and you add a routing rule at the gateway. The frontend does not change, because from where it stands nothing did.
 
-> [!info] An API gateway can be software or hardware.
+> [!note] An API gateway can be software or hardware.
 > Like the reverse proxy, it is defined by its position and its job rather than its packaging — and in practice a gateway and a reverse proxy are very often the same process doing both, since both sit at the front and both rewrite where a request is going.
 
 ## Gateway versus load balancer
@@ -99,14 +112,26 @@ flowchart LR
     LB2 --> O2["Order replica 2"]
     LB3 --> P1["Payment replica 1"]
     LB3 --> P2["Payment replica 2"]
+    style F fill:#2d333b,color:#fff
+    style G fill:#1f4f7a,color:#fff
+    style LB1 fill:#7a5a1f,color:#fff
+    style LB2 fill:#7a5a1f,color:#fff
+    style LB3 fill:#7a5a1f,color:#fff
+    style U1 fill:#1f6f3f,color:#fff
+    style U2 fill:#1f6f3f,color:#fff
+    style U3 fill:#1f6f3f,color:#fff
+    style O1 fill:#1f6f3f,color:#fff
+    style O2 fill:#1f6f3f,color:#fff
+    style P1 fill:#1f6f3f,color:#fff
+    style P2 fill:#1f6f3f,color:#fff
 ```
 
 The gateway holds the addresses of the three load balancers and nothing more. Each load balancer holds the addresses of its own service's replicas and nothing more.
 
 **Why three load balancers rather than one?** Because each one only ever chooses between interchangeable copies of a single service. The load balancer in front of the user service has three user replicas to choose from and no ability to send anything anywhere else — a payment request would be meaningless to it. Deciding that a request belongs to payments at all is a judgement about the endpoint, and only the gateway can make it.
 
-> [!info] Everything in that diagram is a server.
-> The gateway is a server. Each load balancer is a server. The reverse proxy is a server. So is the database. Some of these can be dedicated hardware appliances instead, but in the ordinary case every box in an architecture diagram is software running on a machine, and it helps to read them that way rather than as abstract components.
+> [!tip] Every box in that diagram is a server.
+> The gateway is a server. Each load balancer is a server. So is each replica, and so is the database they all talk to. The reverse proxy from earlier in these notes is one too. Some of these can be dedicated hardware appliances instead, but in the ordinary case every box in an architecture diagram is software running on a machine, and it helps to read them that way rather than as abstract components.
 
 ## What else a gateway does
 
@@ -118,7 +143,9 @@ The gateway can check that a request is authenticated before forwarding it. Anyt
 
 ### Rate limiting
 
-**Rate limiting** caps how many times a given caller may hit an endpoint in a window of time. Set a limit of five calls per minute per IP address, and the sixth call within that minute does not reach the service:
+**Rate limiting** caps how many times a given caller may hit an endpoint in a window of time. Set a limit of five calls per minute per IP address, and the sixth call within that minute does not reach the service.
+
+The refused call still gets an answer — it gets a **status code**, which is the number every HTTP response carries to say how the request went. The one meaning the caller has asked too often is **429**, and its standard description is Too Many Requests.
 
 ```mermaid
 flowchart LR
@@ -126,9 +153,14 @@ flowchart LR
     G -->|"under the limit"| SVC["Service"]
     R6["Request 6"] --> G
     G -->|"over the limit"| ERR["429 Too Many Requests<br/>returned immediately"]
+    style R1 fill:#2d333b,color:#fff
+    style R6 fill:#7a5a1f,color:#fff
+    style G fill:#1f4f7a,color:#fff
+    style SVC fill:#1f6f3f,color:#fff
+    style ERR fill:#7a1f1f,color:#fff
 ```
 
-If you have done any web development you have met the resulting error — too many requests — from the outside.
+If you have done any web development you have met a `429` from the outside, sent by somebody else's gateway when you asked for something too quickly.
 
 The reason to want it is usually cost. Suppose one of your endpoints fetches data from Google Maps, which charges you per API call. Every request a user makes to your endpoint costs you money — you are paying Google each time, whether the caller is a real customer or not. Without a limit, anyone can run up your bill simply by calling it in a loop, and a swarm of bots calling it together is both an attack on your service and an attack on your budget. A rate limit puts a ceiling on both.
 
@@ -139,5 +171,3 @@ Limits can be set per endpoint, so an expensive one is capped tightly while a ch
 The diagram above is one region's worth of architecture. Zoom out and there is more of it: gateways are themselves replicated, DNS resolves to different infrastructure depending on where in the world the request comes from, and content delivery networks sit further out again. All of that is system design rather than deployment, and the flow above is what you need to hold.
 
 Two things worth separating from the gateway before leaving it, because the names invite confusion. A **VPN** is not a proxy of either kind — it does tunnelling, which is a different job entirely. And an **API gateway** has nothing to do with a **payment gateway** beyond sharing a word.
-
-*Source: class 8 — 2 September 2026.*

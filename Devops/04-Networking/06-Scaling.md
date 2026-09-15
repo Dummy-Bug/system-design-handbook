@@ -15,6 +15,7 @@ flowchart LR
     C5["Client 5"] --> S
     C6["Client 6"] --> S
     S["One server<br/>16 GB RAM · 8-core CPU<br/>overloaded"]
+    style S fill:#7a1f1f,color:#fff
 ```
 
 There are exactly two ways out, and they are worth naming precisely because the second one drags in everything else in this note.
@@ -39,6 +40,9 @@ flowchart LR
     C["Clients"] --> A["Server 1<br/>16 GB RAM"]
     C --> B["Server 2<br/>16 GB RAM"]
     C --> D["Server 3<br/>16 GB RAM"]
+    style A fill:#1f6f3f,color:#fff
+    style B fill:#1f6f3f,color:#fff
+    style D fill:#1f6f3f,color:#fff
 ```
 
 This is **horizontal scaling**, sometimes called distributed scaling. Rather than stacking capacity onto one machine, you build more machines and split the work between them. They can be identically configured or not — nothing requires them to match, though matching makes reasoning about them easier.
@@ -61,6 +65,10 @@ flowchart LR
     C["Client"] -->|"every request<br/>goes here"| LB["Load balancer"]
     LB -->|"some requests"| S1["Server 1"]
     LB -->|"other requests"| S2["Server 2"]
+    style C fill:#2d333b,color:#fff
+    style LB fill:#1f4f7a,color:#fff
+    style S1 fill:#1f6f3f,color:#fff
+    style S2 fill:#1f6f3f,color:#fff
 ```
 
 The servers behind it are running **the same application**. Two servers does not mean two different codebases — it means the same code deployed twice, on two machines, so that either can answer any request.
@@ -78,6 +86,10 @@ flowchart LR
         LB -->|"private IP"| S1["Server 1"]
         LB -->|"private IP"| S2["Server 2"]
     end
+    style C fill:#2d333b,color:#fff
+    style LB fill:#1f4f7a,color:#fff
+    style S1 fill:#1f6f3f,color:#fff
+    style S2 fill:#1f6f3f,color:#fff
 ```
 
 **The public IP** is the balancer's. It is the address the outside world can reach, and it is the one DNS hands out — the `A` record for the domain points at the load balancer, not at any server.
@@ -97,7 +109,7 @@ Server 1 goes down. You want traffic to go to server 2 instead — that is the e
 
 It would, if there were one of it. If every request in the system funnels through a single machine, that machine is now the thing whose failure takes everything down — the exact problem horizontal scaling was meant to remove, moved one step forward.
 
-So a load balancer is itself distributed. It is not one box but several working as one, for precisely the reason the servers behind it are several. The same is true of DNS, which faces the same pressure at a much larger scale and is likewise distributed rather than centralised. It is a recurring shape: anything that everything else depends on cannot be allowed to be singular.
+**So a load balancer is itself distributed**. It is not one box but several working as one, for precisely the reason the servers behind it are several. The same is true of DNS, which faces the same pressure at a much larger scale and is likewise distributed rather than centralised. It is a recurring shape: anything that everything else depends on cannot be allowed to be singular.
 
 ## Deciding where a request goes
 
@@ -113,6 +125,8 @@ flowchart LR
     R2["Request 2"] --> B["Server 2"]
     R3["Request 3"] --> A
     R4["Request 4"] --> B
+    style A fill:#1f4f7a,color:#fff
+    style B fill:#1f6f3f,color:#fff
 ```
 
 It requires no knowledge of the servers at all, which is both why it is simple and why it is crude.
@@ -129,14 +143,14 @@ Route on the client's address: hash it, and always send the same client to the s
 
 That property is not obviously useful yet. It becomes the answer to the next problem.
 
-> [!info] Equal distribution stops being meaningful when the servers are not equal.
+> [!note] Equal distribution stops being meaningful when the servers are not equal.
 > Splitting traffic evenly assumes the machines can take an even share. If one server has 16 GB and another has 32 GB, an even split underuses the second and overloads the first. The rules above all have variants that weight servers differently for exactly this reason, and consistent hashing is a further refinement used where you need a client to keep landing on the same server even as servers are added and removed.
 
 ## The session problem
 
 Here is what horizontal scaling breaks, and it is the most important thing in this note because it is a correctness failure rather than a performance one.
 
-A user logs in. The request goes through the balancer to **server 1**, which checks the password, creates a **session** for that user, and stores it. A session is how a server remembers that this client already proved who they are. In a great many applications the session is a JWT — a token issued at login, held server-side, and presented on every request afterwards so the server does not ask for the password again.
+A user logs in. The request goes through the balancer to **server 1**, which checks the password, creates a **session** for that user, and stores it. A session is how a server remembers that this client already proved who they are: a record saying this visitor is signed in as this user, kept by the server, and looked up on every later request so the password is not asked for again.
 
 The user's next request goes back to the balancer. The balancer, following whatever rule it uses, sends it to **server 2**.
 
@@ -146,6 +160,10 @@ flowchart TD
     LB1 --> S1["Server 1<br/>creates and stores the session"]
     N["Next request, same user"] --> LB2["Load balancer"]
     LB2 --> S2["Server 2<br/>has never seen this user<br/>no session — who are you?"]
+    style LB1 fill:#1f4f7a,color:#fff
+    style LB2 fill:#1f4f7a,color:#fff
+    style S1 fill:#1f6f3f,color:#fff
+    style S2 fill:#7a1f1f,color:#fff
 ```
 
 Server 2 has no record of this user. The session lives on server 1's disk and in server 1's memory, and server 2 cannot see either. The user is logged out, or asked to log in again, or refused — and nothing was wrong with the credentials, the code, or the balancer. The architecture did it.
@@ -156,9 +174,9 @@ There are two answers.
 
 Force the balancer to keep sending a given client to the same server. Once a client's session is established on server 1, every subsequent request from that client goes to server 1, no matter what else is happening.
 
-This is called a **sticky session**, and the IP hash rule above is how you get it: same client address, same hash, same server, every time.
+This is called a **sticky session**, and **the IP hash rule above is how you get it**: same client address, same hash, same server, every time.
 
-> [!important] Sticky sessions work, and they are the weaker answer.
+> [!warning] Sticky sessions work, and they are the weaker answer.
 > You have solved the session problem by giving up the thing horizontal scaling was for. The balancer can no longer send a request to the least loaded server, because it is obliged to honour an earlier decision — so a server can be overloaded while another sits idle and nothing may be done about it. Worse, if that server goes down, every client stuck to it loses its session anyway. You have reintroduced a small single point of failure per user.
 
 ### Answer two — move the session out
@@ -172,13 +190,45 @@ flowchart TD
     LB --> S2["Server 2"]
     S1 -->|"reads and writes<br/>the session"| R["Shared store<br/>e.g. Redis"]
     S2 -->|"reads and writes<br/>the session"| R
+    style C fill:#2d333b,color:#fff
+    style LB fill:#1f4f7a,color:#fff
+    style S1 fill:#1f6f3f,color:#fff
+    style S2 fill:#1f6f3f,color:#fff
+    style R fill:#7a5a1f,color:#fff
 ```
 
-The session is stored in a common data store that every server can read — Redis being the usual choice, because sessions are small, short-lived and read constantly, which is what an in-memory store is for.
+**The session is stored in a common data store that every server can read** — Redis being the usual choice, because sessions are small, short-lived and read constantly, which is what an in-memory store is for.
 
 Now it does not matter which server a request lands on. Either one fetches the session from the shared store and knows exactly who the client is. The balancer is free again to route on load, servers become interchangeable, and losing one costs nothing but capacity.
 
-This is why the servers behind a balancer are described as stateless: not that they hold nothing, but that they hold nothing another server would have needed.
+This is why the servers behind a balancer are described as **stateless**: not that they hold nothing, but that they hold nothing another server would have needed.
+
+### Answer three — do not store the session at all
+
+There is a third design, and it attacks the same assumption from the other side. Instead of moving the stored session somewhere shared, arrange for there to be nothing to store.
+
+At login the server issues the client a **token** — a small piece of data stating who the user is, when it was issued and when it expires. The token is stamped by the server in a way that cannot be forged and cannot be altered without the alteration being detectable. The client keeps it and presents it on every subsequent request. The widely used form of this is the **JWT**, short for JSON Web Token.
+
+```mermaid
+flowchart TD
+    L["Login"] --> S1["Server 1 verifies the password<br/>and issues a token to the client"]
+    S1 --> CL["Client holds the token<br/>and sends it with every request"]
+    CL --> LB["Load balancer routes freely"]
+    LB --> S2["Server 2 checks the stamp is genuine<br/>and reads who the user is"]
+    S2 --> OK["Accepted — nothing was stored<br/>and nothing was looked up"]
+    style S1 fill:#1f4f7a,color:#fff
+    style CL fill:#7a5a1f,color:#fff
+    style LB fill:#1f4f7a,color:#fff
+    style S2 fill:#1f6f3f,color:#fff
+    style OK fill:#1f6f3f,color:#fff
+```
+
+The difference from the shared store is that **server 2 does not look anything up**. It checks the token's stamp, finds it genuine, reads the user's identity out of the token itself, and proceeds. No session record exists anywhere, so there is nothing for two servers to disagree about and nothing for a third component to hold.
+
+**That buys the same freedom the shared store buys, without the shared store.** The cost is on the other side: **a stored session can be deleted the instant** you want somebody signed out, whereas a token already in a client's hands stays valid until it expires, because no server is consulting a record that could be removed. Systems that need immediate revocation keep a list of withdrawn tokens, which quietly reintroduces the shared store for that one purpose.
+
+> [!important] All three answers exist to remove the same thing: a fact living inside one server that another server needs.
+> Sticky sessions keep the fact where it is and route around the problem. A shared store moves the fact somewhere every server can reach. A token hands the fact to the client and verifies it on arrival. They are three positions on one question, and the question is the only part worth memorising.
 
 ## Health checks
 
@@ -193,6 +243,10 @@ flowchart LR
     LB -->|"GET /health"| S2["Server 2"]
     S2 -.->|"no response<br/>within the timeout"| LB
     LB --> MARK["Server 2 marked down<br/>all traffic goes to server 1"]
+    style LB fill:#1f4f7a,color:#fff
+    style S1 fill:#1f6f3f,color:#fff
+    style S2 fill:#7a1f1f,color:#fff
+    style MARK fill:#7a5a1f,color:#fff
 ```
 
 If a server answers, it stays in rotation. If it fails to answer within a certain time, the balancer concludes it is down and stops sending it anything. Traffic goes to whatever remains healthy, and the clients never learn that anything happened — which is the payoff for having hidden the servers behind a single public address in the first place.
@@ -218,22 +272,31 @@ flowchart TD
     REQ --> L7["Layer 7 balancer<br/>sees: the HTTP request, including the path"]
     L4 --> D4["Routes by address"]
     L7 --> D7["Routes by path, host or address"]
+    style REQ fill:#2d333b,color:#fff
+    style L4 fill:#7a5a1f,color:#fff
+    style L7 fill:#1f4f7a,color:#fff
+    style D4 fill:#2d333b,color:#fff
+    style D7 fill:#2d333b,color:#fff
 ```
 
-> [!info] A load balancer is not an API gateway, even when it behaves like one.
+> [!warning] A load balancer is not an API gateway, even when it behaves like one.
 > Routing by path is gateway-shaped work, and a layer 7 balancer doing it looks very much like a gateway. They remain different components with different purposes, and gateways commonly include load-balancing among their functions rather than the reverse. Where a system has both, the gateway sits in front and the balancer behind it.
 
 ## One process, several jobs
 
 Recall that nginx appeared earlier as a reverse proxy, translating a public port to an application's real port. The same program is also a load balancer, and it is routinely configured as both at once.
 
-In that arrangement a single request passing through nginx has two things done to it: its port is rewritten to the one the application listens on, and it is directed to whichever of several servers should handle it.
+In that arrangement a single request passing through nginx has two things done to it: **its port is rewritten to the one the application listens on, and it is directed to whichever of several servers should handle it.**
 
 ```mermaid
 flowchart LR
     C["Client"] -->|"port 443"| N["nginx<br/>reverse proxy + load balancer"]
     N -->|"port 8080"| S1["Server 1"]
     N -->|"port 8080"| S2["Server 2"]
+    style C fill:#2d333b,color:#fff
+    style N fill:#1f4f7a,color:#fff
+    style S1 fill:#1f6f3f,color:#fff
+    style S2 fill:#1f6f3f,color:#fff
 ```
 
 Balancers also come as **hardware** appliances as well as software, and the choice between them is largely one of scale and budget rather than capability.
@@ -243,5 +306,3 @@ Balancers also come as **hardware** appliances as well as software, and the choi
 Everything above is the operating knowledge — what a balancer is for, what it breaks, and how the breakage is repaired. Several threads here run considerably deeper: how balancers are themselves made highly available, how consistent hashing behaves when the server set changes, what an API gateway does beyond routing, and how health monitoring works in a real distributed system. Those belong to system design rather than to deployment, and the boundary is a real one.
 
 What is not optional is the shape. Load grows past one machine. More machines need something in front of them. That something hides the machines, which makes them replaceable, which is the entire benefit — and the price is that anything a server remembers privately becomes a bug.
-
-*Source: class 7 — 2 September 2026, recording part 2.*

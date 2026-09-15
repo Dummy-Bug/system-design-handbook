@@ -138,6 +138,10 @@ The recorded observation of one message-mode item carrying the whole response ne
 
 Corrected in [[05-Streaming-Build]] and in the `chatbot.py` comments on the same day. The lesson that survives it: when a question is about which code path runs, the dispatch is usually in the base class, and the provider is the part that only looks like it decides.
 
-### [[03-Stream-Contract]] still publishes status as a v1 frame
+### ~~[[03-Stream-Contract]] still publishes status as a v1 frame~~ · resolved 2026-09-11, confirmed 2026-09-12
 
-The contract gives the frontend a `status` frame with a closed code table. The server no longer sends one and will not until a later step. The document has to say so before a client is built against it.
+This section was written on 2026-09-10, the day `status` was cut from `sse_events.py`, and it asked the contract to stop advertising a frame the server could not send.
+
+**It was answered the next day by putting the frames back rather than by editing the contract.** `status_for` lives in `sse_events.py` again and `frame_writer.py` emits it on three occasions: `understanding` before the graph runs, `status_for(name)` per tool call, and `preparing_answer` when a tool returns. The contract's code table was then regenerated against the implementation on 2026-09-11 and grew to eleven codes, six of which had never been listed.
+
+So the stale text was this section, not the contract. The `status` vocabulary is live for the admin and employee agents, and the fail-closed `.get(name, "working")` default is intact — verified by reading `frame_writer.py`, which routes every tool name through it and sends no tool name, argument or internal identifier on the wire.
