@@ -114,14 +114,18 @@ pytest sees the parameter name, finds the fixture with that name, **calls it**, 
 Printing it removes any doubt.
 
 ```python
-def test_what_the_parameter_actually_is(expensive_client):
-    print(type(expensive_client), expensive_client)
+def test_what_the_parameter_actually_is(service):
+    print(type(service))
 ```
 
 ```
-type : <class 'dict'>
-value: {'connected': True}
+$ uv run pytest -q -s
+<class 'payroll_service.PayrollService'>
+.
+1 passed in 0.01s
 ```
+
+The `-s` is there so the `print` reaches the screen, and the next section explains why it is needed.
 
 So writing `service()` would be trying to call a `PayrollService` object, and Python would say it is not callable.
 
@@ -279,10 +283,10 @@ def test_the_school_has_two_teachers(teachers):
 Each one alone:
 
 ```
-$ pytest -q -k hiring
+$ uv run pytest -q -k hiring
 1 passed, 1 deselected in 0.00s
 
-$ pytest -q -k school
+$ uv run pytest -q -k school
 1 passed, 1 deselected in 0.00s
 ```
 
@@ -413,7 +417,7 @@ The parametrised version reports both failures and the case that still passes, s
 |---|---|---|
 | Cases reported | the first failure only | all of them |
 | Report says | `1 failed` | `2 failed, 1 passed` |
-| Running one case | not possible | `pytest "test_x.py::test_annual_from_monthly[0-0]"` |
+| Running one case | not possible | `uv run pytest "test_x.py::test_annual_from_monthly[0-0]"` |
 | A case is | an iteration | a test, with its own id |
 
 > **Each parametrised case is a separate test** — separately reported, separately runnable, separately counted.

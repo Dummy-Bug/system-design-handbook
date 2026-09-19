@@ -140,7 +140,7 @@ def test_annual_pay_is_twelve_months():
 
 | Piece                                     | Job                                        |
 | ----------------------------------------- | ------------------------------------------ |
-| `patch("payroll.fetch_monthly_pay", ...)` | r**eplace the collaborator**               |
+| `patch("payroll.fetch_monthly_pay", ...)` | **replace the collaborator**               |
 | `return_value=5000`                       | the value still needed                     |
 | `annual_pay(7)`                           | the real function, **actually running**    |
 | `== 60000`                                | arithmetic done independently, by a person |
@@ -166,9 +166,14 @@ Red, with real numbers. The test is genuinely wired to the implementation, and t
 
 ## The accident: one layer too high
 
-Restore the `12` and change a single word in the test.
+Restore the `12` and point the patch at the function being tested instead of at its collaborator. The call now goes through the module, as `payroll.annual_pay`, so that it reaches the name the patch replaced.
 
 ```python
+from unittest.mock import patch
+
+import payroll
+
+
 def test_annual_pay_is_twelve_months():
     with patch("payroll.annual_pay", return_value=60000):
         assert payroll.annual_pay(7) == 60000
@@ -176,10 +181,15 @@ def test_annual_pay_is_twelve_months():
 
 ```
 .                                                                        [100%]
-1 passed in 0.00s
+1 passed in 0.01s
 ```
 
-Green. Now **delete the entire body** of `annual_pay`, so the function does nothing and no longer imports `records` at all.
+Green. Now **delete the entire body** of `annual_pay`, so the function does nothing at all.
+
+```python
+def annual_pay(teacher_id):
+    pass
+```
 
 ```
 .                                                                        [100%]

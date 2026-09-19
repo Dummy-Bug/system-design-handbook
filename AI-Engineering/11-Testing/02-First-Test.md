@@ -151,17 +151,26 @@ tests/test_salary.py .                                            [100%]
 
 ## The error everybody gets first
 
-Run plain `pytest` instead of `uv run pytest` and you are likely to see this:
+Type plain `pytest` instead of `uv run pytest` in a fresh uv project and the shell answers `command not found: pytest`. `uv add --dev pytest` put pytest inside the project's own `.venv`, not anywhere the shell looks, so there is nothing to run.
+
+The confusing version comes when some other pytest is on the machine — one installed globally, or living in another project's environment. That one runs, and fails like this:
 
 ```
-ModuleNotFoundError: No module named 'python_lab'
+____________________ ERROR collecting tests/test_salary.py _____________________
+ImportError while importing test module '.../tests/test_salary.py'.
+...
+tests/test_salary.py:1: in <module>
+    from python_lab.salary import annual_from_monthly
+E   ModuleNotFoundError: No module named 'python_lab'
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.06s
 ```
 
 Nothing in that message mentions tests, so it reads as unrelated to what you were doing.
 
-Here is what actually happened. Your test imports `python_lab`, which lives under `src/`. Python cannot find it there unless the project has been installed into the environment. `uv run` installs the project before running anything, so the import works. Bare `pytest` does not, so it fails.
+Here is what actually happened. Your test imports `python_lab`, which lives under `src/`. Python can only find it in an environment the project has been installed into. `uv add` already installed it into the project's `.venv`, and `uv run` always uses that environment, so the import works. A pytest from anywhere else runs on a different Python that has never heard of `python_lab`.
 
-> **The habit that avoids this entirely is `uv run pytest`, always.** Not because bare `pytest` is wrong, but because it depends on an environment being correct in a way nothing reminds you of.
+> **The habit that avoids this entirely is `uv run pytest`, always.** Not because bare `pytest` is wrong, but because it depends on whichever pytest the shell finds first, in a way nothing reminds you of.
 
 
 ---
@@ -201,7 +210,7 @@ The `where` line is the one people do not expect. pytest keeps the intermediate 
 
 > That is the whole reason `assertEquals` **does not exist and is not missed.** The helper method existed in JUnit to produce a readable message; pytest produces one from the plain statement.
 
-It also explains a rule that would otherwise look arbitrary. **Hide an assert inside a helper function of your own and you lose the diff** — the rewriting only reaches asserts pytest can see in a test file, so an assertion buried one call deeper fails with a bare `AssertionError` and no values.
+It also explains a rule that would otherwise look arbitrary. **Move an assert into a helper in an ordinary module and you lose the diff** — pytest rewrites only test files and `conftest.py`, so an assertion inside a `helpers.py` that a test imports fails with a bare `AssertionError` and no values. A helper function defined in the test file itself is rewritten along with the rest of the file, and keeps the diff.
 
 ---
 
@@ -213,13 +222,13 @@ tests/test_salary.py ..F                                          [100%]
 
 Three tests, in file order. Two dots passed, the `F` failed.
 
-| Character | Means                                                      |
-| --------- | ---------------------------------------------------------- |
-| `.`       | passed                                                     |
-| `F`       | failed — an assertion was false                            |
-| `E`       | errored — the test raised something before it could finish |
+| Character | Means                                                                              |
+| --------- | ---------------------------------------------------------------------------------- |
+| `.`       | passed                                                                             |
+| `F`       | failed — the test body raised, whether a false assertion or any other exception    |
+| `E`       | errored — something around the test raised: its setup, its teardown, or its import |
 
-`F` and `E` are genuinely different and the difference is the first thing to read off a report. **A failure means the code was wrong. An error means the test never got far enough to find out.**
+`F` and `E` are genuinely different and the difference is the first thing to read off a report. **A failure means the test ran and something in it went wrong. An error means the test never got far enough to find out.** A `RuntimeError` raised inside the test body is still an `F` — what decides it is where the exception came from, not what kind it was, and note 04 takes that apart.
 
 When something fails, read the `E` line before the traceback. That line carries the rewritten assertion with real values in it, and it usually contains the whole answer.
 
@@ -441,4 +450,4 @@ The second matters more than it first appears. Once part of a suite needs Docker
 
 One last thing, and it is the only part of pytest a machine ever reads. **A run exits with code 0 when everything passed and non-zero when anything did not.** The report is for people; **the exit code is what a build server checks**.
 
-> **Configure nothing else yet.** No `conftest.py`, no settings block, no plugins. One file, one function, one command is the whole of it for now.
+> **Configure nothing else yet.** No `conftest.py`, no plugins, and nothing in the settings block beyond its two lines. One file, one function, one command is the whole of it for now.

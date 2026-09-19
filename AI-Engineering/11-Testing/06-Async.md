@@ -1,6 +1,6 @@
 #testing #pytest #async #anyio #fastapi
 
-**A test calls the function, asserts on what comes back, and passes — while the function never ran.** No mock, no weak assertion, nothing that looks like a mistake. Async code opens a fourth door into the vacuous test, and it is the only one that looks exactly like a correct test.
+**A test calls the function, asserts on what comes back, and passes — while the function never ran.** No mock, no weak assertion, nothing that looks like a mistake. Async code opens one more door into the vacuous test, and it is the only one that looks exactly like a correct test.
 
 # Async Changes The Rules
 
@@ -22,6 +22,15 @@ def test_pay_is_returned():
 ```
 
 ```
+.                                                                        [100%]
+=============================== warnings summary ===============================
+test_payroll.py::test_pay_is_returned
+  .../_pytest/python.py:167: RuntimeWarning: coroutine 'fetch_monthly_pay' was never awaited
+    result = testfunction(**testargs)
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 1 passed, 1 warning in 0.01s
 ```
 
@@ -34,25 +43,40 @@ async def fetch_monthly_pay(teacher_id):
 
 ```
 .                                                                        [100%]
-1 passed in 0.00s
+=============================== warnings summary ===============================
+test_payroll.py::test_pay_is_returned
+  .../_pytest/python.py:167: RuntimeWarning: coroutine 'fetch_monthly_pay' was never awaited
+    result = testfunction(**testargs)
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+1 passed, 1 warning in 0.01s
 ```
 
-Still green.
+Still green, and the report is identical line for line.
 
 ### What result actually was
 
 ```python
 def test_what_is_it():
     result = fetch_monthly_pay(7)
-    print(type(result), result, bool(result), result == 5000)
+    print("type    :", type(result))
+    print("value   :", result)
+    print("bool    :", bool(result))
+    print("== 5000 :", result == 5000)
 ```
 
 ```
-type : <class 'coroutine'>
-value: <coroutine object fetch_monthly_pay at 0x106ee6ec0>
-bool : True
-== 5000? False
+$ uv run pytest -q -s test_what.py
+type    : <class 'coroutine'>
+value   : <coroutine object fetch_monthly_pay at 0x107a22740>
+bool    : True
+== 5000 : False
+.
 ```
+
+The same warnings summary follows, cut here.
 
 **Calling an `async def` function does not run it.** It builds a coroutine object and hands that back; the body does not execute until something awaits it.
 
@@ -63,7 +87,7 @@ assert result                     # every coroutine object is truthy
 
 The assertion asks whether an object is truthy, and it always is. So the test passes whatever the function contains, including nothing.
 
-> This is the vacuous test through a fourth door, and the worst of the four — because **nothing about the test looks wrong**. No mock, no obviously weak assertion, no empty loop. The function was called and the result was asserted on, which is what a test is supposed to do.
+> This is the vacuous test through yet another door, and the worst of them — because **nothing about the test looks wrong**. No mock, no obviously weak assertion, no empty loop. The function was called and the result was asserted on, which is what a test is supposed to do.
 
 ---
 
@@ -149,13 +173,50 @@ Note it also uses `AsyncClient` with `ASGITransport` rather than `TestClient`. T
 
 > **Installing both and hoping is the one path that does not work.** Pick one.
 
-### Three things that settle it for ASGI code
+### What settles it for ASGI code
 
 **Starlette is built on anyio**, not on asyncio directly. The framework already made this choice.
 
-**`pytest-asyncio` cannot drive `TaskGroup` or `CancelScope`.** A Starlette request handler runs inside an anyio task group, and anyio cancel scopes are level-triggered — which is why an unshielded write in a `finally` block is lost on a single ordinary client disconnect. Testing behaviour like that **requires** the anyio plugin; it is not merely more convenient.
+**The anyio plugin runs the same test on Trio as well as asyncio.** `pytest-asyncio` only ever runs asyncio. For an application that runs on asyncio that costs nothing, and for a library promising both backends it rules `pytest-asyncio` out.
 
 **It is already installed.** `anyio` arrives with FastAPI through Starlette, so choosing it adds no dependency at all.
+
+### An argument that does not hold
+
+You will read that `pytest-asyncio` cannot run code using anyio's `TaskGroup` or `CancelScope`, so anyio-based code needs the anyio plugin. It can. anyio runs on top of whatever asyncio event loop it finds itself in, and `pytest-asyncio` supplies an asyncio loop.
+
+```python
+import anyio
+import pytest
+
+
+@pytest.mark.asyncio
+async def test_task_group_and_cancel_scope():
+    results = []
+
+    async def worker(n):
+        await anyio.sleep(0.01)
+        results.append(n)
+
+    async with anyio.create_task_group() as tg:
+        tg.start_soon(worker, 1)
+        tg.start_soon(worker, 2)
+
+    with anyio.CancelScope() as scope:
+        scope.cancel()
+        await anyio.sleep(1)
+
+    assert sorted(results) == [1, 2]
+    assert scope.cancelled_caught
+```
+
+```
+$ uv run pytest -q -p no:anyio
+.                                                                        [100%]
+1 passed in 0.04s
+```
+
+That run has `pytest-asyncio` installed and anyio's plugin switched off with `-p no:anyio`, so `pytest-asyncio` is the only thing supplying the loop. Both workers ran, and the cancelled one-second sleep returned at once.
 
 ---
 
@@ -291,16 +352,39 @@ The async test passed. The sync test **errored**, loudly, naming both the test a
 ## One loop per test
 
 ```python
+import asyncio
+
+import pytest
+
+
 @pytest.mark.anyio
 async def test_one():
-    print(id(asyncio.get_running_loop()))
+    print("\ntest_one  ", id(asyncio.get_running_loop()))
+
+
+@pytest.mark.anyio
+async def test_two():
+    print("\ntest_two  ", id(asyncio.get_running_loop()))
+
+
+@pytest.mark.anyio
+async def test_three():
+    print("\ntest_three", id(asyncio.get_running_loop()))
 ```
 
 ```
-  test_one   loop: 4414286416
-  test_two   loop: 4414656336
-  test_three loop: 4414659856
+$ uv run pytest -q -s tests/test_loops.py
+
+test_one   4411469040
+.
+test_two   4411593168
+.
+test_three 4411596688
+.
+3 passed in 0.01s
 ```
+
+The numbers are memory addresses and change on every run. What matters is that the three differ.
 
 Three tests, three different loops. **That is anyio's default and it is the safe one** — nothing an object holds can outlive the test that created it, because the loop it belongs to is gone.
 

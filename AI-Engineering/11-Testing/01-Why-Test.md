@@ -208,7 +208,7 @@ That is why so much of what follows is about **keeping tests off the network, of
 
 Some tests fail for reasons that have nothing to do with the code they cover. The usual word for one of those is **flaky**: a test that passes or fails depending on something other than whether the code is correct.
 
-Take the sharpest example. A test checks a report covering last month, and works out last month by subtracting thirty days from today. It passes all year. On the first of March it subtracts thirty days from a twenty-eight-day February, lands in January, and goes red — with nothing wrong in the code at all. Somebody spends an hour on it, finds nothing, reruns it on the second of March, and it passes.
+Take the sharpest example. A test checks a report covering last month, and works out last month by subtracting thirty days from today. It passes on most days. On the thirty-first of May it subtracts thirty days, lands on the first of May, and goes red — with nothing wrong in the code at all. Somebody spends an hour on it, finds nothing, reruns it the next morning, the first of June, and it passes. Across 2026 that test goes red on nine days: the thirty-first of every month that has one, plus the first and second of March, when thirty days back skips the whole of February.
 
 Whatever the cause, the effect is identical. **A flaky test teaches everybody who sees it that red does not mean broken.**
 

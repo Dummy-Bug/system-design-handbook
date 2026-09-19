@@ -1,6 +1,6 @@
 #testing #pytest #fastapi #async #langgraph #agents #syllabus
 
-# 09 · Testing Python Services — Syllabus
+# 11 · Testing Python Services — Syllabus
 
 **19 notes, 223 rungs.** Generic — pytest, async, FastAPI and agent code, not Xarvis's implementation, which is mapped at the bottom.
 
@@ -24,7 +24,7 @@
 
 **Recall is per note, from memory, file closed.** Recognising an answer does not count.
 
-**Two rabbit holes are marked and binding** — event-loop internals in note 6, and coverage tooling in note 17. Both are deep, satisfying, and pay back nothing here.
+**Two rabbit holes are marked and binding** — event-loop internals in note 6, and coverage tooling in note 16. Both are deep, satisfying, and pay back nothing here.
 
 **Spacing:** re-test notes 1 to 7 after finishing note 11, and all of 1 to 12 once the first suite is green. Same-day re-testing is close to wasted, because retrieval works when forgetting has started.
 
@@ -66,11 +66,11 @@ Written up as [[02-First-Test]].
 2. pytest finds tests by **name**: a file whose name starts with `test_`, holding a function whose name starts with `test_`, discovered by walking directories from where the command was run.
 3. So the smallest complete test is a four-line file with no scaffolding of any kind around it.
 4. Tests live in a `tests/` directory beside `src/`, outside the package, because they are not part of what ships.
-5. Which creates the first thing that goes wrong for everybody: the test has to import your package, and a `src/` layout makes that fail until the project is installed. **The error names a missing module, not a test**, so it reads as unrelated to what you were doing.
-6. `uv run pytest` from the project root installs and runs in one step, which is why that problem mostly disappears with uv and bites hard without it.
+5. Which creates the first thing that goes wrong for everybody: the test has to import your package, and a `src/` layout makes that fail under any Python the project was never installed into — a pytest from some other environment, for instance. **The error names a missing module, not a test**, so it reads as unrelated to what you were doing.
+6. `uv run pytest` always runs the project's own environment, which `uv add` already installed the project into, which is why that problem mostly disappears with uv and bites hard without it.
 7. The assertion is the bare `assert` statement. No `assertEquals`, no matcher library, no import.
 8. pytest **rewrites** that statement before running it, so a failure prints both sides of the comparison rather than just saying false.
-9. Which is why the helper methods do not exist and are not missed — and why a helper that hides the assert inside another function loses the diff, since the rewriting only reaches asserts pytest can see.
+9. Which is why the helper methods do not exist and are not missed — and why a helper that hides the assert in an ordinary module loses the diff, since the rewriting only reaches test files and `conftest.py`.
 10. The report is one character per test: a dot passed, `F` failed, `E` errored. The count on the last line is the whole summary.
 11. Reading a failure means reading the **rewritten assertion line first** and the traceback second, because the rewritten line usually contains the answer.
 12. `-q` shrinks the report, `-x` stops at the first failure, `-k` selects tests by name substring. Three flags cover the first month.
@@ -125,7 +125,7 @@ Written up as [[04-Pytest-Model]].
 11. A `conftest.py` is found automatically and never imported by name, which is the mechanism the next note is built on.
 
 > **Recall:** What is the difference between a failure and an error, and why does it matter when reading a report? · What makes two tests order-dependent, and what is the cheapest way to expose it? · Why can an import error in one file break a test in another?
-
+>
 > **Stop:** Do not learn the plugin ecosystem. Two config keys and a handful of flags cover the first month.
 
 ---
@@ -165,12 +165,12 @@ Written up as [[06-Async]].
 
 1. An `async def` function called without awaiting returns a **coroutine object** and runs nothing.
 2. So a sync test calling async code asserts on a coroutine, which is truthy, and the assertion passes while nothing executed.
-3. That is the vacuous test from note 2 arriving through a different door, and it does not look like mocking.
+3. That is the vacuous test from note 3 arriving through a different door, and it does not look like mocking.
 4. Running a coroutine needs an event loop, and a test framework has to supply one.
 5. Two plugins do it: **`pytest-asyncio`** and the **anyio** pytest plugin.
 6. FastAPI's own documentation uses **`@pytest.mark.anyio`**, because Starlette is built on anyio rather than raw asyncio.
 7. And `pytest-asyncio`'s **auto mode conflicts with the anyio plugin** in the same session, so this is a choice rather than an accumulation.
-8. It also cannot drive anyio-native primitives — `TaskGroup`, `CancelScope` — which is decisive for any code using them.
+8. It drives anyio's `TaskGroup` and `CancelScope` perfectly well, because anyio runs on whatever asyncio loop it finds — what it cannot do is run a test on Trio, which matters only for code promising both backends.
 9. `anyio_backend` is **not required** — anyio ships one parametrised over every backend it finds installed, so writing your own is a **pin** rather than a requirement, and anyio's is **module-scoped** while a plain `@pytest.fixture` override is not. An async fixture needs the same plumbing an async test does, and current pytest **errors loudly** when a sync test requests one rather than handing over a coroutine.
 10. Event-loop scope is a second, independent lifetime from fixture scope, and mismatching them produces `attached to a different loop`.
 11. That error names the loop and never names the fixture that caused it, which is why it is hard.
@@ -222,7 +222,7 @@ Written up as [[07-Doubles]].
 8. **`app.dependency_overrides`** replaces any `Depends(...)` callable with a fake, keyed by the original function object.
 9. That is how a database session, an authenticated user or an external client is swapped for a test double without touching the route.
 10. It is a plain dict on the app, and **it is global and persists**, so an override set in one test is still there in the next.
-11. Which produces failures that only appear in a full run and vanish in isolation — the order-dependence of note 3, in FastAPI's own vocabulary.
+11. Which produces failures that only appear in a full run and vanish in isolation — the order-dependence of note 4, in FastAPI's own vocabulary.
 12. So the override belongs in a fixture whose teardown clears it, never inline in a test.
 13. Validation failures return 422 with a body describing the field, and asserting on that body pins the contract rather than the framework.
 14. Lifespan events do not run under a bare `ASGITransport` unless asked for, so anything set up at startup is absent — which is either what you want or a silent hole.
@@ -332,7 +332,7 @@ Written up as [[07-Doubles]].
 2. **A routing condition is a pure function of state** — no model, no network, no graph — and is the cheapest thing in the whole system to test.
 3. Which makes extracting the condition from the node a testability decision before it is a design one.
 4. **A node is a function from state to a state update**, so it is testable by handing it a dict, provided its dependencies are injectable.
-5. A node that reaches for a global context is testable only by patching, which is the pressure of note 10 arriving in a new place.
+5. A node that reaches for a global context is testable only by patching, which is the pressure of note 11 arriving in a new place.
 6. **A trajectory test asserts the sequence of nodes visited**, which is the thing unit tests structurally cannot see.
 7. Compiling with an in-memory checkpointer is what makes state, resume and history observable in a test.
 8. An in-memory checkpointer is for tests and local development only, because it loses everything on restart.
@@ -382,7 +382,7 @@ Written up as [[07-Doubles]].
 6. So configuration read lazily, or injected, is a testability property rather than a style preference.
 7. Anything requiring Docker splits the suite in two, and marking those tests lets the fast half run without it.
 8. **Markers plus a default deselection** is how a suite stays fast locally and thorough in CI.
-9. CI is where the ordering assumptions of note 3 surface, because it runs the whole suite from clean every time.
+9. CI is where the ordering assumptions of note 4 surface, because it runs the whole suite from clean every time.
 10. And a suite that only passes in CI is as broken as one that only passes locally — both mean the environment is part of the test.
 
 > **Recall:** Why can a suite requiring credentials never be a gate? · What breaks when configuration is read at import time? · What do markers buy beyond organisation?
@@ -421,7 +421,7 @@ Written up as [[07-Doubles]].
 2. Which makes it unusual: it is the highest-consequence logic in most systems and among the cheapest to test.
 3. **The negative case is the test.** That an authorised caller succeeds proves nothing about the guard.
 4. So every check needs at least: authorised passes, unauthorised is refused, and the boundary case is decided deliberately.
-5. A guard whose condition is accidentally always true passes the positive test and fails no test at all — the vacuous test of note 2, at the worst possible place.
+5. A guard whose condition is accidentally always true passes the positive test and fails no test at all — the vacuous test of note 3, at the worst possible place.
 6. Which is why the mutation check matters most here: invert the condition and require the negative test to go red.
 7. A check duplicated across call sites needs the test at each site, or the copy that drifts is the one nothing covers.
 8. **Enumerating the call sites is itself the test** — a registry with a test asserting every entry is guarded catches the next tool nobody wired up.
@@ -474,7 +474,7 @@ Written up as [[07-Doubles]].
 
 > **Recall:** Why is a suite more honest than a README? · What does a fixture list tell you about a design? · Why is the absence of a test more informative than its presence?
 >
-> **Stop:** Do not audit a suite before you have written one. This note reads differently after note 17 and is nearly meaningless before it.
+> **Stop:** Do not audit a suite before you have written one. This note reads differently after note 18 and is nearly meaningless before it.
 
 ---
 

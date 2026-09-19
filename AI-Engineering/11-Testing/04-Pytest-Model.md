@@ -231,10 +231,10 @@ def test_after_a_pay_rise_she_earns_6000():
 Each one on its own:
 
 ```
-$ pytest -k priya
+$ uv run pytest -k priya
 1 passed, 1 deselected in 0.01s
 
-$ pytest -k pay_rise
+$ uv run pytest -k pay_rise
 1 passed, 1 deselected in 0.00s
 ```
 
@@ -611,14 +611,14 @@ Which is why testability and design keep turning out to be one subject. **Code t
 A suite where two of five tests are red.
 
 ```
-$ pytest -q
+$ uv run pytest -q
 FAILED test_salary.py::test_net_pay      - assert 54000.0 == 99999
 FAILED test_salary.py::test_net_pay_zero - assert 0.0 == 42
 2 failed, 3 passed in 0.01s
 ```
 
 ```
-$ pytest -q --lf
+$ uv run pytest -q --lf
 FAILED test_salary.py::test_net_pay      - assert 54000.0 == 99999
 FAILED test_salary.py::test_net_pay_zero - assert 0.0 == 42
 2 failed in 0.01s
@@ -650,7 +650,7 @@ Worth noticing given everything else here: pytest keeps state between runs, on d
 ### The companion flag
 
 ```
-pytest --ff
+uv run pytest --ff
 ```
 
 **Failed first.** Runs everything, but puts last time's failures at the front.
@@ -675,8 +675,8 @@ Stack either flag with `-x`, which stops at the first failure. That gives one fa
 **While things are broken the two are identical:**
 
 ```
-pytest --lf -x   ->  1 failed, stopping after 1 failures
-pytest --ff -x   ->  1 failed, stopping after 1 failures
+uv run pytest --lf -x   ->  1 failed, stopping after 1 failures
+uv run pytest --ff -x   ->  1 failed, stopping after 1 failures
 ```
 
 Naturally so. `--ff` puts the failures first and `-x` stops at the first one, so it never reaches the passing tests either.
@@ -684,8 +684,8 @@ Naturally so. `--ff` puts the failures first and `-x` stops at the first one, so
 **Once everything is fixed they diverge:**
 
 ```
-pytest --lf -x   ->  2 passed        the other three never ran
-pytest --ff -x   ->  5 passed        the whole suite confirmed
+uv run pytest --lf -x   ->  2 passed        the other three never ran
+uv run pytest --ff -x   ->  5 passed        the whole suite confirmed
 ```
 
 > **`--ff -x` is the better default.** Identical tight iteration while broken, and it runs the full suite by itself the moment the fix lands — so the confirmation happens without having to remember a second command.
@@ -760,10 +760,33 @@ This is the mechanism behind scope in the autouse section above. The same three 
 And it must not be imported from either.
 
 ```python
+# tests/db/test_rows.py
 from conftest import teacher_id      # do not
+
+
+def test_row_id(teacher_id):
+    assert teacher_id == 7
 ```
 
-That is a real **anti-pattern** with a real mechanism behind it. pytest has already loaded that file its own way; importing it by name loads it **a second time**, as a separate module, producing two copies of every fixture in it — and then resolution errors that read as impossible, because a fixture appears to exist and not exist at once.
+Under the `--import-mode=importlib` setting at the foot of this note, the file never gets as far as the test.
+
+```
+____________________ ERROR collecting tests/db/test_rows.py ____________________
+ImportError while importing test module '.../tests/db/test_rows.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+tests/db/test_rows.py:1: in <module>
+    from conftest import teacher_id
+E   ModuleNotFoundError: No module named 'conftest'
+=========================== short test summary info ============================
+ERROR tests/db/test_rows.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.06s
+```
+
+pytest loaded `conftest.py` its own way, straight from its path, and never put its folder on `sys.path` — so to an ordinary `import` there is no module called `conftest` anywhere.
+
+Switch back to the old default mode and the same file passes, because that mode does put the folder on `sys.path`. **That is the worse outcome**: the import works today, becomes a habit, and turns into a collection error that stops the whole suite on the day somebody sets the recommended mode. It is a real **anti-pattern** either way, and the test never needed the import — naming `teacher_id` as a parameter was already the entire wiring.
 
 > **If something in `conftest.py` needs importing, it does not belong in `conftest.py`.** Plain helper functions go in an ordinary module that gets imported normally. `conftest.py` is for **fixtures and pytest hooks**, and pytest should be the only thing that ever reads it.
 
