@@ -6,11 +6,11 @@ The previous notes described a developer working on a feature branch, their own 
 
 Some teams put a branch in between. A common arrangement keeps a long-lived **develop** branch that finished features are merged into first, with main reserved for what is actually in production. It is one more stop, and it changes nothing about what follows.
 
-Merging is the moment of integration. Until it happens, your reviews feature and somebody else's payment feature are two pieces of work that have never met.
+Merging is the moment of integration. Until it happens, your reviews feature and another developer's payment feature are two pieces of work that have never met.
 
 ## The naive approach, and why it collapses
 
-The obvious way to work is to stay on your own branch until your feature is done. You are not disturbed, nothing half-finished reaches anybody else, and you merge once at the end. On a small piece of work that is completely fine.
+The obvious way to work is to stay on your own branch until your feature is done. You are not disturbed, nothing half-finished reaches any other developer, and you merge once at the end. On a small piece of work that is completely fine.
 
 Now scale it. Twenty developers, each on their own branch, each working for a month without merging. Three months in, the work has to come together.
 
@@ -31,14 +31,14 @@ flowchart LR
     style PAIN fill:#7a1f1f,color:#fff
 ```
 
-A **merge conflict** happens when two branches changed the same part of the same file in different ways. The tool combining them cannot decide which version is correct, because that is a question about intent rather than about text, so it stops and asks a person. Somebody now has to read both versions, work out what each developer was trying to do, and write the version that does both.
+A **merge conflict** happens when two branches changed the same part of the same file in different ways. The tool combining them cannot decide which version is correct, because that is a question about intent rather than about text, so it stops and asks a developer. A developer now has to read both versions, work out what each developer was trying to do, and write the version that does both.
 
 One conflict is a few minutes of thought. The failure is what happens when they arrive together.
 
 > [!failure] The cost of integration grows with the time two branches stay apart.
-> Two branches that separated an hour ago have barely any overlapping changes, so they merge cleanly. Two that separated three months ago have both moved a long way, often through the same files, and each conflict now has to be resolved by somebody reconstructing what a colleague intended twelve weeks ago from code alone. Worse, the conflicts interact: resolving one changes the file that the next one is about. **Waiting does not postpone the work — it multiplies it.**
+> Two branches that separated an hour ago have barely any overlapping changes, so they merge cleanly. Two that separated three months ago have both moved a long way, often through the same files, and each conflict now has to be resolved by a developer reconstructing what another developer intended twelve weeks ago from code alone. Worse, the conflicts interact: resolving one changes the file that the next one is about. **Waiting does not postpone the work — it multiplies it.**
 
-And the conflicts are only the visible part. Code that merges without a single conflict can still be broken by the merge, because two changes can be textually independent and behaviourally incompatible — one developer renames what a value means while another writes new code relying on the old meaning. Nothing in the merge notices. The tests notice, if anybody runs them.
+And the conflicts are only the visible part. **Code that merges without a single conflict can still be broken by the merge, because two changes can be textually independent and behaviourally incompatible** — one developer renames what a value means while another writes new code relying on the old meaning. Nothing in the merge notices. The tests notice, if a developer runs them.
 
 ## Continuous means merging often enough that this never builds up
 
@@ -56,7 +56,7 @@ flowchart LR
     style OK fill:#1f6f3f,color:#fff
 ```
 
-Each merge is small because little has happened since the last one. Conflicts are rare, and the ones that do occur are about code written yesterday by somebody who is still in the room.
+Each merge is small because little has happened since the last one. Conflicts are rare, and the ones that do occur are about code written yesterday by a developer who is still in the room.
 
 > [!important] Continuous does not name a fixed interval, and nobody can tell you the number.
 > There is no standard duration, and anyone who quotes one is describing their own team. **The period is whatever the company decides** — but the decision has a shape. **One month is too long. Two months is far too long.** A day, two days, three days is the kind of interval that works. The test is not the number itself; it is whether developers are working individually for long stretches and then integrating everything in one go. If they are, the interval is wrong whatever it is.
@@ -69,13 +69,13 @@ Merging often, on its own, is a habit. What turns it into a mechanism is the pip
 
 That is the part that converts hope into evidence. Merging frequently means conflicts stay small; merging frequently **into a pipeline** means you also find out, within minutes, whether the combined code still works.
 
-**This depends on the tests existing.** When you write the login feature, you write the test cases that cover the login feature, and they get merged with it. A pipeline with no tests still builds and still deploys — it simply cannot tell you whether the integration was sound, which was the whole reason for running it on every merge.
+**This depends on the tests existing.** When you write the login feature, you write the test cases that cover the login feature, and they get merged with it. **A pipeline with no tests still builds and still deploys** — it simply cannot tell you whether the integration was sound, which was the whole reason for running it on every merge.
 
 | | Guarantees | Does not guarantee |
 |---|---|---|
-| Merging often | Conflicts stay small, and are resolved by people who still remember the code | That the combined code works |
+| Merging often | Conflicts stay small, and are resolved by developers who still remember the code | That the combined code works |
 | Merging often into a pipeline | The combined code builds, and every test that exists passes | That the tests cover anything meaningful |
 | Merging often into a pipeline, with tests written alongside features | That a break is found within minutes of the merge that caused it | That the change is a good idea, which is what review is for |
 
 > [!tip] The pipeline has to stay healthy for any of this to hold.
-> Continuous integration only works while the pipeline is running and trusted. A pipeline that is broken, or so slow that people work around it, stops being a check and becomes an obstacle — and a team that has learned to ignore a failing build has lost the guarantee without anybody deciding to give it up. Keeping it fast, keeping every run passing, and keeping it unchoked is what makes the rest of this real.
+> Continuous integration only works while the pipeline is running and trusted. A pipeline that is broken, or so slow that developers work around it, stops being a check and becomes an obstacle — and a team that has learned to ignore a failing build has lost the guarantee without anybody deciding to give it up. Keeping it fast, keeping every run passing, and keeping it unchoked is what makes the rest of this real.

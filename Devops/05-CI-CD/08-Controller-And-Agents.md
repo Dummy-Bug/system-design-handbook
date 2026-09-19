@@ -5,12 +5,12 @@ Jenkins is the orchestration tool the previous note settled on, and orchestratio
 > [!important] Jenkins has a controller layer and an agent layer. The controller coordinates work. The agent executes it.
 > That is the whole architecture in two sentences. The controller decides what needs doing and who should do it; it does not do the work itself. The agent does the work and decides nothing.
 
-**The controller** holds the definition of every pipeline, watches for the events that should start one, assigns each piece of work to an agent, and keeps track of what is running and what finished. It also carries everything around the edges — the jobs, the structure of each pipeline, the management of those jobs, and the interface a human looks at.
+**The controller** holds the definition of every pipeline, watches for the events that should start one, assigns each piece of work to an agent, and keeps track of what is running and what finished. It also carries everything around the edges — the jobs, the structure of each pipeline, the management of those jobs, and the interface a developer looks at.
 
 **The agents** are the workers. An agent is given a task — build this application, run these tests, produce this package — and it performs it. It is told what to do by the controller and has no view about what it is handed.
 
 > [!note] Older material calls these two the master and the slaves.
-> The current names are controller and agent, and those are the ones to use. You will still meet the older pair in documentation, in tutorials and in the way people talk about existing setups, and they mean exactly the same two things — master for the coordinating layer, slave for a worker. Recognise them and write the current ones.
+> The current names are controller and agent, and those are the ones to use. You will still meet the older pair in documentation, in tutorials and in the way developers talk about existing setups, and they mean exactly the same two things — master for the coordinating layer, slave for a worker. Recognise them and write the current ones.
 
 ```mermaid
 flowchart TD
@@ -25,12 +25,12 @@ flowchart TD
 
 ## Both of them are just servers
 
-This is the point where people get confused, so it is worth being blunt about it.
+This is the point where developers get confused, so it is worth being blunt about it.
 
 **Neither the controller nor an agent is anything on its own.** They are programs. A program needs a computer to run on, which means the controller runs on a machine and each agent runs on a machine, and those machines are ordinary servers with processors and memory and addresses.
 
 > [!note] A node means a computer. Nothing more.
-> The word turns up constantly in this material and in system design generally, where a collection of separate machines is described as a set of nodes. In this context it means exactly one thing: a computer, or a server. The controller runs on a node. Each agent runs on a node. When somebody says a Jenkins node they mean one of the machines involved.
+> The word turns up constantly in this material and in system design generally, where a collection of separate machines is described as a set of nodes. In this context it means exactly one thing: a computer, or a server. The controller runs on a node. Each agent runs on a node. When a developer says a Jenkins node they mean one of the machines involved.
 
 Being a server also means an agent is reachable the ordinary way. Give it a subdomain such as `api.bookcart.in`, and anything looking for that name gets the machine's address back and connects to it — the same mechanism that puts any name on the internet in front of any machine. That mechanism is the domain name system, and it is covered in its own right in [[../04-Networking/04-DNS-Resolution|DNS resolution]] and [[../04-Networking/05-DNS-Records|DNS records]]. The point here is only that there is nothing exotic about these machines: an agent is a server, addressed like any other.
 
@@ -48,7 +48,7 @@ One agent cannot be both a Linux machine and a Windows machine. So you keep one 
 
 ### Parallelism
 
-Say you have three applications — a Spring Boot one, a Node.js one and a Django one — running on ports `8080`, `9090` and `8292`. They are completely independent of each other; nothing about building one involves the others.
+Say you have three applications — the bookshop, a second Spring Boot application, and a Django one — running on ports `8080`, `9090` and `8292`. They are completely independent of each other; nothing about building one involves the others.
 
 **Parallel here means what it sounds like: the work happening at the same instant, on separate machines, with nothing shared and nothing waiting.** There is a weaker arrangement that also makes several things progress together on one machine, and the difference between the two matters enough to get its own treatment in the next note.
 
@@ -57,11 +57,11 @@ With one agent, the three builds queue up and run one after another. With three 
 ```mermaid
 flowchart LR
     subgraph ONE["One agent"]
-        Q["Spring Boot, then Node.js, then Django<br/>one after another"]
+        Q["The bookshop, then the second<br/>Spring Boot app, then Django<br/>one after another"]
     end
     subgraph THREE["Three agents"]
-        P1["Spring Boot"]
-        P2["Node.js"]
+        P1["The bookshop"]
+        P2["Second Spring Boot app"]
         P3["Django"]
     end
     style Q fill:#7a5a1f,color:#fff

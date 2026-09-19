@@ -152,11 +152,8 @@ flowchart TB
     T --> D["<b>first bad commit reported</b>"]
 ```
 
-> [!tip] **Git has this loop built in, which the class did not cover.**
+> [!tip] **Git has this loop built in.**
 >
-> ```bash
-> git bisect run npm test
-> ```
 > ```bash
 > git bisect run ./mvnw test
 > ```

@@ -2,7 +2,7 @@ The previous note took apart the CI half of the abbreviation — code joining ot
 
 ## Everything up to the package is identical
 
-Both arrangements start the same way, and it is the sequence already established: a developer opens a pull request, the automation engine is triggered, the code is built, the tests that were written alongside it are run, and a package is produced. If the tests fail, the pipeline stops there and nobody goes any further.
+Both arrangements start the same way, and it is the sequence already established: a developer opens a pull request, the automation engine is triggered, the code is built, the tests that were written alongside it are run, and a package is produced. If the tests fail, the pipeline stops there and nothing goes any further.
 
 So the shared part is the whole of the pipeline except its last step. What separates the two is **what is allowed to happen once that package exists.**
 

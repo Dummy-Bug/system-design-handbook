@@ -93,7 +93,7 @@ The distinction is worth stating plainly, because it is the actual principle rat
 
 A minimal web application with one endpoint. Ask it for `/api/hello` and it answers with a message.
 
-> [!info] **You do not need to know the framework.** The application below is Spring Boot because that is what the class used, and a Node.js version was shown afterwards following exactly the same steps. **The framework is not the lesson.** If you read the code and understand nothing, you have lost nothing — what matters is that a build produces one file, and that file has to travel.
+> [!info] **You do not need to know the framework.** The application below is Spring Boot. **The framework is not the lesson.** If you read the code and understand nothing, you have lost nothing — what matters is that a build produces one file, and that file has to travel.
 
 Three details matter later, so notice them now:
 
@@ -138,7 +138,6 @@ target/demo-0.0.1-SNAPSHOT.jar
 >
 > Neither is interesting in itself. They are worth recording because **this is what building actually looks like** — the clean single-command version in a tutorial is the exception, not the rule.
 
-Node.js has the same shape: a build step, and one artifact that gets deployed. The name and the tooling differ; the process does not.
 
 ---
 

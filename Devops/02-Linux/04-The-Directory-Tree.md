@@ -55,7 +55,7 @@ It is also, as note `03` showed, **the one place you can create things without a
 
 Every application has configuration: the settings it reads at startup to know how to behave.
 
-You have seen this in whatever you build with. A Spring Boot application has `application.properties`. A Node.js server has a config file, often JSON. Whatever the language, there is a file somewhere holding the values that change between one environment and another.
+You have seen this in whatever you build with. A Spring Boot application has `application.properties`. Whatever the language, there is a file somewhere holding the values that change between one environment and another.
 
 > **`/etc` is where that configuration goes on a Linux server.**
 

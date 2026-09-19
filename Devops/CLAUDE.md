@@ -215,6 +215,9 @@ telling him the command.
 > [!tip] **The placeholder conventions settled for `04-Networking/` — reuse them, do not reinvent them.**
 > Every domain in these notes is one invented brand with its subdomains (`api.`, `admin.`, `manager.`, `blog.`), chosen so the notes read as one continuous example rather than a different placeholder per note. Example IP addresses keep the shape used on the board but with **legal octets** — the ones taught had values above 255, which is a real error to publish. Ports came from `/etc/services` rather than the recording, because the spoken numbers included at least one slip. **A later networking class continues this subject, so the same brand and the same addresses must carry over.**
 
+> [!important] **Every example is Java, never Node.js — set 2026-09-19, at his instruction.**
+> He knows Java, and a Node.js example is one more thing to decode before the concept lands. The running application is a Spring Boot bookshop at `bookcart.in`, built with Maven: sources under `src/main/java`, tests under `src/test/java`, `pom.xml` at the root, test classes named `*Test.java` so Surefire picks them up. **When the class demonstrates in Node.js, translate the example to Java and Maven rather than carrying the Node version**, and verify every Maven command against the lifecycle docs before writing it. Node.js was removed from every folder on that date. JavaScript mentioned as the language of the browser front end is a different thing and stays.
+
 Classes run **Wednesday and Saturday, 9:00 pm, 2–2½ hours**.
 
 > [!important] **The visual standard for this vault — set on 2026-09-12 and applied to `04-Networking/` first.**

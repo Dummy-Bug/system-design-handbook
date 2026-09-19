@@ -6,7 +6,7 @@ Go back through the stages and ask where each one physically runs.
 
 To build the code, something must first get hold of the code — check out the branch, pull the changes down onto a disk somewhere. Then something must compile it, or whatever building means for that language. Then something must execute the test suite. Then assemble a package. Then connect to the target server and deploy.
 
-**Every one of those needs a machine with a processor, memory, a filesystem and a network connection.** They are not abstract operations; they are the same operations a person used to perform on a laptop, and removing the person does not remove the need for the computer.
+**Every one of those needs a machine with a processor, memory, a filesystem and a network connection.** They are not abstract operations; they are the same operations a developer used to perform on a laptop, and removing the developer does not remove the need for the computer.
 
 So the pipeline needs a machine of its own. In practice that means a separate server, bought or rented for the purpose, and a cloud provider is the ordinary place to put it — on AWS, say.
 

@@ -106,7 +106,7 @@ Here is where the simple picture breaks.
 
 **One server can host multiple applications.** This single sentence causes most of the confusion people have about the rest of this subject, so it is worth stating plainly and then looking at.
 
-If you have deployed anything onto a Linux machine before, you have already done this without necessarily noticing. A Spring Boot application deployed on one machine, and a Node.js application deployed on the same machine, both running at the same time, both serving traffic. That is normal — it is what servers are for. A single machine can host two applications, or ten.
+If you have deployed anything onto a Linux machine before, you have already done this without necessarily noticing. Two Spring Boot applications deployed on the same machine, both running at the same time, both serving traffic. That is normal — it is what servers are for. A single machine can host two applications, or ten.
 
 Now watch what that does to the address:
 

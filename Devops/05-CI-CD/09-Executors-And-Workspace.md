@@ -76,4 +76,4 @@ The reason for one each is what would happen otherwise. Both builds write files 
 
 There is now a controller assigning work, agents with executors to perform it, and a workspace on each one with the code checked out into it. One thing is still missing, and it is the obvious one.
 
-The controller has no idea what to actually do with that code. It does not know that the tests for `calculator.js` live in `calculator.test.js`, or that this project is built one way and that one another. **None of that can be guessed — it has to be written down somewhere and handed to the controller**, which is what the rest of this folder is about.
+The controller has no idea what to actually do with that code. It does not know that the tests for `Calculator.java` live in `CalculatorTest.java`, or that this project is built one way and that one another. **None of that can be guessed — it has to be written down somewhere and handed to the controller**, which is what the rest of this folder is about.

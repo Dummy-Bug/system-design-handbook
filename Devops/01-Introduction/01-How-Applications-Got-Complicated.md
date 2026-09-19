@@ -50,7 +50,7 @@ Websites stopped being documents and started being *programs*. The code split in
 
 The **front end** is HTML, CSS and JavaScript. It is delivered to the visitor and runs **inside their browser**, on their own machine.
 
-The **back end** is written in something like Java (often with the Spring Boot framework), Node.js, or Python. It does *not* run in the browser. It runs on a server elsewhere, and the visitor never sees its code.
+The **back end** is written in something like Java (often with the Spring Boot framework) or Python. It does *not* run in the browser. It runs on a server elsewhere, and the visitor never sees its code.
 
 Once that split exists, the conversation changes shape. The server usually stops sending finished pages and starts sending raw data instead:
 
@@ -118,7 +118,7 @@ They talk to each other the same way a browser talks to a server: over a **proto
 
 Two things people expect to be rules, and are not:
 
-- **Services need not share a programming language.** One can be Java, another Python, another Node.js. Each service is free to use whatever suits it.
+- **Services need not share a programming language.** One can be Java, another Python. Each service is free to use whatever suits it.
 - **Each service can have its own repository**, its own deployment, its own server. Fully separate, if you want them that way.
 
 **What you get:** work naturally divides across teams, and deployment gets cheap. Change the payment service and you deploy the payment service — nothing else moves.

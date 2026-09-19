@@ -4,15 +4,15 @@ Everything so far has been the shape of the thing. This note follows one change 
 
 The example is a calculator, and it is deliberately smaller than the bookshop used earlier, because the point is to watch the pipeline rather than the application.
 
-It is a live application that people use, written in JavaScript. It does what a calculator does — addition, subtraction, multiplication, division — and a good deal more besides, since it also handles integration and differentiation. Its code lives in a repository, and one of the files in that repository is `calculator.js`.
+It is a live application that people use, written in Java. It does what a calculator does — addition, subtraction, multiplication, division — and a good deal more besides, since it also handles integration and differentiation. Its code lives in a repository laid out the standard Maven way, with the application's source under `src/main/java`, and the class that does the arithmetic is `Calculator.java`.
 
 ## The change
 
 You are asked to add a function that adds two numbers.
 
-So you write it, into `calculator.js`. That is the whole feature, and on its own it is a few lines of work.
+So you write it, as a new method in `Calculator.java`. That is the whole feature, and on its own it is a few lines of work.
 
-**Then you write the second file, and this is the part that is your job rather than somebody else's.** Alongside the feature you create `calculator.test.js`, holding the test cases that check it. The tests are not a separate deliverable handed to a different team later; they arrive with the code they describe, in the same change, written by the person who wrote the code.
+**Then you write the second file, and this is the part that is your job rather than somebody else's.** Alongside the feature you create `CalculatorTest.java`, under `src/test/java`, holding the test cases that check it. The name is not decoration: the Maven plugin that runs tests picks up any class whose name ends in `Test` by default, so naming it this way is what makes it run at all. The tests are not a separate deliverable handed to a different team later; they arrive with the code they describe, in the same change, written by the developer who wrote the code.
 
 What goes in them is mechanical — call the function with known inputs, state the answer you expect:
 
@@ -34,13 +34,13 @@ Then you open a **pull request** against the master branch, which is the formal 
 
 ```mermaid
 flowchart TD
-    W["Write the addition function<br/>in calculator.js"] --> T["Write the test cases<br/>in calculator.test.js"]
+    W["Write the addition method<br/>in Calculator.java"] --> T["Write the test cases<br/>in CalculatorTest.java"]
     T --> CM["Commit both, with a message"]
     CM --> PUSH["Push to the feature branch"]
     PUSH --> PRQ["Open a pull request<br/>against master"]
     PRQ --> AUTO["Automation is triggered"]
     AUTO --> B["Build"]
-    B --> R["Run the test cases<br/>from calculator.test.js"]
+    B --> R["Run the test cases<br/>from CalculatorTest.java"]
     style W fill:#2d333b,color:#fff
     style T fill:#2d333b,color:#fff
     style CM fill:#2d333b,color:#fff
@@ -52,14 +52,14 @@ flowchart TD
 ```
 
 > [!note] There are two reasonable places to put the trigger, and the choice is yours.
-> The pipeline can run when the pull request is opened, so that the checks report back before anybody merges anything — the result is information used to decide whether to merge. Or it can run after the merge has happened, against the combined code. Teams do both, often both at once, and what changes is only whether a failure is caught before or after it reaches the shared branch.
+> The pipeline can run when the pull request is opened, so that the checks report back before any developer merges anything — the result is information used to decide whether to merge. Or it can run after the merge has happened, against the combined code. Teams do both, often both at once, and what changes is only whether a failure is caught before or after it reaches the shared branch.
 
 ## The trap in the middle
 
 This is the single most common misunderstanding of the whole subject, and it is worth stopping on.
 
 > [!warning] Merging to master does not mean your code is deployed.
-> When the pull request is approved and merged, your change is in the master branch. That is all that has happened. Nothing picked the code up, nothing put it on a server, and no customer can see any of it. The master branch is a version of the source; the server is a machine running a package. A merge changes the first and touches nothing about the second. Treating merged as shipped is how people end up convinced a fix is live when it is sitting in a branch.
+> When the pull request is approved and merged, your change is in the master branch. That is all that has happened. Nothing picked the code up, nothing put it on a server, and no customer can see any of it. The master branch is a version of the source; the server is a machine running a package. A merge changes the first and touches nothing about the second. Treating merged as shipped is how developers end up convinced a fix is live when it is sitting in a branch.
 
 Deployment is a later, separate step — the one that the previous note showed either happening automatically or waiting for an approval.
 
@@ -87,4 +87,4 @@ flowchart LR
 **The pipeline stops, and nothing after that point runs.** No package is produced, nothing is deployed, and the failure is reported back to the developer with the detail that matters — which test failed, what it expected, what it actually got. The developer fixes the function and pushes again, and the pipeline starts over.
 
 > [!important] This is the guarantee that the manual process could never make.
-> In the arrangement described at the start of this folder, a wrong answer of 6 reaches production if whoever was releasing did not happen to run the tests. Here it cannot, and not because anybody is more careful — because the deploy step is downstream of the test step, and a stage that fails ends the run. **The test is not a recommendation that somebody might follow. It is a gate the code physically cannot get past.**
+> In the arrangement described at the start of this folder, a wrong answer of 6 reaches production if the developer releasing it did not happen to run the tests. Here it cannot, and not because any developer is more careful — because the deploy step is downstream of the test step, and a stage that fails ends the run. **The test is not a recommendation that a developer might follow. It is a gate the code physically cannot get past.**

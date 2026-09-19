@@ -12,7 +12,7 @@ Your application, sitting on disk, is a **program**:
 /opt/spring-demo/app.jar
 ```
 
-That is instructions in a file. It occupies disk space and does nothing else. The same is true of a Node.js application, a Django project, or Chrome the moment after you install it.
+That is instructions in a file. It occupies disk space and does nothing else. The same is true of a Spring Boot jar, a Django project, or Chrome the moment after you install it.
 
 Run it:
 
