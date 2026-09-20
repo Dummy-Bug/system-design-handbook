@@ -1,4 +1,4 @@
-Everything is now in place separately — Jenkins on a server with its tools configured, a directory it may deploy into, an application that passes its tests, and a `Jenkinsfile` describing the pipeline. None of it is connected yet. This note connects the repository to Jenkins and follows what happens as code is pushed: a first deploy that quietly does not deploy, a feature branch that fails, a fix, a merge, and a live application that changed without anybody logging into the server.
+Everything is now in place separately — Jenkins on a server with its tools configured, a directory it may deploy into, an application that passes its tests, and a `Jenkinsfile` describing the pipeline. None of it is connected yet. This note connects the repository to Jenkins and follows what happens as code is pushed: a first deploy, a feature branch that fails, a fix, a merge, and a live application that changed without anybody logging into the server.
 
 ## Getting the code into a repository
 
@@ -21,7 +21,7 @@ git push -u origin master
 > [!question] How can there be a master branch to push, when the GitHub repository was just created empty?
 > Because the branch was created locally, not on GitHub. `git init` made a local repository, and the first commit created its first branch there. The GitHub repository really was empty — it was only connected afterwards, with `git remote add`, and the push is what copied the local branch up to it. The order is local first, then connect, then push, and the empty remote simply receives what the local side already had.
 
-Note the name of that branch. **Unless Git has been configured otherwise, `git init` names the first branch `master`.** Many teams and many tools now expect `main`. Whichever your repository uses, it has to agree with the branch name in the `Jenkinsfile` — and that is about to matter.
+Note the name of that branch. **Unless Git has been configured otherwise, `git init` names the first branch `master`.** Many teams and many tools now expect `main`. Whichever your repository uses, it has to agree with the branch name in the `Jenkinsfile`, which here says `master`.
 
 ## Pointing Jenkins at the repository
 
@@ -30,9 +30,18 @@ The pipeline type used here is a **Multibranch Pipeline**. Rather than a pipelin
 Creating one:
 
 1. On the dashboard, **New Item**.
-2. Give it a name — the repository's name is the natural choice — and choose **Multibranch Pipeline**.
+2. Give it a name — the repository's name is the natural choice — and choose **Multibranch Pipeline**, then **OK**.
+
+![[Devops/05-CI-CD/Images/new-item.png]]
+
 3. Under **Branch Sources**, add the Git source and enter the repository's address, with **Discover branches** enabled so it finds them all.
+
+![[Devops/05-CI-CD/Images/branch-sources.png]]
+
 4. Under **Scan Multibranch Pipeline Triggers**, tick **Periodically if not otherwise run** and choose an interval.
+
+![[Devops/05-CI-CD/Images/scan-triggers.png]]
+
 5. Save.
 
 ### How Jenkins notices a push
@@ -50,45 +59,59 @@ There are two ways one system can learn that something changed in another, and t
 
 This setup pulls. Every interval, Jenkins scans the repository, and any branch with new commits gets a new build.
 
+> [!question] How does the push direction actually work — is there a message queue behind it?
+> No. A webhook needs nothing so elaborate: it is an ordinary HTTP request. The repository is configured with an address, and when the event happens it sends a request to that address carrying a description of what changed. The receiving system is listening on that address and acts on what arrives. There is no broker in between, nothing subscribes to a topic, and no queueing system such as Kafka is involved — which is the usual guess, because the pattern of one system telling another that something happened does look like messaging from a distance.
+
 **The interval is a trade.** In production it is set to something like an hour or two, or even a day: scanning more often makes Jenkins keep asking about repositories that have not changed. For a demonstration it is set to **one minute**, which is the smallest the setting allows — deliberately, aggressively short, so that the effect of a push is visible almost immediately. Nobody runs it that low for real.
 
 And a build can always be started by hand: every pipeline has a **Build Now** button, which runs it immediately regardless of the schedule. In production, builds are normally left to start themselves.
 
-## The first run, and the deploy that did not happen
+## The first run
 
-After saving, Jenkins scans the repository and finds one branch, `master`, containing a `Jenkinsfile`. It starts that branch's **build #1**.
+After saving, Jenkins scans the repository and finds one branch, `master`, containing a `Jenkinsfile`. It starts that branch's **build #1**. The pipeline's own page lists every branch it has found, one row each, with the result of its latest build:
+
+![[Devops/05-CI-CD/Images/branches.png]]
+
+The green tick in **S** is the last build's status. The sun in **W**, for weather, summarises the recent builds — sunny when they have all passed, clouding over as more of them fail. The play button at the end of the row is **Build Now** for that branch.
 
 Clicking into the build and opening **Console Output** shows everything it did, line by line and in order — fetching the code, then each stage of the `Jenkinsfile` with its commands and their output. This log is where you go first whenever anything fails.
 
-This first run passed checkout, lint, tests and packaging. And then it skipped deploy, and skipped the smoke test.
-
-Nothing had failed. The pipeline did exactly what it was told. The `Jenkinsfile` says to deploy only when the branch is `main`:
-
-```groovy
-when {
-    branch 'main'
-}
-```
-
-The branch being built is `master`. The condition was false, so the stage was skipped — correctly, silently, and with the pipeline marked as a success.
-
-```mermaid
-flowchart LR
-    B["Branch being built:<br/>master"] --> W{"when branch 'main'"}
-    W -->|"no match"| SKIP["Deploy skipped<br/>Smoke test skipped<br/>pipeline still green"]
-    style B fill:#2d333b,color:#fff
-    style W fill:#7a5a1f,color:#fff
-    style SKIP fill:#7a1f1f,color:#fff
-```
-
-> [!failure] A skipped stage is not a failed stage, and that is what makes this easy to miss.
-> The pipeline reports success, because nothing it attempted went wrong. What it did not attempt, it does not complain about. So a condition naming the wrong branch produces a pipeline that is green on every run and has never deployed anything — and the only way to see it is to look at which stages actually ran, not merely at the colour of the result.
-
-The fix is one word. The `Jenkinsfile` is changed to name the branch that actually exists — `branch 'master'` — committed with a message saying so, and pushed. Within a minute, the scan picks up the new commit and starts a build, and this time every stage runs: lint, tests, package, **deploy**, **smoke test**. Pipeline successful.
+This first run goes through every stage in order: checkout, lint, tests, package, **deploy** and **smoke test**. Deploy and smoke test run because the branch being built is `master`, which is exactly what the `when` condition in the `Jenkinsfile` names. It is also the slowest run this pipeline will have, because everything is being fetched for the first time: Jenkins downloads Maven itself, and Maven then downloads every library the application and its plugins depend on from Maven Central, the public repository of Java libraries. The console output fills with hundreds of `Downloading from central` and `Progress` lines. Maven keeps what it downloads in a local cache on the server, so the next run finds them there and skips all of it.
 
 ## Proof that it deployed
 
 The proof is not in Jenkins — it is on the server. A browser pointed at the server's address and the application's port, `http://192.168.64.2:8081/health`, gets an answer: the service is up. And `http://192.168.64.2:8081/api/add?a=10&b=20` returns **30**.
+
+The smoke test at the end of the build's console output shows the other half of the story — and why its retry options exist:
+
+```
+00:00:46.229  curl: (7) Failed to connect to localhost port 8081 after 0 ms: Could not connect to server
+00:00:46.229  Warning: Problem : connection refused. Will retry in 3 seconds. 10 retries left.
+00:00:49.602  {"version":"0.0.1-SNAPSHOT","service":"calculator","status":"UP"}
+...
+00:00:49.752  Pipeline succeeded
+Finished: SUCCESS
+```
+
+The first attempt came a fraction of a second after `systemctl restart`, while the application was still starting, and nothing was listening yet on `8081` — connection refused. Without `--retry-connrefused` that single refusal would have failed the build. Three seconds later the retry got the health response, with the version number and the service name, and the pipeline finished.
+
+On the server, the deploy stage's work is visible directly:
+
+```bash
+# on the server
+ls -l /opt/cicd/calculator /opt/cicd/calculator/releases
+```
+
+```
+/opt/cicd/calculator:
+lrwxrwxrwx 1 jenkins jenkins   46 Sep 19 20:35 current.jar -> /opt/cicd/calculator/releases/calculator-1.jar
+drwxr-xr-x 2 jenkins jenkins 4096 Sep 19 20:35 releases
+
+/opt/cicd/calculator/releases:
+-rw-r--r-- 1 jenkins jenkins 19906367 Sep 19 20:35 calculator-1.jar
+```
+
+The release is named after the build number — `calculator-1.jar` from build #1 — and `current.jar` is a link pointing at it, which is what the `calculator` service runs. Build #2 will add `calculator-2.jar` beside it and move the link.
 
 **Nobody copied a file to the server, nobody restarted anything by hand.** A push to a branch was the whole of the developer's involvement, and the application on the server is now running that code — the deploy stage copied the new jar, pointed `current.jar` at it and had `systemd` restart the service.
 
@@ -114,7 +137,14 @@ Within a minute Jenkins has discovered a branch it did not know about, created a
 
 It fails.
 
-The Stage View shows it plainly: **Lint** is red, and every stage after it — tests, package, deploy, smoke test — is marked as skipped because of an earlier failure. The console output says why. The endpoint was written, and the private multiply method was written, but the endpoint never actually calls the method. It computes nothing with it. The linter's rule against a private method that is written and never used caught it.
+The pipeline graph shows it plainly: **Lint** is red, and every stage after it — tests, package, deploy, smoke test — is marked as skipped because of an earlier failure. The console output says why, in one line, because the Lint step runs with `-Dpmd.printFailingErrors=true`:
+
+```
+[WARNING] PMD Failure: com.lab.jenkins.CalculatorController:49 Rule:UnusedPrivateMethod Priority:3 Avoid unused private methods such as 'multiplyNumbers(int, int)'..
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-pmd-plugin:3.28.0:check (default-cli) on project jenkins: PMD 7.17.0 has found 1 violation.
+```
+
+Without that flag the first line is missing, and the console only reports that there was one violation and names a report file on the server — a red build that does not say what is wrong. The endpoint was written, and the private multiply method was written, but the endpoint never actually calls the method. It computes nothing with it. The linter's rule against a private method that is written and never used caught it.
 
 ```mermaid
 flowchart LR

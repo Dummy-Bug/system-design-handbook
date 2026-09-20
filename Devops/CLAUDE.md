@@ -167,7 +167,7 @@ telling him the command.
 
 ## Status
 
-**Four folders written**, through class 8 (2026-09-02). **Networking is complete** — CI/CD starts with the next class.
+**Five folders written**, through class 11 (2026-09-20). **Networking is complete**, and CI/CD covers both Jenkins and GitHub Actions.
 
 - `01-Introduction-To-DevOps/` — 8 notes
 - `02-Linux/` — 7 notes, 2,723 lines. **Done.**
@@ -183,6 +183,18 @@ telling him the command.
   **Reviewed end to end as a stranger on 2026-09-12, and eleven findings were fixed.** Three were correctness errors, and they are the ones worth remembering. **A JWT was described as held server-side** in note `06`, inside the very section arguing that a stored session breaks under a load balancer — a token is held by the client and is in fact a third answer to that problem, so the note now gives all three. **Note `11` described RSA key transport while naming TLS 1.3**, which removed that mechanism outright; the seven steps are kept because the failure they lead to motivates Diffie–Hellman, but the note now states plainly that this is the pre-1.3 form and shows the real one-round-trip sequence. And **note `05` used a live Google IPv6 address**, replaced with the documentation range `2001:db8::/32` from RFC 3849, with `::` compression now explained in note `01` where eight groups is first claimed. The other eight were clarity: a missing whole-architecture diagram, a status code used before introduction, a term used a note before its definition, an uncounted number, an SSH port mapped to a web app, and a code-block header naming a file that did not exist.
 
   **Note `02` was rewritten and renamed by class 8** — class 7 promised forward-versus-reverse proxy and never reached it, so note `02` carried a marked beyond-lecture callout. Class 8 taught it properly, so the callout was replaced with real lecture material and the file became `02-Forward-And-Reverse-Proxies.md`. **Merging into the existing note rather than adding a new one is the right call when a later class returns to the same concept.**
+- `05-CI-CD/` — **22 notes, 3,007 lines, plus an `Images/` folder. Classes 9, 10 and 11.** The subject is one folder covering two tools, because the whole of class 11 is built on comparing them.
+  **Class 9** (3 parts) — `01` the manual way · `02` the pipeline · `03` build versus deploy · `04` continuous integration · `05` delivery versus deployment · `06` a pipeline run · `07` orchestration and tools · `08` controller and agents · `09` executors and workspace · `10` pipeline as code · `11` declarative and scripted.
+  **Class 10** (3 parts) — `12` installing Jenkins · `13` preparing the server · `14` the demo application · `15` a real Jenkinsfile · `16` a pipeline in action.
+  **Class 11** (2 parts, 2026-09-20, ~1h 19m) — `17` why GitHub Actions · `18` events and schedules · `19` jobs, steps and actions · `20` runners · `21` testing pull requests · `22` deploying to your server. Three answers to student questions were folded into existing notes rather than made new ones: parallel stages and concurrent builds into `15`, how many pipeline files a set of microservices needs into `13`, and a webhook being an ordinary HTTP request rather than a message queue into `16`.
+
+  **Notes `12`–`16` and `17`–`21` were both executed on the user's own machine, not just written.** A Multipass VM running Ubuntu, Jenkins, a multibranch pipeline, then a self-hosted GitHub Actions runner on the same VM — every command, output and error in those notes came from a real run or a legible frame grab. **This is the standard for this folder: nothing in it is recalled.**
+
+  > [!important] **The whole of class 11 was dictated, so every command came from frames or docs.**
+  > The two workflow files in note `21` were read off the video frame by frame. Everything else — workflow and event syntax, cron's five fields and its UTC default, `actions/checkout@v7`, `actions/setup-java@v6`, the Jenkins `parallel` and `failFast` syntax, `svc.sh` — came from official documentation. **One thing is knowingly unsourced: `RUNNER_TRACKING_ID=""`**, which detaches a process from the Actions runner so it survives the job ending. It is visibly used in the file on screen and works, but GitHub does not document it, and the note recommends systemd over it anyway.
+
+  > [!danger] **Class 11 is taught entirely on the instructor's personal GitHub account.**
+  > His username and repository are in the browser address bar for most of part 2, and his name and hostname are in every terminal prompt in both parts. **No frame from either recording may be embedded.** The demo endpoints also return the course's brand name in their response bodies. All of it was replaced on the way into the notes — the running example is the same calculator on 8081 that the Jenkins notes deploy, chosen so the folder carries one application throughout rather than two.
 
 > [!tip] **Hashes in the internals notes are real and reproducible — keep doing this.**
 > Object IDs in notes `04`–`06` were computed, not invented: `sha1("blob <len>\0<content>")` for blobs,

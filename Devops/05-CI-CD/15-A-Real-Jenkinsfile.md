@@ -26,7 +26,7 @@ pipeline {
         }
         stage('Lint') {
             steps {
-                sh 'mvn pmd:check'
+                sh 'mvn pmd:check -Dpmd.printFailingErrors=true'
             }
         }
         stage('Unit tests') {
@@ -47,17 +47,17 @@ pipeline {
         }
         stage('Deploy') {
             when {
-                branch 'main'
+                branch 'master'
             }
             steps {
-                sh 'cp target/*.jar /opt/cicd-demo/calculator/releases/calculator-${BUILD_NUMBER}.jar'
-                sh 'ln -sfn /opt/cicd-demo/calculator/releases/calculator-${BUILD_NUMBER}.jar /opt/cicd-demo/calculator/current.jar'
+                sh 'cp target/*.jar /opt/cicd/calculator/releases/calculator-${BUILD_NUMBER}.jar'
+                sh 'ln -sfn /opt/cicd/calculator/releases/calculator-${BUILD_NUMBER}.jar /opt/cicd/calculator/current.jar'
                 sh 'sudo systemctl restart calculator'
             }
         }
         stage('Smoke test') {
             when {
-                branch 'main'
+                branch 'master'
             }
             steps {
                 sh 'curl -f --retry 10 --retry-delay 3 --retry-connrefused http://localhost:8081/health'
@@ -105,7 +105,7 @@ This is where the names given under **Manage Jenkins → Tools** are used. `jdk 
 
 **Options are not compulsory.** A pipeline runs perfectly well without this block. These three are here because each one removes a specific annoyance or a specific danger.
 
-**`skipDefaultCheckout()`** needs the idea of a checkout first. The code lives in a repository, on some branch. Jenkins cannot build what it does not have, so before anything else it must fetch the code into its workspace — the directory on the agent where this job's files live. That fetch is the **checkout**, and it is the same idea as checking out a branch in Git: Jenkins takes the exact revision that triggered the run and puts those files on disk.
+**`skipDefaultCheckout()`** needs the idea of a checkout first. The code lives in a repository, on some branch. Jenkins cannot build what it does not have, **so before anything else it must fetch the code into its workspace** — the directory on the agent where this job's files live. That fetch is the **checkout**, and it is the same idea as checking out a branch in Git: Jenkins takes the exact revision that triggered the run and puts those files on disk.
 
 Jenkins does this **automatically**, before the first stage, unless told not to. `skipDefaultCheckout()` tells it not to, and the pipeline then does the checkout itself, as its first stage. The effect is that the checkout becomes visible — a named stage, with its own timing and its own success or failure — instead of something that happened invisibly before the pipeline started.
 
@@ -140,26 +140,34 @@ These are the work, in the order the earlier notes laid out.
 
 **Lint** — `mvn pmd:check` analyses the source and **fails the build if it finds any violation** of its rules, such as a variable declared and never used or a private method written and never called. Code that is half-finished stops here.
 
-**Unit tests** — `mvn test` runs the test suite. The `post` block attached to this stage matters more than it looks. By default, when the tests run, their results are shown in the log and then thrown away: Jenkins knows the stage passed, but not that seven tests ran, which ones, or how long each took. `junit 'target/surefire-reports/*.xml'` hands Jenkins the report files Maven writes after every test run, and Jenkins keeps them — so test results are recorded per build and can be compared across builds. It sits under `always` so the results are recorded **even when tests fail**, which is exactly when you most want to read them.
+`-Dpmd.printFailingErrors=true` decides what a failed lint **tells you**. PMD works in two steps: it analyses the code and writes every violation into a report file, `target/pmd.xml`, and then the check counts what is in that file and fails the build if the count is above zero. By default the check prints only the count — `PMD 7.17.0 has found 1 violation. For more details see: …/target/pmd.xml` — and the details stay in a file on the Jenkins server, where nobody reading the build page can see them. The flag makes it print each violation in the console as well, with the file, the line, the rule and what it objects to:
+
+```
+[WARNING] PMD Failure: com.lab.jenkins.CalculatorController:49 Rule:UnusedPrivateMethod Priority:3 Avoid unused private methods such as 'multiplyNumbers(int, int)'..
+```
+
+The console is the first place anyone looks when a build goes red, so it should say what failed without anyone having to log into the server to find out.
+
+**Unit tests** — `mvn test` runs the test suite. The `post` block attached to this stage matters more than it looks. By default, when the tests run, **their results are shown in the log and then thrown away:** Jenkins knows the stage passed, but not that seven tests ran, which ones, or how long each took. `junit 'target/surefire-reports/*.xml'` hands Jenkins the report files Maven writes after every test run, and Jenkins keeps them — so test results are recorded per build and can be compared across builds. It sits under `always` so the results are recorded **even when tests fail**, which is exactly when you most want to read them.
 
 > [!note] There is no separate step to install dependencies.
 > Some build tools need an explicit install step first, and a pipeline for them has a stage for it. Maven does not: it reads the dependency list in `pom.xml` and downloads whatever is missing as part of any command, so the first `mvn` command in the pipeline takes care of it.
 
-**Package** — `mvn package` produces the jar. As an earlier note established, asking Maven for a phase runs every phase before it, so this stage recompiles and runs the tests again on the way; for a small project that repetition is cheap, and the separate stages keep a lint failure, a test failure and a packaging failure distinguishable at a glance. Then `archiveArtifacts` keeps a copy of the jar in Jenkins.
+**Package** — `mvn package` produces the jar. As an earlier note established, asking Maven for a phase runs every phase before it, **so this stage recompiles and runs the tests again on the way**; for a small project that repetition is cheap, and the separate stages keep a lint failure, a test failure and a packaging failure distinguishable at a glance. Then `archiveArtifacts` keeps a copy of the jar in Jenkins.
 
 Keeping that copy is what makes older builds useful. Every run has a **build number**, counting up from 1, available in the pipeline as `BUILD_NUMBER`. With artifacts archived, the jar from build 7 is still there after build 12 has replaced it — so an older version can be redeployed, and a build that failed or ran unusually slowly can be investigated after the fact. Without it, only the newest jar exists anywhere.
 
 **Deploy** — three commands, each depending on the server preparation in the previous notes:
 
-| Command | What it does |
-|---|---|
-| `cp` | Copies the jar into the releases directory, named with its build number, so every release is kept separately |
-| `ln -sfn` | Points `current.jar` at that new release. `-s` makes it a symbolic link — a small file that stands for another file — and `-f` replaces the old link rather than refusing because one exists |
-| `sudo systemctl restart calculator` | Asks `systemd` to stop the running version and start again from `current.jar`, which is now the new release |
+| Command                             | What it does                                                                                                                                                                                 |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cp`                                | **Copies the jar into the releases directory**, named with its build number, so every release is kept separately                                                                             |
+| `ln -sfn`                           | Points `current.jar` at that new release. `-s` makes it a symbolic link — a small file that stands for another file — and `-f` replaces the old link rather than refusing because one exists |
+| `sudo systemctl restart calculator` | Asks `systemd` to stop the running version and start again from `current.jar`, which is now the new release                                                                                  |
 
 The link is what makes the restart simple: the service always runs `current.jar`, and deploying is just changing what that name points at. It also makes going back simple. Every previous release is still in the directory, so returning to build 7 means pointing `current.jar` at `calculator-7.jar` and restarting — no rebuild needed.
 
-And the restart is done by `systemd` rather than by the pipeline itself for the reason the previous notes gave: Jenkins terminates whatever a build started once the build ends, so an application launched directly by the pipeline would not survive it.
+> And the restart is done by `systemd` rather than by the pipeline itself for the reason the previous notes gave: Jenkins terminates whatever a build started once the build ends, so an application launched directly by the pipeline would not survive it.
 
 A real deploy stage usually also prints what it is doing as it goes — which build number it is deploying, which directory it is writing to, that it is starting the new version — using `echo`. None of those lines change what happens; they exist so that the console output of a run tells a readable story when somebody has to work out afterwards what a deploy actually did. They can be removed, and are usually worth keeping.
 
@@ -167,14 +175,14 @@ This stage has a condition in front of it, and the condition is the most importa
 
 ```groovy
 when {
-    branch 'main'
+    branch 'master'
 }
 ```
 
-**The stage only runs when the branch being built is `main`.** Every other branch — every feature branch any developer pushes — goes through checkout, lint, tests and packaging exactly as `main` does. Then deploy is skipped.
+**The stage only runs when the branch being built is `master`.** Every other branch — every feature branch any developer pushes — goes through checkout, lint, tests and packaging exactly as `master` does. Then deploy is skipped.
 
 > [!warning] The branch named here must be the one your repository actually deploys from.
-> Repositories name their primary branch either `main` or `master`, and nothing forces the `Jenkinsfile` to agree. If the condition names a branch that does not exist in the repository, the deploy and smoke-test stages are skipped on every run — and because a skipped stage is not a failure, the pipeline still reports success. Check which name your repository uses before trusting this line. The next note shows exactly this happening.
+> Repositories name their primary branch either `main` or `master`, and nothing forces the `Jenkinsfile` to agree. If the condition names a branch that does not exist in the repository, the deploy and smoke-test stages are skipped on every run — and because a skipped stage is not a failure, the pipeline still reports success. This file uses `master`, because that is what `git init` names the first branch unless Git is configured otherwise; a repository created with `main` needs `branch 'main'` here instead. `git branch` shows which one yours has — check before trusting this line.
 
 > [!important] Every branch is checked. Only one branch is deployed.
 > There is only one version of the application that customers use, so only one branch may ever reach the server. But every branch deserves to know, within minutes, whether it lints, passes its tests and packages. The `when` condition is what gets both: a feature branch gets the full verdict on its code without ever touching production, and the branch that is deployed has already passed everything the others do.
@@ -194,6 +202,39 @@ The three checks in this pipeline each prove something different, and the smoke 
 | Smoke test | **The deployed application is actually running and answering** |
 
 Lint and tests can pass on a jar that then fails to start on the server — wrong port, missing configuration, a permission problem. Only a check against the deployed thing catches that, and only after deployment is there anything to check.
+
+### Running two stages at the same time
+
+The stages above run one after another, and that is the default: a declarative pipeline works through `stages` in the order they are written, and a stage does not begin until the one before it has finished. Jenkins assumes this because it is usually what the work requires — there is no point testing code that failed to lint, or packaging code whose tests failed, or deploying a package that was never built.
+
+But some stages genuinely do not depend on each other. Linting reads the source and reports on its style; unit tests execute the code and check the results. Neither needs the other's output. The same is true of unit tests and integration tests, which exercise different things and could perfectly well run at once.
+
+**Jenkins can run such stages together, using a `parallel` block.** The stages inside it start at the same time, and the pipeline moves past the enclosing stage only when all of them have finished:
+
+```groovy
+stage('Tests') {
+    failFast true
+    parallel {
+        stage('Unit tests') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('Integration tests') {
+            steps {
+                sh 'mvn verify'
+            }
+        }
+    }
+}
+```
+
+`failFast true` says that if any one of the parallel stages fails, abort the rest immediately rather than letting them finish work whose result is already irrelevant.
+
+**It exists, and it is rarely reached for.** A pipeline of this size finishes in a couple of minutes, so the saving is small, and the sequence lint → test → build → package → deploy is a genuine chain of dependencies for all but one or two links. Jenkins is used, and thought about, as a tool that does things in order; parallelism is available for the case where a stage is slow enough that the complexity pays for itself.
+
+> [!question] Is this the same as two builds running at once?
+> No, and the distinction is worth keeping straight. `parallel` runs two stages of **one** build at the same time. Concurrent builds are two runs of the **whole pipeline** overlapping, usually because a second push arrived while the first run was still going — the situation `disableConcurrentBuilds()` above exists to prevent. Jenkins supports both, and they solve completely different problems.
 
 ## post
 

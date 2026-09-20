@@ -51,7 +51,7 @@ There are two groups of tests, and the split between them is the point.
 > [!note] The two groups catch different mistakes.
 > The first group proves the business logic is right — that 10% off 1000 really is 900. The second proves that logic is reachable and behaves properly over the web — that the endpoint reads its parameters, calls the right method, returns the right status code and refuses input it should refuse. An application can pass every test in the first group and still be broken in a way only the second group sees.
 
-The invalid-discount test deserves a word, because it is the one people forget to write. Checking that correct input gives correct output is natural. Checking that **nonsensical input is refused** — a discount of more than 100%, which would produce a negative price — is where a large share of real defects live, and a test for it costs one line.
+The invalid-discount test deserves a word, because it is the one developers forget to write. Checking that correct input gives correct output is natural. Checking that **nonsensical input is refused** — a discount of more than 100%, which would produce a negative price — is where a large share of real defects live, and a test for it costs one line.
 
 ## Linting
 

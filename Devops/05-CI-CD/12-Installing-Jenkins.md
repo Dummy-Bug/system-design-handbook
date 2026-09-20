@@ -4,7 +4,7 @@ Everything so far has described Jenkins from the outside — a controller that c
 
 In real use, the server Jenkins runs on is somewhere else — a machine in a data centre or a cloud provider, reached over the network. For learning, that distance adds nothing but cost, so the setup here is smaller and behaves the same way.
 
-The developer's own computer — a MacBook — runs an **Ubuntu virtual machine**, created with **Multipass**, a tool for starting and managing lightweight Ubuntu virtual machines. That virtual machine is treated as the server. It has its own operating system, its own address on the network and its own filesystem, and from the point of view of everything that follows it is simply a Linux server that happens to be physically inside the laptop.
+The developer's own computer — a MacBook — runs an **Ubuntu virtual machine**, created with **Multipass**, **a tool for starting and managing lightweight Ubuntu virtual machines.** That virtual machine is treated as the server. It has its own operating system, its own address on the network and its own filesystem, and from the point of view of everything that follows it is simply a Linux server that happens to be physically inside the laptop.
 
 ```mermaid
 flowchart LR
@@ -25,6 +25,38 @@ flowchart LR
 ```
 
 **Nothing about the commands depends on this arrangement.** A virtual machine on a Windows computer, a Linux machine of your own, or a real server rented from a cloud provider all take exactly the same steps, because the steps are about the server's operating system and the server is Ubuntu in every case.
+
+### Creating the virtual machine
+
+On a Mac, Multipass installs through Homebrew, and one command then creates and starts an Ubuntu machine:
+
+```bash
+# on the laptop
+brew install --cask multipass
+multipass launch --name devops --cpus 2 --memory 4G --disk 20G
+```
+
+`--name` is what you call the machine in every later command. The other three set its size, and the defaults — one processor, 1 GB of memory, 5 GB of disk — are too small for what is about to run on it. Jenkins alone takes around 700 MB of memory before it has built anything, and a Maven build and the deployed Spring Boot application come on top of that. The command prints `Launched: devops` when the machine is up, and it is given the current Ubuntu LTS release — 26.04 at the time of writing.
+
+Two more commands, still on the laptop, are the ones used from here on:
+
+```bash
+# on the laptop
+multipass list
+multipass shell devops
+```
+
+`multipass list` shows every machine with its state and its address:
+
+```
+Name                    State             IPv4             Image
+devops                  Running           192.168.64.2     Ubuntu 26.04 LTS
+```
+
+**That IPv4 address is the server's address**, and it is the one to use wherever this folder says `192.168.64.2`. Multipass assigns it, so yours will almost certainly be different. `multipass shell devops` opens a terminal inside the machine; the prompt changes to `ubuntu@devops`, and every command marked on the server in this folder is typed there.
+
+> [!tip] Stopping the machine when you are not using it.
+> `multipass stop devops` shuts it down and gives the memory back to the laptop; `multipass start devops` brings it back with everything on its disk intact.
 
 ### One machine playing both roles
 
@@ -50,7 +82,7 @@ java -version
 
 ## Why the download has to be verified
 
-Jenkins is not installed from Ubuntu's own package collection but from the Jenkins project's repository. That raises a question that did not exist a moment ago.
+Jenkins is not installed from **Ubuntu's own package collection** but from the Jenkins project's repository. That raises a question that did not exist a moment ago.
 
 Suppose you download a file claiming to be the Jenkins package. **How do you know it came from the Jenkins project** — rather than from somebody sitting between you and the download, who substituted a file of their own? This is a man-in-the-middle attack, and a CI server is an unusually valuable target for one: it holds the credentials to your code and your servers, and it runs whatever it is told to run.
 
@@ -112,18 +144,45 @@ sudo systemctl start jenkins
 sudo systemctl status jenkins
 ```
 
-`enable` makes it start again whenever the server reboots, `start` starts it now, and `status` should report it as **active**, meaning it is running.
+`enable` makes it start again whenever the server reboots, `start` starts it now, and `status` should report it as **active**, meaning it is running. A healthy one looks like this, trimmed to the lines worth reading:
+
+```
+● jenkins.service - Jenkins Continuous Integration Server
+     Loaded: loaded (/usr/lib/systemd/system/jenkins.service; enabled; preset: enabled)
+     Active: active (running) since Sat 2026-09-19 19:11:50 IST; 3min 44s ago
+     Memory: 713.8M (peak: 735.8M)
+     CGroup: /system.slice/jenkins.service
+             └─18087 /usr/bin/java -Djava.awt.headless=true -jar /usr/share/java/jenkins.war --webroot=/var/cache/jenkins/war --httpPort=8080
+...
+jenkins[18087]: ... Jenkins is fully up and running
+```
+
+**`enabled`** on the second line is the start at boot, **`active (running)`** is the service up now, the process line shows it is Java running Jenkins on **`--httpPort=8080`**, and **`Jenkins is fully up and running`** in the log at the bottom means start-up has finished — before that line appears, the browser may show nothing yet. The output opens in a pager, a viewer that holds long output on screen; **`q`** closes it and returns the prompt.
+
+> [!tip] On a practice machine, you may not want it starting at every boot.
+> Jenkins holds around 700 MB of memory from the moment it starts, before it has built anything. On a real server that is exactly what you want running after a reboot. On a virtual machine inside your own laptop, it is memory taken whether or not you are practising that day. `disable` undoes `enable` — it cancels the start at boot and leaves a Jenkins that is already running untouched:
+>
+> ```bash
+> # on the server
+> sudo systemctl disable jenkins
+> systemctl is-enabled jenkins   # disabled
+> systemctl is-active jenkins    # still active
+> ```
+>
+> From then on Jenkins runs only when you ask: `sudo systemctl start jenkins` after the machine boots, `sudo systemctl stop jenkins` when you are done.
 
 **Jenkins listens on port `8080` by default.** The port can be changed, but there is rarely any reason to.
 
-To reach it, point a browser at the server's address and that port. The important detail is **which address**. The browser is running on the laptop; Jenkins is running inside the virtual machine. So `localhost` in the laptop's browser means the laptop, not the server, and finds nothing. You need the **virtual machine's own address** — something like `http://192.168.64.2:8080` — which is the address the server has on the network between the laptop and the machine running inside it.
+To reach it, point a browser at the server's address and that port. The important detail is **which address**. The browser is running on the laptop; Jenkins is running inside the virtual machine. So `localhost` in the laptop's browser means the laptop, not the server, and finds nothing. You need the **virtual machine's own address** — the one `multipass list` printed, so something like `http://192.168.64.2:8080` — which is the address the server has on the network between the laptop and the machine running inside it.
 
 > [!important] Change your application's port, never the tool's.
 > Jenkins uses `8080`. So does a Spring Boot application, by default. The moment you deploy one onto the other's server, two programs want the same port, and only one can have it. **The one to change is always your application**, because it is the thing you wrote and fully control — a Spring Boot application's port is one line, `server.port=8081`, in its `application.properties`. The ports of installed tools — Jenkins, a database, Docker and the like — are left at their defaults, because every guide, every other tool that connects to them and every colleague who logs in expects to find them there.
 
 ## Unlocking it
 
-The first time the dashboard opens, Jenkins refuses to go further until you **prove you own the server it is running on**.
+The first time the dashboard opens, Jenkins refuses to go further until you **prove you own the server it is running on**. The page it shows instead is this one:
+
+![[Devops/05-CI-CD/Images/unlock-jenkins.png]]
 
 The proof is a file. During installation Jenkins generated a long random password and wrote it into a file on the server that only an administrator can read:
 
@@ -132,9 +191,17 @@ The proof is a file. During installation Jenkins generated a long random passwor
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
 
+So the steps are:
+
+1. In the laptop's browser, open the server's address on port `8080`, and the page above appears.
+2. In the terminal on the server, run the `sudo cat` command above. It prints one line, a long string of letters and digits.
+3. Copy that line into the **Administrator password** box and press **Continue**.
+
+That password is a credential, if a short-lived one. It is not something to paste into a chat, a ticket or a note.
+
 Only somebody who can log into the server and use `sudo` can read that file, so pasting its contents into the browser demonstrates that the person at the browser controls the machine. Jenkins then asks you to create your own administrator account with a password of your choosing.
 
-This happens once. On a server where Jenkins has been set up before, its configuration is already on disk, and opening the address goes straight to an ordinary login page asking for that administrator's username and password.
+This happens once. When setup finishes, Jenkins deletes the password file — running the same `cat` afterwards reports no such file, which is expected rather than a fault. On a server where Jenkins has been set up before, its configuration is already on disk, and opening the address goes straight to an ordinary login page asking for that administrator's username and password.
 
 > [!warning] That account controls everything the pipeline can reach.
 > A Jenkins administrator can run arbitrary commands on the Jenkins server and use every credential Jenkins holds — which, once pipelines deploy code, means access to the servers they deploy to. A trivial password on a Jenkins instance reachable from anywhere is an open door into all of it. Choose one you would be comfortable defending.
@@ -143,23 +210,33 @@ This happens once. On a server where Jenkins has been set up before, its configu
 
 The setup wizard then offers two choices: **install suggested plugins**, or **select plugins to install** yourself.
 
+![[Devops/05-CI-CD/Images/customize-jenkins.png]]
+
 **Take the suggested plugins.** It takes a while — five or ten minutes is normal — and it is worth the wait. Much of what Jenkins can do comes from plugins, and a plugin you skipped now does not announce itself as missing; it surfaces weeks later as a pipeline failing to deploy for a reason that takes an afternoon to trace back to a plugin that was never installed. Installing the recommended set up front removes that entire category of problem.
+
+While it runs, the wizard shows every plugin in the set as a tile, ticking each one off as it lands, with the individual downloads — including the libraries each plugin depends on, marked `**` — scrolling on the right. Several of the tiles are ones the rest of this folder relies on: **Pipeline** runs a `Jenkinsfile`, **Git** lets Jenkins clone a repository, **GitHub Branch Source** is what a multibranch pipeline on GitHub is built from, and **Timestamper** puts a time on every line of a build's log.
+
+![[Devops/05-CI-CD/Images/installing-plugins.png]]
+
+These screens are from Jenkins 2.568.3. The exact list of suggested plugins changes between releases, so a newer version may show a slightly different grid.
 
 The wizard also mentions **distributed builds** — setting up separate agents — and connecting cloud providers to create agents on demand. Neither is needed with a single server playing both roles.
 
 ## What has actually happened
 
-Put together, the whole sequence was: install Java, verify and install Jenkins, start it, find it on port `8080` at the server's address, unlock it with the password from the server's own disk, and install the plugins.
+Put together, the whole sequence was: create the virtual machine, install Java, verify and install Jenkins, start it, find it on port `8080` at the server's address, unlock it with the password from the server's own disk, and install the plugins.
 
 ```mermaid
 flowchart LR
-    A["Install Java 21"] --> B["Store the Jenkins<br/>public key"]
+    V["Create the VM<br/>note its address"] --> A["Install Java 21"]
+    A --> B["Store the Jenkins<br/>public key"]
     B --> C["Register the repository<br/>and install Jenkins"]
     C --> D["Start the service<br/>check it is active"]
     D --> E["Open server-address:8080"]
     E --> F["Unlock with the<br/>initial admin password"]
     F --> G["Install suggested plugins"]
     G --> H["The dashboard"]
+    style V fill:#2d333b,color:#fff
     style A fill:#1f4f7a,color:#fff
     style B fill:#1f4f7a,color:#fff
     style C fill:#1f4f7a,color:#fff
