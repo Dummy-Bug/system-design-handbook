@@ -34,7 +34,7 @@ Adding a feature to an application is not only writing code. Alongside it you wr
 | Runtime version | installed on the machine |
 | Database, cache and their versions and ports | installed on the machine |
 
-A jar carries the first row reliably and the second row sometimes. **Everything below that is a property of the machine, not of the artifact** — and a modern fat jar, which bundles libraries and often some configuration, is a recent convenience. Older ones carried compiled code and nothing else.
+A jar carries the first row reliably and the second row sometimes. The jar is the build's **artifact** — the finished, deployable package a build produces, versioned and kept, and the thing that actually gets copied onto a server. **Everything below that first row is a property of the machine, not of the artifact** — and a modern fat jar, which bundles libraries and often some configuration, is a recent convenience. Older ones carried compiled code and nothing else.
 
 ## The two machines
 
@@ -81,6 +81,8 @@ If the problem is that one machine holds one configuration, the first-principles
 
 This is already an ordinary thing to do. A single laptop can run its own operating system and, at the same time, a Linux system inside a **virtual machine** — a complete computer simulated in software, with its own operating system, running on hardware it shares with its host. One physical computer, two independent machines.
 
+One word is needed before going further, because everything below turns on it. An operating system has a core called the **kernel**: the part that talks to the hardware, hands out memory, decides which program gets the processor next, and owns the file system. Everything else — the programs, the libraries, the directory layout — sits above it and asks the kernel for what it needs. **How many kernels are involved is the question that separates a virtual machine from a container**, so it is worth having the word fixed now.
+
 So divide the staging server the same way. Create five virtual machines on it, give each developer one, and let each of them install whatever they need inside it: their runtime version, their database on their port, their cache, their variables. The virtual machines do not have to agree with each other and do not have to run the same operating system.
 
 ```mermaid
@@ -108,7 +110,7 @@ Two questions break it.
 
 **How many can you fit?** Not many, and the answer is not a matter of tuning.
 
-**Is a virtual machine lightweight?** Not remotely. A virtual machine is an entire operating system. It has its own kernel, its own file system, its own allocation of memory and its own share of the processor, and all of that exists before a single line of your application has run. You are not paying for your code; you are paying for a second, third and fourth computer.
+**Is a virtual machine lightweight?** Not remotely. A virtual machine is an entire operating system. **It has its own kernel**, its own file system, its own allocation of memory and its own share of the processor, and all of that exists before a single line of your application has run. You are not paying for your code; you are paying for a second, third and fourth computer.
 
 The natural objection is that the hardware underneath is the same hardware, so what is actually being duplicated. The answer is that virtualising it is exactly what costs: **each machine is given a kernel of its own, a file system of its own, memory of its own and processor time of its own, and none of it is shared.** The duplication is the entire mechanism, not an overhead on top of it.
 
@@ -158,10 +160,13 @@ The definition, stated plainly:
 
 > A container packages an application together with the environment, configuration and dependencies required to run it.
 
-That is the whole idea, and it is worth reading against the table near the top of this note. Every row that was a property of the machine — runtime version, database port, environment variables, installed dependencies — becomes a property of the package instead. It works on my machine stops being an excuse and starts being a description, because the machine travels with the code.
+That is the whole idea, and it is worth reading against the table near the top of this note. 
+> Every row that was a property of the machine — runtime version, database port, environment variables, installed dependencies — **becomes a property of the package instead**. 
+
+It works on my machine stops being an excuse and starts being a description, because the machine travels with the code.
 
 > [!warning] A container is not a virtual machine, and the convenient way of picturing it is wrong.
-> It is extremely common to be told that a container is a lightweight virtual machine. That sentence is useful for getting a first grip on the idea, and it is false. **Containers do not get their own kernel. They do not get their own file system. They do not get their own memory.** They share the host's, and what makes them useful is that each one is presented with a view of the system that makes it appear otherwise. A container feels like a machine of its own from the inside; it is not one. Carrying the wrong version of this into an interview or a design discussion is a real and frequent mistake, and the correct form is simply that containers are isolated processes sharing one operating system.
+> It is extremely common to be told that a container is a lightweight virtual machine. That sentence is useful for getting a first grip on the idea, and it is false. **Containers do not get their own kernel. They do not get their own file system. They do not get their own memory.** They share the host's, and what makes them useful is that **each one is presented with a view of the system that makes it appear otherwise.** A container feels like a machine of its own from the inside; it is not one. Carrying the wrong version of this into an interview or a design discussion is a real and frequent mistake, and the correct form is simply that containers are isolated processes sharing one operating system.
 
 Two follow-on confusions are worth naming because they come from the same root. **Creating a container is not creating a virtual machine** — if it were, nothing would have been gained and the whole argument of this note would have gone in a circle. And **running an application in a container is not running it on a virtual machine**, because running it on a virtual machine means there really is a separate kernel, file system, memory and processor allocation underneath it, and here there is not.
 
