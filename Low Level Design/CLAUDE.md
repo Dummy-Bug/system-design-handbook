@@ -98,8 +98,11 @@ retry/fallback + breaker) — Emergent's own published practice problem.
 - **Whoever owns the data owns the code that builds it** (Parking Lot, `Floor`). A constructor
   takes the *parameters* of the thing — `new Floor(1, 2, 2, 1)` — never a pre-assembled internal
   structure the caller had to know how to build. Test that it landed right: **the caller's import
-  list gets shorter.** If `Main` still imports `SpotSize`/`ArrayList`/`Map`, construction logic
-  is in the wrong file.
+  list gets shorter.** If `Main` still imports the class's internals (`ArrayList`, `List`,
+  `SpotStatus`, `Spot`), construction logic is in the wrong file. Domain vocabulary (`VehicleType`,
+  `SpotSize`) is fine to import — a caller can't say "two small spots" without it. Config passed
+  as data (`Map<SpotSize, Integer>` of counts) is the caller's parameters; a pre-built
+  `Map<SpotSize, List<Spot>>` is internals.
 
 ## The bar (Rippling SDE-2 — every case study graded against all 5)
 1. **Timeboxed** — built in 90 min from a blank editor.

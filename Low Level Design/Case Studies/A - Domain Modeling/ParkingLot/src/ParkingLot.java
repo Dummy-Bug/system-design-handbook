@@ -1,7 +1,8 @@
 import model.*;
 import strategies.allocation.AllocationStrategy;
-import strategies.allocation.FirstFitStrategy;
+import strategies.allocation.BestFitStrategy;
 import strategies.payment.PaymentStrategy;
+import strategies.pricing.HourlyPricingStrategy;
 import strategies.pricing.PricingStrategy;
 
 import java.time.Instant;
@@ -11,21 +12,47 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ParkingLot {
 
     private static final ParkingLot instance = new ParkingLot();
-    Map<Integer, Floor> floors = new HashMap<>();
-    Map<String, Ticket> activeTickets = new ConcurrentHashMap<>();
-    PricingStrategy pricingStrategy;
-    AllocationStrategy allocationStrategy = new FirstFitStrategy();   // default policy
+    private final List<Floor> floors = new ArrayList<>();
+    private final Map<String, Ticket> activeTickets = new ConcurrentHashMap<>();
+    private PricingStrategy pricingStrategy = new HourlyPricingStrategy(100d);   // default policy
+    private AllocationStrategy allocationStrategy = new BestFitStrategy();   // default policy
 
 
     public static ParkingLot getInstance() {
         return instance;
     }
 
+    private ParkingLot() {
+
+    }
+
+    public void setPricingStrategy(PricingStrategy pricingStrategy) {
+        this.pricingStrategy = pricingStrategy;
+    }
+
+    public void setAllocationStrategy(AllocationStrategy allocationStrategy) {
+        this.allocationStrategy = allocationStrategy;
+    }
+
+    public void addFloor(Floor floor) {
+        floors.add(floor);
+    }
+
+    public void displayAvailability() {
+        for (Floor floor : floors) {
+            System.out.print("Floor " + floor.getFloorNumber() + ": ");
+            for (SpotSize size : SpotSize.values()) {
+                System.out.print(size + "=" + floor.freeCount(size) + "  ");
+            }
+            System.out.println();
+        }
+    }
+
     public Optional<Ticket> park(Vehicle vehicle) {
         SpotSize minSize = vehicle.getType().getMinSize();
-        Optional<Spot> spot = allocationStrategy.allocate(floors.values(), minSize);
+        Optional<Spot> spot = allocationStrategy.allocate(floors, minSize);
         if (spot.isEmpty()) {
-            return Optional.empty();   // no fitting spot anywhere — lot full
+            return Optional.empty();   // no compatible spot free anywhere
         }
         Ticket ticket = new Ticket(vehicle, spot.get());
         activeTickets.put(ticket.getTicketId(), ticket);
@@ -38,8 +65,8 @@ public class ParkingLot {
             throw new IllegalArgumentException("No active ticket: " + ticketId);
         }
 
-        ticket.setExitTime(Instant.now());
-        double fee = pricingStrategy.calculatePrice(ticket, ticket.getExitTime());
+        Instant now = Instant.now();
+        double fee = pricingStrategy.calculatePrice(ticket, now);
 
         if (!payment.pay(fee)) {
             throw new IllegalStateException("Payment failed for " + ticketId);
@@ -49,28 +76,5 @@ public class ParkingLot {
         ticket.getSpot().release();
         activeTickets.remove(ticketId);
         return fee;
-    }
-
-    public void setPricingStrategy(PricingStrategy pricingStrategy) {
-        this.pricingStrategy = pricingStrategy;
-    }
-
-    public void setAllocationStrategy(AllocationStrategy allocationStrategy) {
-        this.allocationStrategy = allocationStrategy;
-    }
-
-    public void addFloor(Floor floor) {
-        floors.put(floor.getFloorNumber(), floor);
-    }
-
-    public void displayAvailability() {
-        for (Floor floor : floors.values()) {
-            Map<SpotSize, Integer> counts = floor.freeCountsBySize();
-            System.out.print("Floor " + floor.getFloorNumber() + ": ");
-            for (SpotSize size : SpotSize.values()) {
-                System.out.print(size + "=" + counts.get(size) + "  ");
-            }
-            System.out.println();
-        }
     }
 }

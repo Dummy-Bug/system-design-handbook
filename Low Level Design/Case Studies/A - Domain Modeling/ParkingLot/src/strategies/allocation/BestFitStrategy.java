@@ -4,15 +4,15 @@ import model.Floor;
 import model.Spot;
 import model.SpotSize;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public class BestFitStrategy implements AllocationStrategy {
 
     @Override
-    public Optional<Spot> allocate(Collection<Floor> floors, SpotSize minSize) {
+    public Optional<Spot> allocate(List<Floor> floors, SpotSize minSize) {
         for (SpotSize size : SpotSize.values()) {
-            if (size.ordinal() < minSize.ordinal()) continue;
+            if (size.ordinal() < minSize.ordinal()) continue;   // too small, skip
 
             for (Floor floor : floors) {
                 Optional<Spot> spot = floor.claimSpotOfSize(size);

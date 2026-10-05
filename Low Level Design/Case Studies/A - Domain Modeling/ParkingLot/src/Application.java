@@ -16,8 +16,8 @@ public class Application {
 
         lot.setPricingStrategy(new HourlyPricingStrategy(100d));
 
-        Floor f1 = new Floor(1,1,3,2);   // only 1 small spot on floor 1 → forces fallthrough
-        Floor f2 = new Floor(2,2,3,4);
+        Floor f1 = new Floor(1, 1, 3, 2);   // 1 small spot here + 2 on floor 2: the 4th bike falls through to MEDIUM
+        Floor f2 = new Floor(2, 2, 3, 4);
 
         lot.addFloor(f1);
         lot.addFloor(f2);
@@ -28,7 +28,7 @@ public class Application {
 
         Optional<Ticket> parked = lot.park(bike);
         if (parked.isEmpty()) {
-            System.out.println("Lot full");
+            System.out.println("Compatible Spot could not be found");
             return;
         }
         Ticket t = parked.get();
@@ -40,9 +40,9 @@ public class Application {
 
         lot.displayAvailability();
 
-        // --- FR3: fallthrough — a bike takes a car spot only when no bike spot is free ---
-        System.out.println("\n--- fallthrough (first-fit) ---");
-        for (int i = 1; i <= 2; i++) {
+        // --- FR3: smallest fit across the lot — a bike takes a car spot only when no bike spot is free anywhere ---
+        System.out.println("\n--- smallest fit across the lot ---");
+        for (int i = 1; i <= 4; i++) {
             Optional<Ticket> p = lot.park(new Vehicle("BIKE-" + i, VehicleType.BIKE));
             if (p.isPresent()) {
                 System.out.println("BIKE-" + i + " -> " + p.get().getSpot().getId());
@@ -55,7 +55,7 @@ public class Application {
         System.out.println("\n--- full-lot rejection ---");
         int count = 0;
         while (lot.park(new Vehicle("FILL-" + count, VehicleType.BIKE)).isPresent()) {
-            count++;   // bikes fall through to bigger spots, so this fills the whole lot
+            count++;   // bikes fall through to bigger spots, so this fills the lot
         }
         System.out.println("Parked " + count + " more, lot now full");
 

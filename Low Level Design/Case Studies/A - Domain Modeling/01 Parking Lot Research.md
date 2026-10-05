@@ -4,7 +4,10 @@ companion_of: "[[01 Parking Lot Design]]"
 researched: 2026-10-05
 ---
 > [!abstract] Parking Lot: who asks it, in what format, and what our requirements leave out
-> Web research against candidate reports and reference specs. No public source counts how often each company asks it, so companies are ranked by the number of independent reports found, and each row says how strong its evidence is.
+> Web research against candidate reports and reference specs. No public source counts how often each company asks it, so companies are ranked by the number of independent reports found, and each row says how strong its evidence is and how recent it is.
+
+> [!warning] Most interview-report pages block automated reading
+> Medium, LeetCode Discuss, Glassdoor, IGotAnOffer and 1point3acres all refused the fetch. Where a row says search summary, the wording came from a search engine's summary of that page, not from the page itself. Only the Gojek statement and the two reference specs were read in full.
 
 ---
 
@@ -26,16 +29,57 @@ flowchart LR
     class S s
 ```
 
-| Company | Evidence | Format | What they expect |
+| Company | Evidence and date | Format | What they expect |
 |---|---|---|---|
-| **Flipkart** | Strong: several candidate write-ups | **Machine coding, running code.** 2.5 hours split as 30 min brief, 90 min coding, 30 min review. Around 20 candidates on one call get the same problem. | Code that runs and prints output for their inputs. The review probes patterns, naming and modularity, and feeds new inputs to test the logic. In-memory `HashMap` storage is fine; no database. |
-| **Gojek** | Strong: dozens of public repos of the same take-home | **Take-home, running code.** A command-line app: `create_parking_lot n`, `park <reg> <colour>`, `leave <slot>`, `status`, plus queries by colour and by registration number. | Commands read from a file and interactively. Clean, tested code. |
-| **Amazon** | Strong: called the classic Amazon question across several sources | **Discussion, usually no compiling.** 45 to 60 minutes, about 25 of them on Leadership Principles. | Entities, a class diagram, **API signatures**, patterns, extensibility. Deep follow-ups on the API design. |
-| **Microsoft** | Medium: a 2026 SDE-2 report gave the choice of vending machine or parking lot | **LLD discussion** with a deep dive on SOLID and on State or Strategy. Some orgs (CoreAI, Copilot-adjacent teams, SDE II) run an **AI-assisted variant** with GitHub Copilot. | In the AI variant: whether you direct the assistant, check its suggestions and debug what it produces, not whether you can type the syntax. |
-| **Uber** | Medium: SDE-2 screening reports | **Machine coding / LLD.** Classes, interfaces and relationships, with OOP theory questions along the way. | Reported twist: at busy times, four bikes can park in one car spot. |
-| **Goldman Sachs** | Medium: Glassdoor plus practice-site tags | **LLD on CoderPad.** Variants: plain, pricing system, multi-threaded. | Class hierarchy, an **SQL schema with queries over assumed tables**, and concurrency. |
+| **Flipkart** | Medium: the format is described the same way across several prep sites; the one candidate write-up that may hold the statement blocked the fetch. Date unknown. | **Machine coding, running code.** 2.5 hours split as 30 min brief, 90 min coding, 30 min review. Around 20 candidates on one call get the same problem. | Code that runs and prints output for their inputs. The review probes patterns, naming and modularity, and feeds new inputs to test the logic. In-memory `HashMap` storage is fine; no database. |
+| **Gojek** | Strong for the statement, which is read verbatim from candidate repos (see below). **Old: the repos date from 2017 to 2019**, and nothing newer shows the take-home is still used. | **Take-home, running code.** A command-line app: `create_parking_lot n`, `park <reg> <colour>`, `leave <slot>`, `status`, plus queries by colour and by registration number. | Commands read from a file and interactively. Clean, tested code. |
+| **Amazon** | Medium: prep sites repeatedly call it a classic Amazon question. The specific wording (three floors, small and large vehicles, small may use large) is a search summary of a page that blocked the fetch. Date unknown. | **Discussion, usually no compiling.** 45 to 60 minutes, about 25 of them on Leadership Principles. | Entities, a class diagram, **API signatures**, patterns, extensibility. Deep follow-ups on the API design. |
+| **Microsoft** | Medium, and **the most recent**: a 2026 SDE-2 report gave the choice of vending machine or parking lot. Search summary; the page blocked the fetch. | **LLD discussion** with a deep dive on SOLID and on State or Strategy. Some orgs (CoreAI, Copilot-adjacent teams, SDE II) run an **AI-assisted variant** with GitHub Copilot. | In the AI variant: whether you direct the assistant, check its suggestions and debug what it produces, not whether you can type the syntax. |
+| **Uber** | **Unconfirmed.** An Uber L4 write-up says the candidate was asked to design a parking lot and drew the class diagram (search summary; page blocked). The roundz SDE-2 write-up (published 2025-08-25) was read in full and does **not** name its machine-coding problem. | **Machine coding / LLD.** Classes, interfaces and relationships, with OOP theory questions along the way. | A twist of four bikes parking in one car spot at busy times appeared only in a search summary with no source that could be opened. Treat it as unverified. |
+| **Goldman Sachs** | Weak to medium: the Glassdoor question title is exact (Design a system to manage a parking lot) but undated; practice-site tags; the SQL detail is a search summary. | **LLD on CoderPad.** Variants: plain, pricing system, multi-threaded. | Class hierarchy, an **SQL schema with queries over assumed tables**, and concurrency. |
 | Google, Adobe, Grab | Weak: listed by aggregator blogs only, no first-hand report found | Unknown | |
 | **Meta** | No parking-lot report found | **AI-enabled coding round.** 60 minutes, multi-file CoderPad, a choice of models. | Can include object-oriented design problems. Graded on problem solving, code quality, **verification** and communication. |
+
+### The one company statement that is public in full: Gojek
+
+Read verbatim from a candidate's repo of the take-home (repos of this assignment date from 2017 to 2019):
+
+> Design a Parking lot which can hold `n` Cars. Every car been issued a ticket for a slot and the slot been assigned based on the nearest to the entry. The system should also return some queries such as:
+> - Registration numbers of all cars of a particular colour.
+> - Slot number in which a car with a given registration number is parked.
+> - Slot numbers of all slots where a car of a particular colour is parked.
+
+```
+create_parking_lot <n>
+park <registration_number> <colour>
+leave <slot>
+status
+slot_numbers_for_cars_with_colour <colour>
+slot_number_for_registration_number <registration_number>
+registration_numbers_for_cars_with_colour <colour>
+```
+
+Runs from a file of commands or interactively. One size of spot, no pricing, no floors. The core is the nearest slot and **search by colour and by registration**, the gap our design does not cover.
+
+### The reference prompt closest to our requirements: HelloInterview
+
+> Design a parking lot system where different types of vehicles can park, and the system manages spot assignment and calculates fees upon exit.
+
+Its requirements: motorcycle, car and large vehicle; a compatible spot assigned on entry; a ticket at entry; exit by ticket id, validated, hourly fee rounded up, spot freed; one rate for all vehicles; reject entry with no compatible spot; reject exit with an invalid or used ticket. Out of scope: payment processing, gate hardware, cameras, display systems, reservations. Ours is stricter in two places: pricing by vehicle type, and a real payment-failure path.
+
+### How recent is the evidence
+
+| Source | Date | What it shows |
+|---|---|---|
+| Microsoft SDE-2 report | 2026 | Parking lot or vending machine in the LLD round |
+| Microsoft AI-assisted round guides | 2026 | Copilot allowed in some orgs |
+| Meta AI-enabled coding round | rolled out from October 2025 | object-oriented problems possible with an AI assistant |
+| roundz Uber SDE-2 write-up | 2025-08-25 | machine coding round, problem not named |
+| HelloInterview breakdown | current | reference prompt and requirements |
+| Gojek take-home repos | 2017 to 2019 | the only verbatim company statement |
+| Amazon, Flipkart, Goldman Sachs, Uber L4 reports | unknown | pages blocked; dates not readable |
+
+So the claim that the parking lot is still asked after 2023 rests on one 2026 Microsoft report read through a search summary, plus prep sites that keep listing it. The verbatim company statement is older than 2020.
 
 > [!note] Rippling does not ask it
 > Reported Rippling LLD rounds are a key-value store with transactions (then nested transactions), an Excel sheet with formulas and cell references, and a music-player play-count problem. Parking Lot stays in the track for the patterns it carries, not for Rippling.
@@ -63,7 +107,7 @@ Ranked by how often the gap appears across the sources.
 | 4 | **Admin changes while the lot runs**: add or remove a floor or a spot, change rates | Grokking use cases | **Medium.** Raises a real question: what happens to a spot removed while a car is in it. |
 | 5 | **Tiered hourly pricing**: first hour at one rate, later hours cheaper | Grokking | **Low.** One more `PricingStrategy`. |
 | 6 | **A display board on each floor for drivers** | Grokking | **Low.** Our FR10 shows availability to the admin only; the reference adds drivers on every floor. Same data. |
-| 7 | **One spot holding several vehicles**: four bikes in a car spot at busy times | Uber | **High if asked.** Breaks the two-value `SpotStatus`: a spot becomes a count against a capacity. |
+| 7 | **One spot holding several vehicles**: four bikes in a car spot at busy times | Uber, **unverified** (search summary only) | **High if asked.** Breaks the two-value `SpotStatus`: a spot becomes a count against a capacity. |
 | 8 | **Persistence**: table schema and API contract | Goldman Sachs, Amazon, a LeetCode thread on LLD with API spec and DB schema | **Medium** for those two companies; not needed for machine coding. |
 
 > [!question] One addition with no source behind it
@@ -90,7 +134,11 @@ Ranked by how often the gap appears across the sources.
 - [Microsoft SDE-2 interview experience (LeetCode)](https://leetcode.com/discuss/post/7769548/)
 - [Microsoft AI-assisted coding guide (PracHub)](https://prachub.com/resources/microsoft-ai-assisted-coding-interview-guide-2026-tools-rules-and-scoring)
 - [Microsoft SWE AI-assisted coding (Coditioning)](https://www.coditioning.com/blog/408/microsoft-swe-ai-copilot-coding)
-- [Uber SDE-2 interview experience (roundz)](https://roundz.substack.com/p/interview-experience-169-uber-sde2)
+- [Uber SDE-2 interview experience (roundz), read in full, problem not named](https://roundz.substack.com/p/interview-experience-169-uber-sde2)
+- [Uber L4 interview experience (Medium)](https://khaniqbal.medium.com/uber-l4-interview-experience-5350c0e5918d)
+- [Gojek parking lot README, verbatim statement (developerinsider)](https://github.com/developerinsider/InterviewAssignments/tree/master/Go-Jek/Go-Jek-Parking-Lot-Assignment-Python)
+- [Gojek parking lot in Go (agungdwiprasetyo)](https://github.com/agungdwiprasetyo/gojek-parking-lot)
+- [Gojek code challenge 2017 (krishna2nd)](https://github.com/krishna2nd/GOJEK-CODE-CHALLENGE-2017)
 - [Uber SDE-2 LLD and HLD rounds (1point3acres)](https://www.1point3acres.com/interview/post/7896720)
 - [Goldman Sachs: Design a parking lot (Glassdoor)](https://www.glassdoor.com/Interview/Design-a-system-to-manage-a-parking-lot-QTN_93784.htm)
 - [Goldman Sachs LLD questions (CodeZym)](https://codezym.com/lld/goldmansachs)

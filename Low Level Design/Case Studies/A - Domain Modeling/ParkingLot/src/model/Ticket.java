@@ -11,17 +11,12 @@ public class Ticket {
     private final Vehicle vehicle;
     private final Spot spot;
     private final Instant entryTime;
-    private Instant exitTime;
 
     public Ticket(Vehicle vehicle, Spot spot) {
         this.ticketId = "T-" + COUNTER.getAndIncrement();
         this.vehicle = vehicle;
         this.spot = spot;
         this.entryTime = Instant.now();
-    }
-
-    public void setExitTime(Instant exitTime) {
-        this.exitTime = exitTime;
     }
 
     public String getTicketId() {
@@ -38,9 +33,5 @@ public class Ticket {
 
     public Instant getEntryTime() {
         return entryTime;
-    }
-
-    public Instant getExitTime() {
-        return exitTime;
     }
 }
