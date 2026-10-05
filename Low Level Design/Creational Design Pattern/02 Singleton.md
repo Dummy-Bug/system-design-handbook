@@ -1,3 +1,4 @@
+
 > [!abstract] Singleton
 > Exactly **one instance** of a class in the whole system, plus a global way to reach it.
 

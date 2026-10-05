@@ -1,3 +1,4 @@
+
 > [!abstract] Factory
 > Move the *"which concrete class do I create"* decision into **one place**, so every caller asks for an object by type instead of naming the class itself.
 

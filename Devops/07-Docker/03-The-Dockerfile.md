@@ -233,29 +233,58 @@ That also explains something about how Dockerfiles are written. **The more separ
 
 Layers are stored, and reusing them is not something you ask for — it happens automatically, through the **build cache**.
 
-When a build runs, each instruction is checked against what has been built before. If that exact instruction has already been carried out and nothing it depends on has changed, the stored layer is reused rather than executed again. **Only from the first instruction that genuinely differs does the build start doing real work, and everything after it is rebuilt because it sits on top of something new.**
+When a build runs, Docker walks the instructions from the top and compares each one against what it built last time. If the instruction is the same and the layer beneath it is the same, the stored layer is reused instead of being carried out again: nothing is downloaded, nothing is installed, nothing is executed. That is why a second build of an unchanged project finishes in seconds when the first took minutes.
 
-This is why a second build of an unchanged project finishes in seconds while the first took minutes.
+Watch it on the file above, where the only thing that has changed since the last build is one line of application code — so `app.jar` is different and nothing else is.
+
+| Instruction | What is compared | Result |
+|---|---|---|
+| `FROM eclipse-temurin:21-jre` | the same base image | reused from the cache |
+| `RUN apt-get update && apt-get install -y curl` | the same command text | reused from the cache |
+| `WORKDIR /app` | the same | reused from the cache |
+| `COPY target/app.jar app.jar` | the contents of the jar, which differ | **rebuilt** |
+| `CMD ["java", "-jar", "app.jar"]` | the same text | **rebuilt anyway** |
+
+Three instructions cost nothing at all, and the build only starts doing real work at `COPY`, the first one that genuinely differs. That much is intuitive.
+
+**The last row is not.** Nothing about `CMD` changed. It is the same characters it was on the previous build, and it was rebuilt regardless.
+
+The reason is in what a layer actually is. **A layer is not a standalone thing — it is a change applied to the layer underneath it**, so a stored layer is only valid for the exact parent it was built against. Once `COPY` produced a new layer, `CMD` is no longer standing on the foundation it stood on last time, and a result computed against the old foundation cannot be handed back for a new one. The instruction has to be applied again.
+
+Which makes the rule stronger than first-difference-onwards. **Once the cache misses, it stays missed for the whole rest of the file**, however many identical instructions follow it. There is no recovering it lower down.
 
 ```mermaid
 flowchart TB
-    subgraph FIRST["The first build · nothing stored yet"]
+    subgraph RB["A rebuild after one line of application code changed"]
         direction TB
-        F1["FROM · pulled and stored"] --> F2["RUN apt-get · executed and stored"]
-        F2 --> F3["COPY the jar · executed and stored"]
+        F["FROM eclipse-temurin:21-jre<br/>same as last build · reused"] --> R["RUN apt-get install curl<br/>same as last build · reused"]
+        R --> W["WORKDIR /app<br/>same as last build · reused"]
+        W --> C["COPY target/app.jar app.jar<br/>the jar differs · the first miss,<br/>and the first real work of the build"]
+        C --> M["CMD java -jar app.jar<br/>identical text, but the layer beneath it<br/>did not exist before · rebuilt"]
     end
-    subgraph AGAIN["A rebuild after one line of code changed"]
-        direction TB
-        A1["FROM · unchanged, taken from the cache"] --> A2["RUN apt-get · unchanged, taken from the cache"]
-        A2 --> A3["COPY the jar · the file differs,<br/>so this layer and everything above it is rebuilt"]
-    end
-    style F1 fill:#7a5a1f,color:#fff
-    style F2 fill:#7a5a1f,color:#fff
-    style F3 fill:#7a5a1f,color:#fff
-    style A1 fill:#1f6f3f,color:#fff
-    style A2 fill:#1f6f3f,color:#fff
-    style A3 fill:#7a5a1f,color:#fff
+    style F fill:#1f6f3f,color:#fff
+    style R fill:#1f6f3f,color:#fff
+    style W fill:#1f6f3f,color:#fff
+    style C fill:#7a5a1f,color:#fff
+    style M fill:#7a1f1f,color:#fff
 ```
+
+That matters most when the instruction that changed is near the top. Leave the code completely alone this time — the jar is byte-for-byte what it was — and add one package to the `apt-get` line instead:
+
+| Instruction | Result |
+|---|---|
+| `FROM eclipse-temurin:21-jre` | reused from the cache |
+| `RUN apt-get update && apt-get install -y curl jq` | **rebuilt**, because the command text differs |
+| `WORKDIR /app` | rebuilt, though it is identical |
+| `COPY target/app.jar app.jar` | rebuilt, though the jar has not changed at all |
+| `CMD ["java", "-jar", "app.jar"]` | rebuilt, though it is identical |
+
+The same jar is copied in from scratch because something underneath it moved. **The cost of a miss is never the one instruction — it is everything standing on top of it.**
+
+So the position of an instruction in the file decides how expensive its neighbours are, and that gives the rule by which a Dockerfile is ordered. **Put what changes least at the top and what changes most at the bottom.** The base image changes rarely, so it goes first. System packages change occasionally. Your application code changes on every commit, so it belongs as low in the file as it will go, where a miss has the least standing above it. A Dockerfile that copies the code in near the top discards everything beneath it on every single build — which is the 500 MB problem that layers were introduced to solve, reintroduced by ordering alone.
+
+> [!tip] For `RUN`, what gets compared is the command text and not what the command actually does.
+> `RUN apt-get update` stays a cache hit forever, because those three words never change — even though what they would fetch today is not what they fetched last month. The stored layer holds a package list that goes staler with every build, and any install carried out above it works from that stale list. **This is why the update and the install are written as one instruction joined with `&&`**, as they are in the file above: kept together, changing the install forces the update to run again with it. Written as two separate instructions, an install can be rebuilt on top of a package list that was cached months ago.
 
 The cache is not confined to one Dockerfile. **A layer built by one file can be reused by another**, provided the instruction is the same. Six services whose Dockerfiles all begin with the same base image and the same `apt-get` line share those layers: the work is done once, and every later build of every one of them starts from the stored result.
 
