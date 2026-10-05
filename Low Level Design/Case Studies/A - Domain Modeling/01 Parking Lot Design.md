@@ -148,8 +148,7 @@ That ordering is what makes "a bike may use a car spot" expressible in code. Wit
 
 #### `Vehicle`
 
-A licence plate and a `VehicleType`. No behaviour, both fields final. It exists so that a plate
-and its type travel together instead of being passed as two loose arguments.
+A licence plate and a `VehicleType`. No behaviour, both fields final. It exists so that a plate and its type travel together instead of being passed as two loose arguments.
 
 #### `Ticket`
 
@@ -157,9 +156,7 @@ and its type travel together instead of being passed as two loose arguments.
 
 Ticket id, the `Vehicle`, the assigned `Spot`, and the entry time. Created on entry and never changed: every field is `final`. The exit time is not stored; `unpark` reads the clock once and hands that instant to pricing.
 
-The `Spot` reference is the important field and it's the one people forget. Without it, exit
-means scanning every floor for the spot holding this vehicle — 2,500 checks on a 5×500 lot,
-every single time a car leaves. With it, exit is O(1).
+The `Spot` reference is the important field and it's the one people forget. Without it, exit means scanning every floor for the spot holding this vehicle — 2,500 checks on a 5×500 lot, every single time a car leaves. With it, exit is O(1).
 
 ### The classes with logic
 
@@ -374,20 +371,25 @@ classDiagram
 
 ```java
 public enum VehicleType {
-    BIKE(SpotSize.SMALL), CAR(SpotSize.MEDIUM), TRUCK(SpotSize.LARGE);
+
+    BIKE(SpotSize.SMALL), 
+    CAR(SpotSize.MEDIUM), 
+    TRUCK(SpotSize.LARGE);
+    
     private final SpotSize minSize;
+    
     VehicleType(SpotSize minSize) { this.minSize = minSize; }
+    
     public SpotSize getMinSize() { return minSize; }
 }
 ```
 
-**The concurrency answer** — `tryOccupy()` makes check-and-claim one atomic step, so two gates
-can't win the same spot. The search loop *is* the retry: a lost race returns `false`, caller moves on.
+**The concurrency answer** — `tryOccupy()` makes check-and-claim one atomic step, so two gates can't win the same spot. The search loop *is* the retry: a lost race returns `false`, caller moves on.
 
 ```java
 public synchronized boolean tryOccupy() {
     if (status == SpotStatus.FREE) { status = SpotStatus.OCCUPIED; return true; }
-    return false;                       // someone beat me → caller tries next spot
+    return false; // someone beat me → caller tries next spot
 }
 public synchronized void release() { status = SpotStatus.FREE; }
 ```
@@ -398,14 +400,16 @@ public synchronized void release() { status = SpotStatus.FREE; }
 // Floor: claim a free spot of EXACTLY this size
 public Optional<Spot> claimSpotOfSize(SpotSize size) {
     for (Spot spot : spots)
-        if (spot.getSize() == size && spot.tryOccupy()) return Optional.of(spot);
+        if (spot.getSize() == size && spot.tryOccupy()) {
+	        return Optional.of(spot);
+        }
     return Optional.empty();
 }
 
 // BestFitStrategy: sizes outer, floors inner
 public Optional<Spot> allocate(List<Floor> floors, SpotSize minSize) {
     for (SpotSize size : SpotSize.values()) {
-        if (size.ordinal() < minSize.ordinal()) continue;      // too small, skip
+        if (size.ordinal() < minSize.ordinal()) continue; // too small, skip
         for (Floor floor : floors) {
             Optional<Spot> spot = floor.claimSpotOfSize(size);
             if (spot.isPresent()) return spot;
@@ -439,31 +443,19 @@ public double unpark(String ticketId, PaymentStrategy payment) {
     Instant now = Instant.now();
     double fee = pricingStrategy.calculatePrice(ticket, now);
     if (!payment.pay(fee)) {
-        activeTickets.put(ticketId, ticket);                 // declined: ticket active again
+        activeTickets.put(ticketId, ticket); // declined: ticket active again
         throw new IllegalStateException("Payment failed for " + ticketId);
     }
-    ticket.getSpot().release();                              // only on success
+    ticket.getSpot().release();       // only on success
     return fee;
 }
-```
-
-Measured on a copy of the build with this version (JDK 25):
-
-```
---- same ticket scanned at two exits at once ---
-rejected: Unknown or already-used ticket: T-3
-paid 100.0
-times card charged = 1
---- payment declined, then retried ---
-declined -> Payment failed for T-4, spot 1-LARGE-0 is OCCUPIED
-retry -> paid 100.0, spot is FREE
 ```
 
 **Integer ceil pricing** — `(a + b - 1) / b`, min 1 hour, no floating point.
 
 ```java
 long minutes = Duration.between(t.getEntryTime(), exitTime).toMinutes();
-long hours = Math.max(1, (minutes + 59) / 60);   // ceil(minutes/60), min 1 hour
+long hours = Math.max(1, (minutes + 59) / 60); // ceil(minutes/60), min 1 hour
 return hours * hourlyRate;
 ```
 
