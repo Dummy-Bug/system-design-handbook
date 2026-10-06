@@ -239,3 +239,8 @@ with "make notes out of this" is that ask; discussing a topic is not.
 
 **External edits to note files are the user's own refinements — never revert them.** If a file changed
 underneath you, read the change and follow the convention it establishes.
+## Verify before teaching or explaining
+
+**Before teaching or explaining any concept — how a library, language feature, tool or protocol behaves — verify it against a primary source first:** run it, read the library's own source code, or check the official documentation. Never teach from memory alone. When a claim could not be verified, say so explicitly, in chat and in any note it lands in.
+
+Why: on 2026-10-06, a diagram of Python logging's internal order (a record created before the level check) was taught from memory and was wrong. The learner caught it, and Python's own source showed the threshold check comes first.

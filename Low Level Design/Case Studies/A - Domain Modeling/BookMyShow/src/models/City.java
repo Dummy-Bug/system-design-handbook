@@ -1,5 +1,4 @@
 package models;
 
-public class City {
-    String name;
+public record City(String name) {
 }

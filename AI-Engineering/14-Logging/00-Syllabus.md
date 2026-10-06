@@ -78,7 +78,7 @@
 
 **Break:** add a second output and get every line twice; import a library and watch its lines arrive in your format.
 
-1. Under `basicConfig` there is a flow: a log call creates a **record**; a **logger** decides whether it is important enough; **handlers** send it somewhere; each handler's **formatter** decides what it looks like.
+1. Under `basicConfig` there is a flow: the **logger** first checks its threshold, and below it nothing more happens; only then is a **record** created, keeping the message and its arguments separate; **handlers** send it somewhere; and each handler's **formatter** joins message and arguments into text and builds the line — the order that makes argument-style calls nearly free when thrown away.
 2. A **logger** is who is speaking — named, usually after its module — and can have its own threshold.
 3. A **handler** is where a record goes — the terminal, a file, a network service — and one logger can have several.
 4. A **formatter** belongs to a handler, so the same record can look different in two places.
@@ -134,7 +134,7 @@ Reading `configure_logging()` line by line. **Break:** run uvicorn with structlo
 | Topic | Why it is out |
 |---|---|
 | Tracing, spans, OpenTelemetry | `02-Observability` — a different data model, not better logging |
-| Log shipping, retention, and the tools that store logs | ops work, owned by whoever runs the platform |
+| The whole journey from a service to the log store — the platform that runs the service and catches its output, the collector that ships the lines, the log store that keeps them, and Grafana that searches them | its own future folder, next to `Devops/`; this folder stops at the service writing to its output streams |
 | Log sampling and rate limiting | a volume problem the society tax agent does not have yet |
 
 ---

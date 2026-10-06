@@ -1,16 +1,22 @@
 package models;
 
-import java.time.Instant;
 
 public class ShowSeat {
     private final Seat seat;
     private ShowSeatStatus status;
-    private User lockedBy;
-    private Instant lockedAt;
+    private Booking lockedBy;
 
-    public ShowSeat(Show show, Seat seat, ShowSeatStatus status) {
+    public ShowSeat(Seat seat) {
         this.seat = seat;
-        this.status = status;
+        this.status = ShowSeatStatus.FREE;
+    }
+
+    public Seat getSeat() {
+        return seat;
+    }
+
+    public Booking getLockedBy() {
+        return lockedBy;
     }
 
     public String getShowSeatLabel() {
@@ -25,12 +31,9 @@ public class ShowSeat {
         this.status = status;
     }
 
-    public void setLockedBy(User user) {
-        this.lockedBy = user;
+    public void setLockedBy(Booking booking) {
+        this.lockedBy = booking;
     }
 
-    public User getLockedBy() {
-        return lockedBy;
-    }
 
 }

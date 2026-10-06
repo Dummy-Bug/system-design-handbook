@@ -251,3 +251,8 @@ This applies to **definitions**, not only to code examples. A definition is a cl
 **Version drift is the common case, not the exception.** A recording is always older than the installed library. When the two differ, say both and name the versions — never silently pick one.
 
 **When something genuinely cannot be run** — no API key, no hardware, code that was never pushed — say so in the note, and label what is measured versus what is reconstructed. Never present an untested claim in the same voice as a tested one.
+## Verify before teaching or explaining
+
+**Before teaching or explaining any concept — how a library, language feature, tool or protocol behaves — verify it against a primary source first:** run it, read the library's own source code, or check the official documentation. Never teach from memory alone. When a claim could not be verified, say so explicitly, in chat and in any note it lands in.
+
+Why: on 2026-10-06, a diagram of Python logging's internal order (a record created before the level check) was taught from memory and was wrong. The learner caught it, and Python's own source showed the threshold check comes first.
