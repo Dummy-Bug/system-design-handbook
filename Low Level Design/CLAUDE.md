@@ -10,7 +10,9 @@ patterns/mechanics first; the long tail comes later as cheap variants.
 | **A. Domain modeling** (classic MC) | Flipkart, Uber, Swiggy, Ola, CRED, Groww, Meesho, Dream11, BrowserStack (120 min) | Clean OOP, patterns, extensibility, working driver | **Core-7** below |
 | **B. Concurrency / infra** | **Emergent**, Razorpay/Upstox/fintech, infra startups | Races, resource cleanup on timeout/failure, state machines | **Track B** below |
 | **C. AI-assisted mode** | Emergent, Google (2026 code-comprehension round), Meta, Canva | Driving + validating an agent; defending code you didn't type | a *mode*, not a module |
-| **D. Contract/schema LLD** | Emergent's separate LLD round, Atlassian, Salesforce | DDL + indexes, API signatures, optimistic concurrency, migrations | parked — overlaps HLD track |
+| **D. Contract/schema LLD** | Kotak, SpyneAI, Cashfree, Walmart, Flipkart design round, Amazon; Emergent's separate LLD round, Atlassian, Salesforce | DDL + indexes, API signatures, optimistic concurrency, migrations | **active (2026-10-05)** — a 15-20 min spoken cut of every core-7 build |
+
+**Flavor D un-parked (2026-10-05).** The BookMyShow research (`Case Studies/A - Domain Modeling/02 BookMyShow Research.md`) found that most 2026 SDE-2 rounds labelled LLD ask for classes + DB tables + API request/response + the concurrency answer, with no compiling — as common as machine coding. It no longer waits for the HLD track: after each core-7 build, do a timed 15-20 min spoken version (entities, the tables, three API signatures, the lock). The three formats (OOD, machine coding, OOD + tables + APIs) are laid out in `00-Round-Formats.md`; the machine-coding build is the superset, the other two are cuts of it. In the room, ask in the first minute which format is wanted.
 
 Domain flavor tracks the business: fintech → correctness/idempotency; food-delivery &
 ride-hailing → lifecycle modeling; Dream11 → gaming; Flipkart/Amazon → commerce.
@@ -54,22 +56,25 @@ else. Trigger = one-line rule + what its terms mean + a short code contrast. Tem
 tree then one code block per file. No prose walkthroughs, no failure-case sections.
 
 ## 80-20 core set (do in this order)
-7 case studies ≈ 29% of the 24-problem list, but they cover 11 of the 12 interview patterns
-and all 5 recurring mechanics (state machine, TTL lock, fan-out notify, dependency graph,
-pairwise balance map). Everything after these is a variant.
+Re-ordered 2026-10-05 by interview frequency (`00-Problem-Priority-List.md`: company-named LeetCode
+reports since 2023). The problems learned first are revised most, so they must be the most-asked ones.
+Each first build is timed (60 min, machine-coding format), followed by the 15-20 min spoken
+OOD + tables + APIs cut (flavor D).
 
 | # | Case study | Pattern payload (new learning) | Status |
 |---|-----------|-------------------------------|--------|
-| 1 | Parking Lot | Strategy (pricing/payment/allocation), Singleton + check-then-act race. Factory/Observer deliberately dropped (no product to build, pull-based display) — installed later in Splitwise/Logger | ✅ done |
-| 2 | Snake & Ladder | Template Method (game loop), Dice Strategy — speed rep, Flipkart favorite | ☐ |
-| 3 | Elevator | scheduling Strategy (SCAN/LOOK) + PriorityQueue (State now lives in Track B) | ☐ |
-| 4 | BookMyShow | Facade, seat-lock TTL, optimistic locking, **ShowSeat fix** | ☐ |
-| 5 | Splitwise | Split Strategy + Factory, balance graph simplification | ☐ |
-| 6 | Logging Framework | Highest pattern density/hour: Singleton + Chain of Resp + Observer + Strategy + Decorator | ☐ |
-| 7 | Spreadsheet | Observer + Composite + dependency graph + cycle detection (Rippling flagship) | ☐ |
+| 0 | Parking Lot | Strategy (pricing/payment/allocation), Singleton + check-then-act race. Factory/Observer deliberately dropped (no product to build, pull-based display) — installed later in Splitwise/Logger | ✅ done |
+| 1 | BookMyShow | Facade, seat-hold TTL, optimistic locking, **ShowSeat fix** — 109 reports / 58 companies | ☐ |
+| 2 | Splitwise | Split Strategy + Factory, balance graph simplification — most machine-coding-specific | ☐ |
+| 3 | Rate Limiter (= Track B1) | token bucket + sliding window behind one Strategy; atomic refill — most reported item overall, half built | ◐ |
+| 4 | Logging Framework | Highest pattern density/hour: Singleton + Chain of Resp + Observer + Strategy + Decorator | ☐ |
+| 5 | Elevator | scheduling Strategy (SCAN/LOOK) + PriorityQueue (State now lives in Track B) | ☐ |
+| 6 | Snake & Ladder | Template Method (game loop), Dice Strategy — the timed speed rep | ☐ |
+| 7 | Vending Machine | state machine: enum transition table vs State classes; refund on failure — mostly Amazon | ☐ |
+| 8 | Spreadsheet | Observer + Composite + dependency graph + cycle detection (Google, Microsoft, Rippling) | ☐ |
 
-Cheap variants unlocked afterwards (30-45 min each, skeleton transfers): Vending Machine &
-ATM (from the Circuit Breaker / Elevator state machine), Hotel/Car Rental (from BookMyShow's
+Cheap variants unlocked afterwards (30-45 min each, skeleton transfers): ATM (from the
+Vending Machine / Circuit Breaker state machine), Hotel/Car Rental (from BookMyShow's
 context-status idea), Pub-Sub & Notification System (from Logger's fan-out),
 Tic-Tac-Toe/Chess/Card Game (from Snake & Ladder's loop; Chess adds Command/undo).
 
@@ -120,6 +125,8 @@ becomes a live interview target — the bar is theirs, the problem list is ours.
 Low Level Design/
 ├── CLAUDE.md                          ← this file
 ├── 00-Pattern-Priority-List.md        ← pattern learning order
+├── 00-Problem-Priority-List.md        ← case-study order, from LeetCode report counts (2026-10-05)
+├── 00-Round-Formats.md                ← OOD vs machine coding vs OOD + tables + APIs
 ├── Behaviorial|Creational Design Pattern/   ← one note per pattern
 └── Case Studies/
     ├── A - Domain Modeling/           ← flavor A (core-7)
@@ -164,9 +171,10 @@ Post-Build checklist.**
 - **Flavor A first, until fast (decided 2026-07-22).** The classic domain-modeling round is what
   the majority of Tier-A companies still run; Track B is a bet on newer/infra shops. So finish the
   core-7 (flavor A) and get build time down to ~90 min *before* interleaving Track B — don't smuggle
-  concurrency primitives (`ExecutorService`, CAS) into a tired flavor-A build. Order now:
-  ~~Parking Lot~~ ✅ → **Snake & Ladder** → Elevator → BookMyShow → Splitwise → Logging → Spreadsheet,
-  then braid in B1–B5. Do one flavor-C (agent-driven) repeat only after a build exists cold.
+  concurrency primitives (`ExecutorService`, CAS) into a tired flavor-A build. **Exception
+  (2026-10-05): Rate Limiter (B1) moves into slot 3**, because it is the most-reported item of all.
+  Order now: ~~Parking Lot~~ ✅ → **BookMyShow** → Splitwise → Rate Limiter → Logging → Elevator →
+  Snake & Ladder → Vending Machine → Spreadsheet, then braid in B2–B5. Do one flavor-C (agent-driven) repeat only after a build exists cold.
 - After each study, run the "new requirement" test (add a feature — count files touched).
 - Explanations: one concept at a time, plain English, justify with concrete scale/consequence
   ("same seat blocked for all shows"), problem before solution.
