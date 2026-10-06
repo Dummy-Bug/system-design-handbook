@@ -26,7 +26,7 @@ public class Show {
     private void buildShowSeats() {
 
         if (screen == null || screen.getSeats() == null || screen.getSeats().isEmpty()) {
-            throw new RuntimeException("Screen must have atleast one seat");
+            throw new RuntimeException("Screen must have at-least one seat");
         }
         for (Seat seat : screen.getSeats()) {
             String label = seat.getSeatLabel();

@@ -10,10 +10,10 @@ public class Booking {
     private final Show show;
     private final User user;
 
-    private List<ShowSeat> seats;
+    private final List<ShowSeat> seats;
     private BookingStatus status;
     private double amount;
-    private Instant expiresAt;
+    private final Instant expiresAt;
 
     public Booking(String id, Show show, List<ShowSeat> seats, User user) {
         this.id = id;
