@@ -7,13 +7,18 @@ public class Theatre {
     private final String id;
     private final String name;
     private final City city;
-    private final List<Screen> screens;
+    private final List<Screen> screens = new ArrayList<>();
 
-    public Theatre(String id, String name, City city, List<Screen> screens) {
+    public Theatre(String id, String name, City city) {
         this.id = id;
         this.name = name;
         this.city = city;
-        this.screens = new ArrayList<>(screens);
+    }
+
+    public Screen addScreen(String screenId, List<Seat> seats) {
+        Screen screen = new Screen(screenId, seats, this);
+        screens.add(screen);
+        return screen;
     }
 
     public String getId() {
