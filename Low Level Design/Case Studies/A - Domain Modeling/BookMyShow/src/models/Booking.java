@@ -34,6 +34,14 @@ public class Booking {
         }
     }
 
+    public List<ShowSeat> getShowSeats() {
+        return seats;
+    }
+
+    public Show getShow() {
+        return show;
+    }
+
     public BookingStatus getStatus() {
         return status;
     }

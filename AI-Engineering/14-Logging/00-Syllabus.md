@@ -82,7 +82,7 @@
 2. A **logger** is who is speaking — named, usually after its module — and can have its own threshold.
 3. A **handler** is where a record goes — the terminal, a file, a network service — and one logger can have several.
 4. A **formatter** belongs to a handler, so the same record can look different in two places.
-5. Loggers form a tree by their dotted names — `uvicorn.error` sits under `uvicorn` — with the **root logger** at the top.
+5. Loggers form a tree by their dotted names — `payments.bank` sits under `payments` — with the **root logger** at the top.
 6. A record **propagates** up the tree to the handlers of every logger above it, which is how one handler on the root sees every library's lines.
 7. Which is also how a line gets written twice: two handlers on its path means two copies.
 8. With no configuration at all, there is no handler anywhere, so Python uses a built-in last-resort one — WARNING and above, message only — which is exactly note 2's experiment.
@@ -119,7 +119,7 @@ Reading `configure_logging()` line by line. **Break:** run uvicorn with structlo
 3. Library records never went through structlog's processors, so the formatter runs the shared steps for them first (`foreign_pre_chain`).
 4. Redaction sits in that formatter, after both paths meet, so it covers every line — ours and every library's.
 5. Setting up twice must not install two handlers, so the handler is named and replaced, not added.
-6. uvicorn's own handlers are removed so its records propagate to ours, and its access log is switched off because ours carries the request ID.
+6. uvicorn's own handlers are removed so its records propagate to ours, and its access line is switched off because the service writes a better one: one per request, from a middleware, with the method, path, status, duration and request ID each a named value.
 7. JSON when output is not a terminal (`isatty()`), readable colour when it is — one switch, no setting.
 8. stdout, because containers collect it and some platforms treat every stderr line as an error.
 9. `captureWarnings(True)` sends Python warnings through the same pipeline instead of as raw text.
@@ -141,9 +141,18 @@ Reading `configure_logging()` line by line. **Break:** run uvicorn with structlo
 
 ## Where this lands in the society tax agent
 
-**The starting point, 2026-10-06:** the service's `logging.py`, written when its request IDs and structured logs were added. It is the whole of note 6: `configure_logging()`, `redact_sensitive()`, and `RequestContextMiddleware`, which gives every request an ID and writes one access line.
+**The starting point, 2026-10-08:** the service's `logging.py` and its `middleware/` package, written when its request IDs and structured logs were added, and simplified the same week to what it needs today.
 
-To be filled in as the notes are written.
+| Piece | What it does | Where it is taught |
+|---|---|---|
+| `configure_logging()` | one pipeline for the service's lines, every library's, uvicorn's and Python's warnings; JSON or coloured text by `isatty()` | note 6, read line by line in its last two sections; built on notes 3 to 5 |
+| `redact_sensitive` | masks values whose names end in `password`, `otp`, `authorization`, `token` or `cookie`, top-level names only | note 5's masking processor; note 6 places it in the formatter's chain |
+| `RequestContextMiddleware` | binds a request ID, returns it in the `X-Request-Id` header, writes one `request_finished` line per request | note 6, the app writes its own line per request; how the ID is chosen is `15-Request-And-Trace-IDs` note 1 |
+| `UnhandledErrorMiddleware` | logs a crash once, with its traceback, and answers with a 500 | note 3's `logger.exception`; why only once is the currency check above |
+
+**Deliberately simple for now.** The request middleware writes its line when the route has produced its status, before the body is sent. That is exact while every response is sent in one piece; when the service starts streaming responses, it moves to middleware that watches each piece of the response go out and records whether the last one was sent. The crash middleware is the same simple kind, catching a crash from `call_next`; a crash in the middle of a stream happens after `call_next` has returned, so it moves at the same time. Masking looks at top-level names only, so whole dicts, lists or models that can hold a secret are never logged; the fields needed are logged by name.
+
+**Not here yet:** the tenant and user IDs bound after sign-in, and everything in `15-Request-And-Trace-IDs` beyond the request ID.
 
 ---
 

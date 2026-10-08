@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Optional;
 
 public class Main {
     public static void main(String[] args) {
@@ -44,6 +45,9 @@ public class Main {
         service.addShow(show1);
         service.addShow(show2);
 
+        User alpha = new User("Alpha", "alpha@gmail.com");
+        User beta = new User("Beta", "beta@gmail.com");
+
         // --- FR3: cities, then movies in a city ---
         System.out.println("--- cities ---");
         for (City city : service.getAllCities()) {
@@ -64,8 +68,26 @@ public class Main {
 
         // --- FR5: seat map of a show ---
         System.out.println("\n--- seat map of " + show2.getId() + " ---");
-        for (ShowSeat showSeat : show2.getShowSeats()) {
+        for (ShowSeat showSeat : service.getShowSeats(show2)) {
             System.out.println(showSeat.getShowSeatLabel() + " | " + showSeat.getSeat().getSeatType() + " | " + showSeat.getStatus());
         }
+
+        Optional<Booking> bookingOptional = service.lockShowSeats(show2, show2.getShowSeats(), alpha);
+        if (bookingOptional.isEmpty()) {
+            throw new RuntimeException("Please select seats that are Free");
+        }
+
+        System.out.println("Please pay " + bookingOptional.get().getAmount() + " to confirm the Booking");
+
+        Optional<Booking> confirmedBookingOptional = service.confirmBooking(bookingOptional.get(), bookingOptional.get().getAmount());
+        if (confirmedBookingOptional.isEmpty()) {
+            throw new RuntimeException("Payment failed");
+        }
+        Booking confirmedBooking = confirmedBookingOptional.get();
+
+        System.out.println("Your Booking has been confirmed for Movie :- " + confirmedBooking.getShow().getMovie().name() +
+                "show starts from " + confirmedBooking.getShow().getStartTime() + " Ends at " + confirmedBooking.getShow().getEndTime() +
+                "Inside Theatre " + confirmedBooking.getShow().getScreen().getTheatre().getName());
+
     }
 }

@@ -32,7 +32,7 @@ What each step is, in Python's source (`logging/__init__.py`, Python 3.13):
 | Step | Source |
 |---|---|
 | the logger checks its threshold first | `Logger.error`: `if self.isEnabledFor(ERROR): self._log(...)` — below the threshold, `_log` never runs |
-| only then is the record created | `Logger._log`: `record = self.makeRecord(self.name, level, fn, lno, msg, args, ...)` |
+| only then is the record created | `Logger._log`: `record = self.makeRecord(self.name, level, fn, lno, msg, args, ...)` — `fn` and `lno` are the file and line number of the log call |
 | each handler receives it | `Logger.callHandlers`: `hdlr.handle(record)` |
 | the handler asks its formatter | `Handler.format`: `fmt = self.formatter` … `return fmt.format(record)` |
 | the formatter joins message and arguments | `LogRecord.getMessage`: `msg = msg % self.args`, called from inside `Formatter.format` |
@@ -93,7 +93,7 @@ Every logger is its own first gate, with its own threshold, set with `.setLevel(
 ```
 $ uv run python src/logging_lab/note04/a_threshold_per_logger.py
 
-DEBUG payments built the request for the bank: payment P-101, amount 500
+DEBUG payments Request for the bank: payment P-101, amount 500
 
 WARNING bank_client bank answered slowly, retrying payment P-102
 
@@ -148,9 +148,6 @@ So far `basicConfig` built the handler. Built by hand, a logger can have **sever
 16  payments.info("payment %s succeeded", "P-101")
 17  payments.warning("bank answered slowly, retrying payment %s", "P-102")
 18  payments.error("payment %s failed: amount must be positive, got %s", "P-104", 0)
-19
-20  print("--- errors.log contains:")
-21  print(Path("errors.log").read_text(), end="")
 ```
 
 | Line | What it does |
@@ -160,20 +157,18 @@ So far `basicConfig` built the handler. Built by hand, a logger can have **sever
 | 11 | gives the file handler **a threshold of its own**, ERROR |
 | 13–14 | `addHandler` attaches both to the `payments` logger, so every record the logger keeps is given to both |
 
-Run in a terminal, the lines arrive mixed, because the terminal shows both of the program's output streams — standard output, where `print()` writes, and standard error, where `logging` writes by default — in one window, in whatever order they arrive. Sending each stream to its own file separates them:
+Each destination, looked at on its own:
 
 ```
-$ uv run python src/logging_lab/note04/b_two_handlers.py 1>out.txt 2>err.txt
-$ cat out.txt
---- errors.log contains:
-payment P-104 failed: amount must be positive, got 0
-$ cat err.txt
+$ uv run python src/logging_lab/note04/b_two_handlers.py
 payment P-101 succeeded
 bank answered slowly, retrying payment P-102
 payment P-104 failed: amount must be positive, got 0
+$ cat errors.log
+payment P-104 failed: amount must be positive, got 0
 ```
 
-`err.txt` holds what the terminal handler wrote — all three lines. `out.txt` holds the two `print()` lines, the second of which is the contents of `errors.log`: the ERROR line alone. So the ERROR line appears twice in a mixed terminal, with identical text, for two different reasons — once from the terminal handler, once from printing the file.
+The three lines from the run are what the terminal handler wrote, on standard error. `cat errors.log` displays the file, which received only the ERROR line.
 
 | Line | `to_terminal` → standard error | `to_errors_file` → errors.log |
 |---|---|---|
@@ -356,7 +351,7 @@ A logger with no threshold of its own borrows one — and the rule for where it 
 5      logger = logger.parent
 ```
 
-Start with the logger itself; if it has a threshold, use it. If not — its threshold is `NOTSET`, which is stored as 0, so line 3 is false — move to its parent and ask again. `root` always has a threshold, so the climb always ends. It is the same follow-the-parent walk as the find operation of a disjoint-set structure.
+Start with the logger itself; if it has a threshold, use it. If not — its threshold is `NOTSET`, which is stored as 0, so line 3 is false — move to its parent and ask again. `root` always has a threshold, so the climb always ends.
 
 `src/logging_lab/note04/f_borrowing.py`:
 
@@ -372,15 +367,19 @@ Start with the logger itself; if it has a threshold, use it. If not — its thre
  9  for logger in [retry, bank, payments, logging.getLogger()]:
 10      own = logging.getLevelName(logger.level)
 11      used = logging.getLevelName(logger.getEffectiveLevel())
-12      print(f"{logger.name:20} own threshold: {own:8} threshold used: {used}")
+12      print(f"\n {logger.name:40} own threshold: {own:20} threshold used: {used}")
 ```
 
 ```
 $ uv run python src/logging_lab/note04/f_borrowing.py
-payments.bank.retry  own threshold: NOTSET   threshold used: DEBUG
-payments.bank        own threshold: NOTSET   threshold used: DEBUG
-payments             own threshold: DEBUG    threshold used: DEBUG
-root                 own threshold: WARNING  threshold used: WARNING
+
+ payments.bank.retry                      own threshold: NOTSET               threshold used: DEBUG
+
+ payments.bank                            own threshold: NOTSET               threshold used: DEBUG
+
+ payments                                 own threshold: DEBUG                threshold used: DEBUG
+
+ root                                     own threshold: WARNING              threshold used: WARNING
 ```
 
 The climb for `payments.bank.retry` passes `payments.bank` (no threshold) and stops at `payments` (DEBUG). So **one `setLevel` on `payments` sets the threshold of everything beneath it** — every module of the payments code at once — and `root`'s WARNING never comes into play for them.
@@ -447,7 +446,7 @@ $ uv run python src/logging_lab/note04/h_every_handler_on_the_way.py
 | uses | that one threshold | every handler on the way |
 | on the way, checks | — | each handler's own threshold, never the thresholds of the loggers it passes |
 
-That last row explains a result from earlier in this note. In the threshold-per-logger program, `root`'s threshold was WARNING, yet the `payments` DEBUG line was written by `root`'s handler: the line passed `payments`' own threshold, and from then on only handlers' thresholds were checked — `root`'s own threshold never was. In Python's source, `Logger.callHandlers` checks `if record.levelno >= hdlr.level` for each handler and then moves on with `c = c.parent`, until a logger with `propagate` switched off or the top.
+That last row explains a result from earlier in this note. In the threshold-per-logger program, `root`'s threshold was WARNING, yet the `payments` DEBUG line was written by `root`'s handler: the line passed `payments`' own threshold, and from then on only handlers' thresholds were checked — `root`'s own threshold never was. In Python's source, `Logger.callHandlers` checks `if record.levelno >= hdlr.level` for each handler and then moves on with `c = c.parent`, up to `root` — unless it meets a logger whose **`propagate`** switch is off. Every logger has that switch; it is on by default, which is what makes lines climb, and switched off it stops the climb at that logger.
 
 ```mermaid
 flowchart TB
@@ -483,7 +482,7 @@ Every line, from every logger, then climbs to `root` and meets each handler exac
 - **Several handlers on `root` are fine** when they go to different destinations — the terminal and an errors file give one copy in each, which is the point. A line is duplicated when two handlers write to the **same** destination, which is what happens when a handler is added lower in the tree as well as on `root`.
 - **A handler lower in the tree sees only its own branch.** A handler on `payments` never sees `bank_client`'s lines, which climb a different branch. Handlers on `root` see everything.
 
-`propagate = False` on a logger stops the climb at that logger — for the rare logger whose lines must go somewhere separate and nowhere else.
+Switching `propagate` off — `propagate = False` — is for the rare logger whose lines must go somewhere separate and nowhere else.
 
 > [!important] Loggers get names; root gets handlers
 > Every module's logger is just `getLogger(__name__)`, perhaps with a threshold. The handlers — where lines go and what they look like — are set up once, on `root`, by the program that runs everything.
@@ -504,3 +503,108 @@ That is note 2's first experiment, finally fully explained. With nothing configu
 
 > [!info] The last resort is a safety net, not a setup
 > It exists so that a program which never configured logging still shows its warnings and errors somewhere. A program that configures logging puts its own handler on `root`, and the last resort is never used.
+
+## Taking over a library that brings its own handler
+
+A **library** is code someone else wrote that a program uses. Most follow the rule and add no handlers, but some add their own anyway. This one is written to behave badly on purpose, so every line of it is visible. It names its logger with a fixed name, `noisy_library`, instead of `getLogger(__name__)` — a short name keeps the output readable, and the logger behaves the same either way:
+
+`src/logging_lab/note04/noisy_library.py`:
+
+```python
+ 1  import logging
+ 2
+ 3  logger = logging.getLogger("noisy_library")
+ 4
+ 5  its_own_handler = logging.StreamHandler()
+ 6  its_own_handler.setFormatter(logging.Formatter("noisy_library says: %(message)s"))
+ 7  logger.addHandler(its_own_handler)
+ 8  logger.propagate = False
+ 9
+10
+11  def connect() -> None:
+12      logger.warning("connection to the bank is slow")
+```
+
+Lines 5–7 give the library's logger its own handler with its own format. Line 8 switches off its `propagate` switch, so its lines stop climbing at its own logger.
+
+A program that does everything by the rule — one handler, on `root`:
+
+`src/logging_lab/note04/i_a_library_with_its_own_handler.py`:
+
+```python
+ 1  import logging
+ 2
+ 3  from logging_lab.note04 import noisy_library
+ 4
+ 5  our_handler = logging.StreamHandler()
+ 6  our_handler.setFormatter(logging.Formatter("[ours] %(levelname)s %(name)s %(message)s"))
+ 7  logging.getLogger().addHandler(our_handler)
+ 8
+ 9  payments = logging.getLogger("payments")
+10
+11  payments.warning("payment %s is waiting", "P-102")
+12  noisy_library.connect()
+```
+
+```
+$ uv run python src/logging_lab/note04/i_a_library_with_its_own_handler.py
+[ours] WARNING payments payment P-102 is waiting
+noisy_library says: connection to the bank is slow
+```
+
+**Two formats in one log** — note 1's problem again. The `payments` line climbed to `root` and got the program's format. The library's line was written by the library's own handler and then stopped climbing, so it never reached `root`:
+
+```
+noisy_library.connect() → warning("connection to the bank is slow")
+  1. noisy_library's own handler   → written, in the library's format
+  2. propagate is False            → the climb stops here
+  3. root's handler                → never reached
+```
+
+The library's file belongs to someone else, so the fix has to come from the program, undoing both things the library did. Doing only the first half shows why the second is needed:
+
+`src/logging_lab/note04/j_taking_it_over.py`:
+
+```python
+ 1  import logging
+ 2
+ 3  from logging_lab.note04 import noisy_library
+ 4
+ 5  our_handler = logging.StreamHandler()
+ 6  our_handler.setFormatter(logging.Formatter("[ours] %(levelname)s %(name)s %(message)s"))
+ 7  logging.getLogger().addHandler(our_handler)
+ 8
+ 9  library_logger = logging.getLogger("noisy_library")
+10
+11  print("--- step 1: remove its handlers only", flush=True)
+12  library_logger.handlers.clear()
+13  noisy_library.connect()
+14
+15  print("--- step 2: also switch its propagation back on", flush=True)
+16  library_logger.propagate = True
+17  noisy_library.connect()
+```
+
+`flush=True` sends each `print()` line out at once, so the markers stay in order with the log lines, which travel on the other output stream.
+
+```
+$ uv run python src/logging_lab/note04/j_taking_it_over.py 2>&1
+--- step 1: remove its handlers only
+connection to the bank is slow
+--- step 2: also switch its propagation back on
+[ours] WARNING noisy_library connection to the bank is slow
+```
+
+After step 1 the library's line has no handler at its own logger and still cannot climb, so no handler is found anywhere and the last resort from the previous section writes it — bare. After step 2 it climbs to `root` and the program's handler writes it in the program's format.
+
+| The library did | The program undoes it with | Without this half |
+|---|---|---|
+| its own handler, lines 5–7 | `library_logger.handlers.clear()` | the library's format stays |
+| propagation off, line 8 | `library_logger.propagate = True` | the line never reaches `root`; the last resort writes it bare |
+
+> [!important] Taking over a library's logs takes both halves
+> Remove its handlers so its own format disappears, and switch its propagation back on so its lines climb to `root`. Then every line, from every library, meets the same handlers and comes out in one format.
+
+---
+
+> **Recall:** In what order do logger, record, handler and formatter act, and why does the order make argument-style calls cheap? · Which part does each `basicConfig` setting build? · How does a logger with no threshold find one? · What is `root`, and where does it come from? · What is propagation, and how does it differ from the threshold climb? · Why do handlers belong on `root` only, and what causes duplicate lines? · What happens when no handler is found anywhere? · What two things must a program undo to take over a library's logs?

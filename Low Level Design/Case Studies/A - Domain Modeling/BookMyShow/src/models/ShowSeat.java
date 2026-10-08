@@ -1,6 +1,8 @@
 package models;
 
 
+import java.time.Instant;
+
 public class ShowSeat {
     private final Seat seat;
     private ShowSeatStatus status;
