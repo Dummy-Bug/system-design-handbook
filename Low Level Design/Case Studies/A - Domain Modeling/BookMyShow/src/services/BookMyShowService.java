@@ -30,7 +30,9 @@ public class BookMyShowService {
     }
 
     public List<ShowSeat> getShowSeats(Show show) {
-
+        if (show.getStartTime().isBefore(LocalDateTime.now().plusMinutes(5))) {
+            throw new RuntimeException("Show has already started");
+        }
         List<ShowSeat> showSeats = show.getShowSeats();
 
         for (ShowSeat showSeat : showSeats) {
@@ -40,6 +42,10 @@ public class BookMyShowService {
 
                 if (booking.getExpiresAt().isBefore(Instant.now())) {
                     releaseHold(booking);
+                }
+            } else if (showSeat.getStatus().equals(ShowSeatStatus.BOOKED)) {
+                if (show.getEndTime().isBefore(LocalDateTime.now())) {
+                    releaseHold(showSeat.getLockedBy());
                 }
             }
         }
@@ -69,7 +75,7 @@ public class BookMyShowService {
         for (Show show : shows) {
             if (show.getScreen().getTheatre().getCity().equals(city)
                     && show.getMovie().equals(movie)
-                    && show.getStartTime().isAfter(LocalDateTime.now().plusMinutes(5L))) {
+                    && show.getStartTime().isAfter(LocalDateTime.now().plusMinutes(5))) {
                 uniqueShows.add(show);
             }
         }
@@ -79,12 +85,25 @@ public class BookMyShowService {
 
     public synchronized Optional<Booking> lockShowSeats(Show show, List<ShowSeat> showSeats, User user) {
 
+        if (show.getStartTime().isBefore(LocalDateTime.now().plusMinutes(5))) {
+            throw new RuntimeException("Show has already started");
+        }
+
         for (ShowSeat showSeat : showSeats) {
 
             Booking booking = showSeat.getLockedBy();
-            if (booking != null && booking.getStatus().equals(BookingStatus.PENDING) && booking.getExpiresAt().isAfter(Instant.now())) {
+            if (booking == null) continue;
+
+            else if (booking.getStatus().equals(BookingStatus.PENDING) &&
+                    booking.getExpiresAt().isAfter(Instant.now())) {
                 return Optional.empty();
+
+            } else if (booking.getStatus().equals(BookingStatus.CONFIRMED)) {
+                if (show.getEndTime().isBefore(LocalDateTime.now())) {
+                    releaseHold(booking);
+                } else return Optional.empty();
             }
+
         }
 
         Booking booking = new Booking(java.util.UUID.randomUUID().toString(), show, showSeats, user);
@@ -99,6 +118,13 @@ public class BookMyShowService {
     }
 
     public synchronized Optional<Booking> confirmBooking(Booking booking, double amount) {
+
+        Show show = booking.getShow();
+
+        if (show.getStartTime().isBefore(LocalDateTime.now().plusMinutes(5))) {
+            releaseHold(booking);
+            throw new RuntimeException("Show has already started");
+        }
 
         if (amount != booking.getAmount()) {
             return Optional.empty();
