@@ -118,6 +118,14 @@ public class BookMyShowService {
 
     public synchronized Optional<Booking> confirmBooking(Booking booking, double amount) {
 
+        if (booking.getStatus().equals(BookingStatus.CONFIRMED) || booking.getStatus().equals(BookingStatus.CANCELLED)) {
+            return Optional.empty();
+        }
+
+        if (booking.getExpiresAt().isBefore(LocalDateTime.now())) {
+            return Optional.empty();
+        }
+
         Show show = booking.getShow();
 
         if (!show.isOpenForBooking()) {
@@ -126,14 +134,6 @@ public class BookMyShowService {
         }
 
         if (amount != booking.getAmount()) {
-            return Optional.empty();
-        }
-
-        if (booking.getExpiresAt().isBefore(LocalDateTime.now())) {
-            return Optional.empty();
-        }
-
-        if (booking.getStatus().equals(BookingStatus.CONFIRMED) || booking.getStatus().equals(BookingStatus.CANCELLED)) {
             return Optional.empty();
         }
 
