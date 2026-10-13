@@ -32,23 +32,7 @@ public class BookMyShowService {
         if (!show.isOpenForBooking()) {
             throw new RuntimeException("Show has already started");
         }
-        List<ShowSeat> showSeats = show.getShowSeats();
-
-        for (ShowSeat showSeat : showSeats) {
-
-            if (showSeat.getStatus().equals(ShowSeatStatus.LOCKED)) {
-                Booking booking = showSeat.getLockedBy();
-
-                if (booking.getExpiresAt().isBefore(LocalDateTime.now())) {
-                    releaseHold(booking);
-                }
-            } else if (showSeat.getStatus().equals(ShowSeatStatus.BOOKED)) {
-                if (show.getEndTime().isBefore(LocalDateTime.now())) {
-                    releaseHold(showSeat.getLockedBy());
-                }
-            }
-        }
-        return new ArrayList<>(showSeats);
+        return show.getShowSeats();
     }
 
     public List<City> getAllCities() {
@@ -85,7 +69,7 @@ public class BookMyShowService {
     public synchronized Optional<Booking> lockShowSeats(Show show, List<String> seatLabels, User user) {
 
         if (!show.isOpenForBooking()) {
-            throw new RuntimeException("Show has already started");
+            return Optional.empty();
         }
 
         if (seatLabels.isEmpty()) {
@@ -104,27 +88,15 @@ public class BookMyShowService {
         }
 
         for (ShowSeat showSeat : showSeats) {
-
-            Booking booking = showSeat.getLockedBy();
-            if (booking == null) continue;
-
-            else if (booking.getStatus().equals(BookingStatus.PENDING) &&
-                    booking.getExpiresAt().isAfter(LocalDateTime.now())) {
+            if (!showSeat.getStatus().equals(ShowSeatStatus.FREE)) {
                 return Optional.empty();
-
-            } else if (booking.getStatus().equals(BookingStatus.CONFIRMED)) {
-                if (show.getEndTime().isBefore(LocalDateTime.now())) {
-                    releaseHold(booking);
-                } else return Optional.empty();
             }
-
         }
 
         Booking booking = new Booking(java.util.UUID.randomUUID().toString(), show, showSeats, user);
 
 
         for (ShowSeat showSeat : showSeats) {
-            showSeat.setStatus(ShowSeatStatus.LOCKED);
             showSeat.setLockedBy(booking);
         }
         return Optional.of(booking);
@@ -133,49 +105,37 @@ public class BookMyShowService {
 
     public synchronized Optional<Booking> confirmBooking(Booking booking, double amount) {
 
-        if (booking.getStatus().equals(BookingStatus.CONFIRMED) || booking.getStatus().equals(BookingStatus.CANCELLED)) {
+        if (!booking.getStatus().equals(BookingStatus.PENDING)) {
             return Optional.empty();
         }
 
         if (booking.getExpiresAt().isBefore(LocalDateTime.now())) {
+            booking.setStatus(BookingStatus.EXPIRED);
             return Optional.empty();
         }
 
         Show show = booking.getShow();
 
         if (!show.isOpenForBooking()) {
-            releaseHold(booking);
-            throw new RuntimeException("Show has already started");
-        }
-
-        if (amount != booking.getAmount()) {
             return Optional.empty();
         }
 
-        List<ShowSeat> showSeats = booking.getShowSeats();
-        for (ShowSeat showSeat : showSeats) {
-            showSeat.setStatus(ShowSeatStatus.BOOKED);
+        if (amount != booking.getAmount()) {
+            booking.setStatus(BookingStatus.PAYMENT_FAILED);
+            return Optional.empty();
         }
+
         booking.setStatus(BookingStatus.CONFIRMED);
         return Optional.of(booking);
     }
 
-    public Optional<Booking> cancelBooking(Booking booking) {
+    public synchronized Optional<Booking> cancelBooking(Booking booking) {
 
-        if (booking.getStatus().equals(BookingStatus.CONFIRMED)) {
-            releaseHold(booking);
-            booking.setStatus(BookingStatus.CANCELLED);
+        if (!booking.getStatus().equals(BookingStatus.CONFIRMED)) {
+            return Optional.empty();
         }
+
+        booking.setStatus(BookingStatus.CANCELLED);
         return Optional.of(booking);
-    }
-
-    public synchronized void releaseHold(Booking booking) {
-
-        List<ShowSeat> showSeats = booking.getShowSeats();
-
-        for (ShowSeat showSeat : showSeats) {
-            showSeat.setStatus(ShowSeatStatus.FREE);
-            showSeat.setLockedBy(null);
-        }
     }
 }

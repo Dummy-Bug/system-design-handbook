@@ -35,6 +35,10 @@ public class Booking {
         }
     }
 
+    public boolean isHoldActive() {
+        return status.equals(BookingStatus.PENDING) && LocalDateTime.now().isBefore(expiresAt);
+    }
+
     public List<ShowSeat> getShowSeats() {
         return seats;
     }
