@@ -1,7 +1,6 @@
 package models;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDateTime;
 import java.util.EnumMap;
 import java.util.List;
 
@@ -13,7 +12,7 @@ public class Booking {
     private final List<ShowSeat> seats;
     private BookingStatus status;
     private double amount;
-    private final Instant expiresAt;
+    private final LocalDateTime expiresAt;
 
     public Booking(String id, Show show, List<ShowSeat> seats, User user) {
         this.id = id;
@@ -21,7 +20,9 @@ public class Booking {
         this.seats = seats;
         this.user = user;
         this.status = BookingStatus.PENDING;
-        this.expiresAt = Instant.now().plus(5L, ChronoUnit.MINUTES);
+        LocalDateTime holdEndsAt = LocalDateTime.now().plusMinutes(5);
+        LocalDateTime bookingClosesAt = show.getBookingClosesAt();
+        this.expiresAt = holdEndsAt.isBefore(bookingClosesAt) ? holdEndsAt : bookingClosesAt;
         calculateAmount();
     }
 
@@ -50,7 +51,7 @@ public class Booking {
         return amount;
     }
 
-    public Instant getExpiresAt() {
+    public LocalDateTime getExpiresAt() {
         return expiresAt;
     }
 

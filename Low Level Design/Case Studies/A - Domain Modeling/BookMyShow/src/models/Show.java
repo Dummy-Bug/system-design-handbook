@@ -34,8 +34,12 @@ public class Show {
         }
     }
 
+    public LocalDateTime getBookingClosesAt() {
+        return startTime.minusMinutes(5);
+    }
+
     public boolean isOpenForBooking() {
-        return startTime.isAfter(LocalDateTime.now().plusMinutes(5));
+        return LocalDateTime.now().isBefore(getBookingClosesAt());
     }
 
     public String getId() {

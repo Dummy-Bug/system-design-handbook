@@ -3,7 +3,6 @@ package services;
 
 import models.*;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -40,7 +39,7 @@ public class BookMyShowService {
             if (showSeat.getStatus().equals(ShowSeatStatus.LOCKED)) {
                 Booking booking = showSeat.getLockedBy();
 
-                if (booking.getExpiresAt().isBefore(Instant.now())) {
+                if (booking.getExpiresAt().isBefore(LocalDateTime.now())) {
                     releaseHold(booking);
                 }
             } else if (showSeat.getStatus().equals(ShowSeatStatus.BOOKED)) {
@@ -95,7 +94,7 @@ public class BookMyShowService {
             if (booking == null) continue;
 
             else if (booking.getStatus().equals(BookingStatus.PENDING) &&
-                    booking.getExpiresAt().isAfter(Instant.now())) {
+                    booking.getExpiresAt().isAfter(LocalDateTime.now())) {
                 return Optional.empty();
 
             } else if (booking.getStatus().equals(BookingStatus.CONFIRMED)) {
@@ -130,7 +129,7 @@ public class BookMyShowService {
             return Optional.empty();
         }
 
-        if (booking.getExpiresAt().isBefore(Instant.now())) {
+        if (booking.getExpiresAt().isBefore(LocalDateTime.now())) {
             return Optional.empty();
         }
 
