@@ -30,7 +30,7 @@ public class BookMyShowService {
     }
 
     public List<ShowSeat> getShowSeats(Show show) {
-        if (show.getStartTime().isBefore(LocalDateTime.now().plusMinutes(5))) {
+        if (!show.isOpenForBooking()) {
             throw new RuntimeException("Show has already started");
         }
         List<ShowSeat> showSeats = show.getShowSeats();
@@ -75,7 +75,7 @@ public class BookMyShowService {
         for (Show show : shows) {
             if (show.getScreen().getTheatre().getCity().equals(city)
                     && show.getMovie().equals(movie)
-                    && show.getStartTime().isAfter(LocalDateTime.now().plusMinutes(5))) {
+                    && show.isOpenForBooking()) {
                 uniqueShows.add(show);
             }
         }
@@ -85,7 +85,7 @@ public class BookMyShowService {
 
     public synchronized Optional<Booking> lockShowSeats(Show show, List<ShowSeat> showSeats, User user) {
 
-        if (show.getStartTime().isBefore(LocalDateTime.now().plusMinutes(5))) {
+        if (!show.isOpenForBooking()) {
             throw new RuntimeException("Show has already started");
         }
 
@@ -121,7 +121,7 @@ public class BookMyShowService {
 
         Show show = booking.getShow();
 
-        if (show.getStartTime().isBefore(LocalDateTime.now().plusMinutes(5))) {
+        if (!show.isOpenForBooking()) {
             releaseHold(booking);
             throw new RuntimeException("Show has already started");
         }
