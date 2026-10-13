@@ -1,7 +1,11 @@
 import models.*;
 import services.BookMyShowService;
+import strategies.pricing.MorningDiscountPricing;
+import strategies.pricing.WeekendSurgePricing;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -44,6 +48,9 @@ public class Main {
         service.addTheatres(nexus);
         service.addShow(show1);
         service.addShow(show2);
+
+        service.addPricingStrategy(new WeekendSurgePricing(20));
+        service.addPricingStrategy(new MorningDiscountPricing(10));
 
         User alpha = new User("Alpha", "alpha@gmail.com");
         User beta = new User("Beta", "beta@gmail.com");
@@ -89,5 +96,13 @@ public class Main {
                 "show starts from " + confirmedBooking.getShow().getStartTime() + " Ends at " + confirmedBooking.getShow().getEndTime() +
                 "Inside Theatre " + confirmedBooking.getShow().getScreen().getTheatre().getName());
 
+        // --- extension: pricing rules ---
+        System.out.println("\n--- pricing: Gold seat B5, listed at 200 ---");
+        LocalDateTime nextMonday6pm = now.toLocalDate().with(TemporalAdjusters.next(DayOfWeek.MONDAY)).atTime(18, 0);
+        LocalDateTime nextSaturday10am = now.toLocalDate().with(TemporalAdjusters.next(DayOfWeek.SATURDAY)).atTime(10, 0);
+        Show mondayEvening = new Show("s3", audi1, dune, nextMonday6pm, nextMonday6pm.plusHours(2), prices2);
+        Show saturdayMorning = new Show("s4", audi2, dune, nextSaturday10am, nextSaturday10am.plusHours(2), prices2);
+        System.out.println("Monday 6 pm:    " + service.lockShowSeats(mondayEvening, List.of("B5"), beta).get().getAmount());
+        System.out.println("Saturday 10 am: " + service.lockShowSeats(saturdayMorning, List.of("B5"), beta).get().getAmount());
     }
 }

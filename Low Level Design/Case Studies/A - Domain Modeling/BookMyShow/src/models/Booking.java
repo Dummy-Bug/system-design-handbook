@@ -14,7 +14,7 @@ public class Booking {
     private double amount;
     private final LocalDateTime expiresAt;
 
-    public Booking(String id, Show show, List<ShowSeat> seats, User user) {
+    public Booking(String id, Show show, List<ShowSeat> seats, User user, EnumMap<SeatType, Double> prices) {
         this.id = id;
         this.show = show;
         this.seats = seats;
@@ -23,12 +23,10 @@ public class Booking {
         LocalDateTime holdEndsAt = LocalDateTime.now().plusMinutes(5);
         LocalDateTime bookingClosesAt = show.getBookingClosesAt();
         this.expiresAt = holdEndsAt.isBefore(bookingClosesAt) ? holdEndsAt : bookingClosesAt;
-        calculateAmount();
+        calculateAmount(prices);
     }
 
-    private void calculateAmount() {
-        EnumMap<SeatType, Double> prices = this.show.getPrices();
-
+    private void calculateAmount(EnumMap<SeatType, Double> prices) {
         for (ShowSeat showSeat : seats) {
             SeatType type = showSeat.getSeat().getSeatType();
             this.amount += prices.get(type);

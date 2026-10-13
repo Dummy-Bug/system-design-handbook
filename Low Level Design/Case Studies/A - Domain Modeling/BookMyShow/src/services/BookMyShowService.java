@@ -2,6 +2,7 @@ package services;
 
 
 import models.*;
+import strategies.pricing.PricingStrategy;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -10,6 +11,7 @@ public class BookMyShowService {
 
     private final List<Show> shows = new ArrayList<>();
     private final List<Theatre> theatres = new ArrayList<>();
+    private final List<PricingStrategy> pricingStrategies = new ArrayList<>();
 
     private static final BookMyShowService instance = new BookMyShowService();
 
@@ -26,6 +28,18 @@ public class BookMyShowService {
 
     public void addShow(Show show) {
         shows.add(show);
+    }
+
+    public void addPricingStrategy(PricingStrategy pricingStrategy) {
+        pricingStrategies.add(pricingStrategy);
+    }
+
+    private EnumMap<SeatType, Double> priceFor(Show show) {
+        EnumMap<SeatType, Double> prices = new EnumMap<>(show.getPrices());
+        for (PricingStrategy pricingStrategy : pricingStrategies) {
+            prices = pricingStrategy.apply(show, prices);
+        }
+        return prices;
     }
 
     public List<ShowSeat> getShowSeats(Show show) {
@@ -93,7 +107,7 @@ public class BookMyShowService {
             }
         }
 
-        Booking booking = new Booking(java.util.UUID.randomUUID().toString(), show, showSeats, user);
+        Booking booking = new Booking(java.util.UUID.randomUUID().toString(), show, showSeats, user, priceFor(show));
 
 
         for (ShowSeat showSeat : showSeats) {
