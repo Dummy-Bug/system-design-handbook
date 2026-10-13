@@ -82,10 +82,25 @@ public class BookMyShowService {
     }
 
 
-    public synchronized Optional<Booking> lockShowSeats(Show show, List<ShowSeat> showSeats, User user) {
+    public synchronized Optional<Booking> lockShowSeats(Show show, List<String> seatLabels, User user) {
 
         if (!show.isOpenForBooking()) {
             throw new RuntimeException("Show has already started");
+        }
+
+        if (seatLabels.isEmpty()) {
+            return Optional.empty();
+        }
+
+        List<ShowSeat> showSeats = new ArrayList<>();
+        for (String label : seatLabels) {
+            Optional<ShowSeat> showSeat = show.getShowSeat(label);
+            if (showSeat.isEmpty()) {
+                return Optional.empty();
+            }
+            if (!showSeats.contains(showSeat.get())) {
+                showSeats.add(showSeat.get());
+            }
         }
 
         for (ShowSeat showSeat : showSeats) {

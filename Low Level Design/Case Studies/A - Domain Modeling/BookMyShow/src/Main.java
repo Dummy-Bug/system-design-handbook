@@ -72,7 +72,7 @@ public class Main {
             System.out.println(showSeat.getShowSeatLabel() + " | " + showSeat.getSeat().getSeatType() + " | " + showSeat.getStatus());
         }
 
-        Optional<Booking> bookingOptional = service.lockShowSeats(show2, show2.getShowSeats(), alpha);
+        Optional<Booking> bookingOptional = service.lockShowSeats(show2, List.of("A5", "B5", "C5"), alpha);
         if (bookingOptional.isEmpty()) {
             throw new RuntimeException("Please select seats that are Free");
         }

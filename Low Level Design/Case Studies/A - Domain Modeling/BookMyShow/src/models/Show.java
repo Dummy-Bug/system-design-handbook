@@ -51,6 +51,10 @@ public class Show {
         return showSeats.keySet().stream().toList();
     }
 
+    public Optional<ShowSeat> getShowSeat(String label) {
+        return Optional.ofNullable(showSeats.get(label));
+    }
+
     public List<ShowSeat> getShowSeats() {
         return new ArrayList<>(showSeats.values());
     }
