@@ -26,8 +26,16 @@ public class BookMyShowService {
         theatres.add(theatre);
     }
 
-    public void addShow(Show show) {
+    public boolean addShow(Show show) {
+        for (Show existing : shows) {
+            if (existing.getScreen().equals(show.getScreen())
+                    && show.getStartTime().isBefore(existing.getEndTime())
+                    && existing.getStartTime().isBefore(show.getEndTime())) {
+                return false;
+            }
+        }
         shows.add(show);
+        return true;
     }
 
     public void addPricingStrategy(PricingStrategy pricingStrategy) {
@@ -65,6 +73,16 @@ public class BookMyShowService {
             }
         }
         return new ArrayList<>(movies);
+    }
+
+    public List<Show> getAllShowsInTheatre(Theatre theatre) {
+        List<Show> theatreShows = new ArrayList<>();
+        for (Show show : shows) {
+            if (show.getScreen().getTheatre().equals(theatre) && show.isOpenForBooking()) {
+                theatreShows.add(show);
+            }
+        }
+        return theatreShows;
     }
 
     public List<Show> getAllShowsOfMovie(City city, Movie movie) {
