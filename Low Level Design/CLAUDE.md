@@ -58,13 +58,12 @@ tree then one code block per file. No prose walkthroughs, no failure-case sectio
 ## 80-20 core set (do in this order)
 Re-ordered 2026-10-05 by interview frequency (`00-Problem-Priority-List.md`: company-named LeetCode
 reports since 2023). The problems learned first are revised most, so they must be the most-asked ones.
-Each first build is timed (60 min, machine-coding format), followed by the 15-20 min spoken
-OOD + tables + APIs cut (flavor D).
+The first build of each case study is a full-depth learning pass, untimed (see **Build depth** under Session protocol). The timed 60-min machine-coding build is the tier-1 rebuild on revision, followed by the 15-20 min spoken OOD + tables + APIs cut (flavor D).
 
 | # | Case study | Pattern payload (new learning) | Status |
 |---|-----------|-------------------------------|--------|
 | 0 | Parking Lot | Strategy (pricing/payment/allocation), Singleton + check-then-act race. Factory/Observer deliberately dropped (no product to build, pull-based display) — installed later in Splitwise/Logger | ✅ done |
-| 1 | BookMyShow | Facade, seat-hold TTL, optimistic locking, **ShowSeat fix** — 109 reports / 58 companies | ☐ |
+| 1 | BookMyShow | all-or-nothing hold under one lock, expiring hold with status derived from the booking, pricing as a Strategy pipeline, **ShowSeat fix** — 109 reports / 58 companies | ◐ build done 2026-10-13; note, AlgoMaster comparison, spoken cut and timed rebuild pending |
 | 2 | Splitwise | Split Strategy + Factory, balance graph simplification — most machine-coding-specific | ☐ |
 | 3 | Rate Limiter (= Track B1) | token bucket + sliding window behind one Strategy; atomic refill — most reported item overall, half built | ◐ |
 | 4 | Logging Framework | Highest pattern density/hour: Singleton + Chain of Resp + Observer + Strategy + Decorator | ☐ |
@@ -108,6 +107,10 @@ retry/fallback + breaker) — Emergent's own published practice problem.
   `SpotSize`) is fine to import — a caller can't say "two small spots" without it. Config passed
   as data (`Map<SpotSize, Integer>` of counts) is the caller's parameters; a pre-built
   `Map<SpotSize, List<Spot>>` is internals.
+- **Store a fact once; work the rest out from it** (BookMyShow, `ShowSeat`). When one fact is shared by many objects (one booking covers several seats), it lives on the one side and the many point at it. When a state changes with nobody acting (a hold expiring), store the deadline, not the status, and compute the status when asked. Both together removed every release loop in BookMyShow; two copies of one fact always drift apart. Parking Lot could keep `OCCUPIED` on `Spot` because there one ticket covers one spot and never expires on its own.
+- **Ids in, objects looked up inside** (BookMyShow, `lockShowSeats`). A caller, standing in for a UI, passes seat labels; the service fetches the seats from the show it was told about. A real client can only send text, and must not be trusted to hand over objects: passing objects let a caller book seats of another show or list one seat twice.
+- **Read checks first, changes last** (BookMyShow, `confirmBooking`). Ask whether the booking is still waiting for payment before anything that touches seats; otherwise a retry on a paid booking ran into a branch that freed its seats. Name the one allowed state (`status is PENDING`) rather than listing forbidden ones, so a state added later is refused by default.
+- **One rule, one method** (BookMyShow, `Show.isOpenForBooking`). The same time check pasted in four places drifted to three different cutoffs and one flipped comparison. A rule about an object's own data is a method on that object.
 
 ## The bar (Rippling SDE-2 — every case study graded against all 5)
 1. **Timeboxed** — built in 90 min from a blank editor.
@@ -179,6 +182,10 @@ Post-Build checklist.**
 - Explanations: one concept at a time, plain English, justify with concrete scale/consequence
   ("same seat blocked for all shows"), problem before solution.
 - Never write/edit files until explicitly told; discuss and derive in chat first.
+- **Build depth (decided 2026-10-13, option A).** Every case study gets a full-depth first build: all FRs, the failure cases, a driver that shows them, and the extension test. Mechanics repeat across case studies (claim, all-or-nothing claim, expiring hold, check order, Strategy), and meeting them again inside new material is the repetition that makes them owned. Revision is a timed cold rebuild of tier 1 only. Track the study days and hours each build takes against the 30-day x 2 h plan, and say when the plan is slipping; do not cap a build silently.
+- **The user types the code; Claude reviews (decided 2026-10-13).** In BookMyShow most of the fix code was written by Claude, so it was understood but not owned. From Splitwise on: the user writes, Claude compiles it, runs probes that break it, and points at what failed, without writing the fix unless asked. When a fix is large, explain the idea and let the user apply it one step at a time; never land several fixes in one pass (the all-at-once BookMyShow fix was reverted for being overwhelming).
+- **Settle the big decisions in chat before code.** Where each piece of state lives, what the lock covers, who owns expiry. In BookMyShow these were discovered through about ten review rounds of check now, bug, fix; ten minutes of discussion up front would have saved most of them.
+- **Tiers, so the room has a target.** Tier 1 is typed in the round and must run: the model plus the core operations (for BookMyShow: hold all-or-nothing and confirm). Tier 2 is coded only if layer 1 runs by about minute 30 (cancel, search, small validations). Tier 3 is said out loud, never coded (race demos, multi-server locking, extension rules). The note marks every piece with its tier and carries a short tier-1 driver as the rebuild target.
 
 ## Round execution playbooks
 What to *do* in the room, once the problem is on screen. Two different games.
