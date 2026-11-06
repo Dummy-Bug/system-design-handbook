@@ -8,10 +8,10 @@
 
 ## Collection happens before anything runs
 
-Two test files. One is perfectly fine, the other has a typo in its import.
+Two test files. One is perfectly fine, the other has a typo in its import. They are `a_fine.py` and `b_typo.py` in `src/testing_lab/note04/collection_demo/`, and the folder is meant to be run as a folder:
 
 ```python
-# test_salary.py — fine
+# a_fine.py — fine
 from salary import annual_from_monthly
 
 
@@ -24,7 +24,7 @@ def test_zero():
 ```
 
 ```python
-# test_reports.py — one letter wrong
+# b_typo.py — one letter wrong
 from salary import anual_from_monthly
 
 
@@ -33,22 +33,22 @@ def test_report():
 ```
 
 ```
-_______________________ ERROR collecting test_reports.py _______________________
-ImportError while importing test module '.../test_reports.py'.
+_________________ ERROR collecting .../collection_demo/b_typo.py _______________
+ImportError while importing test module '.../collection_demo/b_typo.py'.
 
-test_reports.py:1: in <module>
-    from salary import anual_from_monthly
+b_typo.py:20: in <module>
+    from testing_lab.note04.collection_demo.salary import anual_from_monthly
 E   ImportError: cannot import name 'anual_from_monthly' from 'salary'.
     Did you mean: 'annual_from_monthly'?
 =========================== short test summary info ============================
-ERROR test_reports.py
+ERROR src/testing_lab/note04/collection_demo/b_typo.py
 !!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
 =============================== 1 error in 0.06s ===============================
 ```
 
 Read the last line. **`1 error`, not `2 passed, 1 error`.**
 
-The two tests in `test_salary.py` are correct and they did not run. Nothing was executed at all.
+The two tests in `a_fine.py` are correct and they did not run. Nothing was executed at all.
 
 ---
 
@@ -84,7 +84,7 @@ The instinct is that the change broke everything. It did not. One file failed to
 
 ### The nastier version
 
-Anything at the top level of a test file runs during collection. Not only imports.
+Anything at the top level of a test file runs during collection. Not only imports. `src/testing_lab/note04/env_var_demo/` is this file on its own — it errors without the variable and passes with it.
 
 ```python
 import os
@@ -104,7 +104,7 @@ That is the mechanism behind a rule that turns up later: configuration read at i
 
 ## Failed and errored are different outcomes
 
-Four tests, deliberately built to produce four different results.
+Four tests, deliberately built to produce four different results. `src/testing_lab/note04/a_four_outcomes.py`:
 
 ```python
 def test_passes():
@@ -129,11 +129,11 @@ def test_with_broken_fixture(broken_setup):
 ```
 
 ```
-test_salary.py .FFE                                                      [100%]
+a_four_outcomes.py .FFE                                                  [100%]
 
-FAILED test_salary.py::test_fails  - assert 12000 == 11000
-FAILED test_salary.py::test_errors - RuntimeError: the tax service is down
-ERROR  test_salary.py::test_with_broken_fixture - ValueError: could not build ...
+FAILED a_four_outcomes.py::test_fails  - assert 12000 == 11000
+FAILED a_four_outcomes.py::test_errors - RuntimeError: the tax service is down
+ERROR  a_four_outcomes.py::test_with_broken_fixture - ValueError: could not b...
 
 ===================== 2 failed, 1 passed, 1 error in 0.02s =====================
 ```
@@ -199,7 +199,7 @@ The noisy failure mode announces itself. The silent one does not.
 
 ## Two tests that pass alone and fail together
 
-A module with a cache in it — the same shape as the lookup function everything else in this folder has been built around.
+A module with a cache in it — the same shape as the lookup function everything else in this folder has been built around. It is `src/testing_lab/note04/records_cached.py`, and the two tests are `b_the_leak_and_the_fixture.py` beside it.
 
 ```python
 # records.py
@@ -217,7 +217,7 @@ def fetch_monthly_pay(teacher_id):
 ```
 
 ```python
-# test_records.py
+# b_the_leak_and_the_fixture.py
 def test_priya_earns_5000():
     with patch("records._really_fetch", return_value=5000):
         assert fetch_monthly_pay(7) == 5000
@@ -231,11 +231,11 @@ def test_after_a_pay_rise_she_earns_6000():
 Each one on its own:
 
 ```
-$ uv run pytest -k priya
-1 passed, 1 deselected in 0.01s
+$ uv run pytest -q -k 'priya and not clean' src/testing_lab/note04/b_the_leak_and_the_fixture.py
+1 passed, 3 deselected in 0.01s
 
-$ uv run pytest -k pay_rise
-1 passed, 1 deselected in 0.00s
+$ uv run pytest -q -k 'pay_rise and not clean' src/testing_lab/note04/b_the_leak_and_the_fixture.py
+1 passed, 3 deselected in 0.01s
 ```
 
 `-k` is a filter — it picks tests whose name contains that text and does not run the rest. **Deselected** means excluded by the filter, never a candidate at all, which is worth separating from a word that turns up later.
@@ -358,32 +358,32 @@ The example above fails, which at least says something is wrong.
 
 ## The order, and what a rename does to it
 
-Take the same two tests and put them in separate files.
+Take the same two tests and put them in separate files. That is `src/testing_lab/note04/order_demo/`, which carries its own copy of the cached module so the rename below changes nothing else.
 
 ```
-test_current_pay.py     test_priya_earns_5000
-test_pay_rises.py       test_after_a_pay_rise_she_earns_6000
+c_current_pay.py     test_priya_earns_5000
+p_pay_rises.py       test_after_a_pay_rise_she_earns_6000
 ```
 
 ```
-test_current_pay.py::test_priya_earns_5000                PASSED
-test_pay_rises.py::test_after_a_pay_rise_she_earns_6000    FAILED
+c_current_pay.py::test_priya_earns_5000                PASSED
+p_pay_rises.py::test_after_a_pay_rise_she_earns_6000    FAILED
 ```
 
-> `c` before `p`, so `test_current_pay` runs first and fills the cache with 5000.
+> `c` before `p`, so `c_current_pay` runs first and fills the cache with 5000.
 
 Now rename one file. No code changes at all — only the filename.
 
 ```
-test_current_pay.py  ->  test_salaries.py
+c_current_pay.py  ->  s_salaries.py
 ```
 
 ```
-test_pay_rises.py::test_after_a_pay_rise_she_earns_6000    PASSED
-test_salaries.py::test_priya_earns_5000                    FAILED
+p_pay_rises.py::test_after_a_pay_rise_she_earns_6000    PASSED
+s_salaries.py::test_priya_earns_5000                    FAILED
 ```
 
-**The failure moved to the other test.** `p` now comes before `s`, so `test_pay_rises` runs first, fills the cache with 6000, and the other test gets 6000 where it wanted 5000.
+**The failure moved to the other test.** `p` now comes before `s`, so `p_pay_rises` runs first, fills the cache with 6000, and the other test gets 6000 where it wanted 5000.
 
 ### The order pytest uses
 
@@ -429,7 +429,7 @@ Nothing in pytest resets that dictionary, and nothing ever will. If a test needs
 
 ## Arranging it: a fixture that resets
 
-The mechanical fix is a fixture that empties the cache.
+The mechanical fix is a fixture that empties the cache. `src/testing_lab/note04/b_the_leak_and_the_fixture.py`:
 
 ```python
 @pytest.fixture
@@ -484,7 +484,7 @@ def test_priya_earns_5000(clean_cache):
 
 Forget it on one test and that test quietly goes back to being order-dependent. Nothing warns you.
 
-There is a way to apply a fixture without naming it.
+There is a way to apply a fixture without naming it. `src/testing_lab/note04/c_autouse.py`:
 
 ```python
 @pytest.fixture(autouse=True)
@@ -589,7 +589,7 @@ records._cache.clear()
 
 That line is a **workaround for a design problem**, not a solution to one. The problem is that `records` owns a piece of mutable state with no way to reset it and no way to have a second one.
 
-The version with nothing to arrange is a cache passed in rather than owned.
+The version with nothing to arrange is a cache passed in rather than owned. `src/testing_lab/note04/records_passed_in.py`, exercised by `d_the_cache_passed_in.py`:
 
 ```python
 def fetch_monthly_pay(teacher_id, cache):
@@ -608,20 +608,20 @@ Which is why testability and design keep turning out to be one subject. **Code t
 
 ## Rerunning only what failed
 
-A suite where two of five tests are red.
+A suite where two of five tests are red — `src/testing_lab/note04/e_last_failed.py`.
 
 ```
-$ uv run pytest -q
-FAILED test_salary.py::test_net_pay      - assert 54000.0 == 99999
-FAILED test_salary.py::test_net_pay_zero - assert 0.0 == 42
-2 failed, 3 passed in 0.01s
+$ uv run pytest -q src/testing_lab/note04/e_last_failed.py
+FAILED e_last_failed.py::test_net_pay      - assert 54000 == 99999
+FAILED e_last_failed.py::test_net_pay_zero - assert 0 == 42
+2 failed, 3 passed in 0.02s
 ```
 
 ```
-$ uv run pytest -q --lf
-FAILED test_salary.py::test_net_pay      - assert 54000.0 == 99999
-FAILED test_salary.py::test_net_pay_zero - assert 0.0 == 42
-2 failed in 0.01s
+$ uv run pytest -q --lf src/testing_lab/note04/e_last_failed.py
+FAILED e_last_failed.py::test_net_pay      - assert 54000 == 99999
+FAILED e_last_failed.py::test_net_pay_zero - assert 0 == 42
+2 failed, 3 deselected in 0.01s
 ```
 
 **The three passing tests were not run.** `--lf` means last failed — rerun only what was red last time.
@@ -638,8 +638,8 @@ pytest wrote the answer down.
 
 ```json
 {
-  "test_salary.py::test_net_pay": true,
-  "test_salary.py::test_net_pay_zero": true
+  "src/testing_lab/note04/e_last_failed.py::test_net_pay": true,
+  "src/testing_lab/note04/e_last_failed.py::test_net_pay_zero": true
 }
 ```
 
@@ -698,31 +698,31 @@ The cost is paid on that final green run, where the whole suite executes. That i
 
 ## Sharing fixtures without importing anything
 
-Two test files, in different folders, both needing the same fixture.
+Two test files, in different folders, both needing the same fixture. That tree is `src/testing_lab/note04/conftest_demo/`.
 
 ```
-tests/conftest.py            teacher_id
-tests/api/conftest.py        base_url
-tests/api/test_lookup.py     uses both
-tests/db/test_rows.py        uses teacher_id
+conftest_demo/conftest.py        teacher_id
+conftest_demo/api/conftest.py    base_url
+conftest_demo/api/a_url_and_id.py    uses both
+conftest_demo/db/a_row_id.py         uses teacher_id
 ```
 
 ```python
-# tests/conftest.py
+# conftest_demo/conftest.py
 @pytest.fixture
 def teacher_id():
     return 7
 ```
 
 ```python
-# tests/api/conftest.py
+# conftest_demo/api/conftest.py
 @pytest.fixture
 def base_url():
     return "http://records.example/api"
 ```
 
 ```python
-# tests/api/test_lookup.py
+# conftest_demo/api/a_url_and_id.py
 def test_url_and_id(teacher_id, base_url):
     assert f"{base_url}/teachers/{teacher_id}" == "http://records.example/api/teachers/7"
 ```
@@ -740,16 +740,16 @@ A file pytest looks for by name, whose fixtures become available to **every test
 
 ```mermaid
 flowchart TD
-    R[tests/conftest.py<br/>teacher_id] --> A[tests/api/]
-    R --> D[tests/db/]
-    A2[tests/api/conftest.py<br/>base_url] --> A
-    A --> T1[test_lookup.py<br/>sees teacher_id AND base_url]
-    D --> T2[test_rows.py<br/>sees teacher_id only]
+    R[conftest_demo/conftest.py<br/>teacher_id] --> A[api/]
+    R --> D[db/]
+    A2[api/conftest.py<br/>base_url] --> A
+    A --> T1[a_url_and_id.py<br/>sees teacher_id AND base_url]
+    D --> T2[a_row_id.py<br/>sees teacher_id only]
     style T1 fill:#1f6f3f,color:#fff
     style T2 fill:#1f6f3f,color:#fff
 ```
 
-`test_rows.py` cannot see `base_url`, because that fixture lives in a sibling folder rather than a parent. **Fixtures flow downward, never sideways.**
+`a_row_id.py` cannot see `base_url`, because that fixture lives in a sibling folder rather than a parent. **Fixtures flow downward, never sideways.**
 
 This is the mechanism behind scope in the autouse section above. The same three lines affect two tests or two thousand purely according to which `conftest.py` they sit in.
 
@@ -757,10 +757,10 @@ This is the mechanism behind scope in the autouse section above. The same three 
 
 **A `conftest.py` is never imported.** pytest finds it by name and registers what is inside it.
 
-And it must not be imported from either.
+And it must not be imported from either. `src/testing_lab/note04/conftest_import_demo/` is that mistake, on its own so it breaks nothing else.
 
 ```python
-# tests/db/test_rows.py
+# conftest_import_demo/a_importing_conftest.py
 from conftest import teacher_id      # do not
 
 
@@ -771,15 +771,15 @@ def test_row_id(teacher_id):
 Under the `--import-mode=importlib` setting at the foot of this note, the file never gets as far as the test.
 
 ```
-____________________ ERROR collecting tests/db/test_rows.py ____________________
-ImportError while importing test module '.../tests/db/test_rows.py'.
+_______ ERROR collecting .../conftest_import_demo/a_importing_conftest.py ______
+ImportError while importing test module '.../a_importing_conftest.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
-tests/db/test_rows.py:1: in <module>
+a_importing_conftest.py:32: in <module>
     from conftest import teacher_id
 E   ModuleNotFoundError: No module named 'conftest'
 =========================== short test summary info ============================
-ERROR tests/db/test_rows.py
+ERROR src/testing_lab/note04/conftest_import_demo/a_importing_conftest.py
 !!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
 1 error in 0.06s
 ```

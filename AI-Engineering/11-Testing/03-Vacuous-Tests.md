@@ -10,6 +10,8 @@
 
 A test asserts something about a result. For that to carry information, **the result has to come from the code under test**.
 
+`src/testing_lab/note03/a_two_sources.py`:
+
 ```python
 def test_annual_is_twelve_months():
     assert annual_from_monthly(1000) == 12000
@@ -22,6 +24,8 @@ Now the same shape with that property removed.
 ---
 
 ## A test that cannot fail
+
+`src/testing_lab/note03/a_two_sources.py` holds the honest test above and both versions below. All three pass.
 
 ```python
 def test_annual_is_twelve_months():
@@ -95,7 +99,7 @@ So the network call is replaced with something fake. That thing is a **mock**.
 
 ## The property that causes all the trouble
 
-Ask an unprogrammed mock for anything at all.
+Ask an unprogrammed mock for anything at all — `src/testing_lab/note03/b_the_mock_never_says_no.py` is a script rather than a test, because the point is what the mock does when you poke it.
 
 ```python
 from unittest.mock import MagicMock
@@ -127,6 +131,8 @@ That behaviour is deliberate, and Mockito is built the same way. A mock's job is
 
 The rule is short: **mock the thing you do not want to run, but whose value you still need.**
 
+`src/testing_lab/note03/c_where_to_point_the_patch.py`:
+
 ```python
 from unittest.mock import patch
 
@@ -149,15 +155,15 @@ The multiplication genuinely executes. The 60000 came from a head, not from the 
 
 ### Proving it
 
-Writing the test is not the finish line. Break the implementation and demand red — change the `12` to an `11`.
+Writing the test is not the finish line. Break the implementation and demand red — change the `12` to an `11`. `test_the_same_test_on_a_broken_implementation` in the same file is that test pointed at a module where the change is already made, and it is the only red one in the file.
 
 ```
 >           assert annual_pay(7) == 60000
 E           assert 55000 == 60000
 E            +  where 55000 = annual_pay(7)
 
-FAILED test_payroll.py::test_annual_pay_is_twelve_months - assert 55000 == 60000
-1 failed in 0.01s
+FAILED c_where_to_point_the_patch.py::test_annual_pay_is_twelve_months - assert 55000 == 6...
+1 failed in 0.02s
 ```
 
 Red, with real numbers. The test is genuinely wired to the implementation, and that is now known rather than assumed.
@@ -167,6 +173,8 @@ Red, with real numbers. The test is genuinely wired to the implementation, and t
 ## The accident: one layer too high
 
 Restore the `12` and point the patch at the function being tested instead of at its collaborator. The call now goes through the module, as `payroll.annual_pay`, so that it reaches the name the patch replaced.
+
+`test_patch_the_subject` and `test_patch_the_subject_when_gutted`, in the same file, are this against the real module and against a gutted one. Both pass:
 
 ```python
 from unittest.mock import patch
@@ -223,23 +231,12 @@ flowchart TD
     style A2 fill:#3a3a3a,color:#fff
 ```
 
----
-
-## What the report says about every version of this
-
-| The code | The report |
-|---|---|
-| correct | `1 passed` |
-| multiplied by 11 | `1 passed` |
-| deleted entirely | `1 passed` |
-
-**The test passes forever, including when the implementation is deleted**, and it is indistinguishable in the report from the working version written two minutes earlier.
-
-Which is why the check that worked before is the only one that works here. The correct test went red when the `12` became an `11`. This one would not have.
 
 ---
 
 ## The shape with no subject at all
+
+`src/testing_lab/note03/d_assert_on_the_mock.py`:
 
 ```python
 from unittest.mock import MagicMock
@@ -257,10 +254,10 @@ def test_fetch_returns_the_pay():
 1 passed in 0.01s
 ```
 
-Green. And here is everything in that directory:
+Green. And here is everything that test needs:
 
 ```
-test_payroll.py
+d_assert_on_the_mock.py
 ```
 
 **There is no application.** No `payroll.py`, no `records.py`, nothing imported from the project at all. The test is complete and **passing against a codebase that does not exist.**
@@ -275,7 +272,7 @@ It sounds too silly to happen, and it is common in one particular situation: som
 
 ## An assertion that cannot be false
 
-Every shape so far fakes the subject. This one leaves the subject entirely alone and weakens the assertion instead.
+Every shape so far fakes the subject. This one leaves the subject entirely alone and weakens the assertion instead. `src/testing_lab/note03/e_too_weak_to_be_false.py`:
 
 ```python
 def annual_pay(teacher_id):
@@ -309,7 +306,7 @@ The function runs for real and returns nonsense. Nothing is mocked. The assertio
 
 ## An assertion that never runs
 
-The subtlest one, because the assertion is perfectly strong. It simply does not execute.
+The subtlest one, because the assertion is perfectly strong. It simply does not execute. `src/testing_lab/note03/f_an_assertion_that_never_runs.py` holds both this and the conditional below:
 
 ```python
 def teachers_due_a_rise(department):
@@ -367,7 +364,7 @@ Five different mistakes, arrived at five different ways. In the report, every on
 
 There is no need to work out which of the five might have been committed, or to read the test looking for the flaw. Change the implementation to something wrong, and if the test does not fail then it was never connected — whatever the reason was.
 
-It catches every one of them. Deleting the function body catches the first three. Returning garbage catches the fourth. Returning a list with one bad item in it catches the fifth.
+**It catches every one of them.** Deleting the function body catches the first three. Returning garbage catches the fourth. Returning a list with one bad item in it catches the fifth.
 
 > Ten seconds, and it is **the only direct evidence there will ever be** that an assertion is attached to the code. Everything else is inference.
 
@@ -424,7 +421,7 @@ So `service` pulls in the other two, and a test asking for `service` gets all th
 
 ### A mock keeps a diary
 
-A mock does two jobs. The first is standing in for something and returning what you programmed. The second is that **it writes down every call made to it**.
+A mock does two jobs. The first is standing in for something and returning what you programmed. The second is that **it writes down every call made to it**. `src/testing_lab/note03/b_the_mock_never_says_no.py` is a script:
 
 ```python
 client = MagicMock()
@@ -441,6 +438,49 @@ call_args       : call(department='science')
 ```
 
 How many times, and with what, both readable afterwards.
+
+### What each of the three holds
+
+Read the last line again. **`call_args` holds the last call only** — 7 and 8 are not in it. Three consecutive lines inside `unittest/mock.py` are the whole explanation.
+
+```python
+self.call_args = _call                        # plain assignment
+self.call_args_list.append(_call)             # append
+self.call_count = len(self.call_args_list)
+```
+
+`call_args` is **assigned**, so every call throws the previous value away. `call_args_list` is **appended to**, so it keeps all of them. And `call_count` is not a counter anybody increments — it is the length of that list.
+
+| | Holds | After the three calls above |
+|---|---|---|
+| `call_args` | **the last call only** | `call(department='science')` |
+| `call_args_list` | **every call, in order** | `[call(7), call(8), call(department='science')]` |
+| `call_count` | `len(call_args_list)` | `3` |
+
+Watched one call at a time.
+
+```
+client.fetch_monthly_pay(7)
+  call_args      ->  call(7)
+  call_args_list ->  [call(7)]
+  call_count     ->  1
+
+client.fetch_monthly_pay(8)
+  call_args      ->  call(8)
+  call_args_list ->  [call(7), call(8)]
+  call_count     ->  2
+
+client.fetch_monthly_pay(department="science")
+  call_args      ->  call(department='science')
+  call_args_list ->  [call(7), call(8), call(department='science')]
+  call_count     ->  3
+```
+
+7 leaves `call_args` the moment the second call lands, and never leaves `call_args_list`.
+
+Which decides which one to assert on. **`call_args` when only the most recent call matters. `call_args_list` when the sequence or the count does.**
+
+> And it explains a trap. **`assert_called_with(7)` reads `call_args`**, so it passes when the last call was 7 even if nine wrong calls came before it. Only the `once` version looks at `call_count` as well — which is the next thing below, and the reason that word is load-bearing.
 
 `assert_called_once_with` is a shortcut for reading that record. These two say the same thing.
 
@@ -469,6 +509,8 @@ def notify_of_pay_rise(teacher_id, email_client):
 
 This function returns nothing, so it has no answer to check. Its entire observable behaviour is **that an email was sent, once, to the right address** — and the call is the only thing there is to assert on.
 
+`src/testing_lab/note03/g_assert_on_the_call.py`:
+
 ```python
 def test_notify_sends_one_email():
     email_client = MagicMock()
@@ -487,7 +529,7 @@ The `once` is load-bearing. A bug that sends the email twice is a real bug, and 
 
 ### The test file
 
-And here is a test file for it. **Read it as a reviewer would** — would this be approved?
+And here is a test file for it, as `src/testing_lab/note03/h_the_file_that_looks_competent.py`. **Read it as a reviewer would** — would this be approved?
 
 ```python
 from unittest.mock import MagicMock
@@ -557,7 +599,7 @@ Change `gross - tax` to `gross + tax`, so the service returns 66000 where it sho
 
 ### Break it properly
 
-Gut the method entirely so it returns the number 1.
+Gut the method entirely so it returns the number 1. The same file repeats all five tests against exactly that, and all five stay green.
 
 ```python
 def net_annual_pay(self, teacher_id):
@@ -594,7 +636,7 @@ Gutting the method to `return 1` keeps the conversation and destroys the conclus
 
 But look at what is absent. The method contains one piece of logic, and **not one of the five tests looks at the number it returns.**
 
-The missing test is a single line.
+The missing test is a single line. It is the last pair in that file — against the real service and against the gutted one — and the gutted one is the only red test the whole file produces.
 
 ```python
 def test_net_annual_pay_subtracts_tax(service):

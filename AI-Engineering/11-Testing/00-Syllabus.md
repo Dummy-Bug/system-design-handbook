@@ -20,7 +20,9 @@
 
 **One note per session, rungs in order, never skipping.** A skipped rung breaks the chain — the next one stops being a discovery and becomes a fact to memorise.
 
-**Where a rung says break, it is run, not read.** Watching a test pass against a deliberately broken implementation produces a problem the fix attaches to. Reading that tests can be vacuous produces a fact that decays.
+**Where a rung says break, it is run, not read.** Every note has a lab folder in `~/Desktop/projects/testing-lab/src/testing_lab/`, `note02/` for note 2 and so on, so the outputs quoted in the notes are reproducible rather than taken on faith. Watching a test pass against a deliberately broken implementation produces a problem the fix attaches to. Reading that tests can be vacuous produces a fact that decays.
+
+**The lab files are named `a_idea.py`, not `test_idea.py`**, so the folders read like the other labs, and `python_files` in its `pyproject.toml` is what makes pytest collect them. Their imports and `patch` targets carry the full dotted path — `testing_lab.note03.payroll` where a note writes `payroll` — because the lab files live inside a package and the notes do not. A file holds a whole comparison rather than one variant, so a single run puts the contrast on screen — the correct patch, the red proof and the vacuous version are one file, not three. Many of them are red on purpose, because the failure is the lesson. The files carry no comments; `README.md` tabulates every one with what it shows and what it reports.
 
 **Recall is per note, from memory, file closed.** Recognising an answer does not count.
 
@@ -28,7 +30,7 @@
 
 **Spacing:** re-test notes 1 to 7 after finishing note 11, and all of 1 to 12 once the first suite is green. Same-day re-testing is close to wasted, because retrieval works when forgetting has started.
 
-**Where it gets built.** Every note is worked in `lab` first, where nothing is at stake, and only then applied to Xarvis. The order is not caution — it is that a test written against code you already trust teaches the tool, and a test written against code you do not teaches nothing until you can tell which one failed.
+**Where it gets built.** Every note is worked in `~/Desktop/projects/testing-lab` first, where nothing is at stake, and only then applied to Xarvis. The order is not caution — it is that a test written against code you already trust teaches the tool, and a test written against code you do not teaches nothing until you can tell which one failed.
 
 ---
 

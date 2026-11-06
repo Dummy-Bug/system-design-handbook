@@ -8,7 +8,7 @@
 
 ## The problem fixtures solve
 
-A test file with no fixtures in it.
+A test file with no fixtures in it — `src/testing_lab/note05/a_no_fixtures.py`, which passes:
 
 ```python
 def test_gross_annual():
@@ -47,12 +47,14 @@ That is annoying rather than dangerous. Here is the dangerous part.
 
 ### What happens when the code changes
 
-The service grows a third dependency — an audit log — so the constructor takes another argument.
+The service grows a third dependency — an audit log — so the constructor takes another argument. The same file repeats the three tests against the new constructor, and those three go red.
 
 ```
-FAILED test_payroll.py::test_gross_annual - TypeError: PayrollService.__init_...
-FAILED test_payroll.py::test_tax_due      - TypeError: PayrollService.__init__() m...
-FAILED test_payroll.py::test_net_annual   - TypeError: PayrollService.__init__(...
+$ uv run pytest -q src/testing_lab/note05/a_no_fixtures.py
+
+FAILED a_no_fixtures.py::test_gross_annual - TypeError: PayrollSe...
+FAILED a_no_fixtures.py::test_tax_due      - TypeError: PayrollSe...
+FAILED a_no_fixtures.py::test_net_annual   - TypeError: PayrollSe...
 3 failed in 0.02s
 ```
 
@@ -63,6 +65,8 @@ And that is still the **visible** failure. The invisible one is drift: with fort
 ---
 
 ## The same file with a fixture
+
+`src/testing_lab/note05/b_the_same_file_with_a_fixture.py`:
 
 ```python
 @pytest.fixture
@@ -164,7 +168,7 @@ A fixture written before the tests is a guess about what they will need, and gue
 
 Every fixture so far has run once per test. That is a default rather than a law.
 
-Here is one that announces itself.
+Here is one that announces itself — `src/testing_lab/note05/c_scope.py`, which holds a function-scoped fixture used by four tests and a module-scoped one used by four more:
 
 ```python
 @pytest.fixture
@@ -260,7 +264,7 @@ At `function` scope each test got its own, so nothing one test did could reach a
 
 ## The leak, built out of nothing but a keyword
 
-A fixture returning a list of teachers, shared across the run.
+A fixture returning a list of teachers, shared across the run. `src/testing_lab/note05/d_what_is_safe_to_share.py`:
 
 ```python
 @pytest.fixture(scope="session")
@@ -295,7 +299,7 @@ Both together:
 ```
 E   where 3 = len([{'id': 7, 'name': 'Priya'}, {'id': 8, 'name': 'Rahul'}, {'id': 9, 'name': 'Arshiya'}])
 
-FAILED test_teachers.py::test_the_school_has_two_teachers - AssertionError: a...
+FAILED d_what_is_safe_to_share.py::test_the_school_has_two_teachers - Ass...
 1 failed, 1 passed in 0.01s
 ```
 
@@ -315,7 +319,7 @@ Change the one word to `scope="function"` and both tests pass, because the body 
 
 ## The property that decides it
 
-Not everything at session scope is dangerous. These are all fine.
+Not everything at session scope is dangerous. These are all fine, and the same file runs two of them plus a test that the tuple refuses to be changed.
 
 ```python
 @pytest.fixture(scope="session")
@@ -370,7 +374,7 @@ def test_negative():
     assert annual_from_monthly(-500) == -6000
 ```
 
-The same thing as one function.
+The same thing as one function, in `src/testing_lab/note05/e_parametrize.py`.
 
 ```python
 @pytest.mark.parametrize(
@@ -396,7 +400,7 @@ One function, **three tests**, each with an id built from its values.
 
 ### Why not just loop inside one test
 
-Put a bug in the implementation — return 999 for anything at or below zero — and run both versions.
+Put a bug in the implementation — return 999 for anything at or below zero — and run both versions. That bug is `src/testing_lab/note05/salary_buggy.py`, and `e_parametrize.py` runs the loop version and the parametrised version against it side by side.
 
 ```python
 def test_annual_from_monthly_loop():
@@ -417,7 +421,7 @@ The parametrised version reports both failures and the case that still passes, s
 |---|---|---|
 | Cases reported | the first failure only | all of them |
 | Report says | `1 failed` | `2 failed, 1 passed` |
-| Running one case | not possible | `uv run pytest "test_x.py::test_annual_from_monthly[0-0]"` |
+| Running one case | not possible | `uv run pytest "e_parametrize.py::test_annual_from_monthly[0-0]"` |
 | A case is | an iteration | a test, with its own id |
 
 > **Each parametrised case is a separate test** — separately reported, separately runnable, separately counted.
@@ -426,7 +430,7 @@ The parametrised version reports both failures and the case that still passes, s
 
 ## Parametrising the fixture instead
 
-The same idea one level up. A fixture can take `params`, and then **every test using it runs once per value**.
+The same idea one level up. A fixture can take `params`, and then **every test using it runs once per value**. `src/testing_lab/note05/f_parametrise_the_fixture.py`:
 
 ```python
 @pytest.fixture(params=["postgres", "sqlite"])
@@ -462,11 +466,11 @@ test_delete[sqlite] PASSED                       [100%]
 
 ### Multiplies rather than adds
 
-Two folders. Both hold **five test functions** and **three values**. Only the placement of the values differs.
+Two files, `src/testing_lab/note05/g_the_values_on_a_test.py` and `h_the_values_on_a_fixture.py`. Both hold **five test functions** and **three values**. Only the placement of the values differs.
 
 ```
-A - the values on a test        ->   7 passed
-B - the values on a fixture     ->  15 passed
+m - the values on a test        ->   7 passed
+n - the values on a fixture     ->  15 passed
 ```
 
 **Folder A**
@@ -550,7 +554,7 @@ The legitimate use is exactly that second sentence — a suite that must pass id
 
 ## A fixture is a dependency injection container
 
-Try giving a long-lived fixture a short-lived dependency.
+Try giving a long-lived fixture a short-lived dependency. `src/testing_lab/note05/i_scope_mismatch.py`:
 
 ```python
 @pytest.fixture(scope="function")

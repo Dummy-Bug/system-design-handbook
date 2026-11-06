@@ -8,7 +8,7 @@
 
 ## Two doubles, one class
 
-One function with two dependencies.
+One function with two dependencies — `src/testing_lab/note07/notify_simple.py`, tested by `a_two_doubles_one_class.py`.
 
 ```python
 def notify_underpaid(teacher_id, records, mailer):
@@ -57,7 +57,7 @@ A mock should be asserted on. That is its entire reason for existing.
 
 A stub should not. Here is what happens when that is forgotten.
 
-Take the same function, with one sloppy detail — it asks for the pay twice.
+Take the same function, with one sloppy detail — it asks for the pay twice. `src/testing_lab/note07/notify_asks_twice.py`:
 
 ```python
 def notify_underpaid(teacher_id, records, mailer):
@@ -70,7 +70,7 @@ def notify_underpaid(teacher_id, records, mailer):
     return False
 ```
 
-Two tests, identical except for one extra line at the end of the second.
+Two tests, identical except for one extra line at the end of the second — `src/testing_lab/note07/b_asserting_on_the_stub.py`:
 
 ```python
 def test_behaviour_only():
@@ -103,7 +103,7 @@ def test_behaviour_plus_the_stub():
 
 ### Now tidy the code
 
-Ask once and remember the answer.
+Ask once and remember the answer. `src/testing_lab/note07/notify_asks_once.py`, and the same file repeats both tests against it:
 
 ```python
 def notify_underpaid(teacher_id, records, mailer):
@@ -120,8 +120,8 @@ def notify_underpaid(teacher_id, records, mailer):
 A duplicate call removed. **The email is identical and the stub is untouched.**
 
 ```
-FAILED test_notify.py::test_behaviour_plus_the_stub - AssertionError: assert ...
-1 failed, 1 passed in 0.01s
+FAILED b_asserting_on_the_stub.py::test_behaviour_plus_the_stub - AssertionE...
+1 failed, 1 passed in 0.02s
 ```
 
 ### Which one failed, and why
@@ -162,7 +162,7 @@ That is a failure mode the earlier notes never touched. Not a test that passes w
 
 ## The fake, and what it catches that a stub cannot
 
-Put a bug in the function — it looks up the wrong teacher.
+Put a bug in the function — it looks up the wrong teacher. `src/testing_lab/note07/notify_wrong_teacher.py`:
 
 ```python
 def notify_underpaid(teacher_id, records, mailer):
@@ -173,7 +173,7 @@ def notify_underpaid(teacher_id, records, mailer):
     return False
 ```
 
-Two tests. One uses the stub from earlier; the other uses a **fake**.
+Two tests, in `src/testing_lab/note07/c_a_fake_notices_a_wrong_argument.py`. One uses the stub from earlier; the other uses a **fake**, which lives in `fakes.py` beside it.
 
 ```python
 class FakeRecords:
@@ -222,6 +222,8 @@ The function asked for teacher **8** when it was given **7**.
 ---
 
 ## The spy, where the real code still runs
+
+`src/testing_lab/note07/d_the_spy.py`:
 
 ```python
 def test_with_a_spy():
@@ -304,7 +306,7 @@ records = MagicMock(wraps=real)          # spy
 
 ## The double that will impersonate anything
 
-A real class with exactly one method.
+A real class with exactly one method — `src/testing_lab/note07/records_client.py`.
 
 ```python
 class RecordsClient:
@@ -312,7 +314,7 @@ class RecordsClient:
         raise RuntimeError("this would hit the network")
 ```
 
-And production code with a typo in it.
+And production code with a typo in it — `src/testing_lab/note07/notify_typo_passed_along.py`.
 
 ```python
 def notify_underpaid(teacher_id, records, mailer):
@@ -321,7 +323,7 @@ def notify_underpaid(teacher_id, records, mailer):
     return True
 ```
 
-Two tests, differing only in how the double is built.
+Two tests, differing only in how the double is built — `src/testing_lab/note07/e_autospec.py`:
 
 ```python
 def test_with_a_plain_mock():
@@ -335,7 +337,7 @@ def test_with_autospec():
 ```
 
 ```
-FAILED test_notify.py::test_with_autospec - AttributeError: Mock object has n...
+FAILED e_autospec.py::test_with_autospec - AttributeE...
 1 failed, 1 passed in 0.04s
 ```
 
@@ -350,7 +352,7 @@ Autospec failed, and named the typo.
 
 ### Even when the plain mock fails, it fails uselessly
 
-The version above passes the value straight into the email. Change it so the value is actually **used** — compared against a threshold — and the plain mock does eventually break.
+The version above passes the value straight into the email. Change it so the value is actually **used** — compared against a threshold — and the plain mock does eventually break. That is `src/testing_lab/note07/notify_typo_compared.py`, and the same file runs both doubles against it:
 
 ```python
 def notify_underpaid(teacher_id, records, mailer):
@@ -412,7 +414,7 @@ Which answers something left open earlier. A vacuous test caused by mocking one 
 
 ## Where patch has to point
 
-Two modules and one import style.
+Two modules and one import style — `src/testing_lab/note07/records_defined.py` and `notify_from_import.py`.
 
 ```python
 # records.py
@@ -429,7 +431,7 @@ def is_underpaid(teacher_id):
     return fetch_monthly_pay(teacher_id) < 3000
 ```
 
-Two tests, differing in one word.
+Two tests, differing in one word — `src/testing_lab/note07/f_patch_where_it_is_used.py`:
 
 ```python
 def test_patching_where_it_is_defined():
@@ -443,8 +445,8 @@ def test_patching_where_it_is_used():
 ```
 
 ```
-FAILED test_notify.py::test_patching_where_it_is_defined - RuntimeError: this...
-1 failed, 1 passed in 0.01s
+FAILED f_patch_where_it_is_used.py::test_patching_where_it_is_defined - Runti...
+1 failed, 1 passed in 0.02s
 ```
 
 The first patched something, and the real function ran anyway.
@@ -488,7 +490,7 @@ notify's table
   "fetch_monthly_pay"  ->  <function at 4446024656>     the same object
 ```
 
-Two entries, one function — and `records.fetch_monthly_pay is notify.fetch_monthly_pay` is `True`.
+Two entries, one function — and `records.fetch_monthly_pay is notify.fetch_monthly_pay` is `True`. `src/testing_lab/note07/g_the_two_tables.py` prints both entries, before the patch and under it.
 
 **`patch` edits one table entry.**
 
@@ -550,6 +552,8 @@ import records                             # patch "records.fetch_monthly_pay"
 records.fetch_monthly_pay(teacher_id)
 ```
 
+`src/testing_lab/note07/notify_import_module.py` is written the second way, and the third test in that same file patches the definition and passes.
+
 > The second form looks the attribute up **at call time**, every time — so patching the definition works, because that is genuinely where the lookup goes.
 
 Which is a real argument for `import records` over `from records import ...` in code meant to be tested. Not a style preference: it changes what has to be patched, and removes the most common way to get patching wrong.
@@ -578,7 +582,7 @@ def is_underpaid(teacher_id, records):
     return records.fetch_monthly_pay(teacher_id) < 3000
 ```
 
-Two tests for the same function, placing the double at two different depths.
+Two tests for the same function, placing the double at two different depths — `src/testing_lab/note07/h_mock_at_the_boundary_you_own.py`, over `http_lib_v1.py` and `records_client_v1.py`.
 
 ```python
 def test_mocking_their_library():
@@ -600,7 +604,7 @@ def test_mocking_my_boundary():
 
 ### Then the library releases version 2
 
-`get` becomes `request`. `records.py` is updated to match, and **nothing about what your code does has changed.**
+`get` becomes `request`. `records.py` is updated to match, and **nothing about what your code does has changed.** That pair is `http_lib_v2.py` and `records_client_v2.py`, and the same file repeats both tests against them.
 
 ```python
 # http_lib.py
@@ -614,9 +618,9 @@ class RecordsClient:
 ```
 
 ```
-FAILED test_notify.py::test_mocking_their_library
-       - AttributeError: <module 'http_lib'> does not have the attribute 'get'
-1 failed, 1 passed in 0.04s
+FAILED h_mock_at_the_boundary_you_own.py::test_mocking_their_library
+       - AttributeError: <module 'http_lib_v2'> does not have the attribute 'get'
+1 failed, 1 passed in 0.05s
 ```
 
 `is_underpaid` never changed and neither did its behaviour. But one test knew the name of a function inside a library, and that name moved.

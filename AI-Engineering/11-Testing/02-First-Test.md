@@ -2,10 +2,6 @@
 
 **In Java, a test is a method in a class, marked with an annotation, asserting through a helper method.** In Python it is a plain function in a plain file, and every one of those four things is gone. Not shortened — absent, each for a reason worth knowing before you copy the shape.
 
-# Your First Python Test
-
-> [!info] pytest is a program you run from the terminal. It goes looking for your tests, runs them, and prints what happened. There is no annotation marking a test and no class holding it — the only thing that makes a function a test is its name.
-
 ## What pytest is
 
 **A program you run from the terminal.** You type `pytest`, it finds your tests, runs them, and reports. It is not built into Python and not a library you import — it is an **installable package** like any other dependency.
@@ -45,8 +41,10 @@ Four things are doing work there: two imports, a class, an annotation, and a hel
 
 Now the same test in Python.
 
+`src/testing_lab/note02/a_the_first_test.py`:
+
 ```python
-from python_lab.salary import annual_from_monthly
+from testing_lab.note02.salary import annual_from_monthly
 
 
 def test_annual_is_twelve_months():
@@ -86,17 +84,17 @@ flowchart TD
     style S2 fill:#7a1f1f,color:#fff
 ```
 
-> **Rename a test function and it silently stops being a test.** No error, no warning — it disappears from the run and the report simply counts one fewer. This is the first trap, and it is worth knowing before you write anything.
+> **Rename a test function and it silently stops being a test.** No error, no warning — it disappears from the run and the report simply counts one fewer. This is the first trap, and it is worth knowing before you write anything. `src/testing_lab/note02/d_rename_and_it_disappears.py` holds two identical failing functions and reports `1 failed`.
 
 ---
 
 ## Where the files go
 
 ```
-python-lab/
+payroll-service/
   pyproject.toml
   src/
-    python_lab/
+    app/
       __init__.py
       salary.py
   tests/
@@ -107,16 +105,17 @@ python-lab/
 
 That layout is close to what Gradle already gives you — `src/main/java` and `src/test/java` — with one real difference. In Python the tests directory is not itself a package, so there is no mirrored folder structure to maintain and no import path pointing into it. Nothing ever imports a test file except pytest.
 
+> **The lab in `~/Desktop/projects/testing-lab` departs from this on purpose**, and it is the only place in these notes that does. Its files sit at `src/testing_lab/note02/`, one per idea and named `a_the_first_test.py` rather than `test_salary.py`, so the folders read like `config-lab` and `logging-lab` next to it. That is a revision convenience and nothing more — the layout above is the one a real project uses.
+
 ---
 
 ## Setting up a project from scratch
 
 ```
 cd ~/Desktop/projects
-uv init --vcs none --lib python-lab
-cd python-lab
+uv init --vcs none --lib testing-lab
+cd testing-lab
 uv add --dev pytest
-mkdir tests
 ```
 
 Two of those flags are decisions rather than ceremony.
@@ -130,17 +129,18 @@ Two of those flags are decisions rather than ceremony.
 ## Running it
 
 ```
-uv run pytest
+uv run pytest src/testing_lab/note02/a_the_first_test.py
 ```
 
 ```
 ========================= test session starts ==========================
-platform darwin -- Python 3.14.7, pytest-9.1.1, pluggy-1.6.0
-rootdir: /Users/home/Desktop/projects/python-lab
+platform darwin -- Python 3.14.7, pytest-9.1.1, pluggy-1.7.0
+rootdir: /Users/home/Desktop/projects/testing-lab
 configfile: pyproject.toml
+plugins: anyio-4.15.1
 collected 1 item
 
-tests/test_salary.py .                                            [100%]
+src/testing_lab/note02/a_the_first_test.py .                      [100%]
 
 ============================== 1 passed in 0.01s ======================
 ```
@@ -156,19 +156,19 @@ Type plain `pytest` instead of `uv run pytest` in a fresh uv project and the she
 The confusing version comes when some other pytest is on the machine — one installed globally, or living in another project's environment. That one runs, and fails like this:
 
 ```
-____________________ ERROR collecting tests/test_salary.py _____________________
-ImportError while importing test module '.../tests/test_salary.py'.
+_______ ERROR collecting src/testing_lab/note02/a_the_first_test.py ____________
+ImportError while importing test module '.../note02/a_the_first_test.py'.
 ...
-tests/test_salary.py:1: in <module>
-    from python_lab.salary import annual_from_monthly
-E   ModuleNotFoundError: No module named 'python_lab'
+a_the_first_test.py:12: in <module>
+    from testing_lab.note02.salary import annual_from_monthly
+E   ModuleNotFoundError: No module named 'testing_lab'
 !!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
 1 error in 0.06s
 ```
 
 Nothing in that message mentions tests, so it reads as unrelated to what you were doing.
 
-Here is what actually happened. Your test imports `python_lab`, which lives under `src/`. Python can only find it in an environment the project has been installed into. `uv add` already installed it into the project's `.venv`, and `uv run` always uses that environment, so the import works. A pytest from anywhere else runs on a different Python that has never heard of `python_lab`.
+Here is what actually happened. Your test imports `testing_lab`, which lives under `src/`. Python can only find it in an environment the project has been installed into. `uv add` already installed it into the project's `.venv`, and `uv run` always uses that environment, so the import works. A pytest from anywhere else runs on a different Python that has never heard of `testing_lab`.
 
 > **The habit that avoids this entirely is `uv run pytest`, always.** Not because bare `pytest` is wrong, but because it depends on whichever pytest the shell finds first, in a way nothing reminds you of.
 
@@ -179,9 +179,11 @@ Here is what actually happened. Your test imports `python_lab`, which lives unde
 
 The assertion is the bare `assert` keyword. No matcher library, no helper, no import.
 
-That looks like a downgrade until you see a failure. Change the expected value to something wrong and run it again.
+That looks like a downgrade until you see a failure. Change the expected value to something wrong and run it again — `src/testing_lab/note02/b_the_failure_report.py` is that change already made.
 
 ```
+$ uv run pytest src/testing_lab/note02/b_the_failure_report.py
+
 =============================== FAILURES ===============================
 _____________________ test_annual_is_twelve_months _____________________
 
@@ -190,7 +192,7 @@ _____________________ test_annual_is_twelve_months _____________________
 E       assert 12000 == 11000
 E        +  where 12000 = annual_from_monthly(1000)
 
-tests/test_salary.py:5: AssertionError
+src/testing_lab/note02/b_the_failure_report.py:23: AssertionError
 ======================= 1 failed in 0.01s ==============================
 ```
 
@@ -211,6 +213,31 @@ The `where` line is the one people do not expect. pytest keeps the intermediate 
 > That is the whole reason `assertEquals` **does not exist and is not missed.** The helper method existed in JUnit to produce a readable message; pytest produces one from the plain statement.
 
 It also explains a rule that would otherwise look arbitrary. **Move an assert into a helper in an ordinary module and you lose the diff** — pytest rewrites only test files and `conftest.py`, so an assertion inside a `helpers.py` that a test imports fails with a bare `AssertionError` and no values. A helper function defined in the test file itself is rewritten along with the rest of the file, and keeps the diff.
+
+The same helper, twice, in one run.
+
+```
+$ uv run pytest -q src/testing_lab/note02/c_where_the_assert_lives.py
+
+______________________ test_helper_in_an_imported_module _______________________
+    def check_annual(monthly, expected):
+>       assert annual_from_monthly(monthly) == expected
+E       AssertionError
+
+src/testing_lab/note02/helpers.py:5: AssertionError
+
+___________________________ test_helper_in_this_file ___________________________
+    def check_annual_here(monthly, expected):
+>       assert annual_from_monthly(monthly) == expected
+E       assert 12000 == 11000
+E        +  where 12000 = annual_from_monthly(1000)
+
+src/testing_lab/note02/c_where_the_assert_lives.py:5: AssertionError
+
+2 failed
+```
+
+Same helper body, same arguments, two different messages — and only the one pytest rewrote carries the numbers.
 
 ---
 
@@ -240,7 +267,7 @@ Everything a Python project knows about itself is in one file at its root.
 
 ```toml
 [project]
-name = "python-lab"
+name = "testing-lab"
 version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = []
@@ -284,20 +311,21 @@ testpaths = ["tests"]
 A **flag** is a word typed after the command to change how it behaves. Here is the same project run twice, once with the `-q` flag and once without.
 
 ```
-$ uv run pytest
+$ uv run pytest src/testing_lab/note02/a_the_first_test.py
 ============================= test session starts ==============================
-platform darwin -- Python 3.14.7, pytest-9.1.1, pluggy-1.6.0
-rootdir: /Users/home/Desktop/projects/python-lab
+platform darwin -- Python 3.14.7, pytest-9.1.1, pluggy-1.7.0
+rootdir: /Users/home/Desktop/projects/testing-lab
 configfile: pyproject.toml
+plugins: anyio-4.15.1
 collected 1 item
 
-tests/test_salary.py .                                                   [100%]
+src/testing_lab/note02/a_the_first_test.py .                             [100%]
 
-============================== 1 passed in 0.00s ===============================
+============================== 1 passed in 0.01s ===============================
 ```
 
 ```
-$ uv run pytest -q
+$ uv run pytest -q src/testing_lab/note02/a_the_first_test.py
 .                                                                        [100%]
 1 passed in 0.00s
 ```
@@ -329,16 +357,16 @@ The other flag needs its own section, because it exists to solve a problem you h
 
 ## Directory structure at any real size
 
-The convention is to mirror the source, the same as Java: `tests/test_salary.py` covers `src/python_lab/salary.py`.
+The convention is to mirror the source, the same as Java: `tests/test_salary.py` covers `src/app/salary.py`.
 
 The difference is who enforces it. **In Java, package equals directory, so the compiler requires the path.** In Python nothing checks — you could put every test in one file and pytest would only object that the name does not start with `test_`. The mirror is a **discipline rather than a rule**.
 
 And a trap follows from that, which is worth meeting properly because the error it produces points at the wrong thing.
 
-Two files, same name, different folders.
+Two files, same name, different folders. `src/testing_lab/note02/import_mode_demo/` is exactly this pair, and its `README.md` carries both commands.
 
 ```
-tests/
+import_mode_demo/
   api/test_user.py
   db/test_user.py
 ```
@@ -397,13 +425,15 @@ flowchart TD
 The second one turns the same two files into this.
 
 ```
-collected 2 items
+$ uv run pytest \
+    src/testing_lab/note02/import_mode_demo/api/test_user.py \
+    src/testing_lab/note02/import_mode_demo/db/test_user.py
 
-tests/api/test_user.py .                                                 [ 50%]
-tests/db/test_user.py .                                                  [100%]
-
-============================== 2 passed in 0.00s ===============================
+..                                                                       [100%]
+2 passed in 0.01s
 ```
+
+Add `--import-mode=prepend` to that same command and the collision comes back.
 
 There is no shared name for the files to fight over, so the collision cannot arise at all.
 
@@ -442,10 +472,10 @@ The second matters more than it first appears. Once part of a suite needs Docker
 
 ## Three flags
 
-| Flag | Does |
-|---|---|
-| `-q` | shrinks the report to almost nothing |
-| `-x` | stops at the first failure instead of running everything |
+| Flag | Does                                                             |
+| ---- | ---------------------------------------------------------------- |
+| `-q` | shrinks the report to almost nothing                             |
+| `-x` | stops at the first failure instead of running everything         |
 | `-k` | selects tests whose name contains a substring, as in `-k salary` |
 
 One last thing, and it is the only part of pytest a machine ever reads. **A run exits with code 0 when everything passed and non-zero when anything did not.** The report is for people; **the exit code is what a build server checks**.

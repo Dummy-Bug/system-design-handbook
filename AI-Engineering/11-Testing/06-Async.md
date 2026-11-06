@@ -9,13 +9,13 @@
 ## The test that passes without running anything
 
 ```python
-# payroll.py
+# src/testing_lab/note06/payroll.py
 async def fetch_monthly_pay(teacher_id):
     return 5000
 ```
 
 ```python
-# test_payroll.py
+# src/testing_lab/note06/a_the_test_that_never_ran.py
 def test_pay_is_returned():
     result = fetch_monthly_pay(7)
     assert result
@@ -24,7 +24,7 @@ def test_pay_is_returned():
 ```
 .                                                                        [100%]
 =============================== warnings summary ===============================
-test_payroll.py::test_pay_is_returned
+a_the_test_that_never_ran.py::test_pay_is_returned
   .../_pytest/python.py:167: RuntimeWarning: coroutine 'fetch_monthly_pay' was never awaited
     result = testfunction(**testargs)
   Enable tracemalloc to get traceback where the object was allocated.
@@ -34,7 +34,7 @@ test_payroll.py::test_pay_is_returned
 1 passed, 1 warning in 0.01s
 ```
 
-Now empty the function.
+Now empty the function — `src/testing_lab/note06/payroll_empty.py`, which the same file tests as its second case.
 
 ```python
 async def fetch_monthly_pay(teacher_id):
@@ -44,7 +44,7 @@ async def fetch_monthly_pay(teacher_id):
 ```
 .                                                                        [100%]
 =============================== warnings summary ===============================
-test_payroll.py::test_pay_is_returned
+a_the_test_that_never_ran.py::test_pay_is_returned
   .../_pytest/python.py:167: RuntimeWarning: coroutine 'fetch_monthly_pay' was never awaited
     result = testfunction(**testargs)
   Enable tracemalloc to get traceback where the object was allocated.
@@ -58,6 +58,8 @@ Still green, and the report is identical line for line.
 
 ### What result actually was
 
+`src/testing_lab/note06/a_the_test_that_never_ran.py`:
+
 ```python
 def test_what_is_it():
     result = fetch_monthly_pay(7)
@@ -68,7 +70,7 @@ def test_what_is_it():
 ```
 
 ```
-$ uv run pytest -q -s test_what.py
+$ uv run pytest -q -s src/testing_lab/note06/a_the_test_that_never_ran.py
 type    : <class 'coroutine'>
 value   : <coroutine object fetch_monthly_pay at 0x107a22740>
 bool    : True
@@ -109,13 +111,15 @@ One other thing would have caught it.
 assert result == 5000      # a coroutine does not equal 5000
 ```
 
+That is `test_assert_on_the_value` in the same file, and it is the only red test in it.
+
 > Which is the earlier rule in new clothes: **assert on the value, not on the truthiness.**
 
 ---
 
 ## The fix needs something pytest does not have
 
-Awaiting requires being inside an async function, and a test function is not one by default.
+Awaiting requires being inside an async function, and a test function is not one by default. `test_with_no_marker` in `src/testing_lab/note06/b_the_smallest_async_test.py`:
 
 ```python
 async def test_pay_is_returned():
@@ -132,7 +136,7 @@ You need to install a suitable plugin for your async framework, for example:
   - pytest-trio
   - pytest-twisted
 
-FAILED test_payroll.py::test_pay_is_returned - Failed: async def functions ar...
+FAILED b_the_smallest_async_test.py::test_pay_is_returned - Failed: async de...
 1 failed in 0.00s
 ```
 
@@ -218,14 +222,18 @@ $ uv run pytest -q -p no:anyio
 
 That run has `pytest-asyncio` installed and anyio's plugin switched off with `-p no:anyio`, so `pytest-asyncio` is the only thing supplying the loop. Both workers ran, and the cancelled one-second sleep returned at once.
 
+> **This is the one thing in the folder with no lab file.** Reproducing it means installing `pytest-asyncio` alongside anyio, which is the combination the section above says not to have — so the lab stays on anyio alone and this run is quoted rather than kept.
+
 ---
 
 ## The smallest async test that works
 
+`test_with_the_marker`, in the same file:
+
 ```python
 import pytest
 
-from python_lab.payroll import fetch_monthly_pay
+from testing_lab.note06.payroll import fetch_monthly_pay
 
 
 @pytest.fixture
@@ -282,6 +290,8 @@ def anyio_backend(request):
 ('asyncio',)
 ```
 
+`src/testing_lab/note06/c_the_available_backends.py` prints that.
+
 With Trio absent that list holds one entry, so every test runs once — which is why deleting the fixture from a test file changes nothing at all.
 
 ### Writing your own is a pin, not a requirement
@@ -314,7 +324,7 @@ Put it in `conftest.py` and it covers the whole suite rather than being repeated
 
 ## Async fixtures
 
-A fixture can be `async def` too, and it needs the same plumbing a test does.
+A fixture can be `async def` too, and it needs the same plumbing a test does. `src/testing_lab/note06/d_async_fixture.py`:
 
 ```python
 async def open_connection():
@@ -351,6 +361,8 @@ The async test passed. The sync test **errored**, loudly, naming both the test a
 
 ## One loop per test
 
+`src/testing_lab/note06/e_one_loop_per_test.py`:
+
 ```python
 import asyncio
 
@@ -373,7 +385,7 @@ async def test_three():
 ```
 
 ```
-$ uv run pytest -q -s tests/test_loops.py
+$ uv run pytest -q -s src/testing_lab/note06/e_one_loop_per_test.py
 
 test_one   4411469040
 .
@@ -395,14 +407,14 @@ Which sets up the error that costs an afternoon.
 ## The error that names everything except the cause
 
 ```python
-# conftest.py
+# src/testing_lab/note06/scope_mismatch_demo/conftest.py
 @pytest.fixture                  # function scope, the default
 def anyio_backend():
     return "asyncio"
 ```
 
 ```python
-# test_mismatch.py
+# src/testing_lab/note06/scope_mismatch_demo/a_module_scoped_async_fixture.py
 @pytest.fixture(scope="module")  # module scope
 async def shared_lock():
     return asyncio.Lock()
@@ -431,11 +443,13 @@ An **async** fixture needs an event loop to run in, so anyio's plugin makes it d
 | `anyio_backend` | the fixture at the bottom of the chain |
 | `anyio/pytest_plugin.py:133  wrapper` | a function inside a library nobody here wrote |
 
-**`shared_lock` appears nowhere**, and neither does `test_mismatch.py`. The fixture whose `scope="module"` caused all of it is not in the message.
+**`shared_lock` appears nowhere**, and neither does the file it is written in. The fixture whose `scope="module"` caused all of it is not in the message.
 
 > You are handed a conflict between a line in your `conftest.py` and a line in a library, and **the thing that has to change is in a third file that is not mentioned**.
 
 ### The fix, and the irony in it
+
+`src/testing_lab/note06/scope_fixed_demo/` is the same two files with this one word changed.
 
 ```python
 @pytest.fixture(scope="module")
