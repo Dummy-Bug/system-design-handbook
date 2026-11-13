@@ -65,8 +65,8 @@ Companies don't publish cutoffs — this is correlation between rating and abili
 | 1500-1600 | — | Cred, Postman, Hasura, better startups |
 | 1600-1700 | — | **Atlassian, Razorpay, PhonePe, Swiggy** — 2027 target zone |
 | 1700-1800 | — | **Walmart Global Tech, Stripe India, Confluent, Booking, Uber** |
-| 1800-1900 | — | **Google L3, Microsoft, Amazon, Adobe, Salesforce** |
-| 1900-2000 | **Knight** (top 5%) | **Google L4, Meta E4, Apple, Stripe global** |
+| 1800-1900 | **Knight** from ≈1843 (top 25%) | **Google L3, Microsoft, Amazon, Adobe, Salesforce** |
+| 1900-2000 | Knight | **Google L4, Meta E4, Apple, Stripe global** |
 | 2000-2100 | Knight | **Top FAANG bands, Two Sigma backend, DE Shaw** |
 | 2100+ | **Guardian** (top 1%) | **HFT (Citadel, Jane Street), TikTok, top L5+ FAANG** |
 
