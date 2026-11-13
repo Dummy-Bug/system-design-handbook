@@ -26,16 +26,18 @@ flowchart TB
     P --> W2["Copies to another directory<br/>the application cannot find itself"]
     P --> W3["Sets a different database port<br/>the connection is refused"]
     P --> OK["Or gets every step right,<br/>on this one machine, this one time"]
-    style LIST fill:#7a5a1f,color:#fff
-    style P fill:#2d333b,color:#fff
-    style W1 fill:#7a1f1f,color:#fff
-    style W2 fill:#7a1f1f,color:#fff
-    style W3 fill:#7a1f1f,color:#fff
-    style OK fill:#1f6f3f,color:#fff
+    classDef good fill:#1f6f3f,stroke:#2e9c5a,stroke-width:1.5px,color:#fff
+    classDef broken fill:#7a1f1f,stroke:#b03030,stroke-width:1.5px,color:#fff
+    classDef step fill:#7a5a1f,stroke:#b08a2e,stroke-width:1.5px,color:#fff
+    classDef actor fill:#2d333b,stroke:#4b5563,stroke-width:1.5px,color:#fff
+    class OK good
+    class W1,W2,W3 broken
+    class LIST step
+    class P actor
 ```
 
 > [!info] This is the same argument that produces a build pipeline, applied one level lower.
-> A pipeline exists because a sequence of build and deployment steps carried out by a person is slow and is performed differently each time, so the steps are written into a file and a machine executes them identically on every run. A Dockerfile does exactly that for the environment the application runs in rather than for the steps that build it. Both are the same move: **take the instructions out of a person's head, put them in a file next to the code, and let a machine follow them.**
+> A `Jenkinsfile` exists because a sequence of build and deployment steps carried out by a person is slow and is performed differently each time, so the steps are written into a file and a machine executes them identically on every run. A Dockerfile does exactly that for the environment the application runs in rather than for the steps that build it. Both are the same move: **take the instructions out of a person's head, put them in a file next to the code, and let a machine follow them.**
 
 ## The file that carries out the list
 
@@ -86,14 +88,14 @@ flowchart TB
         S2 --> PR["A process, with an ID, using<br/>memory and processor time"]
     end
     IMG -->|"docker run"| S1
-    style I1 fill:#7a5a1f,color:#fff
-    style I2 fill:#7a5a1f,color:#fff
-    style I3 fill:#7a5a1f,color:#fff
-    style I4 fill:#3a3a3a,color:#fff
-    style IMG fill:#3a3a3a,color:#fff
-    style S1 fill:#1f4f7a,color:#fff
-    style S2 fill:#1f4f7a,color:#fff
-    style PR fill:#1f6f3f,color:#fff
+    classDef mech fill:#1f4f7a,stroke:#2f6ea6,stroke-width:1.5px,color:#fff
+    classDef good fill:#1f6f3f,stroke:#2e9c5a,stroke-width:1.5px,color:#fff
+    classDef step fill:#7a5a1f,stroke:#b08a2e,stroke-width:1.5px,color:#fff
+    classDef inert fill:#3a3a3a,stroke:#5a5a5a,stroke-width:1.5px,color:#fff
+    class S1,S2 mech
+    class PR good
+    class I1,I2,I3 step
+    class I4,IMG inert
 ```
 
 The split is one you already work with under a different name. Running `mvn package` resolves the dependencies, compiles the classes and packs `app.jar`, and every step of it is genuinely carried out — **and your application is still not running.** Starting it is a separate act, `java -jar app.jar`, and that is the act that produces a process. **`docker build` is `mvn package` and `docker run` is `java -jar`**, one level further out: the artifact produced is an entire file system rather than a single jar, but the line between making the thing and executing it falls in exactly the same place.
@@ -109,16 +111,16 @@ With that settled, the four lines map onto the four things you would have told a
 
 `FROM` names an image to build on top of. Your image is not assembled from nothing; **it starts as a copy of another image**, and your instructions are added to it.
 
-`eclipse-temurin:21-jre` is an image that already contains a Java 21 runtime, correctly installed, **with its environment set up.** **By naming it you are saying: whatever that image did to get Java 21 working, do that, and then continue.**
+`eclipse-temurin:21-jre` is an image that already contains a Java 21 runtime, correctly installed, with its environment set up. **By naming it you are saying: whatever that image did to get Java 21 working, do that, and then continue.**
 
 Which raises the obvious objection. Why not just write the install command yourself?
 
-Because somebody already worked out how to install Java 21 properly on Linux — which packages, which paths, which environment variables — and published the result. Writing it again in every Dockerfile that needs Java would be the same work repeated by everybody who ever needs a Java runtime. **You reference the finished thing instead of reproducing the recipe.**
+Because somebody already worked out how to install Java 21 properly **on Linux** — which packages, which paths, which environment variables — and published the result. Writing it again in every Dockerfile that needs Java would be the same work repeated by everybody who ever needs a Java runtime. **You reference the finished thing instead of reproducing the recipe.**
 
-The same applies to every other runtime. `FROM node:21` starts from an image with Node.js 21 installed. `FROM python:3.13` starts from one with Python 3.13. Each of them is an image somebody built and published, with the installation already done inside it.
+The same applies to anything else you might need to start from. `FROM python:3.15` starts from an image with Python 3.15 installed; `FROM nginx:1.30` starts from one with NGINX already in place; `FROM mysql:8.4` from one with MySQL. Each of them is an image somebody built and published, with the installation already done inside it.
 
 > [!info] These live on Docker Hub, and it is the same idea as a shared build action.
-> Docker Hub is a public registry of ready-made images — runtimes, databases, web servers, operating system bases — that anybody can build on top of. A build pipeline works the same way: rather than writing the commands to install a Java toolchain into your pipeline file, you reference a published step that does it, because it is maintained by people who care about getting it right. The base image is that idea applied to the environment instead of to the build.
+> Docker Hub is a public registry of ready-made images — runtimes, databases, web servers, operating system bases — that anybody can build on top of. A build pipeline works the same way: rather than writing the commands to install a Java toolchain into a `Jenkinsfile` or a GitHub Actions workflow, you reference a published step that already does it, because it is maintained by people who care about getting it right. **The same `temurin` name turns up in both places**, for the same reason. The base image is that idea applied to the environment the application runs in instead of to the machine that builds it.
 
 The tag after the colon matters. `21-jre` is a runtime only — enough to run a jar and nothing more. There is also a `-jdk` variant containing the full development kit, compiler included, which is what you would need to compile inside the image and is dead weight if you are only running an already-built jar.
 
@@ -168,16 +170,12 @@ flowchart LR
     C["COPY target/app.jar"] -->|"supplies"| J["The application itself"]
     E["ENV APP_ENV=production"] -->|"supplies"| V["Configuration and<br/>environment variables"]
     M["CMD"] -->|"supplies"| X["What to run when<br/>a container starts"]
-    style F fill:#7a5a1f,color:#fff
-    style W fill:#7a5a1f,color:#fff
-    style C fill:#7a5a1f,color:#fff
-    style E fill:#7a5a1f,color:#fff
-    style M fill:#7a5a1f,color:#fff
-    style R fill:#1f4f7a,color:#fff
-    style D fill:#1f4f7a,color:#fff
-    style J fill:#1f4f7a,color:#fff
-    style V fill:#1f4f7a,color:#fff
-    style X fill:#1f6f3f,color:#fff
+    classDef mech fill:#1f4f7a,stroke:#2f6ea6,stroke-width:1.5px,color:#fff
+    classDef good fill:#1f6f3f,stroke:#2e9c5a,stroke-width:1.5px,color:#fff
+    classDef step fill:#7a5a1f,stroke:#b08a2e,stroke-width:1.5px,color:#fff
+    class R,D,J,V mech
+    class X good
+    class F,W,C,E,M step
 ```
 
 ## Turning the file into an image
@@ -188,13 +186,12 @@ One command reads the Dockerfile and carries out every instruction in it:
 docker build -t order-service .
 ```
 
-`-t` is the tag — the name the finished image is given, so that you can refer to it afterwards instead of by an unreadable identifier. `order-service` is that name.
+`-t` **is the tag — the name the finished image is given**, so that you can refer to it afterwards instead of by an unreadable identifier. `order-service` is that name.
 
 The trailing dot is easy to skim past and is doing real work. It is the **build context**: the directory whose contents are made available to the build. `COPY target/app.jar` can only find that file **because the dot handed the current directory to the build in the first place.** A Dockerfile at the root of that directory is used automatically, which is why the file is conventionally named exactly `Dockerfile` and placed alongside the code.
 
 ## Why an image is built in layers
 
-The previous note said an image is a stack of layers and deferred the reason. The reason is a cost, and it is best seen by watching what would happen without them.
 
 The order service's image is 500 MB — a Java runtime, libraries, the file system underneath them, and the jar. It is built, deployed, and running.
 
@@ -202,7 +199,9 @@ Then one line of application code changes. The branch is merged, a new jar is pr
 
 If an image were one solid 500 MB block, a new image would mean producing and moving 500 MB — nearly all of it identical to what is already there. A one-line change would cost the same as the first build, every time, forever.
 
-So it is not one block. **Each instruction in the Dockerfile produces its own layer**, and the image is those layers stacked:
+So it is not one block. **Each instruction in the Dockerfile produces its own layer**, and the image is those layers stacked.
+
+The file below adds one instruction that has not appeared yet. **`RUN` executes a command while the image is being built**, and whatever that command leaves behind on the file system becomes part of the image. Here it installs `curl`, the command-line tool for making HTTP requests — the kind of thing an application's start-up checks often need and a bare runtime image does not carry. `RUN` sits firmly on the build side of the split above: unlike `CMD`, it genuinely runs during the build, and it is a setup step like the rest.
 
 ```dockerfile
 # Dockerfile
@@ -217,9 +216,10 @@ CMD ["java", "-jar", "app.jar"]
 flowchart TB
     C["COPY target/app.jar<br/>100 MB · changes every release"] --> B["RUN apt-get install curl<br/>100 MB · unchanged"]
     B --> A["FROM eclipse-temurin:21-jre<br/>300 MB · unchanged"]
-    style C fill:#7a5a1f,color:#fff
-    style B fill:#1f6f3f,color:#fff
-    style A fill:#1f6f3f,color:#fff
+    classDef good fill:#1f6f3f,stroke:#2e9c5a,stroke-width:1.5px,color:#fff
+    classDef step fill:#7a5a1f,stroke:#b08a2e,stroke-width:1.5px,color:#fff
+    class B,A good
+    class C step
 ```
 
 Now change the jar and rebuild. The `FROM` layer is unchanged. The `curl` layer is unchanged. Only the `COPY` layer contains something different, so **only that layer is rebuilt**, and the 400 MB underneath it is reused exactly as it stands. A one-line code change costs 100 MB of work instead of 500.
@@ -262,11 +262,12 @@ flowchart TB
         W --> C["COPY target/app.jar app.jar<br/>the jar differs · the first miss,<br/>and the first real work of the build"]
         C --> M["CMD java -jar app.jar<br/>identical text, but the layer beneath it<br/>did not exist before · rebuilt"]
     end
-    style F fill:#1f6f3f,color:#fff
-    style R fill:#1f6f3f,color:#fff
-    style W fill:#1f6f3f,color:#fff
-    style C fill:#7a5a1f,color:#fff
-    style M fill:#7a1f1f,color:#fff
+    classDef good fill:#1f6f3f,stroke:#2e9c5a,stroke-width:1.5px,color:#fff
+    classDef broken fill:#7a1f1f,stroke:#b03030,stroke-width:1.5px,color:#fff
+    classDef step fill:#7a5a1f,stroke:#b08a2e,stroke-width:1.5px,color:#fff
+    class F,R,W good
+    class M broken
+    class C step
 ```
 
 That matters most when the instruction that changed is near the top. Leave the code completely alone this time — the jar is byte-for-byte what it was — and add one package to the `apt-get` line instead:
@@ -295,6 +296,6 @@ Three habits follow directly from everything above.
 > [!warning] Never put a secret in a Dockerfile.
 > A password, token or key written into the file ends up in the image and in the history of every image built from it, and anybody who can pull that image can read it back out. The file itself is also meant to be shared — it sits in version control next to the code, and other people read it and copy from it. **Pass secrets in at run time as environment variables, from wherever your deployment already keeps them**, so that the image stays something you can hand to anybody.
 
-**Do not install what you do not need.** If the application needs Java, the image needs Java and nothing else — not Node.js, not Python, not a text editor that seemed handy while debugging. Every extra package is size, and size is what gets pulled over the network every time the image is deployed, on top of being one more thing that can carry a vulnerability. This is the same reason to prefer the `-jre` tag over `-jdk` when nothing inside the image ever compiles anything.
+**Do not install what you do not need.** If the application needs Java, the image needs Java and nothing else — not Python, not `vim` because somebody wanted it there while debugging once. Every extra package is size, and size is what gets pulled over the network every time the image is deployed, on top of being one more thing that can carry a vulnerability. This is the same reason to prefer the `-jre` tag over `-jdk` when nothing inside the image ever compiles anything.
 
 **Use `FROM` rather than rebuilding what somebody has already built.** A published base image with a runtime in it is a layer that is already cached, already correct, and already maintained. Installing that runtime by hand in your own file produces a larger image, a slower build, and a thing you now have to keep up to date yourself.

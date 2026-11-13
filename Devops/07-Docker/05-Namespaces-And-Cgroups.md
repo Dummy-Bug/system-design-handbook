@@ -4,13 +4,13 @@ Two containers were started from one image, a file was changed inside the first,
 
 A container behaves as though it were a machine of its own. From inside it, there is a file system starting at `/` with nothing else on the disk. There are network ports, all of them apparently free. There is an address. There is memory. Look around from inside a container and you will find no evidence that anything else exists.
 
-None of it is true. There is one file system, one set of ports, one block of memory, and one operating system, belonging to the host, and **every container on the machine is being shown a version of it edited for their benefit.**
+> None of it is true. There is one file system, one set of ports, one block of memory, and one operating system, belonging to the host, and **every container on the machine is being shown a version of it edited for their benefit.**
 
 This is the exact point where a container and a virtual machine part company, and it is worth being precise rather than impressionistic about it.
 
 That a virtual machine has a kernel of its own and a container does not is already established. What has not been said is what that means for the resources each one is given, and it is the sharper half of the distinction.
 
-A virtual machine's resources are **real and reserved**. Give a virtual machine 8 GB of a host's 16 GB and 2 of its 8 processor cores, and those are genuinely set aside: the guest operating system inside it stores what it stores within that 8 GB, schedules its threads across those 2 cores, and the remaining 8 GB and 6 cores are not available to it under any circumstances. **It is partitioned hardware, and the partition is enforced by there being a second operating system managing it.**
+A virtual machine's resources are **real and reserved**. The first note in this folder counted that out — 8 GB of a host's 16, 2 of its 8 cores — and the point to carry forward is what the reservation means: the guest operating system inside it stores what it stores within that 8 GB and schedules its threads across those 2 cores, and the rest of the machine is not available to it under any circumstances. **It is partitioned hardware, and the partition is enforced by there being a second operating system managing it.**
 
 A container's resources are **the host's, shown selectively**. There is no reserved block of memory that belongs to the container in the way the virtual machine's 8 GB belongs to it. There is one machine, one pool of memory, one set of cores, and the container is a process on that machine which has been given a deliberately partial view of all of it.
 
@@ -27,7 +27,7 @@ Two mechanisms produce that partial view, and between them they are the whole ba
 
 ## Namespaces — what am I allowed to see
 
-A **namespace** is the kernel's way of giving a process a **restricted view of some part of the system.** The process sees what its namespace contains and has no way of perceiving anything outside it — not restricted from it in the sense of being refused, but genuinely unable to see that there is anything there.
+>A **namespace** is the kernel's way of giving a process a **restricted view of some part of the system.** The process sees what its namespace contains and has no way of perceiving anything outside it — not restricted from it in the sense of being refused, but genuinely unable to see that there is anything there.
 
 The shape of it is easier with a building.
 
@@ -46,17 +46,19 @@ flowchart TB
         direction TB
         SELF["Everything there is<br/>rooms, a door, a full set of walls"]
     end
-    style BLD fill:#1f4f7a,color:#fff
-    style F1 fill:#1f6f3f,color:#fff
-    style F2 fill:#1f6f3f,color:#fff
-    style SELF fill:#7a5a1f,color:#fff
+    classDef mech fill:#1f4f7a,stroke:#2f6ea6,stroke-width:1.5px,color:#fff
+    classDef good fill:#1f6f3f,stroke:#2e9c5a,stroke-width:1.5px,color:#fff
+    classDef step fill:#7a5a1f,stroke:#b08a2e,stroke-width:1.5px,color:#fff
+    class BLD mech
+    class F1,F2 good
+    class SELF step
 ```
 
 A namespace is that, applied to a part of the operating system. There is more than one kind, because there is more than one thing worth hiding.
 
 A view in SQL is a **query given a name and treated like a table**: you select from it exactly as you would from a table, and what comes back is real data. But the view is not a table. It is a presentation of one or more real tables, possibly showing only some columns and only some rows, and a user handed nothing but the view has no way to tell the difference and no way to reach the rest. **A namespace does that to the operating system** — the process queries a file system, or a list of processes, or a set of ports, and gets real answers from a genuinely restricted presentation of the real thing.
 
-## The process namespace
+## 1. The process namespace
 
 Every running process on a Linux machine has a **process ID**, a number identifying it. Those numbers are unique across the machine, and **PID 1 is special**: it is the first process started at boot, the one every other process descends from. On a modern Linux system that is `systemd`, **the program that starts and supervises everything else.**
 
@@ -82,20 +84,21 @@ flowchart TB
         direction TB
         A2["PID 1 · the payment service<br/>and nothing else"]
     end
-    style H1 fill:#2d333b,color:#fff
-    style H2 fill:#1f4f7a,color:#fff
-    style H3 fill:#1f4f7a,color:#fff
-    style A1 fill:#7a5a1f,color:#fff
-    style A2 fill:#7a5a1f,color:#fff
+    classDef mech fill:#1f4f7a,stroke:#2f6ea6,stroke-width:1.5px,color:#fff
+    classDef step fill:#7a5a1f,stroke:#b08a2e,stroke-width:1.5px,color:#fff
+    classDef actor fill:#2d333b,stroke:#4b5563,stroke-width:1.5px,color:#fff
+    class H2,H3 mech
+    class A1,A2 step
+    class H1 actor
 ```
 
 The container is not lying and it is not mistaken. **It is being shown a different numbering**, in which its own main process is the first one, and nothing else on the machine appears at all. The host keeps the real numbers, because the host is the one that actually has to schedule them.
 
-## The network namespace
+## 2. The network namespace
 
 The same treatment is applied to the network, and this is the one with the most practical consequence.
 
-Whatever runs inside a container is an ordinary program with ordinary expectations about the network. It might be the order service. It might equally be nginx.
+Whatever runs inside a container is an ordinary program with ordinary expectations about the network. It might be the order service. It might equally be NGINX, the reverse proxy.
 
 Two instances of the order service, in two containers, both want port 8080 — which is reasonable, because it is the same application and the port is written into its configuration. On one machine, two processes cannot both hold port 8080.
 
@@ -114,26 +117,28 @@ flowchart TB
     REQ["A request arrives<br/>at the host's address"] --> HOST["Host<br/>8081 and 8082 are real and distinct"]
     HOST -->|"8081, rewritten to 8080 on the way in"| C1["Container one<br/>listening on 8080"]
     HOST -->|"8082, rewritten to 8080 on the way in"| C2["Container two<br/>listening on 8080"]
-    style REQ fill:#2d333b,color:#fff
-    style HOST fill:#1f4f7a,color:#fff
-    style C1 fill:#1f6f3f,color:#fff
-    style C2 fill:#1f6f3f,color:#fff
+    classDef mech fill:#1f4f7a,stroke:#2f6ea6,stroke-width:1.5px,color:#fff
+    classDef good fill:#1f6f3f,stroke:#2e9c5a,stroke-width:1.5px,color:#fff
+    classDef actor fill:#2d333b,stroke:#4b5563,stroke-width:1.5px,color:#fff
+    class HOST mech
+    class C1,C2 good
+    class REQ actor
 ```
 
 **The rewriting is the part worth holding on to.** The application inside the container was never modified and never told about any of this. It binds to 8080, because that is what its configuration says, and requests arrive on 8080 as far as it can tell. The translation from 8081 happens outside it, in the host, on the way through.
 
-The same applies to addresses. Each container has its own address inside its namespace . A container might hold `192.0.2.10` and a second `192.0.2.11`, while the **host holds the address the outside world actually reaches**. Requests land on the host's address and are directed onward based on which port they arrived at.
+The same applies to addresses. Each container has its own address inside its namespace. A container might hold `192.0.2.10` and a second `192.0.2.11`, while the **host holds the address the outside world actually reaches**. Requests land on the host's address and are directed onward based on which port they arrived at.
 
 And this is exactly the problem the first note in this folder opened with, now solved. Two developers who need the same port no longer have to negotiate: both applications keep the port they were written for, and the host maps each to a free one of its own.
 
 > [!question] So which port does somebody outside actually use?
 > The published one. A browser, another service, or anything else reaching this machine from outside addresses the host and the host's port — `8081` for the first container, `8082` for the second. **The container's own 8080 is not reachable from outside and is not meant to be**; it exists only inside that container's namespace. The number written in the application's configuration and the number typed by whoever calls it are two different things, and the mapping is what connects them. If nothing is published at all, the application runs perfectly well and simply cannot be reached from off the machine.
 
-## The mount namespace
+## 3. The mount namespace
 
 The third one covers the file system, and it is what the two containers in the demonstration were relying on.
 
-Each container is given its own root. Inside, there is a `/` with the usual directories beneath it — `/app`, `/usr`, `/etc` — and it looks like a complete Linux file system because it is one, **assembled from the image's layers.** **The host meanwhile has its own complete file system, with everything on the machine in it.**
+Each container is given its own root. Inside, there is a `/` with the usual directories beneath it — `/app`, `/usr`, `/etc` — and it looks like a complete Linux file system because it is one, **assembled from the image's layers.** The host meanwhile has its own complete file system, with everything on the machine in it.
 
 > **Neither container can see the other's, and neither can see the host's.** A container may create, modify and delete anything within its own view and cannot reach outside it.
 
@@ -145,6 +150,7 @@ Which means **two containers may use the same paths without any conflict at all*
 | Contents of `hello.txt` | whatever A wrote | the image's original | both versions, unconnected |
 | Add `/app/hello2.txt` in A | two files | still one file | A's layer grows; B's is untouched |
 
+---
 ## Cgroups — how much am I allowed to use
 
 Namespaces answer what a container can see. They say nothing whatever about how much it can consume, and on their own they leave a serious hole.
@@ -165,7 +171,15 @@ docker run --memory 1g payment-service
 docker run --memory 1g user-service
 ```
 
-Each container now behaves as though that were all the memory in the world. The order service can use 512 MB and not a byte more. Processor cores are limited the same way, and every thread the application runs is scheduled within whatever share it was given.
+Each container now behaves as though that were all the memory in the world. The order service can use 512 MB and not a byte more.
+
+**Processor time is capped by the same kind of flag**, and on a host with 8 cores a container can be held to 2 of them:
+
+```bash
+docker run --memory 1g --cpus 2 payment-service
+```
+
+Every thread the application starts is then scheduled within that share. A process inside the container can create as many threads as it likes; they queue for 2 cores' worth of time between them, and the other 6 cores go on serving everything else on the host.
 
 ```mermaid
 flowchart TB
@@ -173,11 +187,14 @@ flowchart TB
     HOST --> G2["Payment service<br/>ceiling 1 GB"]
     HOST --> G3["User service<br/>ceiling 1 GB"]
     G2 --> LEAK["A leak here fills 1 GB<br/>and is refused more"]
-    style HOST fill:#1f4f7a,color:#fff
-    style G1 fill:#1f6f3f,color:#fff
-    style G2 fill:#7a5a1f,color:#fff
-    style G3 fill:#1f6f3f,color:#fff
-    style LEAK fill:#7a1f1f,color:#fff
+    classDef mech fill:#1f4f7a,stroke:#2f6ea6,stroke-width:1.5px,color:#fff
+    classDef good fill:#1f6f3f,stroke:#2e9c5a,stroke-width:1.5px,color:#fff
+    classDef broken fill:#7a1f1f,stroke:#b03030,stroke-width:1.5px,color:#fff
+    classDef step fill:#7a5a1f,stroke:#b08a2e,stroke-width:1.5px,color:#fff
+    class HOST mech
+    class G1,G3 good
+    class LEAK broken
+    class G2 step
 ```
 
 Now run the leak again. The payment service grows until it reaches 1 GB and is refused further memory. It will fail — there is no fixing a leak by containing it — but **it fails alone**. The user service and the order service never notice, because the memory the leak wanted was never theirs to lose.

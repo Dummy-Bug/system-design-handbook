@@ -7,18 +7,21 @@ flowchart TB
     IMG -->|"docker run -it --name container-b"| CB["Container B<br/>the file is untouched"]
     CA --> PS["docker ps -a<br/>both listed against one image"]
     CB --> PS
-    style TXT fill:#7a5a1f,color:#fff
-    style IMG fill:#3a3a3a,color:#fff
-    style CA fill:#1f6f3f,color:#fff
-    style CB fill:#1f6f3f,color:#fff
-    style PS fill:#1f4f7a,color:#fff
+    classDef mech fill:#1f4f7a,stroke:#2f6ea6,stroke-width:1.5px,color:#fff
+    classDef good fill:#1f6f3f,stroke:#2e9c5a,stroke-width:1.5px,color:#fff
+    classDef step fill:#7a5a1f,stroke:#b08a2e,stroke-width:1.5px,color:#fff
+    classDef inert fill:#3a3a3a,stroke:#5a5a5a,stroke-width:1.5px,color:#fff
+    class PS mech
+    class CA,CB good
+    class TXT step
+    class IMG inert
 ```
 
 ## The smallest thing that proves it
 
 The order service would work here, and it would also get in the way. Building a Spring Boot jar takes a Maven build, and none of that has anything to do with what is being demonstrated.
 
-So use something smaller. **Code is files.** A Java class is a file with a `.java` extension, a JavaScript module has `.js`, a Python module has `.py`, and the compiled package that comes out the other end is a file too. What matters for this demonstration is that an image carries a file into a container and the container can read it.
+So use something smaller. **Code is files.** A Java class is a file with a `.java` extension, the `pom.xml` that describes the build sits beside it as another file, and the jar that comes out of the build is a file as well. What matters for this demonstration is that an image carries a file into a container and the container can read it.
 
 So the code, for the moment, is a text file containing one word:
 
@@ -29,6 +32,15 @@ hello
 If that can be built into an image, carried into two containers, changed in one and left alone in the other, then the same is true of a jar, because nothing about the mechanism cares which extension the file has.
 
 ## The Dockerfile
+
+Work in a directory of its own, since the build is going to be handed that directory and everything in it:
+
+```bash
+mkdir docker-demo
+cd docker-demo
+```
+
+The Dockerfile is an ordinary text file, written with whatever editor is to hand — `nano Dockerfile` in the terminal, or `code Dockerfile` if VS Code is installed. The name matters: a build looks for a file called exactly `Dockerfile` in the directory it is given.
 
 ```dockerfile
 # Dockerfile
@@ -44,7 +56,7 @@ Three of those four instructions are already familiar. The one that is new is th
 
 `RUN mkdir /app` creates the directory. `RUN echo hello > /app/hello.txt` writes the file into it, using the shell's redirection to send the text into a file rather than to the screen. Both are ordinary Linux commands, run at build time, with their results baked into the image.
 
-`CMD ["sh"]` starts a shell when a container starts. Since the point of this exercise is to get inside a container and look around, a shell is the thing worth starting.
+`CMD ["sh"]` **starts a shell when a container starts**. Since the point of this exercise is to get inside a container and look around, a shell is the thing worth starting.
 
 ## Building it
 
@@ -55,17 +67,20 @@ docker build -t hello-demo .
 The image is named `hello-demo` by the tag, and the trailing dot **hands the current directory to the build as its context.** Each instruction is carried out in order, and each produces a layer.
 
 **Nothing new appears in the directory afterwards.** Running `ls` shows the same `Dockerfile` that was there before, and this is the first thing that surprises people. The image was not written into the working directory — Docker keeps images in its own storage, and the way to see them is to ask Docker rather than to look at the file system.
+
 ## Starting the first container
 
 ```bash
 docker run -it --name container-a hello-demo
 ```
 
-Three things are being asked for. `-i` keeps the input stream open, so that what you type is delivered to the process inside rather than discarded. `-t` allocates a terminal for it, so that the shell behaves like a shell instead of like a program reading from a pipe. Together they are what makes it possible to work inside the container interactively, and they are almost always written as the single `-it`.
+Three things are being asked for. 
+* `-i` keeps the input stream open, so that what you type is delivered to the process inside rather than discarded. 
+* `-t` allocates a terminal for it, so that the shell behaves like a shell instead of like a program reading from a pipe. Together they are what makes it possible to work inside the container interactively, and they are almost always written as the single `-it`.
 
-`--name container-a` gives the container a name. Without it Docker generates one, and naming it yourself means the next command can refer to it legibly.
+* `--name container-a` gives the container a name. Without it Docker generates one, and naming it yourself means the next command can refer to it legibly.
 
-The prompt changes, and that change is the signal that the commands you type are now running inside the container rather than on the host. The file the Dockerfile created is there:
+The prompt changes — on this image to a `#` — and that change is the signal that the commands you type are now running inside the container rather than on the host. The file the Dockerfile created is there:
 
 ```bash
 cat /app/hello.txt
@@ -79,7 +94,7 @@ It contains `hello`, because `RUN echo hello > /app/hello.txt` put it there at b
 echo "hello from container A" > /app/hello.txt
 ```
 
-Reading the file again shows the new text. Then leave:
+**Reading the file again shows the new text**. Then leave:
 
 ```bash
 exit
@@ -107,9 +122,12 @@ Not the edited text. The original, exactly as the image built it. **Container B 
 flowchart TB
     IMG["Image hello-demo<br/>/app/hello.txt contains hello<br/>read-only"] --> A["Container A<br/>writable layer holds an edited copy<br/>reads: hello from container A"]
     IMG --> B["Container B<br/>writable layer is empty<br/>reads: hello"]
-    style IMG fill:#3a3a3a,color:#fff
-    style A fill:#7a5a1f,color:#fff
-    style B fill:#1f6f3f,color:#fff
+    classDef good fill:#1f6f3f,stroke:#2e9c5a,stroke-width:1.5px,color:#fff
+    classDef step fill:#7a5a1f,stroke:#b08a2e,stroke-width:1.5px,color:#fff
+    classDef inert fill:#3a3a3a,stroke:#5a5a5a,stroke-width:1.5px,color:#fff
+    class B good
+    class A step
+    class IMG inert
 ```
 
 ## Seeing what exists
@@ -124,7 +142,13 @@ The listing gives a container ID, the image each was created from, the command i
 
 ## Adding a file rather than changing one
 
-The same isolation holds for creating things, not only for editing them. Back inside container A:
+The same isolation holds for creating things, not only for editing them. Container A was exited a moment ago, which stopped it, so getting back in is its own command rather than another `docker run` — a second `docker run` would build a third container instead of reopening the first:
+
+```bash
+docker start -ai container-a
+```
+
+`-a` attaches your terminal to the container's output and `-i` attaches its input, which together put you back at the shell inside it. Then:
 
 ```bash
 echo "second file" > /app/hello2.txt
