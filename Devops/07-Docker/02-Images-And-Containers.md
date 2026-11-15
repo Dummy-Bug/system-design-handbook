@@ -157,20 +157,6 @@ Put MySQL in a container and it accumulates data — that is what a database is 
 
 So anything that has to survive is not kept inside the container. It is kept outside, in storage that Docker manages separately and attaches to the container, called a **volume**. The container reads and writes through it as though it were part of its own file system, and when the container is deleted the volume is still there, with the data in it, ready for the next container.
 
-| | Written inside the container | Written to a volume |
-|---|---|---|
-| Lives in | the writable layer | storage outside the container |
-| When the container is deleted | it is gone | it survives |
-| Suitable for | scratch files, logs you do not need, anything rebuildable | database files, uploads, anything you would miss |
-
-A volume is **created and managed by Docker** rather than by you, and it is **stored in Docker's own area on the host machine** rather than anywhere inside the container. You give it a name, and you say where in the container's file system it should appear:
-
-```bash
-docker run -v order-data:/var/lib/mysql mysql
-```
-
-Everything the database writes under `/var/lib/mysql` now goes into the volume named `order-data`. Delete the container and the volume is still there, untouched — Docker does not remove volumes when the containers using them go away, which has to be done deliberately. Start a replacement container with the same volume attached and it finds the data exactly as the previous one left it.
-
 That is the rule the whole mechanism exists to enforce: **a container is a place to run something, not a place to keep something.**
 
 ## The step that has not been explained yet

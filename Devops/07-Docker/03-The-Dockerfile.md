@@ -122,7 +122,7 @@ The same applies to anything else you might need to start from. `FROM python:3.1
 > [!info] These live on Docker Hub, and it is the same idea as a shared build action.
 > Docker Hub is a public registry of ready-made images — runtimes, databases, web servers, operating system bases — that anybody can build on top of. A build pipeline works the same way: rather than writing the commands to install a Java toolchain into a `Jenkinsfile` or a GitHub Actions workflow, you reference a published step that already does it, because it is maintained by people who care about getting it right. **The same `temurin` name turns up in both places**, for the same reason. The base image is that idea applied to the environment the application runs in instead of to the machine that builds it.
 
-The tag after the colon matters. `21-jre` is a runtime only — enough to run a jar and nothing more. There is also a `-jdk` variant containing the full development kit, compiler included, which is what you would need to compile inside the image and is dead weight if you are only running an already-built jar.
+The tag after the colon matters. `21-jre` is a runtime only — enough to run a jar and nothing more. There is also a `-jdk` variant containing the full development kit, compiler included, which is what you would need in order to compile inside the image.
 
 ## WORKDIR — make a directory and move into it
 
@@ -296,6 +296,6 @@ Three habits follow directly from everything above.
 > [!warning] Never put a secret in a Dockerfile.
 > A password, token or key written into the file ends up in the image and in the history of every image built from it, and anybody who can pull that image can read it back out. The file itself is also meant to be shared — it sits in version control next to the code, and other people read it and copy from it. **Pass secrets in at run time as environment variables, from wherever your deployment already keeps them**, so that the image stays something you can hand to anybody.
 
-**Do not install what you do not need.** If the application needs Java, the image needs Java and nothing else — not Python, not `vim` because somebody wanted it there while debugging once. Every extra package is size, and size is what gets pulled over the network every time the image is deployed, on top of being one more thing that can carry a vulnerability. This is the same reason to prefer the `-jre` tag over `-jdk` when nothing inside the image ever compiles anything.
+**Do not install what you do not need.** If the application needs Java, the image needs Java and nothing else — not Python, not `vim` because somebody wanted it there while debugging once. Every extra package is size, and size is what gets pulled over the network every time the image is deployed, on top of being one more thing that can carry a vulnerability.
 
 **Use `FROM` rather than rebuilding what somebody has already built.** A published base image with a runtime in it is a layer that is already cached, already correct, and already maintained. Installing that runtime by hand in your own file produces a larger image, a slower build, and a thing you now have to keep up to date yourself.
