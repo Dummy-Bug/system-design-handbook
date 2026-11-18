@@ -47,10 +47,10 @@ The recurring bug families are still live and sit in `extendedClaude.md` as pre-
 
 ## Protocol rules in force
 
-1. **30-minute cap** on a new problem: stop at 30, write a 3-line stuck note, then the editorial.
+1. **30-minute cap** on a new problem: stop at 30, write a 3-line stuck note, then Claude explains the solution **step by step until the user is unstuck** — no LeetCode hints, no long Socratic questioning. Claude gives the first step (the rewritten question) and stops; if the user can carry on, they finish alone; if not, Claude gives the next step. Then the user writes the rewritten question in one line, codes it with Steps 2 and 3, and does the cold re-solve the next day. Target: about an hour per problem. Decided 2026-11-18: on #35-#37, hints plus Socratic teaching cost about 55 minutes per problem, and the USACO Guide (usaco.guide/general/practicing, read 2026-11-18) advises reading the solution step by step until unstuck after 30-40 minutes of no progress, then implementing it yourself.
 2. **No editorial before 30 minutes.** Even a glance counts as a fail.
 3. **No AI while solving,** and code typed in a plain editor. Amazon and the startups grade hand-written code.
-4. **Cold re-solve the same day** after a hinted, editorial or WA solve.
+4. **Cold re-solve the next day** after a hinted, editorial or WA solve, from a blank editor, starting with the rewritten question in one line.
 5. **Honest results.** Every log states the real outcome: clean (first submission AC, self-derived), soft fail (WA then AC), hinted, or editorial. Record the minutes taken. A self-derived AC over 30 minutes still counts as solved, but the readiness bar is the plan's unseen medium in 20 minutes or less.
 
 ## Problem solving session — Claude's role
@@ -59,6 +59,7 @@ The recurring bug families are still live and sit in `extendedClaude.md` as pre-
 - No hints. No nudges. No questions. No observations. No commentary.
 - Stay completely silent unless the user explicitly asks for help (says "help" or asks a question).
 - When the user says "log it" or shares their thinking, record it faithfully.
+- At the 30-minute cap, or when the user gives up, switch to protocol rule 1: step-by-step explanation until unstuck.
 
 ## What this folder contains
 
