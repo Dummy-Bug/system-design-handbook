@@ -18,7 +18,7 @@ Same overcounting — `(a, b)` and `(b, a)` are the same unordered pair. Divide 
 
 ### Framing 3 — `C(n, 2)` notation
 
-The formal name for "unordered selections of 2 from `n`" is `C(n, 2)`, also written `nC2` or `(n 2)`. Its closed form is:
+The formal name for unordered selections of 2 from `n` is `C(n, 2)`, also written `nC2` or `(n 2)`. Its closed form is:
 
 ```
 C(n, 2) = n! / (2! × (n - 2)!) = n(n - 1) / 2
@@ -28,11 +28,9 @@ The three framings are the same fact viewed from three angles. Each one will be 
 
 ### Why divide by 2 — the deeper rule
 
-The "÷ 2" isn't arbitrary. When you go from ordered to unordered for a group of size `k`, you always divide by `k!`. The reason: `k!` is exactly the number of ways to arrange `k` items in a row, and every unordered group of size `k` shows up exactly `k!` times in the ordered count.
+The ÷ 2 isn't arbitrary. When you go from ordered to unordered for a group of size `k`, you always divide by `k!`. The reason: `k!` is exactly the number of ways to arrange `k` items in a row, and every unordered group of size `k` shows up exactly `k!` times in the ordered count.
 
-For pairs: `2! = 2` arrangements per pair (`(a,b)` and `(b,a)`), so ÷ 2.
-For triples: `3! = 6` arrangements per triple, so ÷ 6.
-For quadruples: `4! = 24` arrangements, so ÷ 24.
+For pairs: `2! = 2` arrangements per pair (`(a,b)` and `(b,a)`), so ÷ 2. For triples: `3! = 6` arrangements per triple, so ÷ 6. For quadruples: `4! = 24` arrangements, so ÷ 24.
 
 This is the heartbeat behind `C(n, k) = n! / (k! × (n-k)!)` — the `k!` in the denominator kills the ordering.
 
@@ -40,13 +38,13 @@ This is the heartbeat behind `C(n, k) = n! / (k! × (n-k)!)` — the `k!` in the
 
 ## Concrete recall — these numbers should fire in 5 seconds
 
-| n | `n(n-1)/2` |
-|---|------------|
-| 5 | 10 |
-| 10 | 45 |
-| 20 | 190 |
-| 100 | 4,950 |
-| 1,000 | 499,500 |
+|     n | `n(n-1)/2` |
+| ----: | ---------: |
+|     5 |         10 |
+|    10 |         45 |
+|    20 |        190 |
+|   100 |      4,950 |
+| 1,000 |    499,500 |
 
 The growth is roughly `n²/2`. It sneaks up fast. At `n = 1000` you're already at half a million pairs — which is why brute-force `O(n²)` over `n = 10⁵` is 5 × 10⁹ operations and TLEs in any contest.
 
@@ -107,11 +105,11 @@ n = 1,290  →  n³ ≈ 2.1 × 10⁹  (boundary)
 n = 1,300  →  n³ ≈ 2.2 × 10⁹  (overflows int)
 ```
 
-| Operation | Overflow boundary (int) |
-|-----------|--------------------------|
+| Operation | Overflow boundary (int)    |
+| --------- | -------------------------- |
 | `n²`      | n > ~46,340 (`√(2.1×10⁹)`) |
-| `n³`      | n > ~1,290 (`∛(2.1×10⁹)`) |
-| `n⁴`      | n > ~215 |
+| `n³`      | n > ~1,290 (`∛(2.1×10⁹)`)  |
+| `n⁴`      | n > ~215                   |
 
 For LC triple count at `n = 10⁵`, the product is `~10¹⁵` — overflows int by orders of magnitude. Cast the first operand to long:
 
@@ -137,8 +135,8 @@ Each unordered group of `k` shows up `k!` times in that ordered count (every per
 
 ```
 C(n, k) = n × (n - 1) × (n - 2) × ... × (n - k + 1)
-         ─────────────────────────────────────────
-                          k!
+          ─────────────────────────────────────────
+                             k!
 ```
 
 Equivalent formal form (multiply top and bottom by `(n - k)!`):
@@ -155,11 +153,11 @@ Deeper machinery — Pascal's identity, modular factorial precomputation, `C(n, 
 
 ## The unordered convention in LeetCode problems
 
-LC frequently writes "count pairs `(i, j)` with `i < j` such that ...". The `i < j` constraint is **linguistic**, not algorithmic — it's how LC says *unordered*. The constraint forces a single canonical ordering per pair so each pair is counted exactly once.
+LC frequently writes count pairs `(i, j)` with `i < j` such that some condition holds. The `i < j` constraint is **linguistic**, not algorithmic — it's how LC says unordered. The constraint forces a single canonical ordering per pair so each pair is counted exactly once.
 
-If the problem says **"pairs `(i, j)`"** without the `i < j` constraint, it usually means *ordered* — every `(a, b)` and `(b, a)` is a distinct pair, and the count is `n × (n - 1)`, not `n(n-1)/2`.
+If the problem says **pairs `(i, j)`** without the `i < j` constraint, it usually means ordered — every `(a, b)` and `(b, a)` is a distinct pair, and the count is `n × (n - 1)`, not `n(n-1)/2`.
 
-A 2× factor lives in this one phrase. Read the problem statement carefully — misreading "i < j" as ordered, or missing its absence, is a classic contest WA.
+A 2× factor lives in this one phrase. Read the problem statement carefully — misreading i < j as ordered, or missing its absence, is a classic contest WA.
 
 ---
 
@@ -178,10 +176,10 @@ For each value `v` that appears `k` times, the number of unordered pairs you can
 Frequencies: `{1: 2, 2: 3, 3: 1}`.
 
 | Value | Count `k` | `k(k-1)/2` |
-|-------|-----------|------------|
-| 1 | 2 | 1 |
-| 2 | 3 | 3 |
-| 3 | 1 | 0 |
+| ----: | --------: | ---------: |
+|     1 |         2 |          1 |
+|     2 |         3 |          3 |
+|     3 |         1 |          0 |
 
 Total: `1 + 3 + 0 = 4` pairs.
 
@@ -207,7 +205,7 @@ At LC scale `n = 10⁵`, a single bucket can contain all `n` elements (if the ar
 
 ### LC anchor
 
-*Number of Good Pairs* (LC 1512, rated ~1200) is literally this exact problem.
+number-of-good-pairs (LC 1512, rating 1161) is literally this exact problem.
 
 ---
 
@@ -222,13 +220,13 @@ The insight: when a new element arrives, we only need to count **new pairs**, no
 ### Walkthrough on `[1, 2, 2, 3, 2, 1]`
 
 | Step | Value | freq before | delta | running total |
-|------|-------|-------------|-------|---------------|
-| 1 | 1 | 0 | 0 | 0 |
-| 2 | 2 | 0 | 0 | 0 |
-| 3 | 2 | 1 | +1 | 1 |
-| 4 | 3 | 0 | 0 | 1 |
-| 5 | 2 | 2 | +2 | 3 |
-| 6 | 1 | 1 | +1 | 4 |
+| ---: | ----: | ----------: | ----- | ------------: |
+|    1 |     1 |           0 | 0     |             0 |
+|    2 |     2 |           0 | 0     |             0 |
+|    3 |     2 |           1 | +1    |             1 |
+|    4 |     3 |           0 | 0     |             1 |
+|    5 |     2 |           2 | +2    |             3 |
+|    6 |     1 |           1 | +1    |             4 |
 
 Final = 4, matching the bucket-sum from earlier. ✓
 
@@ -242,7 +240,7 @@ Final = 4, matching the bucket-sum from earlier. ✓
 long total = 0;
 Map<Integer, Integer> freq = new HashMap<>();
 for (int x : arr) {
-    int prev = freq.getOrDefault(x, 0);   // freq BEFORE increment
+    int prev = freq.getOrDefault(x, 0);    // freq BEFORE increment
     total += prev;                         // delta = prev
     freq.put(x, prev + 1);                 // then increment
     // report(total);
@@ -271,7 +269,7 @@ So adding the `k`-th element of a value bumps the pair count by `k - 1`, which e
 
 ## Derived-key bucketing — d.2
 
-The final generalisation: the "match" isn't equality between values, it's some derived condition. Example:
+The final generalisation: the match isn't equality between values, it's some derived condition. Example:
 
 > Count pairs `(i, j)` with `i < j` such that `(arr[i] + arr[j]) % k == 0`.
 
@@ -310,21 +308,21 @@ Verify by enumeration: `(1, 4)`, `(6, 4)`, `(2, 3)`. Three pairs. ✓
 
 For a bucket with remainder `r`, its complement bucket has remainder `(k - r) % k`. The outer `% k` handles the case `r = 0` — the complement of 0 is 0, not k.
 
-| `r` | complement |
-|-----|------------|
-| 0 | 0 (self-pair) |
-| 1 | k - 1 |
-| 2 | k - 2 |
-| ... | ... |
-| k - 1 | 1 |
+| `r`   | complement    |
+| ----- | ------------- |
+| 0     | 0 (self-pair) |
+| 1     | k - 1         |
+| 2     | k - 2         |
+| ...   | ...           |
+| k - 1 | 1             |
 
 ### Why it works — the modular addition identity
 
-The proof relies on `(a + b) % k = (a % k + b % k) % k`. Every number can be written as `(some multiple of k) + (remainder)`. The "multiple of k" parts contribute nothing to `(a + b) % k`, so only the remainders matter. Full derivation lives in [[06-modular-arithmetic]] — it's the central identity of that topic.
+The proof relies on `(a + b) % k = (a % k + b % k) % k`. Every number can be written as `(some multiple of k) + (remainder)`. The multiple of k parts contribute nothing to `(a + b) % k`, so only the remainders matter. Full derivation lives in [[06-modular-arithmetic]] — it's the central identity of that topic.
 
 ### Streaming version — combining d.1 and d.2
 
-If the values arrive one at a time and we report the running total, the same "read before write" pattern applies — but you read from the **complement bucket**, write to **your own bucket**.
+If the values arrive one at a time and we report the running total, the same read before write pattern applies — but you read from the **complement bucket**, write to **your own bucket**.
 
 ```java
 long total = 0;
@@ -342,9 +340,9 @@ The `((x % k) + k) % k` instead of bare `x % k` handles negative inputs — Java
 
 ### The general pattern
 
-> For "count pairs where condition F(arr[i], arr[j]) holds":
+> For count pairs where condition F(arr[i], arr[j]) holds:
 >
-> 1. Identify the **derived key** `K` such that F can be rewritten as "key[i] matches some function `g(key[j])`".
+> 1. Identify the **derived key** `K` such that F can be rewritten as key[i] matches some function `g(key[j])`.
 > 2. Bucket every element by its key.
 > 3. For each arrival (or each element in a single pass), look up `g(key)` in the freq map — that's your delta.
 > 4. Then increment `freq[key]`.
@@ -355,10 +353,10 @@ Examples of this pattern:
 - Pairs with sum divisible by k: key = `value % k`, `g(r) = (k - r) % k`
 - Pairs with XOR equal to K: key = value, `g(v) = v ^ K`
 - Pairs with difference equal to K: key = value, `g(v) = v - K`
-- Pairs whose product is a perfect square: key = "square-free part of value", `g(s) = s`
+- Pairs whose product is a perfect square: key = square-free part of value, `g(s) = s`
 
 ### LC anchors
 
-- *Subarray Sums Divisible by K* (LC 974, rated ~1450) — bucket prefix sums by remainder mod k. Two prefix sums with the same remainder differ by a multiple of k.
-- *Find the Number of Good Pairs II* — derived-key variants.
+- subarray-sums-divisible-by-k (LC 974, rating 1676) — bucket prefix sums by remainder mod k. Two prefix sums with the same remainder differ by a multiple of k.
+- find-the-number-of-good-pairs-ii (LC 3164, rating 1777) — derived-key variants.
 - XOR-pair and diff-pair problems use the same key+complement skeleton with different `g`.

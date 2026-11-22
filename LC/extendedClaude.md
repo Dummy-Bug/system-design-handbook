@@ -311,7 +311,7 @@ Each log entry:
 ### Saving individual contest problems:
 
 If a contest problem is especially valuable (tricky insight, pattern worth remembering):
-- Create `contest/<contest-name>-q<num>-<slug>.md` (e.g., `biweekly-182-q2-coherent-string.md`)
+- Create `contest/Official/<contest-name>-q<num>-<slug>.md` (e.g., `biweekly-182-q2-coherent-string.md`)
 - Include: problem statement, key insight, link to problem
 - Use this for observation/enumeration problems or non-standard patterns
 - *Don't* create for every problem — only ones worth revising

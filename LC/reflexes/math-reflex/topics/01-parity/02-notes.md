@@ -1,6 +1,6 @@
 ## a. Parity arithmetic rules
 
-The three rules that govern everything else in this topic. They feel obvious written out, but under contest pressure "obvious" becomes a 3-minute derivation if they're not reflex.
+The three rules that govern everything else in this topic. They feel obvious written out, but under contest pressure, obvious becomes a 3-minute derivation if they're not reflex.
 
 **Sum and difference:**
 
@@ -17,7 +17,7 @@ The rule is simpler than addition — one even factor is enough to make the whol
 - Any factor even → product even
 - All factors odd → product odd
 
-One even number poisons the whole product. This is why 2 is called "the only even prime" — it's the parity disruptor. `3 × 5 × 7 = 105` (odd). `3 × 5 × 6 = 90` (even — one even factor does it).
+One even number poisons the whole product. This is why 2, the only even prime, is the parity disruptor. `3 × 5 × 7 = 105` (odd). `3 × 5 × 6 = 90` (even — one even factor does it).
 
 **Powers:**
 
@@ -41,7 +41,7 @@ n % 2 == 1   // mod form
 
 `n & 1` is preferred in tight loops — single bitwise AND, no division.
 
-Critical Java trap: `n % 2` can return `-1` for negative integers (Java's mod preserves sign of dividend). So `n % 2 == 1` will be false for odd negative numbers. Safe version is `n % 2 != 0`. But `n & 1` has no such issue — returns 0 for even, 1 for odd, always. Default to `n & 1`.
+Critical Java trap: `n % 2` can return `-1` for negative integers (Java's mod preserves sign of dividend). So `n % 2 == 1` **will be false for odd negative numbers.** Safe version is `n % 2 != 0`. But `n & 1` has no such issue — returns 0 for even, 1 for odd, always. Default to `n & 1`.
 
 ---
 
@@ -51,13 +51,13 @@ Adding or subtracting an **even** number preserves parity. `n + 4`, `n - 100`, `
 
 Adding or subtracting an **odd** number flips parity. `n + 3`, `n - 7` — even becomes odd, odd becomes even.
 
-This unlocks a powerful invariant: if a sequence of operations only involves adding even numbers, parity is locked. Any time you see a problem where the operations have fixed parity structure, check if the answer is forced by invariant before doing any computation.
+This unlocks a powerful invariant: **if a sequence of operations only involves adding even numbers, parity is locked**. Any time you see a problem where the operations have fixed parity structure, check if the answer is forced by invariant before doing any computation.
 
 ---
 
-## d. "Can target be reached?" parity check
+## d. Can-target-be-reached parity check
 
-Parity as a **necessary condition for reachability**. Before computing anything, check parity. If it fails, the answer is immediately 0 or "impossible".
+Parity as a **necessary condition for reachability**. Before computing anything, check parity. If it fails, the answer is immediately 0 or impossible.
 
 The classic form: you have an array of integers and a target sum. Count the odds. If count of odds is even, the sum is even. If count of odds is odd, the sum is odd. If target parity doesn't match — done. No arrangement, permutation, or subset selection changes this.
 
@@ -78,15 +78,15 @@ More precisely: in any collection of integers, the sum is even if and only if th
 **e.2 — counting pairs with odd sum.** A sum `x + y` is odd exactly when one of the two is odd and the other even. So to count pairs `(x, y)` drawn from two ranges where `x ∈ [1, n]` and `y ∈ [1, m]`, you don't iterate — you multiply parity-class counts and add both directions:
 
 ```
-oddCount(n)  × evenCount(m)   ← x odd, y even
-+ evenCount(n) × oddCount(m)   ← x even, y odd
+  oddCount(n)  × evenCount(m)   ← x odd, y even
++ evenCount(n) × oddCount(m)    ← x even, y odd
 ```
 
 where `oddCount(k) = ceil(k/2) = (k+1)/2` and `evenCount(k) = floor(k/2) = k/2`.
 
-The reflex is: **"count pairs with odd sum" → parity buckets, not a loop over sums.** The trap is reaching for an O(n+m) loop over every possible odd sum (clamping pair counts per sum) — that works but is 40 minutes of fiddly derivation for a one-liner.
+The reflex is: **count pairs with odd sum → parity buckets, not a loop over sums.** The trap is reaching for an O(n+m) loop over every possible odd sum (clamping pair counts per sum) — that works but is 40 minutes of fiddly derivation for a one-liner.
 
-Anchor: *Alice and Bob Playing Flower Game* — Alice wins iff `x + y` is odd, so the answer is exactly this pair count. For `n=9, m=5`: `5×2 + 4×3 = 22`. (It further collapses to `floor(nm/2)` algebraically, but that simplification is problem-specific and not worth memorizing — the parity-bucket product is the reusable move.)
+Anchor: alice-and-bob-playing-flower-game (LC 3021, rating 1581) — Alice wins iff `x + y` is odd, so the answer is exactly this pair count. For `n=9, m=5`: `5×2 + 4×3 = 22`. (It further collapses to `floor(nm/2)` algebraically, but that simplification is problem-specific and not worth memorizing — the parity-bucket product is the reusable move.)
 
 ---
 
@@ -94,7 +94,7 @@ Anchor: *Alice and Bob Playing Flower Game* — Alice wins iff `x + y` is odd, s
 
 XOR of bit-i across n numbers = 1 if an odd count of those numbers have bit-i set, 0 if even count.
 
-XOR is parity, applied per bit. This is why XOR appears constantly in problems that ask "how many elements have property X" — when X is a bit condition, XOR accumulates the count's parity automatically.
+XOR is parity, applied per bit. This is why XOR appears constantly in problems that ask how many elements have property X — when X is a bit condition, XOR accumulates the count's parity automatically.
 
 ---
 
@@ -104,7 +104,7 @@ To interleave elements such that no two adjacent elements share the same parity,
 
 Valid interleaving exists iff `|count_even - count_odd| ≤ 1`.
 
-If one group outnumbers the other by 2 or more, you'll inevitably have two same-parity elements forced adjacent. The check is on count, not sum — don't let "sum of evens" distract you.
+If one group outnumbers the other by 2 or more, you'll inevitably have two same-parity elements forced adjacent. The check is on count, not sum — don't let the sum of evens distract you.
 
 ---
 

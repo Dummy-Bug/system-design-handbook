@@ -17,6 +17,7 @@ For `n = 4729`, this prints `9, 2, 7, 4` — rightmost first. The two operations
 
 ```java
 String s = Integer.toString(n);
+// String s = String.valueOf(n);
 for (int i = 0; i < s.length(); i++) {
     int d = s.charAt(i) - '0';
     System.out.println(d);
@@ -187,6 +188,7 @@ Reflex line: *"divide-then-mod = i-th digit from right."*
 
 ```java
 int L = Long.toString(n).length();
+// int L = String.valueOf(n).length();
 int digit_i_from_left = (n / pow10(L - 1 - i)) % 10;
 ```
 

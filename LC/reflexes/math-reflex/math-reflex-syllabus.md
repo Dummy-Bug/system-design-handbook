@@ -722,7 +722,7 @@ You already have logged notes that go deeper on several of these topics. When st
 |---|---|---|
 | 1.3 Complexity reflex | `reasoning-primitives/05-tle-mle-budget.md` | TLE/MLE bug families, ops/sec cheat-sheet |
 | 1.1, 2.5, 2.6 Pair counting | `reasoning-primitives/04-contribution-technique.md` | Sum over pairs without iterating pairs — full worked example with prefix/suffix sums |
-| 3.5 Float cast trap | `contest/weekly-502-q2-count-kth-roots.md` | The Math.pow / Math.sqrt integer trap in a live contest — TLE story + fix |
+| 3.5 Float cast trap | `contest/Official/weekly-502.md` | The Math.pow / Math.sqrt integer trap in a live contest — TLE story + fix |
 | 4.10, 5.7 Game theory / algebraic bound | `reasoning-primitives/01-invariants.md` | The Q1-Q4 invariant framework from House Robber V (1650-1700 #1) |
 | 5.7 Algebraic bound + tight check | `reasoning-primitives/02-lower-bounds.md` | Full lower-bound reasoning template |
 | Greedy correctness proofs (algorithmic, supports many math sections) | `reasoning-primitives/03-exchange-argument.md` | Exchange argument template |

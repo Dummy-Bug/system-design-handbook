@@ -22,7 +22,7 @@ Take the positive root only. This appears in problems that give you a triangular
 
 ## b. General AP sum
 
-Any sequence with a constant difference `d` between consecutive terms is an arithmetic progression. Recognise it when you see: evenly spaced numbers, multiples of d, consecutive integers, or any "every k-th element" structure.
+Any sequence with a constant difference `d` between consecutive terms is an arithmetic progression. Recognise it when you see: evenly spaced numbers, multiples of d, consecutive integers, or any every k-th element structure.
 
 **Two equivalent forms:**
 
@@ -69,7 +69,7 @@ Verify: 1 = 1², 1+3 = 4 = 2², 1+3+5 = 9 = 3², 1+3+5+7 = 16 = 4².
 
 ## e. Sum of multiples of d in [L, R]
 
-**LC anchor:** *Sum Multiples* (LC 2652, rated 1182) — sum all integers in [1, n] divisible by 3, 5, or 7. Most people solve it with an O(n) loop and get AC because n ≤ 1000. The O(1) formula approach is what builds the reflex for harder problems where O(n) TLEs.
+**LC anchor:** sum-multiples (LC 2652, rating 1182) — sum all integers in [1, n] divisible by 3, 5, or 7. Most people solve it with an O(n) loop and get AC because n ≤ 1000. The O(1) formula approach is what builds the reflex for harder problems where O(n) TLEs.
 
 **Pattern:**
 
