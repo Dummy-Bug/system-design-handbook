@@ -36,10 +36,10 @@ This folder is the DSA log. Since 2026-11-12 it runs under the November plan in 
 
 - **Timer:** 15 minutes is the target; the real time is logged whatever it is. The readiness bar stays the referral one, 20 minutes or less with clean code. The 30-minute cap and protocol rule 1 are unchanged.
 - **One pool, alternating:** an unseen problem, then an old one, then unseen again. Both are dealt the same way, as one bare link on next.
-- **Unseen problems:** least-covered mechanic first, from the coverage table in `contest/Mock/mock-contest.md`. One solved without help counts toward coverage.
+- **Unseen problems:** least-covered mechanic first, from the coverage table in `contest/Mock/mock-contest.md`. One counts toward coverage when solved without help in 30 minutes or less, with 5 minutes added for each WA (set 2026-11-23; rule in `mock-contest.md`).
 - **Old problems:** the 40 first attempts in `problem-solving/1550-1600/First-Attempt/` (#01-#40, 2026-05-04 to 2026-06-09). They were unseen at the time and mostly slow: of the 37 with a recorded time, the median was about 39 minutes and 9 came in at 25 minutes or less. Dealt weakest first: those that had help (#06, #12, #15, #30, #38, #40), then the soft fails (#11, #21, #24, #27, #28, #32, #36), then the slowest clean ones. Skipped: the 7 clean ones at 25 minutes or less (#01, #07, #19, #25, #26, #33, #39). No queue file; each is picked straight from the logs.
 - **Never the same mechanic twice in a row.**
-- **Old re-solves do not count toward coverage,** because they were seen before. The exception is a mechanic with no unseen problem left in 1550-1599; then a re-solve without help counts. As of 2026-11-22, by LeetCode tag, the unseen supply has no stack, DP, binary search, heap, trie, divide and conquer or simulation problem.
+- **Old re-solves count toward coverage** under the same rule as unseen problems: no help, 30 minutes or less, 5 minutes added for each WA. Set by the user on 2026-11-23; before that a re-solve counted only for a mechanic with no unseen problem left in 1550-1599. Trade-off accepted: a problem seen before is easier the second time, so the old pool fills coverage faster than unseen problems would.
 - **Where the logs go:** an unseen problem to `problem-solving/1550-1600/First-Attempt/41-<slug>.md` onward; an old one to `problem-solving/1550-1600/Second-Attempt/` under its old number, and its debrief compares the time with the May one.
 - **Supply:** about 24 unseen problems in 1550-1599 on 2026-11-22. When they run out, widen the range rather than deal a mis-pick.
 
@@ -65,7 +65,7 @@ The recurring bug families are still live and sit in `extendedClaude.md` as pre-
 
 ## Protocol rules in force
 
-1. **30-minute cap** on a new problem: stop at 30, write a 3-line stuck note, then Claude explains the solution **step by step until the user is unstuck** — no LeetCode hints, no long Socratic questioning. Claude gives the first step (the rewritten question) and stops; if the user can carry on, they finish alone; if not, Claude gives the next step. Then the user writes the rewritten question in one line, codes it with Steps 2 and 3, and does the cold re-solve the next day. Target: about an hour per problem. Decided 2026-11-18: on #35-#37, hints plus Socratic teaching cost about 55 minutes per problem, and the USACO Guide (usaco.guide/general/practicing, read 2026-11-18) advises reading the solution step by step until unstuck after 30-40 minutes of no progress, then implementing it yourself.
+1. **30-minute cap** on a new problem: stop at 30, write a 3-line stuck note, then Claude explains the solution **step by step until the user is unstuck** — no LeetCode hints, no long Socratic questioning. Claude gives the first step (the rewritten question) and stops; if the user can carry on, they finish alone; if not, Claude gives the next step. Then the user writes the rewritten question in one line, codes it with Steps 2 and 3, and does the cold re-solve the next day. Target: about an hour per problem. Decided 2026-11-18: on #35-#37, hints plus Socratic teaching cost about 55 minutes per problem, and the USACO Guide (usaco.guide/general/practicing, read 2026-11-18) advises reading the solution step by step until unstuck after 30-40 minutes of no progress, then implementing it yourself. **The cap applies to the idea, not the code** (added 2026-11-22): if at 30 minutes the user already has a working idea and is coding or debugging it, they keep going alone and the log notes the time over the cap; only with no working idea yet do they stop for the step-by-step explanation. Why: in the logs that split idea from coding time, coding took as long as the idea or longer in 7 of 8 (172 minutes of idea against 198 of coding), and #41 (longest-palindrome-by-concatenating-two-letter-words, 1557) hit 30 mid-debug with the idea in hand and was finished alone at 39.
 2. **No editorial before 30 minutes.** Even a glance counts as a fail.
 3. **No AI while solving,** and code typed in a plain editor. Amazon and the startups grade hand-written code.
 4. **Cold re-solve the next day** after a hinted, editorial or WA solve, from a blank editor, starting with the rewritten question in one line.
@@ -77,7 +77,7 @@ The recurring bug families are still live and sit in `extendedClaude.md` as pre-
 - No hints. No nudges. No questions. No observations. No commentary.
 - Stay completely silent unless the user explicitly asks for help (says "help" or asks a question).
 - When the user says "log it" or shares their thinking, record it faithfully.
-- At the 30-minute cap, or when the user gives up, switch to protocol rule 1: step-by-step explanation until unstuck.
+- At the 30-minute cap with no working idea yet, or when the user gives up, switch to protocol rule 1: step-by-step explanation until unstuck. With a working idea already being coded at 30, keep logging silently.
 
 ## What this folder contains
 

@@ -5,7 +5,7 @@
 - **Bucket (revealed after the solve):** hash table / counting.
 - **Dealt:** 2026-11-22, timer 19:57.
 - **AC:** 20:36, 39 minutes.
-- **Result:** clean first-submission AC, self-derived, over the 30-minute cap. The version with the bug was only run on the examples, never submitted. Counts toward coverage: hash table / counting 1 of 2.
+- **Result:** clean first-submission AC, self-derived, over the 30-minute cap. The version with the bug was only run on the examples, never submitted. Counted toward coverage at first (hash table / counting 1 of 2); dropped on 2026-11-23, when a solve began to count only at 30 minutes or less.
 
 ## The problem
 

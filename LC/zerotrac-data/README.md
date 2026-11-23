@@ -10,7 +10,7 @@ The data here was used to build `math-band-*.md` files in the parent folder (`LC
 
 ```
 zerotrac-data/
-├── ratings.tsv                          ← 2,489 problems w/ empirical contest ratings (1084–3774)
+├── ratings.tsv                          ← 2,644 problems w/ empirical contest ratings (1084–3125), synced 2026-11-23 (weekly 528, biweekly 195)
 ├── ratings.json                         ← same data as JSON
 ├── classify.py                          ← old regex-based classifier (deprecated, kept for reference)
 │
@@ -201,3 +201,25 @@ Each requires only writing a new set of `classifiers/<lens>_tags_<rating>.py` fi
 - **Segment tree / BIT / sparse table**
 - **Greedy patterns** (exchange argument, sort + heap, scheduling, regret)
 - **Binary search on answer** (categorised by check-function type)
+
+---
+
+## Q2 and Q3 medians by year
+
+Computed 2026-11-23 from `ratings.tsv` after the sync to weekly 528 and biweekly 195. Medians of the zerotrac rating of every Q2 and Q3 in the year's weekly and biweekly contests; 2026 runs from January to mid-November.
+
+| Year | Contests (weekly, biweekly) | Weekly Q2 | Biweekly Q2 | All Q2 | Weekly Q3 | Biweekly Q3 | All Q3 | Q3 − Q2 |
+| ---- | --------------------------- | --------: | ----------: | -----: | --------: | ----------: | -----: | ------: |
+| 2020 | 52 (170-221), 26 (17-42)    |      1460 |        1491 |   1474 |      1812 |        1673 |   1752 |     278 |
+| 2021 | 52 (222-273), 26 (43-68)    |      1491 |        1573 |   1510 |      1855 |        1840 |   1855 |     345 |
+| 2022 | 52 (274-325), 26 (69-94)    |      1447 |        1468 |   1466 |      1716 |        1739 |   1718 |     252 |
+| 2023 | 53 (326-378), 26 (95-120)   |      1483 |        1474 |   1480 |      1914 |        1752 |   1889 |     409 |
+| 2024 | 52 (379-430), 26 (121-146)  |      1543 |        1533 |   1533 |      1901 |        1913 |   1907 |     374 |
+| 2025 | 52 (431-482), 26 (147-172)  |      1561 |        1639 |   1579 |      2060 |        1941 |   2040 |     461 |
+| 2026 | 46 (483-528), 23 (173-195)  |      1476 |        1505 |   1492 |      1861 |        1771 |   1841 |     349 |
+
+Q2 stays between 1466 and 1579 in every year; Q3 swings by about 300 points and peaked in 2025.
+
+**The 2026 drop may be rating deflation, not easier problems.** Zerotrac rates a problem from how contestants did on it, so a rise in AI-assisted solves would lower a rating without the problem getting easier. The user found 2026 problems no easier. Against it: LLMs were already strong in 2023-2025 while ratings rose every year. The data cannot separate the two, so for planning, 2024-2025 levels (Q2 about 1530-1580) are the safer reading.
+
+**The years are inferred, not read.** `ratings.tsv` has no dates. Contest dates were computed back from weekly 502 on 2026-05-17 and biweekly 182 on 2026-05-09 (both from `../contest/Official/`), assuming one weekly every 7 days and one biweekly every 14 with none skipped. That holds for every logged contest in 2026; earlier year boundaries were not checked against LeetCode, whose contest API refused the request, so a contest at a boundary could sit in the neighbouring year.

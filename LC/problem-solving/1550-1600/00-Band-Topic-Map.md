@@ -21,32 +21,32 @@ Editorials for all 83 are downloaded at `editorials-data/band_1550_1599/`.
 
 ## Band topic supply (LearnYard, across the 59 classified of 83)
 
-| Main topic | Subgroup | # problems |
-|---|---|---|
-| Hashing | Implementary Problems | 16 |
-| Greedy | Part I | 14 |
-| Sorting | Implementary | 10 |
-| DP Level 1 | Linear DP | 8 |
-| 2 Pointers | Two Pointer on Arrays | 8 |
-| 2 Pointers | Two Pointer on Strings | 5 |
-| Matrix | Implementary | 5 |
-| Sliding Window | Dynamic Size | 5 |
-| Prefix Sum | Implementary | 5 |
-| Stack | Implementary Stack | 4 |
-| Stack | Stack with String | 3 |
-| Binary Search | Upper/Lower Bound | 3 |
-| Bit Manipulation | Basic Bit Concepts | 3 |
-| DP Level 1 | DP on String | 2 |
-| DP Level 1 | DP on Grid | 2 |
-| Combinatorics & Geometry | Line | 2 |
-| Graphs | Graph Representation | 2 |
-| Graphs | Disjoint Set Union (DSU) | 2 |
-| Recursion & Backtracking | Recursion | 1 |
-| String Matching | Pattern Matching | 1 |
-| Heap (PQ) | Implementary | 1 |
-| Tries | Trie involving String | 1 |
-| Advanced | Segment Tree / BIT | 1 |
-| Stack | Monotonic Stack | 1 |
+| Main topic               | Subgroup                 | # problems |
+| ------------------------ | ------------------------ | ---------- |
+| Hashing                  | Implementary Problems    | 16         |
+| Greedy                   | Part I                   | 14         |
+| Sorting                  | Implementary             | 10         |
+| DP Level 1               | Linear DP                | 8          |
+| 2 Pointers               | Two Pointer on Arrays    | 8          |
+| 2 Pointers               | Two Pointer on Strings   | 5          |
+| Matrix                   | Implementary             | 5          |
+| Sliding Window           | Dynamic Size             | 5          |
+| Prefix Sum               | Implementary             | 5          |
+| Stack                    | Implementary Stack       | 4          |
+| Stack                    | Stack with String        | 3          |
+| Binary Search            | Upper/Lower Bound        | 3          |
+| Bit Manipulation         | Basic Bit Concepts       | 3          |
+| DP Level 1               | DP on String             | 2          |
+| DP Level 1               | DP on Grid               | 2          |
+| Combinatorics & Geometry | Line                     | 2          |
+| Graphs                   | Graph Representation     | 2          |
+| Graphs                   | Disjoint Set Union (DSU) | 2          |
+| Recursion & Backtracking | Recursion                | 1          |
+| String Matching          | Pattern Matching         | 1          |
+| Heap (PQ)                | Implementary             | 1          |
+| Tries                    | Trie involving String    | 1          |
+| Advanced                 | Segment Tree / BIT       | 1          |
+| Stack                    | Monotonic Stack          | 1          |
 
 **Scarcity warning (matters for getting 2 clean self-derived ACs in-band):** Monotonic Stack (1), Trie (1), Segment Tree/BIT (1), DSU (2). Blind-spot patterns are thin here — some ownership reps will have to come cross-band.
 
