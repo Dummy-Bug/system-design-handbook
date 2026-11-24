@@ -1,10 +1,5 @@
 # Maths for LeetCode — syllabus
 
-> [!abstract] How to use this folder
-> **Skim:** read only the Recall card at the top of each note, in the order below.
-> **Test:** answer the Check yourself questions at the end of each note before opening the answers.
-> **Relearn:** read a note's body only where its card does not come back.
-
 ## How much of LeetCode is maths
 
 **About 39% of contest problems rated below 1900 use maths: 657 of 1,666.** A problem counts when any maths idea is part of its solution, even as one ingredient (hand-classified in May 2026).
@@ -22,7 +17,7 @@ LeetCode's own Math tag is stricter: it was on 19% of 2025 Q2s and 25% of 2026 Q
 
 ## The learning order
 
-Part 1 is built only from what the class notes cover. Each arrow means the later folder uses the earlier one.
+Part 1 is built only from what the class notes cover. Each arrow means the later note uses the earlier one.
 
 ```mermaid
 graph LR
@@ -40,17 +35,17 @@ graph LR
     style C fill:#14532d,color:#fff
 ```
 
-Every note follows the same shape: **the problem → the naive way, broken with numbers → why → the fix, step by step**, with Java that was run and LeetCode problems that carry their slug and zerotrac rating.
+Every note teaches the idea first, with diagrams and tables, and keeps Java short and last. Every number in a note was checked by running it.
 
 ## Part 1 — from the class notes
 
-| #   | Folder                       | Notes                                                                                        | Share of maths problems | Status |
-| --- | ---------------------------- | -------------------------------------------------------------------------------------------- | ----------------------- | ------ |
-| 1   | `01-modular-arithmetic/`     | [[01-modulo-operator]], [[02-mod-rules]], [[03-remainder-buckets]], [[04-encode-two-values]] | 17% (12-22%)            | ⬜      |
-| 2   | `02-gcd/`                    | [[01-gcd-euclid]], [[02-gcd-of-array]]                                                       | 4% (0-6%)               | ⬜      |
-| 3   | `03-fast-power-and-inverse/` | [[01-fast-power]], [[02-modular-inverse]]                                                    | 2% (0-4%)               | ⬜      |
-| 4   | `04-primes-divisors/`        | [[01-primality]], [[02-sieve]], [[03-spf-factorisation]], [[04-divisors]]                    | 4% (1-6%)               | ⬜      |
-| 5   | `05-counting/`               | [[01-counting-rules]], [[02-permutations-combinations]], [[03-ncr-mod-p]]                    | 9% (7-11%)              | ⬜      |
+| #   | File                           | Notes                         | Share of maths problems | Status |
+| --- | ------------------------------ | ----------------------------- | ----------------------- | ------ |
+| 1   | `01-modular-arithmetic.md`     | [[01-modular-arithmetic]]     | 17% (12-22%)            | ⬜      |
+| 2   | `02-gcd.md`                    | [[02-gcd]]                    | 4% (0-6%)               | ⬜      |
+| 3   | `03-fast-power-and-inverse.md` | [[03-fast-power-and-inverse]] | 2% (0-4%)               | ⬜      |
+| 4   | `04-primes-divisors.md`        | [[04-primes-divisors]]        | 4% (1-6%)               | ⬜      |
+| 5   | `05-counting.md`               | [[05-counting]]               | 9% (7-11%)              | ⬜      |
 
 | #   | Why it sits here                                                                                                                              |
 | --- | --------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -61,7 +56,7 @@ Every note follows the same shape: **the problem → the naive way, broken with 
 | 5   | Needs the mod rules and the inverse.                                                                                                          |
 
 > [!tip] For the 1450-1599 band
-> Folder 1 and the first two counting notes carry most of what Q2 asks. The rest of Part 1 is tools (fast power, the inverse, the sieve, `nCr mod p`): they cannot be derived in contest time, so they are read once and kept.
+> Note 1 and the first half of the counting note (the counting rules, nPr and nCr) carry most of what Q2 asks. The rest of Part 1 is tools (fast power, the inverse, the sieve, `nCr mod p`): they cannot be derived in contest time, so they are read once and kept.
 
 ## Part 2 — not in the class notes, discuss first
 
@@ -94,7 +89,7 @@ Nothing here gets a note until it has been discussed in chat. Sorted by share.
 
 ## Rules for these notes
 
-> [!warning] [[03-remainder-buckets]] gives away old #06
+> [!warning] [[01-modular-arithmetic]] gives away old #06
 > maximum-sum-of-three-numbers-divisible-by-three (1585) uses the same idea. Read that note after the #06 re-solve.
 
 > [!note] Problems are cited seen or unseen
