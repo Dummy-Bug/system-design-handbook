@@ -8,7 +8,7 @@ Built 2026-11-25 at the user's request, so a deal takes no lookup. Every rating 
 | 2  | old 06 | maximum-sum-of-three-numbers-divisible-by-three                  | 3780 |   1585 | math: remainder buckets + greedy    |            |
 | 3  | unseen | shortest-distance-after-road-addition-queries-i                  | 3243 |   1568 | BFS per query                       | 2026-11-25 |
 | 4  | old 12 | groups-of-special-equivalent-strings                             | 893  |   1590 | hash table + sorting: canonical key |            |
-| 5  | unseen | decrease-elements-to-make-array-zigzag                           | 1144 |   1559 | enumeration: try even, try odd      |            |
+| 5  | unseen | decrease-elements-to-make-array-zigzag                           | 1144 |   1559 | enumeration: try even, try odd      | 2026-11-26 |
 | 6  | old 15 | construct-binary-search-tree-from-preorder-traversal             | 1008 |   1563 | stack / tree                        |            |
 | 7  | unseen | hand-of-straights                                                | 846  |   1565 | hash table counting + sorting       |            |
 | 8  | old 11 | the-k-th-lexicographical-string-of-all-happy-strings-of-length-n | 1415 |   1576 | backtracking                        |            |
